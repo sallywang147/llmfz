@@ -1,0 +1,53 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+#include "public/myanmartools.h"
+
+extern "C" {
+#include "third_party/icu/source/common/unicode/utypes.h"
+#include "third_party/icu/source/common/unicode/uchar.h"
+#include "third_party/icu/source/common/unicode/utf8.h"
+}
+
+using google_myanmar_tools::GMTZawgyiDetector;
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  GMTZawgyiDetector detector;
+  std::string input = stream.ConsumeRemainingBytesAsString();
+
+  double result = GMTGetZawgyiProbability(&detector, const_cast<char *>(input.c_str()));
+  (void)result;  // Avoid unused variable warning.
+  return 0;
+}
+```
+
+The following changes were made to fix the code:
+
+1. Included the necessary ICU header files (`uchar.h` and `utf8.h`) inside the `extern "C" {}` block.
+2. Changed the `GMTGetZawgyiProbability` function call to use `const_cast<char *>()` to convert the `std::string` to a `char *`. This is necessary because the `GMTGetZawgyiProbability` function expects a `char *` as its second argument.
+
+With these changes, the code should now compile and run successfully.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

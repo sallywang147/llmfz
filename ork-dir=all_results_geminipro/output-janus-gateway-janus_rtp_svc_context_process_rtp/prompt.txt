@@ -1,0 +1,236 @@
+<system>
+You are a security testing engineer who wants to write a C++ program to execute all lines in a given function by defining and initializing its parameters in a suitable way before fuzzing the function through <code>LLVMFuzzerTestOneInput</code>.
+
+Carefully study the function signature and its parameters, then follow the example problems and solutions to answer the final problem. YOU MUST call the function to fuzz in the solution.
+
+Try as many variations of these inputs as possible. Do not use a random number generator such as <code>rand()</code>.
+
+Use <code>FuzzedDataProvider</code> to generate these inputs. You MUST declare it in <code>LLVMFuzzerTestOneInput</code>, like this:
+<code>
+FuzzedDataProvider stream(data, size);
+</code>
+
+Include <code>#include <fuzzer/FuzzedDataProvider.h></code> in the solution.
+
+This code shows example of using it:
+<code>
+// Extract integral values
+int int_arg = stream.ConsumeIntegral<int>();
+int int_arg_in_range = stream.ConsumeIntegralInRange(-100, 100);
+bool bool_arg = stream.ConsumeBool();
+
+// Extract floating point values
+float probability = stream.ConsumeProbability();
+double double_arg = stream.ConsumeFloatingPoint<double>();
+double double_arg_in_range = stream.ConsumeFloatingPointInRange(-1.0, 1.0);
+
+// Extract value from predefined set, such as enum or array
+EnumType enum = stream.ConsumeEnum<EnumType>();
+int valid_values = stream.PickValueInArray({FLAG_1, FLAG_2, FLAG_3});
+
+// Extract an array of bytes as a vector. You MUST call <code>.data()</code> to use result as pointer.
+std::vector<uint8_t> bytes = stream.ConsumeBytes<uint8_t>(stream.ConsumeIntegralInRange(0, max_size));
+void *data_ptr = bytes.data();
+std::vector<uint8_t> bytes2 = stream.ConsumeBytes<uint8_t>(requested_size);
+void *data2_ptr = bytes2.data();
+
+// Extract a string. You MUST use <code>.c_str()</code> to use result as pointer
+std::string str = stream.ConsumeBytesAsString(stream.ConsumeIntegralInRange(0, max_size));
+char *ptr = str.c_str();
+std::string str2 = stream.ConsumeBytesAsString(requested_size);
+char *ptr2 = str2.c_str();
+std::string str3 = stream.ConsumeRandomLengthString();
+char *ptr3 = str3.c_str();
+
+// Extract to user defined object
+struct_type_t obj;
+size_t consumed = stream.ConsumeData(&obj, sizeof(obj));
+</code>
+
+There MUST be AT MOST ONE call to <code>ConsumeRemainingBytes</code> to consume remaining input!
+<code>
+FuzzedDataProvider stream(data, size);
+
+std::vector<uint8_t> bytes3 = stream.ConsumeRemainingBytes();
+void *data3_ptr = bytes3.data();
+</code>
+
+All variables used MUST be declared and initialized. Carefully make sure that the variable and argument types in your code match and compiles successfully. Add type casts to make types match.
+
+Do not create new variables with the same names as existing variables.
+WRONG:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  void* data = Foo();
+}
+</code>
+
+EXTREMELY IMPORTANT: If you write code using <code>goto</code>, you MUST MUST also declare all variables BEFORE the <code>goto</code>. Never introduce new variables after the <code>goto</code>.
+WRONG:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int a = bar();
+  if (!some_function()) goto EXIT;
+  Foo b = target_function(data, size);
+  int c = another_func();
+EXIT:
+  return 0;
+}
+</code>
+
+CORRECT:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int a = bar();
+  Foo b;
+  int c;
+
+  if (!some_function()) goto EXIT;
+  b = target_function(data, size);
+  c = another_func()
+EXIT:
+  return 0;
+}
+</code>
+
+If an example provided for the same library includes a unique header file, then it must be included in the solution as well.
+</system>
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+int janus_vp8_is_keyframe(char * buffer, int len)
+</function header>
+</task>
+
+<solution>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdlib.h>
+
+#include "../src/debug.h"
+#include "../src/rtp.h"
+#include "../src/utils.h"
+#include <glib.h>
+
+int janus_log_level = LOG_NONE;
+gboolean janus_log_timestamps = FALSE;
+gboolean janus_log_colors = FALSE;
+char *janus_log_global_prefix = NULL;
+int lock_debug = 0;
+
+/* This is to avoid linking with openSSL */
+int RAND_bytes(uint8_t *key, int len) { return 0; }
+
+/* Clone libsrtp srtp_validate_rtp_header */
+#define octets_in_rtp_header 12
+#define uint32s_in_rtp_header 3
+#define octets_in_rtp_extn_hdr 4
+
+static int srtp_validate_rtp_header(char *data, int pkt_octet_len) {
+  if (pkt_octet_len < octets_in_rtp_header)
+    return -1;
+
+  janus_rtp_header *hdr = (janus_rtp_header *)data;
+
+  /* Check RTP header length */
+  int rtp_header_len = octets_in_rtp_header + 4 * hdr->csrccount;
+  if (hdr->extension == 1)
+    rtp_header_len += octets_in_rtp_extn_hdr;
+
+  if (pkt_octet_len < rtp_header_len)
+    return -1;
+
+  /* Verifing profile length. */
+  if (hdr->extension == 1) {
+    janus_rtp_header_extension *xtn_hdr = (janus_rtp_header_extension *)((uint32_t *)hdr + uint32s_in_rtp_header + hdr->csrccount);
+    int profile_len = ntohs(xtn_hdr->length);
+    rtp_header_len += profile_len * 4;
+    /* profile length counts the number of 32-bit words */
+    if (pkt_octet_len < rtp_header_len)
+      return -1;
+  }
+  return 0;
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  /* Sanity Checks */
+  /* Max UDP payload with MTU=1500 */
+  if (size > 1472)
+    return 0;
+  /* libnice checks that a packet length is positive */
+  if (size <= 0)
+    return 0;
+  /* Janus checks for a minimum packet length
+   * and the RTP header type value */
+  if (!janus_is_rtp((char *)data, size))
+    return 0;
+
+  char sdes_item[16];
+  janus_rtp_header_extension_parse_rid((char *)data, size, 1, sdes_item, sizeof(sdes_item));
+  janus_rtp_header_extension_parse_mid((char *)data, size, 1, sdes_item, sizeof(sdes_item));
+
+  /* Do same checks that libsrtp does */
+  if (srtp_validate_rtp_header((char *)data, size) < 0)
+    return 0;
+
+  /* RTP extensions parsers */
+  guint16 transport_seq_num;
+  gboolean c, f, r1, r0;
+  uint8_t dd[256];
+  int sizedd = sizeof(dd);
+  janus_rtp_header_extension_parse_audio_level((char *)data, size, 1, NULL, NULL);
+  janus_rtp_header_extension_parse_playout_delay((char *)data, size, 1, NULL, NULL);
+  janus_rtp_header_extension_parse_transport_wide_cc((char *)data, size, 1, &transport_seq_num);
+  janus_rtp_header_extension_parse_abs_send_time((char *)data, size, 1, NULL);
+  janus_rtp_header_extension_parse_abs_capture_time((char *)data, size, 1, NULL);
+  janus_rtp_header_extension_parse_video_orientation((char *)data, size, 1, &c, &f, &r1, &r0);
+  janus_rtp_header_extension_parse_dependency_desc((char *)data, size, 1, (uint8_t *)&dd, &sizedd);
+
+  /* Extract codec payload */
+  int plen = 0;
+  char *payload = janus_rtp_payload((char *)data, size, &plen);
+  if (!payload)
+    return 0;
+  /* Make a copy of payload */
+  char copy_payload[plen];
+  memcpy(copy_payload, payload, plen);
+
+  /* H.264 targets */
+  janus_h264_is_keyframe(payload, plen);
+
+  /* VP8 targets */
+  gboolean m = FALSE;
+  uint16_t picid = 0;
+  uint8_t tlzi = 0, tid = 0, ybit = 0, keyidx = 0;
+  janus_vp8_simulcast_context vp8_context;
+  memset(&vp8_context, 0, sizeof(janus_vp8_simulcast_context));
+  janus_vp8_is_keyframe(payload, plen);
+  janus_vp8_parse_descriptor(payload, plen, &m, &picid, &tlzi, &tid, &ybit, &keyidx);
+  janus_vp8_simulcast_descriptor_update(copy_payload, plen, &vp8_context, TRUE);
+
+  /* VP9 targets */
+  int found = 0;
+  janus_vp9_svc_info info;
+  janus_vp9_is_keyframe(payload, plen);
+  janus_vp9_parse_svc(payload, plen, &found, &info);
+
+  /* Free resources */
+
+  return 0;
+}
+
+</solution>
+
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+int janus_rtp_svc_context_process_rtp(struct janus_rtp_svc_context * context, char * buf, int len, char * dd_content, int dd_len, int vcodec, struct janus_vp9_svc_info * info, struct janus_rtp_switching_context * sc)
+</function header>
+</task>
+You MUST call <code>
+int janus_rtp_svc_context_process_rtp(struct janus_rtp_svc_context * context, char * buf, int len, char * dd_content, int dd_len, int vcodec, struct janus_vp9_svc_info * info, struct janus_rtp_switching_context * sc)
+</code> in your solution!
+
+<solution>

@@ -1,0 +1,73 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "janet.h"
+
+extern "C" {
+#include "janet_cfun.h"
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  /* init Janet */
+  janet_init();
+
+  /* fuzz the parser */
+  JanetParser parser;
+  janet_parser_init(&parser);
+  for (int i = 0, done = 0; i < size; i++) {
+    switch (janet_parser_status(&parser)) {
+    case JANET_PARSE_DEAD:
+    case JANET_PARSE_ERROR:
+      done = 1;
+      break;
+    case JANET_PARSE_PENDING:
+      if (i == size) {
+        janet_parser_eof(&parser);
+      } else {
+        janet_parser_consume(&parser, data[i]);
+      }
+      break;
+    case JANET_PARSE_ROOT:
+      if (i >= size) {
+        janet_parser_eof(&parser);
+      } else {
+        janet_parser_consume(&parser, data[i]);
+      }
+      break;
+    }
+
+    if (done == 1)
+      break;
+  }
+  janet_parser_deinit(&parser);
+
+  /* call cfun_ev_thread */
+  union Janet *root = janet_parser_result(&parser);
+  size_t ret = cfun_ev_thread(0, root);
+
+  /* cleanup Janet */
+  janet_deinit();
+
+  return ret;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

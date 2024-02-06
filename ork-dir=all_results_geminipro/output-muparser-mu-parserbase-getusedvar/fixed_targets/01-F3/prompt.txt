@@ -1,0 +1,45 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <iostream>
+#include <stdint.h>
+#include <stdio.h>
+#include <string>
+#include <map>
+
+extern "C" {
+#include "muParser.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  std::string line_string((char *)data, size);
+  try {
+    mu::Parser parser;
+    parser.SetExpr(line_string);
+    parser.Eval();
+    std::map<std::string, mu::value_type> *used_var = parser.GetUsedVar();
+  } catch (mu::Parser::exception_type &e) {
+  } catch (mu::ParserError &e) {
+  }
+  return 0;
+}
+```
+
+In this case, the error is caused by the use of the C++ standard library in a C context. To fix it, we need to wrap the `#include` directives for the C++ standard library with `extern "C" {}`. This tells the compiler to treat the included code as C code, which allows it to be linked with the rest of the C program.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

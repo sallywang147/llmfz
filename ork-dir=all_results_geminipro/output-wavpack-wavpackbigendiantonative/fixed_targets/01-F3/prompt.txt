@@ -1,0 +1,46 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <wavpack/wavpack.h>
+
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+#include <string>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const size_t data_size = stream.ConsumeIntegralInRange<size_t>(0, size);
+  const std::string format = stream.ConsumeRemainingBytesAsString();
+  std::vector<char> data_buffer(data_size);
+  stream.ConsumeBytes(data_buffer.data(), data_size);
+
+  WavpackBigEndianToNative(data_buffer.data(), const_cast<char*>(format.c_str()));
+  return 0;
+}
+```
+
+The original code has the following issues:
+
+* The header file `wavpack/wavpack.h` is not included. This header file defines the function `WavpackBigEndianToNative`.
+* The function `WavpackBigEndianToNative` is not declared as `extern "C"`. This is necessary because the function is defined in a C library, and we are calling it from a C++ program.
+
+The corrected code includes the necessary header file and declares the function as `extern "C"`. This should fix the build error.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

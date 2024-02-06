@@ -1,0 +1,53 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+#include "njs.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  struct njs_vm_s* vm = njs_vm_create();
+  if (vm == nullptr) {
+    return 0;
+  }
+
+  struct njs_str_t name;
+  name.length = stream.ConsumeIntegralInRange<uint32_t>(0, 1024);
+  name.ptr = static_cast<char*>(malloc(name.length + 1));
+  stream.ConsumeBytes(name.ptr, name.length);
+  name.ptr[name.length] = '\0';
+
+  const size_t script_size = stream.ConsumeIntegralInRange<size_t>(0, 1024);
+  char* script = static_cast<char*>(malloc(script_size + 1));
+  stream.ConsumeBytes(script, script_size);
+  script[script_size] = '\0';
+
+  njs_vm_compile_module(vm, &name, &script, script + script_size);
+
+  free(script);
+  free(name.ptr);
+  njs_vm_destroy(vm);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

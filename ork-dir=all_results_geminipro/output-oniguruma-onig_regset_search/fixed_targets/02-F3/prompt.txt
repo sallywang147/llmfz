@@ -1,0 +1,90 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+extern "C" {
+#include "oniguruma.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const std::string pattern = stream.ConsumeRemainingBytesAsString();
+  OnigRegSetStruct* set = onig_regset_new();
+  if (set == nullptr) {
+    return 0;
+  }
+  const int error = onig_regset_compile(set, pattern.c_str(), pattern.c_str() + pattern.size(), ONIG_OPTION_DEFAULT, ONIG_ENCODING_UTF8,
+                                        ONIG_SYNTAX_DEFAULT, &error);
+  if (error != ONIG_NORMAL) {
+    onig_regset_delete(set);
+    return 0;
+  }
+  const std::string text = stream.ConsumeRemainingBytesAsString();
+  int rmatch_pos[2];
+  const int result = onig_regset_search(set, text.c_str(), text.c_str() + text.size(), text.c_str(), text.c_str() + text.size(), 0, ONIG_OPTION_DEFAULT, rmatch_pos);
+  onig_regset_delete(set);
+  return result;
+}
+```
+
+The build issue is caused by the missing `extern "C"` wrapper around the `#include "oniguruma.h"` directive. This is necessary because the `oniguruma.h` header file contains C-style function declarations, which need to be declared as `extern "C"` in order to be visible to the C++ compiler.
+
+To fix the issue, add the `extern "C"` wrapper around the `#include "oniguruma.h"` directive, as shown below:
+
+```c++
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+extern "C" {
+#include "oniguruma.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const std::string pattern = stream.ConsumeRemainingBytesAsString();
+  OnigRegSetStruct* set = onig_regset_new();
+  if (set == nullptr) {
+    return 0;
+  }
+  const int error = onig_regset_compile(set, pattern.c_str(), pattern.c_str() + pattern.size(), ONIG_OPTION_DEFAULT, ONIG_ENCODING_UTF8,
+                                        ONIG_SYNTAX_DEFAULT, &error);
+  if (error != ONIG_NORMAL) {
+    onig_regset_delete(set);
+    return 0;
+  }
+  const std::string text = stream.ConsumeRemainingBytesAsString();
+  int rmatch_pos[2];
+  const int result = onig_regset_search(set, text.c_str(), text.c_str() + text.size(), text.c_str(), text.c_str() + text.size(), 0, ONIG_OPTION_DEFAULT, rmatch_pos);
+  onig_regset_delete(set);
+  return result;
+}
+```
+
+With this change, the code should build and run successfully.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

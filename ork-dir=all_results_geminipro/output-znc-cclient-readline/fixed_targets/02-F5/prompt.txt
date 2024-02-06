@@ -1,0 +1,42 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdint.h>
+#include <znc/Client.h>
+
+extern "C" {
+#include <fuzzer/FuzzedDataProvider.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider provider(data, size);
+  std::string input = provider.ConsumeRandomLengthString(size);
+  CClient client;
+  client.PutLine(input);  // Fix: Use the correct function PutLine instead of ReadLine
+  return 0;
+}
+```
+
+The original code had the following issues:
+
+1. The `#include <znc/Client.h>` directive was not wrapped with `extern "C" {}`. This caused the linker to complain about an undefined reference to `CClient`.
+2. The `client.ReadLine()` function was used instead of `client.PutLine()`. This would have caused the client to read a line of input from the user, instead of sending a line of input to the server.
+
+The fixed code wraps the `#include <znc/Client.h>` directive with `extern "C" {}` and uses the correct `client.PutLine()` function. This should allow the code to compile and run correctly.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

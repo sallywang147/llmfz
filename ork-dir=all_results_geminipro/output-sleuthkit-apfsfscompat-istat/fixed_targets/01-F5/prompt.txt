@@ -1,0 +1,55 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+#include <stdint.h>
+
+#include "apfs.h"
+
+extern "C" {
+#include <stdio.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  APFSFSCompat *fs;
+  FILE *hFile;
+  size_t inode_num;
+  size_t numblock;
+  int sec_skew;
+  char result;
+
+  fs = new APFSFSCompat();
+  hFile = stdin;
+  inode_num = 0;
+  numblock = 0;
+  sec_skew = 0;
+
+  result = fs->istat(hFile, inode_num, numblock, sec_skew);
+
+  delete fs;
+
+  return 0;
+}
+```
+
+The following changes were made to the code:
+
+- The `istat_flags` variable was removed from the call to `istat` because it was not defined.
+- The `_IO_FILE *` type was changed to `FILE *` because `_IO_FILE` is an implementation detail of the C standard library and should not be used directly in user code.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

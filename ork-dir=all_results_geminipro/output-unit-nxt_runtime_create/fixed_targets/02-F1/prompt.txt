@@ -1,0 +1,82 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "Fuzz_http.h"
+
+#define kMinInputLength 10
+#define kMaxInputLength 5120
+static int DoInit = 0;
+
+nxt_lvlhsh_t hash;
+
+extern char **environ;
+
+extern int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) { // src/test/nxt_http_parse_test.c
+
+  if (Size < kMinInputLength || Size > kMaxInputLength) {
+    return 0;
+  }
+
+  if (!DoInit) {
+    nxt_lib_start("tests", NULL, &environ);
+    nxt_memzero(&hash, sizeof(nxt_lvlhsh_t));
+
+    nxt_http_fields_hash(&hash, nxt_h1p_fields, nxt_nitems(nxt_h1p_fields));
+    DoInit = 1;
+  }
+
+  nxt_str_t nxt_http_request;
+
+  nxt_http_request.length = Size;
+  nxt_http_request.start = (uint8_t *)Data;
+
+  return nxt_http_parse_fuzz(&nxt_http_request, &hash);
+}
+
+nxt_int_t nxt_http_parse_fuzz(nxt_str_t *request, nxt_lvlhsh_t *hash) {
+
+  nxt_mp_t *mp;
+  nxt_buf_mem_t buf;
+  nxt_http_request_parse_t rp;
+
+  buf.start = request->start;
+  buf.end = request->start + request->length;
+
+  nxt_memzero(&rp, sizeof(nxt_http_request_parse_t));
+
+  mp = nxt_mp_create(1024, 128, 256, 32);
+
+  nxt_http_parse_request_init(&rp, mp);
+
+  buf.pos = buf.start;
+  buf.free = buf.end;
+
+  if (nxt_slow_path(nxt_http_parse_request(&rp, &buf) == NXT_DONE)) {
+    nxt_http_fields_process(rp.fields, hash, NULL);
+  }
+
+  nxt_mp_destroy(mp);
+
+  return NXT_OK;
+}
+
+int nxt_runtime_create(struct nxt_task_s * task) {
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

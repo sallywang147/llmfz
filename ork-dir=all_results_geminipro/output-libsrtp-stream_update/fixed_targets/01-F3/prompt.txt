@@ -1,0 +1,70 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+
+#include "srtp.h"
+
+extern "C" {
+#include "stream_update.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  const uint8_t key[SRTP_MAX_KEY_LEN] = {};
+  const uint8_t salt[SRTP_MAX_SALT_LEN] = {};
+  const srtp_cipher_type_t cipher = stream.PickValueInArray(
+      {SRTP_NULL_CIPHER, SRTP_AES_ICM_128, SRTP_AES_ICM_256});
+  const srtp_auth_type_t auth = stream.PickValueInArray(
+      {SRTP_NULL_AUTH, SRTP_HMAC_SHA1, SRTP_HMAC_SHA256});
+  const uint32_t ssrc = stream.ConsumeIntegral<uint32_t>();
+  const uint32_t window_size = stream.ConsumeIntegral<uint32_t>();
+  const uint32_t lifetime = stream.ConsumeIntegral<uint32_t>();
+  const uint32_t flags = stream.ConsumeIntegral<uint32_t>();
+
+  srtp_policy_t policy = {0};
+  srtp_policy_set_key(&policy, key, sizeof(key));
+  srtp_policy_set_salt(&policy, salt, sizeof(salt));
+  srtp_policy_set_cipher(&policy, cipher);
+  srtp_policy_set_auth_type(&policy, auth);
+  srtp_policy_set_ssrc(&policy, ssrc);
+  srtp_policy_set_window_size(&policy, window_size);
+  srtp_policy_set_lifetime(&policy, lifetime);
+  srtp_policy_set_flags(&policy, flags);
+
+  srtp_ctx_t* session = srtp_create(&policy, NULL);
+  if (session == NULL) {
+    return 0;
+  }
+
+  int ret = stream_update(session, &policy);
+  if (ret != SRTP_OK) {
+    srtp_dealloc(session);
+    return 0;
+  }
+
+  srtp_dealloc(session);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

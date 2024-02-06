@@ -1,0 +1,281 @@
+<system>
+You are a security testing engineer who wants to write a C++ program to execute all lines in a given function by defining and initializing its parameters in a suitable way before fuzzing the function through <code>LLVMFuzzerTestOneInput</code>.
+
+Carefully study the function signature and its parameters, then follow the example problems and solutions to answer the final problem. YOU MUST call the function to fuzz in the solution.
+
+Try as many variations of these inputs as possible. Do not use a random number generator such as <code>rand()</code>.
+
+Use <code>FuzzedDataProvider</code> to generate these inputs. You MUST declare it in <code>LLVMFuzzerTestOneInput</code>, like this:
+<code>
+FuzzedDataProvider stream(data, size);
+</code>
+
+Include <code>#include <fuzzer/FuzzedDataProvider.h></code> in the solution.
+
+This code shows example of using it:
+<code>
+// Extract integral values
+int int_arg = stream.ConsumeIntegral<int>();
+int int_arg_in_range = stream.ConsumeIntegralInRange(-100, 100);
+bool bool_arg = stream.ConsumeBool();
+
+// Extract floating point values
+float probability = stream.ConsumeProbability();
+double double_arg = stream.ConsumeFloatingPoint<double>();
+double double_arg_in_range = stream.ConsumeFloatingPointInRange(-1.0, 1.0);
+
+// Extract value from predefined set, such as enum or array
+EnumType enum = stream.ConsumeEnum<EnumType>();
+int valid_values = stream.PickValueInArray({FLAG_1, FLAG_2, FLAG_3});
+
+// Extract an array of bytes as a vector. You MUST call <code>.data()</code> to use result as pointer.
+std::vector<uint8_t> bytes = stream.ConsumeBytes<uint8_t>(stream.ConsumeIntegralInRange(0, max_size));
+void *data_ptr = bytes.data();
+std::vector<uint8_t> bytes2 = stream.ConsumeBytes<uint8_t>(requested_size);
+void *data2_ptr = bytes2.data();
+
+// Extract a string. You MUST use <code>.c_str()</code> to use result as pointer
+std::string str = stream.ConsumeBytesAsString(stream.ConsumeIntegralInRange(0, max_size));
+char *ptr = str.c_str();
+std::string str2 = stream.ConsumeBytesAsString(requested_size);
+char *ptr2 = str2.c_str();
+std::string str3 = stream.ConsumeRandomLengthString();
+char *ptr3 = str3.c_str();
+
+// Extract to user defined object
+struct_type_t obj;
+size_t consumed = stream.ConsumeData(&obj, sizeof(obj));
+</code>
+
+There MUST be AT MOST ONE call to <code>ConsumeRemainingBytes</code> to consume remaining input!
+<code>
+FuzzedDataProvider stream(data, size);
+
+std::vector<uint8_t> bytes3 = stream.ConsumeRemainingBytes();
+void *data3_ptr = bytes3.data();
+</code>
+
+All variables used MUST be declared and initialized. Carefully make sure that the variable and argument types in your code match and compiles successfully. Add type casts to make types match.
+
+Do not create new variables with the same names as existing variables.
+WRONG:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  void* data = Foo();
+}
+</code>
+
+EXTREMELY IMPORTANT: If you write code using <code>goto</code>, you MUST MUST also declare all variables BEFORE the <code>goto</code>. Never introduce new variables after the <code>goto</code>.
+WRONG:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int a = bar();
+  if (!some_function()) goto EXIT;
+  Foo b = target_function(data, size);
+  int c = another_func();
+EXIT:
+  return 0;
+}
+</code>
+
+CORRECT:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int a = bar();
+  Foo b;
+  int c;
+
+  if (!some_function()) goto EXIT;
+  b = target_function(data, size);
+  c = another_func()
+EXIT:
+  return 0;
+}
+</code>
+
+If an example provided for the same library includes a unique header file, then it must be included in the solution as well.
+</system>
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+void pj_md5_update(struct pj_md5_context * ctx, char * buf, int len)
+</function header>
+</task>
+
+<solution>
+
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#include <pjlib-util.h>
+#include <pjlib.h>
+
+#define OPENSSL_SUPPRESS_DEPRECATED 1
+#include <openssl/bio.h>
+#include <openssl/evp.h>
+#include <openssl/md5.h>
+#include <openssl/sha.h>
+#include <zlib.h>
+
+#define kMinInputLength 10
+#define kMaxInputLength 1024
+
+#define MAXSIZE 5120
+
+void encode_base64_differential(const uint8_t *Data, size_t Size) {
+
+  // PJSIP
+  char pj_output[MAXSIZE];
+  int pj_output_len = MAXSIZE;
+
+  memset(pj_output, 0, MAXSIZE);
+  pj_base64_encode(Data, Size, pj_output, &pj_output_len);
+
+  // OPENSSL
+  BIO *bio, *bio_mem;
+  char *ssl_output;
+  int ssl_output_len;
+
+  bio = BIO_new(BIO_f_base64());
+  BIO_set_flags(bio, BIO_FLAGS_BASE64_NO_NL);
+
+  bio_mem = BIO_new(BIO_s_mem());
+  BIO_push(bio, bio_mem);
+
+  BIO_write(bio, Data, Size);
+  BIO_flush(bio);
+
+  ssl_output_len = BIO_get_mem_data(bio_mem, &ssl_output);
+
+  // Differential
+  int result = memcmp(pj_output, ssl_output, ssl_output_len);
+  if (result != 0) {
+    abort();
+  }
+  BIO_free_all(bio);
+
+  // PJSIP Decode After encode.
+  pj_str_t pj_input;
+  uint8_t pj_output_dec[MAXSIZE];
+  int pj_output_dec_len = MAXSIZE;
+
+  pj_input.ptr = pj_output;
+  pj_input.slen = ssl_output_len;
+
+  memset(pj_output_dec, 0, MAXSIZE);
+  pj_base64_decode(&pj_input, pj_output_dec, &pj_output_dec_len);
+
+  // Differential
+  int result_dec = memcmp(pj_output_dec, Data, Size);
+  if (result_dec != 0) {
+    abort();
+  }
+}
+
+void decode_base64_differential(const uint8_t *Data, size_t Size) {
+
+  // PJSIP
+  pj_str_t pj_input;
+  uint8_t pj_output[MAXSIZE];
+  int pj_output_len = MAXSIZE;
+
+  pj_input.ptr = (char *)Data;
+  pj_input.slen = Size;
+
+  memset(pj_output, 0, MAXSIZE);
+  pj_base64_decode(&pj_input, pj_output, &pj_output_len);
+}
+
+void md5_differential(const uint8_t *Data, size_t Size) {
+
+  // PJSIP
+  pj_md5_context ctx;
+  pj_uint8_t pj_md5_hash[MD5_DIGEST_LENGTH];
+
+  pj_md5_init(&ctx);
+  pj_md5_update(&ctx, Data, Size);
+  pj_md5_final(&ctx, pj_md5_hash);
+
+  // OPENSSL
+  uint8_t ssl_md5_hash[MD5_DIGEST_LENGTH] = {};
+  MD5(Data, Size, ssl_md5_hash);
+
+  // Differential
+  int result = memcmp(pj_md5_hash, ssl_md5_hash, MD5_DIGEST_LENGTH);
+  if (result != 0) {
+    abort();
+  }
+}
+
+void sha1_differential(const uint8_t *Data, size_t Size) {
+
+  // PJSIP
+  pj_sha1_context pj_sha;
+  pj_uint8_t pj_sha_hash[SHA_DIGEST_LENGTH];
+
+  pj_sha1_init(&pj_sha);
+  pj_sha1_update(&pj_sha, Data, Size);
+  pj_sha1_final(&pj_sha, pj_sha_hash);
+
+  // OPENSSL
+  uint8_t ssl_sha_hash[SHA_DIGEST_LENGTH] = {};
+
+  SHA_CTX ctx;
+  SHA1_Init(&ctx);
+  SHA1_Update(&ctx, Data, Size);
+  SHA1_Final(ssl_sha_hash, &ctx);
+
+  // Differential
+  int result = memcmp(pj_sha_hash, ssl_sha_hash, SHA_DIGEST_LENGTH);
+  if (result != 0) {
+    abort();
+  }
+}
+
+void crc32_differential(const uint8_t *Data, size_t Size) {
+
+  // PJSIP
+  pj_uint32_t pj_crc;
+  pj_crc = pj_crc32_calc(Data, Size);
+
+  // zlib
+  uint32_t zlib_crc;
+  zlib_crc = crc32(0L, Data, Size);
+
+  // Differential
+  if (pj_crc != zlib_crc) {
+    abort();
+  }
+}
+
+extern int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+
+  if (Size < kMinInputLength || Size > kMaxInputLength) {
+    return 1;
+  }
+
+  encode_base64_differential(Data, Size);
+  decode_base64_differential(Data, Size);
+  md5_differential(Data, Size);
+  sha1_differential(Data, Size);
+  crc32_differential(Data, Size);
+
+  return 0;
+}
+
+</solution>
+
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+int pjsip_tsx_create_uas2(struct pjsip_module * tsx_user, struct pjsip_rx_data * rdata, struct pj_grp_lock_t * grp_lock, struct pjsip_transaction ** p_tsx)
+</function header>
+</task>
+You MUST call <code>
+int pjsip_tsx_create_uas2(struct pjsip_module * tsx_user, struct pjsip_rx_data * rdata, struct pj_grp_lock_t * grp_lock, struct pjsip_transaction ** p_tsx)
+</code> in your solution!
+
+<solution>

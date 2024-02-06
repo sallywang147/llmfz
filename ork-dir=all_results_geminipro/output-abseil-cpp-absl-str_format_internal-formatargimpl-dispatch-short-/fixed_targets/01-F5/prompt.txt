@@ -1,0 +1,45 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstdio>
+#include <string>
+
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include "absl/strings/str_format.h"
+#include "absl/strings/str_join.h"
+#include "absl/strings/str_split.h"
+
+extern "C" {
+#include "absl/strings/internal/str_format_internal.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider fuzzed_data(data, size);
+  std::string str = fuzzed_data.ConsumeRemainingBytesAsString();
+  std::vector<std::string> v = absl::StrSplit(str, ".");
+  absl::StrJoin(v, ".");
+  int spec = fuzzed_data.ConsumeIntegral<int>();
+  short arg = fuzzed_data.ConsumeIntegral<short>();
+  char out[100];
+  absl::str_format_internal::FormatArgImpl::Dispatch<short>(
+      reinterpret_cast<char *>(&arg), spec, 100, out);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

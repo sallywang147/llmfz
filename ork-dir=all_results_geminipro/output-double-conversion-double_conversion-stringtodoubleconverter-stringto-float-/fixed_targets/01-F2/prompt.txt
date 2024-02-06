@@ -1,0 +1,36 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+
+#include "double-conversion.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  StringToDoubleConverter converter(StringToDoubleConverter::ALLOW_HEX | StringToDoubleConverter::ALLOW_OCTALS | StringToDoubleConverter::ALLOW_TRAILING_JUNK | StringToDoubleConverter::ALLOW_LEADING_SPACES | StringToDoubleConverter::ALLOW_TRAILING_SPACES | StringToDoubleConverter::ALLOW_SPACES_AFTER_SIGN | StringToDoubleConverter::ALLOW_CASE_INSENSIBILITY | StringToDoubleConverter::ALLOW_HEX_FLOATS,
+                                    /*empty_string_value=*/0.0,
+                                    /*junk_string_value=*/0.0, "inf", "nan");
+  int num_digits_unused;
+  double result = converter.StringTo<double>(reinterpret_cast<char *>(data), size, &num_digits_unused);
+  return 0;
+}
+```
+The original code attempts to convert a string to a float using the `StringTo<float>` method of the `StringToDoubleConverter` class. However, the `StringTo` method is only defined for converting strings to `double`, not to `float`. To fix the issue, change the call to `StringTo` to use `double` instead of `float`.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

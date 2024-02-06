@@ -1,0 +1,48 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+extern "C" {
+#include "mongoose.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const int send_buffer_size = stream.ConsumeIntegral<int>();
+  const std::string path = stream.ConsumeRemainingBytesAsString();
+
+  struct mg_connection conn;
+  memset(&conn, 0, sizeof(conn));
+  conn.send_iov = static_cast<struct mg_iovec*>(
+      malloc(sizeof(struct mg_iovec) * send_buffer_size));
+  conn.send_iov_count = send_buffer_size;
+
+  mg_send_file_body(&conn, path.c_str());  // Remove const_cast
+  free(conn.send_iov);
+  return 0;
+}
+```
+
+The issue with the original code was that `mg_send_file_body` expects a non-const character pointer as its second argument, but the code was passing a `const std::string::c_str()` which is a `const char*`. To fix this, the `const_cast` was removed from the line `mg_send_file_body(&conn, path.c_str());`.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

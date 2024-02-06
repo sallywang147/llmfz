@@ -1,0 +1,87 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <assert.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string>
+#include <sys/socket.h>
+
+#include <fuzzer/FuzzedDataProvider.h>
+
+extern "C" {
+#include "libevent/include/event2/event.h"
+#include "libevent/include/event2/http.h"
+#include "libevent/include/event2/bufferevent.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+
+  FuzzedDataProvider data_provider(data, size);
+
+  std::string s1 = data_provider.ConsumeRandomLengthString();
+  size_t int1 = data_provider.ConsumeIntegral<size_t>();
+  size_t int2 = data_provider.ConsumeIntegral<size_t>();
+  size_t int3 = data_provider.ConsumeIntegral<size_t>();
+
+  struct evhttp *httpd = NULL;
+  struct event_base *base = NULL;
+  int fd = -1;
+
+  base = event_base_new();
+  httpd = evhttp_new(base);
+  if (!httpd) {
+    goto cleanup;
+  }
+
+  fd = socket(AF_INET, SOCK_STREAM, 0);
+  if (fd < 0) {
+    goto cleanup;
+  }
+
+  /*make it non-blocking*/
+  if (evutil_make_socket_nonblocking(fd) < 0) {
+    goto cleanup;
+  }
+
+  /*accept socket*/
+  assert(evhttp_accept_socket(httpd, fd) != -1);
+
+  /*set some options*/
+  evhttp_set_gencb(httpd, NULL, NULL);
+  evhttp_set_timeout(httpd, int1);
+  evhttp_set_max_body_size(httpd, int2);
+  evhttp_set_max_headers(httpd, int3);
+
+  /*clean up*/
+cleanup:
+  if (httpd) {
+    evhttp_free(httpd);
+  }
+  if (base) {
+    event_base_free(base);
+  }
+  if (fd != -1) {
+    close(fd);
+  }
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

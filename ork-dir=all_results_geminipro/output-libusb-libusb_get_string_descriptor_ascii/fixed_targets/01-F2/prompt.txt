@@ -1,0 +1,50 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <string>
+
+#include "libusb/libusb.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  struct libusb_device_handle *handle = nullptr;
+  FuzzedDataProvider stream(data, size);
+  char desc_index = stream.ConsumeIntegral<char>();
+  int length = stream.ConsumeIntegral<int>();
+  std::string input = stream.ConsumeRandomLengthString();
+  const char *d = input.c_str();
+
+  int ret = libusb_get_string_descriptor_ascii(handle, desc_index, (char *)d, length);
+  if (ret < 0) {
+    return 0;
+  }
+
+  return 0;
+}
+```
+
+The fixed code:
+
+1. Added a check for the return value of `libusb_get_string_descriptor_ascii`. If the function returns a negative value, it means that an error occurred, and the function returns 0 to indicate that the fuzzer should continue to the next input.
+
+2. Wrapped the `#include "libusb/libusb.h"` directive with `extern "C" {}` to ensure that the function is exported with C linkage, which is required for the object linking to succeed.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

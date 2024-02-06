@@ -1,0 +1,67 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+extern "C" {
+#include "shl_htable.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  static bool initialized = false;
+  if (!initialized) {
+    shl_htable_init();
+    initialized = true;
+  }
+  shl_htable_t* htable = shl_htable_new();
+  if (htable == nullptr) {
+    return 0;
+  }
+
+  // Create a vector of bytes to hold the object to be inserted into the hash table.
+  std::vector<uint8_t> object(size);
+  // Copy the data from the input buffer into the object vector.
+  std::copy(data, data + size, object.begin());
+
+  // Generate a hash value for the object using the provided data.
+  size_t hash = 0;
+  for (size_t i = 0; i < size; i++) {
+    hash += data[i];
+  }
+
+  // Insert the object into the hash table using the generated hash value.
+  int ret = shl_htable_insert(htable, (const char *)object.data(), hash);
+
+  // Free the hash table.
+  shl_htable_free(htable);
+
+  return ret;
+}
+```
+
+The issue in the provided code was that the `shl_htable_insert` function expects a `const char*` as the second argument, but the code was passing a `char*`. This mismatch in the argument type caused the build error.
+
+To fix this issue, the code was modified to pass a `const char*` to the `shl_htable_insert` function. This was done by casting the `object.data()` to a `const char*`.
+
+After making this change, the code should build and run successfully.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

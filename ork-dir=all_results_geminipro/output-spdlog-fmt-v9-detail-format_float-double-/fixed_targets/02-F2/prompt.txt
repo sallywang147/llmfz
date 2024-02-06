@@ -1,0 +1,65 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+#include "fmt/format.h"
+
+extern "C" {
+#include "llvm/Support/Format.h"
+#include "llvm/Support/raw_ostream.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  if (size == 0) {
+    return 0;
+  }
+
+  fmt::v9::detail::buffer buf;
+  FuzzedDataProvider provider(data, size);
+
+  const double value = provider.ConsumeFloatingPoint<double>();
+  const int precision = provider.ConsumeIntegralInRange<int>(-100, 100);
+  const size_t max_digits10 = provider.ConsumeIntegralInRange<size_t>(0, 100);
+  const std::string format_str = provider.ConsumeRandomLengthString();
+
+  int result = fmt::v9::detail::format_float<double>(value, precision, max_digits10, &buf);
+  if (result < 0) {
+    return 0;
+  }
+
+  buf.append(buf.size(), '\0');
+  llvm::raw_ostream OS(buf.data());
+  OS << buf.data();
+
+  return 0;
+}
+```
+
+The build issues are caused by the following:
+
+* The `fmt/format.h` header includes the `llvm/Support/Format.h` and `llvm/Support/raw_ostream.h` headers, which are not included in the original code.
+* The `fprintf` function is not available in C++, so it needs to be replaced with `llvm::raw_ostream`.
+
+The fixed code includes the necessary headers and uses `llvm::raw_ostream` instead of `fprintf`.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

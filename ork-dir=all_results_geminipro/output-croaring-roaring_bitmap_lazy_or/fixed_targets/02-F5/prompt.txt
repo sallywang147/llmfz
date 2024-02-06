@@ -1,0 +1,54 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+#include <vector>
+
+#include "roaring.h"
+#include "roaring_bitmap.h" // Include the definition of roaring_bitmap_lazy_or
+
+extern "C" {
+roaring_bitmap_t* roaring_bitmap_lazy_or(roaring_bitmap_t* bitmap1, roaring_bitmap_t* bitmap2, int inplace);
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const uint8_t bitmap_count = stream.ConsumeIntegralInRange<uint8_t>(1, 10);
+  std::vector<roaring_bitmap_t*> bitmaps;
+  for (uint8_t i = 0; i < bitmap_count; ++i) {
+    const uint32_t bitmap_size = stream.ConsumeIntegralInRange<uint32_t>(0, 10000);
+    auto bitmap_data = stream.ConsumeBytes<uint8_t>(bitmap_size);
+    bitmaps.push_back(roaring_bitmap_from_bytes(bitmap_data.data(), bitmap_size));
+  }
+
+  const bool inplace = stream.ConsumeBool();
+  roaring_bitmap_t* result = inplace ? bitmaps[0] : roaring_bitmap_lazy_or(bitmaps[0], bitmaps[1], inplace);
+  roaring_bitmap_free(result);
+
+  for (roaring_bitmap_t* bitmap : bitmaps) {
+    roaring_bitmap_free(bitmap);
+  }
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

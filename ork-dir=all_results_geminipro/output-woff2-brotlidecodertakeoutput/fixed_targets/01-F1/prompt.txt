@@ -1,0 +1,44 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <brotli/decode.h>
+#include <fuzzer/FuzzedDataProvider.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  BrotliDecoderState *s = BrotliDecoderCreateInstance(0, 0, 0);
+  if (!s) return 0;
+  FuzzedDataProvider stream(data, size);
+  BrotliDecoderSetParameter(s, BROTLI_DECODER_PARAM_LARGE_WINDOW, 1);
+  size_t available_in = stream.remaining_bytes();
+  const uint8_t *next_in = stream.ConsumeBytes<uint8_t>(available_in).data();
+  size_t total_out = 0;
+  while (BrotliDecoderHasMoreOutput(s)) {
+    size_t available_out = 65536;
+    uint8_t *next_out = new uint8_t[available_out];
+    BrotliDecoderResult result = BrotliDecoderDecompressStream(
+        s, &available_in, &next_in, &available_out, &next_out, &total_out);
+    delete[] next_out;
+    if (result != BROTLI_DECODER_RESULT_NEEDS_MORE_INPUT) break;
+    available_in = stream.remaining_bytes();
+    next_in = stream.ConsumeBytes<uint8_t>(available_in).data();
+  }
+  BrotliDecoderDestroyInstance(s);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+The target function `char * BrotliDecoderTakeOutput(struct BrotliDecoderStateStruct * , size_t * )` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `char * BrotliDecoderTakeOutput(struct BrotliDecoderStateStruct * , size_t * )` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

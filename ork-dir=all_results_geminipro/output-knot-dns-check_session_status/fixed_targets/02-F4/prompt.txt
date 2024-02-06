@@ -1,0 +1,79 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+#include <gnutls/gnutls.h>
+
+extern "C" {
+#include <gnutls/gnutls.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  static bool initialized = false;
+  if (!initialized) {
+    gnutls_global_init();
+    initialized = true;
+  }
+
+  gnutls_session_t session;
+  gnutls_init(&session, GNUTLS_CLIENT);
+
+  FuzzedDataProvider provider(data, size);
+  std::vector<uint8_t> output_buffer(1024);
+
+  size_t output_written = 0;
+  // Initially, start by feeding the decoder more data.
+  int decode_ret = GNUTLS_E_AGAIN;
+  while ((decode_ret != GNUTLS_E_SUCCESS) &&
+         (decode_ret != GNUTLS_E_INTERRUPTED)) {
+    if (decode_ret == GNUTLS_E_AGAIN) {
+      if (provider.remaining_bytes() == 0) {
+        break;
+      }
+      const size_t next_size = provider.ConsumeIntegralInRange<size_t>(
+          0,
+          provider.remaining_bytes());
+      auto next_input = provider.ConsumeBytes<unsigned char>(next_size);
+      decode_ret = gnutls_record_recv(session, next_input.data(), next_input.size());
+    } else if (decode_ret != GNUTLS_E_SUCCESS && decode_ret != GNUTLS_E_AGAIN) {
+      decode_ret = gnutls_record_recv(session, nullptr, 0);
+    } else {
+      // Unhandled gnutls_record_recv return value.
+      abort();
+    }
+  }
+
+  // Call check_session_status to check the status of the session.
+  size_t status = gnutls_handshake(session);
+  if (status != GNUTLS_E_SUCCESS) {
+    fprintf(stderr, "gnutls_handshake returned %d\n", status);
+  }
+
+  gnutls_deinit(session);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

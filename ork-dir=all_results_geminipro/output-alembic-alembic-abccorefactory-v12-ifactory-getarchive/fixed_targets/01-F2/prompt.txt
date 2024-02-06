@@ -1,0 +1,125 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <vector>
+
+#include <Alembic/Abc/v12/IArchive.h>
+#include <Alembic/AbcCoreFactory/v12/IFactory.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  std::vector<Alembic::Abc::v12::IArchive*> archives;
+  std::vector<Alembic::AbcCoreFactory::v12::IFactory*> factories;
+  std::vector<std::vector<uint8_t>> archives_data;
+  std::vector<int> archive_sizes;
+  while (stream.remaining_bytes() > 0) {
+    archives_data.emplace_back(stream.ConsumeRemainingBytes());
+    archive_sizes.emplace_back(archives_data.back().size());
+  }
+  for (size_t i = 0; i < archives_data.size(); ++i) {
+    Alembic::Abc::v12::IArchive* archive =
+        Alembic::Abc::v12::IArchive::create(
+            archives_data[i].data(), archive_sizes[i],
+            Alembic::Abc::v12::IArchive::kNoThrow);
+    if (archive) archives.emplace_back(archive);
+  }
+  for (size_t i = 0; i < archives.size(); ++i) {
+    Alembic::AbcCoreFactory::v12::IFactory* factory =
+        Alembic::AbcCoreFactory::v12::IFactory::create();
+    if (factory) factories.emplace_back(factory);
+  }
+  std::vector<std::vector<uint8_t>> data;
+  std::vector<int> sizes;
+  for (size_t i = 0; i < archives.size(); ++i) {
+    data.emplace_back();
+    sizes.emplace_back();
+    archives[i]->getArchive(factories[i], &data.back(), &sizes.back());
+  }
+  for (size_t i = 0; i < archives.size(); ++i) {
+    delete archives[i];
+    delete factories[i];
+  }
+  return 0;
+}
+```
+
+The build error is caused by the missing `extern "C" {}` around the `#include` directives for the Alembic headers. This is necessary because the Alembic headers are written in C++, and the fuzzer is written in C. Without the `extern "C" {}` wrapper, the compiler will not be able to find the Alembic symbols.
+
+To fix the error, add `extern "C" {}` around the `#include` directives for the Alembic headers, as shown in the following code:
+
+```c++
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <vector>
+
+#include <Alembic/Abc/v12/IArchive.h>
+#include <Alembic/AbcCoreFactory/v12/IFactory.h>
+
+extern "C" {
+#include <Alembic/Abc/v12/IArchive.h>
+#include <Alembic/AbcCoreFactory/v12/IFactory.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  std::vector<Alembic::Abc::v12::IArchive*> archives;
+  std::vector<Alembic::AbcCoreFactory::v12::IFactory*> factories;
+  std::vector<std::vector<uint8_t>> archives_data;
+  std::vector<int> archive_sizes;
+  while (stream.remaining_bytes() > 0) {
+    archives_data.emplace_back(stream.ConsumeRemainingBytes());
+    archive_sizes.emplace_back(archives_data.back().size());
+  }
+  for (size_t i = 0; i < archives_data.size(); ++i) {
+    Alembic::Abc::v12::IArchive* archive =
+        Alembic::Abc::v12::IArchive::create(
+            archives_data[i].data(), archive_sizes[i],
+            Alembic::Abc::v12::IArchive::kNoThrow);
+    if (archive) archives.emplace_back(archive);
+  }
+  for (size_t i = 0; i < archives.size(); ++i) {
+    Alembic::AbcCoreFactory::v12::IFactory* factory =
+        Alembic::AbcCoreFactory::v12::IFactory::create();
+    if (factory) factories.emplace_back(factory);
+  }
+  std::vector<std::vector<uint8_t>> data;
+  std::vector<int> sizes;
+  for (size_t i = 0; i < archives.size(); ++i) {
+    data.emplace_back();
+    sizes.emplace_back();
+    archives[i]->getArchive(factories[i], &data.back(), &sizes.back());
+  }
+  for (size_t i = 0; i < archives.size(); ++i) {
+    delete archives[i];
+    delete factories[i];
+  }
+  return 0;
+}
+```
+
+With this change, the code should compile and run without errors.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

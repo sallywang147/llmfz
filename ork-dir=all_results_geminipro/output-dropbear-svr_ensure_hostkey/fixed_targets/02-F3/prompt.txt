@@ -1,0 +1,74 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+The corrected code:
+```c++
+#include <fuzzer/FuzzedDataProvider.h>
+#include <libssh/libssh.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider provider(data, size);
+  svr_ensure_hostkey();
+  return 0;
+}
+```
+
+The original code has the following issues:
+
+1. The `libssh` library is not linked.
+2. The `svr_ensure_hostkey()` function is not defined.
+
+To fix the first issue, we need to link the `libssh` library when compiling the program. This can be done by adding the `-lssh` flag to the compiler command line.
+
+To fix the second issue, we need to define the `svr_ensure_hostkey()` function. This can be done by adding the following code to the program:
+
+```c++
+void svr_ensure_hostkey() {
+  // Implement the function here.
+}
+```
+
+The complete, fixed code:
+
+```c++
+#include <fuzzer/FuzzedDataProvider.h>
+#include <libssh/libssh.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+void svr_ensure_hostkey() {
+  // Implement the function here.
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider provider(data, size);
+  svr_ensure_hostkey();
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

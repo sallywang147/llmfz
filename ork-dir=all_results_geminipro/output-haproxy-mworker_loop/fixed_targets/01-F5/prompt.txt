@@ -1,0 +1,59 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+#include "mworker.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  static bool initialized = false;
+  if (!initialized) {
+    // Initialize global state here.
+    initialized = true;
+  }
+
+  // Use the data provided by libFuzzer.
+  FuzzedDataProvider provider(data, size);
+
+  // Read some integers from the data.
+  std::vector<int> integers;
+  while (provider.remaining_bytes() > 0) {
+    integers.push_back(provider.ConsumeIntegral<int>());
+  }
+
+  // Call the function to be fuzzed.
+  mworker_loop(integers.data(), integers.size());
+
+  return 0;
+}
+```
+
+The following changes were made to the code:
+
+1. Added the `mworker.h` header file to the `#include` directives.
+2. Wrapped the `#include` directive for `mworker.h` with `extern "C" {}`.
+3. Added the `integers.data()` and `integers.size()` arguments to the `mworker_loop()` function call.
+
+With these changes, the code should compile and run without errors.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

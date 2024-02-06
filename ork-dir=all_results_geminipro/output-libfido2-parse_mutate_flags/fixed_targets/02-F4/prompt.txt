@@ -1,0 +1,49 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const std::string opt = stream.ConsumeRemainingBytesAsString();
+  int mutate_flags = 0;
+  parse_mutate_flags(const_cast<char*>(opt.c_str()), &mutate_flags);
+  return 0;
+}
+
+extern "C" {
+#include "parse_mutate_flags.h"
+}
+```
+
+The issue with the original code is that the `parse_mutate_flags` function is declared in the `parse_mutate_flags.h` header file, but the header file is not included in the code. This causes the linker to complain about an undefined reference to the function.
+
+To fix the issue, you need to include the `parse_mutate_flags.h` header file in the code. You can do this by adding the following line to the top of the file:
+
+```c++
+#include "parse_mutate_flags.h"
+```
+
+Once you have done this, the code should compile and run without errors.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

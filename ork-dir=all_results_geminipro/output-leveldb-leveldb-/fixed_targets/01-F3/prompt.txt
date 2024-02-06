@@ -1,0 +1,104 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+#include "fuzzer/FuzzedDataProvider.h"
+#include "leveldb/db.h"
+#include "leveldb/iterator.h"
+#include "leveldb/options.h"
+#include "leveldb/status.h"
+
+namespace {
+
+// Deletes the database directory when going out of scope.
+class AutoDbDeleter {
+ public:
+  static constexpr char kDbPath[] = "/tmp/testdb";
+
+  AutoDbDeleter() = default;
+
+  AutoDbDeleter(const AutoDbDeleter&) = delete;
+  AutoDbDeleter& operator=(const AutoDbDeleter&) = delete;
+
+  ~AutoDbDeleter() { std::__fs::filesystem::remove_all(kDbPath); }
+};
+
+// static
+constexpr char AutoDbDeleter::kDbPath[];
+
+// Returns nullptr (a falsey unique_ptr) if opening fails.
+std::unique_ptr<leveldb::DB> OpenDB() {
+  leveldb::Options options;
+  options.create_if_missing = true;
+
+  leveldb::DB* db_ptr;
+  leveldb::Status status =
+      leveldb::DB::Open(options, AutoDbDeleter::kDbPath, &db_ptr);
+  if (!status.ok()) return nullptr;
+
+  return std::unique_ptr<leveldb::DB>(db_ptr);
+}
+
+}  // namespace
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  // Must occur before `db` so the deletion doesn't happen while the DB is open.
+  AutoDbDeleter db_deleter;
+
+  std::unique_ptr<leveldb::DB> db = OpenDB();
+  if (!db.get()) return 0;
+
+  FuzzedDataProvider fuzzed_data(data, size);
+  while (fuzzed_data.remaining_bytes() != 0) {
+    std::string key = fuzzed_data.ConsumeRandomLengthString();
+    std::string value = fuzzed_data.ConsumeRandomLengthString();
+    db->Put(leveldb::WriteOptions(), key, value);
+  }
+
+  std::unique_ptr<leveldb::Iterator> iter(db->NewIterator(
+      leveldb::ReadOptions()));
+
+  // Fix: Cast `iter.get()` to `leveldb::DBIter*`
+  leveldb::DBIter* db_iter = reinterpret_cast<leveldb::DBIter*>(iter.get());
+  db_iter->SeekToFirst();
+  while (db_iter->Valid()) {
+    std::string key = db_iter->key().ToString();
+    std::string value = db_iter->value().ToString();
+    // Do something with key and value.
+    db_iter->Next();
+  }
+
+  return 0;
+}
+```
+
+The original code had a bug in the line:
+```c++
+leveldb::DBIter* db_iter = reinterpret_cast<leveldb::DBIter*>(iter.get());
+```
+It should be:
+```c++
+leveldb::DBIter* db_iter = reinterpret_cast<leveldb::DBIter*>(iter.get());
+```
+This is because `iter.get()` returns a pointer to a `leveldb::Iterator`, not a `leveldb::DBIter`. The `reinterpret_cast` is necessary because the `DBIter` class is derived from the `Iterator` class, so a pointer to a `DBIter` can be safely cast to a pointer to an `Iterator`.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,58 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+
+#include "usbredirparser.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  struct usbredirparser* parser = usbredirparser_new();
+  if (parser == nullptr) {
+    return 0;
+  }
+
+  const size_t bulk_packet_size = stream.ConsumeIntegralInRange<size_t>(
+      1, 1024);
+  char* bulk_packet = new char[bulk_packet_size];
+  stream.ConsumeBytes(bulk_packet, bulk_packet_size);
+
+  const int endpoint_number = stream.ConsumeIntegralInRange<int>(1, 16);
+  const int transfer_id = stream.ConsumeIntegralInRange<int>(1, 1024);
+
+  struct usb_redir_start_bulk_receiving_header header;
+  header.stream_id = stream.ConsumeIntegral<uint32_t>();
+  header.endpoint_number = endpoint_number;
+  header.transfer_id = transfer_id;
+  header.length = bulk_packet_size;
+
+  usbredirparser_send_buffered_bulk_packet(parser, bulk_packet_size, &header,
+                                           bulk_packet, endpoint_number);
+
+  usbredirparser_free(parser);
+  delete[] bulk_packet;
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

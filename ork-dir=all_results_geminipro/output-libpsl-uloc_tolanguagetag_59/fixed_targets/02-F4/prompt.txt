@@ -1,0 +1,46 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+#include <unicode/uloc.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  std::vector<uint8_t> locale_id_bytes(data, data + size);
+  locale_id_bytes.push_back('\0');
+  const char* locale_id = reinterpret_cast<const char*>(locale_id_bytes.data());
+
+  std::vector<uint8_t> langtag_bytes(size, 0);
+  langtag_bytes.push_back('\0');
+  char* langtag = reinterpret_cast<char*>(langtag_bytes.data());
+
+  int langtag_capacity = size;
+  int status = 0;
+
+  uloc_toLanguageTag(locale_id, langtag, langtag_capacity, &status);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+The target function `int uloc_toLanguageTag_59(char * localeID, char * langtag, int langtagCapacity, char strict, int * status)` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `int uloc_toLanguageTag_59(char * localeID, char * langtag, int langtagCapacity, char strict, int * status)` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

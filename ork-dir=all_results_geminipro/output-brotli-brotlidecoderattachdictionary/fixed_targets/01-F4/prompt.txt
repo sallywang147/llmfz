@@ -1,0 +1,47 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <vector>
+
+extern "C" {
+#include <brotli/decode.h>
+}
+
+// Entry point for LibFuzzer.
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  BrotliDecoderState *state = BrotliDecoderCreateInstance(0, 0, 0);
+  if (!state) {
+    // OOM is out-of-scope here.
+    return 0;
+  }
+
+  FuzzedDataProvider stream(data, size);
+  int dictionary_id = stream.ConsumeIntegral<int>();
+  size_t dictionary_size = stream.ConsumeIntegral<size_t>();
+  std::vector<uint8_t> dictionary = stream.ConsumeBytes<uint8_t>(dictionary_size);
+
+  BrotliDecoderAttachDictionary(state, dictionary_id, dictionary_size, dictionary.data());
+
+  BrotliDecoderDestroyInstance(state);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,64 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+#include <stdint.h>
+
+#include <cassert>
+#include <string>
+
+#include "snappy.h"
+
+extern "C" {
+#include "zlib.h"
+}
+
+// Entry point for LibFuzzer.
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  // Construct a Sink that writes to a string.
+  std::string compressed;
+  snappy::StringSink compressed_sink(&compressed);
+
+  // Construct a Sink that writes to a string.
+  std::string uncompressed;
+  snappy::StringSink uncompressed_sink(&uncompressed);
+
+  // Write the input data to the compressed Sink.
+  compressed_sink.Append(reinterpret_cast<const char *>(data), size);
+
+  // Uncompress the data from the compressed Sink to the uncompressed Sink.
+  bool uncompress_succeeded = snappy::Uncompress(&compressed_sink, &uncompressed_sink);
+
+  (void)uncompress_succeeded; // Variable only used in debug builds.
+  assert(uncompress_succeeded);
+
+  return 0;
+}
+```
+
+The code has the following issues:
+- `zlib.h` is not included.
+- `snappy::Uncompress` is not declared.
+
+To fix the first issue, include `zlib.h` with `extern "C" {}` to ensure that the C-style header is properly linked.
+
+To fix the second issue, include the necessary header file for `snappy::Uncompress`. In this case, it is `snappy.h`.
+
+The corrected code is provided above.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,101 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <assert.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+
+extern "C" {
+#include "api/yajl_parse.h"
+}
+
+typedef struct {
+  int arrayLevel;
+  int objectLevel;
+} context;
+
+static int yajl_found_null(void *ctx) { return 1; }
+
+static int yajl_found_boolean(void *ctx, int boolean) { return 1; };
+
+static int yajl_found_number(void *ctx, const char *v, unsigned int l) {
+  assert(l > 0);
+  return 1;
+}
+
+static int yajl_found_string(void *ctx, const unsigned char *s, unsigned int l) { return 1; }
+
+static int yajl_found_object_key(void *ctx, const unsigned char *v, unsigned int l) {
+  assert(((context *)ctx)->objectLevel > 0);
+  return 1;
+}
+
+static int yajl_found_start_object(void *ctx) {
+  ((context *)ctx)->objectLevel++;
+  return 1;
+}
+
+static int yajl_found_end_object(void *ctx) {
+  assert(((context *)ctx)->objectLevel > 0);
+  ((context *)ctx)->objectLevel--;
+  return 1;
+}
+
+static int yajl_found_start_array(void *ctx) {
+  ((context *)ctx)->arrayLevel++;
+  return 1;
+}
+
+static int yajl_found_end_array(void *ctx) {
+  assert(((context *)ctx)->arrayLevel > 0);
+  ((context *)ctx)->arrayLevel--;
+  return 1;
+}
+
+static yajl_callbacks callbacks = {yajl_found_null, yajl_found_boolean, NULL, NULL, yajl_found_number, yajl_found_string, yajl_found_start_object, yajl_found_object_key, yajl_found_end_object, yajl_found_start_array, yajl_found_end_array};
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  context ctx = {
+      .arrayLevel = 0,
+      .objectLevel = 0,
+  };
+  yajl_parser_config cfg = {
+      .allowComments = 1,
+      .checkUTF8 = 1,
+  };
+  yajl_handle parser = yajl_alloc(&callbacks, &cfg, NULL, (void *)&ctx);
+
+  yajl_status status = yajl_parse(parser, data, size);
+  if (status != yajl_status_ok) {
+    char *error = yajl_render_error_string(parser, (char *)data, size, 1);
+    if (error) {
+      free(error);
+    }
+  }
+  yajl_free(parser);
+
+  return 0;
+}
+```
+
+The issue in the original code was that the `yajl_parse` function was called incorrectly. The correct way to call it is to pass the `parser` handle, the data to parse, and the size of the data. The return value of `yajl_parse` should be checked to see if the parsing was successful. If it was not, the error message should be rendered and printed.
+
+The corrected code includes these changes and should now work correctly.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

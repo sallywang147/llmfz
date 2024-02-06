@@ -1,0 +1,50 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+
+#include "opusfile/config.h"
+extern "C" {
+#include "opusfile/include/opusfile.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const uint8_t slate_width = stream.ConsumeIntegral<uint8_t>();
+  const uint8_t slate_height = stream.ConsumeIntegral<uint8_t>();
+  OggOpusFile* of = op_open_memory(data, size, nullptr);
+  if (of == nullptr) {
+    return 0;
+  }
+
+  const int buf_size = slate_width * slate_height;
+  float* pcm = new float[buf_size];
+  int num_samples_read = op_read_float_stereo(of, pcm, buf_size);
+  delete[] pcm;
+  op_free(of);
+  return num_samples_read;
+}
+```
+
+The issue in the original code was that `op_read_float_stereo` returns the number of samples read, but the function was not returning this value. This has been fixed by adding `int num_samples_read = op_read_float_stereo(of, pcm, buf_size);` and returning `num_samples_read`.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,25 @@
+#include <rfb/rfb.h>
+
+extern size_t fuzz_offset;
+extern size_t fuzz_size;
+extern const uint8_t *fuzz_data;
+
+int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  fuzz_data = Data;
+  fuzz_offset = 0;
+  fuzz_size = Size;
+
+  rfbScreenInfoPtr rfbScreen = rfbGetScreen(NULL, NULL, 400, 300, 8, 3, 4);
+  rfbScreen->frameBuffer = malloc(400 * 300 * 4);
+  rfbInitServer(rfbScreen);
+
+  FuzzedDataProvider stream(Data, Size);
+  char *host = stream.ConsumeRemainingBytesAsString().c_str();
+  int port = stream.ConsumeIntegral<int>();
+  rfbReverseConnection(rfbScreen, host, port);
+
+  rfbScreenCleanup(rfbScreen);
+  free(rfbScreen->frameBuffer);
+  return 0;
+}
+</solution>

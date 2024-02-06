@@ -1,0 +1,61 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <vector>
+
+extern "C" {
+#include "b2nd.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  static bool initialized = false;
+  if (!initialized) {
+    b2nd_init();
+    initialized = true;
+  }
+  int ret;
+  struct b2nd_array_t* array = b2nd_array_new(&ret);
+  if (array == nullptr) {
+    return 0;
+  }
+
+  FuzzedDataProvider provider(data, size);
+
+  size_t array_size = provider.ConsumeIntegralInRange<size_t>(0, 1<<20);
+  std::vector<char> array_data(array_size);
+  provider.ConsumeBytes(array_data.data(), array_size);
+
+  char delim = provider.ConsumeIntegral<char>();
+
+  b2nd_append(array, array_data.data(), array_size, delim);
+
+  b2nd_array_delete(array);
+
+  return 0;
+}
+```
+In this fixed code, the `#include "b2nd.h"` is wrapped with `extern "C" {}` to resolve the linking issue.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

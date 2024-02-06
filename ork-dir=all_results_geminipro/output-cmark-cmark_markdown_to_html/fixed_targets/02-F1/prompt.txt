@@ -1,0 +1,43 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "cmark.h"
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int options = CMARK_OPT_DEFAULT;
+
+  if (size >= sizeof(options)) {
+    /* The beginning of `data` is treated as fuzzer configuration */
+    memcpy(&options, data, sizeof(options));
+
+    /* Mask off valid option bits */
+    options &= (CMARK_OPT_SOURCEPOS | CMARK_OPT_HARDBREAKS | CMARK_OPT_UNSAFE | CMARK_OPT_NOBREAKS | CMARK_OPT_NORMALIZE | CMARK_OPT_VALIDATE_UTF8 | CMARK_OPT_SMART);
+
+    /* Remainder of input is the markdown */
+    const char *markdown = (const char *)(data + sizeof(options));
+    const size_t markdown_size = size - sizeof(options);
+    char *html = cmark_markdown_to_html(markdown, markdown_size, options);
+    free(html);
+  }
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

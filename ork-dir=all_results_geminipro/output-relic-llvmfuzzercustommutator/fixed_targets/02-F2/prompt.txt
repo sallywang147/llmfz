@@ -1,0 +1,38 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+#include <vector>
+
+extern "C" size_t LLVMFuzzerCustomMutator(char* data, size_t size, size_t max_size,
+                                         int seed) {
+  FuzzedDataProvider stream(data, size);
+  const size_t new_size = stream.ConsumeIntegralInRange<size_t>(0, max_size);
+  std::vector<uint8_t> new_data = stream.ConsumeBytes<uint8_t>(new_size);
+  memcpy(data, new_data.data(), new_size);
+  return new_size;
+}
+```
+In this fixed code, the `#include <vector>` directive is added to include the necessary header for the `std::vector` class. This allows the code to compile and run without the undefined reference error.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

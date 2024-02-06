@@ -1,0 +1,68 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <vector>
+
+#include "fuzzer/FuzzedDataProvider.h"
+#include "tpm2_fuzz.h"
+
+extern "C" {
+#include <tss2/tss2_tpm2_types.h>
+#include <tss2/tss2_sys.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider provider(data, size);
+
+  CreateLoaded_In in = {};
+  CreateLoaded_Out out = {};
+
+  in.parentHandle = provider.ConsumeIntegral<uint32_t>();
+  in.inSensitive.sensitive.data = provider.ConsumeBytes<uint8_t>(
+      provider.ConsumeIntegralInRange<uint32_t>(0, 1024));
+  in.inSensitive.sensitive.size = in.inSensitive.sensitive.data.size();
+  in.inPublic.publicArea.nameAlg =
+      provider.ConsumeIntegralInRange<TPMI_ALG_HASH>(TPM2_ALG_FIRST, TPM2_ALG_LAST);
+  in.inPublic.publicArea.type =
+      provider.ConsumeIntegralInRange<TPMI_ALG_PUBLIC>(TPM2_ALG_FIRST, TPM2_ALG_LAST);
+  in.inPublic.publicArea.parameters.rsaDetail.exponent =
+      provider.ConsumeIntegralInRange<uint32_t>(0, 1024);
+  in.inPublic.publicArea.parameters.rsaDetail.modulus.size =
+      provider.ConsumeIntegralInRange<uint32_t>(0, 1024);
+  in.inPublic.publicArea.parameters.rsaDetail.modulus.data =
+      provider.ConsumeBytes<uint8_t>(in.inPublic.publicArea.parameters.rsaDetail.modulus.size);
+  in.outsideInfo.size = provider.ConsumeIntegralInRange<uint16_t>(0, 1024);
+  in.outsideInfo.data = provider.ConsumeBytes<uint8_t>(in.outsideInfo.size);
+
+  TSS2_RC rc = Tss2_Sys_CreateLoaded(&in, &out);
+  if (rc != TPM2_RC_SUCCESS) {
+    return 0;
+  }
+
+  return 0;
+}
+```
+
+The original code has a typo in the function call `TPM2_CreateLoaded`. It should be `Tss2_Sys_CreateLoaded` instead. This typo is corrected in the fixed code.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

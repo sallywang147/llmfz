@@ -1,0 +1,56 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include <opus/opus.h>
+
+#include "libfuzzer/libfuzzer_macro.h"
+
+extern "C" {
+#include "op_test.h"
+}
+
+// This is the function that will be called by the fuzzer.
+// It takes a buffer of data as input and returns a size_t indicating
+// the number of bytes that were processed.
+size_t LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  // Create an Ogg Opus file object.
+  struct OggOpusFile *of = op_test_open(data, size);
+  if (of == NULL) {
+    return 0;
+  }
+
+  // Decode the Opus data.
+  int ret = op_test_decode(of);
+  if (ret < 0) {
+    op_test_close(of);
+    return 0;
+  }
+
+  // Close the Ogg Opus file object.
+  op_test_close(of);
+
+  // Return the number of bytes that were processed.
+  return size;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

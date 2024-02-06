@@ -1,0 +1,220 @@
+<system>
+You are a security testing engineer who wants to write a C++ program to execute all lines in a given function by defining and initializing its parameters in a suitable way before fuzzing the function through <code>LLVMFuzzerTestOneInput</code>.
+
+Carefully study the function signature and its parameters, then follow the example problems and solutions to answer the final problem. YOU MUST call the function to fuzz in the solution.
+
+Try as many variations of these inputs as possible. Do not use a random number generator such as <code>rand()</code>.
+
+Use <code>FuzzedDataProvider</code> to generate these inputs. You MUST declare it in <code>LLVMFuzzerTestOneInput</code>, like this:
+<code>
+FuzzedDataProvider stream(data, size);
+</code>
+
+Include <code>#include <fuzzer/FuzzedDataProvider.h></code> in the solution.
+
+This code shows example of using it:
+<code>
+// Extract integral values
+int int_arg = stream.ConsumeIntegral<int>();
+int int_arg_in_range = stream.ConsumeIntegralInRange(-100, 100);
+bool bool_arg = stream.ConsumeBool();
+
+// Extract floating point values
+float probability = stream.ConsumeProbability();
+double double_arg = stream.ConsumeFloatingPoint<double>();
+double double_arg_in_range = stream.ConsumeFloatingPointInRange(-1.0, 1.0);
+
+// Extract value from predefined set, such as enum or array
+EnumType enum = stream.ConsumeEnum<EnumType>();
+int valid_values = stream.PickValueInArray({FLAG_1, FLAG_2, FLAG_3});
+
+// Extract an array of bytes as a vector. You MUST call <code>.data()</code> to use result as pointer.
+std::vector<uint8_t> bytes = stream.ConsumeBytes<uint8_t>(stream.ConsumeIntegralInRange(0, max_size));
+void *data_ptr = bytes.data();
+std::vector<uint8_t> bytes2 = stream.ConsumeBytes<uint8_t>(requested_size);
+void *data2_ptr = bytes2.data();
+
+// Extract a string. You MUST use <code>.c_str()</code> to use result as pointer
+std::string str = stream.ConsumeBytesAsString(stream.ConsumeIntegralInRange(0, max_size));
+char *ptr = str.c_str();
+std::string str2 = stream.ConsumeBytesAsString(requested_size);
+char *ptr2 = str2.c_str();
+std::string str3 = stream.ConsumeRandomLengthString();
+char *ptr3 = str3.c_str();
+
+// Extract to user defined object
+struct_type_t obj;
+size_t consumed = stream.ConsumeData(&obj, sizeof(obj));
+</code>
+
+There MUST be AT MOST ONE call to <code>ConsumeRemainingBytes</code> to consume remaining input!
+<code>
+FuzzedDataProvider stream(data, size);
+
+std::vector<uint8_t> bytes3 = stream.ConsumeRemainingBytes();
+void *data3_ptr = bytes3.data();
+</code>
+
+All variables used MUST be declared and initialized. Carefully make sure that the variable and argument types in your code match and compiles successfully. Add type casts to make types match.
+
+Do not create new variables with the same names as existing variables.
+WRONG:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  void* data = Foo();
+}
+</code>
+
+EXTREMELY IMPORTANT: If you write code using <code>goto</code>, you MUST MUST also declare all variables BEFORE the <code>goto</code>. Never introduce new variables after the <code>goto</code>.
+WRONG:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int a = bar();
+  if (!some_function()) goto EXIT;
+  Foo b = target_function(data, size);
+  int c = another_func();
+EXIT:
+  return 0;
+}
+</code>
+
+CORRECT:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int a = bar();
+  Foo b;
+  int c;
+
+  if (!some_function()) goto EXIT;
+  b = target_function(data, size);
+  c = another_func()
+EXIT:
+  return 0;
+}
+</code>
+
+If an example provided for the same library includes a unique header file, then it must be included in the solution as well.
+</system>
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+void hoedown_document_render(struct hoedown_document * doc, struct hoedown_buffer * ob, char * data, size_t size)
+</function header>
+</task>
+
+<solution>
+#include <errno.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "context_test.h"
+#include "document.h"
+#include "html.h"
+
+enum renderer_type { RENDERER_HTML, RENDERER_HTML_TOC, RENDERER_CONTEXT_TEST };
+
+#define DEF_IUNIT 1024
+#define DEF_OUNIT 64
+#define DEF_MAX_NESTING 16
+
+struct option_data {
+  char *basename;
+  int done;
+
+  /* time reporting */
+  int show_time;
+
+  /* I/O */
+  size_t iunit;
+  size_t ounit;
+  const char *filename;
+
+  /* renderer */
+  enum renderer_type renderer;
+  int toc_level;
+  hoedown_html_flags html_flags;
+
+  /* document */
+  uint8_t attr_activation;
+
+  /* parsing */
+  hoedown_extensions extensions;
+  size_t max_nesting;
+
+  /* link_attributes */
+  int link_attributes;
+};
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  struct option_data opt;
+  hoedown_buffer *ib, *ob, *meta;
+  hoedown_renderer *renderer = NULL;
+  void (*renderer_free)(hoedown_renderer *) = NULL;
+  hoedown_document *document;
+
+  /* Parse options */
+  opt.basename = "fuzz";
+  opt.done = 0;
+  opt.show_time = 0;
+  opt.iunit = DEF_IUNIT;
+  opt.ounit = DEF_OUNIT;
+  opt.filename = NULL;
+  opt.renderer = RENDERER_HTML;
+  opt.toc_level = 0;
+  opt.attr_activation = 0;
+  // opt.html_flags = 0;
+  opt.html_flags = HOEDOWN_HTML_SKIP_HTML | HOEDOWN_HTML_ESCAPE | HOEDOWN_HTML_HARD_WRAP | HOEDOWN_HTML_USE_XHTML | HOEDOWN_HTML_USE_TASK_LIST | HOEDOWN_HTML_LINE_CONTINUE | HOEDOWN_HTML_HEADER_ID | HOEDOWN_HTML_FENCED_CODE_SCRIPT;
+  // opt.extensions = 0;
+  opt.extensions = HOEDOWN_EXT_TABLES | HOEDOWN_EXT_MULTILINE_TABLES | HOEDOWN_EXT_FENCED_CODE | HOEDOWN_EXT_FOOTNOTES | HOEDOWN_EXT_DEFINITION_LISTS | HOEDOWN_EXT_BLOCKQUOTE_EMPTY_LINE | HOEDOWN_EXT_AUTOLINK | HOEDOWN_EXT_STRIKETHROUGH | HOEDOWN_EXT_UNDERLINE | HOEDOWN_EXT_HIGHLIGHT | HOEDOWN_EXT_QUOTE | HOEDOWN_EXT_SUPERSCRIPT | HOEDOWN_EXT_MATH | HOEDOWN_EXT_NO_INTRA_EMPHASIS | HOEDOWN_EXT_SPACE_HEADERS | HOEDOWN_EXT_MATH_EXPLICIT | HOEDOWN_EXT_HTML5_BLOCKS | HOEDOWN_EXT_NO_INTRA_UNDERLINE_EMPHASIS | HOEDOWN_EXT_DISABLE_INDENTED_CODE | HOEDOWN_EXT_SPECIAL_ATTRIBUTE | HOEDOWN_EXT_SCRIPT_TAGS | HOEDOWN_EXT_META_BLOCK;
+  opt.max_nesting = DEF_MAX_NESTING;
+  opt.link_attributes = 0;
+
+  /* Read everything */
+  ib = hoedown_buffer_new(opt.iunit);
+  hoedown_buffer_put(ib, data, size);
+
+  renderer = hoedown_html_renderer_new(opt.html_flags, opt.toc_level);
+  renderer_free = hoedown_html_renderer_free;
+
+  /* Perform Markdown rendering */
+  ob = hoedown_buffer_new(opt.ounit);
+  meta = hoedown_buffer_new(opt.ounit);
+  document = hoedown_document_new(renderer, opt.extensions, opt.max_nesting, opt.attr_activation, NULL, meta);
+
+  hoedown_html_renderer_state *state;
+  state = (hoedown_html_renderer_state *)renderer->opaque;
+
+  hoedown_document_render(document, ob, ib->data, ib->size);
+
+  /* Cleanup */
+  hoedown_buffer_free(ib);
+  hoedown_document_free(document);
+  renderer_free(renderer);
+
+  /* Write the result to stdout */
+  // (void)fwrite(ob->data, 1, ob->size, stdout);
+  hoedown_buffer_free(ob);
+
+  hoedown_buffer_free(meta);
+
+  return 0;
+}
+
+</solution>
+
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+void toc_header(struct hoedown_buffer * ob, struct hoedown_buffer * content, struct hoedown_buffer * attr, int level, struct hoedown_renderer_data * data)
+</function header>
+</task>
+You MUST call <code>
+void toc_header(struct hoedown_buffer * ob, struct hoedown_buffer * content, struct hoedown_buffer * attr, int level, struct hoedown_renderer_data * data)
+</code> in your solution!
+
+<solution>

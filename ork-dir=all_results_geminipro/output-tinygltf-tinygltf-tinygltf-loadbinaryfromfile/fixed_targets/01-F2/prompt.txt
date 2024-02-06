@@ -1,0 +1,52 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstdint>
+#include <cstring>
+#include <iostream>
+#include <memory>
+#include <vector>
+
+#define STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#define TINYGLTF_IMPLEMENTATION
+#include "tiny_gltf.h"
+
+extern "C" {
+#include "fuzzer_support.h"
+}
+
+static void parse_binary(const uint8_t *data, size_t size) {
+
+  tinygltf::Model model;
+  tinygltf::TinyGLTF ctx;
+  std::string err;
+  std::string warn;
+
+  const char *str = reinterpret_cast<const char *>(data);
+
+  bool ret = ctx.LoadBinaryFromMemory(&model, &err, &warn, str, size);
+  (void)ret;
+}
+
+extern "C" int LLVMFuzzerTestOneInput(std::uint8_t const *data, std::size_t size) {
+  parse_binary(data, size);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+The target function `bool tinygltf::TinyGLTF::LoadBinaryFromFile(tinygltf::TinyGLTF * , tinygltf::Model * , std::string * , std::string * , std::string * , int )` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `bool tinygltf::TinyGLTF::LoadBinaryFromFile(tinygltf::TinyGLTF * , tinygltf::Model * , std::string * , std::string * , std::string * , int )` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

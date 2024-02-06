@@ -1,0 +1,41 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+#include "is_legal_3d_block_size.h" // Header file that defines the function
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  int xdim = stream.ConsumeIntegralInRange<int>(1, 1024);
+  int ydim = stream.ConsumeIntegralInRange<int>(1, 1024);
+  int zdim = stream.ConsumeIntegralInRange<int>(1, 1024);
+
+  bool result = is_legal_3d_block_size(xdim, ydim, zdim);
+
+  return 0;
+}
+```
+
+The fixed code includes the header file "is_legal_3d_block_size.h", which defines the function `is_legal_3d_block_size`. This resolves the issue of the function being undefined.
+
+Additionally, the `extern "C"` directive is used to wrap the `#include` directive for the "is_legal_3d_block_size.h" header file. This is necessary because the header file is written in C, and the function `is_legal_3d_block_size` is declared using the C calling convention.
+
+With these changes, the code should compile and run without errors.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

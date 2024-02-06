@@ -1,0 +1,57 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstdio>
+#include <cstring>
+#include <string>
+#include <vector>
+
+#include "LibRaw.h"
+#include "LibRaw_types.h"
+#include "dcraw_defs.h"
+#include "dcraw_structs.h"
+
+#include <fuzzer/FuzzedDataProvider.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  FuzzedDataProvider stream(Data, Size);
+
+  // Extract integral values
+  int planeNumber = stream.ConsumeIntegral<int>();
+
+  // Extract an array of bytes as a vector. You MUST call `.data()` to use result as pointer.
+  std::vector<uint8_t> bytes = stream.ConsumeBytes<uint8_t>(stream.ConsumeIntegralInRange(0, 1024 * 1024));
+  void *data_ptr = bytes.data();
+
+  // Construct LibRaw object
+  LibRaw libRaw;
+  libRaw.open_buffer((char *)data_ptr, bytes.size());
+
+  // Call the function to fuzz
+  int result = libRaw.crxDecodePlane(&libRaw, (char *)data_ptr, planeNumber);
+
+  // ConsumeRemainingBytes
+  std::vector<uint8_t> bytes3 = stream.ConsumeRemainingBytes();
+
+  return 0;
+}
+```
+
+The fixed code is provided above. The only change made is in the function call: `crwDecodePlane` is replaced with `crxDecodePlane`. This ensures that the correct function is called for decoding CRX files.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

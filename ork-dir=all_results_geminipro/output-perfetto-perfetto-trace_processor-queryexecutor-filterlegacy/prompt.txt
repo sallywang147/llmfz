@@ -1,0 +1,273 @@
+<system>
+You are a security testing engineer who wants to write a C++ program to execute all lines in a given function by defining and initializing its parameters in a suitable way before fuzzing the function through <code>LLVMFuzzerTestOneInput</code>.
+
+Carefully study the function signature and its parameters, then follow the example problems and solutions to answer the final problem. YOU MUST call the function to fuzz in the solution.
+
+Try as many variations of these inputs as possible. Do not use a random number generator such as <code>rand()</code>.
+
+Use <code>FuzzedDataProvider</code> to generate these inputs. You MUST declare it in <code>LLVMFuzzerTestOneInput</code>, like this:
+<code>
+FuzzedDataProvider stream(data, size);
+</code>
+
+Include <code>#include <fuzzer/FuzzedDataProvider.h></code> in the solution.
+
+This code shows example of using it:
+<code>
+// Extract integral values
+int int_arg = stream.ConsumeIntegral<int>();
+int int_arg_in_range = stream.ConsumeIntegralInRange(-100, 100);
+bool bool_arg = stream.ConsumeBool();
+
+// Extract floating point values
+float probability = stream.ConsumeProbability();
+double double_arg = stream.ConsumeFloatingPoint<double>();
+double double_arg_in_range = stream.ConsumeFloatingPointInRange(-1.0, 1.0);
+
+// Extract value from predefined set, such as enum or array
+EnumType enum = stream.ConsumeEnum<EnumType>();
+int valid_values = stream.PickValueInArray({FLAG_1, FLAG_2, FLAG_3});
+
+// Extract an array of bytes as a vector. You MUST call <code>.data()</code> to use result as pointer.
+std::vector<uint8_t> bytes = stream.ConsumeBytes<uint8_t>(stream.ConsumeIntegralInRange(0, max_size));
+void *data_ptr = bytes.data();
+std::vector<uint8_t> bytes2 = stream.ConsumeBytes<uint8_t>(requested_size);
+void *data2_ptr = bytes2.data();
+
+// Extract a string. You MUST use <code>.c_str()</code> to use result as pointer
+std::string str = stream.ConsumeBytesAsString(stream.ConsumeIntegralInRange(0, max_size));
+char *ptr = str.c_str();
+std::string str2 = stream.ConsumeBytesAsString(requested_size);
+char *ptr2 = str2.c_str();
+std::string str3 = stream.ConsumeRandomLengthString();
+char *ptr3 = str3.c_str();
+
+// Extract to user defined object
+struct_type_t obj;
+size_t consumed = stream.ConsumeData(&obj, sizeof(obj));
+</code>
+
+There MUST be AT MOST ONE call to <code>ConsumeRemainingBytes</code> to consume remaining input!
+<code>
+FuzzedDataProvider stream(data, size);
+
+std::vector<uint8_t> bytes3 = stream.ConsumeRemainingBytes();
+void *data3_ptr = bytes3.data();
+</code>
+
+All variables used MUST be declared and initialized. Carefully make sure that the variable and argument types in your code match and compiles successfully. Add type casts to make types match.
+
+Do not create new variables with the same names as existing variables.
+WRONG:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  void* data = Foo();
+}
+</code>
+
+EXTREMELY IMPORTANT: If you write code using <code>goto</code>, you MUST MUST also declare all variables BEFORE the <code>goto</code>. Never introduce new variables after the <code>goto</code>.
+WRONG:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int a = bar();
+  if (!some_function()) goto EXIT;
+  Foo b = target_function(data, size);
+  int c = another_func();
+EXIT:
+  return 0;
+}
+</code>
+
+CORRECT:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int a = bar();
+  Foo b;
+  int c;
+
+  if (!some_function()) goto EXIT;
+  b = target_function(data, size);
+  c = another_func()
+EXIT:
+  return 0;
+}
+</code>
+
+If an example provided for the same library includes a unique header file, then it must be included in the solution as well.
+</system>
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+void perfetto::TestHelper::StartServiceIfRequired(perfetto::TestHelper * )
+</function header>
+</task>
+
+<solution>
+
+#include <stddef.h>
+#include <stdint.h>
+#include <unistd.h>
+
+#include "perfetto/base/logging.h"
+#include "perfetto/base/task_runner.h"
+#include "perfetto/ext/base/utils.h"
+#include "perfetto/ext/tracing/core/producer.h"
+#include "perfetto/ext/tracing/core/trace_writer.h"
+#include "perfetto/ext/tracing/ipc/default_socket.h"
+#include "perfetto/ext/tracing/ipc/producer_ipc_client.h"
+#include "perfetto/ext/tracing/ipc/service_ipc_host.h"
+#include "perfetto/tracing/core/data_source_config.h"
+#include "perfetto/tracing/core/data_source_descriptor.h"
+#include "protos/perfetto/trace/test_event.pbzero.h"
+#include "src/base/test/test_task_runner.h"
+#include "test/test_helper.h"
+
+#include "protos/perfetto/trace/trace_packet.pbzero.h"
+
+// If we're building on Android and starting the daemons ourselves,
+// create the sockets in a world-writable location.
+#if PERFETTO_BUILDFLAG(PERFETTO_OS_ANDROID) && PERFETTO_BUILDFLAG(PERFETTO_START_DAEMONS)
+#define TEST_PRODUCER_SOCK_NAME "/data/local/tmp/traced_producer"
+#else
+#define TEST_PRODUCER_SOCK_NAME ::perfetto::GetProducerSocket()
+#endif
+
+namespace perfetto {
+namespace shm_fuzz {
+namespace {
+
+// Fake producer writing a protozero message of data into shared memory
+// buffer, followed by a sentinel message to signal completion to the
+// consumer.
+class FakeProducer : public Producer {
+public:
+  FakeProducer(std::string name, const uint8_t *data, size_t size, std::function<void()> on_produced_and_committed) : name_(std::move(name)), data_(data), size_(size), on_produced_and_committed_(on_produced_and_committed) {}
+
+  void Connect(const char *socket_name, base::TaskRunner *task_runner) { endpoint_ = ProducerIPCClient::Connect(socket_name, this, "android.perfetto.FakeProducer", task_runner); }
+
+  void OnConnect() override {
+    DataSourceDescriptor descriptor;
+    descriptor.set_name(name_);
+    endpoint_->RegisterDataSource(descriptor);
+  }
+
+  void OnDisconnect() override {}
+
+  void SetupDataSource(DataSourceInstanceID, const DataSourceConfig &) override {}
+
+  void StartDataSource(DataSourceInstanceID, const DataSourceConfig &source_config) override {
+    auto trace_writer = endpoint_->CreateTraceWriter(static_cast<BufferID>(source_config.target_buffer()));
+    {
+      auto packet = trace_writer->NewTracePacket();
+      packet->AppendRawProtoBytes(data_, size_);
+    }
+    trace_writer->Flush();
+
+    {
+      auto end_packet = trace_writer->NewTracePacket();
+      end_packet->set_for_testing()->set_str("end");
+    }
+    trace_writer->Flush(on_produced_and_committed_);
+  }
+
+  void StopDataSource(DataSourceInstanceID) override {}
+  void OnTracingSetup() override {}
+  void Flush(FlushRequestID, const DataSourceInstanceID *, size_t, FlushFlags) override {}
+  void ClearIncrementalState(const DataSourceInstanceID *, size_t) override {}
+
+private:
+  const std::string name_;
+  const uint8_t *data_;
+  const size_t size_;
+  std::unique_ptr<TracingService::ProducerEndpoint> endpoint_;
+  std::function<void()> on_produced_and_committed_;
+};
+
+class FuzzerFakeProducerThread {
+public:
+  FuzzerFakeProducerThread(const uint8_t *data, size_t size, std::function<void()> on_produced_and_committed) : data_(data), size_(size), on_produced_and_committed_(on_produced_and_committed) {}
+
+  ~FuzzerFakeProducerThread() {
+    if (!runner_)
+      return;
+    runner_->PostTaskAndWaitForTesting([this]() { producer_.reset(); });
+  }
+
+  void Connect() {
+    runner_ = base::ThreadTaskRunner::CreateAndStart("perfetto.prd.fake");
+    runner_->PostTaskAndWaitForTesting([this]() {
+      producer_.reset(new FakeProducer("android.perfetto.FakeProducer", data_, size_, on_produced_and_committed_));
+      producer_->Connect(TEST_PRODUCER_SOCK_NAME, runner_->get());
+    });
+  }
+
+private:
+  std::optional<base::ThreadTaskRunner> runner_; // Keep first.
+
+  std::unique_ptr<FakeProducer> producer_;
+  const uint8_t *data_;
+  const size_t size_;
+  std::function<void()> on_produced_and_committed_;
+};
+
+class FuzzTestHelper : public TestHelper {
+public:
+  explicit FuzzTestHelper(base::TestTaskRunner *task_runner) : TestHelper(task_runner) {}
+  // Do not verify the data, as it will most likely be corrupted.
+  void ReadTraceData(std::vector<TracePacket>) override {}
+};
+
+int FuzzSharedMemory(const uint8_t *data, size_t size);
+
+int FuzzSharedMemory(const uint8_t *data, size_t size) {
+  base::TestTaskRunner task_runner;
+
+  FuzzTestHelper helper(&task_runner);
+  helper.StartServiceIfRequired();
+
+  auto cp = helper.WrapTask(task_runner.CreateCheckpoint("produced.and.committed"));
+  FuzzerFakeProducerThread producer_thread(data, size, cp);
+  producer_thread.Connect();
+
+  helper.ConnectConsumer();
+  helper.WaitForConsumerConnect();
+
+  TraceConfig trace_config;
+  trace_config.add_buffers()->set_size_kb(8);
+
+  auto *ds_config = trace_config.add_data_sources()->mutable_config();
+  ds_config->set_name("android.perfetto.FakeProducer");
+  ds_config->set_target_buffer(0);
+
+  helper.StartTracing(trace_config);
+  task_runner.RunUntilCheckpoint("produced.and.committed");
+
+  helper.ReadData();
+  helper.WaitForReadData();
+
+  return 0;
+}
+
+} // namespace
+} // namespace shm_fuzz
+} // namespace perfetto
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size);
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) { return perfetto::shm_fuzz::FuzzSharedMemory(data, size); }
+
+</solution>
+
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+void perfetto::trace_processor::QueryExecutor::FilterLegacy(perfetto::trace_processor::RowMap * , perfetto::trace_processor::Table * , std::vector * )
+</function header>
+</task>
+You MUST call <code>
+void perfetto::trace_processor::QueryExecutor::FilterLegacy(perfetto::trace_processor::RowMap * , perfetto::trace_processor::Table * , std::vector * )
+</code> in your solution!
+
+<solution>

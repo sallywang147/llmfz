@@ -1,0 +1,88 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <string.h>
+
+#include "gssapi.h"
+#include "krb5.h"
+
+extern "C" {
+#include "gssapi_krb5.h"
+}
+
+extern int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  OM_uint32 maj_stat, min_stat;
+
+  gss_ctx_id_t ctx = GSS_C_NO_CONTEXT;
+  gss_name_t client_name = GSS_C_NO_NAME;
+  gss_cred_id_t deleg_cred = GSS_C_NO_CREDENTIAL;
+
+  /* Each fuzz input contains multiple tokens preceded by a length field.
+   * Process them in turn with gss_accept_sec_context while
+   * GSS_S_CONTINUE_NEEDED is set
+   */
+  do {
+    unsigned short token_length;
+
+    gss_buffer_desc input_token, output_token = GSS_C_EMPTY_BUFFER;
+
+    if (Size < sizeof(token_length))
+      break;
+
+    token_length = *(unsigned short *)Data;
+
+    Data += sizeof(token_length);
+    Size -= sizeof(token_length);
+
+    if (token_length == 0 || token_length > Size)
+      break;
+
+    input_token.length = token_length;
+    input_token.value = malloc(token_length);
+    memcpy(input_token.value, Data, token_length);
+
+    Data += token_length;
+    Size -= token_length;
+
+    maj_stat = kg_accept_krb5(&min_stat, &ctx, GSS_C_NO_CREDENTIAL,    /* server_creds */
+                                      &input_token, GSS_C_NO_CHANNEL_BINDINGS, /* input_bindings */
+                                      &client_name, NULL,                      /* mech_type */
+                                      &output_token, NULL,                     /* ret_flags */
+                                      NULL,                                    /* time */
+                                      &deleg_cred, NULL);
+
+    gss_release_buffer(&min_stat, &output_token);
+    gss_release_buffer(&min_stat, &input_token);
+
+    if (GSS_ERROR(maj_stat)) {
+      if (ctx != GSS_C_NO_CONTEXT)
+        gss_delete_sec_context(&min_stat, &ctx, GSS_C_NO_BUFFER);
+      break;
+    }
+  } while (maj_stat & GSS_S_CONTINUE_NEEDED);
+
+  gss_release_name(&min_stat, &client_name);
+  gss_release_cred(&min_stat, &deleg_cred);
+
+  return 0;
+}
+```
+
+The build issue is caused by the missing declaration of the `kg_accept_krb5` function. To fix this, the `gssapi_krb5.h` header file needs to be included in the code. However, since this header file is not a standard C header, it needs to be wrapped with `extern "C" {}` to ensure that the function declarations are properly exported.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

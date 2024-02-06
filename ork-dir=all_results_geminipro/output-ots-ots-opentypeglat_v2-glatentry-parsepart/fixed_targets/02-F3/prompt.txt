@@ -1,0 +1,55 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+#include <stdint.h>
+
+#include "opentype-sanitiser.h"
+#include "ots-memory-stream.h"
+#include "ots.h"
+
+namespace ots {
+
+bool OpenTypeGLAT_v2::GlatEntry::ParsePart(OpenTypeGLAT_v2::GlatEntry *this,
+                                            Buffer *table) {
+  uint32_t length;
+  if (!table->ReadU32(&length)) {
+    return Drop("Failed to read length");
+  }
+  if (length > table->length()) {
+    return Drop("Length longer than table");
+  }
+  Buffer sub_table(*table);
+  sub_table.set_limit(length);
+  if (!this->Parse(&sub_table)) {
+    return Drop("Failed to parse subtable");
+  }
+  table->Skip(length);
+  return true;
+}
+
+}  // namespace ots
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  ots::Buffer table(data, size);
+  ots::OpenTypeGLAT_v2::GlatEntry entry;
+  entry.ParsePart(&entry, &table);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

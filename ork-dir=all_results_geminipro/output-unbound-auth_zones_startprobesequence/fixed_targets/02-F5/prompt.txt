@@ -1,0 +1,60 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "config.h"
+#include "auth.h"
+
+extern "C" {
+#include <stdlib.h>
+#include <string.h>
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  struct auth_zones *az = NULL;
+  struct module_env *env = NULL;
+  char *nm = NULL;
+  size_t nmlen = 0;
+  short dclass = 0;
+
+  if (size > 0) {
+    nm = (char *)malloc(size);
+    memcpy(nm, data, size);
+    nmlen = size;
+  }
+
+  auth_zones_startprobesequence(az, env, nm, nmlen, dclass);
+
+  if (nm) {
+    free(nm);
+  }
+
+  return 0;
+}
+```
+
+The build error is caused by the missing declaration of the `auth_zones_startprobesequence` function. To fix this, we need to include the necessary header file that declares this function. In this case, the header file is `auth.h`.
+
+To fix the code, we need to add the following line at the beginning of the file:
+
+```c++
+#include "auth.h"
+```
+
+This will include the `auth.h` header file and make the declaration of the `auth_zones_startprobesequence` function available to the compiler.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,54 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+
+#include "protobuf-c.h"
+
+extern "C" {
+#include "optional_field.pb-c.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  struct ProtobufCBuffer buffer;
+  protobuf_c_buffer_init(&buffer, 0, NULL);
+
+  // Initialize a field descriptor.
+  struct ProtobufCFieldDescriptor field;
+  memset(&field, 0, sizeof(field));
+  field.label = PROTOBUF_C_LABEL_OPTIONAL;
+  field.type = PROTOBUF_C_TYPE_INT32;
+  field.name = (char*)"test_field";
+
+  // Initialize a member variable.
+  int32_t member = 0;
+
+  // Call the function to be fuzzed.
+  size_t packed_size = optional_field__pack_to_buffer(&field, 1, (char*)&member, &buffer);
+
+  // Free the buffer.
+  protobuf_c_buffer_fini(&buffer);
+
+  // Return 0 to indicate successful execution.
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+The target function `size_t optional_field_pack_to_buffer(struct ProtobufCFieldDescriptor * field, int has, char * member, struct ProtobufCBuffer * buffer)` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `size_t optional_field_pack_to_buffer(struct ProtobufCFieldDescriptor * field, int has, char * member, struct ProtobufCBuffer * buffer)` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

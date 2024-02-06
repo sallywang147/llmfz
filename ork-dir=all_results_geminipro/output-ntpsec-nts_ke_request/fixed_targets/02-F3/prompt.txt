@@ -1,0 +1,49 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "ntpd.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define kMinInputLength 20
+#define kMaxInputLength 1024
+
+bool nts_ke_request(struct ssl_st *ssl);
+
+extern "C" {
+int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) { // ntpsec/tests/ntpd/nts_ke.c
+
+  if (Size < kMinInputLength || Size > kMaxInputLength) {
+    return 0;
+  }
+
+  struct ntpd_ke_request req;
+  memset(&req, 0, sizeof(req));
+
+  req.version = 1;
+  req.flags = 0;
+  req.key_id = 0;
+  req.nonce_len = Size;
+  req.nonce = (uint8_t *)Data;
+
+  return nts_ke_request(&req);
+}
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,50 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <stdint.h>
+#include <stdlib.h>
+
+#include "tss2_sys.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  struct _TSS2_SYS_OPAQUE_CONTEXT_BLOB *sysContext = NULL;
+  int parentHandle = stream.ConsumeIntegral<int>();
+  struct TSS2L_SYS_AUTH_COMMAND *cmdAuthsArray = NULL;
+  struct TPM2B_SENSITIVE_CREATE *inSensitive = NULL;
+  struct TPM2B_PUBLIC *inPublic = NULL;
+  struct TPM2B_DIGEST *outsideInfo = NULL;
+  struct TPML_PCR_SELECTION *creationPCR = NULL;
+  struct TPM2B_PRIVATE *outPrivate = NULL;
+  struct TPM2B_PUBLIC *outPublic = NULL;
+  struct TPM2B_CREATION_DATA *creationData = NULL;
+  struct TPM2B_DIGEST *creationHash = NULL;
+  struct TPMT_TK_CREATION *creationTicket = NULL;
+  struct TSS2L_SYS_AUTH_RESPONSE *rspAuthsArray = NULL;
+
+  Tss2_Sys_Create(sysContext, parentHandle, cmdAuthsArray, inSensitive, inPublic,
+                  outsideInfo, creationPCR, outPrivate, outPublic, creationData,
+                  creationHash, creationTicket, rspAuthsArray);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

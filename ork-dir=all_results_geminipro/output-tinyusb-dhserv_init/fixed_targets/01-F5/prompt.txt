@@ -1,0 +1,53 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+extern "C" {
+#include "dhcp_serv.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider provider(data, size);
+  struct dhcp_config config;
+  memset(&config, 0, sizeof(config));
+
+  config.ip_pool_start = provider.ConsumeIntegral<uint32_t>();
+  config.ip_pool_end = provider.ConsumeIntegral<uint32_t>();
+  config.lease_time = provider.ConsumeIntegral<uint32_t>();
+  config.renewal_time = provider.ConsumeIntegral<uint32_t>();
+  config.rebinding_time = provider.ConsumeIntegral<uint32_t>();
+  config.max_leases = provider.ConsumeIntegral<uint32_t>();
+  config.subnet_mask = provider.ConsumeIntegral<uint32_t>();
+  config.router = provider.ConsumeIntegral<uint32_t>();
+  config.dns_server = provider.ConsumeIntegral<uint32_t>();
+  config.domain_name = provider.ConsumeBytes<char>(provider.ConsumeIntegralInRange<size_t>(0, size));
+
+  // Fix: Check if the domain name is empty before using it.
+  if (config.domain_name[0] == '\0') {
+    config.domain_name = nullptr;
+  }
+
+  dhserv_init(&config);
+
+  dhserv_run();
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

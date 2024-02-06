@@ -1,0 +1,72 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+#include "tt_size.h"
+
+extern "C" {
+#include "tt_size.h"
+
+void tt_size_ready_bytecode(TT_SizeRec_* size, int32_t flags);
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider fdp(data, size);
+  TT_SizeRec_ size;
+  size.ptSize = fdp.ConsumeIntegral<float>();
+  size.x_scale = fdp.ConsumeIntegral<float>();
+  size.y_scale = fdp.ConsumeIntegral<float>();
+  size.x_ppem = fdp.ConsumeIntegral<int32_t>();
+  size.y_ppem = fdp.ConsumeIntegral<int32_t>();
+  size.ascender = fdp.ConsumeIntegral<int32_t>();
+  size.descender = fdp.ConsumeIntegral<int32_t>();
+  size.line_gap = fdp.ConsumeIntegral<int32_t>();
+  size.advance = fdp.ConsumeIntegral<int32_t>();
+  size.bearing = fdp.ConsumeIntegral<int32_t>();
+  size.width_max = fdp.ConsumeIntegral<int32_t>();
+  size.height_max = fdp.ConsumeIntegral<int32_t>();
+  size.subscript_x_size = fdp.ConsumeIntegral<int32_t>();
+  size.subscript_y_size = fdp.ConsumeIntegral<int32_t>();
+  size.subscript_x_offset = fdp.ConsumeIntegral<int32_t>();
+  size.subscript_y_offset = fdp.ConsumeIntegral<int32_t>();
+  size.superscript_x_size = fdp.ConsumeIntegral<int32_t>();
+  size.superscript_y_size = fdp.ConsumeIntegral<int32_t>();
+  size.superscript_x_offset = fdp.ConsumeIntegral<int32_t>();
+  size.superscript_y_offset = fdp.ConsumeIntegral<int32_t>();
+  size.strikeout_size = fdp.ConsumeIntegral<int32_t>();
+  size.strikeout_offset = fdp.ConsumeIntegral<int32_t>();
+  size.underline_size = fdp.ConsumeIntegral<int32_t>();
+  size.underline_offset = fdp.ConsumeIntegral<int32_t>();
+  size.overshoot = fdp.ConsumeIntegral<int32_t>();
+  size.extra_space = fdp.ConsumeIntegral<int32_t>();
+  size.num_glyphs = fdp.ConsumeIntegral<uint32_t>();
+  size.glyph_widths = fdp.ConsumeRemainingBytes<int32_t>();
+
+  tt_size_ready_bytecode(&size, 0);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

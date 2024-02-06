@@ -1,0 +1,69 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+
+extern "C" {
+#include <ssh/ssh.h>
+#include <ssh/kex.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  // Create a SSH struct.
+  ssh_session session;
+  ssh_options_set(&session.options, SSH_OPTIONS_HOST, "localhost");
+  ssh_init(&session);
+
+  // Create a proposal string.
+  const std::string proposal = stream.ConsumeRemainingBytesAsString();
+  char* proposal_cstr = strdup(proposal.c_str());
+
+  // Call kex_setup.
+  int result = kex_setup(&session, &proposal_cstr);
+
+  // Clean up.
+  ssh_finalize(&session);
+  free(proposal_cstr);
+
+  return result;
+}
+```
+The original code has the following issues:
+
+1. The `ssh.h` and `kex.h` headers are not wrapped with `extern "C" {}`. This can cause issues when linking the object files, as the C++ compiler may not be able to find the definitions of the functions and variables declared in these headers.
+
+To fix this, we need to wrap the `#include` directives for these headers with `extern "C" {}`. This will tell the compiler to treat the declarations in these headers as C declarations, rather than C++ declarations.
+
+2. The `kex_setup` function is not declared in the `ssh.h` header. This means that the compiler will not be able to find the definition of this function when it tries to compile the code.
+
+To fix this, we need to add a declaration for the `kex_setup` function to the `ssh.h` header. We can do this by adding the following line to the top of the `ssh.h` header:
+
+```c
+extern int kex_setup(ssh_session *session, char **proposal);
+```
+
+With these changes, the code should compile and run correctly.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

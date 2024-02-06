@@ -1,0 +1,58 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+#include "MQTTClient.h"
+
+extern "C" {
+#include "MQTTClient.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  const std::string client_id = stream.ConsumeRemainingBytesAsString();
+  MQTTClient client = MQTTClient(client_id.c_str());
+
+  int ret = MqttClient_Ping(&client);
+  if (ret != MQTTCLIENT_SUCCESS) {
+    return 0;
+  }
+
+  return 0;
+}
+```
+
+The original code has the following issues:
+
+1. The header file `MQTTClient.h` is included twice, which is not allowed.
+2. The function `MqttClient_Ping` is declared in the header file `MQTTClient.h`, but it is not defined in the source file.
+
+To fix the first issue, we can wrap the second `#include` directive with `extern "C" {}` to prevent the header file from being included twice.
+
+To fix the second issue, we can add the definition of the function `MqttClient_Ping` to the source file.
+
+The corrected code is shown above.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

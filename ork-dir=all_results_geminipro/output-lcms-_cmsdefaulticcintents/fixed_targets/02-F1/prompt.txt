@@ -1,0 +1,51 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <lcms2.h>
+#include <stdint.h>
+
+struct _cmsPipeline_struct73 *
+_cmsDefaultICCintents(struct _cmsContext_struct *ContextID, int nProfiles, int *TheIntents,
+                      char **hProfiles, int *BPC, double *AdaptationStates, int dwFlags) {
+  return cmsDefaultICCintents(ContextID, nProfiles, TheIntents, hProfiles, BPC, AdaptationStates,
+                             dwFlags);
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  if (size < 16) {
+    return 0;
+  }
+
+  cmsContext ContextID = cmsCreateContext(NULL, NULL);
+  int nProfiles = *((const int *)data + 0);
+  int *TheIntents = (int *)data + 1;
+  char **hProfiles = (char **)data + 2;
+  int *BPC = (int *)data + 3;
+  double *AdaptationStates = (double *)data + 4;
+  int dwFlags = *((const int *)data + 5);
+
+  struct _cmsPipeline_struct73 *result =
+      _cmsDefaultICCintents(ContextID, nProfiles, TheIntents, hProfiles, BPC, AdaptationStates,
+                            dwFlags);
+  cmsDeleteTransform(result);
+  cmsDeleteContext(ContextID);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

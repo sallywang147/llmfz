@@ -1,0 +1,63 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "oatpp/parser/json/mapping/Serializer.hpp"
+#include "oatpp/core/macro/codegen.hpp"
+
+typedef oatpp::parser::Caret ParsingCaret;
+typedef oatpp::parser::json::mapping::Serializer Serializer;
+typedef oatpp::parser::json::mapping::Deserializer Deserializer;
+
+#include OATPP_CODEGEN_BEGIN(DTO)
+
+class EmptyDto : public oatpp::DTO {
+  DTO_INIT(EmptyDto, DTO)
+};
+
+class Test1 : public oatpp::DTO {
+  DTO_INIT(Test1, DTO)
+  DTO_FIELD(String, strF);
+};
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  oatpp::String input(reinterpret_cast<const char *>(data), size);
+  oatpp::parser::json::mapping::ObjectMapper mapper;
+  try {
+    mapper.readFromString<oatpp::Object<Test1>>(input);
+  } catch (...) {
+  }
+
+  return 0;
+}
+
+extern "C" {
+extern "C" void oatpp::parser::json::mapping::Serializer::serializeMap(oatpp::parser::json::mapping::Serializer *serializer, std::bad_array_new_length *array, oatpp::data::mapping::type::Void *voidPtr) {
+  (void)serializer;
+  (void)array;
+  (void)voidPtr;
+}
+
+extern "C" void oatpp::parser::json::mapping::Deserializer::deserializeMap(oatpp::parser::json::mapping::Deserializer *deserializer, std::bad_array_new_length *array, oatpp::data::mapping::type::Void *voidPtr) {
+  (void)deserializer;
+  (void)array;
+  (void)voidPtr;
+}
+}
+#include OATPP_CODEGEN_END
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

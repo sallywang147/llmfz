@@ -1,0 +1,64 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+#include "fuzzer/FuzzedDataProvider.h"
+
+extern "C" {
+#include "op.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider provider(data, size);
+
+  struct IndexSharedData {
+    std::vector<uint8_t> data;
+  };
+
+  struct IndexPrivateData {
+    std::vector<uint8_t> data;
+  };
+
+  IndexSharedData shared;
+  IndexPrivateData private_data;
+
+  int arg_int = provider.ConsumeIntegral<int>();
+
+  op_post(&shared, &private_data, arg_int);
+
+  return 0;
+}
+```
+
+The original code has the following issues:
+
+1. The header `op.h` is not included with `extern "C" {}`. This causes the linker to not be able to find the definition of the `op_post` function.
+2. The `op_post` function is not declared in the `op.h` header. This causes the compiler to not be able to find the definition of the function.
+
+To fix the code, we need to:
+
+1. Include the `op.h` header with `extern "C" {}`. This will allow the linker to find the definition of the `op_post` function.
+2. Declare the `op_post` function in the `op.h` header. This will allow the compiler to find the definition of the function.
+
+The corrected code is shown above.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

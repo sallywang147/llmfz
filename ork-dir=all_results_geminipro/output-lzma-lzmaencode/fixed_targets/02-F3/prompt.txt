@@ -1,0 +1,64 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+#include "7z.h"
+
+extern "C" {
+#include "7zAlloc.h"
+#include "7zCrc.h"
+#include "7zFile.h"
+#include "7zVersion.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  size_t src_len = stream.ConsumeIntegralInRange<size_t>(0, 1024 * 1024);
+  std::vector<char> src(src_len);
+  stream.ConsumeBytes(src.data(), src_len);
+
+  size_t dest_len = stream.ConsumeIntegralInRange<size_t>(0, 1024 * 1024);
+  std::vector<char> dest(dest_len);
+
+  CLzmaEncProps props;
+  LzmaEncProps_Init(&props);
+
+  size_t props_encoded_len = stream.ConsumeIntegralInRange<size_t>(0, 1024);
+  std::vector<char> props_encoded(props_encoded_len);
+  stream.ConsumeBytes(props_encoded.data(), props_encoded_len);
+
+  int write_end_mark = stream.ConsumeBool();
+
+  int ret = LzmaEncode(dest.data(), &dest_len, src.data(), src_len, &props,
+                       props_encoded.data(), &props_encoded_len, write_end_mark,
+                       nullptr, nullptr, nullptr);
+  if (ret != SZ_OK) {
+    return 0;
+  }
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

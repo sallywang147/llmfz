@@ -1,0 +1,51 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+
+#include <fuzzer/FuzzedDataProvider.h>
+
+extern "C" {
+#include <unistd.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider provider(data, size);
+
+  int argc = provider.ConsumeIntegralInRange<int>(0, 10);
+  char **argv = (char **)calloc(argc + 1, sizeof(char *));
+  for (int i = 0; i < argc; i++) {
+    size_t arg_size = provider.ConsumeIntegralInRange<size_t>(0, 1024);
+    argv[i] = (char *)calloc(arg_size + 1, sizeof(char));
+    provider.ConsumeBytes<char>(argv[i], arg_size);
+  }
+  char **envp = (char **)calloc(1, sizeof(char *));
+  disabled_main(argc, argv, envp);
+  for (int i = 0; i < argc; i++) {
+    free(argv[i]);
+  }
+  free(argv);
+  free(envp);
+  return 0;
+}
+```
+In this code, the `unistd.h` header is included inside the `extern "C" {}` block to resolve the undefined reference to `disabled_main`. This is because `disabled_main` is declared in `unistd.h`, and the `extern "C"` block ensures that the function is properly linked when compiling the code.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

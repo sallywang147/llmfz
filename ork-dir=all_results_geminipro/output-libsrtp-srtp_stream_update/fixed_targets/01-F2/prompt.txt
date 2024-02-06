@@ -1,0 +1,50 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+#include "srtp.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider provider(data, size);
+  srtp_policy_t policy;
+  uint8_t key[SRTP_MAX_KEY_LEN];
+  uint8_t salt[SRTP_MAX_SALT_LEN];
+  provider.ConsumeBytes<uint8_t>(key, SRTP_MAX_KEY_LEN);
+  provider.ConsumeBytes<uint8_t>(salt, SRTP_MAX_SALT_LEN);
+  srtp_crypto_policy_set_from_profile_for_test(&policy.rtp, SRTP_AES128_CM_HMAC_SHA1_80);
+  srtp_crypto_policy_set_from_profile_for_test(&policy.rtcp, SRTP_AES128_CM_HMAC_SHA1_80);
+  srtp_policy_init(&policy);
+  srtp_ctx_t session;
+  srtp_init();
+  srtp_create(&session, &policy);
+  srtp_set_master_key(&session, key, SRTP_MAX_KEY_LEN);
+  srtp_set_master_salt(&session, salt, SRTP_MAX_SALT_LEN);
+  srtp_stream_update(&session, &policy);
+  srtp_close(&session);
+  srtp_dealloc(&session);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

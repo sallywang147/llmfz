@@ -1,0 +1,53 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+#include "parallel_hashmap/phmap_dump.h"
+#include <fuzzer/FuzzedDataProvider.h>
+
+using phmap::flat_hash_set;
+using namespace std;
+
+extern "C" {
+#include "parallel_hashmap/phmap.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  phmap::flat_hash_set<unsigned int> table;
+  FuzzedDataProvider provider(data, size);
+  const int num_items = provider.ConsumeIntegral<int16_t>();
+
+  for (int i = 0; i < num_items; ++i) {
+    table.insert(provider.ConsumeIntegral<uint32_t>());
+  }
+
+  size_t pos = provider.ConsumeIntegralInRange<size_t>(0, table.size());
+  table.drop_deletes_without_resize(&table, pos);
+
+  return 0;
+}
+```
+
+The issue was that the `phmap::flat_hash_set` class was not defined in the code. To fix this, the `#include "parallel_hashmap/phmap.h"` line was added to the code. This line includes the header file that defines the `phmap::flat_hash_set` class.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,38 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+extern "C" {
+#include "draco/src/draco/core/point_cloud.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  draco::PointCloud pc;
+  pc.DecodeFromBuffer(data, size);  // Fix: Decode the point cloud from the input buffer
+  bool result = pc.DeduplicateAttributeValues();  // Fix: Remove the pointer to `pc`
+  return 0;
+}
+```
+
+The original code had two issues:
+
+1. The `draco::PointCloud` object `pc` was not initialized with any data. This is fixed by calling the `DecodeFromBuffer` method to decode the point cloud from the input buffer.
+2. The `DeduplicateAttributeValues` method was called with a pointer to `pc` as the first argument. This is incorrect, as the method does not take a pointer to the point cloud as an argument. The fix is to remove the pointer to `pc` from the method call.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

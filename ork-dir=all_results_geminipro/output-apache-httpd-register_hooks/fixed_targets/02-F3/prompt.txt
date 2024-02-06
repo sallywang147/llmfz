@@ -1,0 +1,55 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+
+#include "apr_pools.h"
+
+extern "C" {
+#include "apr_hooks.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  apr_pool_t* pool = apr_pool_create_ex(nullptr, nullptr, nullptr);
+  apr_pool_pre_cleanup_register(pool, nullptr, register_hooks);
+  apr_pool_destroy(pool);
+  return 0;
+}
+```
+
+The original code has the following issues:
+
+1. The `register_hooks` function is called without being properly registered with the pool. This can lead to undefined behavior.
+2. The `apr_pool_pre_cleanup_register` function is not declared in the `apr_pools.h` header.
+
+To fix these issues, we can use the `apr_pool_pre_cleanup_register` function to register the `register_hooks` function with the pool before it is destroyed. This ensures that the `register_hooks` function is called before the pool is destroyed, which prevents undefined behavior.
+
+We also need to declare the `apr_pool_pre_cleanup_register` function in the `apr_pools.h` header. This can be done by adding the following line to the top of the header file:
+
+```c++
+extern "C" APR_DECLARE(apr_status_t) apr_pool_pre_cleanup_register(apr_pool_t *pool, void *data, apr_status_t (*cleanup_fn)(void *));
+```
+
+With these changes, the code should compile and run successfully.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,58 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <lwip/udp.h>
+#include <lwip/ip4_addr.h>
+#include <lwip/pbuf.h>
+
+extern "C" {
+#include <stdlib.h>
+#include <string.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider provider(data, size);
+  struct pbuf *p = pbuf_alloc(PBUF_TRANSPORT, provider.ConsumeIntegralInRange<uint16_t>(0, 1024), PBUF_RAM);
+  if (p == NULL) {
+    return 0;
+  }
+  provider.ConsumeBytes(p->payload, p->len);
+  struct udp_pcb *pcb = udp_new();
+  if (pcb == NULL) {
+    pbuf_free(p);
+    return 0;
+  }
+  struct ip4_addr addr;
+  IP4_ADDR(&addr, provider.ConsumeIntegralInRange<uint8_t>(0, 255), provider.ConsumeIntegralInRange<uint8_t>(0, 255),
+           provider.ConsumeIntegralInRange<uint8_t>(0, 255), provider.ConsumeIntegralInRange<uint8_t>(0, 255));
+  udp_recv_proc((char *)p->payload, pcb, p, &addr, provider.ConsumeIntegralInRange<uint16_t>(0, 65535));
+  udp_remove(pcb);
+  pbuf_free(p);
+  return 0;
+}
+```
+
+The original code has the following issues:
+
+1. The `#include` directives for the LwIP headers are not wrapped with `extern "C" {}`. This is necessary because the LwIP headers are written in C, and the fuzzer is written in C++. Without the `extern "C" {}` wrapper, the linker will not be able to find the LwIP functions.
+2. The `udp_recv_proc()` function is missing a semicolon at the end of the line. This is a syntax error that will cause the compiler to fail.
+
+The fixed code includes the necessary `extern "C" {}` wrapper around the LwIP headers and adds the missing semicolon to the `udp_recv_proc()` function. This should allow the code to compile and run successfully.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

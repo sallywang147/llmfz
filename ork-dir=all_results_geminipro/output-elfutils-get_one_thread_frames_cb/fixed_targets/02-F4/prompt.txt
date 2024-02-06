@@ -1,0 +1,44 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <libdwfl.h>
+#include <stdint.h>
+#include <stdlib.h>
+
+extern "C" {
+#include <libelf.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider fdp(data, size);
+  Dwfl *dwfl = dwfl_begin();
+  if (!dwfl)
+    return 0;
+
+  Dwfl_Thread *thread = dwfl_getthread_byid(dwfl, fdp.ConsumeIntegral<int>());
+  if (!thread)
+    return 0;
+
+  char *arg = fdp.ConsumeBytesAsString(fdp.ConsumeIntegralInRange(0, 1024)).c_str();
+  get_one_thread_frames_cb(thread, arg); // Declare the function
+  dwfl_end(dwfl);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

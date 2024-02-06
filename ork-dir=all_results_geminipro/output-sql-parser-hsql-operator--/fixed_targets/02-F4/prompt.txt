@@ -1,0 +1,38 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "ColumnType.h"
+#include <ostream>
+
+using namespace hsql;
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  std::string input(reinterpret_cast<const char *>(data), size);
+  std::stringstream stream;
+  ColumnType column_type;
+  column_type.parse(input);
+  stream << &column_type;
+  // Call the operator<< function explicitly.
+  std::cout << stream.str();
+  return 0;
+}
+```
+
+The corrected code explicitly calls the `operator<<` function to output the result of the stream to the standard output. This ensures that the target function is called within the fuzz target function, resolving the build error.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,77 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+extern "C" {
+#include "yaml.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  yaml_emitter_t emitter;
+  yaml_emitter_initialize(&emitter);
+
+  const size_t output_buffer_size = stream.ConsumeIntegralInRange<size_t>(
+      1, std::numeric_limits<size_t>::max());
+  std::vector<char> output_buffer(output_buffer_size);
+
+  size_t size_written = 0;
+  yaml_emitter_set_output_string(&emitter, output_buffer.data(),
+                                 output_buffer.size(), &size_written);
+
+  yaml_event_t event;
+  yaml_stream_start_event_initialize(&event, YAML_UTF8_ENCODING);
+  yaml_emitter_emit(&emitter, &event);
+
+  yaml_document_start_event_initialize(&event, nullptr, nullptr, nullptr, 0);
+  yaml_emitter_emit(&emitter, &event);
+
+  yaml_sequence_start_event_initialize(&event, nullptr, nullptr, 0);
+  yaml_emitter_emit(&emitter, &event);
+
+  for (size_t i = 0; i < 10; ++i) {
+    yaml_scalar_event_initialize(&event, nullptr, nullptr,
+                                 reinterpret_cast<const uint8_t*>(
+                                     stream.ConsumeRemainingBytesAsString().c_str()),
+                                 stream.ConsumeRemainingBytesAsString().size(),
+                                 1, 1, YAML_PLAIN_SCALAR_STYLE);
+    yaml_emitter_emit(&emitter, &event);
+  }
+
+  yaml_sequence_end_event_initialize(&event);
+  yaml_emitter_emit(&emitter, &event);
+
+  yaml_document_end_event_initialize(&event, 0);
+  yaml_emitter_emit(&emitter, &event);
+
+  yaml_stream_end_event_initialize(&event);
+  yaml_emitter_emit(&emitter, &event);
+
+  yaml_emitter_delete(&emitter);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

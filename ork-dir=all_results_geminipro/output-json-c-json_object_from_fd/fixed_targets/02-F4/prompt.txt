@@ -1,0 +1,45 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdint.h>
+#include <json-c/json.h>
+#include <json-c/json_util.h>
+
+extern "C" {
+#include <json-c/json_util.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  json_object *obj = json_object_from_fd(0);
+
+  if (json_object_is_type(obj, json_type_object)) {
+    json_object_object_foreach(obj, key, val) {
+      (void)json_object_get_type(val);
+      (void)json_object_get_string(val);
+    }
+  }
+  (void)json_object_to_json_string_ext(obj, JSON_C_TO_STRING_PRETTY | JSON_C_TO_STRING_SPACED);
+
+  json_object_put(obj);
+  return 0;
+}
+```
+
+In this fixed code, the `json-c/json_util.h` header is included and wrapped with `extern "C" {}` to ensure that the function is exported with C linkage. This resolves the build error and allows the code to compile successfully.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

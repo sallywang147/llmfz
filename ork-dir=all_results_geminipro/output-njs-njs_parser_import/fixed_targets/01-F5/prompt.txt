@@ -1,0 +1,65 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+#include "njs_parser.h"
+
+extern "C" {
+#include "njs_parser_import.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const size_t parser_size = stream.ConsumeIntegral<size_t>();
+  struct njs_parser_s* parser =
+      static_cast<struct njs_parser_s*>(malloc(parser_size));
+  if (parser == nullptr) {
+    return 0;
+  }
+
+  const size_t token_size = stream.ConsumeIntegral<size_t>();
+  struct njs_lexer_token_t* token =
+      static_cast<struct njs_lexer_token_t*>(malloc(token_size));
+  if (token == nullptr) {
+    free(parser);
+    return 0;
+  }
+
+  const size_t current_size = stream.ConsumeIntegral<size_t>();
+  struct njs_queue_link_s* current =
+      static_cast<struct njs_queue_link_s*>(malloc(current_size));
+  if (current == nullptr) {
+    free(parser);
+    free(token);
+    return 0;
+  }
+
+  const int result = njs_parser_import(parser, token, current);
+  free(parser);
+  free(token);
+  free(current);
+  return result;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

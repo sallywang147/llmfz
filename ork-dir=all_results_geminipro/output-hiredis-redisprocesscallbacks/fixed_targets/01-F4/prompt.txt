@@ -1,0 +1,57 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "hiredis.h"
+#include <stdlib.h>
+#include <string.h>
+
+extern "C" {
+#include "redisAsync.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  redisAsyncContext *c = redisAsyncConnect("127.0.0.1", 6379);
+  if (c->err) {
+    return 0;
+  }
+  redisAsyncSetConnectCallback(c, connectCallback);
+  redisAsyncSetDisconnectCallback(c, disconnectCallback);
+  redisAsyncCommand(c, NULL, NULL, "SET key %b", (size_t)size, data);
+  redisAsyncHandleConnect(c);
+  redisAsyncHandleDisconnect(c);
+  redisAsyncFree(c);
+  return 0;
+}
+
+static void connectCallback(const redisAsyncContext *c, int status) {
+  if (status != REDIS_OK) {
+    printf("Error: %s\n", c->errstr);
+    return;
+  }
+  printf("Connected to Redis\n");
+}
+
+static void disconnectCallback(const redisAsyncContext *c, int status) {
+  if (status != REDIS_OK) {
+    printf("Error: %s\n", c->errstr);
+    return;
+  }
+  printf("Disconnected from Redis\n");
+}
+</code>
+
+The code has the following build issues:
+<error>
+The target function `void redisProcessCallbacks(struct redisAsyncContext * ac)` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `void redisProcessCallbacks(struct redisAsyncContext * ac)` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

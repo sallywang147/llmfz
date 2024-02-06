@@ -1,0 +1,52 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+The build error is:
+
+```
+error: undefined reference to 'incclasscanon'
+```
+
+This error means that the function `incclasscanon` is not defined in the code. To fix this, we need to include the header file that defines this function.
+
+The following is the corrected code:
+
+```c++
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <cstdio>
+#include <fuzzer/FuzzedDataProvider.h>
+#include "incclasscanon.h" // Include the header file that defines incclasscanon
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  struct Reclass {
+    int dummy;
+  };
+  struct Reclass* cc = new struct Reclass;
+  int c = stream.ConsumeIntegral<int>();
+  int result = incclasscanon(cc, c);
+  delete cc;
+  return result;
+}
+```
+
+With this change, the code should build successfully.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

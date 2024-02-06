@@ -1,0 +1,40 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdint.h>
+#include <vector>
+
+extern "C" {
+#include "butteraugli/butteraugli.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  std::vector<uint8_t> input(data, data + size);
+  std::vector<uint8_t> output;
+  butteraugli::Image img;
+  double score;
+  bool status = butteraugli::ButteraugliInterface(&input, &output, &img, &score);
+  return status ? 0 : 1;  // Return 1 if the status is false.
+}
+```
+
+The issue with the original code is that it doesn't return a proper value to indicate the status of the `butteraugli::ButteraugliInterface` function call. The `LLVMFuzzerTestOneInput` function is expected to return 0 if the input is valid and 1 otherwise.
+
+The corrected code returns 0 if the status is true, indicating a successful call to `butteraugli::ButteraugliInterface`, and 1 if the status is false, indicating an unsuccessful call.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

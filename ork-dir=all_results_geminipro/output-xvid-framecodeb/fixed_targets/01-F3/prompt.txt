@@ -1,0 +1,83 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+
+struct Encoder {
+  int a;
+  int b;
+};
+
+struct FRAMEINFO {
+  int c;
+  int d;
+};
+
+struct Bitstream {
+  int e;
+  int f;
+};
+
+extern "C" {
+#include "FrameCodeB.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  Encoder encoder;
+  encoder.a = stream.ConsumeIntegral<int>();
+  encoder.b = stream.ConsumeIntegral<int>();
+
+  FRAMEINFO frame;
+  frame.c = stream.ConsumeIntegral<int>();
+  frame.d = stream.ConsumeIntegral<int>();
+
+  Bitstream bs;
+  bs.e = stream.ConsumeIntegral<int>();
+  bs.f = stream.ConsumeIntegral<int>();
+
+  FrameCodeB(&encoder, &frame, &bs);
+
+  return 0;
+}
+```
+
+The issue is that the `FrameCodeB` function is declared with `extern "C"`, but the definition is not wrapped with `extern "C"`. This causes the linker to not be able to find the definition of the function.
+
+To fix this, the definition of `FrameCodeB` in `FrameCodeB.h` should be wrapped with `extern "C"`. For example:
+
+```c++
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void FrameCodeB(Encoder *encoder, FRAMEINFO *frame, Bitstream *bs);
+
+#ifdef __cplusplus
+}
+#endif
+```
+
+With this change, the linker will be able to find the definition of `FrameCodeB` and the program will build successfully.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

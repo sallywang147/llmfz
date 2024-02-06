@@ -1,0 +1,275 @@
+<system>
+You are a security testing engineer who wants to write a C++ program to execute all lines in a given function by defining and initializing its parameters in a suitable way before fuzzing the function through <code>LLVMFuzzerTestOneInput</code>.
+
+Carefully study the function signature and its parameters, then follow the example problems and solutions to answer the final problem. YOU MUST call the function to fuzz in the solution.
+
+Try as many variations of these inputs as possible. Do not use a random number generator such as <code>rand()</code>.
+
+Use <code>FuzzedDataProvider</code> to generate these inputs. You MUST declare it in <code>LLVMFuzzerTestOneInput</code>, like this:
+<code>
+FuzzedDataProvider stream(data, size);
+</code>
+
+Include <code>#include <fuzzer/FuzzedDataProvider.h></code> in the solution.
+
+This code shows example of using it:
+<code>
+// Extract integral values
+int int_arg = stream.ConsumeIntegral<int>();
+int int_arg_in_range = stream.ConsumeIntegralInRange(-100, 100);
+bool bool_arg = stream.ConsumeBool();
+
+// Extract floating point values
+float probability = stream.ConsumeProbability();
+double double_arg = stream.ConsumeFloatingPoint<double>();
+double double_arg_in_range = stream.ConsumeFloatingPointInRange(-1.0, 1.0);
+
+// Extract value from predefined set, such as enum or array
+EnumType enum = stream.ConsumeEnum<EnumType>();
+int valid_values = stream.PickValueInArray({FLAG_1, FLAG_2, FLAG_3});
+
+// Extract an array of bytes as a vector. You MUST call <code>.data()</code> to use result as pointer.
+std::vector<uint8_t> bytes = stream.ConsumeBytes<uint8_t>(stream.ConsumeIntegralInRange(0, max_size));
+void *data_ptr = bytes.data();
+std::vector<uint8_t> bytes2 = stream.ConsumeBytes<uint8_t>(requested_size);
+void *data2_ptr = bytes2.data();
+
+// Extract a string. You MUST use <code>.c_str()</code> to use result as pointer
+std::string str = stream.ConsumeBytesAsString(stream.ConsumeIntegralInRange(0, max_size));
+char *ptr = str.c_str();
+std::string str2 = stream.ConsumeBytesAsString(requested_size);
+char *ptr2 = str2.c_str();
+std::string str3 = stream.ConsumeRandomLengthString();
+char *ptr3 = str3.c_str();
+
+// Extract to user defined object
+struct_type_t obj;
+size_t consumed = stream.ConsumeData(&obj, sizeof(obj));
+</code>
+
+There MUST be AT MOST ONE call to <code>ConsumeRemainingBytes</code> to consume remaining input!
+<code>
+FuzzedDataProvider stream(data, size);
+
+std::vector<uint8_t> bytes3 = stream.ConsumeRemainingBytes();
+void *data3_ptr = bytes3.data();
+</code>
+
+All variables used MUST be declared and initialized. Carefully make sure that the variable and argument types in your code match and compiles successfully. Add type casts to make types match.
+
+Do not create new variables with the same names as existing variables.
+WRONG:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  void* data = Foo();
+}
+</code>
+
+EXTREMELY IMPORTANT: If you write code using <code>goto</code>, you MUST MUST also declare all variables BEFORE the <code>goto</code>. Never introduce new variables after the <code>goto</code>.
+WRONG:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int a = bar();
+  if (!some_function()) goto EXIT;
+  Foo b = target_function(data, size);
+  int c = another_func();
+EXIT:
+  return 0;
+}
+</code>
+
+CORRECT:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int a = bar();
+  Foo b;
+  int c;
+
+  if (!some_function()) goto EXIT;
+  b = target_function(data, size);
+  c = another_func()
+EXIT:
+  return 0;
+}
+</code>
+
+If an example provided for the same library includes a unique header file, then it must be included in the solution as well.
+</system>
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+void FuzzData::splitIntoStrings(std::vector * , struct FuzzData * )
+</function header>
+</task>
+
+<solution>
+#include "simdjson.h"
+#include <cstddef>
+#include <cstdint>
+#include <string>
+
+#include "FuzzUtils.h"
+#include "NullBuffer.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  FuzzData fd(Data, Size);
+  const int action = fd.getInt<0, 31>();
+
+  // there will be some templatized functions like is() which need to be tested
+  // on a type. select one dynamically and create a function that will invoke
+  // with that type
+  const int selecttype = fd.getInt<0, 7>();
+  auto invoke_with_type = [selecttype](auto cb) {
+    using constcharstar = const char *;
+    switch (selecttype) {
+    case 0:
+      cb(bool{});
+      break;
+    case 1:
+      cb(double{});
+      break;
+    case 2:
+      cb(uint64_t{});
+      break;
+    case 3:
+      cb(int64_t{});
+      break;
+    case 4:
+      cb(std::string_view{});
+      break;
+    case 5:
+      cb(constcharstar{});
+      break;
+    case 6:
+      cb(simdjson::dom::array{});
+      break;
+    case 7:
+      cb(simdjson::dom::object{});
+      break;
+    }
+  };
+
+  const auto index = fd.get<size_t>();
+
+  // split the remainder of the document into strings
+  auto strings = fd.splitIntoStrings();
+  while (strings.size() < 2) {
+    strings.emplace_back();
+  }
+  const auto str = strings[0];
+
+  // exit if there was too little data
+  if (!fd)
+    return 0;
+
+  simdjson::dom::parser parser;
+  simdjson_unused simdjson::dom::element elem;
+  simdjson_unused auto error = parser.parse(strings[1]).get(elem);
+
+  if (error)
+    return 0;
+
+#define CASE(num, fun)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 \
+  case num: {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          \
+    simdjson_unused auto v = elem.fun();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               \
+    break;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             \
+  }
+#define CASE2(num, fun)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \
+  case num: {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          \
+    simdjson_unused auto v = elem fun;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 \
+    break;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             \
+  }
+#if SIMDJSON_EXCEPTIONS
+  try {
+#endif
+
+    switch (action) {
+      CASE(0, type);
+      CASE(1, get_array);
+      CASE(2, get_object);
+      CASE(3, get_c_str);
+      CASE(4, get_string_length);
+      CASE(5, get_string);
+      CASE(6, get_int64);
+      CASE(7, get_uint64);
+      CASE(8, get_double);
+      CASE(9, get_bool);
+      CASE(10, is_array);
+      CASE(11, is_object);
+      CASE(12, is_string);
+      CASE(13, is_int64);
+      CASE(14, is_uint64);
+      CASE(15, is_double);
+      CASE(16, is_number);
+      CASE(17, is_bool);
+      CASE(18, is_null);
+      // element.is<>() :
+    case 19: {
+      invoke_with_type([&elem](auto t) { simdjson_unused auto v = elem.is<decltype(t)>(); });
+    } break;
+
+    // CASE(xx,get);
+    case 20: {
+      invoke_with_type([&elem](auto t) { simdjson_unused auto v = elem.get<decltype(t)>(); });
+    } break;
+
+    // CASE(xx,tie);
+    case 21: {
+      invoke_with_type([&elem](auto t) {
+        simdjson::error_code ec;
+        simdjson::dom::element{elem}.tie(t, ec);
+      });
+    } break;
+
+#if SIMDJSON_EXCEPTIONS
+    // cast to type
+    case 22: {
+      invoke_with_type([&elem](auto t) {
+        using T = decltype(t);
+        simdjson_unused auto v = static_cast<T>(elem);
+      });
+    } break;
+
+      CASE(23, begin);
+      CASE(24, end);
+#endif
+      CASE2(25, [str]);
+      CASE2(26, .at_pointer(str));
+      // CASE2(xx,at(str)); deprecated
+      CASE2(28, .at(index));
+      CASE2(29, .at_key(str));
+      CASE2(30, .at_key_case_insensitive(str));
+    case 31: {
+      NulOStream os;
+      simdjson_unused auto dumpstatus = elem.dump_raw_tape(os);
+    }; break;
+    default:
+      return 0;
+    }
+#undef CASE
+#undef CASE2
+
+#if SIMDJSON_EXCEPTIONS
+  } catch (std::exception &) {
+    // do nothing
+  }
+#endif
+
+  return 0;
+}
+
+</solution>
+
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+int simdjson::icelake::dom_parser_implementation::stage2_next(simdjson::fallback::dom_parser_implementation * , simdjson::dom::document * )
+</function header>
+</task>
+You MUST call <code>
+int simdjson::icelake::dom_parser_implementation::stage2_next(simdjson::fallback::dom_parser_implementation * , simdjson::dom::document * )
+</code> in your solution!
+
+<solution>

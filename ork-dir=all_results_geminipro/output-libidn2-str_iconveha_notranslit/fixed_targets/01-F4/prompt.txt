@@ -1,0 +1,62 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+extern "C" {
+#include <iconv.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  const std::string input = stream.ConsumeRemainingBytesAsString();
+  char* input_cstr = const_cast<char*>(input.c_str());
+
+  const std::string from_codeset = stream.ConsumeRandomLengthString();
+  char* from_codeset_cstr = const_cast<char*>(from_codeset.c_str());
+
+  const std::string to_codeset = stream.ConsumeRandomLengthString();
+  char* to_codeset_cstr = const_cast<char*>(to_codeset.c_str());
+
+  const int handler = stream.ConsumeIntegral<int>();
+
+  char* output = iconv(input_cstr, strlen(input_cstr), from_codeset_cstr, strlen(from_codeset_cstr),
+                                         to_codeset_cstr, strlen(to_codeset_cstr));
+  free(output);
+
+  return 0;
+}
+```
+
+The original code has the following issues:
+1. The function `str_iconv_notranslit` is not declared in the `iconv.h` header.
+2. The function `str_iconv_notranslit` is declared in the `iconv.h` header, but it is not wrapped with `extern "C" {}`.
+
+To fix the first issue, we need to include the correct header file for the `iconv` function. In this case, the correct header file is `<iconv.h>`.
+
+To fix the second issue, we need to wrap the `#include <iconv.h>` directive with `extern "C" {}`. This is because the `iconv` function is declared in a C header file, and we are using it in a C++ program.
+
+After fixing these issues, the code should compile and run correctly.
+</code>
+
+The code has the following build issues:
+<error>
+The target function `char * str_iconveha_notranslit(char * src, char * from_codeset, char * to_codeset, int handler)` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `char * str_iconveha_notranslit(char * src, char * from_codeset, char * to_codeset, int handler)` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

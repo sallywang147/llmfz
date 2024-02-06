@@ -1,0 +1,48 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzz.h>
+
+extern "C" {
+#include <libxslt/xslt.h>
+#include <libxml/parser.h>
+}
+
+int LLVMFuzzerInitialize(int *argc_p ATTRIBUTE_UNUSED, char ***argv_p ATTRIBUTE_UNUSED) { return xsltFuzzInit(); }
+
+int LLVMFuzzerTestOneInput(const char *data, size_t size) {
+  xmlDocPtr xmlDoc = xsltFuzzParseDoc(data, size);
+  if (xmlDoc == NULL) {
+    return 0;
+  }
+
+  xsltStylesheetPtr style = xsltFuzzParseStylesheet(data, size);
+  if (style == NULL) {
+    xmlFreeDoc(xmlDoc);
+    return 0;
+  }
+
+  char *output = xsltFuzzRunStylesheetUser(style, xmlDoc, NULL, NULL, NULL, NULL, NULL, NULL);
+  xsltFreeStylesheet(style);
+  xmlFreeDoc(xmlDoc);
+  xsltFuzzFreeString(output);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+The target function `int xsltRunStylesheetUser(struct _xsltStylesheet * style, struct _xmlDoc * doc, char ** params, char * output, struct _xmlSAXHandler * SAX, struct _xmlOutputBuffer * IObuf, struct _IO_FILE * profile, struct _xsltTransformContext * userCtxt)` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `int xsltRunStylesheetUser(struct _xsltStylesheet * style, struct _xmlDoc * doc, char ** params, char * output, struct _xmlSAXHandler * SAX, struct _xmlOutputBuffer * IObuf, struct _IO_FILE * profile, struct _xsltTransformContext * userCtxt)` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

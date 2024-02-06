@@ -1,0 +1,71 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <lwip/udp.h>
+#include <lwip/pbuf.h>
+#include <lwip/ip4_addr.h>
+
+#include <cstdint>
+#include <cstring>
+#include <string>
+#include <vector>
+
+extern "C" {
+void udp_recv_proc(char *, struct udp_pcb *, struct pbuf *, struct ip4_addr *, short);
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  FuzzedDataProvider provider(Data, Size);
+
+  // Generate a random UDP PCB.
+  struct udp_pcb pcb;
+  memset(&pcb, 0, sizeof(pcb));
+  pcb.local_port = provider.ConsumeIntegralInRange<uint16_t>(0, 65535);
+  pcb.remote_port = provider.ConsumeIntegralInRange<uint16_t>(0, 65535);
+
+  // Generate a random PBUF.
+  struct pbuf *pbuf = pbuf_alloc(PBUF_TRANSPORT, provider.ConsumeIntegralInRange<uint16_t>(0, 1024), PBUF_RAM);
+  if (pbuf == NULL) {
+    return 0;
+  }
+  provider.ConsumeBytes(pbuf->payload, pbuf->len);
+
+  // Generate a random IP4 address.
+  struct ip4_addr ip4_addr;
+  provider.ConsumeBytes(&ip4_addr, sizeof(ip4_addr));
+
+  // Generate a random port number.
+  short port = provider.ConsumeIntegralInRange<short>(0, 65535);
+
+  // Call the UDP receive function.
+  udp_recv_proc(NULL, &pcb, pbuf, &ip4_addr, port);
+
+  // Free the PBUF.
+  pbuf_free(pbuf);
+
+  return 0;
+}
+```
+
+The original code has an issue with the `udp_recv_proc` function declaration. It should be declared as `extern "C"` to ensure that it is visible to the linker when building the shared library.
+
+The corrected code includes the `extern "C"` declaration for the `udp_recv_proc` function, which resolves the linker error.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

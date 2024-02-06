@@ -1,0 +1,45 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+#include <stdint.h>
+#include <string.h>
+
+#include "easywsclient.hpp"
+#include <fuzzer/FuzzedDataProvider.h>
+
+extern "C" {
+#include "easywsclient.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  std::string str(reinterpret_cast<const char *>(data), size);
+  easywsclient::WebSocket::from_url_no_mask(str);
+  return 0;
+}
+```
+
+The original code has the following issues:
+
+1. The `easywsclient.h` header file is included without the `extern "C"` wrapper. This causes a linker error because the C++ compiler generates different name mangling for function and variable names than the C compiler.
+
+2. The `easywsclient.hpp` header file is included without the `#include <string>` directive. This causes a compiler error because the `std::string` class is used in the code.
+
+The fixed code includes the `easywsclient.h` header file with the `extern "C"` wrapper and includes the `#include <string>` directive. This resolves the linker and compiler errors.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

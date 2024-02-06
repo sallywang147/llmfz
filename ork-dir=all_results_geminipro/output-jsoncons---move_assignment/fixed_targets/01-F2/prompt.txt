@@ -1,0 +1,36 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <jsoncons/json.hpp>
+#include <stdio.h>
+
+using namespace jsoncons;
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, std::size_t size) {
+  std::string input(reinterpret_cast<const char *>(data), size);
+  json j1 = json::parse(input);
+  json j2 = json::parse(input);
+  j1 = std::move(j2); // Use move assignment operator
+  return 0;
+}
+```
+
+The error is caused by the use of the `move_assignment` method, which is not a member of the `json` class. To fix this, the `move_assignment` method should be replaced with the move assignment operator `=`.
+
+The corrected code is shown above.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

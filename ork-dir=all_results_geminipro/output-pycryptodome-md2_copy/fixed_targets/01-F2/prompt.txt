@@ -1,0 +1,76 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "common.h"
+#include <fuzzer/FuzzedDataProvider.h>
+
+#ifndef HASHTYPE
+#error Macro HASHTYPE must be defined.
+#endif
+
+#ifndef FNAME
+#error Macro FNAME must be defined.
+#endif
+
+#define CONCAT_TYPE(x) _PASTE2(HASHTYPE, x)
+
+#define init CONCAT_TYPE(_init)
+#define update CONCAT_TYPE(_update)
+#define digest CONCAT_TYPE(_digest)
+#define destroy CONCAT_TYPE(_destroy)
+#define copy CONCAT_TYPE(_copy)
+
+#define STR(x) #x
+#define INCLUDE(x) STR(x)
+
+extern "C" {
+#include INCLUDE(FNAME)
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+
+  if (!size)
+    return 0;
+
+  FuzzedDataProvider stream(data, size);
+  hash_state *hs1;
+  if (init(&hs1))
+    return 0;
+
+  hash_state *hs2;
+  if (init(&hs2))
+    goto error1;
+
+  while (stream.remaining_bytes()) {
+    size_t num_bytes = stream.ConsumeIntegral<size_t>();
+    std::vector<uint8_t> buffer = stream.ConsumeBytes<uint8_t>(num_bytes);
+
+    if (update(hs1, buffer.data(), buffer.size()))
+      goto error2;
+  }
+
+  copy(hs1, hs2);
+
+error2:
+  destroy(hs1);
+error1:
+  destroy(hs2);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+The target function `int md2_copy(struct hash_state * src, struct hash_state * dst)` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `int md2_copy(struct hash_state * src, struct hash_state * dst)` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,53 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <fmt/core.h>
+
+extern "C" {
+#include <string.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider provider(data, size);
+
+  fmt::v9::basic_memory_buffer<char, 250ul, std::__1::allocator<char>> buffer;
+  std::__1::back_insert_iterator<fmt::v9::basic_memory_buffer<char, 250ul, std::__1::allocator<char>>> it(buffer);
+
+  auto format_string = provider.ConsumeRandomLengthString();
+  auto args = provider.ConsumeRemainingBytesAsString();
+
+  fmt::v9::vformat_to(it, 0, format_string.size(), format_string.c_str(), args.c_str());
+
+  return 0;
+}
+```
+
+The build error is:
+
+```
+error: undefined reference to 'strcmp'
+```
+
+This error is because the `strcmp` function is not declared in the C++ standard library. To fix this, we need to include the `cstring` header, which declares the `strcmp` function.
+
+The fixed code includes the `cstring` header using the `extern "C"` block. This is necessary because the `cstring` header is a C header, and C headers need to be wrapped in `extern "C"` blocks when used in C++ code.
+
+The `extern "C"` block tells the compiler that the functions and variables declared in the header are C functions and variables, and not C++ functions and variables. This is necessary because C++ has different rules for function and variable declarations than C.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,72 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "ixml.h"
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+#define kMinInputLength 10
+#define kMaxInputLength 5120
+
+int CheckXML(char * buffer) {
+
+  int rc;
+  DOMString s;
+  IXML_Document *doc = NULL;
+
+  doc = ixmlParseBuffer(buffer);
+  if (doc == NULL) {
+    return 1;
+  }
+
+  s = ixmlPrintDocument(doc);
+  if (s == NULL || s[0] == '\0') {
+    ixmlDocument_free(doc);
+    return 1;
+  }
+
+  ixmlFreeDOMString(s);
+  ixmlDocument_free(doc);
+
+  return 0;
+}
+
+extern int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+
+  if (Size < kMinInputLength || Size > kMaxInputLength) {
+    return 1;
+  }
+
+  int ret;
+  char *buffer = (char *)malloc(Size + 1);
+  if (!buffer) {
+    return 0;
+  }
+
+  memcpy(buffer, Data, Size);
+  buffer[Size] = '\0';
+
+  ret = CheckXML(buffer);
+  free(buffer);
+  return ret;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

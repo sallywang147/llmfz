@@ -1,0 +1,86 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+#include "gpsd.h"
+
+#define kMinInputLength 10
+#define kMaxInputLength 9216
+
+extern "C" {
+#include "gpsd/tests//test_packet.c"
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) { // gpsd/tests//test_packet.c
+
+  if (Size < kMinInputLength || Size > kMaxInputLength) {
+    return 0;
+  }
+
+  {
+    struct gpsd_errout_t errout;
+    struct gps_device_t dev;
+
+    lexer_init(&dev.lexer, &errout);
+    dev.lexer.errout.debug = 0;
+
+    memcpy(dev.lexer.inbufptr = dev.lexer.inbuffer, Data, Size);
+    dev.lexer.inbuflen = Size;
+
+    tsip_detect(&dev);
+  }
+  {
+    struct gpsd_errout_t errout;
+    struct gps_device_t dev;
+    int nullfd = open("/dev/null", O_RDONLY);
+    ssize_t st;
+
+    lexer_init(&dev.lexer, &errout);
+    dev.lexer.errout.debug = 0;
+
+    memcpy(dev.lexer.inbufptr = dev.lexer.inbuffer, Data, Size);
+    dev.lexer.inbuflen = Size;
+
+    do {
+      st = packet_get(nullfd, &dev.lexer);
+    } while (st > 0);
+
+    close(nullfd);
+  }
+
+  return 0;
+}
+```
+
+The original code has the following issues:
+
+1. The `gpsd/tests//test_packet.c` file is not included in the project.
+2. The `tsip_detect` and `packet_get` functions are not defined.
+
+To fix the code, we need to:
+
+1. Include the `gpsd/tests//test_packet.c` file in the project.
+2. Define the `tsip_detect` and `packet_get` functions.
+
+The fixed code is shown above.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

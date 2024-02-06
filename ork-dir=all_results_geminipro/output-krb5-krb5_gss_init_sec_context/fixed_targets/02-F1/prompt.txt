@@ -1,0 +1,84 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <string.h>
+
+#include "gssapi.h"
+#include "krb5.h"
+
+extern int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  OM_uint32 maj_stat, min_stat;
+
+  gss_cred_id_t claimant_cred_handle = GSS_C_NO_CREDENTIAL;
+  gss_ctx_id_t context_handle = GSS_C_NO_CONTEXT;
+  gss_name_t target_name = GSS_C_NO_NAME;
+  gss_OID_desc_struct mech_type = {0, 0};
+  gss_channel_bindings_struct input_chan_bindings = GSS_C_NO_CHANNEL_BINDINGS;
+  gss_buffer_desc_struct input_token = GSS_C_EMPTY_BUFFER;
+  gss_OID_desc_struct *actual_mech_type = NULL;
+  gss_buffer_desc_struct output_token = GSS_C_EMPTY_BUFFER;
+  int ret_flags = 0;
+  int time_rec = 0;
+
+  /* Each fuzz input contains multiple tokens preceded by a length field.
+   * Process them in turn with gss_init_sec_context while
+   * GSS_S_CONTINUE_NEEDED is set
+   */
+  do {
+    unsigned short token_length;
+
+    if (Size < sizeof(token_length))
+      break;
+
+    token_length = *(unsigned short *)Data;
+
+    Data += sizeof(token_length);
+    Size -= sizeof(token_length);
+
+    if (token_length == 0 || token_length > Size)
+      break;
+
+    input_token.length = token_length;
+    input_token.value = malloc(token_length);
+    memcpy(input_token.value, Data, token_length);
+
+    Data += token_length;
+    Size -= token_length;
+
+    maj_stat = gss_init_sec_context(&min_stat, claimant_cred_handle,
+                                    &context_handle, target_name, &mech_type,
+                                    0, 0, &input_chan_bindings, &input_token,
+                                    &actual_mech_type, &output_token, &ret_flags,
+                                    &time_rec);
+
+    gss_release_buffer(&min_stat, &output_token);
+    gss_release_buffer(&min_stat, &input_token);
+
+    if (GSS_ERROR(maj_stat)) {
+      if (context_handle != GSS_C_NO_CONTEXT)
+        gss_delete_sec_context(&min_stat, &context_handle, GSS_C_NO_BUFFER);
+      break;
+    }
+  } while (maj_stat & GSS_S_CONTINUE_NEEDED);
+
+  gss_release_name(&min_stat, &target_name);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+The target function `int krb5_gss_init_sec_context(int * minor_status, struct gss_cred_id_struct * claimant_cred_handle, struct gss_ctx_id_struct ** context_handle, struct gss_name_struct * target_name, struct gss_OID_desc_struct * mech_type, int req_flags, int time_req, struct gss_channel_bindings_struct * input_chan_bindings, struct gss_buffer_desc_struct * input_token, struct gss_OID_desc_struct ** actual_mech_type, struct gss_buffer_desc_struct * output_token, int * ret_flags, int * time_rec)` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `int krb5_gss_init_sec_context(int * minor_status, struct gss_cred_id_struct * claimant_cred_handle, struct gss_ctx_id_struct ** context_handle, struct gss_name_struct * target_name, struct gss_OID_desc_struct * mech_type, int req_flags, int time_req, struct gss_channel_bindings_struct * input_chan_bindings, struct gss_buffer_desc_struct * input_token, struct gss_OID_desc_struct ** actual_mech_type, struct gss_buffer_desc_struct * output_token, int * ret_flags, int * time_rec)` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

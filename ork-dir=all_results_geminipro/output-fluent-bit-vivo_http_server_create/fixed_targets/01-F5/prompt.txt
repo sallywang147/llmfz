@@ -1,0 +1,49 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+#include "vivo_exporter.h"
+
+extern "C" {
+#include "flb.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  char* listen = strdup(stream.ConsumeRemainingBytesAsString().c_str());
+  const int tcp_port = stream.ConsumeIntegral<int>();
+  struct flb_config config;
+  struct vivo_exporter ctx;
+  vivo_http_server_create(&ctx, listen, tcp_port, &config);
+  free(listen);
+  vivo_http_server_destroy(&ctx);
+  return 0;
+}
+```
+
+The original code has a memory leak issue because it doesn't call `vivo_http_server_destroy` to free the resources allocated by `vivo_http_server_create`. To fix this issue, we need to call `vivo_http_server_destroy` before returning from the `LLVMFuzzerTestOneInput` function.
+
+The corrected code is shown above.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

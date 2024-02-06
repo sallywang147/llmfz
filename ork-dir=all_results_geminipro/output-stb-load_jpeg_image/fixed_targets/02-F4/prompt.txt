@@ -1,0 +1,44 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#ifdef __cplusplus
+extern "C" {
+#endif
+#define STB_IMAGE_IMPLEMENTATION
+#define STBI_ONLY_JPEG
+#include "../stb_image.h"
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int x, y, channels;
+  unsigned char *img = stbi_load_from_memory(data, size, &x, &y, &channels, 4);
+  free(img);
+  return 0;
+}
+
+#ifdef __cplusplus
+}
+#endif
+```
+
+The issue in the original code is that the function `stbi_load_from_memory` is not defined in the `stb_image.h` header file. This is because the header file only includes the declaration of the function, but not its definition. To fix this, we need to include the definition of the function by defining the macro `STB_IMAGE_IMPLEMENTATION` before including the header file.
+
+Additionally, we need to define the macro `STBI_ONLY_JPEG` to only include the JPEG support in the library, as the fuzzer only needs to load JPEG images. This will reduce the size of the compiled code.
+
+With these changes, the code should compile and run correctly.
+</code>
+
+The code has the following build issues:
+<error>
+The target function `char * load_jpeg_image(struct stbi__jpeg * z, int * out_x, int * out_y, int * comp, int req_comp)` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `char * load_jpeg_image(struct stbi__jpeg * z, int * out_x, int * out_y, int * comp, int req_comp)` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

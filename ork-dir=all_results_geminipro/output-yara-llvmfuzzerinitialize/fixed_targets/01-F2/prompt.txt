@@ -1,0 +1,64 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+
+extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv) {
+  // This is an example of how to use the argc and argv parameters.
+  // This is not a required part of the fuzzer harness.
+  // If you don't want to use them, you can remove this function
+  // and the corresponding call to LLVMFuzzerInitialize.
+  if (*argc != 2) {
+    return 1;
+  }
+  if (strcmp((*argv)[1], "bar") != 0) {
+    return 1;
+  }
+  return 0;
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  // Do something with data.
+  // This is just an example, you can replace it with your own code.
+  for (size_t i = 0; i < size; i++) {
+    if (data[i] == 'a') {
+      // Do something interesting.
+    }
+  }
+  return 0;
+}
+```
+
+The original code has the following issues:
+
+1. The `FuzzedDataProvider` class is not defined.
+2. The `LLVMFuzzerInitialize` and `LLVMFuzzerTestOneInput` functions are not declared as `extern "C"`.
+
+To fix the code, we need to:
+
+1. Include the necessary header file for the `FuzzedDataProvider` class.
+2. Declare the `LLVMFuzzerInitialize` and `LLVMFuzzerTestOneInput` functions as `extern "C"`.
+
+The corrected code is shown above.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

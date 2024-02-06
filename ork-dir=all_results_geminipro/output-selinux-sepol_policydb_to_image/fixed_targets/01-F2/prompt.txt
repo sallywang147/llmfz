@@ -1,0 +1,42 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <sepol/policydb/policydb.h>
+#include <fuzzer/FuzzedDataProvider.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  sepol_handle_t *handle = sepol_handle_create();
+  sepol_policydb_t *policydb = sepol_policydb_create();
+
+  FuzzedDataProvider provider(data, size);
+  const size_t policydb_size = provider.ConsumeIntegralInRange<size_t>(0, size);
+  const auto policydb_bytes = provider.ConsumeBytes<uint8_t>(policydb_size);
+  sepol_policydb_read(handle, policydb, policydb_bytes.data(), policydb_bytes.size());
+
+  char *newdata = nullptr;
+  size_t newlen = 0;
+  sepol_policydb_to_image(handle, policydb, &newdata, &newlen);
+
+  sepol_policydb_free(policydb);
+  sepol_handle_destroy(handle);
+  free(newdata);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

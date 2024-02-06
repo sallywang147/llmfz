@@ -1,0 +1,75 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+#include <libavutil/avutil.h>
+#include <libavformat/avformat.h>
+
+extern "C" {
+#include <libvlc/libvlc.h>
+}
+
+int LLVMFuzzerInitialize(int *argc, char ***argv) {
+  (void)argc;
+  (void)argv;
+
+  libvlc_instance_t *vlc = libvlc_new(0, NULL);
+  if (!vlc) {
+    return -1;
+  }
+
+  return 0;
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  std::string str = stream.ConsumeRemainingBytesAsString();
+  char *path = str.c_str();
+
+  libvlc_media_t *media = libvlc_media_new_path(vlc, path);
+  if (!media) {
+    return -1;
+  }
+
+  libvlc_media_player_t *player = libvlc_media_player_new(vlc);
+  if (!player) {
+    libvlc_media_release(media);
+    return -1;
+  }
+
+  libvlc_media_player_set_media(player, media);
+  libvlc_media_release(media);
+
+  libvlc_media_player_play(player);
+
+  while (libvlc_media_player_is_playing(player)) {
+    // Wait for the player to finish playing.
+  }
+
+  libvlc_media_player_release(player);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+The target function `int vlc_demux_process_path(struct vlc_run_args * args, char * path)` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `int vlc_demux_process_path(struct vlc_run_args * args, char * path)` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

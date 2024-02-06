@@ -1,0 +1,37 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <capnp/message.h>
+#include <capnp/dynamic.h>
+#include <capnp/test.capnp.h>
+#include <kj/main.h>
+#include <unistd.h>
+
+/* This is the entry point of a fuzz target to be used with libFuzzer
+ * or another fuzz driver.
+ * Such a fuzz driver is used by the autotools target capnp-llvm-fuzzer-testcase
+ * when the environment variable LIB_FUZZING_ENGINE is defined
+ * for instance LIB_FUZZING_ENGINE=-fsanitize=fuzzer for libFuzzer
+ */
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  capnp::DynamicStruct::Builder builder = capnp::DynamicStruct::Builder::initEmpty();
+  capnp::_::StructBuilder_init(builder);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,45 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <ArduinoJson.h>
+
+extern "C" {
+#include <stddef.h>
+#include <stdlib.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  JsonDocument doc;
+  DeserializationError error = deserializeMsgPack(doc, data, size);
+  if (!error) {
+    std::string json;
+    serializeMsgPack(doc, json);
+  }
+  return 0;
+}
+
+extern "C" void ArduinoJson::V701HB4::detail::VariantSlot::operator delete(char *ptr, char *ptr2) {
+  free(ptr);
+}
+```
+
+The issue is that the fuzzer target `LLVMFuzzerTestOneInput` calls the function `ArduinoJson::V701HB4::detail::VariantSlot::operator delete` with two arguments, but the definition of the function in the ArduinoJson library only takes one argument. To fix this, we need to define the function with two arguments in the fuzzer code.
+
+The corrected code includes the definition of the `operator delete` function with two arguments, which is necessary for the fuzzer to call it correctly. This ensures that the fuzzer can properly exercise the `ArduinoJson` library and detect potential issues.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

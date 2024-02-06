@@ -1,0 +1,71 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+#include <stdint.h>
+#include <string>
+#include <vector>
+
+#include "tinyxml2.h"
+
+extern "C" {
+#include "llvm/ADT/ArrayRef.h"
+#include "llvm/FuzzMutate/FuzzMutate.h"
+}
+
+using namespace llvm;
+using namespace tinyxml2;
+
+static size_t MutateTinyXML(uint8_t *Data, size_t Size, size_t MaxBytesToMutate) {
+  // Parse the XML document.
+  XMLDocument doc;
+  doc.Parse((char *)Data, Size);
+
+  // Get the root element.
+  XMLElement *root = doc.RootElement();
+  if (!root)
+    return 0;
+
+  // Mutate the root element's text.
+  ArrayRef<uint8_t> TextData(Data, Size);
+  MutateStringField(TextData, &root->Value(), MaxBytesToMutate);
+
+  // Serialize the mutated XML document.
+  std::string Out;
+  doc.Print(&Out);
+
+  // Copy the mutated XML document back to the input buffer.
+  memcpy(Data, Out.c_str(), Out.size());
+
+  // Return the size of the mutated XML document.
+  return Out.size();
+}
+
+extern "C" size_t LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  // Mutate the XML document.
+  size_t MutatedSize = MutateTinyXML((uint8_t *)Data, Size, 1024);
+
+  // If the XML document was mutated, return the mutated size.
+  if (MutatedSize)
+    return MutatedSize;
+
+  // Otherwise, return the original size.
+  return Size;
+}
+</code>
+
+The code has the following build issues:
+<error>
+The target function `void tinyxml2::XMLElement::SetText(const char* inText)` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `void tinyxml2::XMLElement::SetText(const char* inText)` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

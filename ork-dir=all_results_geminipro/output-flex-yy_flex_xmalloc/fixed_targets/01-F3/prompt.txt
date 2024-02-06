@@ -1,0 +1,78 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstdint>
+#include <cstdlib>
+#include <cstdio>
+
+#include "flexdef.h"
+
+extern "C" char *yy_flex_xmalloc(int size) {
+  return static_cast<char *>(malloc(size));
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  if (size < 4) {
+    return 0;
+  }
+  int alloc_size = *(reinterpret_cast<const int *>(data));
+  data += sizeof(int);
+  size -= sizeof(int);
+  char *buf = yy_flex_xmalloc(alloc_size);
+  if (buf == nullptr) {
+    return 0;
+  }
+  memcpy(buf, data, size);
+  free(buf);
+  return 0;
+}
+```
+
+The error is because the function `yy_flex_xmalloc` is defined in C, but the code tries to call it from C++. To fix this, we need to wrap the `#include` directive for `flexdef.h` with `extern "C" {}`. This tells the compiler that the functions and variables in that header are defined in C, not C++.
+
+The corrected code:
+```c++
+#include <cstdint>
+#include <cstdlib>
+#include <cstdio>
+
+extern "C" {
+#include "flexdef.h"
+}
+
+extern "C" char *yy_flex_xmalloc(int size) {
+  return static_cast<char *>(malloc(size));
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  if (size < 4) {
+    return 0;
+  }
+  int alloc_size = *(reinterpret_cast<const int *>(data));
+  data += sizeof(int);
+  size -= sizeof(int);
+  char *buf = yy_flex_xmalloc(alloc_size);
+  if (buf == nullptr) {
+    return 0;
+  }
+  memcpy(buf, data, size);
+  free(buf);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

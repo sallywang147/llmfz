@@ -1,0 +1,51 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "../src/meshoptimizer.h"
+
+#include <stdint.h>
+#include <stdlib.h>
+
+extern "C" {
+#include <assert.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  size_t vertex_count = 66; // must be divisible by 3 for decodeIndexBuffer; should be >=64 to cover large vertex blocks
+  size_t vertex_size = 16; // must be divisible by 4
+
+  char *vertex_data = (char *)malloc(vertex_count * vertex_size);
+  assert(vertex_data);
+
+  // decodeVertexBlock supports any strides divisible by 4 in 4-256 interval
+  // It's a waste of time to check all of them, so we'll just check a few with different alignment mod 16
+  meshopt::decodeVertexBlock(reinterpret_cast<char *>(data), reinterpret_cast<char *>(data) + size, vertex_data, vertex_count, vertex_size, vertex_data + (vertex_count - 1) * vertex_size);
+  meshopt::decodeVertexBlock(reinterpret_cast<char *>(data), reinterpret_cast<char *>(data) + size, vertex_data, vertex_count, vertex_size, vertex_data + (vertex_count - 1) * vertex_size + 1);
+  meshopt::decodeVertexBlock(reinterpret_cast<char *>(data), reinterpret_cast<char *>(data) + size, vertex_data, vertex_count, vertex_size, vertex_data + (vertex_count - 1) * vertex_size + 2);
+  meshopt::decodeVertexBlock(reinterpret_cast<char *>(data), reinterpret_cast<char *>(data) + size, vertex_data, vertex_count, vertex_size, vertex_data + (vertex_count - 1) * vertex_size + 3);
+  meshopt::decodeVertexBlock(reinterpret_cast<char *>(data), reinterpret_cast<char *>(data) + size, vertex_data, vertex_count, vertex_size, vertex_data + (vertex_count - 1) * vertex_size + 4);
+  meshopt::decodeVertexBlock(reinterpret_cast<char *>(data), reinterpret_cast<char *>(data) + size, vertex_data, vertex_count, vertex_size, vertex_data + (vertex_count - 1) * vertex_size + 5);
+  meshopt::decodeVertexBlock(reinterpret_cast<char *>(data), reinterpret_cast<char *>(data) + size, vertex_data, vertex_count, vertex_size, vertex_data + (vertex_count - 1) * vertex_size + 6);
+  meshopt::decodeVertexBlock(reinterpret_cast<char *>(data), reinterpret_cast<char *>(data) + size, vertex_data, vertex_count, vertex_size, vertex_data + (vertex_count - 1) * vertex_size + 7);
+
+  free(vertex_data);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

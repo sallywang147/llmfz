@@ -1,0 +1,64 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+#include "speex/speex.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const size_t state_size = stream.ConsumeIntegralInRange<size_t>(
+      0, 1 << 10);
+  char* state = new char[state_size];
+  stream.ConsumeBytes(state, state_size);
+
+  const size_t vin_size = stream.ConsumeIntegralInRange<size_t>(
+      0, 1 << 10);
+  char* vin = new char[vin_size];
+  stream.ConsumeBytes(vin, vin_size);
+
+  SpeexBits bits;
+  speex_bits_init(&bits);
+  nb_encode(state, vin, &bits);
+  speex_bits_destroy(&bits);
+
+  delete[] state;
+  delete[] vin;
+  return 0;
+}
+```
+
+The original code is missing the `nb_encode` function declaration. To fix this, the following line should be added to the beginning of the code:
+
+```c++
+extern "C" void nb_encode(void* state, void* vin, SpeexBits* bits);
+```
+
+Additionally, the `speex_bits_init` and `speex_bits_destroy` functions are declared in the `speex/speex.h` header file, which is included in the code. However, the `nb_encode` function is declared in a separate header file, `speex/speex_nb.h`. To fix this, the following line should be added to the beginning of the code:
+
+```c++
+#include "speex/speex_nb.h"
+```
+
+With these changes, the code should compile and run without errors.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

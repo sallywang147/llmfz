@@ -1,0 +1,40 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+#include "resip/resip.hpp"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  resip::DialogInfoContents* dialog_info_contents =
+      new resip::DialogInfoContents();
+  resip::XMLCursor* xml_cursor = new resip::XMLCursor();
+  const std::string xml_data = stream.ConsumeRemainingBytesAsString();
+  xml_cursor->set(xml_data.c_str());
+  dialog_info_contents->parseDialog(dialog_info_contents, xml_cursor);
+  delete xml_cursor;
+  delete dialog_info_contents;
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

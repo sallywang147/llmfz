@@ -1,0 +1,49 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+
+extern "C" {
+#include "libusb/libusb.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  struct libusb_device_handle *dev_handle = nullptr;
+  FuzzedDataProvider stream(data, size);
+  char desc_index = stream.ConsumeIntegral<char>();
+  short langid = stream.ConsumeIntegral<short>();
+  char *data_ptr = new char[size];
+  int length = stream.ConsumeIntegralInRange<int>(0, size);
+
+  int ret = libusb_get_string_descriptor(dev_handle, desc_index, langid, data_ptr, length);
+
+  delete[] data_ptr;
+  return ret;
+}
+```
+
+The original code has the following issues:
+
+1. `libusb_get_string_descriptor` requires a valid `libusb_device_handle` as the first argument, but it is set to `nullptr` in the code.
+
+The fixed code initializes `dev_handle` to `nullptr` to avoid using an uninitialized variable. It is not possible to provide a valid `libusb_device_handle` without additional context, such as the USB device to connect to.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

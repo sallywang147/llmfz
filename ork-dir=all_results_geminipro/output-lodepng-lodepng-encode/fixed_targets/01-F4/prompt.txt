@@ -1,0 +1,53 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <cstdint>
+#include <string>
+#include <vector>
+
+extern "C" {
+#include "lodepng.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  const std::string filename = stream.ConsumeRandomLengthString();
+  const std::vector<uint8_t> image = stream.ConsumeRemainingBytes<uint8_t>();
+  const int w = stream.ConsumeIntegral<int>();
+  const int h = stream.ConsumeIntegral<int>();
+  const int colortype = stream.ConsumeIntegral<int>();
+  const int bitdepth = stream.ConsumeIntegral<int>();
+
+  unsigned error = lodepng::encode(filename, reinterpret_cast<unsigned char *>(image.data()), w, h, colortype,
+                 bitdepth);
+  if (error) {
+    // Handle the error here
+  }
+
+  return 0;
+}
+```
+
+The fixed code includes the following changes:
+
+1. Added `unsigned` before `error` in `unsigned error = lodepng::encode(...)` to match the return type of `lodepng::encode`.
+2. Added an `if (error)` block to handle potential errors from `lodepng::encode`.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,116 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+extern "C" {
+#include <pn/pn_data.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  // Create a pn_data_t struct.
+  pn_data_t pn_data;
+  pn_data.flags = 0;
+  pn_data.len = 0;
+  pn_data.buf = nullptr;
+
+  // Consume a string from the input data.
+  std::string input_string = stream.ConsumeRemainingBytesAsString();
+
+  // Allocate a buffer to hold the string.
+  char* buffer = new char[input_string.length() + 1];
+
+  // Copy the string into the buffer.
+  strcpy(buffer, input_string.c_str());
+
+  // Create a va_list to hold the arguments to be passed to pn_data_vfill.
+  va_list args;
+  va_start(args, buffer);
+
+  // Call pn_data_vfill with the pn_data struct, the buffer, and the va_list.
+  int result = pn_data_vfill(&pn_data, buffer, args);
+
+  // Free the buffer.
+  delete[] buffer;
+
+  // Free the va_list.
+  va_end(args);
+
+  return result;
+}
+```
+
+The issue with the provided code is that the `pn_data_vfill` function is not declared in the `pn/pn_data.h` header file. To fix this, we need to include the necessary header file that declares this function.
+
+The corrected code includes the `pn/pn_data.h` header file, which should contain the declaration for the `pn_data_vfill` function:
+
+```c++
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+#include <pn/pn_data.h>  // Include the necessary header file
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  // Create a pn_data_t struct.
+  pn_data_t pn_data;
+  pn_data.flags = 0;
+  pn_data.len = 0;
+  pn_data.buf = nullptr;
+
+  // Consume a string from the input data.
+  std::string input_string = stream.ConsumeRemainingBytesAsString();
+
+  // Allocate a buffer to hold the string.
+  char* buffer = new char[input_string.length() + 1];
+
+  // Copy the string into the buffer.
+  strcpy(buffer, input_string.c_str());
+
+  // Create a va_list to hold the arguments to be passed to pn_data_vfill.
+  va_list args;
+  va_start(args, buffer);
+
+  // Call pn_data_vfill with the pn_data struct, the buffer, and the va_list.
+  int result = pn_data_vfill(&pn_data, buffer, args);
+
+  // Free the buffer.
+  delete[] buffer;
+
+  // Free the va_list.
+  va_end(args);
+
+  return result;
+}
+```
+
+With this change, the code should compile and run as expected.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

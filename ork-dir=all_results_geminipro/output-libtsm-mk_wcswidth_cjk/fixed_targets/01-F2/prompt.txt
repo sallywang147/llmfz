@@ -1,0 +1,46 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <vector>
+
+#include <fuzzer/FuzzedDataProvider.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider provider(data, size);
+  size_t n = provider.ConsumeIntegralInRange<size_t>(0, 1000);
+  std::vector<int> pwcs(n);
+  for (size_t i = 0; i < n; i++) {
+    pwcs[i] = provider.ConsumeIntegral<int>();
+  }
+  mk_wcswidth_cjk(pwcs.data(), n);
+  return 0;
+}
+
+extern "C" {
+#include <wchar.h>
+}
+```
+
+In this case, the missing function `mk_wcswidth_cjk` is declared in `<wchar.h>`. To fix the issue, we need to include this header file and wrap it with `extern "C" {}` to ensure that the function is exported with C linkage.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

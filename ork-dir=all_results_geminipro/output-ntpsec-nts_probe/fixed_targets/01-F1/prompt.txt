@@ -1,0 +1,46 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "ntpd.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define kMinInputLength 20
+#define kMaxInputLength 1024
+
+bool nts_probe(struct peer *peer);
+
+extern int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) { // ntpsec/tests/ntpd/nts_client.c
+
+  if (Size < kMinInputLength || Size > kMaxInputLength) {
+    return 0;
+  }
+
+  struct peer peer;
+
+  peer.nts_state.aead = 42; /* Dummy init values */
+  peer.nts_state.cookielen = 0;
+  peer.nts_state.writeIdx = 0;
+  peer.nts_state.count = 0;
+
+  peer.srcadr.sa4.sin_family = AF_INET;
+  peer.srcadr.sa4.sin_port = htons(9999);
+  peer.srcadr.sa4.sin_addr.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

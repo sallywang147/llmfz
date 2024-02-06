@@ -1,0 +1,61 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+#include <turbojpeg.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  tjhandle handle = NULL;
+  short *buffer = NULL;
+  int width = 0, height = 0, pixelFormat = 0, pitch = 0;
+  FuzzedDataProvider stream(data, size);
+
+  if ((handle = tjInitCompress()) == NULL)
+    goto bailout;
+
+  width = stream.ConsumeIntegralInRange<int>(1, 1024);
+  height = stream.ConsumeIntegralInRange<int>(1, 1024);
+  pixelFormat = stream.ConsumeIntegralInRange<int>(TJ_GRAY, TJ_BGRX);
+  pitch = stream.ConsumeIntegralInRange<int>(1, 1024);
+
+  if (pixelFormat == TJ_GRAY)
+    buffer = (short *)malloc(width * height * sizeof(short));
+  else
+    buffer = (short *)malloc(width * height * 4 * sizeof(short));
+
+  if (!buffer)
+    goto bailout;
+
+  stream.ConsumeData(buffer, width * height * sizeof(short));
+
+  if (tj3SaveImage12(handle, "/dev/null", buffer, width, pitch, height, pixelFormat) == 0)
+    goto bailout;
+
+  free(buffer);
+  buffer = NULL;
+
+bailout:
+  free(buffer);
+  if (handle)
+    tjDestroy(handle);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

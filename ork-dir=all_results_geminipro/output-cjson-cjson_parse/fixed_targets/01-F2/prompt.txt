@@ -1,0 +1,63 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "../cJSON.h"
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size); /* required by C89 */
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  if (size == 0)
+    return 0;
+
+  char *copy = (char *)malloc(size + 1);
+  if (copy == NULL)
+    return 0;
+
+  memcpy(copy, data, size);
+  copy[size] = '\0';
+
+  cJSON *json = cJSON_Parse(copy);
+
+  if (json != NULL)
+    cJSON_Delete(json);
+
+  free(copy);
+
+  return 0;
+}
+
+#ifdef __cplusplus
+}
+#endif
+```
+
+The issue in the original code was that the `cJSON.h` header file was not wrapped with `extern "C" {}` when it was included in the C++ code. This caused the linker to be unable to find the `cJSON_Parse` and `cJSON_Delete` functions when trying to link the object file.
+
+To fix the issue, the `#include` directive for `cJSON.h` has been wrapped with `extern "C" {}`. This tells the compiler that the header file contains C code, and that the functions and variables declared in the header file should be treated as C symbols.
+
+With this change, the code should now compile and link successfully.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

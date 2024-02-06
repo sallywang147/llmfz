@@ -1,0 +1,61 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstddef>
+#include <cstdint>
+#include <string>
+
+#include "Firestore/core/src/core/query.h"
+#include "Firestore/core/src/model/document.h"
+#include "Firestore/core/src/model/field_value.h"
+#include "Firestore/core/src/model/resource_path.h"
+#include "Firestore/core/src/model/value_type.h"
+#include "Firestore/core/src/util/status.h"
+
+extern "C" {
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  const char *str_ptr = reinterpret_cast<const char *>(data);
+  std::string str{str_ptr, size};
+  firebase::firestore::core::ResourcePath path =
+      firebase::firestore::core::ResourcePath::FromString(str);
+
+  firebase::firestore::core::FieldValue field_value =
+      firebase::firestore::core::FieldValue::FromInteger(0);
+
+  firebase::firestore::core::Query query;
+  firebase::firestore::core::Query::Bound bound;
+  bound.type = firebase::firestore::core::Query::BoundType::kEqual;
+  bound.value = field_value;
+  query.AddFilter(firebase::firestore::core::FieldFilter(
+      path, firebase::firestore::core::Operator::kEqual, field_value));
+
+  firebase::firestore::core::Document doc(
+      path,
+      firebase::firestore::core::DocumentState::kLocalDocument,
+      firebase::firestore::core::SnapshotVersion::FromTimestamp(
+          firebase::firestore::core::Timestamp::Now()),
+      firebase::firestore::core::Value::Array(
+          {firebase::firestore::core::FieldValue::FromInteger(0)}));
+
+  bool result = query.MatchesBounds(&doc, &bound);
+
+  return static_cast<int>(result);
+}
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

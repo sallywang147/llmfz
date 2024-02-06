@@ -1,0 +1,54 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <pg_query.h>
+
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+extern "C" {
+#include <libfuzzer/libfuzzer_macro.h>
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  char *new_str = (char *)malloc(size + 1);
+  if (new_str == NULL) {
+    return 0;
+  }
+  memcpy(new_str, data, size);
+  new_str[size] = '\0';
+
+  PgQueryProtobufParseResult result = pg_query_protobuf_parse(new_str);
+  pg_query_parse_protobuf(&result, new_str);
+  pg_query_free_protobuf_parse_result(result);
+
+  free(new_str);
+  return 0;
+}
+```
+
+The corrected code:
+1. Added `PgQueryProtobufParseResult result = pg_query_protobuf_parse(new_str);` to parse the input string.
+2. Added `pg_query_parse_protobuf(&result, new_str);` to parse the protobuf data.
+3. Added `pg_query_free_protobuf_parse_result(result);` to free the result object.
+
+With these changes, the code should build successfully and call the `pg_query_parse_protobuf` function as expected.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,54 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+
+#include "fuzzer/FuzzedDataProvider.h"
+
+extern "C" {
+#include "scanContentNS.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider provider(data, size);
+  char* ptr = const_cast<char*>(provider.ConsumeRemainingBytes());
+  char* end = ptr + size;
+  char* nextTokPtr;
+
+  struct encoding enc;
+  memset(&enc, 0, sizeof(enc));
+
+  int ret = initScanContentNS(&enc, ptr, end, &nextTokPtr);
+  if (ret == 0) {
+    printf("initScanContentNS returned 0\n");
+  } else if (ret == 1) {
+    printf("initScanContentNS returned 1\n");
+  } else {
+    printf("initScanContentNS returned %d\n", ret);
+  }
+
+  return 0;
+}
+```
+
+The code above should build successfully without any errors.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

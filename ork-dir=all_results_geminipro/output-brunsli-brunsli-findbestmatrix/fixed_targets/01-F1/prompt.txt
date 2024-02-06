@@ -1,0 +1,47 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "../common/platform.h"
+#include "../dec/state.h"
+#include <brunsli/brunsli_decode.h>
+#include <brunsli/jpeg_data.h>
+#include <brunsli/jpeg_data_writer.h>
+#include <brunsli/status.h>
+#include <brunsli/types.h>
+#include <fuzzer/FuzzedDataProvider.h>
+
+size_t DiscardOutputFunction(void *data, const uint8_t *buf, size_t count) {
+  BRUNSLI_UNUSED(data);
+  BRUNSLI_UNUSED(buf);
+  return count;
+}
+
+// Entry point for LibFuzzer.
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  int num_blocks = stream.ConsumeIntegralInRange<int>(1, 1000);
+  bool is_chroma_derived = stream.ConsumeBool();
+  std::vector<char> matrix(num_blocks * 6);
+  stream.ConsumeBytes(matrix.data(), matrix.size());
+  int result = brunsli::FindBestMatrix(matrix.data(), is_chroma_derived,
+                                       matrix.data());
+  BRUNSLI_UNUSED(result);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,59 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "RawImage.h"
+#include "NakedDecoder.h"
+#include "RawDecoder.h"
+#include "io/ByteStream.h"
+#include "io/Endianness.h"
+#include "io/File.h"
+#include "io/FileBuffer.h"
+#include "io/IOException.h"
+#include "io/MemoryBuffer.h"
+#include "io/Stream.h"
+#include "io/StreamBuffer.h"
+#include "io/StreamFile.h"
+#include "io/StreamMemory.h"
+#include "io/StreamString.h"
+#include "io/StreamVector.h"
+#include "io/StringStream.h"
+#include "io/VectorStream.h"
+#include "io/VectorStreamBuffer.h"
+#include "io/VectorStreamFile.h"
+#include "io/VectorStreamMemory.h"
+#include "io/VectorStreamString.h"
+#include "io/VectorStreamVector.h"
+#include "codes/PrefixCodeDecoder.h"
+#include "codes/PrefixCodeDecoder/Common.h"
+#include "codes/PrefixCodeLUTDecoder.h"
+#include "codes/PrefixCodeLookupDecoder.h"
+#include "codes/PrefixCodeTreeDecoder.h"
+#include "codes/PrefixCodeVectorDecoder.h"
+
+extern "C" {
+#include "codes/PrefixCodeDecoder/Common.h"
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  rawspeed::RawImage rawImage;
+  rawspeed::NakedDecoder nakedDecoder;
+  nakedDecoder.decodeRaw(&rawImage, data, size);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+The target function `void rawspeed::NakedDecoder::decodeRawInternal(rawspeed::RawImage * , rawspeed::NakedDecoder * )` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `void rawspeed::NakedDecoder::decodeRawInternal(rawspeed::RawImage * , rawspeed::NakedDecoder * )` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

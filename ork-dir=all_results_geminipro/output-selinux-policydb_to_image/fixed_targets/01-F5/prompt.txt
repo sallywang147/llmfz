@@ -1,0 +1,59 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <sepol/policydb/policydb.h>
+#include <sepol/policydb/policydb_write.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  sepol_handle_t *handle = sepol_handle_create();
+  if (!handle) {
+    return 0;
+  }
+  policydb_t *policydb = policydb_create();
+  if (!policydb) {
+    sepol_handle_destroy(handle);
+    return 0;
+  }
+
+  FuzzedDataProvider provider(data, size);
+  size_t policydb_size = provider.ConsumeIntegralInRange<size_t>(0, size);
+  auto policydb_data = provider.ConsumeBytes<char>(policydb_size);
+  if (policydb_read(policydb, policydb_data.data(), policydb_data.size())) {
+    policydb_destroy(policydb);
+    sepol_handle_destroy(handle);
+    return 0;
+  }
+
+  char *newdata = nullptr;
+  size_t newlen = 0;
+  if (policydb_write(handle, policydb, &newdata, &newlen)) {  // Fix: Call policydb_write here
+    policydb_destroy(policydb);
+    sepol_handle_destroy(handle);
+    return 0;
+  }
+  free(newdata);
+
+  policydb_destroy(policydb);
+  sepol_handle_destroy(handle);
+  return 0;
+}
+```
+
+The original code was calling `policydb_to_image` instead of `policydb_write`. This was causing the build error. The corrected code now calls `policydb_write` which is the correct function to write a policy database to a buffer.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

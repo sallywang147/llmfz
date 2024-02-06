@@ -1,0 +1,46 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <plist/plist.h>
+#include <stdio.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const unsigned char *data, size_t size) {
+  plist_t root_node = NULL;
+  plist_from_openstep(reinterpret_cast<const char *>(data), size, &root_node);
+  if (root_node == NULL) {
+    return 0;
+  }
+
+  char *filename = "/tmp/fuzzed.plist";
+  int format = PLIST_XML_FORMAT;
+  int options = PLIST_OPTION_AS_XML_NO_HEADER;
+  int result = plist_write_to_file(root_node, filename, format, options);
+  plist_free(root_node);
+  return result;
+}
+```
+
+In this corrected code:
+
+- Added the missing `#include <plist/plist.h>` directive to include the necessary header for working with plists.
+
+- Changed the `options` parameter in `plist_write_to_file` to `PLIST_OPTION_AS_XML_NO_HEADER`. This is because the default value of `options` is `0`, which corresponds to the binary format. The `PLIST_OPTION_AS_XML_NO_HEADER` option ensures that the plist is written in XML format without a header.
+
+- Added the `extern "C"` block around the `#include <plist/plist.h>` directive. This is necessary because the `plist` library is written in C and not C++, so it uses the C calling convention. The `extern "C"` block ensures that the function is exported with the C calling convention, allowing it to be called from C++ code.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

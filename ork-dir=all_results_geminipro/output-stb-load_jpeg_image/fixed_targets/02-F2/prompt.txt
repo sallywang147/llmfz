@@ -1,0 +1,42 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#ifdef __cplusplus
+extern "C" {
+#endif
+#define STB_IMAGE_IMPLEMENTATION
+#include "../stb_image.h"
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int x, y, channels;
+  unsigned char *img = stbi_load_from_memory(data, size, &x, &y, &channels, 4);
+  free(img);
+  return 0;
+}
+
+#ifdef __cplusplus
+}
+#endif
+```
+
+The code was fixed by making the following changes:
+
+* The `load_jpeg_image` function was replaced with `stbi_load_from_memory` which is the correct function to load an image from memory using the stb_image library.
+* The `char *img` variable was changed to `unsigned char *img` to match the return type of `stbi_load_from_memory`.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,42 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+The issue is that the `Pack` function is declared twice, once in the C++ code and once in the `Pack.h` header file. This causes a linker error because the linker doesn't know which definition of the function to use.
+
+To fix this, remove the declaration of the `Pack` function from the C++ code. The corrected code is shown below:
+
+```c++
+#include <cstring>
+#include <vector>
+
+extern "C" {
+#include "Pack.h"
+}
+
+int Pack(unsigned char* data, size_t size, const std::vector<unsigned char>& value) {
+  int error = Pack(data, size, value.data());
+  if (!error) {
+    size_t len = value.size();
+  }
+  return 0;
+}
+```
+
+With this change, the linker will only see one definition of the `Pack` function, which is in the `Pack.h` header file. This will resolve the linker error and allow the program to build successfully.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,75 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fmt/core.h>
+#include <fmt/v10.h>  // Include the necessary header file for `fmt::v10::vprintln`.
+
+#include <cstdint>
+#include <cstring>
+#include <string>
+#include <vector>
+
+#include "fuzzer-common.h"
+
+extern "C" {
+  template <typename T>
+  T assign_from_buf(const uint8_t *data) {
+    T value;
+    std::memcpy(&value, data, sizeof(T));
+    return value;
+  }
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  if (size < fixed_size)
+    return 0;
+
+  std::string format = as_chars(data);
+  data += fixed_size;
+  size -= fixed_size;
+
+  // Make sure that the format string is valid.
+  try {
+    fmt::format(format);
+  } catch (std::runtime_error &) {
+    return 0;
+  }
+
+  // Generate arguments.
+  std::vector<fmt::detail::value> args;
+  size_t max_args = size / fixed_size;
+  for (size_t i = 0; i < max_args; ++i) {
+    args.push_back(assign_from_buf<fmt::detail::value>(data));
+    data += fixed_size;
+    size -= fixed_size;
+  }
+
+  // Make sure that the number of arguments matches the format string.
+  if (format.find('{') == std::string::npos) {
+    if (!args.empty())
+      return 0;
+  } else if (args.empty()) {
+    return 0;
+  }
+
+  // Call vprintln.
+  fmt::v10::vprintln(stderr, format.c_str(), args.size(), 0, args.data());
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

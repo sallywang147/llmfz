@@ -1,0 +1,51 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include "draco/src/draco/core/geometry_attribute.h"
+#include "draco/src/draco/core/point_attribute.h"
+
+extern "C" {
+#include "draco/src/draco/core/quantization_utils.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider provider(data, size);
+  draco::PointAttribute point_attribute;
+  draco::GeometryAttribute geometry_attribute;
+  int num_values = provider.ConsumeIntegralInRange<int>(0, 10000);
+  int result = point_attribute.DeduplicateTypedValues<uint32_t>(
+      &geometry_attribute, num_values);
+  return result;
+}
+```
+
+The build error is caused by the missing header file `draco/src/draco/core/quantization_utils.h`. This header file is needed because the function `DeduplicateTypedValues` uses the `draco::QuantizationUtils` class.
+
+To fix the error, we need to add the following line to the beginning of the file:
+
+```c++
+#include "draco/src/draco/core/quantization_utils.h"
+```
+
+We also need to wrap the `#include` directives for the Draco header files with `extern "C" {}`. This is because the Draco header files are written in C++, and we are compiling the fuzzer in C.
+
+The corrected code is shown above.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

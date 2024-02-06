@@ -1,0 +1,51 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+#include "cbor.h"
+
+extern "C" {
+#include "cbor_load.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  cbor_load_result result;
+  cbor_item_t *item = cbor_load(Data, Size, &result);
+  if (result.error.code == CBOR_ERR_NONE) {
+    cbor_item_free(item);
+  }
+  return 0;
+}
+```
+
+Changes made:
+
+- Changed `cbor_intermediate_decref(item);` to `cbor_item_free(item);`.
+- Removed `cbor_decref(&item);`.
+
+Explanation:
+
+- `cbor_intermediate_decref()` is used to decrement the reference count of an intermediate item that was created during decoding. In this case, `item` is not an intermediate item, so `cbor_intermediate_decref()` is not needed.
+- `cbor_decref()` is used to decrement the reference count of an item. However, `item` is already freed by `cbor_item_free()`, so `cbor_decref()` is not needed.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

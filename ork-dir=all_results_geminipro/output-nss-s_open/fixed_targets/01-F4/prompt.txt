@@ -1,0 +1,51 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <sdb.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+extern "C" {
+#include <sdb.h>
+}
+
+extern "C" size_t LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider provider(data, size);
+  char *name = provider.ConsumeBytesAsString(provider.ConsumeIntegralInRange<size_t>(0, 1024)).c_str();
+  char *user = provider.ConsumeBytesAsString(provider.ConsumeIntegralInRange<size_t>(0, 1024)).c_str();
+  char *password = provider.ConsumeBytesAsString(provider.ConsumeIntegralInRange<size_t>(0, 1024)).c_str();
+  int flags = provider.ConsumeIntegral<int>();
+  int mode = provider.ConsumeIntegral<int>();
+  int fd = provider.ConsumeIntegral<int>();
+  struct SDBStr_2311 **sdbs = nullptr;
+  struct SDBStr_2311 **sdbs2 = nullptr;
+  int *fd2 = nullptr;
+  size_t ret = sdb_open(name, user, password, flags, mode, fd, &sdbs, &sdbs2, fd2);
+  sdb_close(sdbs);
+  free(name);
+  free(user);
+  free(password);
+  return ret;
+}
+</code>
+
+The code has the following build issues:
+<error>
+The target function `size_t s_open(char * , char * , char * , int , int , int , struct SDBStr.2311 ** , struct SDBStr.2311 ** , int * )` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `size_t s_open(char * , char * , char * , int , int , int , struct SDBStr.2311 ** , struct SDBStr.2311 ** , int * )` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

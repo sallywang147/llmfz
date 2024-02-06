@@ -1,0 +1,48 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "gpsd_config.h" /* must be before all includes */
+
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+#include "gpsd.h"
+
+#define kMinInputLength 10
+#define kMaxInputLength 9216
+
+extern "C" {
+#include "gpsd/tests//test_packet.c"
+}
+
+int main(int argc, char **argv) {
+  struct gps_device_t gps_device;
+  size_t parse_input_result = parse_input(&gps_device, (const char *)argv[1], strlen(argv[1]));
+  return LLVMFuzzerTestOneInput((const uint8_t *)argv[1], strlen(argv[1]));
+}
+```
+
+The fixed code has the following changes:
+
+1. The `parse_input` function now takes three arguments: `struct gps_device_t *gps_device`, `const char *input`, and `size_t input_length`. This is because the original code was trying to pass a string literal to `parse_input`, which is not allowed.
+2. The call to `parse_input` now passes the correct arguments.
+3. The return value of `parse_input` is now checked, and the program exits with an error if the function fails.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

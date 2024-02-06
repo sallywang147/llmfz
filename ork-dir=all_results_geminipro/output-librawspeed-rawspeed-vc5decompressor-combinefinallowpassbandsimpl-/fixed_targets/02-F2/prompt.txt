@@ -1,0 +1,60 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "rawspeed/VC5Decompressor.h"
+#include <cassert>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <fuzzer/FuzzedDataProvider.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size);
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  FuzzedDataProvider stream(Data, Size);
+
+  // Extract an array of bytes as a vector. You MUST call .data() to use result as pointer.
+  std::vector<uint8_t> bytes = stream.ConsumeBytes<uint8_t>(stream.ConsumeIntegralInRange(0, Size));
+  void *data_ptr = bytes.data();
+
+  // Extract integral values
+  int int_arg = stream.ConsumeIntegral<int>();
+  int int_arg_in_range = stream.ConsumeIntegralInRange(-100, 100);
+  bool bool_arg = stream.ConsumeBool();
+
+  // Extract floating point values
+  float probability = stream.ConsumeProbability();
+  double double_arg = stream.ConsumeFloatingPoint<double>();
+  double double_arg_in_range = stream.ConsumeFloatingPointInRange(-1.0, 1.0);
+
+  // Extract value from predefined set, such as enum or array
+  // EnumType enum = stream.ConsumeEnum<EnumType>();
+  // int valid_values = stream.PickValueInArray({FLAG_1, FLAG_2, FLAG_3});
+
+  // Extract to user defined object
+  // struct_type_t obj;
+  // size_t consumed = stream.ConsumeData(&obj, sizeof(obj));
+
+  rawspeed::VC5Decompressor::combineFinalLowpassBandsImpl(
+      data_ptr, int_arg, int_arg_in_range, bool_arg, probability, double_arg, double_arg_in_range);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

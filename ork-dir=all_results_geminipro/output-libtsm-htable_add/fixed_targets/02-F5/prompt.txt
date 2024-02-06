@@ -1,0 +1,63 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+#include "shl_htable.h"
+
+extern "C" {
+#include "shl_htable.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  struct shl_htable_int* table = shl_htable_int_new(1024);
+  std::vector<char*> keys;
+
+  FuzzedDataProvider provider(data, size);
+  while (provider.remaining_bytes() > 0) {
+    size_t hash = provider.ConsumeIntegral<size_t>();
+    size_t key_size = provider.ConsumeIntegralInRange<size_t>(0, 1024);
+    std::string key = provider.ConsumeRandomLengthString(key_size);
+    char* key_ptr = key.data();
+    keys.push_back(key_ptr);
+    bool ret = htable_add(table, hash, key_ptr);
+    if (!ret) {
+      abort();
+    }
+  }
+
+  for (auto key : keys) {
+    shl_htable_int_remove(table, shl_htable_int_hash(key), key);
+    free(key);  // Free the allocated memory for the key
+  }
+
+  shl_htable_int_free(table);
+  return 0;
+}
+```
+
+The fixed code:
+1. Added `#include <cstdlib>` to include the `free` function.
+2. Added `free(key);` inside the `for` loop to free the allocated memory for each key.
+3. Wrapped the `#include "shl_htable.h"` with `extern "C" {}` to resolve the linking issue.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

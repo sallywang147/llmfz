@@ -1,0 +1,52 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstddef>
+#include <cstdint>
+#include <string>
+
+#include "FuzzUtils.h"
+#include "NullBuffer.h"
+#include "simdjson.h"
+
+extern "C" {
+#include "simdjson/dom/parser_implementation.h"
+#include "simdjson/icelake/dom_parser_implementation.h"
+}
+
+#define simdjson_unused static inline
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  FuzzData fd(Data, Size);
+
+  simdjson::fallback::dom_parser_implementation parser;
+  simdjson::dom::document doc;
+  simdjson_unused auto error = parser.stage1(fd.data(), fd.size(), &doc);
+  if (error)
+    return 0;
+
+  simdjson_unused auto res = simdjson::icelake::dom_parser_implementation::stage2(&parser, &doc);
+  return 0;
+}
+```
+
+Changes made:
+- Corrected the call to `stage1` in the `simdjson::fallback::dom_parser_implementation` class. The correct signature is `stage1(const uint8_t* json, size_t length, simdjson::dom::document* doc)`.
+- Corrected the call to `stage2` in the `simdjson::icelake::dom_parser_implementation` class. The correct signature is `stage2(simdjson::fallback::dom_parser_implementation* parser, simdjson::dom::document* doc)`.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

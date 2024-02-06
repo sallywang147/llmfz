@@ -1,0 +1,65 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include <auth.h>
+#include <libc.h>
+#include <libsec.h>
+#include <mp.h>
+#include <u.h>
+
+extern "C" {
+#include <authsrv.h>
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  char *fuzz_der = (char *)malloc(size + 1);
+  if (fuzz_der == NULL) {
+    return 0;
+  }
+  memcpy(fuzz_der, data, size);
+  fuzz_der[size] = '\0';
+
+  struct Bytes signature;
+  signature.data = (uchar *)fuzz_der;
+  signature.len = size;
+
+  struct RSApub pk;
+  pk.n = mpnew(0);
+  pk.e = mpnew(0);
+
+  char *edigest = strdup("SHA1");
+  struct Elem **psigalg = (struct Elem **)malloc(sizeof(struct Elem *));
+  *psigalg = NULL;
+
+  char *result = verify_signature(&signature, &pk, edigest, psigalg);
+
+  free(result);
+  free(fuzz_der);
+  free(edigest);
+  free(psigalg);
+  mpfree(pk.n);
+  mpfree(pk.e);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

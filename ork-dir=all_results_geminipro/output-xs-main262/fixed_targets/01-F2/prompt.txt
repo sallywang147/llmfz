@@ -1,0 +1,68 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <string>
+#include <vector>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider provider(data, size);
+
+  // Initialize argc and argv.
+  int argc = 1;
+  std::vector<char*> argv;
+  argv.push_back(const_cast<char*>("main262"));
+
+  // Parse the input data as command-line arguments.
+  while (provider.remaining_bytes() > 0) {
+    std::string arg = provider.ConsumeRemainingBytesAsString();
+    argv.push_back(const_cast<char*>(arg.c_str()));
+    argc++;
+  }
+
+  // Call main262 with the parsed arguments.
+  int result = main262(argc, argv.data());
+
+  // Clean up the argv array.
+  for (int i = 1; i < argc; i++) {
+    free(argv[i]);
+  }
+
+  return result;
+}
+
+int main262(int argc, char** argv) {
+  // Do something with the arguments.
+  for (int i = 1; i < argc; i++) {
+    printf("%s\n", argv[i]);
+  }
+
+  return 0;
+}
+```
+
+The fixed code includes the definition of the `main262` function, which was missing in the original code. This function is called by `LLVMFuzzerTestOneInput` to process the input data.
+
+The `main262` function simply prints the command-line arguments to the standard output. This is just an example of how the input data can be processed. In a real-world scenario, the `main262` function would perform some specific task based on the input data.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

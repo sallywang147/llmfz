@@ -1,0 +1,63 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "src/tiff_parser.h"
+#include "fuzzing/datasource/datasource.hpp"
+#include "shared.h"
+#include <cstddef>
+#include <cstdint>
+#include <cstring>
+#include <vector>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  fuzzing::datasource::Datasource ds(data, size);
+
+  try {
+    const auto tiffData = ds.GetData(0);
+
+    FuzzingStreamInterface stream(tiffData);
+    const auto tagSet = getTagSet(ds);
+    const auto max_number_ifds = ds.Get<uint16_t>();
+
+    /* XXX To prevent stack overflow. Remove this once upstream is fixed */
+    if (max_number_ifds > 100) {
+      return 0;
+    }
+
+    piex::TiffParser parser(&stream, 0);
+    piex::TiffContent tiff_content;
+    const bool parseOk = parser.Parse(tagSet, max_number_ifds, &tiff_content);
+
+    if (parseOk && !tiff_content.tiff_directory.empty()) {
+      std::exception *exception = nullptr;
+      int *int_ptr = nullptr;
+
+      const bool ok = piex::(exception, int_ptr);
+
+      if (ok) {
+        (void)exception;
+        (void)int_ptr;
+      }
+    }
+  } catch (...) {
+  }
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

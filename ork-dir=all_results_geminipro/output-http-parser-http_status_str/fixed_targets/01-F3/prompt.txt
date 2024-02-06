@@ -1,0 +1,45 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "http_parser.h"
+
+extern "C" {
+#include "http_parser.h"
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int status_code = *(int *)data;
+  const char *status_str = http_status_str(status_code);
+  if (status_str != NULL) {
+    free((void *)status_str);
+  }
+  return 0;
+}
+```
+
+The original code has the following issues:
+1. The `http_status_str` function returns a `const char *`, so the `status_str` variable should be declared as `const char *` instead of `char *`.
+2. The `free` function should be called with a `void *` pointer, so the `status_str` variable should be cast to `(void *)` before calling `free`.
+
+The fixed code addresses both of these issues.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

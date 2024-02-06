@@ -1,0 +1,53 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+#include <string>
+
+#include "lodepng.h"
+
+extern "C" {
+#include "lodepng.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  if (size == 0) {
+    return 0;
+  }
+  FuzzedDataProvider stream(data, size);
+  const std::string filename = stream.ConsumeRandomLengthString();
+  const std::vector<uint8_t> image = stream.ConsumeRemainingBytes<uint8_t>();
+  const uint32_t w = stream.ConsumeIntegral<uint32_t>();
+  const uint32_t h = stream.ConsumeIntegral<uint32_t>();
+  const LodePNGColorType colortype =
+      stream.PickValueInArray({LCT_GREY, LCT_RGB, LCT_PALETTE, LCT_GREY_ALPHA,
+                               LCT_RGBA});
+  const uint32_t bitdepth = stream.ConsumeIntegralInRange<uint32_t>(1, 16);
+  int error = lodepng_encode_file(
+      const_cast<char *>(filename.c_str()), reinterpret_cast<char *>(image.data()),
+      w, h, colortype, bitdepth);
+  if (error != 0) {
+    return 0;
+  }
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

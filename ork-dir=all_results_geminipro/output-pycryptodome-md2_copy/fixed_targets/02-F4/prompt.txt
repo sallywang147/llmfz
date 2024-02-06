@@ -1,0 +1,92 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "common.h"
+#include <fuzzer/FuzzedDataProvider.h>
+
+#ifndef HASHTYPE
+#error Macro HASHTYPE must be defined.
+#endif
+
+#ifndef FNAME
+#error Macro FNAME must be defined.
+#endif
+
+#define CONCAT_TYPE(x) _PASTE2(HASHTYPE, x)
+
+#define init CONCAT_TYPE(_init)
+#define update CONCAT_TYPE(_update)
+#define digest CONCAT_TYPE(_digest)
+#define destroy CONCAT_TYPE(_destroy)
+#define copy CONCAT_TYPE(_copy)
+
+#define STR(x) #x
+#define INCLUDE(x) STR(x)
+
+#include INCLUDE(FNAME)
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+
+  if (!size)
+    return 0;
+
+  FuzzedDataProvider stream(data, size);
+  hash_state *hs1;
+  hash_state *hs2;
+  if (init(&hs1) || init(&hs2))
+    return 0;
+
+  while (stream.remaining_bytes()) {
+    size_t num_bytes = stream.ConsumeIntegral<size_t>();
+    std::vector<uint8_t> buffer = stream.ConsumeBytes<uint8_t>(num_bytes);
+
+    if (update(hs1, buffer.data(), buffer.size()))
+      goto error;
+  }
+
+  copy(hs1, hs2); // Call the missing function
+
+  uint8_t result1[DIGEST_SIZE];
+  uint8_t result2[DIGEST_SIZE];
+
+#ifndef DIGEST_THIRD_PARAM
+  digest(hs1, result1);
+  digest(hs2, result2);
+#else
+  digest(hs1, result1, DIGEST_SIZE);
+  digest(hs2, result2, DIGEST_SIZE);
+#endif
+
+  for (int i = 0; i < DIGEST_SIZE; ++i) {
+    if (result1[i] != result2[i])
+      goto error;
+  }
+
+error:
+  destroy(hs1);
+  destroy(hs2);
+  return 0;
+}
+
+extern "C" int md2_copy(struct hash_state *src, struct hash_state *dst) {
+  // Implement the missing function here
+  memcpy(dst, src, sizeof(struct hash_state));
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,51 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstddef>
+#include <cstdint>
+#include <cstring>
+#include <string>
+
+#include <rapidjson/document.h>
+#include <valijson/adapters/rapidjson_adapter.hpp>
+#include <valijson/utils/rapidjson_utils.hpp>
+
+using valijson::adapters::GenericRapidJsonFrozenValue;
+using valijson::adapters::RapidJsonAdapter;
+using rapidjson::GenericValue;
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  std::string input_file(reinterpret_cast<const char *>(data), size);
+  rapidjson::Document document;
+  if (!valijson::utils::loadDocument(input_file, document)) {
+    return 0;
+  }
+
+  RapidJsonAdapter adapter(document);
+  GenericValue *value = adapter.getValue();
+  GenericRapidJsonFrozenValue<GenericValue> frozen_value(&value);
+
+  return 0;
+}
+```
+
+The issue in the original code was that the `GenericRapidJsonFrozenValue` constructor expects a `GenericValue` pointer and a `GenericValue` reference, but the code was passing a `nullptr` and a `GenericValue` pointer. This caused a compilation error.
+
+The corrected code passes a `GenericValue` pointer and a `GenericValue` reference to the `GenericRapidJsonFrozenValue` constructor, which fixes the compilation error.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

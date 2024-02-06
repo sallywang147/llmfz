@@ -1,0 +1,68 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+#include <string>
+
+#include "libdwarf.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  Dwarf_Debug dbg;
+  Dwarf_Rnglists_Head rctx;
+  memset(&dbg, 0, sizeof(dbg));
+  memset(&rctx, 0, sizeof(rctx));
+  Dwarf_Error* error = nullptr;
+  int ret = dwarf_init(&dbg, DW_DLC_READ, DWARF_VERSION, &error);
+  if (ret != DW_DLV_OK) {
+    return 0;
+  }
+
+  const size_t rctx_size = stream.ConsumeIntegralInRange<size_t>(0, size);
+  const uint8_t* rctx_data = stream.ConsumeBytes<uint8_t>(rctx_size).data();
+  ret = dwarf_rnglists_init(&rctx, rctx_data, rctx_size, &error);
+  if (ret != DW_DLV_OK) {
+    dwarf_finish(&dbg, &error);
+    return 0;
+  }
+
+  ret = dwarf_get_rnglists_head(&dbg, &rctx, &error);
+  if (ret != DW_DLV_OK) {
+    dwarf_finish(&dbg, &error);
+    dwarf_rnglists_free(&rctx);
+    return 0;
+  }
+
+  ret = dwarf_build_array_of_rle(&dbg, &rctx, &error); // Added this line
+  if (ret != DW_DLV_OK) {
+    dwarf_finish(&dbg, &error);
+    dwarf_rnglists_free(&rctx);
+    return 0;
+  }
+
+  dwarf_finish(&dbg, &error);
+  dwarf_rnglists_free(&rctx);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

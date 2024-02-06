@@ -1,0 +1,70 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+extern "C" {
+#include "lzma.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  // Remove the static keyword from the lzma_stream declaration.
+  lzma_stream strm = LZMA_STREAM_INIT;
+
+  int ret = lzma_easy_encoder(&strm, 9, LZMA_CHECK_CRC64);
+  if (ret != LZMA_OK) {
+    fprintf(stderr, "lzma_easy_encoder() failed (%d)\n", ret);
+    return 1;  // Return an error code instead of aborting.
+  }
+
+  std::vector<uint8_t> output_buffer(1 << 20);
+  size_t output_written = 0;
+
+  FuzzedDataProvider provider(data, size);
+  while (provider.remaining_bytes() > 0) {
+    const size_t next_size = provider.ConsumeIntegralInRange<size_t>(
+        0,
+        provider.remaining_bytes());
+    auto next_input = provider.ConsumeBytes<unsigned char>(next_size);
+    ret = lzma_encode(&strm, next_input.data(), next_input.size(),
+                      output_buffer.data(), &output_written,
+                      output_buffer.size());
+    if (ret != LZMA_OK) {
+      fprintf(stderr, "lzma_encode() failed (%d)\n", ret);
+      return 1;  // Return an error code instead of aborting.
+    }
+  }
+
+  lzma_end(&strm);
+
+  return 0;
+}
+```
+
+The following changes were made to the code:
+
+- Removed the `static` keyword from the `lzma_stream strm = LZMA_STREAM_INIT;` line.
+- Removed the `abort()` calls from the error handling code. These calls are not necessary, and can cause the program to crash. Instead, the program should simply return an error code.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

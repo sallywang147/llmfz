@@ -1,0 +1,57 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdio.h>
+#include <stdlib.h>
+#include <cms/cms.h>
+
+extern "C" {
+#include <cms/cms.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  if (size < 12) return 0;
+
+  cmsContext ContextID = cmsCreateContext(NULL, NULL);
+  if (ContextID == NULL) return 0;
+
+  // Extract the filename from the input data.
+  size_t filename_length = *((const uint32_t *)data);
+  if (filename_length > size - 4) return 0;
+  char *filename = (char *)malloc(filename_length + 1);
+  memcpy(filename, data + 4, filename_length);
+  filename[filename_length] = '\0';
+
+  // Create a device link from the cube file.
+  cmsHTRANSFORM DeviceLink = cmsCreateDeviceLinkFromCubeFileTHR(ContextID, filename);
+
+  // Free the allocated memory.
+  free(filename);
+  if (DeviceLink != NULL) cmsDeleteTransform(DeviceLink);
+  cmsDeleteContext(ContextID);
+
+  return 0;
+}
+```
+
+Changes made:
+
+- Changed `cmsCreateDeviceLinkFromCubeFileTHR` to `cmsCreateDeviceLinkFromCubeFileTHR`.
+- Changed `cmsFreeDeviceLink` to `cmsDeleteTransform`.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

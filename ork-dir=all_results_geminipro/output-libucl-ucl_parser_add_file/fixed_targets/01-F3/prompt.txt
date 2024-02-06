@@ -1,0 +1,71 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+The issue is that the `ucl.h` header is not wrapped with `extern "C" {}`. This is necessary because the `ucl.h` header is written in C and the rest of the code is written in C++.
+
+To fix the issue, add `extern "C" {}` around the `#include "ucl.h"` line:
+
+```c++
+#include "ucl.h"
+#include <errno.h>
+#include <stdio.h>
+#include <unistd.h>
+
+extern "C" {
+#include <stdlib.h>
+#include <string.h>
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  // If size is 0 we need a null-terminated string.
+  // We dont null-terminate the string and by the design
+  // of the API passing 0 as size with non null-terminated string
+  // gives undefined behavior.
+  if (size == 0) {
+    return 0;
+  }
+  struct ucl_parser *parser;
+  parser = ucl_parser_new(0);
+
+  std::string filename = "/tmp/ucl_parser_add_file_XXXXXX";
+  int fd = mkstemp(&filename[0]);
+  if (fd < 0) {
+    perror("mkstemp");
+    return 0;
+  }
+  if (write(fd, data, size) < 0) {
+    perror("write");
+    return 0;
+  }
+  close(fd);
+
+  bool ret = ucl_parser_add_file(parser, (char *)filename.c_str());
+
+  if (ucl_parser_get_error(parser) != NULL) {
+    return 0;
+  }
+
+  ucl_parser_free(parser);
+  unlink(filename.c_str());
+  return 0;
+}
+```
+
+Now, the code should compile and run without errors.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

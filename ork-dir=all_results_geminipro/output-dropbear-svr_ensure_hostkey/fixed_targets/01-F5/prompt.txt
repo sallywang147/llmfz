@@ -1,0 +1,58 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <libssh/libssh.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+extern "C" {
+#include <libssh/server.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  ssh_session session = ssh_new();
+  if (session == NULL) {
+    return 0;
+  }
+  ssh_options_set(session, SSH_OPTIONS_HOST, "localhost");
+  ssh_options_set(session, SSH_OPTIONS_PORT, 22);
+  ssh_options_set(session, SSH_OPTIONS_USER, "username");
+  ssh_options_set(session, SSH_OPTIONS_TIMEOUT, 10);
+  svr_ensure_hostkey(); // Call svr_ensure_hostkey() to ensure the host key is loaded
+  if (ssh_connect(session) != SSH_OK) {
+    ssh_free(session);
+    return 0;
+  }
+  ssh_disconnect(session);
+  ssh_free(session);
+  return 0;
+}
+```
+
+The fixed code includes the following changes:
+
+1. Added `extern "C" {}` around the `#include <libssh/server.h>` line to ensure that the `svr_ensure_hostkey()` function is visible to the linker.
+
+2. Added a call to `svr_ensure_hostkey()` before attempting to connect to the SSH server. This ensures that the host key is loaded and verified before the connection is established.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

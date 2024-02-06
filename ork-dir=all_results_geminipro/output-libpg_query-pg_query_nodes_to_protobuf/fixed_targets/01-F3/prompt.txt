@@ -1,0 +1,69 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <pg_query.h>
+
+extern "C" {
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  char *new_str = (char *)malloc(size + 1);
+  if (new_str == NULL) {
+    return 0;
+  }
+  memcpy(new_str, data, size);
+  new_str[size] = '\0';
+
+  PGresult *res = PQexec(new_str);
+  if (PQresultStatus(res) != PGRES_TUPLES_OK) {
+    PQclear(res);
+    free(new_str);
+    return 0;
+  }
+
+  int num_rows = PQntuples(res);
+  for (int i = 0; i < num_rows; i++) {
+    int num_cols = PQnfields(res);
+    for (int j = 0; j < num_cols; j++) {
+      const char *value = PQgetvalue(res, i, j);
+      if (value != NULL) {
+        printf("%s", value);
+      }
+    }
+    printf("\n");
+  }
+
+  PQclear(res);
+  free(new_str);
+  return 0;
+}
+```
+
+The original code was missing the necessary function `PQexec` from the `libpq` library. To fix this, we added the following line to the top of the file:
+
+```c++
+#include <libpq-fe.h>
+```
+
+We also added the necessary code to execute the SQL query and print the results.
+</code>
+
+The code has the following build issues:
+<error>
+The target function `void pg_query_nodes_to_protobuf(char * )` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `void pg_query_nodes_to_protobuf(char * )` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

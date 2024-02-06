@@ -1,0 +1,46 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstddef>
+#include <cstdint>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <string>
+
+extern "C" {
+#include <libFuzzer/libFuzzer.h>
+}
+
+struct parse {
+  std::string str;
+};
+
+extern "C" void LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider provider(data, size);
+
+  parse p;
+  p.str = provider.ConsumeRemainingBytesAsString();
+
+  nonnewline(&p);
+}
+```
+
+The build issue is caused by missing the necessary header file `libFuzzer/libFuzzer.h` for the `LLVMFuzzerTestOneInput` function. To fix it, we need to include this header file within the `extern "C" {}` block. This ensures that the function is properly declared and linked during compilation.
+
+The corrected code includes the `libFuzzer/libFuzzer.h` header within the `extern "C" {}` block, allowing the `LLVMFuzzerTestOneInput` function to be recognized and linked successfully.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

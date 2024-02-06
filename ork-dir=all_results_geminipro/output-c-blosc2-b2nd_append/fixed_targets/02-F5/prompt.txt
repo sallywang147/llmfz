@@ -1,0 +1,67 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <string>
+#include <vector>
+
+#include "b2nd.h"
+
+extern "C" {
+#include "b2nd.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  struct b2nd_array_t* array = b2nd_array_create(1024);
+  if (array == nullptr) {
+    return 0;
+  }
+
+  FuzzedDataProvider provider(data, size);
+  while (provider.remaining_bytes() > 0) {
+    size_t len = provider.ConsumeIntegralInRange<size_t>(0, 1024);
+    std::string str = provider.ConsumeRandomLengthString(len);
+    char delimiter = provider.ConsumeIntegral<char>();
+
+    int ret = b2nd_append(array, str.c_str(), len, delimiter);
+    if (ret != 0) {
+      b2nd_array_destroy(array);
+      return 0;
+    }
+  }
+
+  b2nd_array_destroy(array);
+
+  return 0;
+}
+```
+
+The original code has the following issues:
+
+1. The `b2nd.h` header is included twice, once with `#include "b2nd.h"` and once with `extern "C" { #include "b2nd.h" }`. This is not necessary and can lead to compilation errors.
+2. The `b2nd_append` function is declared with `int b2nd_append(struct b2nd_array_t* array, const char* str, size_t len, char delimiter);` in the `b2nd.h` header, but it is called with `int ret = b2nd_append(array, str.c_str(), len, delimiter);` in the `LLVMFuzzerTestOneInput` function. This is a mismatch between the declaration and the definition of the function.
+
+The fixed code addresses these issues by including the `b2nd.h` header only once, and by calling the `b2nd_append` function with the correct arguments.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

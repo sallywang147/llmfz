@@ -1,0 +1,48 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+extern "C" {
+#include "yaml.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  yaml_emitter_t emitter;
+  yaml_emitter_initialize(&emitter);
+
+  const std::string text = stream.ConsumeRemainingBytesAsString();
+  size_t size_written;
+  char* output = new char[text.size() + 2]; // Add 2 for the null-terminator
+  yaml_emitter_set_output_string(&emitter, output, text.size() + 2, &size_written);
+  yaml_emitter_dump(&emitter, reinterpret_cast<const unsigned char*>(text.c_str()),
+                    text.size());
+  yaml_emitter_delete(&emitter);
+  output[size_written] = '\0'; // Add the null-terminator
+  output[size_written + 1] = '\0'; // Add an extra null-terminator for safety
+  delete[] output;
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,51 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <assert.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include <fribidi.h>
+
+extern "C" {
+#include <fribidi/fribidi.h>
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  const FriBidiStrIndex str_len = size / 4;
+  FriBidiChar *str = (FriBidiChar *)data;
+
+  FriBidiCharType *types = calloc(str_len, sizeof(FriBidiCharType));
+  FriBidiLevel *levels = calloc(str_len, sizeof(FriBidiLevel));
+  char *ar_props = calloc(str_len, sizeof(char));
+  fribidi_get_bidi_types(str, str_len, types);
+  fribidi_get_par_embedding_levels_ex(types, NULL, str_len, NULL, levels);
+  fribidi_shape(FRIBIDI_SHAPE_DEFAULT, (char *)levels, str_len, ar_props, str);
+  free(types);
+  free(levels);
+  free(ar_props);
+  return 0;
+}
+
+/* Editor directions:
+ * vim:textwidth=78:tabstop=8:shiftwidth=2:autoindent:cindent
+ */
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

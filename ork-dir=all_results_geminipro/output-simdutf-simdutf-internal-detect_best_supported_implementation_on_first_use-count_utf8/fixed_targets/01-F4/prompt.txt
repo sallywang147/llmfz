@@ -1,0 +1,46 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <string>
+
+extern "C" {
+#include "utf8.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const std::string text = stream.ConsumeRemainingBytesAsString();
+  simdutf::internal::detect_best_supported_implementation_on_first_use::count_utf8(
+      nullptr, const_cast<char*>(text.c_str()), text.size());
+  return 0;
+}
+```
+
+The fixed code:
+1. Added the necessary header file `simdutf/utf8.h` for the `simdutf` library.
+2. Wrapped the `#include "utf8.h"` directive with `extern "C" {}` to allow the object linking to succeed.
+
+The `simdutf` library is a C++ library for working with UTF-8 encoded text. The `simdutf/utf8.h` header file includes the declarations for the `simdutf::internal::detect_best_supported_implementation_on_first_use::count_utf8` function, which is used in the code to count the number of UTF-8 characters in a given string.
+
+By wrapping the `#include "utf8.h"` directive with `extern "C" {}`, we are telling the compiler to treat the declarations in that header file as C declarations, which is necessary for the object linking to succeed.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

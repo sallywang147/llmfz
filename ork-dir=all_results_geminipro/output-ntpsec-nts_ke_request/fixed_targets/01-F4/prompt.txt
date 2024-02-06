@@ -1,0 +1,78 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "ntpd.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define kMinInputLength 20
+#define kMaxInputLength 1024
+
+bool nts_ke_request(struct ssl_st * ssl);
+
+extern "C" {
+#include <openssl/ssl.h>
+}
+
+extern "C" {
+int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) { // ntpsec/tests/ntpd/nts_
+  if (Size < kMinInputLength || Size > kMaxInputLength) {
+    return 0;
+  }
+
+  // Initialize SSL context.
+  SSL_CTX *ctx = SSL_CTX_new(TLS_method());
+  if (!ctx) {
+    return 0;
+  }
+
+  // Create a new SSL structure.
+  SSL *ssl = SSL_new(ctx);
+  if (!ssl) {
+    SSL_CTX_free(ctx);
+    return 0;
+  }
+
+  // Set the input data as the BIO.
+  BIO *bio = BIO_new_mem_buf((void *)Data, Size);
+  if (!bio) {
+    SSL_free(ssl);
+    SSL_CTX_free(ctx);
+    return 0;
+  }
+  SSL_set_bio(ssl, bio, bio);
+
+  // Parse the input data.
+  if (!nts_ke_request(ssl)) {
+    SSL_free(ssl);
+    SSL_CTX_free(ctx);
+    BIO_free(bio);
+    return 0;
+  }
+
+  // Free the SSL structures.
+  SSL_free(ssl);
+  SSL_CTX_free(ctx);
+  BIO_free(bio);
+
+  return 0;
+}
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

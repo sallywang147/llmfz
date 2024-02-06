@@ -1,0 +1,83 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <libxml/parser.h>
+#include <libxml/relaxng.h>
+#include <libxml/xmlschemastypes.h>
+#include <libxml/xmlschemas.h>
+#include <libxml/xmlschemasval.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider provider(data, size);
+  xmlSchemaParserCtxtPtr parser_ctxt = xmlSchemaNewParserCtxt(nullptr);
+  if (!parser_ctxt) return 0;
+  xmlSchemaValidCtxtPtr valid_ctxt = xmlSchemaNewValidCtxt(parser_ctxt);
+  if (!valid_ctxt) {
+    xmlSchemaFreeParserCtxt(parser_ctxt);
+    return 0;
+  }
+
+  // Use a random encoding.
+  int enc = provider.ConsumeIntegralInRange<int>(0, 10);
+  // Use a random schema.
+  const char *schema_data = provider.ConsumeRemainingBytesAsString().c_str();
+  xmlSchemaPtr schema = xmlSchemaParseMemory(schema_data, strlen(schema_data));
+  if (!schema) {
+    xmlSchemaFreeValidCtxt(valid_ctxt);
+    xmlSchemaFreeParserCtxt(parser_ctxt);
+    return 0;
+  }
+  xmlSchemaSetValidCtxt(valid_ctxt, schema);
+
+  // Use a random SAX handler.
+  xmlSAXHandler *sax = xmlSAXNewDefaultHandler();
+  if (!sax) {
+    xmlSchemaFree(schema);
+    xmlSchemaFreeValidCtxt(valid_ctxt);
+    xmlSchemaFreeParserCtxt(parser_ctxt);
+    return 0;
+  }
+  xmlSchemaSetSAXHandler(valid_ctxt, sax);
+
+  // Use a random input buffer.
+  xmlParserInputBufferPtr input = xmlParserInputBufferCreateMem(
+      provider.ConsumeRemainingBytes().data(), provider.remaining_bytes(), enc);
+  if (!input) {
+    xmlSAXFreeHandler(sax);
+    xmlSchemaFree(schema);
+    xmlSchemaFreeValidCtxt(valid_ctxt);
+    xmlSchemaFreeParserCtxt(parser_ctxt);
+    return 0;
+  }
+
+  // Validate the input.
+  int ret = xmlSchemaValidateStream(valid_ctxt, input, enc, sax, nullptr);
+
+  // Cleanup.
+  xmlParserInputBufferFree(input);
+  xmlSAXFreeHandler(sax);
+  xmlSchemaFree(schema);
+  xmlSchemaFreeValidCtxt(valid_ctxt);
+  xmlSchemaFreeParserCtxt(parser_ctxt);
+
+  return ret;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

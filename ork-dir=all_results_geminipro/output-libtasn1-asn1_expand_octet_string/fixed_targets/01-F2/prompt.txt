@@ -1,0 +1,54 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+extern "C" {
+#include "asn1_fuzzer_utils.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  struct asn1_node_st* definitions = nullptr;
+  struct asn1_node_st* element = nullptr;
+  char* octetName = nullptr;
+  char* objectName = nullptr;
+
+  asn1_fuzzer_init_definitions(&definitions);
+  asn1_fuzzer_init_element(&element);
+  asn1_fuzzer_init_octetName(&octetName, stream);
+  asn1_fuzzer_init_objectName(&objectName, stream);
+
+  int result = asn1_expand_octet_string(definitions, &element, octetName,
+                                        objectName);
+
+  asn1_fuzzer_free_definitions(&definitions);
+  asn1_fuzzer_free_element(&element);
+  asn1_fuzzer_free_octetName(&octetName);
+  asn1_fuzzer_free_objectName(&objectName);
+
+  return result;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

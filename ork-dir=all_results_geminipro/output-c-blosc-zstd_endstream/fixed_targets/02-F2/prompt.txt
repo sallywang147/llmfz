@@ -1,0 +1,79 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+#include "zstd.h"
+
+extern "C" {
+#include "zstd.h"
+}
+
+extern "C" size_t LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  static bool initialized = false;
+  if (!initialized) {
+    ZSTD_initCStream();
+    initialized = true;
+  }
+  int ret;
+  ZSTD_CCtx* handle = ZSTD_createCCtx();
+  if (handle == nullptr) {
+    return 0;
+  }
+
+  ZSTD_inBuffer input = {data, size, 0};
+  ZSTD_outBuffer output = {nullptr, 0, 0};
+
+  size_t output_written = 0;
+  // Initially, start by feeding the decoder more data.
+  int decode_ret = ZSTD_compressStream(handle, &output, &input);
+  FuzzedDataProvider provider(data, size);
+  while ((decode_ret != ZSTD_closed)) {
+    if (decode_ret == ZSTD_needDict) {
+      break;
+    } else if (decode_ret == ZSTD_partial_out) {
+      if (provider.remaining_bytes() == 0) {
+        break;
+      }
+      const size_t next_size = provider.ConsumeIntegralInRange<size_t>(
+          0,
+          provider.remaining_bytes());
+      auto next_input = provider.ConsumeBytes<unsigned char>(next_size);
+      input.src = next_input.data();
+      input.size = next_input.size();
+      input.pos = 0;
+      decode_ret = ZSTD_compressStream(handle, &output, &input);
+    } else if (decode_ret != ZSTD_needDst) {
+      // Unhandled mpg123_decode return value.
+      abort();
+    }
+  }
+
+  ZSTD_endStream(handle, &input);
+  ZSTD_freeCCtx(handle);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

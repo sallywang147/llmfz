@@ -1,0 +1,67 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "libyang.h"
+
+extern "C" {
+#include "structure_parse.h"
+}
+
+int LLVMFuzzerTestOneInput(uint8_t const *buf, size_t len) {
+  struct lysp_ctx *pctx = NULL;
+  struct lysp_ext_instance *ext = NULL;
+  static bool log = false;
+
+  if (!log) {
+    ly_log_options(0);
+    log = true;
+  }
+
+  pctx = lysp_ctx_new(NULL);
+  if (!pctx) {
+    fprintf(stderr, "Failed to create context\n");
+    exit(EXIT_FAILURE);
+  }
+
+  ext = malloc(sizeof(*ext));
+  if (!ext) {
+    fprintf(stderr, "Failed to allocate memory for extension instance\n");
+    exit(EXIT_FAILURE);
+  }
+
+  char *data = malloc(len + 1);
+  if (data == NULL) {
+    return 0;
+  }
+  memcpy(data, buf, len);
+  data[len] = 0;
+
+  int ret = structure_parse(pctx, ext, data);
+
+  lysp_ctx_destroy(pctx);
+  free(ext);
+  free(data);
+
+  return ret;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

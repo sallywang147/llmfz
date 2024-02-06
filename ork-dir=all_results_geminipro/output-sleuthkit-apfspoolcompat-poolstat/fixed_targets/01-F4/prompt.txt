@@ -1,0 +1,49 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+#include <stdint.h>
+
+#include "apfs_compat.h"
+
+extern "C" {
+#include <fuzzer/FuzzedDataProvider.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider fuzzed_data(data, size);
+  APFSPoolCompat pool;
+  if (!pool.open(fuzzed_data)) {
+    return 0;
+  }
+  char result = pool.poolstat(nullptr);
+  pool.close();
+  return 0;
+}
+```
+
+The original code had the following issues:
+
+1. The `FuzzedDataProvider` constructor was called with `data` and `size` as arguments, which is incorrect. The constructor should be called with a `FuzzedDataProvider` object as an argument.
+2. The `APFSPoolCompat` class was not declared.
+
+The first issue was fixed by calling the `FuzzedDataProvider` constructor with `fuzzed_data` as an argument. The second issue was fixed by including the `apfs_compat.h` header file.
+
+The fixed code should now compile and run without errors.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

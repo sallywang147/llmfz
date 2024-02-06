@@ -1,0 +1,181 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <assert.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string>
+#include <sys/socket.h>
+
+#include <fuzzer/FuzzedDataProvider.h>
+
+extern "C" {
+#include "libevent/include/event2/buffer.h"
+#include "libevent/include/event2/bufferevent.h"
+#include "libevent/include/event2/event.h"
+#include "libevent/include/event2/http.h"
+#include "libevent/include/event2/http_struct.h"
+#include "libevent/include/event2/keyvalq_struct.h"
+#include "libevent/include/event2/listener.h"
+#include "libevent/include/event2/util.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+
+  FuzzedDataProvider data_provider(data, size);
+
+  std::string s1 = data_provider.ConsumeRandomLengthString();
+  std::string s2 = data_provider.ConsumeRandomLengthString();
+  std::string s3 = data_provider.ConsumeRandomLengthString();
+  std::string s4 = data_provider.ConsumeRandomLengthString();
+  std::string s5 = data_provider.ConsumeRandomLengthString();
+  size_t int1 = data_provider.ConsumeIntegral<size_t>();
+  size_t int2 = data_provider.ConsumeIntegral<size_t>();
+  size_t int3 = data_provider.ConsumeIntegral<size_t>();
+  size_t int4 = data_provider.ConsumeIntegral<size_t>();
+  size_t int5 = data_provider.ConsumeIntegral<size_t>();
+  size_t int6 = data_provider.ConsumeIntegral<size_t>();
+  size_t int7 = data_provider.ConsumeIntegral<size_t>();
+  size_t int8 = data_provider.ConsumeIntegral<size_t>();
+  size_t int9 = data_provider.ConsumeIntegral<size_t>();
+  size_t int10 = data_provider.ConsumeIntegral<size_t>();
+  size_t int11 = data_provider.ConsumeIntegral<size_t>();
+  size_t int12 = data_provider.ConsumeIntegral<size_t>();
+  size_t int13 = data_provider.ConsumeIntegral<size_t>();
+  size_t int14 = data_provider.ConsumeIntegral<size_t>();
+  size_t int15 = data_provider.ConsumeIntegral<size_t>();
+  size_t int16 = data_provider.ConsumeIntegral<size_t>();
+  size_t int17 = data_provider.ConsumeIntegral<size_t>();
+  size_t int18 = data_provider.ConsumeIntegral<size_t>();
+  size_t int19 = data_provider.ConsumeIntegral<size_t>();
+  size_t int20 = data_provider.ConsumeIntegral<size_t>();
+  size_t int21 = data_provider.ConsumeIntegral<size_t>();
+  size_t int22 = data_provider.ConsumeIntegral<size_t>();
+  size_t int23 = data_provider.ConsumeIntegral<size_t>();
+  size_t int24 = data_provider.ConsumeIntegral<size_t>();
+  size_t int25 = data_provider.ConsumeIntegral<size_t>();
+  size_t int26 = data_provider.ConsumeIntegral<size_t>();
+
+  int use_pair = int1 % 2;
+  int read_write = int2 % 2;
+  int use_filter = int4 % 2;
+
+  int options1 = int2 % 16;
+  int options2 = int3 % 16;
+
+  struct bufferevent *bev1 = NULL, *bev2 = NULL, *bev3 = NULL, *bev4 = NULL, *pair[2];
+  struct event_base *base = NULL;
+  struct evbuffer *evbuf = NULL;
+  static struct ev_token_bucket_cfg *conn_bucket_cfg = NULL;
+  struct bufferevent_rate_limit_group *bev_rate_group = NULL;
+  char buf[128];
+
+  /*create a buffer event*/
+  base = event_base_new();
+  if (use_pair == 0) {
+    if (bufferevent_pair_new(base, options1, pair) == -1) {
+      event_base_free(base);
+      return 0;
+    }
+    bev1 = pair[0];
+    bev2 = pair[1];
+    assert(bufferevent_pair_get_partner(bev1) != NULL);
+  } else {
+    bev1 = bufferevent_socket_new(base, -1, options1);
+    bev2 = bufferevent_socket_new(base, -1, options2);
+  }
+
+  /*bufferevent_filter_new*/
+  if (use_filter == 0) {
+
+    /*we cannot use BEV_OPT_CLOSE_ON_FREE when freeing bufferevents*/
+    bev3 = bufferevent_filter_new(bev1, NULL, NULL, options1 & (~BEV_OPT_CLOSE_ON_FREE), NULL, NULL);
+    bev4 = bufferevent_filter_new(bev2, NULL, NULL, options2 & (~BEV_OPT_CLOSE_ON_FREE), NULL, NULL);
+
+    if (bev1) {
+      bufferevent_free(bev1);
+    }
+    if (bev2) {
+      bufferevent_free(bev2);
+    }
+  } else {
+    bev3 = bev1;
+    bev4 = bev2;
+  }
+
+  if (!bev3 || !bev4) {
+    goto cleanup;
+  }
+
+  if (bufferevent_priority_set(bev3, options2) == 0) {
+    assert(bufferevent_get_priority(bev3) == options2);
+  }
+
+  /*set rate limits*/
+  assert(bufferevent_set_rate_limit(bev3, NULL) != -1);
+  static struct timeval cfg_tick = {static_cast<__time_t>(int1), static_cast<__suseconds_t>(int2)};
+  conn_bucket_cfg = ev_token_bucket_cfg_new(int1, int2, int3, int4, &cfg_tick);
+  if (!conn_bucket_cfg) {
+    goto cleanup;
+  }
+
+  bev_rate_group = bufferevent_rate_limit_group_new(base, conn_bucket_cfg);
+  assert(bufferevent_add_to_rate_limit_group(bev4, bev_rate_group) != -1);
+
+  /*write and read from buffer events*/
+  bufferevent_write(bev3, s1.c_str(), s1.size());
+  bufferevent_write(bev4, s2.c_str(), s2.size());
+  bufferevent_write_buffer(bev3, bufferevent_get_input(bev4));
+
+  evbuf = evbuffer_new();
+  bufferevent_read_buffer(bev3, evbuf);
+  evbuffer_free(evbuf);
+  bufferevent_read(bev3, buf, sizeof(buf) - 1);
+  bufferevent_remove_from_rate_limit_group(bev4);
+
+  /*watermarks*/
+  if (read_write == 0) {
+    bufferevent_setwatermark(bev4, EV_READ, int1, int2);
+    bufferevent_getwatermark(bev4, EV_READ, &int3, NULL);
+    bufferevent_getwatermark(bev4, EV_READ, NULL, &int4);
+  } else {
+    bufferevent_setwatermark(bev4, EV_WRITE, int1, int2);
+    bufferevent_getwatermark(bev4, EV_WRITE, &int3, NULL);
+    bufferevent_getwatermark(bev4, EV_WRITE, NULL, &int4);
+  }
+
+  assert(int1 == int3);
+  assert(int2 == int4);
+
+  /*clean up*/
+cleanup:
+  if (bev3) {
+    bufferevent_free(bev3);
+  }
+  if (bev4) {
+    bufferevent_free(bev4);
+  }
+  if (conn_bucket_cfg) {
+    ev_token_bucket_cfg_free(conn_bucket_cfg);
+    conn_bucket_cfg = NULL;
+  }
+
+  if (
+</code>
+
+The code has the following build issues:
+<error>
+The target function `struct evhttp_bound_socket * evhttp_accept_socket_with_handle(struct evhttp * , int )` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `struct evhttp_bound_socket * evhttp_accept_socket_with_handle(struct evhttp * , int )` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

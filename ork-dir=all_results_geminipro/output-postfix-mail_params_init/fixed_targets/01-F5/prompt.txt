@@ -1,0 +1,54 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+#include "mail_params.h"
+
+extern "C" {
+#include "mail_params.c"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  static bool initialized = false;
+  if (!initialized) {
+    mail_params_init();
+    initialized = true;
+  }
+
+  FuzzedDataProvider provider(data, size);
+
+  // mail_params_init() only takes a single argument, so we'll just
+  // provide it with a random integer.
+  int arg = provider.ConsumeIntegralInRange<int>(0, 100);
+
+  mail_params_init(arg);
+
+  return 0;
+}
+```
+
+In this case, the issue is that `mail_params_init()` takes a single argument, but the code was providing it with a random integer. To fix this, the code was updated to use `ConsumeIntegralInRange()` to generate a random integer within a specified range. The range was set to 0-100 to ensure that the argument is valid.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

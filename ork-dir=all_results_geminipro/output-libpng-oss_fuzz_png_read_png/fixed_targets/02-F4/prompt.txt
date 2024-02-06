@@ -1,0 +1,71 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+#include <vector>
+
+#include <png.h>
+
+extern "C" {
+#include <png.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
+  if (png_ptr == nullptr) {
+    return 0;
+  }
+
+  png_infop info_ptr = png_create_info_struct(png_ptr);
+  if (info_ptr == nullptr) {
+    png_destroy_read_struct(&png_ptr, nullptr, nullptr);
+    return 0;
+  }
+
+  if (setjmp(png_jmpbuf(png_ptr))) {
+    png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
+    return 0;
+  }
+
+  png_set_read_fn(png_ptr, nullptr, [](png_structp png_ptr, png_bytep data, png_size_t length) {
+    FuzzedDataProvider* stream = static_cast<FuzzedDataProvider*>(png_get_io_ptr(png_ptr));
+    const auto data_ptr = stream->ConsumeBytes<uint8_t>(length);
+    std::memcpy(data, data_ptr.data(), length);
+  });
+
+  png_process_data(png_ptr, info_ptr, nullptr, 0);
+
+  const int transforms = stream.ConsumeIntegral<int>();
+  const std::string params = stream.ConsumeRemainingBytesAsString();
+
+  // Call the function that was not called before
+  png_read_png(png_ptr, info_ptr, transforms, const_cast<char*>(params.c_str()));
+
+  png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+The target function `void OSS_FUZZ_png_read_png(struct png_struct_def * png_ptr, struct png_info_def * info_ptr, int transforms, char * params)` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `void OSS_FUZZ_png_read_png(struct png_struct_def * png_ptr, struct png_info_def * info_ptr, int transforms, char * params)` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

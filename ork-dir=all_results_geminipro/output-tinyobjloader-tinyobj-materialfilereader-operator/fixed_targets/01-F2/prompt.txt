@@ -1,0 +1,42 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdarg.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define TINYOBJLOADER_IMPLEMENTATION // define this in only *one* .cc
+#include "tiny_obj_loader.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  tinyobj::MaterialFileReader reader;
+  std::string matId;
+  std::vector<tinyobj::material_t> materials;
+  std::map<std::string, tinyobj::material_t> matMap;
+  std::string warn;
+  std::string err;
+  bool success = reader.ReadString(reinterpret_cast<const char *>(Data), Size, &matId, &materials, &matMap, &warn, &err);
+  if (!success) {
+    return 0;
+  }
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+The target function `bool tinyobj::MaterialFileReader::operator(tinyobj::MaterialFileReader * this, std::string * matId, std::vector * materials, std::map * matMap, std::string * warn, std::string * err)` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `bool tinyobj::MaterialFileReader::operator(tinyobj::MaterialFileReader * this, std::string * matId, std::vector * materials, std::map * matMap, std::string * warn, std::string * err)` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

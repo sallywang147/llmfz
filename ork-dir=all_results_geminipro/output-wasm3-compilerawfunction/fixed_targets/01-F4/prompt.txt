@@ -1,0 +1,75 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+#include <stdint.h>
+
+#include "wasm3.h"
+
+#define FATAL(...) __builtin_trap()
+
+extern "C" {
+#include "compile.h"
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  M3Result result = m3Err_none;
+
+  if (size < 8 || size > 256 * 1024) {
+    return 0;
+  }
+
+  IM3Environment env = m3_NewEnvironment();
+  if (env) {
+    IM3Runtime runtime = m3_NewRuntime(env, 128, NULL);
+    if (runtime) {
+      IM3Module module = NULL;
+      result = m3_ParseModule(env, &module, data, size);
+      if (module) {
+        result = m3_LoadModule(runtime, module);
+        if (result == 0) {
+          IM3Function f = NULL;
+          result = m3_FindFunction(&f, runtime, "fib");
+          if (f) {
+            char *code = NULL;
+            char *error = NULL;
+            result = CompileRawFunction(&module, &f, &code, &error);
+            m3_Free(code);
+            m3_Free(error);
+          }
+        } else {
+          m3_FreeModule(module);
+        }
+      }
+
+      m3_FreeRuntime(runtime);
+    }
+    m3_FreeEnvironment(env);
+  }
+
+  return 0;
+}
+```
+
+Changes made:
+
+1. Added `extern "C" {}` around the `#include "compile.h"` directive to ensure that the function `CompileRawFunction` is properly linked.
+2. Changed the call to `CompileRawFunction` to pass the `module` and `f` parameters by reference, as required by the function signature.
+3. Changed the call to `m3_Free` to pass the `code` and `error` parameters by reference, as required by the function signature.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

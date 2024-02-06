@@ -1,0 +1,57 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+extern "C" {
+#include "yaml.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const std::vector<uint8_t> file_bytes = stream.ConsumeRemainingBytes();
+  if (file_bytes.empty()) {
+    return 0;
+  }
+  yaml_parser_t parser;
+  yaml_parser_initialize(&parser);
+  FILE* file = fmemopen(file_bytes.data(), file_bytes.size(), "r");
+  if (file == nullptr) {
+    yaml_parser_delete(&parser);
+    return 0;
+  }
+  yaml_parser_set_input_file(&parser, file);
+  yaml_event_t event;
+  while (yaml_parser_parse(&parser, &event) != YAML_NO_EVENT) {
+    yaml_parser_delete_event(&event);
+  }
+  yaml_parser_delete(&parser);
+  fclose(file);
+  return 0;
+}
+```
+
+The corrected code includes the necessary header files and wraps the `yaml.h` header with `extern "C" {}` to ensure proper linking. The condition in the `while` loop is also corrected to `yaml_parser_parse(&parser, &event) != YAML_NO_EVENT`, which checks for the presence of more events to parse.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

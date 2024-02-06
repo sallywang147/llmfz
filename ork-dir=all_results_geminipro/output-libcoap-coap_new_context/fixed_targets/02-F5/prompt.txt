@@ -1,0 +1,50 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <coap3/coap.h>
+#include <stdint.h>
+
+extern "C" {
+#include <fuzzer/FuzzedDataProvider.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  struct coap_address_t addr;
+  addr.addr.sin.sin_family = AF_INET;
+  addr.addr.sin.sin_port = htons(stream.ConsumeIntegralInRange<uint16_t>(1, 65535));
+  addr.addr.sin.sin_addr.s_addr = stream.ConsumeIntegral<uint32_t>();
+  coap_context_t *ctx = coap_new_context(&addr);
+  if (ctx) {
+    coap_free_context(ctx);
+  }
+  return 0;
+}
+```
+
+The fixed code:
+
+1. Includes the necessary header files for the CoAP library and the fuzzer.
+2. Declares the `LLVMFuzzerTestOneInput` function with the correct signature and `extern "C"` linkage.
+3. Uses the `FuzzedDataProvider` to generate random input data.
+4. Initializes a CoAP address structure with the generated input data.
+5. Creates a CoAP context using the `coap_new_context()` function.
+6. Frees the CoAP context using the `coap_free_context()` function to prevent memory leaks.
+7. Returns 0 to indicate successful execution of the fuzzer.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

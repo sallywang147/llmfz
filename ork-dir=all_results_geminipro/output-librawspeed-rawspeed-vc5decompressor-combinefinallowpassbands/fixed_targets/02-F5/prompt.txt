@@ -1,0 +1,95 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "codes/VC5Decompressor.h"
+#include "codes/VC5Decompressor/Common.h"
+#include "codes/VC5Decompressor/LowpassFilter.h"
+#include "codes/VC5Decompressor/LowpassFilter/Common.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter2D.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter2D_16.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter2D_4.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter2D_8.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_16.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_4.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_8.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_16.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_4.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_8.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_16_X.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_4_X.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_8_X.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_16_Y.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_4_Y.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_8_Y.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_16_Z.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_4_Z.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_8_Z.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_16_XY.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_4_XY.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_8_XY.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_16_XZ.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_4_XZ.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_8_XZ.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_16_YZ.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_4_YZ.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_8_YZ.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_16_XYZ.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_4_XYZ.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_8_XYZ.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_16_X_Y.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_4_X_Y.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_8_X_Y.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_16_X_Z.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_4_X_Z.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_8_X_Z.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_16_Y_Z.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_4_Y_Z.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_8_Y_Z.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_16_X_Y_Z.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_4_X_Y_Z.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter3D_Generic_8_X_Y_Z.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter4D.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter4D_16.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter4D_4.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter4D_8.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter4D_Generic.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter4D_Generic_16.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter4D_Generic_4.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter4D_Generic_8.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter4D_Generic_16_X.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter4D_Generic_4_X.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter4D_Generic_8_X.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter4D_Generic_16_Y.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter4D_Generic_4_Y.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter4D_Generic_8_Y.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter4D_Generic_16_Z.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter4D_Generic_4_Z.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter4D_Generic_8_Z.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter4D_Generic_16_XY.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter4D_Generic_4_XY.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter4D_Generic_8_XY.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter4D_Generic_16_XZ.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter4D_Generic_4_XZ.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter4D_Generic_8_XZ.h"
+#include "codes/VC5Decompressor/LowpassFilter/LowpassFilter4D_Generic_16_YZ.h"
+
+namespace
+</code>
+
+The code has the following build issues:
+<error>
+The target function `void rawspeed::VC5Decompressor::combineFinalLowpassBands(rawspeed::VC5Decompressor * ) const` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `void rawspeed::VC5Decompressor::combineFinalLowpassBands(rawspeed::VC5Decompressor * ) const` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

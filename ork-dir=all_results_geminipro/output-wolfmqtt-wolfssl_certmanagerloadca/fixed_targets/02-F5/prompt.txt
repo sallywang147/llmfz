@@ -1,0 +1,67 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <vector>
+
+#include "wolfssl/options.h"
+#include "wolfssl/wolfcrypt/cert_mgr.h"
+
+extern "C" {
+#include "wolfssl/wolfcrypt/asn.h"
+#include "wolfssl/wolfcrypt/sha.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  /* Initialize the certificate manager. */
+  struct WOLFSSL_CERT_MANAGER* cm = wolfSSL_CertManagerNew();
+  if (cm == nullptr) {
+    return 0;
+  }
+
+  /* Consume the necessary data from the stream. */
+  const std::string file = stream.ConsumeRemainingBytesAsString();
+  const std::string path = stream.ConsumeRemainingBytesAsString();
+
+  /* Convert the strings to C-style strings. */
+  char* file_c_str = strdup(file.c_str());
+  char* path_c_str = strdup(path.c_str());
+
+  /* Call the function to be fuzzed. */
+  int ret = wolfSSL_CertManagerLoadCA(cm, file_c_str, path_c_str);
+
+  /* Clean up. */
+  wolfSSL_CertManagerFree(cm);
+  free(file_c_str);
+  free(path_c_str);
+
+  return ret;
+}
+```
+
+The corrected code should compile and run successfully without any build errors.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

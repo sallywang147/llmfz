@@ -1,0 +1,84 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstring>
+
+#include "fuzzer_utils.h"
+
+#include "unicode/messageformat.h"
+#include "unicode/unistr.h"
+
+#include "unicode/uversion.h"
+
+extern "C" {
+#include "unicode/ustring.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  // Check the ICU version to ensure compatibility.
+  if (U_ICU_VERSION < 63) {
+    return EXIT_FAILURE;
+  }
+
+  icu::StringPiece fuzzData(reinterpret_cast<const char *>(data), size);
+  int32_t status = 0;
+  icu::MessageFormat fmt(icu::UnicodeString(), status);
+  if (U_FAILURE(status)) {
+    return EXIT_FAILURE;
+  }
+
+  while (fuzzData.length() > 0) {
+    uint8_t command = *fuzzData.data();
+    fuzzData.remove_prefix(1);
+
+    switch (command % 4) {
+    case 0:
+      printf("setLocale(%s)\n", GetRandomLocaleString(fuzzData).c_str());
+      fmt.setLocale(icu::Locale(GetRandomLocaleString(fuzzData).c_str()));
+      break;
+    case 1:
+      printf("applyPattern(%s)\n", GetRandomPatternString(fuzzData).c_str());
+      fmt.applyPattern(icu::UnicodeString(GetRandomPatternString(fuzzData).c_str()), status);
+      break;
+    case 2:
+      printf("format(string)\n");
+      {
+        icu::UnicodeString arg = GetRandomString(fuzzData);
+        icu::UnicodeString result;
+        fmt.format(arg, result, status);
+      }
+      break;
+    case 3:
+      printf("format(list)\n");
+      {
+        icu::UnicodeString arg = GetRandomString(fuzzData);
+        icu::UnicodeString result;
+        fmt.format(arg, result, status);
+      }
+      break;
+    default:
+      break;
+    }
+  }
+
+  fmt.cacheExplicitFormats(status);
+
+  return EXIT_SUCCESS;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

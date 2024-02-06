@@ -1,0 +1,61 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+#include "libdwarf.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  static bool initialized = false;
+  if (!initialized) {
+    libdwarf_init(0, 0);
+    initialized = true;
+  }
+
+  FuzzedDataProvider provider(data, size);
+
+  Dwfl_Module* module = dwfl_module_create_empty(DWFL_MODULE_LIBDW);
+  Dwfl_Line* line;
+  Dwfl_Line* prev_line = nullptr;
+  Dwfl_Frame* frame = dwfl_frame_create();
+
+  while (provider.remaining_bytes() > 0) {
+    uint32_t addr = provider.ConsumeIntegral<uint32_t>();
+    line = dwfl_add_line(module, addr, "file", 0);
+    if (prev_line != nullptr) {
+      dwfl_add_frame(frame, prev_line, line, nullptr, nullptr);
+    }
+    prev_line = line;
+  }
+
+  // Call the function `dwfl_frame_unwind`
+  dwfl_frame_unwind(frame);
+
+  dwfl_module_destroy(module);
+  dwfl_frame_destroy(frame);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+The target function `void __libdwfl_frame_unwind(struct Dwfl_Frame * state)` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `void __libdwfl_frame_unwind(struct Dwfl_Frame * state)` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

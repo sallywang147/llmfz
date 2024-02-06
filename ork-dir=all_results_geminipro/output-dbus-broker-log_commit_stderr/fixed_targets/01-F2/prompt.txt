@@ -1,0 +1,57 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdarg.h>
+
+#include "log.h"
+
+extern "C" {
+#include <stdio.h>
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  struct Log log;
+  log_init(&log, NULL);
+  log_commit_stderr(&log, (char *)data, (struct __va_list_tag *)data);
+  return 0;
+}
+```
+
+The build error message is:
+```
+error: undefined reference to 'log_init'
+error: undefined reference to 'log_commit_stderr'
+```
+
+This error occurs because the functions `log_init` and `log_commit_stderr` are declared in the header file `log.h`, but they are not defined in the source file. To fix this error, we need to include the definition of these functions in the source file.
+
+We can do this by adding the following line to the top of the source file:
+
+```c++
+#include "log.c"
+```
+
+This will include the definition of the functions `log_init` and `log_commit_stderr` from the file `log.c`.
+
+We also need to wrap the `#include` directive for the header file `stdio.h` with `extern "C" {}`. This is because the header file `stdio.h` is written in C, and the compiler needs to know that the functions declared in this header file are C functions, not C++ functions.
+
+The corrected code is shown above.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

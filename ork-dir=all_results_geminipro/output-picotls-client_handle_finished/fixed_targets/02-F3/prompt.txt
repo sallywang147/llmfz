@@ -1,0 +1,65 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <assert.h>
+#include <getopt.h>
+#include <inttypes.h>
+#include <stdio.h>
+#include <string.h>
+#include <strings.h>
+#include <sys/select.h>
+#include <sys/socket.h>
+#include <sys/stat.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <unistd.h>
+
+#include <openssl/engine.h>
+#include <openssl/err.h>
+
+extern "C" {
+#include <ptls/ptls.h>
+}
+
+int client_handle_finished(struct st_ptls_t * tls, struct st_ptls_message_emitter_t * emitter, char * message, size_t message_size) {
+  int ret;
+  ret = ptls_handshake_client_finished(tls, emitter, message, message_size);
+  return ret;
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int ret;
+  struct st_ptls_t *tls;
+  struct st_ptls_message_emitter_t *emitter;
+  char message[4096];
+
+  tls = ptls_new(PTLS_CLIENT_MODE, PTLS_MTU_1350);
+  assert(tls != NULL);
+
+  emitter = ptls_get_message_emitter(tls);
+  assert(emitter != NULL);
+
+  ret = client_handle_finished(tls, emitter, message, size);
+  assert(ret == 0);
+
+  ptls_free(tls);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

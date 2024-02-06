@@ -1,0 +1,51 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <unicode/utypes.h>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+
+#include "unicode/regex.h"
+
+extern "C" {
+#include "unicode/uchar.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider fuzzed_data(data, size);
+
+  icu::RegexMatcher::UText regexp;
+  regexp.flags = UREGEX_CASE_INSENSITIVE;
+  regexp.length = fuzzed_data.ConsumeIntegralInRange<int>(0, 1024);
+  regexp.nativeChars = static_cast<UChar *>(
+      malloc(sizeof(UChar) * (regexp.length + 1)));
+  fuzzed_data.ConsumeBytes<UChar>(regexp.nativeChars, regexp.length);
+  regexp.nativeChars[regexp.length] = 0;
+
+  int status = 0;
+  icu::RegexMatcher matcher(regexp, status);
+
+  free(regexp.nativeChars);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

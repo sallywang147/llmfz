@@ -1,0 +1,92 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <string.h>
+
+extern "C" {
+#include "gssapi.h"
+#include "krb5.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  OM_uint32 maj_stat, min_stat;
+
+  gss_ctx_id_t ctx = GSS_C_NO_CONTEXT;
+  gss_name_t client_name = GSS_C_NO_NAME;
+  gss_cred_id_t deleg_cred = GSS_C_NO_CREDENTIAL;
+
+  /* Each fuzz input contains multiple tokens preceded by a length field.
+   * Process them in turn with krb5_gss_init_sec_context_ext while
+   * GSS_S_CONTINUE_NEEDED is set
+   */
+  do {
+    unsigned short token_length;
+
+    gss_buffer_desc input_token, output_token = GSS_C_EMPTY_BUFFER;
+
+    if (Size < sizeof(token_length))
+      break;
+
+    token_length = *(unsigned short *)Data;
+
+    Data += sizeof(token_length);
+    Size -= sizeof(token_length);
+
+    if (token_length == 0 || token_length > Size)
+      break;
+
+    input_token.length = token_length;
+    input_token.value = malloc(token_length);
+    memcpy(input_token.value, Data, token_length);
+
+    Data += token_length;
+    Size -= token_length;
+
+    maj_stat = krb5_gss_init_sec_context_ext(
+        &min_stat, GSS_C_NO_CREDENTIAL, /* claimant_cred_handle */
+        &ctx, client_name, NULL,          /* mech_type */
+        0,                             /* req_flags */
+        0,                             /* time_req */
+        NULL,                          /* input_chan_bindings */
+        &input_token, NULL,             /* actual_mech_type */
+        &output_token, NULL,            /* ret_flags */
+        NULL,                           /* time_rec */
+        NULL);                          /* exts */
+
+    gss_release_buffer(&min_stat, &output_token);
+    free(input_token.value);
+
+    if (GSS_ERROR(maj_stat)) {
+      if (ctx != GSS_C_NO_CONTEXT)
+        gss_delete_sec_context(&min_stat, &ctx, GSS_C_NO_BUFFER);
+      break;
+    }
+  } while (maj_stat & GSS_S_CONTINUE_NEEDED);
+
+  gss_release_name(&min_stat, &client_name);
+  gss_release_cred(&min_stat, &deleg_cred);
+
+  return 0;
+}
+```
+
+The issue in the original code was that the `free()` function was not used to release the memory allocated for the `input_token.value` buffer. This could lead to memory leaks and other issues.
+
+To fix this, the `free()` function has been added to release the memory allocated for the `input_token.value` buffer after it is no longer needed.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

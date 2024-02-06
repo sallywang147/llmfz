@@ -1,0 +1,65 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  static bool initialized = false;
+  if (!initialized) {
+    initialized = true;
+  }
+  // Initially, start by feeding the decoder more data.
+  int decode_ret = 0;
+  FuzzedDataProvider provider(data, size);
+  while ((decode_ret != -1)) {
+    if (decode_ret == 0) {
+      if (provider.remaining_bytes() == 0) {
+        break;
+      }
+      const size_t next_size = provider.ConsumeIntegralInRange<size_t>(
+          0,
+          provider.remaining_bytes());
+      auto next_input = provider.ConsumeBytes<unsigned char>(next_size);
+      decode_ret = main_loop(next_input, next_size);
+    } else {
+      // Unhandled mpg123_decode return value.
+      abort();
+    }
+  }
+
+  return 0;
+}
+```
+
+In the fixed code:
+
+1. Added the `main_loop` function declaration in the `extern "C"` block to fix the undefined reference error.
+
+2. In the `while` loop, when `decode_ret` is 0, the `main_loop` function is called with the `next_input` and `next_size` arguments, which are obtained from the FuzzedDataProvider.
+
+3. The return value of `main_loop` is stored in `decode_ret` to control the loop.
+
+4. The `main_loop` function is assumed to be defined elsewhere in the program, and it is responsible for processing the input data and returning a status code.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

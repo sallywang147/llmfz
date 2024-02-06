@@ -1,0 +1,39 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <pjsip.h>
+#include <pjlib.h>
+
+extern int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  pjsip_endpoint *endpt = pjsip_endpt_create(NULL, NULL);
+  pjsip_module *tsx_user = NULL;
+  pjsip_rx_data *rdata = NULL;
+  int st_code = 200;
+  pj_str_t *st_text = NULL;
+  pjsip_hdr *hdr_list = NULL;
+  pjsip_msg_body *body = NULL;
+  pjsip_transaction **p_tsx = NULL;
+
+  pjsip_endpt_respond(endpt, tsx_user, rdata, st_code, st_text, hdr_list, body,
+                      p_tsx);
+
+  pjsip_endpt_destroy(endpt);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

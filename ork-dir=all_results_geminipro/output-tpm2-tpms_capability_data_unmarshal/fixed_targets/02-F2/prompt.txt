@@ -1,0 +1,53 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+#include <stdint.h>
+#include <string.h>
+
+#include "TPMS_CAPABILITY_DATA_fp.h"
+
+extern "C" {
+#include "TPMS_CAPABILITY_DATA_fp.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  struct TPMS_CAPABILITY_DATA target;
+  char *buffer = (char *)data;
+  int size_left = size;
+
+  int ret = TPMS_CAPABILITY_DATA_Unmarshal(&target, &buffer, &size_left);
+  if (ret != 0) {
+    return 0;
+  }
+
+  memset(&target, 0, sizeof(target));
+  ret = TPMS_CAPABILITY_DATA_Unmarshal(&target, &buffer, &size_left);
+  if (ret != 0) {
+    return 0;
+  }
+
+  return 0;
+}
+```
+
+The issue with the original code is that the header `TPMS_CAPABILITY_DATA_fp.h` is included twice, once without and once with `extern "C" {}`. This causes a build error because the compiler sees the same header twice, with different preprocessor directives.
+
+To fix this, we can move the `#include` directive for `TPMS_CAPABILITY_DATA_fp.h` inside the `extern "C" {}` block, so that it is only included once, with the correct preprocessor directives.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

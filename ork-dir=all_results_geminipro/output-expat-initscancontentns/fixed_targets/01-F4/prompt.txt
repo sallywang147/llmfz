@@ -1,0 +1,87 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+The issue was that the `initScanContentNS` function was not declared in the `libxml/parserInternals.h` header. To fix this, we need to declare the function in the header file.
+
+Here is the fixed `libxml/parserInternals.h` header file:
+
+```c++
+#ifndef LIBXML_PARSERINTERNALS_H
+#define LIBXML_PARSERINTERNALS_H
+
+#include <stddef.h>
+#include <stdint.h>
+
+struct encoding;
+
+int initScanContentNS(const struct encoding *enc, const char *ptr,
+                      const char *end, char **next_tok_ptr);
+
+#endif
+```
+
+With this change, the code should compile and run without errors.
+
+Here is the fixed code:
+
+```c++
+#include <stddef.h>
+#include <stdint.h>
+#include <string.h>
+
+#include "fuzzer/FuzzedDataProvider.h"
+
+extern "C" {
+#include "libxml/parserInternals.h"
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  if (size == 0) {
+    return 0;
+  }
+  FuzzedDataProvider stream(data, size);
+
+  // Consume bytes to use as the encoding name.
+  std::string encoding_name = stream.ConsumeBytesAsString(16);
+  // Consume bytes to use as the input string.
+  std::string input_string = stream.ConsumeBytesAsString(1024);
+
+  // Create an encoding structure.
+  struct encoding enc;
+  memset(&enc, 0, sizeof(enc));
+  enc.name = encoding_name.c_str();
+
+  // Create a pointer to the input string.
+  char *input_ptr = input_string.data();
+
+  // Create a pointer to the end of the input string.
+  char *input_end = input_ptr + input_string.size();
+
+  // Create a pointer to the next token.
+  char *next_tok_ptr;
+
+  // Call the function to be fuzzed.
+  int result = initScanContentNS(&enc, input_ptr, input_end, &next_tok_ptr);
+
+  // Consume the remaining bytes.
+  stream.ConsumeRemainingBytes();
+
+  return result;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

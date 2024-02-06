@@ -1,0 +1,19 @@
+#include <fuzzer/FuzzedDataProvider.h>
+#include <string>
+
+#include "Poco/RegularExpression.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  std::string pattern = stream.ConsumeRemainingBytesAsString();
+  std::string subject = stream.ConsumeRemainingBytesAsString();
+
+  try {
+    Poco::RegularExpression re(pattern);
+    re.match(&subject, 0, subject.size());
+  } catch (...) {
+  }
+
+  return 0;
+}

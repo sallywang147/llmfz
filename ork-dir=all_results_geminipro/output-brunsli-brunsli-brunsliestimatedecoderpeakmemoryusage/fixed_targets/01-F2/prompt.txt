@@ -1,0 +1,41 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <brunsli/decode.h>
+#include <fuzzer/FuzzedDataProvider.h>
+
+extern "C" size_t LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider fdp(data, size);
+  size_t len = fdp.ConsumeIntegralInRange<size_t>(0, 1 << 30);
+  char *buf = new char[len];
+  fdp.ConsumeBytes(buf, len);
+  size_t res = brunsli::BrunsliEstimateDecoderPeakMemoryUsage(buf, len);
+  delete[] buf;
+  return res;
+}
+```
+
+The issue here is that the `brunsli` library is not properly linked to the program. To fix it, one needs to add the necessary linker flags when compiling the program. The specific flags will depend on the platform and the compiler used. For example, on Linux, one would need to add the following flag:
+
+```
+-lbrunsli
+```
+
+to the linker command line.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

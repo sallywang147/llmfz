@@ -1,0 +1,55 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <unicode/regex.h>
+#include <unicode/unistr.h>
+
+extern "C" {
+#include <unicode/uclean.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider fdp(data, size);
+
+  UErrorCode status = U_ZERO_ERROR;
+  icu::RegexMatcher m(icu::UnicodeString::fromUTF8(fdp.ConsumeRandomLengthString()),
+                      0, status);
+  if (U_FAILURE(status)) {
+    return 0;
+  }
+
+  m.reset(icu::UnicodeString::fromUTF8(fdp.ConsumeRandomLengthString()));
+  m.matches(status);
+
+  u_cleanup();
+
+  return 0;
+}
+```
+
+The original code has the following issues:
+
+1. The `#include <unicode/regex.h>` and `#include <unicode/unistr.h>` directives are not wrapped with `extern "C" {}`. This is necessary because the headers are written in C++ and the function `LLVMFuzzerTestOneInput` is written in C.
+
+2. The `u_cleanup()` function is not declared in the header file `unicode/uclean.h`. This is because the function is declared in the C++ header file `unicode/uclean.hxx`. To fix this, the `extern "C"` directive must be used to declare the function in the C header file `unicode/uclean.h`.
+
+The fixed code includes the necessary `extern "C" {}` directives and declares the `u_cleanup()` function in the C header file `unicode/uclean.h`.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

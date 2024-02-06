@@ -1,0 +1,55 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <lzo1x.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstring>
+#include <vector>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  const std::vector<uint8_t> input = stream.ConsumeBytes<uint8_t>(stream.ConsumeIntegralInRange<size_t>(0, size));
+  const std::vector<uint8_t> dictionary = stream.ConsumeBytes<uint8_t>(stream.ConsumeIntegralInRange<size_t>(0, size));
+  const size_t input_size = input.size();
+  const size_t dictionary_size = dictionary.size();
+  std::vector<uint8_t> output(input_size);
+
+  size_t output_size = output.size();
+  std::vector<uint8_t> work_mem(input_size);
+  int result = lzo1x_999_compress_dict(reinterpret_cast<char*>(input.data()), input_size,
+                                      reinterpret_cast<char*>(output.data()), &output_size,
+                                      reinterpret_cast<char*>(work_mem.data()),
+                                      reinterpret_cast<char*>(dictionary.data()), dictionary_size);
+  if (result != LZO_E_OK) {
+    return 0;
+  }
+
+  output.resize(output_size);
+  return 0;
+}
+```
+
+The issue with the provided code is that the header file `lzo1x.h` is not included, which contains the declaration for the function `lzo1x_999_compress_dict`. To fix this, include the header file `lzo1x.h` before using the function.
+
+The corrected code includes the `lzo1x.h` header file, which contains the declaration for the `lzo1x_999_compress_dict` function. With this change, the code should compile and run successfully.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

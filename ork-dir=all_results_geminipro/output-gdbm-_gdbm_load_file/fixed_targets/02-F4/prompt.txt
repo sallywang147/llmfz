@@ -1,0 +1,56 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+extern "C" {
+#include "gdbm.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider provider(data, size);
+
+  struct gdbm_file_info* dbf = nullptr;
+  struct gdbm_file_info* ofp = nullptr;  // Fix the type mismatch
+
+  const int replace = provider.ConsumeIntegral<int>();
+  const int meta_mask = provider.ConsumeIntegral<int>();
+
+  const size_t filename_size = provider.ConsumeIntegralInRange<size_t>(0, 1024);
+  auto filename = provider.ConsumeBytes<char>(filename_size);
+  struct dump_file* file = _gdbm_open_dump_file(filename.data(), "r");
+  if (file == nullptr) {
+    return 0;
+  }
+
+  int ret = _gdbm_load_file(file, &dbf, &ofp, replace, meta_mask);
+  if (ret == 0) {
+    _gdbm_close_dump_file(file);
+    _gdbm_free_file_info(dbf);
+    _gdbm_free_file_info(ofp);  // Fix the type mismatch
+  }
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,44 @@
+#include "oatpp/parser/json/mapping/Serializer.hpp"
+#include "oatpp/core/macro/codegen.hpp"
+
+typedef oatpp::parser::Caret ParsingCaret;
+typedef oatpp::parser::json::mapping::Serializer Serializer;
+typedef oatpp::parser::json::mapping::Deserializer Deserializer;
+
+extern "C" {
+#include OATPP_CODEGEN_BEGIN(DTO)
+
+class EmptyDto : public oatpp::DTO {
+  DTO_INIT(EmptyDto, DTO)
+};
+
+class Test1 : public oatpp::DTO {
+  DTO_INIT(Test1, DTO)
+  DTO_FIELD(String, strF);
+};
+
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  oatpp::String input(reinterpret_cast<const char *>(data), size);
+  oatpp::parser::json::mapping::ObjectMapper mapper;
+  oatpp::Object<Test1> obj;
+  try {
+    obj = mapper.readFromString<oatpp::Object<Test1>>(input);
+  } catch (...) {
+    return 0;
+  }
+
+  Serializer serializer;
+  try {
+    serializer.serializeObject(obj); // Fixed: Call `serializeObject` with `obj` instead of `obj.get()`
+  } catch (...) {
+  }
+
+  return 0;
+}
+```
+
+The issue in the original code was that the `serializeObject()` method of the `Serializer` class was called with `obj.get()` instead of `obj`. This is incorrect because `obj.get()` returns a pointer to the underlying `Test1` object, while `serializeObject()` expects an `Object<Test1>` object.
+
+The corrected code calls `serializeObject()` with `obj` instead of `obj.get()`, which fixes the issue.

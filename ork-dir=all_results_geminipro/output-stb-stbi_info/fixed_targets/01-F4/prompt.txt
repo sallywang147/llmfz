@@ -1,0 +1,61 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "../stb_image.h"
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int x, y, channels;
+  char filename[256];
+  snprintf(filename, sizeof(filename), "/tmp/stb_image_fuzz_%d", rand());
+  FILE *fp = fopen(filename, "wb");
+  fwrite(data, size, 1, fp);
+  fclose(fp);
+
+  if (!stbi_info(filename, &x, &y, &channels))
+    return 0;
+
+  /* exit if the image is larger than ~80MB */
+  if (y && x > (80000000 / 4) / y)
+    return 0;
+
+  unsigned char *img = stbi_load(filename, &x, &y, &channels, 0); // Change 4 to 0
+
+  free(img);
+
+  remove(filename); // Add this line to remove the temporary file
+
+  return 0;
+}
+
+#ifdef __cplusplus
+}
+#endif
+```
+
+The solution includes the following changes:
+
+1. Changed `stbi_load(filename, &x, &y, &channels, 4)` to `stbi_load(filename, &x, &y, &channels, 0)`. This change is necessary because the `stbi_load()` function expects the number of channels to be specified as the fourth argument, and in this case, we want to load the image without any alpha channel.
+
+2. Added `remove(filename);` after `free(img);` to remove the temporary file that was created to store the image data. This is good practice to avoid leaving temporary files on the system.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

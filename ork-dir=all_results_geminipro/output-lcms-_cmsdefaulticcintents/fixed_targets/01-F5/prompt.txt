@@ -1,0 +1,84 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <lcms2.h>
+#include <stdint.h>
+
+extern "C" {
+#include <lcms2_plugin.h>
+}
+
+struct _cmsPipeline_struct73 *
+_cmsDefaultICCintents(struct _cmsContext_struct *ContextID, int nProfiles,
+                      int *TheIntents, char **hProfiles, int *BPC,
+                      double *AdaptationStates, int dwFlags) {
+  return cmsDefaultICCintents(ContextID, nProfiles, TheIntents, hProfiles, BPC,
+                             AdaptationStates, dwFlags);
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  if (size < 12) {
+    return 0;
+  }
+
+  int nProfiles = *((const int *)data + 0);
+  int dwFlags = *((const int *)data + 1);
+  data += 8;
+  size -= 8;
+
+  int *TheIntents = new int[nProfiles];
+  char **hProfiles = new char *[nProfiles];
+  int *BPC = new int[nProfiles];
+  double *AdaptationStates = new double[nProfiles];
+
+  for (int i = 0; i < nProfiles; i++) {
+    TheIntents[i] = *((const int *)data + 0);
+    data += 4;
+    size -= 4;
+
+    hProfiles[i] = (char *)data;
+    data += 4;
+    size -= 4;
+
+    BPC[i] = *((const int *)data + 0);
+    data += 4;
+    size -= 4;
+
+    AdaptationStates[i] = *((const double *)data + 0);
+    data += 8;
+    size -= 8;
+  }
+
+  struct _cmsContext_struct *ContextID = cmsCreateContext(NULL, NULL);
+  struct _cmsPipeline_struct73 *Pipeline =
+      _cmsDefaultICCintents(ContextID, nProfiles, TheIntents, hProfiles, BPC,
+                            AdaptationStates, dwFlags);
+  cmsDeletePipeline(Pipeline);
+  cmsDeleteContext(ContextID);
+
+  delete[] TheIntents;
+  delete[] hProfiles;
+  delete[] BPC;
+  delete[] AdaptationStates;
+
+  return 0;
+}
+```
+The issue was that `cmsDeletePipeline` was not called to free the memory allocated for the pipeline. This can lead to memory leaks and crashes. The corrected code calls `cmsDeletePipeline` before deleting the context.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

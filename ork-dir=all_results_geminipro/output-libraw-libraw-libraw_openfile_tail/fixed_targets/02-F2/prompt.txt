@@ -1,0 +1,52 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <libraw/libraw.h>
+
+extern "C" {
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  LibRaw raw;
+  std::exception *stream_exception = nullptr;
+
+  std::string filename = stream.ConsumeRandomLengthString(1024);
+  int ret = raw.libraw_openfile_tail(&raw, &stream_exception, filename.c_str());
+
+  if (ret == LIBRAW_SUCCESS) {
+    raw.libraw_close(&raw);
+  }
+
+  return 0;
+}
+```
+
+The original code has the following issues:
+
+1. The `stdio.h`, `stdlib.h`, and `string.h` headers are not included in the code, which is necessary for using functions like `printf`, `exit`, and string manipulation functions.
+2. The `libraw.h` header is not wrapped with `extern "C" {}`, which is necessary for the object linking to succeed.
+
+To fix the code, we need to include the necessary headers and wrap the `libraw.h` header with `extern "C" {}`. The corrected code is shown above.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

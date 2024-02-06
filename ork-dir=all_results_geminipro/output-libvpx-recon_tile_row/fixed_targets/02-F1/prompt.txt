@@ -1,0 +1,52 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+#include <stdint.h>
+
+#include "vp9/common/vp9_common.h"
+#include "vp9/common/vp9_entropy.h"
+#include "vp9/common/vp9_scan.h"
+#include "vp9/common/vp9_seg_common.h"
+#include "vp9/common/vp9_tokenenums.h"
+#include "vp9/common/vp9_types_common.h"
+#include "vp9/decoder/vp9_decodframe.h"
+#include "vp9/decoder/vp9_decodemv.h"
+#include "vp9/decoder/vp9_decoder.h"
+#include "vp9/decoder/vp9_dthread.h"
+#include "vp9/decoder/vp9_entropymode.h"
+#include "vp9/decoder/vp9_onyxc_int.h"
+#include "vp9/decoder/vp9_reader.h"
+#include "vp9/decoder/vp9_threading.h"
+#include "vpx_ports/mem_ops.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  struct VP9Decoder decoder;
+  struct VP9LfSyncData lf_sync_data;
+  struct TileWorkerData twd;
+  if (size < sizeof(lf_sync_data)) {
+    return 0;
+  }
+  memmove(&lf_sync_data, data, sizeof(lf_sync_data));
+  data += sizeof(lf_sync_data);
+  size -= sizeof(lf_sync_data);
+  recon_tile_row(&twd, &decoder, 0, 0, &lf_sync_data, 0);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

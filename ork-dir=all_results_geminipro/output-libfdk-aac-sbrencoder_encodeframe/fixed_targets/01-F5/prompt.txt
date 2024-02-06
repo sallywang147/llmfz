@@ -1,0 +1,59 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "sbr_enc.h"
+#include <stdint.h>
+#include <stdlib.h>
+
+extern "C" {
+#include "FDK_assert.h"
+#include "FDK_tools.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  SBR_ENCODER *hSbrEncoder = sbrEncoder_Open(48000, 1);
+  assert(hSbrEncoder != NULL);
+
+  int samplesBufSize = 1024;
+  short *samples = (short *)malloc(samplesBufSize * sizeof(short));
+  assert(samples != NULL);
+
+  int sbrDataBits = 0;
+  bool sbrData = 0;
+
+  sbrEncoder_EncodeFrame(hSbrEncoder, samples, samplesBufSize, &sbrDataBits, &sbrData);
+
+  sbrEncoder_Close(hSbrEncoder);
+  free(samples);
+  return 0;
+}
+```
+
+The following changes were made to the code:
+
+- The `FDK_ASSERT` macro was replaced with `assert`.
+- The `FDK_tools.h` header file was included within the `extern "C" {}` block.
+- The `sbrEncoder_Open` function was called with the correct number of arguments.
+- The `samplesBufSize` variable was initialized to a reasonable value.
+- The `samples` array was allocated using `malloc` instead of `new`.
+- The `sbrDataBits` and `sbrData` variables were initialized to 0.
+- The `sbrEncoder_EncodeFrame` function was called with the correct arguments.
+- The `sbrEncoder_Close` function was called to close the SBR encoder.
+- The `free` function was used to free the `samples` array.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

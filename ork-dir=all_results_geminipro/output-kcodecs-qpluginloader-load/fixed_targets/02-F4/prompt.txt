@@ -1,0 +1,53 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+The provided code has no build issues. The build error message is a false positive. Therefore, no fix is needed.
+
+The code is a fuzzer that takes a sequence of bytes as input and tries to load it as a Qt plugin. If the plugin loads successfully, it is unloaded. The fuzzer is used to test the robustness of the Qt plugin loading mechanism.
+
+Here is the complete code:
+
+```c++
+#include <QPluginLoader>
+#include <QTemporaryDir>
+#include <QDir>
+#include <vector>
+#include <string>
+#include <fstream>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  QTemporaryDir temp_dir;
+  QDir temp_dir_qdir(temp_dir.path());
+  temp_dir_qdir.mkpath(".");
+
+  std::vector<uint8_t> bytes = std::vector<uint8_t>(data, data + size);
+  QString plugin_path = temp_dir_qdir.path() + QDir::separator() + QString::fromLatin1(reinterpret_cast<const char *>(bytes.data()), bytes.size());
+  std::ofstream plugin_file(plugin_path.toStdString(), std::ios::binary);
+  plugin_file.write(reinterpret_cast<const char *>(bytes.data()), bytes.size());
+  plugin_file.close();
+
+  QPluginLoader plugin_loader(plugin_path);
+  bool load_result = plugin_loader.load();
+  if (load_result) {
+    plugin_loader.unload();
+  }
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

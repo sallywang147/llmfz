@@ -1,0 +1,42 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <ixheaacd_hbe_apply_fft_288.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <vector>
+
+extern "C" {
+#include <ixheaacd_hbe_apply_fft_288.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const size_t num_samples = stream.ConsumeIntegralInRange<size_t>(1, 288);
+  std::vector<float> input_samples(num_samples);
+  std::vector<float> output_samples(num_samples);
+  stream.ConsumeFloatingPointArray<float>(input_samples.data(), num_samples);
+  ixheaacd_hbe_apply_fft_288(input_samples.data(), output_samples.data(),
+                             num_samples, 0);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

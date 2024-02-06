@@ -1,0 +1,56 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <janet.h>
+#include <stdint.h>
+#include <string.h>
+
+extern "C" {
+#include <janet/vm.h>
+#include <janet/go.h>
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+
+  /* init Janet */
+  janet_init();
+
+  /* fuzz the parser */
+  JanetEVGenericMessage args;
+  JanetEVGenericMessage ret;
+  args.data = (uint8_t *)data;
+  args.size = size;
+  janet_go_thread_subr(&args, &ret);
+
+  /* cleanup Janet */
+  janet_deinit();
+
+  return 0;
+}
+```
+
+The original code has the following issues:
+
+1. The `janet_init()` and `janet_deinit()` functions are not declared in the `janet.h` header file.
+2. The `janet_go_thread_subr()` function is not declared in the `janet/go.h` header file.
+
+To fix these issues, the `janet.h` and `janet/go.h` header files need to be wrapped with `extern "C" {}`. This is because the `LLVMFuzzerTestOneInput()` function is written in C++, and it needs to be able to call the Janet functions, which are written in C.
+
+The corrected code is shown above.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

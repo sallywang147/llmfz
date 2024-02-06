@@ -1,0 +1,50 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstddef>
+#include <string>
+
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include "spdlog/sinks/ansicolor_sink_mt.h"
+
+extern "C" {
+#include "spdlog/spdlog.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  if (size == 0) {
+    return 0;
+  }
+
+  FuzzedDataProvider stream(data, size);
+
+  std::string pattern = stream.ConsumeRandomLengthString();
+
+  // Fix: Use spdlog::set_pattern instead of logger->set_pattern
+  spdlog::set_pattern(&pattern);
+
+  return 0;
+}
+```
+
+The issue with the original code was that it tried to call `logger->set_pattern`, which is not a valid method for the `spdlog::logger` class. The correct way to set the pattern for a logger is to use the `spdlog::set_pattern` function.
+
+The corrected code uses `spdlog::set_pattern` to set the pattern for the logger, which should resolve the build error.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

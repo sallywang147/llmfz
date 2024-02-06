@@ -1,0 +1,70 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "aacenc_lib.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  struct AACENCODER *hAacEncoder = NULL;
+  struct USER_PARAM config;
+  memset(&config, 0, sizeof(config));
+
+  FuzzedDataProvider stream(data, size);
+  config.codecType = stream.ConsumeIntegral<int>();
+  config.bitRate = stream.ConsumeIntegral<int>();
+  config.nChannels = stream.ConsumeIntegral<int>();
+  config.sampleRate = stream.ConsumeIntegral<int>();
+  config.frameLength = stream.ConsumeIntegral<int>();
+  config.aacParams.profile = stream.ConsumeIntegral<int>();
+  config.aacParams.chanMode = stream.ConsumeIntegral<int>();
+  config.aacParams.quantFrm = stream.ConsumeIntegral<int>();
+  config.aacParams.bitRateMode = stream.ConsumeIntegral<int>();
+  config.aacParams.audioObjectType = stream.ConsumeIntegral<int>();
+  config.aacParams.sbrEnabled = stream.ConsumeIntegral<int>();
+  config.aacParams.psEnable = stream.ConsumeIntegral<int>();
+  config.aacParams.sbrMode = stream.ConsumeIntegral<int>();
+  config.aacParams.sbrRate = stream.ConsumeIntegral<int>();
+  config.aacParams.sbrDelay = stream.ConsumeIntegral<int>();
+  config.aacParams.msMaskPresent = stream.ConsumeIntegral<int>();
+  config.aacParams.msPresent = stream.ConsumeIntegral<int>();
+  config.aacParams.ErAacLsb = stream.ConsumeIntegral<int>();
+  config.aacParams.ErAacBitRate = stream.ConsumeIntegral<int>();
+  config.aacParams.ErAacFrameLength = stream.ConsumeIntegral<int>();
+  config.aacParams.ErAacToolPresent = stream.ConsumeIntegral<int>();
+  config.aacParams.aacSectionDataResilienceFlag = stream.ConsumeIntegral<int>();
+  config.aacParams.aacScalefactorResilienceFlag = stream.ConsumeIntegral<int>();
+  config.aacParams.aacLfeFlag = stream.ConsumeIntegral<int>();
+  config.aacParams.extensionFlag = stream.ConsumeIntegral<int>();
+  config.aacParams.directMapping = stream.ConsumeIntegral<int>();
+  config.aacParams.warpedInfoPresentFlag = stream.ConsumeIntegral<int>();
+  config.aacParams.fillElementFlag = stream.ConsumeIntegral<int>();
+  config.aacParams.isDependentCoding = stream.ConsumeIntegral<int>();
+  config.aacParams.highBandPresentFlag = stream.ConsumeIntegral<int>();
+  config.aacParams.psPresentFlag = stream.ConsumeIntegral<int>();
+  config.aacParams.escapeValue = stream.ConsumeIntegral<int>();
+
+  int init_flags = stream.ConsumeIntegral<int>();
+  int ret = aacEncInit(&hAacEncoder, init_flags, &config);
+  if (ret != AACENC_OK) {
+    return 0;
+  }
+  aacEncEncode(hAacEncoder, NULL, NULL, NULL, NULL);
+  aacEncClose(hAacEncoder);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

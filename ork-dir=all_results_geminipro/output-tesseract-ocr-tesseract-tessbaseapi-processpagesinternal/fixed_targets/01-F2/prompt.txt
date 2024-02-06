@@ -1,0 +1,122 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <allheaders.h>
+#include <tesseract/baseapi.h>
+
+#include <cstdio>   // for printf
+#include <cstdlib>  // for std::getenv, std::setenv
+#include <libgen.h> // for dirname
+#include <string>   // for std::string
+
+#ifndef TESSERACT_FUZZER_WIDTH
+#define TESSERACT_FUZZER_WIDTH 100
+#endif
+
+#ifndef TESSERACT_FUZZER_HEIGHT
+#define TESSERACT_FUZZER_HEIGHT 100
+#endif
+
+class BitReader {
+private:
+  uint8_t const *data;
+  size_t size;
+  size_t shift;
+
+public:
+  BitReader(const uint8_t *data, size_t size) : data(data), size(size), shift(0) {}
+
+  int Read(void) {
+    if (size == 0) {
+      return 0;
+    }
+
+    const int ret = ((*data) >> shift) & 1;
+
+    shift++;
+    if (shift >= 8) {
+      shift = 0;
+      data++;
+      size--;
+    }
+
+    return ret;
+  }
+};
+
+static tesseract::TessBaseAPI *api = nullptr;
+
+extern "C" int LLVMFuzzerInitialize(int * /*pArgc*/, char ***pArgv) {
+  if (std::getenv("TESSDATA_PREFIX") == nullptr) {
+    std::string binary_path = *pArgv[0];
+    const std::string filepath = dirname(&binary_path[0]);
+
+    const std::string tessdata_path = filepath + "/" + "tessdata";
+    if (setenv("TESSDATA_PREFIX", tessdata_path.c_str(), 1) != 0) {
+      printf("Setenv failed\n");
+      std::abort();
+    }
+  }
+
+  api = new tesseract::TessBaseAPI();
+  if (api->Init(nullptr, "eng") != 0) {
+    printf("Cannot initialize API\n");
+    abort();
+  }
+
+  /* Silence output */
+  api->SetVariable("debug_file", "/dev/null");
+
+  return 0;
+}
+
+static PIX *createPix(BitReader &BR, const size_t width, const size_t height) {
+  Pix *pix = pixCreate(width, height, 1);
+
+  if (pix == nullptr) {
+    printf("pix creation failed\n");
+    abort();
+  }
+
+  for (size_t i = 0; i < width; i++) {
+    for (size_t j = 0; j < height; j++) {
+      pixSetPixel(pix, i, j, BR.Read());
+    }
+  }
+
+  return pix;
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  BitReader BR(data, size);
+
+  auto pix = createPix(BR, TESSERACT_FUZZER_WIDTH, TESSERACT_FUZZER_HEIGHT);
+
+  api->SetImage(pix);
+
+  api->ProcessPagesInternal(nullptr, nullptr, 0, nullptr);
+
+  pixDestroy(&pix);
+
+  return 0;
+}
+```
+
+The issue was that the `tesseract` library was not properly included. To fix it, the `extern "C" {}` wrapper was added around the `#include <tesseract/baseapi.h>`. This is necessary because the `tesseract` library is written in C++, and the `LLVMFuzzerTestOneInput` function is written in C. Without the `extern "C" {}` wrapper, the C compiler would not be able to find the `tesseract` library functions.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

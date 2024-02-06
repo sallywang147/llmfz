@@ -1,0 +1,65 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#if defined(_MSC_VER)
+#if !defined(_CRT_SECURE_NO_WARNINGS)
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+#endif
+#include "tinyxml2/tinyxml2.h"
+#include <stddef.h>
+#include <stdint.h>
+#include <string>
+
+#if defined(_MSC_VER) || defined(WIN32)
+#include <crtdbg.h>
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+_CrtMemState startMemState;
+_CrtMemState endMemState;
+#else
+#include <sys/stat.h>
+#include <sys/types.h>
+#endif
+
+using namespace tinyxml2;
+using namespace std;
+
+// Entry point for LibFuzzer.
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  std::string data_string(reinterpret_cast<const char *>(data), size);
+  XMLDocument doc;
+  doc.Parse(data_string.c_str());
+
+  XMLElement* root = doc.FirstChildElement();
+  if (root == nullptr) {
+    return 0;
+  }
+
+  tinyxml2::XMLText* text = root->InsertNewText(data_string.c_str());
+  if (text == nullptr) {
+    return 0;
+  }
+
+  return 0;
+}
+```
+
+The fixed code includes the necessary `#include` directives and declarations for the memory leak detection to work correctly. It also includes the `WIN32_LEAN_AND_MEAN` macro to ensure that the `Windows.h` header is included correctly.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

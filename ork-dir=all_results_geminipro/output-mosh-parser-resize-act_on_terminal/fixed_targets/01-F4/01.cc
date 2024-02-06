@@ -1,0 +1,24 @@
+#include <cstddef>
+#include <cstdint>
+
+extern "C" {
+#include "src/parser/parser.h"
+#include "src/terminal/terminal.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  Terminal::Emulator emu;
+  Parser::Resize resize(&emu);  // Pass the emulator object as an argument
+  for (size_t i = 0; i < size; i++) {
+    resize.act(Parser::UserByte(data[i]));
+  }
+
+  return 0;
+}
+```
+
+The fixed code:
+
+- Includes the necessary C++ standard libraries.
+- Wraps the header file inclusions for the `parser` and `terminal` modules with `extern "C" {}` to ensure C linkage.
+- Creates the `Parser::Resize` object with the `Terminal::Emulator` object as an argument, allowing the `act_on_terminal` method to access the emulator object and perform the intended operations.

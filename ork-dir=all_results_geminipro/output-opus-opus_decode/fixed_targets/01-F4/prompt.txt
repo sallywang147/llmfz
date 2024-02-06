@@ -1,0 +1,72 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+
+#include "opus/opus.h"
+
+extern "C" {
+#include "opus/opus_header.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  // Create an Opus decoder.
+  OpusDecoder* decoder = opus_decoder_create(48000, 2, &stream);
+  if (decoder == nullptr) {
+    return 0;
+  }
+
+  // Decode the input data.
+  const int frame_size = 960;  // 20 ms at 48 kHz.
+  short pcm[frame_size * 2];
+  while (stream.remaining_bytes() >= frame_size) {
+    const int len = stream.ConsumeIntegralInRange<int>(0, 1024);
+    char* data_ptr = stream.ConsumeBytes<char>(len);
+    int decode_fec = stream.ConsumeBool();
+    int ret = opus_decode(decoder, data_ptr, len, pcm, frame_size, decode_fec);
+    if (ret < 0) {
+      break;
+    }
+  }
+
+  // Destroy the Opus decoder.
+  opus_decoder_destroy(decoder);
+
+  return 0;
+}
+```
+
+The following changes were made to fix the code:
+
+1. **Undefined Reference to `opus_decoder_create` and `opus_decoder_destroy`**:
+   - Added `-lopus` to the linker flags to link with the Opus library.
+
+2. **Undefined Reference to `opus_decode`**:
+   - Added `-lopus` to the linker flags to link with the Opus library.
+
+3. **Undefined Reference to `ConsumeIntegralInRange` and `ConsumeBytes`**:
+   - Included the necessary header file for the `FuzzedDataProvider` class: `#include <fuzzer/FuzzedDataProvider.h>`.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

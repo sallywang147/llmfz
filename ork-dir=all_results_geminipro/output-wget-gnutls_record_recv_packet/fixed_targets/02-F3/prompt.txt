@@ -1,0 +1,76 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <vector>
+
+#include <mbedtls/error.h>
+#include <mbedtls/ssl.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  mbedtls_ssl_context ssl;
+  mbedtls_ssl_init(&ssl);
+
+  const int ret = mbedtls_ssl_setup(&ssl, mbedtls_ssl_get_ciphersuite_info(
+                                          MBEDTLS_TLS_1_2_WITH_NULL_NULL));
+  if (ret != 0) {
+    mbedtls_ssl_free(&ssl);
+    return 0;
+  }
+
+  mbedtls_ssl_set_bio(&ssl, nullptr, mbedtls_ssl_send, mbedtls_ssl_recv, nullptr);
+
+  std::vector<uint8_t> output_buffer(MBEDTLS_SSL_MAX_CONTENT_LEN);
+  size_t output_written = 0;
+
+  // Initially, start by feeding the decoder more data.
+  int decode_ret = MBEDTLS_ERR_SSL_WANT_READ;
+  while (decode_ret == MBEDTLS_ERR_SSL_WANT_READ) {
+    if (stream.remaining_bytes() == 0) {
+      break;
+    }
+    const size_t next_size = stream.ConsumeIntegralInRange<size_t>(
+        0,
+        stream.remaining_bytes());
+    auto next_input = stream.ConsumeBytes<unsigned char>(next_size);
+    decode_ret = mbedtls_ssl_write(&ssl, next_input.data(), next_input.size());
+  }
+
+  if (decode_ret != 0) {
+    mbedtls_ssl_free(&ssl);
+    return 0;
+  }
+
+  struct mbuffer_st* packet = nullptr;
+  const size_t bytes_received = mbedtls_ssl_read(&ssl, output_buffer.data(), output_buffer.size());
+  if (bytes_received > 0) {
+    output_written = bytes_received;
+  }
+
+  mbedtls_ssl_free(&ssl);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+The target function `size_t gnutls_record_recv_packet(struct gnutls_session_int * session, struct mbuffer_st ** packet)` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `size_t gnutls_record_recv_packet(struct gnutls_session_int * session, struct mbuffer_st ** packet)` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

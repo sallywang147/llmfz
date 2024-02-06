@@ -1,0 +1,106 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+
+#define PORT 8080
+
+int handle_tcpconn_ev(struct tcp_connection * tcpconn, short ev, int fd_i) {
+  // Handle TCP connection event
+  return 0;
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  // Parse the input data
+
+  // Create a TCP connection
+
+  // Register the TCP connection event handler
+
+  // Start the event loop
+
+  // Handle TCP connection events
+
+  // Close the TCP connection
+
+  return 0;
+}
+
+int main() {
+  // Initialize the fuzzer
+
+  // Start the fuzzer
+
+  return 0;
+}
+```
+
+The fixed code:
+1. Include the necessary header files for the `handle_tcpconn_ev` function.
+2. Call the `handle_tcpconn_ev` function inside the `LLVMFuzzerTestOneInput` function.
+
+The complete fixed code:
+```c++
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+
+#define PORT 8080
+
+int handle_tcpconn_ev(struct tcp_connection * tcpconn, short ev, int fd_i) {
+  // Handle TCP connection event
+  return 0;
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  // Parse the input data
+
+  // Create a TCP connection
+
+  // Register the TCP connection event handler
+
+  // Start the event loop
+
+  handle_tcpconn_ev(NULL, 0, 0);  // Call the handle_tcpconn_ev function
+
+  // Close the TCP connection
+
+  return 0;
+}
+
+int main() {
+  // Initialize the fuzzer
+
+  // Start the fuzzer
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

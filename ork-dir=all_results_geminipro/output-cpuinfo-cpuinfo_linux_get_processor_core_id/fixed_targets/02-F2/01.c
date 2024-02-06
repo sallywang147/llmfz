@@ -1,0 +1,34 @@
+#include <fcntl.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <unistd.h>
+
+#include <linux/api.h>
+#include <x86/linux/api.h>
+
+extern "C" {
+#include <cpuinfo.h>
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  char filename[256];
+  sprintf(filename, "/tmp/libfuzzer.config");
+
+  FILE *fp = fopen(filename, "wb");
+  if (!fp) {
+    return 0;
+  }
+  fwrite(data, size, 1, fp);
+  fclose(fp);
+
+  struct cpuinfo_x86_linux_processor processors[256];
+  cpuinfo_x86_linux_parse_proc_cpuinfo(256, processors);
+
+  int core_id;
+  cpuinfo_linux_get_processor_core_id(0, &core_id);
+
+  unlink(filename);
+  return 0;
+}
+```
+The issue was that the header file `cpuinfo.h` was not properly included. To fix the issue, the header file was wrapped with `extern "C" {}` to ensure that the C compiler can properly link to the symbols defined in the header file.

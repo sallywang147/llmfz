@@ -1,0 +1,227 @@
+<system>
+You are a security testing engineer who wants to write a C++ program to execute all lines in a given function by defining and initializing its parameters in a suitable way before fuzzing the function through <code>LLVMFuzzerTestOneInput</code>.
+
+Carefully study the function signature and its parameters, then follow the example problems and solutions to answer the final problem. YOU MUST call the function to fuzz in the solution.
+
+Try as many variations of these inputs as possible. Do not use a random number generator such as <code>rand()</code>.
+
+Use <code>FuzzedDataProvider</code> to generate these inputs. You MUST declare it in <code>LLVMFuzzerTestOneInput</code>, like this:
+<code>
+FuzzedDataProvider stream(data, size);
+</code>
+
+Include <code>#include <fuzzer/FuzzedDataProvider.h></code> in the solution.
+
+This code shows example of using it:
+<code>
+// Extract integral values
+int int_arg = stream.ConsumeIntegral<int>();
+int int_arg_in_range = stream.ConsumeIntegralInRange(-100, 100);
+bool bool_arg = stream.ConsumeBool();
+
+// Extract floating point values
+float probability = stream.ConsumeProbability();
+double double_arg = stream.ConsumeFloatingPoint<double>();
+double double_arg_in_range = stream.ConsumeFloatingPointInRange(-1.0, 1.0);
+
+// Extract value from predefined set, such as enum or array
+EnumType enum = stream.ConsumeEnum<EnumType>();
+int valid_values = stream.PickValueInArray({FLAG_1, FLAG_2, FLAG_3});
+
+// Extract an array of bytes as a vector. You MUST call <code>.data()</code> to use result as pointer.
+std::vector<uint8_t> bytes = stream.ConsumeBytes<uint8_t>(stream.ConsumeIntegralInRange(0, max_size));
+void *data_ptr = bytes.data();
+std::vector<uint8_t> bytes2 = stream.ConsumeBytes<uint8_t>(requested_size);
+void *data2_ptr = bytes2.data();
+
+// Extract a string. You MUST use <code>.c_str()</code> to use result as pointer
+std::string str = stream.ConsumeBytesAsString(stream.ConsumeIntegralInRange(0, max_size));
+char *ptr = str.c_str();
+std::string str2 = stream.ConsumeBytesAsString(requested_size);
+char *ptr2 = str2.c_str();
+std::string str3 = stream.ConsumeRandomLengthString();
+char *ptr3 = str3.c_str();
+
+// Extract to user defined object
+struct_type_t obj;
+size_t consumed = stream.ConsumeData(&obj, sizeof(obj));
+</code>
+
+There MUST be AT MOST ONE call to <code>ConsumeRemainingBytes</code> to consume remaining input!
+<code>
+FuzzedDataProvider stream(data, size);
+
+std::vector<uint8_t> bytes3 = stream.ConsumeRemainingBytes();
+void *data3_ptr = bytes3.data();
+</code>
+
+All variables used MUST be declared and initialized. Carefully make sure that the variable and argument types in your code match and compiles successfully. Add type casts to make types match.
+
+Do not create new variables with the same names as existing variables.
+WRONG:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  void* data = Foo();
+}
+</code>
+
+EXTREMELY IMPORTANT: If you write code using <code>goto</code>, you MUST MUST also declare all variables BEFORE the <code>goto</code>. Never introduce new variables after the <code>goto</code>.
+WRONG:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int a = bar();
+  if (!some_function()) goto EXIT;
+  Foo b = target_function(data, size);
+  int c = another_func();
+EXIT:
+  return 0;
+}
+</code>
+
+CORRECT:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int a = bar();
+  Foo b;
+  int c;
+
+  if (!some_function()) goto EXIT;
+  b = target_function(data, size);
+  c = another_func()
+EXIT:
+  return 0;
+}
+</code>
+
+If an example provided for the same library includes a unique header file, then it must be included in the solution as well.
+</system>
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+int json_dump_callback(struct json_t * json, func_type * callback, char * data, size_t flags)
+</function header>
+</task>
+
+<solution>
+#include <inttypes.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <sys/types.h>
+
+#include "jansson.h"
+
+static int enable_diags;
+
+#define FUZZ_DEBUG(FMT, ...)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           \
+  if (enable_diags) {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  \
+    fprintf(stderr, FMT, ##__VA_ARGS__);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               \
+    fprintf(stderr, "\n");                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             \
+  }
+
+static int json_dump_counter(const char *buffer, size_t size, void *data) {
+  uint64_t *counter = reinterpret_cast<uint64_t *>(data);
+  *counter += size;
+  return 0;
+}
+
+#define NUM_COMMAND_BYTES (sizeof(size_t) + sizeof(size_t) + 1)
+
+#define FUZZ_DUMP_CALLBACK 0x00
+#define FUZZ_DUMP_STRING 0x01
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  json_error_t error;
+  unsigned char dump_mode;
+
+  // Enable or disable diagnostics based on the FUZZ_VERBOSE environment flag.
+  enable_diags = (getenv("FUZZ_VERBOSE") != NULL);
+
+  FUZZ_DEBUG("Input data length: %zd", size);
+
+  if (size < NUM_COMMAND_BYTES) {
+    return 0;
+  }
+
+  // Use the first sizeof(size_t) bytes as load flags.
+  size_t load_flags = *(const size_t *)data;
+  data += sizeof(size_t);
+
+  FUZZ_DEBUG("load_flags: 0x%zx\n"
+             "& JSON_REJECT_DUPLICATES =  0x%zx\n"
+             "& JSON_DECODE_ANY =         0x%zx\n"
+             "& JSON_DISABLE_EOF_CHECK =  0x%zx\n"
+             "& JSON_DECODE_INT_AS_REAL = 0x%zx\n"
+             "& JSON_ALLOW_NUL =          0x%zx\n",
+             load_flags, load_flags & JSON_REJECT_DUPLICATES, load_flags & JSON_DECODE_ANY, load_flags & JSON_DISABLE_EOF_CHECK, load_flags & JSON_DECODE_INT_AS_REAL, load_flags & JSON_ALLOW_NUL);
+
+  // Use the next sizeof(size_t) bytes as dump flags.
+  size_t dump_flags = *(const size_t *)data;
+  data += sizeof(size_t);
+
+  FUZZ_DEBUG("dump_flags: 0x%zx\n"
+             "& JSON_MAX_INDENT =     0x%zx\n"
+             "& JSON_COMPACT =        0x%zx\n"
+             "& JSON_ENSURE_ASCII =   0x%zx\n"
+             "& JSON_SORT_KEYS =      0x%zx\n"
+             "& JSON_PRESERVE_ORDER = 0x%zx\n"
+             "& JSON_ENCODE_ANY =     0x%zx\n"
+             "& JSON_ESCAPE_SLASH =   0x%zx\n"
+             "& JSON_REAL_PRECISION = 0x%zx\n"
+             "& JSON_EMBED =          0x%zx\n",
+             dump_flags, dump_flags & JSON_MAX_INDENT, dump_flags & JSON_COMPACT, dump_flags & JSON_ENSURE_ASCII, dump_flags & JSON_SORT_KEYS, dump_flags & JSON_PRESERVE_ORDER, dump_flags & JSON_ENCODE_ANY, dump_flags & JSON_ESCAPE_SLASH, ((dump_flags >> 11) & 0x1F) << 11, dump_flags & JSON_EMBED);
+
+  // Use the next byte as the dump mode.
+  dump_mode = data[0];
+  data++;
+
+  FUZZ_DEBUG("dump_mode: 0x%x", (unsigned int)dump_mode);
+
+  // Remove the command bytes from the size total.
+  size -= NUM_COMMAND_BYTES;
+
+  // Attempt to load the remainder of the data with the given load flags.
+  const char *text = reinterpret_cast<const char *>(data);
+  json_t *jobj = json_loadb(text, size, load_flags, &error);
+
+  if (jobj == NULL) {
+    return 0;
+  }
+
+  if (dump_mode & FUZZ_DUMP_STRING) {
+    // Dump as a string. Remove indents so that we don't run out of memory.
+    char *out = json_dumps(jobj, dump_flags & ~JSON_MAX_INDENT);
+    if (out != NULL) {
+      free(out);
+    }
+  } else {
+    // Default is callback mode.
+    //
+    // Attempt to dump the loaded json object with the given dump flags.
+    uint64_t counter = 0;
+
+    json_dump_callback(jobj, json_dump_counter, &counter, dump_flags);
+    FUZZ_DEBUG("Counter function counted %" PRIu64 " bytes.", counter);
+  }
+
+  if (jobj) {
+    json_decref(jobj);
+  }
+
+  return 0;
+}
+
+</solution>
+
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+struct json_t * json_loads(char * string, size_t flags, struct json_error_t * error)
+</function header>
+</task>
+You MUST call <code>
+struct json_t * json_loads(char * string, size_t flags, struct json_error_t * error)
+</code> in your solution!
+
+<solution>

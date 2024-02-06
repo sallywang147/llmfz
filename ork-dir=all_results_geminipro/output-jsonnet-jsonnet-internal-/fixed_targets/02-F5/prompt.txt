@@ -1,0 +1,76 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstddef>
+#include <cstdint>
+#include <cstring>
+#include <string>
+#include <vector>
+
+extern "C" {
+#include "libjsonnet.h"
+}
+
+struct jsonnet::internal::LocationRange {
+  int32_t start_byte;
+  int32_t end_byte;
+};
+
+struct jsonnet::internal::AST {
+  int type;
+  jsonnet::internal::LocationRange range;
+  std::vector<jsonnet::internal::AST *> children;
+};
+
+struct jsonnet::internal::(anonymous namespace)::Interpreter {
+  jsonnet::internal::AST *(*parse_expr)(jsonnet::internal::(anonymous namespace)::Interpreter *interp,
+                                          jsonnet::internal::LocationRange *range,
+                                          std::vector<jsonnet::internal::AST *> *errors);
+};
+
+jsonnet::internal::AST *jsonnet::internal::(jsonnet::internal::(anonymous namespace)::Interpreter *interp,
+                                               jsonnet::internal::LocationRange *range,
+                                               std::vector<jsonnet::internal::AST *> *errors) {
+  return nullptr;
+}
+
+std::string ConvertJsonnetToJson(const std::string &jsonnet) {
+  jsonnet::internal::LocationRange range;
+  range.start_byte = 0;
+  range.end_byte = jsonnet.size();
+  std::vector<jsonnet::internal::AST *> errors;
+  jsonnet::internal::AST *ast =
+      jsonnet::internal::(jsonnet::internal::(anonymous namespace)::Interpreter *)parse_expr(
+          nullptr, &range, &errors);
+
+  std::string json;
+  if (ast != nullptr) {
+    json = "json";
+  }
+
+  jsonnet::internal::AST::free(ast);
+  return json;
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  std::string fuzz_jsonnet(reinterpret_cast<const char *>(data), size);
+  ConvertJsonnetToJson(fuzz_jsonnet);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

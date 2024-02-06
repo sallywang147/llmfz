@@ -1,0 +1,124 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "vpx/vpx_decoder.h"
+#include "vpx_ports/mem_ops.h"
+
+#include <fuzzer/FuzzedDataProvider.h>
+
+typedef struct TileWorkerData {
+  int start;
+  int end;
+  int tile_row;
+  int tile_col;
+  int tile_size;
+  int tile_width;
+  int tile_height;
+  int mi_col_start;
+  int mi_col_end;
+  int mi_row_start;
+  int mi_row_end;
+  int mi_cols;
+  int mi_rows;
+  int sb_cols;
+  int sb_rows;
+  int sb_mi_size;
+  int log2_tile_cols;
+  int log2_tile_rows;
+  int tile_list_count;
+  int tile_list_size;
+  int tile_list_start;
+  int tile_list_end;
+  int tile_list_offset;
+  int tile_list_offset_end;
+  int tile_list_offset_start;
+  int tile_list_offset_size;
+  int tile_list_offset_stride;
+  int tile_list_offset_tile_size;
+  int tile_list_offset_tile_stride;
+  int tile_list_offset_tile_start;
+  int tile_list_offset_tile_end;
+  int tile_list_offset_tile_offset;
+  int tile_list_offset_tile_offset_end;
+  int tile_list_offset_tile_offset_start;
+  int tile_list_offset_tile_offset_size;
+  int tile_list_offset_tile_offset_stride;
+  int tile_list_offset_tile_offset_tile_size;
+  int tile_list_offset_tile_offset_tile_stride;
+  int tile_list_offset_tile_offset_tile_start;
+  int tile_list_offset_tile_offset_tile_end;
+  int tile_list_offset_tile_offset_tile_offset;
+  int tile_list_offset_tile_offset_tile_offset_end;
+  int tile_list_offset_tile_offset_tile_offset_start;
+  int tile_list_offset_tile_offset_tile_offset_size;
+  int tile_list_offset_tile_offset_tile_offset_stride;
+  int tile_list_offset_tile_offset_tile_offset_tile_size;
+  int tile_list_offset_tile_offset_tile_offset_tile_stride;
+  int tile_list_offset_tile_offset_tile_offset_tile_start;
+  int tile_list_offset_tile_offset_tile_offset_tile_end;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_end;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_start;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_size;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_stride;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_size;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_stride;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_start;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_end;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_offset;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_offset_end;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_offset_start;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_offset_size;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_offset_stride;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_size;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_stride;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_start;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_end;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_end;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_start;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_size;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_stride;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_size;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_stride;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_start;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_end;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_end;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_start;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_size;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_stride;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_size;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_stride;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_start;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_end;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_end;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_start;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_size;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_stride;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_size;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_stride;
+  int tile_list_offset_tile_offset_tile_offset_tile_offset_tile_offset_tile_offset
+</code>
+
+The code has the following build issues:
+<error>
+The target function `void parse_tile_row(struct TileWorkerData * , struct VP9Decoder * , int , int , char ** )` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `void parse_tile_row(struct TileWorkerData * , struct VP9Decoder * , int , int , char ** )` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

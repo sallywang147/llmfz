@@ -1,0 +1,57 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+The code has the following issue:
+
+* The `#include` directive for `ivorbisfile.h` needs to be wrapped with `extern "C" {}` for the object linking to succeed.
+
+The corrected code:
+```c++
+#include <cstdint>
+#include <cstdio>
+#include <cstring>
+
+extern "C" {
+#include "ivorbisfile.h"
+}
+
+#define INPUT_LIMIT 16384
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  FILE *f = fmemopen((void *)Data, Size, "r");
+  if (!f) {
+    return 0;
+  }
+  OggVorbis_File vf;
+  char initial[INPUT_LIMIT];
+  size_t ibytes = Size > INPUT_LIMIT ? INPUT_LIMIT : Size;
+  if (fread(initial, 1, ibytes, f) != ibytes) {
+    fclose(f);
+    return 0;
+  }
+  int result = ov_open(f, &vf, initial, ibytes);
+  if (result < 0) {
+    fclose(f);
+    return 0;
+  }
+  ov_clear(&vf);
+  fclose(f);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

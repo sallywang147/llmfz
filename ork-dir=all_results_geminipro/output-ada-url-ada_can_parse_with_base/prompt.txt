@@ -1,0 +1,260 @@
+<system>
+You are a security testing engineer who wants to write a C++ program to execute all lines in a given function by defining and initializing its parameters in a suitable way before fuzzing the function through <code>LLVMFuzzerTestOneInput</code>.
+
+Carefully study the function signature and its parameters, then follow the example problems and solutions to answer the final problem. YOU MUST call the function to fuzz in the solution.
+
+Try as many variations of these inputs as possible. Do not use a random number generator such as <code>rand()</code>.
+
+Use <code>FuzzedDataProvider</code> to generate these inputs. You MUST declare it in <code>LLVMFuzzerTestOneInput</code>, like this:
+<code>
+FuzzedDataProvider stream(data, size);
+</code>
+
+Include <code>#include <fuzzer/FuzzedDataProvider.h></code> in the solution.
+
+This code shows example of using it:
+<code>
+// Extract integral values
+int int_arg = stream.ConsumeIntegral<int>();
+int int_arg_in_range = stream.ConsumeIntegralInRange(-100, 100);
+bool bool_arg = stream.ConsumeBool();
+
+// Extract floating point values
+float probability = stream.ConsumeProbability();
+double double_arg = stream.ConsumeFloatingPoint<double>();
+double double_arg_in_range = stream.ConsumeFloatingPointInRange(-1.0, 1.0);
+
+// Extract value from predefined set, such as enum or array
+EnumType enum = stream.ConsumeEnum<EnumType>();
+int valid_values = stream.PickValueInArray({FLAG_1, FLAG_2, FLAG_3});
+
+// Extract an array of bytes as a vector. You MUST call <code>.data()</code> to use result as pointer.
+std::vector<uint8_t> bytes = stream.ConsumeBytes<uint8_t>(stream.ConsumeIntegralInRange(0, max_size));
+void *data_ptr = bytes.data();
+std::vector<uint8_t> bytes2 = stream.ConsumeBytes<uint8_t>(requested_size);
+void *data2_ptr = bytes2.data();
+
+// Extract a string. You MUST use <code>.c_str()</code> to use result as pointer
+std::string str = stream.ConsumeBytesAsString(stream.ConsumeIntegralInRange(0, max_size));
+char *ptr = str.c_str();
+std::string str2 = stream.ConsumeBytesAsString(requested_size);
+char *ptr2 = str2.c_str();
+std::string str3 = stream.ConsumeRandomLengthString();
+char *ptr3 = str3.c_str();
+
+// Extract to user defined object
+struct_type_t obj;
+size_t consumed = stream.ConsumeData(&obj, sizeof(obj));
+</code>
+
+There MUST be AT MOST ONE call to <code>ConsumeRemainingBytes</code> to consume remaining input!
+<code>
+FuzzedDataProvider stream(data, size);
+
+std::vector<uint8_t> bytes3 = stream.ConsumeRemainingBytes();
+void *data3_ptr = bytes3.data();
+</code>
+
+All variables used MUST be declared and initialized. Carefully make sure that the variable and argument types in your code match and compiles successfully. Add type casts to make types match.
+
+Do not create new variables with the same names as existing variables.
+WRONG:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  void* data = Foo();
+}
+</code>
+
+EXTREMELY IMPORTANT: If you write code using <code>goto</code>, you MUST MUST also declare all variables BEFORE the <code>goto</code>. Never introduce new variables after the <code>goto</code>.
+WRONG:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int a = bar();
+  if (!some_function()) goto EXIT;
+  Foo b = target_function(data, size);
+  int c = another_func();
+EXIT:
+  return 0;
+}
+</code>
+
+CORRECT:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int a = bar();
+  Foo b;
+  int c;
+
+  if (!some_function()) goto EXIT;
+  b = target_function(data, size);
+  c = another_func()
+EXIT:
+  return 0;
+}
+</code>
+
+If an example provided for the same library includes a unique header file, then it must be included in the solution as well.
+</system>
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+bool ada::url_aggregator::set_pathname(struct ada::url_aggregator * this, char * input, size_t )
+</function header>
+</task>
+
+<solution>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <memory>
+#include <string>
+
+#include "ada.cpp"
+#include "ada.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider fdp(data, size);
+  std::string source = fdp.ConsumeRandomLengthString(256);
+  std::string base_source = fdp.ConsumeRandomLengthString(256);
+
+  /**
+   * ada::parse<ada::url>
+   */
+  auto out_url = ada::parse<ada::url>(source);
+
+  if (out_url) {
+    std::string input = fdp.ConsumeRandomLengthString(256);
+    out_url->set_protocol(input);
+    out_url->set_username(input);
+    out_url->set_password(input);
+    out_url->set_hostname(input);
+    out_url->set_host(input);
+    out_url->set_pathname(input);
+    out_url->set_search(input);
+    out_url->set_hash(input);
+    out_url->set_port(input);
+
+    // volatile forces the compiler to store the results without undue
+    // optimizations
+    volatile size_t length = 0;
+
+    // getters
+    length += out_url->get_protocol().size();
+    length += out_url->get_username().size();
+    length += out_url->get_password().size();
+    length += out_url->get_hostname().size();
+    length += out_url->get_host().size();
+    length += out_url->get_pathname().size();
+    length += out_url->get_search().size();
+    length += out_url->get_hash().size();
+    length += out_url->get_origin().size();
+    length += out_url->get_port().size();
+  }
+
+  /**
+   * ada::parse<ada::url_aggregator>
+   */
+  auto out_aggregator = ada::parse<ada::url_aggregator>(source);
+
+  if (out_aggregator) {
+    std::string input = fdp.ConsumeRandomLengthString(256);
+    out_aggregator->set_protocol(input);
+    out_aggregator->set_username(input);
+    out_aggregator->set_password(input);
+    out_aggregator->set_hostname(input);
+    out_aggregator->set_host(input);
+    out_aggregator->set_pathname(input);
+    out_aggregator->set_search(input);
+    out_aggregator->set_hash(input);
+    out_aggregator->set_port(input);
+
+    // volatile forces the compiler to store the results without undue
+    // optimizations
+    volatile size_t length = 0;
+
+    // getters
+    length += out_aggregator->get_protocol().size();
+    length += out_aggregator->get_username().size();
+    length += out_aggregator->get_password().size();
+    length += out_aggregator->get_hostname().size();
+    length += out_aggregator->get_host().size();
+    length += out_aggregator->get_pathname().size();
+    length += out_aggregator->get_search().size();
+    length += out_aggregator->get_hash().size();
+    length += out_aggregator->get_origin().size();
+    length += out_aggregator->get_port().size();
+
+    // clear methods
+    out_aggregator->clear_port();
+    out_aggregator->clear_search();
+    out_aggregator->clear_hash();
+  }
+
+  /**
+   * ada::can_parse
+   */
+  auto base_source_view = std::string_view(base_source.data(), base_source.length());
+  ada::can_parse(source);
+  ada::can_parse(source, &base_source_view);
+
+  /**
+   * ada::idna
+   */
+  ada::idna::to_ascii(source);
+  ada::idna::to_unicode(source);
+
+  /**
+   * Node.js specific
+   */
+  ada::href_from_file(source);
+
+  /**
+   * ada::url_search_params
+   */
+  auto initialized = ada::url_search_params(base_source_view);
+
+  auto search_params = ada::url_search_params();
+  search_params.append(source, base_source);
+  search_params.set(source, base_source);
+  search_params.to_string();
+  if (!search_params.has(base_source)) {
+    search_params.append(base_source, source);
+  }
+  search_params.remove(source);
+  search_params.remove(source, base_source);
+  if (search_params.has(base_source, source)) {
+    search_params.remove(base_source);
+    search_params.remove(base_source, source);
+  }
+
+  auto keys = search_params.get_keys();
+  while (keys.has_next()) {
+    keys.next();
+  }
+
+  auto values = search_params.get_values();
+  while (values.has_next()) {
+    values.next();
+  }
+
+  auto entries = search_params.get_entries();
+  while (entries.has_next()) {
+    entries.next();
+  }
+
+  return 0;
+} // extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+
+</solution>
+
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+bool ada_can_parse_with_base(char * input, size_t input_length, char * base, size_t base_length)
+</function header>
+</task>
+You MUST call <code>
+bool ada_can_parse_with_base(char * input, size_t input_length, char * base, size_t base_length)
+</code> in your solution!
+
+<solution>

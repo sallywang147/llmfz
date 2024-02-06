@@ -1,0 +1,45 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "htmlparser.h"
+
+extern "C" {
+#include "scanentities.h"
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  char *copy = (char *)malloc(size + 1);
+  memcpy(copy, data, size);
+  copy[size] = '\0';
+
+  _scan_entity(copy);
+
+  free(copy);
+  return 0;
+}
+```
+
+The `scanentities.h` header file should include the definition of the `_scan_entity` function.
+
+The `extern "C" {}` block is used to wrap the `#include` directive for the `scanentities.h` header file. This is necessary because the `_scan_entity` function is declared in a C header file, and the C++ compiler needs to be told to look for it in the C standard library.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

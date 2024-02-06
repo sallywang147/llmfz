@@ -1,0 +1,60 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+#include "public/myanmartools.h"
+
+extern "C" {
+#include "myanmartools/ZawgyiUnicodeData.h"
+}
+
+using google_myanmar_tools::GMTZawgyiDetector;
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  // Create a GMTZawgyiDetector object.
+  GMTZawgyiDetector detector;
+
+  // Create a FuzzedDataProvider object to generate random inputs.
+  FuzzedDataProvider stream(data, size);
+
+  // Generate a random string of characters.
+  std::string input_utf8 = stream.ConsumeRemainingBytesAsString();
+
+  // Get the Zawgyi probability for the input string.
+  double probability = GMTGetZawgyiProbabilityWithLength(
+      &detector, input_utf8.c_str(), input_utf8.size());
+
+  // Do something with the probability.
+  (void)probability;
+
+  return 0;
+}
+```
+
+The following changes were made to the code:
+
+* The `const_cast` on the input string was removed.
+* The input string is now passed to the `GMTGetZawgyiProbabilityWithLength` function as a `char *` directly.
+
+These changes fix the build error and allow the code to compile successfully.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

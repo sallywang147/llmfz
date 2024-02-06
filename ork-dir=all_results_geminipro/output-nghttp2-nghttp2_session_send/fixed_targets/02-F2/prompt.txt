@@ -1,0 +1,67 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+extern "C" {
+#include "nghttp2_session.h"
+#include <string.h>
+
+#include "nghttp2_test_helper.h"
+
+void check_session_send(FuzzedDataProvider *data_provider) {
+  nghttp2_session *session;
+  int rv;
+
+  session = nghttp2_session_new();
+  if (session == NULL) {
+    return;
+  }
+
+  /* Create a set of headers seeded with data from the fuzzer */
+  std::vector<uint8_t> bytes = data_provider->ConsumeRemainingBytes();
+  void *data_ptr = bytes.data();
+
+  /* Perform a set of operations with the fuzz data */
+  rv = nghttp2_session_send(session, data_ptr, bytes.size());
+  if (rv < 0) {
+    return;
+  }
+
+  /* Cleanup */
+  nghttp2_session_del(session);
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider data_provider(data, size);
+
+  check_session_send(&data_provider);
+  return 0;
+}
+
+} // extern C
+```
+
+The original code has the following issues:
+
+1. The `nghttp2_session_new` function is not wrapped in `extern "C" {}`. This can cause linker errors when compiling the code.
+2. The `nghttp2_session_del` function is not wrapped in `extern "C" {}`. This can also cause linker errors when compiling the code.
+
+To fix these issues, we need to wrap both functions in `extern "C" {}`. The corrected code is shown above.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

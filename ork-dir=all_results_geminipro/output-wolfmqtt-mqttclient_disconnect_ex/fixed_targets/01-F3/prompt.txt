@@ -1,0 +1,45 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+The issue is that the `MQTTClient.h` header includes the `MQTTClient_public.h` header, which is declared as `extern "C" { }`. This causes the `MqttClient_Disconnect_ex` function to be declared as `extern "C"`, but the function definition in the `MQTTClient.h` header is not declared as `extern "C"`, which results in a linker error.
+
+To fix this issue, the `MQTTClient.h` header needs to be wrapped with `extern "C" { }` as well.
+
+Here is the fixed code:
+
+```c++
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+
+extern "C" {
+#include "MQTTClient.h"
+#include "MQTTClient_public.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  struct _MqttClient client;
+  struct _MqttDisconnect disconnect;
+  int rc = MqttClient_Disconnect_ex(&client, &disconnect);
+  return rc;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

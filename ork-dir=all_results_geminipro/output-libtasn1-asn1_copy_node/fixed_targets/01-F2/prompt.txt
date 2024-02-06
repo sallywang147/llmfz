@@ -1,0 +1,58 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+
+#include "asn1_fuzz.h"
+#include "asn1_parser.h"
+
+extern "C" {
+#include "asn1_copy.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  struct asn1_node_st *dst = asn1_create_node();
+  struct asn1_node_st *src = asn1_create_node();
+
+  const std::string dst_name = stream.ConsumeRemainingBytesAsString();
+  const std::string src_name = stream.ConsumeRemainingBytesAsString();
+
+  asn1_copy_node(dst, const_cast<char*>(dst_name.c_str()), src,
+                 const_cast<char*>(src_name.c_str()));
+
+  asn1_delete_node(dst);
+  asn1_delete_node(src);
+
+  return 0;
+}
+```
+
+The build error is caused by the missing header file `asn1_copy.h`. This header file contains the declaration of the `asn1_copy_node` function, which is used in the code. To fix the error, we need to include this header file in the code.
+
+Since `asn1_copy.h` is a C header file, we need to wrap the `#include` directive with `extern "C" {}` to prevent name mangling. This is because C++ uses name mangling to generate unique names for functions and variables, which can cause problems when linking C and C++ code together.
+
+The corrected code includes the necessary header file and wraps the `#include` directive with `extern "C" {}` to ensure that the code compiles successfully.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

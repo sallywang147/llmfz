@@ -1,0 +1,42 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstdint>
+#include <string>
+
+#define exprtk_enable_range_runtime_checks
+#include "exprtk.hpp"
+
+namespace exprtk { namespace details {
+  template <typename T, typename Op>
+  struct vec_binop_vecvec_node {
+    typedef exprtk::details::expression_node<vec_binop_vecvec_node<T, Op> > node_type;
+
+    static node_type *allocate_rrr(std::allocator *alloc, int *n,
+                                   node_type **a, node_type **b) {
+      return exprtk::details::node_allocator::allocate_rrr<vec_binop_vecvec_node<T, Op> >(alloc, n, a, b);
+    }
+  };
+}}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  exprtk::details::vec_binop_vecvec_node<float, exprtk::details::div_op<float> >::allocate_rrr(nullptr, nullptr, nullptr, nullptr);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+The target function `exprtk::details::expression_node * exprtk::details::expression_node<exprtk::details::vec_binop_vecvec_node<float, exprtk::details::div_op<float> >::value_type>* exprtk::details::node_allocator::allocate_rrr<exprtk::details::vec_binop_vecvec_node<float, exprtk::details::div_op<float> >, exprtk::details::operator_type const, exprtk::details::expression_node<float>*, exprtk::details::expression_node<float>*>(std::allocator * , int * , exprtk::details::expression_node.3444 ** , exprtk::details::expression_node.3444 ** ) const` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `exprtk::details::expression_node * exprtk::details::expression_node<exprtk::details::vec_binop_vecvec_node<float, exprtk::details::div_op<float> >::value_type>* exprtk::details::node_allocator::allocate_rrr<exprtk::details::vec_binop_vecvec_node<float, exprtk::details::div_op<float> >, exprtk::details::operator_type const, exprtk::details::expression_node<float>*, exprtk::details::expression_node<float>*>(std::allocator * , int * , exprtk::details::expression_node.3444 ** , exprtk::details::expression_node.3444 ** ) const` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

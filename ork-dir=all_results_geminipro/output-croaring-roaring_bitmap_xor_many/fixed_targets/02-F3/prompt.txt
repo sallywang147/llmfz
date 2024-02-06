@@ -1,0 +1,50 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <vector>
+
+#include "roaring/roaring.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const size_t bitmap_count = stream.ConsumeIntegral<size_t>();
+  std::vector<roaring_bitmap_t*> bitmaps;
+  for (size_t i = 0; i < bitmap_count; ++i) {
+    const size_t bitmap_size = stream.ConsumeIntegral<size_t>();
+    std::vector<uint32_t> bitmap_data(bitmap_size);
+    stream.ConsumeIntegralVector<uint32_t>(&bitmap_data, bitmap_size);
+    bitmaps.push_back(roaring_bitmap_create());
+    for (auto value : bitmap_data) {
+      roaring_bitmap_add(bitmaps.back(), value);
+    }
+  }
+
+  roaring_bitmap_t* result = roaring_bitmap_xor_many(bitmap_count, bitmaps.data());
+  roaring_bitmap_free(result);
+  for (auto bitmap : bitmaps) {
+    roaring_bitmap_free(bitmap);
+  }
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

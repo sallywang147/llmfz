@@ -1,0 +1,42 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <cstdint>
+#include <cstdlib>
+#include "key_agreement.h" // Include the header file that declares exercise_key_agreement_key
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  const int key = stream.ConsumeIntegral<int>();
+  const int usage = stream.ConsumeIntegral<int>();
+  const int alg = stream.ConsumeIntegral<int>();
+
+  exercise_key_agreement_key(key, usage, alg);
+  return 0;
+}
+```
+
+The issue with the original code was that the function `exercise_key_agreement_key` was being called without being declared or defined. To fix this, the header file that declares this function (`key_agreement.h`) was included.
+
+Additionally, the `#include` directive for the header file was wrapped with `extern "C" {}` to ensure that the function declaration is visible to the linker. This is necessary because the function is defined in a C++ file, and the fuzzer is written in C.
+
+With these changes, the code should compile and run without errors.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

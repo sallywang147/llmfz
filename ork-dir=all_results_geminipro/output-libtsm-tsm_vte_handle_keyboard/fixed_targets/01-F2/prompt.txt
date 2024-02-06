@@ -1,0 +1,47 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+#include "libtsm.h"
+
+// Entry point for LibFuzzer.
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  struct tsm_screen *screen;
+  struct tsm_vte *vte;
+  const int scrollback_size = 200; // frecon use 200
+
+  tsm_screen_new(&screen, NULL, NULL);
+  tsm_screen_set_max_sb(screen, scrollback_size);
+  tsm_vte_new(&vte, screen, NULL, NULL, NULL, NULL);
+  tsm_screen_resize(screen, 80, 24);
+
+  FuzzedDataProvider provider(data, size);
+  while (provider.remaining_bytes() > 0) {
+    int keysym = provider.ConsumeIntegral<int>();
+    int ascii = provider.ConsumeIntegral<int>();
+    int mods = provider.ConsumeIntegral<int>();
+    int unicode = provider.ConsumeIntegral<int>();
+    tsm_vte_handle_keyboard(vte, keysym, ascii, mods, unicode);
+  }
+
+  tsm_vte_unref(vte);
+  tsm_screen_unref(screen);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

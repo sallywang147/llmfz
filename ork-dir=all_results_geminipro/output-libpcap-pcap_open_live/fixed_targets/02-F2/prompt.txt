@@ -1,0 +1,50 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <pcap/pcap.h>
+#include <fuzzer/FuzzedDataProvider.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  // Generate random values for function arguments
+  std::string device = stream.ConsumeRandomLengthString(16);
+  int snaplen = stream.ConsumeIntegralInRange<int>(0, 1024);
+  int promisc = stream.ConsumeBool() ? 1 : 0;
+  int to_ms = stream.ConsumeIntegralInRange<int>(0, 1000);
+  std::string errbuf = stream.ConsumeRandomLengthString(16);
+
+  // Call the function with the generated arguments
+  struct pcap *pcap_handle = pcap_open_live(device.c_str(), snaplen, promisc, to_ms, errbuf.c_str());
+
+  // Close the PCAP handle if it was successfully opened
+  if (pcap_handle != nullptr) {
+    pcap_close(pcap_handle);
+  }
+
+  return 0;
+}
+```
+
+The following changes were made to the code:
+
+- Added `extern "C" {}` around the `#include <pcap/pcap.h>` directive to ensure that the C library functions are properly linked. This is necessary because the `pcap` library is a C library, and the fuzzer is a C++ program.
+
+- Changed the `pcap_open_live()` function call to use `device.c_str()` and `errbuf.c_str()` instead of `device` and `errbuf`. This is necessary because the `pcap_open_live()` function expects C-style strings, and `device` and `errbuf` are C++ strings.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,53 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstdint>
+#include <cstdlib>
+
+#include "skcms.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const size_t profile_size = stream.ConsumeIntegralInRange<size_t>(0, 1000000);
+  const uint8_t* profile_data = stream.ConsumeBytes<uint8_t>(profile_size);
+  skcms_ICCProfile profile;
+  skcms_Parse(&profile, profile_data, profile_size);
+
+  const size_t inv_tf_size = stream.ConsumeIntegralInRange<size_t>(0, 1000000);
+  const uint8_t* inv_tf_data = stream.ConsumeBytes<uint8_t>(inv_tf_size);
+  skcms_TransferFunction inv_tf;
+  skcms_ParseTransferFunction(&inv_tf, inv_tf_data, inv_tf_size);
+
+  bool are_approximate_inverse = skcms_TRCs_AreApproximateInverse(&profile, &inv_tf);
+  return 0;
+}
+```
+
+The original code had a few issues:
+
+1. The function `skcms_TRCs_AreApproximateInverse` returns a boolean, but the return type of the `LLVMFuzzerTestOneInput` function was `int`. This has been fixed by changing the return type to `bool`.
+
+2. The function `skcms_TRCs_AreApproximateInverse` was not defined. This has been fixed by adding the definition of the function to the code.
+
+3. The function `skcms_ParseTransferFunction` was not defined. This has been fixed by adding the definition of the function to the code.
+
+4. The function `skcms_Parse` was not defined. This has been fixed by adding the definition of the function to the code.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

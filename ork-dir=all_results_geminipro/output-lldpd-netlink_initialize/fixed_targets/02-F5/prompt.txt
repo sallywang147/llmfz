@@ -1,0 +1,46 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "../src/daemon/lldpd.h"
+#include "../src/daemon/log.h"
+
+extern "C" {
+#include "../src/daemon/netlink.h"
+}
+
+extern int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  struct lldpd cfg;
+  cfg.g_config.c_mgmt_pattern = NULL;
+  cfg.g_config.c_tx_hold = LLDPD_TX_HOLD;
+
+  // Use `log_register_donothing` instead of `donothing`.
+  log_register_donothing();
+  netlink_initialize(&cfg);
+
+  return 0;
+}
+```
+
+The original code had the following issues:
+
+1. The function `donothing` was not defined.
+2. The function `log_register_donothing` was not defined.
+
+The fixed code uses the function `log_register_donothing` instead of `donothing`. The function `log_register_donothing` is defined in the header file `log.h`.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

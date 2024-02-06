@@ -1,0 +1,93 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <assert.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string>
+#include <sys/socket.h>
+
+#include <fuzzer/FuzzedDataProvider.h>
+
+extern "C" {
+#include "libevent/include/event2/buffer.h"
+#include "libevent/include/event2/bufferevent.h"
+#include "libevent/include/event2/event.h"
+#include "libevent/include/event2/http.h"
+#include "libevent/include/event2/http_struct.h"
+#include "libevent/include/event2/util.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+
+  FuzzedDataProvider data_provider(data, size);
+
+  std::string s1 = data_provider.ConsumeRandomLengthString();
+  size_t int1 = data_provider.ConsumeIntegral<size_t>();
+  size_t int2 = data_provider.ConsumeIntegral<size_t>();
+  size_t int3 = data_provider.ConsumeIntegral<size_t>();
+  size_t int4 = data_provider.ConsumeIntegral<size_t>();
+
+  struct evhttp *http = NULL;
+  struct evhttp_connection *evcon = NULL;
+  struct evhttp_request *req = NULL;
+
+  /*create an http object*/
+  http = evhttp_new(NULL);
+  if (!http) {
+    return 0;
+  }
+
+  /*bind socket*/
+  int ret = evhttp_bind_socket(http, s1.c_str(), int1);
+  assert(ret != -1);
+
+  /*create a connection*/
+  evcon = evhttp_connection_base_new(http, NULL, s1.c_str(), int1);
+  if (!evcon) {
+    goto cleanup;
+  }
+
+  /*create a request*/
+  req = evhttp_request_new(NULL, NULL);
+  if (!req) {
+    goto cleanup;
+  }
+
+  /*send request*/
+  evhttp_connection_send_request(evcon, req, EVHTTP_REQ_GET, "/");
+
+  /*get response*/
+  evhttp_connection_set_timeout(evcon, int2);
+  evhttp_connection_set_max_body_size(evcon, int3);
+  evhttp_connection_set_max_headers_size(evcon, int4);
+
+  evhttp_connection_free(evcon);
+  evhttp_request_free(req);
+
+  /*clean up*/
+cleanup:
+  if (http) {
+    evhttp_free(http);
+  }
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

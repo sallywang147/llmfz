@@ -1,0 +1,46 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+#include <string>
+
+extern "C" {
+#include <sys/socket.h>
+#include <netinet/in.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  struct sockaddr_in6 addr;
+  memset(&addr, 0, sizeof(addr));
+  addr.sin6_family = AF_INET6;
+  addr.sin6_port = htons(80);
+
+  // Fix the issue by replacing `muduo::net::sockets::accept4` with `::accept4`.
+  int fd = ::accept4(0, &addr, nullptr, SOCK_STREAM);
+  if (fd >= 0) {
+    close(fd);
+  }
+  return 0;
+}
+```
+
+The original code uses `muduo::net::sockets::accept4` to accept a connection on a socket. However, this function is not part of the standard C library and is not available in the `sys/socket.h` header. To fix this, we replace `muduo::net::sockets::accept4` with `::accept4`, which is the standard C function for accepting a connection on a socket.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

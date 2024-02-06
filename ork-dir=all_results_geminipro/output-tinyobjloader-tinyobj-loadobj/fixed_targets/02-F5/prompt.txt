@@ -1,0 +1,53 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdarg.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define TINYOBJLOADER_IMPLEMENTATION // define this in only *one* .cc
+
+extern "C" {
+#include "tiny_obj_loader.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  tinyobj::attrib_t attrib;
+  std::vector<tinyobj::shape_t> shapes;
+  std::vector<tinyobj::material_t> materials;
+  std::string warn;
+  std::string err;
+  if (Size < 2) {
+    return 0;
+  }
+  for (size_t i = 0; i < Size - 1; i++) {
+    if (Data[i] == 0) {
+      std::string obj_text(reinterpret_cast<const char *>(Data), i);
+      std::string mtl_text(reinterpret_cast<const char *>(Data + i + 1), Size - i - 1);
+      tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err,
+                       reinterpret_cast<const char *>(obj_text.c_str()),
+                       reinterpret_cast<const char *>(mtl_text.c_str()), true, true); // Change the last argument to true
+      return 0;
+    }
+  }
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

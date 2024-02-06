@@ -1,0 +1,55 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <string>
+#include <vector>
+
+extern "C" {
+#include "asn1_parser2array.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const std::string input_file_name = stream.ConsumeRemainingBytesAsString();
+  const std::string output_file_name = stream.ConsumeRemainingBytesAsString();
+  const std::string vector_name = stream.ConsumeRemainingBytesAsString();
+  const std::string error_desc = stream.ConsumeRemainingBytesAsString();
+
+  char* input_file_name_ptr = const_cast<char*>(input_file_name.c_str());
+  char* output_file_name_ptr = const_cast<char*>(output_file_name.c_str());
+  char* vector_name_ptr = const_cast<char*>(vector_name.c_str());
+  char* error_desc_ptr = const_cast<char*>(error_desc.c_str());
+
+  // Fix: Cast the return value of asn1_parser2array to int
+  return static_cast<int>(asn1_parser2array(input_file_name_ptr, output_file_name_ptr,
+                             vector_name_ptr, error_desc_ptr));
+}
+```
+
+The issue in the code was that the return value of `asn1_parser2array` was not cast to `int`. This caused a compiler error because the function was declared to return an `int`, but the actual return value was a `void*`.
+
+To fix this, the return value of `asn1_parser2array` was cast to `int` using the `static_cast` operator. This ensures that the function returns an `int`, as expected by the compiler.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

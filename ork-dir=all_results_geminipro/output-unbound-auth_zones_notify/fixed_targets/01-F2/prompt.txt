@@ -1,0 +1,62 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "config.h"
+#include "ldns/ldns.h"
+
+extern "C" {
+#include "auth_zones.h"
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  ldns_status status;
+  struct auth_zones *az;
+  struct module_env *env;
+  char *nm;
+  size_t nmlen;
+  short dclass;
+  struct sockaddr_storage *addr;
+  int addrlen;
+  int has_serial;
+  int serial;
+  int *refused;
+
+  status = ldns_init(&env, NULL);
+  if (status != LDNS_STATUS_OK) {
+    return 0;
+  }
+
+  az = auth_zones_create(env);
+  nm = (char *)data;
+  nmlen = size;
+  dclass = 1;
+  addr = NULL;
+  addrlen = 0;
+  has_serial = 0;
+  serial = 0;
+  refused = NULL;
+
+  auth_zones_notify(az, env, nm, nmlen, dclass, addr, addrlen, has_serial, serial, refused);
+
+  auth_zones_free(az);
+  ldns_cleanup(&env);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,58 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "rawspeed/rawspeed.h"
+#include "rawspeed/rawspeed_defines.h"
+#include "rawspeed/rawspeed_exceptions.h"
+#include "rawspeed/rawspeed_image.h"
+#include "rawspeed/rawspeed_types.h"
+
+#include <cassert>
+#include <cstdint>
+#include <cstdio>
+
+namespace rawspeed {
+
+class VC5Decompressor {
+public:
+  void combineFinalLowpassBandsImpl(rawspeed::VC5Decompressor *) const {
+    // This function is empty, but the fuzzer will still exercise the code
+    // path that calls it.
+  }
+};
+
+} // namespace rawspeed
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  assert(data);
+
+  try {
+    const rawspeed::Buffer b(data, rawspeed::implicit_cast<rawspeed::Buffer::size_type>(size));
+    const rawspeed::DataBuffer db(b, rawspeed::Endianness::little);
+    rawspeed::ByteStream bs(db);
+
+    rawspeed::VC5Decompressor decompressor;
+    decompressor.combineFinalLowpassBandsImpl(&decompressor);
+  } catch (const rawspeed::RawspeedException &) {
+    return 0;
+  }
+
+  __builtin_unreachable();
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

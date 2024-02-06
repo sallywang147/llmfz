@@ -1,0 +1,94 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "rd.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "regexp.h"
+
+extern "C" {
+#include "match.h"
+}
+
+int LLVMFuzzerTestOneInput(uint8_t *data, size_t size) {
+  /* wrap random data in a null-terminated string */
+  char *null_terminated = malloc(size + 1);
+  memcpy(null_terminated, data, size);
+  null_terminated[size] = '\0';
+
+  const char *error;
+  Reprog *p = re_regcomp(null_terminated, 0, &error);
+  if (p == NULL) {
+    /* compilation failed */
+    free(null_terminated);
+    return 0;
+  }
+
+  /* create a match context */
+  struct Reinst *pc = re_regtry(p, null_terminated, 0);
+  if (pc == NULL) {
+    /* no match */
+    re_regfree(p);
+    free(null_terminated);
+    return 0;
+  }
+
+  /* create a result buffer */
+  struct Resub out[10];
+
+  /* perform matching */
+  int ret = match(pc, null_terminated, null_terminated, 0, out);
+
+  /* cleanup */
+  re_regfree(p);
+  free(null_terminated);
+
+  return 0;
+}
+
+#if WITH_MAIN
+#include "helpers.h"
+
+int main(int argc, char **argv) {
+  int i;
+  for (i = 1; i < argc; i++) {
+    size_t size;
+    uint8_t *buf = read_file(argv[i], &size);
+    LLVMFuzzerTestOneInput(buf, size);
+    free(buf);
+  }
+}
+#endif
+```
+
+The build error message is:
+
+```
+error: undefined reference to 'match'
+```
+
+This error indicates that the linker cannot find the definition of the `match` function. The `match` function is declared in the `match.h` header file, but it is not defined in any of the source files that are being linked.
+
+To fix this error, you need to add the definition of the `match` function to one of the source files. The definition of the `match` function can be found in the `match.c` source file.
+
+Once you have added the definition of the `match` function to one of the source files, you should be able to build the program without any errors.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

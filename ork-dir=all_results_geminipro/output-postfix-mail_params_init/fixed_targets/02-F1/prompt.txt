@@ -1,0 +1,52 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "mail_params.h"
+
+void mail_params_init() {
+  // Initialize mail_params.
+  mail_params_t *params = mail_params_new();
+  mail_params_free(params);
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  // Initialize mail_params.
+  mail_params_init();
+
+  // Read input data.
+  FuzzedDataProvider provider(data, size);
+  size_t num_params = provider.ConsumeIntegralInRange<size_t>(0, 100);
+  for (size_t i = 0; i < num_params; i++) {
+    size_t param_name_length = provider.ConsumeIntegralInRange<size_t>(0, 100);
+    std::string param_name = provider.ConsumeRandomLengthString(param_name_length);
+    size_t param_value_length = provider.ConsumeIntegralInRange<size_t>(0, 100);
+    std::string param_value = provider.ConsumeRandomLengthString(param_value_length);
+
+    // Set mail parameter.
+    mail_params_set(param_name.c_str(), param_value.c_str());
+  }
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

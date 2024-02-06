@@ -1,0 +1,73 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+#include <string>
+
+extern "C" {
+#include "buf.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const size_t buf_size = stream.ConsumeIntegralInRange<size_t>(1, 1024);
+  struct Buf* buf = buf_new(buf_size);
+  if (buf == nullptr) {
+    return 0;
+  }
+
+  const size_t fmt_size = stream.ConsumeIntegralInRange<size_t>(1, 1024);
+  char* fmt = static_cast<char*>(malloc(fmt_size + 1));  // Fix: Add 1 for null-terminator
+  if (fmt == nullptr) {
+    buf_free(buf);
+    return 0;
+  }
+  stream.ConsumeBytes(fmt, fmt_size);
+  fmt[fmt_size] = '\0';  // Fix: Add null-terminator
+
+  const size_t s_size = stream.ConsumeIntegralInRange<size_t>(1, 1024);
+  char* s = static_cast<char*>(malloc(s_size + 1));  // Fix: Add 1 for null-terminator
+  if (s == nullptr) {
+    buf_free(buf);
+    free(fmt);
+    return 0;
+  }
+  stream.ConsumeBytes(s, s_size);
+  s[s_size] = '\0';  // Fix: Add null-terminator
+
+  buf_prints(buf, fmt, s);
+
+  buf_free(buf);
+  free(fmt);
+  free(s);
+  return 0;
+}
+```
+
+The following changes were made to fix the code:
+
+- **Null-terminator for `fmt` and `s`**: In the original code, the `fmt` and `s` buffers were allocated without adding space for a null-terminator. This could lead to undefined behavior when using these buffers with functions that expect null-terminated strings. To fix this, `fmt_size` and `s_size` are incremented by 1 to accommodate the null-terminator, and the null-terminator is explicitly added to both buffers after consuming bytes from the stream.
+
+With these changes, the code should now compile and run as intended.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,54 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <cmath>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider fdp(data, size);
+  int xdim = fdp.ConsumeIntegral<int>();
+  int ydim = fdp.ConsumeIntegral<int>();
+  bool result = is_legal_2d_block_size(xdim, ydim);
+  return 0;
+}
+
+bool is_legal_2d_block_size(int xdim, int ydim) {
+  // Check if the dimensions are positive.
+  if (xdim <= 0 || ydim <= 0) {
+    return false;
+  }
+
+  // Check if the dimensions are within the allowed range.
+  if (xdim > 1024 || ydim > 1024) {
+    return false;
+  }
+
+  // Check if the dimensions are powers of two.
+  if (std::log2(xdim) != std::floor(std::log2(xdim)) ||
+      std::log2(ydim) != std::floor(std::log2(ydim))) {
+    return false;
+  }
+
+  // The dimensions are legal.
+  return true;
+}
+```
+
+The fixed code checks if the dimensions are powers of two in addition to the previous checks. This is because the block size must be a power of two for the algorithm to work correctly.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

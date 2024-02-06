@@ -1,0 +1,293 @@
+<system>
+You are a security testing engineer who wants to write a C++ program to execute all lines in a given function by defining and initializing its parameters in a suitable way before fuzzing the function through <code>LLVMFuzzerTestOneInput</code>.
+
+Carefully study the function signature and its parameters, then follow the example problems and solutions to answer the final problem. YOU MUST call the function to fuzz in the solution.
+
+Try as many variations of these inputs as possible. Do not use a random number generator such as <code>rand()</code>.
+
+Use <code>FuzzedDataProvider</code> to generate these inputs. You MUST declare it in <code>LLVMFuzzerTestOneInput</code>, like this:
+<code>
+FuzzedDataProvider stream(data, size);
+</code>
+
+Include <code>#include <fuzzer/FuzzedDataProvider.h></code> in the solution.
+
+This code shows example of using it:
+<code>
+// Extract integral values
+int int_arg = stream.ConsumeIntegral<int>();
+int int_arg_in_range = stream.ConsumeIntegralInRange(-100, 100);
+bool bool_arg = stream.ConsumeBool();
+
+// Extract floating point values
+float probability = stream.ConsumeProbability();
+double double_arg = stream.ConsumeFloatingPoint<double>();
+double double_arg_in_range = stream.ConsumeFloatingPointInRange(-1.0, 1.0);
+
+// Extract value from predefined set, such as enum or array
+EnumType enum = stream.ConsumeEnum<EnumType>();
+int valid_values = stream.PickValueInArray({FLAG_1, FLAG_2, FLAG_3});
+
+// Extract an array of bytes as a vector. You MUST call <code>.data()</code> to use result as pointer.
+std::vector<uint8_t> bytes = stream.ConsumeBytes<uint8_t>(stream.ConsumeIntegralInRange(0, max_size));
+void *data_ptr = bytes.data();
+std::vector<uint8_t> bytes2 = stream.ConsumeBytes<uint8_t>(requested_size);
+void *data2_ptr = bytes2.data();
+
+// Extract a string. You MUST use <code>.c_str()</code> to use result as pointer
+std::string str = stream.ConsumeBytesAsString(stream.ConsumeIntegralInRange(0, max_size));
+char *ptr = str.c_str();
+std::string str2 = stream.ConsumeBytesAsString(requested_size);
+char *ptr2 = str2.c_str();
+std::string str3 = stream.ConsumeRandomLengthString();
+char *ptr3 = str3.c_str();
+
+// Extract to user defined object
+struct_type_t obj;
+size_t consumed = stream.ConsumeData(&obj, sizeof(obj));
+</code>
+
+There MUST be AT MOST ONE call to <code>ConsumeRemainingBytes</code> to consume remaining input!
+<code>
+FuzzedDataProvider stream(data, size);
+
+std::vector<uint8_t> bytes3 = stream.ConsumeRemainingBytes();
+void *data3_ptr = bytes3.data();
+</code>
+
+All variables used MUST be declared and initialized. Carefully make sure that the variable and argument types in your code match and compiles successfully. Add type casts to make types match.
+
+Do not create new variables with the same names as existing variables.
+WRONG:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  void* data = Foo();
+}
+</code>
+
+EXTREMELY IMPORTANT: If you write code using <code>goto</code>, you MUST MUST also declare all variables BEFORE the <code>goto</code>. Never introduce new variables after the <code>goto</code>.
+WRONG:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int a = bar();
+  if (!some_function()) goto EXIT;
+  Foo b = target_function(data, size);
+  int c = another_func();
+EXIT:
+  return 0;
+}
+</code>
+
+CORRECT:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int a = bar();
+  Foo b;
+  int c;
+
+  if (!some_function()) goto EXIT;
+  b = target_function(data, size);
+  c = another_func()
+EXIT:
+  return 0;
+}
+</code>
+
+If an example provided for the same library includes a unique header file, then it must be included in the solution as well.
+</system>
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+int vreader_xfr_bytes(struct VReaderStruct * reader, char * send_buf, int send_buf_len, char * receive_buf, int * receive_buf_len)
+</function header>
+</task>
+
+<solution>
+
+#include <libcacard.h>
+#include <stdlib.h>
+
+#include "fuzzer.h"
+
+#define ARGS "db=\"sql:%s\" use_hw=no soft=(,Test,CAC,,cert1,cert2,cert3)"
+#define APDUBufSize 270
+
+static GMainLoop *loop;
+static GThread *thread;
+static guint nreaders;
+static GMutex mutex;
+static GCond cond;
+
+static gpointer events_thread(gpointer arg) {
+  unsigned int reader_id;
+  VEvent *event;
+
+  (void)arg;
+
+  while (1) {
+    event = vevent_wait_next_vevent();
+    if (event->type == VEVENT_LAST) {
+      vevent_delete(event);
+      break;
+    }
+    reader_id = vreader_get_id(event->reader);
+    if (reader_id == VSCARD_UNDEFINED_READER_ID) {
+      g_mutex_lock(&mutex);
+      vreader_set_id(event->reader, nreaders++);
+      g_cond_signal(&cond);
+      g_mutex_unlock(&mutex);
+      reader_id = vreader_get_id(event->reader);
+    }
+    switch (event->type) {
+    case VEVENT_READER_INSERT:
+    case VEVENT_READER_REMOVE:
+    case VEVENT_CARD_INSERT:
+    case VEVENT_CARD_REMOVE:
+      break;
+    case VEVENT_LAST:
+    default:
+      g_warn_if_reached();
+      break;
+    }
+    vevent_delete(event);
+  }
+
+  return NULL;
+}
+
+static void libcacard_init(void) {
+  VCardEmulOptions *command_line_options = NULL;
+  gchar *dbdir = NULL;
+  gchar *args = NULL;
+  VReader *r;
+  VCardEmulError ret;
+
+  /* This will use the test directory when running as test and
+   * and dirname part of argv[0] when running from oss-fuzz */
+  dbdir = g_test_build_filename(G_TEST_DIST, "db", NULL);
+  args = g_strdup_printf(ARGS, dbdir);
+
+  thread = g_thread_new("fuzz/events", events_thread, NULL);
+
+  command_line_options = vcard_emul_options(args);
+  ret = vcard_emul_init(command_line_options);
+  g_assert_cmpint(ret, ==, VCARD_EMUL_OK);
+
+  r = vreader_get_reader_by_name("Test");
+  g_assert_nonnull(r);
+  vreader_free(r); /* get by name ref */
+
+  g_mutex_lock(&mutex);
+  while (nreaders == 0)
+    g_cond_wait(&cond, &mutex);
+  g_mutex_unlock(&mutex);
+
+  g_free(args);
+  g_free(dbdir);
+}
+
+static void libcacard_finalize(void) {
+  VReader *reader = vreader_get_reader_by_id(0);
+
+  /* This actually still generates events ?? */
+  if (reader) /*if /remove didn't run */
+    vreader_remove_reader(reader);
+
+  /* This probably supposed to be a event that terminates the loop */
+  vevent_queue_vevent(vevent_new(VEVENT_LAST, reader, NULL));
+
+  /* join */
+  g_thread_join(thread);
+
+  vreader_free(reader);
+
+  vcard_emul_finalize();
+}
+
+int LLVMFuzzerInitialize(int *argc, char ***argv) {
+  VReader *reader;
+
+  (void)argc;
+
+  g_test_init(argc, argv, NULL);
+
+  loop = g_main_loop_new(NULL, TRUE);
+
+  g_debug("Initializing ...");
+  libcacard_init();
+
+  reader = vreader_get_reader_by_id(0);
+  if (vreader_card_is_present(reader) != VREADER_OK) {
+    g_error("Card inserted but not still not present");
+    return -1;
+  }
+
+  atexit(libcacard_finalize);
+
+  vreader_free(reader);
+  return 0;
+}
+
+/* We require at least 2b for length and 4 bytes for simplest APDU (Case 1) */
+size_t kMinInputLength = 6;
+
+int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  size_t left = Size;
+  uint8_t *data = (uint8_t *)Data;
+  VReader *reader = NULL;
+  int dwRecvLength = APDUBufSize;
+  uint8_t pbRecvBuffer[APDUBufSize];
+
+  if (left < kMinInputLength) {
+    g_debug("Too short input for APDU");
+    return 0;
+  }
+
+  reader = vreader_get_reader_by_id(0);
+  g_assert_nonnull(reader);
+
+  while (left > 0) {
+    VReaderStatus status;
+    size_t data_len;
+
+    /* Interpret the fuzzing data as follows:
+     * 1 byte       length
+     * length bytes data
+     */
+    data_len = (size_t)data[0];
+    data++;
+    left--;
+    data_len = data_len > left ? left : data_len;
+
+    g_debug("Transfering %zu bytes", data_len);
+    status = vreader_xfr_bytes(reader, data, data_len, pbRecvBuffer, &dwRecvLength);
+    if (status != VREADER_OK) {
+      g_debug("Returned %s", status == VREADER_NO_CARD ? "VREADER_NO_CARD" : "VREADER_OUT_OF_MEMORY");
+    }
+    data += data_len;
+    left -= data_len;
+  }
+
+  g_debug("Cleaning up");
+  vreader_free(reader);
+
+  return 0;
+}
+
+/* vim: set ts=4 sw=4 tw=0 noet expandtab: */
+
+</solution>
+
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+int vcard_emul_force_card_insert(struct VReaderStruct * vreader)
+</function header>
+</task>
+You MUST call <code>
+int vcard_emul_force_card_insert(struct VReaderStruct * vreader)
+</code> in your solution!
+
+<solution>

@@ -1,0 +1,46 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <openssl/x509.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider provider(data, size);
+
+  // Choose a random X.509 AC type.
+  int type = provider.ConsumeIntegralInRange<int>(0, 10);
+
+  // Create a va_list to pass to x509_ac_load().
+  va_list args;
+  va_start(args, type);
+
+  // Call x509_ac_load() with the chosen type and va_list.
+  struct x509_ac_t* ac = x509_ac_load(type, &args);
+
+  // Clean up the va_list.
+  va_end(args);
+
+  // Free the X.509 AC context.
+  if (ac != NULL) {
+    x509_ac_free(ac);
+  }
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

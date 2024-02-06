@@ -1,0 +1,84 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <plist/plist.h>
+#include <stdio.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const unsigned char *data, size_t size) {
+  plist_t root_node = NULL;
+  plist_from_openstep(reinterpret_cast<const char *>(data), size, &root_node);
+  if (root_node == NULL) {
+    return 0;
+  }
+
+  FILE *fp = fopen("/dev/null", "w");
+  if (fp == NULL) {
+    plist_free(root_node);
+    return 0;
+  }
+
+  int result = plist_write_to_stream(root_node, fp, PLIST_XML_FORMAT_V1_0, 0);
+  fclose(fp);
+  plist_free(root_node);
+
+  return result;
+}
+```
+The error message is:
+
+```
+error: undefined reference to 'plist_from_openstep'
+error: undefined reference to 'plist_write_to_stream'
+error: undefined reference to 'plist_free'
+```
+
+The reason for these errors is that the header file `plist/plist.h` is not wrapped with `extern "C" {}`. This is necessary because the header file is written in C, and the function `LLVMFuzzerTestOneInput` is written in C++.
+
+To fix the error, we need to wrap the `#include` directive for `plist/plist.h` with `extern "C" {}`. The corrected code is:
+
+```c++
+#include <stdio.h>
+
+extern "C" {
+#include <plist/plist.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const unsigned char *data, size_t size) {
+  plist_t root_node = NULL;
+  plist_from_openstep(reinterpret_cast<const char *>(data), size, &root_node);
+  if (root_node == NULL) {
+    return 0;
+  }
+
+  FILE *fp = fopen("/dev/null", "w");
+  if (fp == NULL) {
+    plist_free(root_node);
+    return 0;
+  }
+
+  int result = plist_write_to_stream(root_node, fp, PLIST_XML_FORMAT_V1_0, 0);
+  fclose(fp);
+  plist_free(root_node);
+
+  return result;
+}
+```
+
+Now, the code should compile and run without errors.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

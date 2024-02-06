@@ -1,0 +1,62 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fcntl.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <unistd.h>
+
+#include <linux/api.h>
+#include <x86/linux/api.h>
+
+extern "C" {
+#include <cpuinfo.h>
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  char filename[256];
+  sprintf(filename, "/tmp/libfuzzer.config");
+
+  FILE *fp = fopen(filename, "wb");
+  if (!fp) {
+    return 0;
+  }
+  fwrite(data, size, 1, fp);
+  fclose(fp);
+
+  struct cpuinfo_x86_linux_processor processors[256];
+  cpuinfo_x86_linux_parse_proc_cpuinfo(256, processors);
+  for (int i = 0; i < 256; i++) {
+    if (processors[i].valid) {
+      cpuinfo_linux_get_processor_max_frequency(processors[i].processor,
+                                                &(processors[i].max_frequency));
+    }
+  }
+
+  unlink(filename);
+  return 0;
+}
+```
+
+The original code had the following issues:
+
+1. The `cpuinfo.h` header was not included with `extern "C" {}`. This caused the linker to be unable to find the definition of the `cpuinfo_x86_linux_parse_proc_cpuinfo` and `cpuinfo_linux_get_processor_max_frequency` functions.
+
+The fixed code includes the `cpuinfo.h` header with `extern "C" {}`, which tells the linker to look for the function definitions in the C language, rather than the C++ language. This allows the linker to find the function definitions and resolve the undefined reference errors.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

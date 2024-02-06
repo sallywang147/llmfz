@@ -1,0 +1,61 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <vector>
+
+#include "planner.h"
+#include "scanner.h"
+
+// Include the necessary header for the import function
+#include "import.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider provider(data, size);
+  planner_s planner;
+  scanner_s scanner;
+
+  // Initialize planner and scanner
+  planner_init(&planner);
+  scanner_init(&scanner);
+
+  // Read fuzzed data into planner
+  size_t bytes_read = 0;
+  while (bytes_read < size) {
+    const size_t next_size = provider.ConsumeIntegralInRange<size_t>(0, size - bytes_read);
+    auto next_input = provider.ConsumeBytes<uint8_t>(next_size);
+    planner_feed(&planner, next_input.data(), next_input.size());
+    bytes_read += next_size;
+  }
+
+  // Call import function
+  import(&planner, &scanner);
+
+  // Cleanup
+  planner_free(&planner);
+  scanner_free(&scanner);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+The target function `int imprt(struct planner_s * ego, struct scanner_s * sc)` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `int imprt(struct planner_s * ego, struct scanner_s * sc)` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

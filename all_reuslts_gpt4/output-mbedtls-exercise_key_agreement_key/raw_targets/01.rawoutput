@@ -1,0 +1,14 @@
+#include <fuzzer/FuzzedDataProvider.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  int key = stream.ConsumeIntegral<int>();
+  int usage = stream.ConsumeIntegral<int>();
+  int alg = stream.ConsumeIntegral<int>();
+
+  exercise_key_agreement_key(key, usage, alg);
+
+  return 0;
+}
+</solution>

@@ -1,0 +1,45 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+#include <stdint.h>
+#include <yara.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int fd = open("/dev/null", O_RDONLY);
+  if (fd < 0)
+    return 0;
+
+  YR_COMPILER *compiler = NULL;
+  if (yr_compiler_create(&compiler) != ERROR_SUCCESS) {
+    close(fd);
+    return 0;
+  }
+
+  write(fd, data, size);
+  lseek(fd, 0, SEEK_SET);
+
+  yr_lex_parse_rules_fd(fd, compiler);
+
+  close(fd);
+  yr_compiler_destroy(compiler);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

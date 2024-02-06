@@ -1,0 +1,62 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <sxClient.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+#include <string>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const size_t pool_size = stream.ConsumeIntegralInRange<size_t>(0, 1024 * 1024);
+  struct sxPool* pool = sxPoolCreate(pool_size, 0);
+  if (pool == nullptr) {
+    return 0;
+  }
+
+  const size_t context_size = stream.ConsumeIntegralInRange<size_t>(0, 1024 * 1024);
+  struct sxContext* context = sxContextCreate(pool, context_size);
+  if (context == nullptr) {
+    sxPoolDestroy(pool);
+    return 0;
+  }
+
+  const size_t path_size = stream.ConsumeIntegralInRange<size_t>(0, 1024);
+  std::string path = stream.ConsumeBytesAsString(path_size);
+
+  const int flags = stream.ConsumeIntegral<int>();
+  const int async = stream.ConsumeIntegral<int>();
+  const size_t message_size = stream.ConsumeIntegralInRange<size_t>(0, 1024);
+  std::string message = stream.ConsumeBytesAsString(message_size);
+
+  int ret = fxRunTestCase(pool, context, const_cast<char*>(path.c_str()), flags, async,
+                          const_cast<char*>(message.c_str()));
+
+  sxContextDestroy(context);
+  sxPoolDestroy(pool);
+  return ret;
+}
+```
+
+The fixed code includes the `sxClient.h` header, which contains the declarations for the `sxPoolCreate`, `sxContextCreate`, `sxContextDestroy`, `sxPoolDestroy`, and `fxRunTestCase` functions. This resolves the undefined reference errors.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

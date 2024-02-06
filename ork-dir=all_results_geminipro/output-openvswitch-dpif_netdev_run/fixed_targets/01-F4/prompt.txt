@@ -1,0 +1,95 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+#include <string>
+
+#include "dpif.h"
+
+extern "C" {
+#include "dpif-netdev.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const size_t dpif_size = stream.ConsumeIntegralInRange<size_t>(
+      sizeof(struct dpif), sizeof(struct dpif) * 2);
+  struct dpif* dpif = reinterpret_cast<struct dpif*>(std::malloc(dpif_size));
+  if (dpif == nullptr) {
+    return 0;
+  }
+  memset(dpif, 0, dpif_size);
+
+  dpif->netdev_run = dpif_netdev_run;
+
+  dpif_netdev_run(dpif);
+
+  std::free(dpif);
+  return 0;
+}
+```
+
+The original code has the following issues:
+
+1. The `dpif_netdev_run` function is declared as `extern "C"`, but its definition is not wrapped in `extern "C" {}`. This causes a linker error because the compiler cannot find the definition of the function.
+2. The `dpif_netdev_run` function is declared to take a `struct dpif*` as its first argument, but the definition of the function takes a `struct dpif_netdev*` as its first argument. This causes a compiler error because the types of the arguments do not match.
+
+To fix these issues, the code can be modified as follows:
+
+```c++
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+#include <string>
+
+#include "dpif.h"
+
+extern "C" {
+#include "dpif-netdev.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const size_t dpif_size = stream.ConsumeIntegralInRange<size_t>(
+      sizeof(struct dpif), sizeof(struct dpif) * 2);
+  struct dpif* dpif = reinterpret_cast<struct dpif*>(std::malloc(dpif_size));
+  if (dpif == nullptr) {
+    return 0;
+  }
+  memset(dpif, 0, dpif_size);
+
+  dpif->netdev_run = dpif_netdev_run;
+
+  dpif_netdev_run(dpif);
+
+  std::free(dpif);
+  return 0;
+}
+```
+
+This code will compile and run without errors.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

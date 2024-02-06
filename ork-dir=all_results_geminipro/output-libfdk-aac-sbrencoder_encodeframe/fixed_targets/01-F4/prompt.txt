@@ -1,0 +1,49 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "sbr_enc.h"
+#include <stdint.h>
+#include <stdlib.h>
+
+extern "C" {
+#include "FDK_assert.h"
+#include "FDK_tools.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  SBR_ENCODER *hSbrEncoder = sbrEncoder_Open(48000, 1);
+  FDK_ASSERT(hSbrEncoder != NULL);
+
+  int samplesBufSize = 1024;
+  short *samples = (short *)malloc(samplesBufSize * sizeof(short));
+  FDK_ASSERT(samples != NULL);
+
+  int sbrDataBits = 0;
+  bool sbrData = 0;
+
+  sbrEncoder_EncodeFrame(hSbrEncoder, samples, samplesBufSize, &sbrDataBits, &sbrData);
+
+  sbrEncoder_Close(hSbrEncoder);
+  free(samples);
+  return 0;
+}
+```
+
+The missing header file `FDK_tools.h` is included.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,50 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <boost/regex.hpp>
+#include <fuzzer/FuzzedDataProvider.h>
+
+extern "C" {
+#include <cstdlib>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  FuzzedDataProvider fuzzed_data(Data, Size);
+  // First value is length of the regex string
+  size_t regex_length = fuzzed_data.ConsumeIntegral<uint8_t>();
+  // Second value is regexp string whose length is `regex_length`
+  std::string regex_string = fuzzed_data.ConsumeBytesAsString(regex_length);
+  try {
+    boost::regex_traits<char, boost::cpp_regex_traits<char> > traits;
+    boost::re_detail_500::basic_regex_parser<char, traits> parser;
+    parser.parse_basic_escape(&parser, regex_string.c_str());
+  } catch (const std::runtime_error &) {
+  }
+  return 0;
+}
+```
+
+The fixed code:
+
+1. Added `#include <boost/regex.hpp>` to include the necessary Boost Regex library.
+2. Added `extern "C" {}` around the `#include <cstdlib>` line to ensure compatibility with C linkage.
+3. Changed `parser.parse_basic_escape(&parser);` to `parser.parse_basic_escape(&parser, regex_string.c_str());` to correctly parse the regular expression string.
+
+With these changes, the code should compile and run as intended.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

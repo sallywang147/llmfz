@@ -1,0 +1,58 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <vector>
+
+#include "7z.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  const size_t srcLen = stream.ConsumeIntegralInRange<size_t>(0, 10000);
+  std::vector<char> src(srcLen);
+  stream.ConsumeBytes<char>(src.data(), srcLen);
+
+  const size_t destLen = stream.ConsumeIntegralInRange<size_t>(0, 10000);
+  std::vector<char> dest(destLen);
+  size_t destLenActual = destLen;
+
+  const int writeEndMark = stream.ConsumeBool();
+
+  ISzAlloc alloc = {nullptr, nullptr};
+  ISzAlloc allocBig = {nullptr, nullptr};
+  ICompressProgress progress = {nullptr, nullptr};
+
+  int ret = LzmaEnc_MemEncode(nullptr, dest.data(), &destLenActual,
+                                    src.data(), srcLen, writeEndMark, &progress,
+                                    &alloc, &allocBig);
+  if (ret != SZ_OK) {
+    return 0;
+  }
+
+  return 0;
+}
+```
+
+The issue was that the `LzmaEnc_MemEncode` function was declared with a return type of `int`, but the definition in the `7z.h` header file has a return type of `SRes`. To fix this, the return type of the `LzmaEnc_MemEncode` function was changed to `SRes`.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

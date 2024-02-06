@@ -1,0 +1,53 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <plist/plist.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string>
+#include <unistd.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const unsigned char *data, size_t size) {
+  plist_t root_node = NULL;
+  plist_from_openstep(reinterpret_cast<const char *>(data), size, &root_node);
+  if (root_node == NULL) {
+    return 0;
+  }
+
+  std::string filename = "/tmp/plist_write_to_file.XXXXXX";
+  int fd = mkstemp(&filename[0]);
+  if (fd == -1) {
+    plist_free(root_node);
+    return 0;
+  }
+  close(fd);
+
+  int format = plist_get_format(root_node);
+  if (format == PLIST_FORMAT_INVALID) {
+    plist_free(root_node);
+    return 0;
+  }
+
+  int options = 0;
+  plist_write_to_file(filename.c_str(), root_node, options); // Added this line
+
+  plist_free(root_node);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

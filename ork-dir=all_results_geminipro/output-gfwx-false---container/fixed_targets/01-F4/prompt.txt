@@ -1,0 +1,50 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+#include <stdint.h>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <fuzzing/types/Container.h>
+
+extern "C" {
+#include <fuzzing/fuzzer_test_common.h>
+}
+
+using namespace fuzzing;
+using namespace fuzzing::types;
+
+// A fuzzer that reads a sequence of characters and stores them in a
+// Container.
+void LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider data_provider(data, size);
+
+  // Create a Container to store the characters.
+  Container<char, true, false> container;
+
+  // Read the characters from the data provider and store them in the
+  // Container.
+  while (data_provider.remaining_bytes() > 0) {
+    char c = data_provider.ConsumeIntegral<char>();
+    container.push_back(c);
+  }
+
+  // Destroy the Container.
+  container.~Container();
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

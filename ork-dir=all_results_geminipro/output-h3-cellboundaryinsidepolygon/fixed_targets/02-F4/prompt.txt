@@ -1,0 +1,78 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "cellBoundaryInsidePolygon.h"
+
+extern "C" {
+#include "cellBoundaryInsidePolygon.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider fdp(data, size);
+
+  // Generate a random GeoPolygon.
+  struct GeoPolygon geoPolygon;
+  geoPolygon.numPoints = fdp.ConsumeIntegralInRange<uint32_t>(0, 100);
+  geoPolygon.points =
+      (struct GeoPoint *)malloc(sizeof(struct GeoPoint) * geoPolygon.numPoints);
+  for (uint32_t i = 0; i < geoPolygon.numPoints; i++) {
+    geoPolygon.points[i].lat = fdp.ConsumeFloat();
+    geoPolygon.points[i].lon = fdp.ConsumeFloat();
+  }
+
+  // Generate a random BBox.
+  struct BBox bbox;
+  bbox.minLat = fdp.ConsumeFloat();
+  bbox.minLon = fdp.ConsumeFloat();
+  bbox.maxLat = fdp.ConsumeFloat();
+  bbox.maxLon = fdp.ConsumeFloat();
+
+  // Generate a random CellBoundary.
+  struct CellBoundary boundary;
+  boundary.numPoints = fdp.ConsumeIntegralInRange<uint32_t>(0, 100);
+  boundary.points =
+      (struct GeoPoint *)malloc(sizeof(struct GeoPoint) * boundary.numPoints);
+  for (uint32_t i = 0; i < boundary.numPoints; i++) {
+    boundary.points[i].lat = fdp.ConsumeFloat();
+    boundary.points[i].lon = fdp.ConsumeFloat();
+  }
+
+  // Generate a random BBox for the CellBoundary.
+  struct BBox boundaryBBox;
+  boundaryBBox.minLat = fdp.ConsumeFloat();
+  boundaryBBox.minLon = fdp.ConsumeFloat();
+  boundaryBBox.maxLat = fdp.ConsumeFloat();
+  boundaryBBox.maxLon = fdp.ConsumeFloat();
+
+  // Call the function under test.
+  bool result = cellBoundaryInsidePolygon(&geoPolygon, &bbox, &boundary,
+                                          &boundaryBBox);
+
+  // Free the allocated memory.
+  free(geoPolygon.points);
+  free(boundary.points);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

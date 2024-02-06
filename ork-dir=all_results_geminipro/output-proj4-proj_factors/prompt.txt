@@ -1,0 +1,281 @@
+<system>
+You are a security testing engineer who wants to write a C++ program to execute all lines in a given function by defining and initializing its parameters in a suitable way before fuzzing the function through <code>LLVMFuzzerTestOneInput</code>.
+
+Carefully study the function signature and its parameters, then follow the example problems and solutions to answer the final problem. YOU MUST call the function to fuzz in the solution.
+
+Try as many variations of these inputs as possible. Do not use a random number generator such as <code>rand()</code>.
+
+Use <code>FuzzedDataProvider</code> to generate these inputs. You MUST declare it in <code>LLVMFuzzerTestOneInput</code>, like this:
+<code>
+FuzzedDataProvider stream(data, size);
+</code>
+
+Include <code>#include <fuzzer/FuzzedDataProvider.h></code> in the solution.
+
+This code shows example of using it:
+<code>
+// Extract integral values
+int int_arg = stream.ConsumeIntegral<int>();
+int int_arg_in_range = stream.ConsumeIntegralInRange(-100, 100);
+bool bool_arg = stream.ConsumeBool();
+
+// Extract floating point values
+float probability = stream.ConsumeProbability();
+double double_arg = stream.ConsumeFloatingPoint<double>();
+double double_arg_in_range = stream.ConsumeFloatingPointInRange(-1.0, 1.0);
+
+// Extract value from predefined set, such as enum or array
+EnumType enum = stream.ConsumeEnum<EnumType>();
+int valid_values = stream.PickValueInArray({FLAG_1, FLAG_2, FLAG_3});
+
+// Extract an array of bytes as a vector. You MUST call <code>.data()</code> to use result as pointer.
+std::vector<uint8_t> bytes = stream.ConsumeBytes<uint8_t>(stream.ConsumeIntegralInRange(0, max_size));
+void *data_ptr = bytes.data();
+std::vector<uint8_t> bytes2 = stream.ConsumeBytes<uint8_t>(requested_size);
+void *data2_ptr = bytes2.data();
+
+// Extract a string. You MUST use <code>.c_str()</code> to use result as pointer
+std::string str = stream.ConsumeBytesAsString(stream.ConsumeIntegralInRange(0, max_size));
+char *ptr = str.c_str();
+std::string str2 = stream.ConsumeBytesAsString(requested_size);
+char *ptr2 = str2.c_str();
+std::string str3 = stream.ConsumeRandomLengthString();
+char *ptr3 = str3.c_str();
+
+// Extract to user defined object
+struct_type_t obj;
+size_t consumed = stream.ConsumeData(&obj, sizeof(obj));
+</code>
+
+There MUST be AT MOST ONE call to <code>ConsumeRemainingBytes</code> to consume remaining input!
+<code>
+FuzzedDataProvider stream(data, size);
+
+std::vector<uint8_t> bytes3 = stream.ConsumeRemainingBytes();
+void *data3_ptr = bytes3.data();
+</code>
+
+All variables used MUST be declared and initialized. Carefully make sure that the variable and argument types in your code match and compiles successfully. Add type casts to make types match.
+
+Do not create new variables with the same names as existing variables.
+WRONG:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  void* data = Foo();
+}
+</code>
+
+EXTREMELY IMPORTANT: If you write code using <code>goto</code>, you MUST MUST also declare all variables BEFORE the <code>goto</code>. Never introduce new variables after the <code>goto</code>.
+WRONG:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int a = bar();
+  if (!some_function()) goto EXIT;
+  Foo b = target_function(data, size);
+  int c = another_func();
+EXIT:
+  return 0;
+}
+</code>
+
+CORRECT:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int a = bar();
+  Foo b;
+  int c;
+
+  if (!some_function()) goto EXIT;
+  b = target_function(data, size);
+  c = another_func()
+EXIT:
+  return 0;
+}
+</code>
+
+If an example provided for the same library includes a unique header file, then it must be included in the solution as well.
+</system>
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+struct PJconsts * proj_create_crs_to_crs(struct pj_ctx * , char * , char * , struct PJ_AREA * )
+</function header>
+</task>
+
+<solution>
+
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/types.h>
+#include <unistd.h>
+
+#include "proj.h"
+
+/* Standalone build:
+g++ -g -std=c++11 proj_crs_to_crs_fuzzer.cpp -o proj_crs_to_crs_fuzzer
+-fvisibility=hidden -DSTANDALONE ../../build/lib/libproj.a -lpthread -lsqlite3
+-I../../src -I../../include
+*/
+
+extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv);
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *buf, size_t len);
+
+int LLVMFuzzerInitialize(int * /*argc*/, char ***argv) {
+  const char *argv0 = (*argv)[0];
+  char *path = strdup(argv0);
+  char *lastslash = strrchr(path, '/');
+  if (lastslash) {
+    *lastslash = '\0';
+    setenv("PROJ_DATA", path, 1);
+  } else {
+    setenv("PROJ_DATA", ".", 1);
+  }
+  free(path);
+  return 0;
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *buf, size_t len) {
+  if (len > 1000) {
+#ifdef STANDALONE
+    fprintf(stderr, "Input too large\n");
+#endif
+    return -1;
+  }
+
+  /* We expect the blob to be 2 lines: */
+  /* source_string\ndestination_string */
+  char *buf_dup = (char *)malloc(len + 1);
+  memcpy(buf_dup, buf, len);
+  buf_dup[len] = 0;
+  char *first_line = buf_dup;
+  char *first_newline = strchr(first_line, '\n');
+  if (!first_newline) {
+    free(buf_dup);
+    return -1;
+  }
+  first_newline[0] = 0;
+  char *second_line = first_newline + 1;
+
+#ifdef STANDALONE
+  fprintf(stderr, "src=%s\n", first_line);
+  fprintf(stderr, "dst=%s\n", second_line);
+#endif
+
+  proj_destroy(proj_create_crs_to_crs(nullptr, first_line, second_line, nullptr));
+
+  free(buf_dup);
+  proj_cleanup();
+  return 0;
+}
+
+#ifdef STANDALONE
+
+int main(int argc, char *argv[]) {
+  if (argc < 2) {
+    const char str[] = "+proj=longlat +datum=WGS84 +nodefs\n+proj=longlat "
+                       "+datum=WGS84 +nodefs";
+    int ret = LLVMFuzzerTestOneInput((const uint8_t *)(str), sizeof(str) - 1);
+    if (ret)
+      return ret;
+
+    return 0;
+  } else {
+    int nRet = 0;
+    void *buf = NULL;
+    int nLen = 0;
+    FILE *f = fopen(argv[1], "rb");
+    if (!f) {
+      fprintf(stderr, "%s does not exist.\n", argv[1]);
+      exit(1);
+    }
+    fseek(f, 0, SEEK_END);
+    nLen = (int)ftell(f);
+    fseek(f, 0, SEEK_SET);
+    buf = malloc(nLen);
+    if (!buf) {
+      fprintf(stderr, "malloc failed.\n");
+      fclose(f);
+      exit(1);
+    }
+    if (fread(buf, nLen, 1, f) != 1) {
+      fprintf(stderr, "fread failed.\n");
+      fclose(f);
+      free(buf);
+      exit(1);
+    }
+    fclose(f);
+    nRet = LLVMFuzzerTestOneInput((const uint8_t *)(buf), nLen);
+    free(buf);
+    return nRet;
+  }
+}
+
+#endif // STANDALONE
+
+</solution>
+
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+BGD_DECLARE(void) gdImageString (gdImagePtr im, gdFontPtr f, int x, int y, unsigned char *s, int color)
+</function header>
+</task>
+
+<solution>
+
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+#include "gd.h"
+#include "gdfontg.h"
+#include "gdfontl.h"
+#include "gdfontmb.h"
+#include "gdfonts.h"
+#include "gdfontt.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const uint8_t slate_width = stream.ConsumeIntegral<uint8_t>();
+  const uint8_t slate_height = stream.ConsumeIntegral<uint8_t>();
+  gdImagePtr slate_image = gdImageCreateTrueColor(slate_width, slate_height);
+  if (slate_image == nullptr) {
+    return 0;
+  }
+
+  const int x_position = stream.ConsumeIntegral<int>();
+  const int y_position = stream.ConsumeIntegral<int>();
+  const int text_color = stream.ConsumeIntegral<int>();
+  const gdFontPtr font_ptr = stream.PickValueInArray(
+      {gdFontGetGiant(), gdFontGetLarge(), gdFontGetMediumBold(),
+       gdFontGetSmall(), gdFontGetTiny()});
+  const std::string text = stream.ConsumeRemainingBytesAsString();
+
+  gdImageString(slate_image, font_ptr, x_position, y_position,
+                reinterpret_cast<uint8_t*>(const_cast<char*>(text.c_str())),
+                text_color);
+  gdImageDestroy(slate_image);
+  return 0;
+}
+</solution>
+
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+void proj_factors(struct P5_FACTORS * , struct PJconsts * lp, union.PJ_COORD * )
+</function header>
+</task>
+You MUST call <code>
+void proj_factors(struct P5_FACTORS * , struct PJconsts * lp, union.PJ_COORD * )
+</code> in your solution!
+
+<solution>

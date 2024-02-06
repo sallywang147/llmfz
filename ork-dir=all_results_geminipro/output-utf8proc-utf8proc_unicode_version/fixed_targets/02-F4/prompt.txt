@@ -1,0 +1,31 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+The provided code has no errors. The build issue is most likely caused by an incorrect compiler invocation or a missing library. Make sure that the compiler is properly configured and that the necessary libraries are linked.
+
+If you are using a compiler like `clang` or `gcc`, you may need to link the `utf8proc` library explicitly. This can be done by adding the `-lutf8proc` flag to the compiler command. For example:
+
+```
+clang++ -std=c++11 -I/path/to/utf8proc/include -L/path/to/utf8proc/lib -lutf8proc main.cpp -o main
+```
+
+Make sure to replace `/path/to/utf8proc/include` and `/path/to/utf8proc/lib` with the actual paths to the `utf8proc` header files and library.
+
+If you are using a different compiler, refer to its documentation for instructions on how to link external libraries.
+</code>
+
+The code has the following build issues:
+<error>
+The target function `char * utf8proc_unicode_version()` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `char * utf8proc_unicode_version()` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

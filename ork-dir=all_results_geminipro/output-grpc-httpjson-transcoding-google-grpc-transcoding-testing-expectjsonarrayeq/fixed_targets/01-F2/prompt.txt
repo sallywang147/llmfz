@@ -1,0 +1,61 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "grpc_transcoding/testing/matchers.h"
+
+#include <cstddef>
+#include <cstdint>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <string>
+
+namespace google {
+namespace grpc {
+namespace transcoding {
+namespace testing {
+namespace {
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider provider(data, size);
+
+  // Generate two JSON strings.
+  const std::string json1 = provider.ConsumeRandomLengthString(100);
+  const std::string json2 = provider.ConsumeRandomLengthString(100);
+
+  // Check if the two JSON strings are equal.
+  bool result = ExpectJsonArrayEq(&json1, &json2);
+
+  // Return 0 to indicate success.
+  return 0;
+}
+} // namespace
+} // namespace testing
+} // namespace transcoding
+} // namespace grpc
+} // namespace google
+```
+
+The original code has the following issues:
+
+1. The header `grpc_transcoding/testing/matchers.h` is not wrapped with `extern "C" {}`. This is necessary because the header contains C++ code that needs to be compiled as C code for the fuzzer to work.
+2. The function `ExpectJsonArrayEq` is not defined. This function is defined in the header `grpc_transcoding/testing/matchers.h`, but the header is not included in the code.
+
+To fix the code, we need to wrap the header `grpc_transcoding/testing/matchers.h` with `extern "C" {}` and include the header in the code. We also need to define the function `ExpectJsonArrayEq`.
+
+The fixed code is shown above.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

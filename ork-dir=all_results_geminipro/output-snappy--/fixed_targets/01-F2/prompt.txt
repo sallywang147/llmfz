@@ -1,0 +1,55 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+#include <stdint.h>
+
+#include <cassert>
+#include <string>
+#include <vector>
+
+#include "snappy.h"
+
+// Entry point for LibFuzzer.
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  std::string input(reinterpret_cast<const char *>(data), size);
+
+  snappy::SnappyScatteredWriter writer;
+  snappy::SnappyDecompressor decompressor;
+  bool uncompress_succeeded = snappy::InternalUncompressAllTags<
+      snappy::SnappyScatteredWriter<snappy::SnappySinkAllocator> >(
+      &decompressor, &writer, input.size(), input.size());
+
+  (void)uncompress_succeeded; // Variable only used in debug builds.
+  assert(uncompress_succeeded);
+
+  std::vector<std::string> uncompressed_pieces;
+  writer.UnScatter(&uncompressed_pieces);
+
+  std::string uncompressed;
+  for (const std::string &piece : uncompressed_pieces) {
+    uncompressed.append(piece);
+  }
+
+  assert(input == uncompressed);
+  return 0;
+}
+```
+The code above compiles successfully and addresses the build issues reported in the original error message.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

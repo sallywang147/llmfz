@@ -1,0 +1,52 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "htmlparser.h"
+
+extern "C" {
+#include "scanentities.h"
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  char *copy = (char *)malloc(size + 1);
+  memcpy(copy, data, size);
+  copy[size] = '\0';
+
+  _scan_entity(copy);  // Fix: call _scan_entity instead of scan_entity
+
+  free(copy);
+  return 0;
+}
+```
+
+The fix is to change `scan_entity` to `_scan_entity` in the call to the function. This is because the function is declared with a leading underscore in the `scanentities.h` header file, which indicates that it is a private function.
+
+The full explanation of the fix is as follows:
+
+* The original code calls the `scan_entity` function, but this function is not declared in any of the included header files.
+* The `scanentities.h` header file includes the declaration of the `_scan_entity` function, which is the private version of the `scan_entity` function.
+* To call the `_scan_entity` function from C++, it is necessary to use the `extern "C"` block to wrap the `#include` directive for the `scanentities.h` header file. This tells the C++ compiler to look for the `_scan_entity` function in the C standard library.
+* The `_scan_entity` function is declared with a leading underscore in the `scanentities.h` header file, which indicates that it is a private function. This means that it is not intended to be called from outside of the `scanentities.h` module. However, it is still possible to call the function from C++ by using the `extern "C"` block.
+
+By making the above changes, the code should now compile and run correctly.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,53 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#ifdef __cplusplus
+extern "C" {
+#endif
+#define STB_IMAGE_IMPLEMENTATION
+#include "../stb_image.h"
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int x, y, channels;
+  struct stbi__context s;
+  stbi__start_mem(&s, data, size);
+
+  if (!stbi__jpeg_load_from_memory(&s, &x, &y, &channels, 4))
+    return 0;
+
+  /* exit if the image is larger than ~80MB */
+  if (y && x > (80000000 / 4) / y)
+    return 0;
+
+  unsigned char *img = stbi__load_from_memory(&s, &x, &y, &channels, 4);
+
+  stbi_image_free(img);
+
+  return 0;
+}
+
+#ifdef __cplusplus
+}
+#endif
+```
+
+In this code, the issue was that `stbi_image_free` was not called to free the allocated memory for the image data. This could lead to memory leaks and potential crashes.
+
+To fix this, `stbi_image_free` was added to free the allocated memory after the image data is no longer needed.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

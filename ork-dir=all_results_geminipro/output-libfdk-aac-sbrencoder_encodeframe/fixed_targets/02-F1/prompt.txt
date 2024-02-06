@@ -1,0 +1,48 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "sbr_enc.h"
+#include <stdint.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  HANDLE_SBRENCODER hSbrEncoder = NULL;
+  INT16 *samples = NULL;
+  INT32 samplesBufSize = 0;
+  INT32 *sbrDataBits = NULL;
+  INT8 sbrData = 0;
+
+  hSbrEncoder = sbrEncoder_Open();
+  FDK_ASSERT(hSbrEncoder != NULL);
+
+  const uint8_t *start = Data;
+  UINT valid, buffer_size;
+
+  do {
+    valid = buffer_size = Data + Size - start;
+    samplesBufSize = valid / 2;
+    samples = (INT16 *)start;
+    start += buffer_size - valid;
+    sbrEncoder_EncodeFrame(hSbrEncoder, samples, samplesBufSize, &sbrDataBits, sbrData);
+  } while (valid > 0);
+
+  sbrEncoder_Close(hSbrEncoder);
+  hSbrEncoder = NULL;
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

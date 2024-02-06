@@ -1,0 +1,43 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstdint>
+#include <cstring>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <phmap/phmap.h>
+
+using namespace phmap::priv;
+
+extern "C" {
+#include <string.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider fuzzed_data(data, size);
+  const size_t capacity = fuzzed_data.ConsumeIntegralInRange<size_t>(0, 10000);
+  char *ctrl = new char[capacity];
+  memset(ctrl, 'd', capacity);
+  ConvertDeletedToEmptyAndFullToDeleted(ctrl, capacity);
+  delete[] ctrl;
+  return 0;
+}
+```
+
+In this fixed code, `memset` is used to initialize the `ctrl` array with 'd' characters. This ensures that all elements in the array are initialized, which is necessary for the `ConvertDeletedToEmptyAndFullToDeleted` function to work correctly.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,87 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+#include "ldns/ldns.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const std::string domain_name = stream.ConsumeRemainingBytesAsString();
+  ldns_view* view = ldns_view_new(ldns_resolver_new());
+  if (view == nullptr) {
+    return 0;
+  }
+  ldns_zone* zone = ldns_zone_new(domain_name.c_str(), ldns_rr_class_IN);
+  if (zone == nullptr) {
+    ldns_view_free(view);
+    return 0;
+  }
+  ldns_view_add_zone(view, zone);
+  const bool value = stream.ConsumeBool();
+  ldns_view_freezezones(view, value);
+  ldns_zone_free(zone);
+  ldns_view_free(view);
+  return 0;
+}
+```
+
+The only issue with the code is that the function `dns_view_freezezones` is not defined. To fix this, one needs to include the header file `ldns/dns.h` which contains the declaration of this function.
+
+The corrected code with the necessary header file included is given below:
+
+```c++
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+#include "ldns/ldns.h"
+#include "ldns/dns.h" // Include the header file for dns_view_freezezones
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const std::string domain_name = stream.ConsumeRemainingBytesAsString();
+  ldns_view* view = ldns_view_new(ldns_resolver_new());
+  if (view == nullptr) {
+    return 0;
+  }
+  ldns_zone* zone = ldns_zone_new(domain_name.c_str(), ldns_rr_class_IN);
+  if (zone == nullptr) {
+    ldns_view_free(view);
+    return 0;
+  }
+  ldns_view_add_zone(view, zone);
+  const bool value = stream.ConsumeBool();
+  ldns_view_freezezones(view, value); // Call the dns_view_freezezones function
+  ldns_zone_free(zone);
+  ldns_view_free(view);
+  return 0;
+}
+```
+
+With this change, the code should compile and run without errors.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

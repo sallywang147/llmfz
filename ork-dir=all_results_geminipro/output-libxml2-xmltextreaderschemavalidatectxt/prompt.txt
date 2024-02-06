@@ -1,0 +1,333 @@
+<system>
+You are a security testing engineer who wants to write a C++ program to execute all lines in a given function by defining and initializing its parameters in a suitable way before fuzzing the function through <code>LLVMFuzzerTestOneInput</code>.
+
+Carefully study the function signature and its parameters, then follow the example problems and solutions to answer the final problem. YOU MUST call the function to fuzz in the solution.
+
+Try as many variations of these inputs as possible. Do not use a random number generator such as <code>rand()</code>.
+
+Use <code>FuzzedDataProvider</code> to generate these inputs. You MUST declare it in <code>LLVMFuzzerTestOneInput</code>, like this:
+<code>
+FuzzedDataProvider stream(data, size);
+</code>
+
+Include <code>#include <fuzzer/FuzzedDataProvider.h></code> in the solution.
+
+This code shows example of using it:
+<code>
+// Extract integral values
+int int_arg = stream.ConsumeIntegral<int>();
+int int_arg_in_range = stream.ConsumeIntegralInRange(-100, 100);
+bool bool_arg = stream.ConsumeBool();
+
+// Extract floating point values
+float probability = stream.ConsumeProbability();
+double double_arg = stream.ConsumeFloatingPoint<double>();
+double double_arg_in_range = stream.ConsumeFloatingPointInRange(-1.0, 1.0);
+
+// Extract value from predefined set, such as enum or array
+EnumType enum = stream.ConsumeEnum<EnumType>();
+int valid_values = stream.PickValueInArray({FLAG_1, FLAG_2, FLAG_3});
+
+// Extract an array of bytes as a vector. You MUST call <code>.data()</code> to use result as pointer.
+std::vector<uint8_t> bytes = stream.ConsumeBytes<uint8_t>(stream.ConsumeIntegralInRange(0, max_size));
+void *data_ptr = bytes.data();
+std::vector<uint8_t> bytes2 = stream.ConsumeBytes<uint8_t>(requested_size);
+void *data2_ptr = bytes2.data();
+
+// Extract a string. You MUST use <code>.c_str()</code> to use result as pointer
+std::string str = stream.ConsumeBytesAsString(stream.ConsumeIntegralInRange(0, max_size));
+char *ptr = str.c_str();
+std::string str2 = stream.ConsumeBytesAsString(requested_size);
+char *ptr2 = str2.c_str();
+std::string str3 = stream.ConsumeRandomLengthString();
+char *ptr3 = str3.c_str();
+
+// Extract to user defined object
+struct_type_t obj;
+size_t consumed = stream.ConsumeData(&obj, sizeof(obj));
+</code>
+
+There MUST be AT MOST ONE call to <code>ConsumeRemainingBytes</code> to consume remaining input!
+<code>
+FuzzedDataProvider stream(data, size);
+
+std::vector<uint8_t> bytes3 = stream.ConsumeRemainingBytes();
+void *data3_ptr = bytes3.data();
+</code>
+
+All variables used MUST be declared and initialized. Carefully make sure that the variable and argument types in your code match and compiles successfully. Add type casts to make types match.
+
+Do not create new variables with the same names as existing variables.
+WRONG:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  void* data = Foo();
+}
+</code>
+
+EXTREMELY IMPORTANT: If you write code using <code>goto</code>, you MUST MUST also declare all variables BEFORE the <code>goto</code>. Never introduce new variables after the <code>goto</code>.
+WRONG:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int a = bar();
+  if (!some_function()) goto EXIT;
+  Foo b = target_function(data, size);
+  int c = another_func();
+EXIT:
+  return 0;
+}
+</code>
+
+CORRECT:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int a = bar();
+  Foo b;
+  int c;
+
+  if (!some_function()) goto EXIT;
+  b = target_function(data, size);
+  c = another_func()
+EXIT:
+  return 0;
+}
+</code>
+
+If an example provided for the same library includes a unique header file, then it must be included in the solution as well.
+</system>
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+int xmlTextReaderRead(struct _xmlTextReader * reader)
+</function header>
+</task>
+
+<solution>
+
+#include "fuzz.h"
+#include <libxml/catalog.h>
+#include <libxml/parser.h>
+#include <libxml/tree.h>
+#include <libxml/xmlerror.h>
+#include <libxml/xmlreader.h>
+#include <libxml/xmlsave.h>
+
+int LLVMFuzzerInitialize(int *argc ATTRIBUTE_UNUSED, char ***argv ATTRIBUTE_UNUSED) {
+  xmlFuzzMemSetup();
+  xmlInitParser();
+#ifdef LIBXML_CATALOG_ENABLED
+  xmlInitializeCatalog();
+  xmlCatalogSetDefaults(XML_CATA_ALLOW_NONE);
+#endif
+  xmlSetGenericErrorFunc(NULL, xmlFuzzErrorFunc);
+  xmlSetExternalEntityLoader(xmlFuzzEntityLoader);
+
+  return 0;
+}
+
+int LLVMFuzzerTestOneInput(const char *data, size_t size) {
+  xmlParserCtxtPtr ctxt;
+  xmlDocPtr doc;
+  const char *docBuffer, *docUrl;
+  size_t maxAlloc, docSize;
+  int opts;
+
+  xmlFuzzDataInit(data, size);
+  opts = (int)xmlFuzzReadInt(4);
+  /*
+   * Disable options that are known to cause timeouts
+   */
+  opts &= ~XML_PARSE_XINCLUDE & ~XML_PARSE_DTDVALID & ~XML_PARSE_SAX1;
+  maxAlloc = xmlFuzzReadInt(4) % (size + 100);
+
+  xmlFuzzReadEntities();
+  docBuffer = xmlFuzzMainEntity(&docSize);
+  docUrl = xmlFuzzMainUrl();
+  if (docBuffer == NULL)
+    goto exit;
+
+  /* Pull parser */
+
+  xmlFuzzMemSetLimit(maxAlloc);
+  ctxt = xmlNewParserCtxt();
+  if (ctxt != NULL) {
+    doc = xmlCtxtReadMemory(ctxt, docBuffer, docSize, docUrl, NULL, opts);
+    xmlFuzzCheckMallocFailure("xmlCtxtReadMemory", ctxt->errNo == XML_ERR_NO_MEMORY);
+
+    if (doc != NULL) {
+#ifdef LIBXML_OUTPUT_ENABLED
+      xmlBufferPtr buffer;
+      xmlSaveCtxtPtr save;
+
+      /* Also test the serializer. */
+      xmlFuzzResetMallocFailed();
+      buffer = xmlBufferCreate();
+      save = xmlSaveToBuffer(buffer, NULL, 0);
+      if (save != NULL) {
+        int errNo;
+
+        xmlSaveDoc(save, doc);
+        errNo = xmlSaveFinish(save);
+        xmlFuzzCheckMallocFailure("xmlDocDumpMemory", errNo == XML_ERR_NO_MEMORY);
+      }
+      xmlBufferFree(buffer);
+#endif
+      xmlFreeDoc(doc);
+    }
+
+    xmlFreeParserCtxt(ctxt);
+  }
+
+  /* Push parser */
+
+#ifdef LIBXML_PUSH_ENABLED
+  {
+    static const size_t maxChunkSize = 128;
+    size_t consumed, chunkSize;
+
+    xmlFuzzMemSetLimit(maxAlloc);
+    ctxt = xmlCreatePushParserCtxt(NULL, NULL, NULL, 0, docUrl);
+    if (ctxt != NULL) {
+      xmlCtxtUseOptions(ctxt, opts);
+
+      for (consumed = 0; consumed < docSize; consumed += chunkSize) {
+        chunkSize = docSize - consumed;
+        if (chunkSize > maxChunkSize)
+          chunkSize = maxChunkSize;
+        xmlParseChunk(ctxt, docBuffer + consumed, chunkSize, 0);
+      }
+
+      xmlParseChunk(ctxt, NULL, 0, 1);
+      xmlFuzzCheckMallocFailure("xmlParseChunk", ctxt->errNo == XML_ERR_NO_MEMORY);
+      xmlFreeDoc(ctxt->myDoc);
+      xmlFreeParserCtxt(ctxt);
+    }
+  }
+#endif
+
+  /* Reader */
+
+#ifdef LIBXML_READER_ENABLED
+  {
+    xmlTextReaderPtr reader;
+    const xmlError *error;
+    int j;
+
+    xmlFuzzMemSetLimit(maxAlloc);
+    reader = xmlReaderForMemory(docBuffer, docSize, NULL, NULL, opts);
+    if (reader != NULL) {
+      while (xmlTextReaderRead(reader) == 1) {
+        if (xmlTextReaderNodeType(reader) == XML_ELEMENT_NODE) {
+          int i, n = xmlTextReaderAttributeCount(reader);
+          for (i = 0; i < n; i++) {
+            xmlTextReaderMoveToAttributeNo(reader, i);
+            while (xmlTextReaderReadAttributeValue(reader) == 1)
+              ;
+          }
+        }
+      }
+      for (j = 0; j < 10; j++)
+        xmlTextReaderRead(reader);
+      error = xmlTextReaderGetLastError(reader);
+      xmlFuzzCheckMallocFailure("xmlTextReaderRead", error->code == XML_ERR_NO_MEMORY);
+      xmlFreeTextReader(reader);
+    }
+  }
+#endif
+
+exit:
+  xmlFuzzMemSetLimit(0);
+  xmlFuzzDataCleanup();
+  xmlResetLastError();
+  return (0);
+}
+
+</solution>
+
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+MPG123_EXPORT int mpg123_decode(mpg123_handle *mh, const unsigned char *inmemory, size_t inmemsize, unsigned char *outmemory, size_t outmemsize, size_t *done )
+</function header>
+</task>
+
+<solution>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+#include "mpg123.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  static bool initialized = false;
+  if (!initialized) {
+    mpg123_init();
+    initialized = true;
+  }
+  int ret;
+  mpg123_handle* handle = mpg123_new(nullptr, &ret);
+  if (handle == nullptr) {
+    return 0;
+  }
+
+  ret = mpg123_param(handle, MPG123_ADD_FLAGS, MPG123_QUIET, 0.);
+  if(ret == MPG123_OK)
+    ret = mpg123_open_feed(handle);
+  if (ret != MPG123_OK) {
+    mpg123_delete(handle);
+    return 0;
+  }
+
+  std::vector<uint8_t> output_buffer(mpg123_outblock(handle));
+
+  size_t output_written = 0;
+  // Initially, start by feeding the decoder more data.
+  int decode_ret = MPG123_NEED_MORE;
+  FuzzedDataProvider provider(data, size);
+  while ((decode_ret != MPG123_ERR)) {
+    if (decode_ret == MPG123_NEED_MORE) {
+      if (provider.remaining_bytes() == 0
+          || mpg123_tellframe(handle) > 10000
+          || mpg123_tell_stream(handle) > 1<<20) {
+        break;
+      }
+      const size_t next_size = provider.ConsumeIntegralInRange<size_t>(
+          0,
+          provider.remaining_bytes());
+      auto next_input = provider.ConsumeBytes<unsigned char>(next_size);
+      decode_ret = mpg123_decode(handle, next_input.data(), next_input.size(),
+                                 output_buffer.data(), output_buffer.size(),
+                                 &output_written);
+    } else if (decode_ret != MPG123_ERR && decode_ret != MPG123_NEED_MORE) {
+      decode_ret = mpg123_decode(handle, nullptr, 0, output_buffer.data(),
+                                 output_buffer.size(), &output_written);
+    } else {
+      // Unhandled mpg123_decode return value.
+      abort();
+    }
+  }
+
+  mpg123_delete(handle);
+
+  return 0;
+}
+</solution>
+
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+int xmlTextReaderSchemaValidateCtxt(struct _xmlTextReader * reader, struct _xmlSchemaValidCtxt * ctxt, int options)
+</function header>
+</task>
+You MUST call <code>
+int xmlTextReaderSchemaValidateCtxt(struct _xmlTextReader * reader, struct _xmlSchemaValidCtxt * ctxt, int options)
+</code> in your solution!
+
+<solution>

@@ -1,0 +1,67 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+
+#include "mpeg2d_fast_dec.h"
+
+extern "C" {
+#include "mpeg2d_fast_dec_vlc.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  const size_t buffer_size = stream.ConsumeIntegralInRange<size_t>(
+      1, std::min(size, static_cast<size_t>(1 << 16)));
+  uint8_t* buffer = new uint8_t[buffer_size];
+  stream.ConsumeBytes(buffer, buffer_size);
+
+  struct _stream_t stream_struct = {
+      .p_buffer = buffer,
+      .buffer_size = buffer_size,
+      .buffer_index = 0,
+      .p_bit_buffer = nullptr,
+      .bit_buffer_size = 0,
+      .bit_buffer_index = 0,
+      .error_code = 0,
+      .p_error_message = nullptr,
+      .p_user_data = nullptr,
+  };
+
+  const bool ai2_code_table = stream.ConsumeBool();
+  const bool au2_index_table = stream.ConsumeBool();
+  const int u2_max_len = stream.ConsumeIntegral<int>();
+  const short result = impeg2d_fast_dec_vld_symbol(
+      &stream_struct, ai2_code_table, au2_index_table, u2_max_len);
+
+  delete[] buffer;
+  return result;
+}
+```
+
+The original code had no errors. The build issues were caused by the missing `extern "C" {}` around the `#include` directive for `mpeg2d_fast_dec_vlc.h`. This directive is necessary when including C headers in C++ code to ensure that the C compiler uses the correct calling convention.
+
+The corrected code includes the `extern "C" {}` directive around the `#include` directive for `mpeg2d_fast_dec_vlc.h`, which should resolve the build issues.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

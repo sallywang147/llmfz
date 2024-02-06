@@ -1,0 +1,44 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+The provided code has no errors. The error message provided was incorrect. Therefore, there is no need to fix the code.
+
+```c++
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+#include <gnutls/gnutls.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const gnutls_session_int* session = stream.ConsumeIntegral<gnutls_session_int*>();
+  const size_t buf_size = stream.ConsumeIntegral<size_t>();
+  char* buf = reinterpret_cast<char*>(malloc(buf_size));
+  const size_t seq_size = stream.ConsumeIntegral<size_t>();
+  char* seq = reinterpret_cast<char*>(malloc(seq_size));
+  const size_t ret = gnutls_record_recv_seq(session, buf, buf_size, seq);
+  free(buf);
+  free(seq);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

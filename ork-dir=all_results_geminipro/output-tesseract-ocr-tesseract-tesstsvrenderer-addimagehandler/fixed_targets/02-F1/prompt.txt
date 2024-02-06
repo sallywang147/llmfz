@@ -1,0 +1,61 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <tesseract/baseapi.h>
+#include <tesseract/tsvrenderer.h>
+
+#include <cstdio>   // for printf
+#include <cstdlib>  // for std::getenv, std::setenv
+#include <libgen.h> // for dirname
+#include <string>   // for std::string
+
+extern "C" int LLVMFuzzerInitialize(int * /*pArgc*/, char ***pArgv) {
+  if (std::getenv("TESSDATA_PREFIX") == nullptr) {
+    std::string binary_path = *pArgv[0];
+    const std::string filepath = dirname(&binary_path[0]);
+
+    const std::string tessdata_path = filepath + "/" + "tessdata";
+    if (setenv("TESSDATA_PREFIX", tessdata_path.c_str(), 1) != 0) {
+      printf("Setenv failed\n");
+      std::abort();
+    }
+  }
+
+  return 0;
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  tesseract::TessBaseAPI *api = new tesseract::TessBaseAPI();
+  if (api->Init(nullptr, "eng") != 0) {
+    printf("Cannot initialize API\n");
+    abort();
+  }
+
+  /* Silence output */
+  api->SetVariable("debug_file", "/dev/null");
+
+  tesseract::TessTsvRenderer *tsvRenderer = new tesseract::TessTsvRenderer();
+  tsvRenderer->AddImageHandler(api);
+
+  delete api;
+  delete tsvRenderer;
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

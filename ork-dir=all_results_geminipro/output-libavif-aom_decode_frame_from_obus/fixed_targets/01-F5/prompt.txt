@@ -1,0 +1,53 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <aom/aom_decoder.h>
+#include <aom/aomdx.h>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <stdlib.h>
+
+extern "C" {
+#include <aom/aom_integer.h>
+#include <aom/aom_codec.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider fdp(data, size);
+
+  aom_codec_ctx_t codec_ctx;
+  aom_codec_dec_cfg_t dec_cfg;
+  aom_codec_err_t res = aom_codec_dec_init(&codec_ctx, aom_codec_av1_dx(), &dec_cfg, 0);
+  if (res != AOM_CODEC_OK) {
+    return 0;
+  }
+
+  AV1_COMMON *dec = reinterpret_cast<AV1_COMMON *>(codec_ctx.priv);
+
+  char *obus_start = nullptr;
+  char *obus_end = nullptr;
+  int ret = aom_codec_decode_frame(&codec_ctx, &obus_start, &obus_end);
+  if (ret != AOM_CODEC_OK) {
+    aom_codec_dec_destroy(&codec_ctx);
+    return 0;
+  }
+
+  aom_codec_dec_destroy(&codec_ctx);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+The target function `int aom_decode_frame_from_obus(struct AV1Decoder * , char * , char * , char ** )` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `int aom_decode_frame_from_obus(struct AV1Decoder * , char * , char * , char ** )` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,104 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstdint>
+#include <cstring>
+#include <iostream>
+#include <memory>
+#include <vector>
+
+#define STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#define TINYGLTF_IMPLEMENTATION
+#include "tiny_gltf.h"
+
+static void parse_intCoding4(const uint8_t *data, size_t size) {
+
+  tinygltf::TinyGLTF ctx;
+  std::string err;
+  std::string warn;
+  std::string base_dir;
+  std::string file_name;
+  tinygltf::Model model;
+
+  const char *str = reinterpret_cast<const char *>(data);
+
+  bool ret = ctx.LoadASCIIFromString(&model, &err, &warn, str, size, /* base_dir */ "");
+  (void)ret;
+}
+
+extern "C" int LLVMFuzzerTestOneInput(std::uint8_t const *data, std::size_t size) {
+  parse_intCoding4(data, size);
+  return 0;
+}
+```
+
+In this code, the issue is that the `LoadASCIIFromFile` function is not being called within the `LLVMFuzzerTestOneInput` function. The error message clearly states that this function must be called inside the fuzz target function.
+
+To fix this, we need to modify the `LLVMFuzzerTestOneInput` function to call the `LoadASCIIFromFile` function. Here's the corrected code:
+
+```c++
+#include <cstdint>
+#include <cstring>
+#include <iostream>
+#include <memory>
+#include <vector>
+
+#define STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#define TINYGLTF_IMPLEMENTATION
+#include "tiny_gltf.h"
+
+static void parse_intCoding4(const uint8_t *data, size_t size) {
+
+  tinygltf::TinyGLTF ctx;
+  std::string err;
+  std::string warn;
+  std::string base_dir;
+  std::string file_name;
+  tinygltf::Model model;
+
+  const char *str = reinterpret_cast<const char *>(data);
+
+  bool ret = ctx.LoadASCIIFromString(&model, &err, &warn, str, size, /* base_dir */ "");
+  (void)ret;
+}
+
+extern "C" int LLVMFuzzerTestOneInput(std::uint8_t const *data, std::size_t size) {
+  parse_intCoding4(data, size);
+
+  // Call the LoadASCIIFromFile function here
+  tinygltf::TinyGLTF ctx;
+  std::string err;
+  std::string warn;
+  std::string base_dir;
+  std::string file_name;
+  tinygltf::Model model;
+
+  const char *str = reinterpret_cast<const char *>(data);
+
+  bool ret = ctx.LoadASCIIFromFile(&model, &err, &warn, str, size, /* base_dir */ "");
+  (void)ret;
+
+  return 0;
+}
+```
+
+With this change, the `LoadASCIIFromFile` function is now being called within the `LLVMFuzzerTestOneInput` function, which should resolve the build error.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

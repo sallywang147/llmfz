@@ -1,0 +1,81 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+#include "fuzzer/FuzzedDataProvider.h"
+
+#include "leveldb/db.h"
+#include "leveldb/iterator.h"
+#include "leveldb/options.h"
+#include "leveldb/status.h"
+
+namespace {
+
+// Deletes the database directory when going out of scope.
+class AutoDbDeleter {
+public:
+  static constexpr char kDbPath[] = "/tmp/testdb";
+
+  AutoDbDeleter() = default;
+
+  AutoDbDeleter(const AutoDbDeleter &) = delete;
+  AutoDbDeleter &operator=(const AutoDbDeleter &) = delete;
+
+  ~AutoDbDeleter() { std::__fs::filesystem::remove_all(kDbPath); }
+};
+
+// static
+constexpr char AutoDbDeleter::kDbPath[];
+
+// Returns nullptr (a falsey unique_ptr) if opening fails.
+std::unique_ptr<leveldb::DB> OpenDB() {
+  leveldb::Options options;
+  options.create_if_missing = true;
+
+  leveldb::DB *db_ptr;
+  leveldb::Status status = leveldb::DB::Open(options, AutoDbDeleter::kDbPath, &db_ptr);
+  if (!status.ok())
+    return nullptr;
+
+  return std::unique_ptr<leveldb::DB>(db_ptr);
+}
+
+} // namespace
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  // Must occur before `db` so the deletion doesn't happen while the DB is open.
+  AutoDbDeleter db_deleter;
+
+  std::unique_ptr<leveldb::DB> db = OpenDB();
+  if (!db.get())
+    return 0;
+
+  FuzzedDataProvider fuzzed_data(data, size);
+  leveldb::ReadOptions read_options;
+  leveldb::Iterator *it = db->NewIterator(read_options);
+  leveldb::(leveldb::(anonymous namespace)::DBIter *)it, &fuzzed_data;
+  delete it;
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

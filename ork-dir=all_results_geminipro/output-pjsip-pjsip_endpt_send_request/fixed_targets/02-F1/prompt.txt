@@ -1,0 +1,87 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#include <pj/assert.h>
+#include <pj/log.h>
+#include <pj/pool.h>
+#include <pj/string.h>
+#include <pj/stun.h>
+#include <pj/transport.h>
+#include <pj/util.h>
+#include <pjlib.h>
+#include <pjmedia/sdp.h>
+#include <pjmedia/transport_udp.h>
+#include <pjsip/sip_message.h>
+#include <pjsip/sip_ua.h>
+
+#include <fuzzer/FuzzedDataProvider.h>
+
+#define MAX_TOKEN_SIZE 1024
+
+extern int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  FuzzedDataProvider stream(Data, Size);
+
+  pj_pool_t *pool;
+  pj_status_t status;
+  pjsip_endpoint *endpt;
+  pjsip_tx_data *tdata;
+  char token[MAX_TOKEN_SIZE];
+  func_type *cb;
+
+  /* Initialize pjlib */
+  status = pj_init();
+  PJ_ASSERT_RETURN(status == PJ_SUCCESS, 1);
+
+  /* Create a pool */
+  pool = pj_pool_create();
+
+  /* Create an endpoint */
+  status = pjsip_endpt_create(pool, NULL, &endpt);
+  PJ_ASSERT_RETURN(status == PJ_SUCCESS, 1);
+
+  /* Create a transaction data */
+  tdata = pjsip_tx_data_create(pool);
+
+  /* Generate a random token */
+  stream.ConsumeBytesAsString(MAX_TOKEN_SIZE - 1).copy(token, MAX_TOKEN_SIZE - 1);
+  token[MAX_TOKEN_SIZE - 1] = '\0';
+
+  /* Create a callback function */
+  cb = NULL;
+
+  /* Send the request */
+  status = pjsip_endpt_send_request(endpt, tdata, 0, token, cb);
+  PJ_ASSERT_RETURN(status == PJ_SUCCESS, 1);
+
+  /* Destroy the endpoint */
+  pjsip_endpt_destroy(endpt);
+
+  /* Destroy the pool */
+  pj_pool_release(pool);
+
+  /* Shutdown pjlib */
+  pj_shutdown();
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

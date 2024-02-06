@@ -1,0 +1,77 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+#include "lzma.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  static bool initialized = false;
+  if (!initialized) {
+    lzma_init();
+    initialized = true;
+  }
+
+  lzma_mf mf;
+  if (lzma_mf_init(&mf) != LZMA_OK) {
+    return 0;
+  }
+
+  std::vector<uint8_t> output_buffer(size * 2);
+  size_t output_written = 0;
+
+  lzma_filter filters[2] = {{
+                                .id = LZMA_FILTER_LZMA2,
+                                .options = &mf,
+                            },
+                            {
+                                .id = LZMA_VLI_UNKNOWN,
+                            }};
+
+  lzma_stream strm = LZMA_STREAM_INIT;
+  if (lzma_stream_encoder(&strm, filters, LZMA_CHECK_CRC64) != LZMA_OK) {
+    lzma_mf_free(&mf);
+    return 0;
+  }
+
+  FuzzedDataProvider provider(data, size);
+  while (provider.remaining_bytes() > 0) {
+    auto next_input = provider.ConsumeBytes<uint8_t>(provider.remaining_bytes());
+    lzma_ret ret = lzma_encode(&strm, next_input.data(), next_input.size(),
+                               output_buffer.data(), &output_written,
+                               output_buffer.size());
+    if (ret != LZMA_OK && ret != LZMA_STREAM_END) {
+      lzma_mf_free(&mf);
+      lzma_end(&strm);
+      return 0;
+    }
+  }
+
+  lzma_mf_free(&mf);
+  lzma_end(&strm);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

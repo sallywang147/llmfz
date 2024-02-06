@@ -1,0 +1,65 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+#include "tidy.h"
+#include "tidybuffio.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  static bool initialized = false;
+  if (!initialized) {
+    tidyInit();
+    initialized = true;
+  }
+  TidyDoc tdoc = tidyCreate();
+  TidyBuffer fuzz_toutput;
+  TidyBuffer fuzz_terror;
+
+  tidyBufInit(&fuzz_toutput);
+  tidyBufInit(&fuzz_terror);
+
+  tidySetErrorBuffer(tdoc, &fuzz_terror);
+  tidySetOutputBuffer(tdoc, &fuzz_toutput);
+
+  TidyInputSource source;
+  source.encoding = NULL;
+  source.flags = 0;
+  source.lastByte = 0;
+  source.line = 1;
+  source.column = 1;
+  source.charEncoding = CharEncoding_UTF8;
+  source.nextByte = data;
+  source.bytesLeft = size;
+
+  int ret = tidyParseSource(tdoc, &source);
+
+  tidyBufFree(&fuzz_toutput);
+  tidyBufFree(&fuzz_terror);
+  tidyRelease(tdoc);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

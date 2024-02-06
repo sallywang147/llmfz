@@ -1,0 +1,51 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstddef>
+
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include "spdlog/sinks/base_sink.h"
+#include "spdlog/spdlog.h"
+
+extern "C" {
+#include "spdlog/sinks/basic_sink.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  if (size == 0) {
+    return 0;
+  }
+
+  static std::shared_ptr<spdlog::logger> my_logger;
+  if (!my_logger.get()) {
+    my_logger = spdlog::basic_logger_mt("basic_logger", "/dev/null");
+    spdlog::set_default_logger(my_logger);
+  }
+
+  FuzzedDataProvider stream(data, size);
+
+  const std::string pattern = stream.ConsumeRandomLengthString();
+  spdlog::sinks::base_sink<std::mutex>::set_pattern(my_logger->sinks()[0].get(), &pattern);
+
+  spdlog::info("Hello, world!");
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+The target function `void spdlog::sinks::base_sink<std::__1::mutex>::set_pattern_(spdlog::sinks::base_sink * , std::string * )` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `void spdlog::sinks::base_sink<std::__1::mutex>::set_pattern_(spdlog::sinks::base_sink * , std::string * )` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

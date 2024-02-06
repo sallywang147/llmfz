@@ -1,0 +1,44 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+
+extern "C" {
+#include "iter.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  if (size < sizeof(int)) {
+    return 0;
+  }
+
+  FuzzedDataProvider provider(data, size);
+  struct IterCellsResolution res;
+  int arg_0 = provider.ConsumeIntegral<int>();
+  iterInitRes(&res, arg_0);
+  return 0;
+}
+```
+
+The original code had an issue with the inclusion of the `iter.h` header file. The error message indicated that the compiler could not find the declaration of the `iterInitRes` function, which is defined in `iter.h`. To fix this issue, we wrapped the inclusion of `iter.h` with `extern "C" {}`. This tells the compiler to use the C name mangling rules for the symbols defined in `iter.h`, which is necessary because `iter.h` contains C code.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

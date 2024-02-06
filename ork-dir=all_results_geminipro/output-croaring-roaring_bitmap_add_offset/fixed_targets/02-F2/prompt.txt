@@ -1,0 +1,43 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+
+extern "C" {
+#include "roaring.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  roaring_bitmap_t* bitmap = roaring_bitmap_create();
+  size_t offset = stream.ConsumeIntegral<size_t>();
+  roaring_bitmap_add_offset(bitmap, offset);
+  roaring_bitmap_free(bitmap);
+  return 0;
+}
+```
+
+The build error message indicates that the `roaring.h` header file is not properly included. To fix this, we need to wrap the `#include` directive for `roaring.h` with `extern "C" {}`. This is because `roaring.h` is a C header file, and it needs to be included in a C++ program using the `extern "C"` directive.
+
+The corrected code includes the `roaring.h` header file correctly, and it should now compile and run without errors.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

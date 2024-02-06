@@ -1,0 +1,43 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <ArduinoJson.h>
+
+extern "C" {
+#include <stddef.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  StaticJsonDocument<200> doc;
+  DeserializationError error = deserializeJson(doc, data, size);
+  if (error) {
+    return 0;
+  }
+  return 1;
+}
+```
+
+The original code has a few issues:
+
+- It uses the `SerializedValue` class, which is not defined in the code.
+- It calls the `size()` method on the `SerializedValue` object, but the `size()` method is not defined for the `SerializedValue` class.
+- It returns 0, which indicates that the input is not valid, but it should return 1 to indicate that the input is valid.
+
+The corrected code fixes these issues by using the `StaticJsonDocument` class instead of the `SerializedValue` class, calling the `deserializeJson()` function to parse the input JSON, and returning 1 to indicate that the input is valid.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,51 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "muduo/base/TimeZone.h"
+
+extern "C" {
+#include "muduo/base/TimeZone.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  char *new_str = (char *)malloc(size + 1);
+  if (new_str == NULL) {
+    return 0;
+  }
+  memcpy(new_str, data, size);
+  new_str[size] = '\0';
+
+  muduo::TimeZone tz;
+  tz.loadZoneFile(new_str);
+  free(new_str);
+  return 0;
+}
+```
+
+The original code has the following issues:
+
+1. The `muduo/base/TimeZone.h` header is included twice, once with and once without the `extern "C" {}` wrapper. This can lead to linker errors.
+2. The `muduo::TimeZone` class is defined in the `muduo/base/TimeZone.h` header, which is included with the `extern "C" {}` wrapper. This means that the `muduo::TimeZone` class is not visible to the `LLVMFuzzerTestOneInput` function, which is defined in C.
+
+To fix these issues, the `muduo/base/TimeZone.h` header is included twice, once with and once without the `extern "C" {}` wrapper. The `muduo::TimeZone` class is defined in the `muduo/base/TimeZone.h` header, which is included without the `extern "C" {}` wrapper. This makes the `muduo::TimeZone` class visible to the `LLVMFuzzerTestOneInput` function.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

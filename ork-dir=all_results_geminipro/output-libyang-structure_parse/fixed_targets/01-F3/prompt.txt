@@ -1,0 +1,58 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdio.h>
+#include <stdint.h>
+#include <stdlib.h>
+
+#include "libyang.h"
+
+extern "C" {
+#include "structure.h"
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  struct lysp_ext_instance *ext = NULL;
+  struct lysp_ctx *pctx = NULL;
+  LY_ERR err;
+
+  err = lysp_parse_mem(NULL, data, size, LYS_IN_YANG, NULL, &pctx);
+  if (err != LY_SUCCESS) {
+    fprintf(stderr, "Failed to parse data\n");
+    exit(EXIT_FAILURE);
+  }
+
+  err = lysp_ext_instance_new(pctx, &ext);
+  if (err != LY_SUCCESS) {
+    fprintf(stderr, "Failed to create ext instance\n");
+    exit(EXIT_FAILURE);
+  }
+
+  err = structure_parse(pctx, ext);
+  if (err != LY_SUCCESS) {
+    fprintf(stderr, "Failed to parse structure\n");
+    exit(EXIT_FAILURE);
+  }
+
+  lysp_ext_instance_free(ext);
+  lysp_ctx_destroy(pctx);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,87 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+#include <stdint.h>
+
+#include "sleuthkit/tsk/fs/apfs/apfs_fs.h"
+#include "sleuthkit/tsk/fs/tsk_fs.h"
+#include "sleuthkit/tsk/pool/tsk_pool.h"
+#include "sleuthkit/tsk/tsk_tools_i.h"
+#include "sleuthkit_mem_img.h"
+
+extern "C" {
+#include <sleuthkit/tsk/fs/apfs/apfs_fs_attr.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  TSK_IMG_INFO *img;
+  TSK_IMG_INFO *pool_img;
+  TSK_FS_INFO *fs;
+  const TSK_POOL_INFO *pool;
+  TSK_FS_FILE *file;
+
+  img = mem_open(data, size);
+  if (img == nullptr) {
+    return 0;
+  }
+  pool = tsk_pool_open_img_sing(img, 0, TSK_POOL_TYPE_APFS);
+
+  if (pool == nullptr) {
+    goto out_img;
+  }
+  // Pool start block is APFS container specific and is hard coded for now
+  pool_img = pool->get_img_info(pool, (TSK_DADDR_T)106);
+
+  if (pool_img == nullptr) {
+    goto out_pool;
+  }
+  fs = tsk_fs_open_img_decrypt(pool_img, 0, TSK_FS_TYPE_APFS_DETECT, "");
+
+  if (fs == nullptr) {
+    goto out_pool_img;
+  }
+  file = tsk_fs_file_open(fs, 1);
+  if (file == nullptr) {
+    goto out_fs;
+  }
+
+  APFSFSCompat *apfs_fs = (APFSFSCompat *)fs;
+  char ret = apfs_fs->load_attrs(apfs_fs, file);
+
+  tsk_fs_file_close(file);
+
+out_fs:
+  tsk_fs_close(fs);
+
+out_pool_img:
+  tsk_img_close(pool_img);
+
+out_pool:
+  tsk_pool_close(pool);
+
+out_img:
+  tsk_img_close(img);
+
+  return 0;
+}
+```
+
+The issue was that the header file `apfs_fs_attr.h` was not included. This header file contains the declaration of the `load_attrs` function. To fix the issue, the header file was included with `extern "C" {}` to ensure that the function is exported with C linkage.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,45 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+#include <stdint.h>
+#include <vector>
+
+#include "archive.h"
+
+extern "C" {
+#include <libarchive/archive_entry.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int ret;
+  struct archive_entry *entry = archive_entry_new();
+
+  std::vector<uint8_t> acl_text(size);
+  size_t len = acl_text.size();
+  ret = archive_entry_acl_text_l(entry, ARCHIVE_ENTRY_ACL_TYPE_ACCESS,
+                                 reinterpret_cast<char *>(acl_text.data()), &len,
+                                 nullptr);
+  if (ret != ARCHIVE_OK)
+    return 0;
+
+  archive_entry_free(entry);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+The target function `int _archive_entry_acl_text_l(struct archive_entry * entry, int flags, char ** acl_text, size_t * len, struct archive_string_conv * sc)` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `int _archive_entry_acl_text_l(struct archive_entry * entry, int flags, char ** acl_text, size_t * len, struct archive_string_conv * sc)` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

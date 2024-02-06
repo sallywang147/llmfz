@@ -1,0 +1,47 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <rawspeed/ArwDecoder.h>
+#include <rawspeed/RawImage.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  FuzzedDataProvider stream(Data, Size);
+
+  // Extract an array of bytes as a vector. You MUST call .data() to use result as pointer.
+  std::vector<uint8_t> bytes = stream.ConsumeBytes<uint8_t>(stream.ConsumeIntegralInRange(0, 100000));
+  void *data_ptr = bytes.data();
+
+  // Extract to user defined object
+  rawspeed::RawImage obj;
+  size_t consumed = stream.ConsumeData(&obj, sizeof(obj));
+
+  // Extract to user defined object
+  rawspeed::ArwDecoder obj2;
+  size_t consumed2 = stream.ConsumeData(&obj2, sizeof(obj2));
+
+  // Call the function
+  obj2.decodeSRF(&obj); // Fix: Call decodeSRF as a member function of obj2
+
+  return 0;
+}
+```
+
+The corrected code calls the `decodeSRF` function as a member function of the `obj2` object, which is the correct way to call member functions in C++. The original code had a syntax error where it was calling `decodeSRF` as a function pointer, which is incorrect.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

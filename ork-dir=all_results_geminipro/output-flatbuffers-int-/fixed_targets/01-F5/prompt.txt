@@ -1,0 +1,42 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <flatbuffers/flatbuffers.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const uint8_t slate_width = stream.ConsumeIntegral<uint8_t>();
+  const uint8_t slate_height = stream.ConsumeIntegral<uint8_t>();
+  const int text_color = stream.ConsumeIntegral<int>();
+  const std::string text = stream.ConsumeRemainingBytesAsString();
+
+  flatbuffers::FlatBufferBuilder fbb;
+  flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<void>>> offset_vector =
+      fbb.CreateVectorOfOffsets(nullptr, 0);
+  flatbuffers::Offset<flatbuffers::Vector<uint8_t>> string_vector =
+      fbb.CreateVector(reinterpret_cast<const uint8_t*>(text.c_str()), text.size());
+  flatbuffers::Type type = flatbuffers::Type::UType_Int32;
+  flatbuffers::JsonPrinter printer;
+  char* result = printer.PrintVector<flatbuffers::Offset64<void>, unsigned int>(
+      &fbb, nullptr, &type, text_color, nullptr);
+  free(result);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

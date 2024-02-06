@@ -1,0 +1,57 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+#include "jv.h"
+#include "jq_parser.h"
+#include "jq_compile.h"  // Include the missing header
+
+extern "C" {
+#include "jq_compile.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const std::string jq_string = stream.ConsumeRemainingBytesAsString();
+  jq_state *jq = jq_init();
+  if (jq == nullptr) {
+    return 0;
+  }
+
+  jv_refcnt *refcnt = jv_refcnt_create(jv_string(jq_string.c_str()), 1);
+  f_modulemeta(jq, 0, refcnt);
+  jv_free(jv_refcnt_dec(refcnt, 1));
+  jq_teardown(&jq);
+  return 0;
+}
+
+// Define the missing jv_string function
+jv jv_string(const char *str) {
+  return jv_string_sized(jv_string_value(str), strlen(str));
+}
+```
+
+The missing header `jq_compile.h` is included in the code. The `jv_string` function is also defined. The code should now build and run successfully.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

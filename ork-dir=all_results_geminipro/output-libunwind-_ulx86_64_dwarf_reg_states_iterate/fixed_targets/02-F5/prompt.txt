@@ -1,0 +1,60 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+extern "C" {
+#include "libdwarf.h"
+#include <gd.h>
+}
+
+// Declare the function _ULx86_64_dwarf_reg_states_iterate
+int _ULx86_64_dwarf_reg_states_iterate(Dwarf_Cursor, Dwarf_Die, char*);
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const uint8_t slate_width = stream.ConsumeIntegral<uint8_t>();
+  const uint8_t slate_height = stream.ConsumeIntegral<uint8_t>();
+  Dwarf_Cursor slate_cursor;
+  dwarf_init(slate_width, DW_DLC_READ, &slate_cursor, 0, 0);
+  const int x_position = stream.ConsumeIntegral<int>();
+  const int y_position = stream.ConsumeIntegral<int>();
+  const int text_color = stream.ConsumeIntegral<int>();
+  const gdFontPtr font_ptr = stream.PickValueInArray(
+      {gdFontGetGiant(), gdFontGetLarge(), gdFontGetMediumBold(),
+       gdFontGetSmall(), gdFontGetTiny()});
+  const std::string text = stream.ConsumeRemainingBytesAsString();
+
+  int status = _ULx86_64_dwarf_reg_states_iterate(slate_cursor, nullptr,
+                                         reinterpret_cast<char*>(const_cast<char*>(text.c_str())));
+  if (status != DW_DLV_OK) {
+    return status;
+  }
+  dwarf_free(slate_cursor);
+  return 0;
+}
+```
+
+The fixed code includes the declaration of the function `_ULx86_64_dwarf_reg_states_iterate` and checks the return value of the function. If the function returns an error, the fixed code returns the error code to indicate the failure.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

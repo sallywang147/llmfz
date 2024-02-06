@@ -1,0 +1,88 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdio.h>
+#include <unistd.h>
+
+#include <gpac/constants.h>
+#include <gpac/dash.h>
+#include <gpac/gpac.h>
+
+extern "C" {
+#include <libfuzzer/libfuzzer_macro.h>
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  char filename[256];
+  GF_Err e;
+  sprintf(filename, "/tmp/libfuzzer.%d", getpid());
+
+  FILE *fp = fopen(filename, "wb");
+  if (!fp)
+    return 0;
+  fwrite(data, size, 1, fp);
+  fclose(fp);
+
+  GF_DashClient *dash = gf_dash_new(NULL, NULL);
+  gf_dash_load_manifest(dash, filename, &e);
+  gf_dash_update_manifest(dash);
+  gf_dash_delete(dash);
+
+  unlink(filename);
+  return 0;
+}
+```
+
+The issue in the original code is that the `gpac` library is not properly linked. To fix this, the header files for the `gpac` library need to be wrapped with `extern "C" {}`. This tells the compiler that the functions and variables in the `gpac` library are written in C, not C++.
+
+Here is the corrected code:
+```c++
+#include <stdio.h>
+#include <unistd.h>
+
+extern "C" {
+#include <gpac/constants.h>
+#include <gpac/dash.h>
+#include <gpac/gpac.h>
+}
+
+extern "C" {
+#include <libfuzzer/libfuzzer_macro.h>
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  char filename[256];
+  GF_Err e;
+  sprintf(filename, "/tmp/libfuzzer.%d", getpid());
+
+  FILE *fp = fopen(filename, "wb");
+  if (!fp)
+    return 0;
+  fwrite(data, size, 1, fp);
+  fclose(fp);
+
+  GF_DashClient *dash = gf_dash_new(NULL, NULL);
+  gf_dash_load_manifest(dash, filename, &e);
+  gf_dash_update_manifest(dash);
+  gf_dash_delete(dash);
+
+  unlink(filename);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

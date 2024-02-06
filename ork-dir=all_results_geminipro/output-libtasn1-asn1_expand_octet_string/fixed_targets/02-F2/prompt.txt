@@ -1,0 +1,63 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+#include <string>
+
+#include <asn1c/asn1c.h>
+
+extern "C" {
+#include <asn1c/asn1_common.h>
+#include <asn1c/asn1_codec.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  const size_t definitions_size = stream.ConsumeIntegralInRange<size_t>(0, 1024);
+  std::vector<uint8_t> definitions_bytes =
+      stream.ConsumeBytes<uint8_t>(definitions_size);
+  char* definitions = reinterpret_cast<char*>(definitions_bytes.data());
+
+  const size_t element_size = stream.ConsumeIntegralInRange<size_t>(0, 1024);
+  std::vector<uint8_t> element_bytes =
+      stream.ConsumeBytes<uint8_t>(element_size);
+  char* element = reinterpret_cast<char*>(element_bytes.data());
+
+  const size_t octetName_size = stream.ConsumeIntegralInRange<size_t>(0, 1024);
+  std::vector<uint8_t> octetName_bytes =
+      stream.ConsumeBytes<uint8_t>(octetName_size);
+  char* octetName = reinterpret_cast<char*>(octetName_bytes.data());
+
+  const size_t objectName_size = stream.ConsumeIntegralInRange<size_t>(0, 1024);
+  std::vector<uint8_t> objectName_bytes =
+      stream.ConsumeBytes<uint8_t>(objectName_size);
+  char* objectName = reinterpret_cast<char*>(objectName_bytes.data());
+
+  asn1_expand_octet_string(
+      reinterpret_cast<asn1_node_st*>(definitions),
+      reinterpret_cast<asn1_node_st**>(&element), octetName, objectName);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,17 @@
+#include <fuzzer/FuzzedDataProvider.h>
+#include <cstddef>
+#include <cstdint>
+#include <vector>
+#include "simdutf.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  simdutf::internal::unsupported_implementation impl;
+  simdutf::internal::detect_best_supported_implementation_on_first_use detector;
+
+  std::string buffer = stream.ConsumeRemainingBytesAsString();
+  detector.count_utf8(&impl, buffer.data(), buffer.size());
+
+  return 0;
+}

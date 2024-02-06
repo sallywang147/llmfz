@@ -1,0 +1,49 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "avif/avif.h"
+#include "avif/avif_cxx.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  avif::DecoderPtr decoder(avifDecoderCreate());
+  if (decoder == nullptr)
+    return 0;
+  decoder->allowProgressive = AVIF_TRUE;
+
+  // ClusterFuzz passes -rss_limit_mb=2560 to avif_decode_fuzzer. Empirically
+  // setting decoder->imageSizeLimit to this value allows avif_decode_fuzzer to
+  // consume no more than 2560 MB of memory. Also limit the dimensions to avoid
+  // timeouts and to speed the fuzzing up.
+  constexpr uint32_t kImageSizeLimit = 8 * 1024 * 8 * 1024;
+  static_assert(kImageSizeLimit <= AVIF_DEFAULT_IMAGE_SIZE_LIMIT, "");
+  decoder->imageSizeLimit = kImageSizeLimit;
+
+  avifIO *const io = avifIOCreateMemoryReader(Data, Size);
+  if (io == nullptr)
+    return 0;
+  // Simulate Chrome's avifIO object, which is not persistent.
+  io->persistent = AVIF_FALSE;
+  avifDecoderSetIO(decoder.get(), io);
+
+  avifImage img = {};
+  int result = avifDecoderReadFile(decoder.get(), &img);
+  avifImageDestroy(&img);
+  return result;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,75 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <lcms2.h>
+#include <stdint.h>
+
+char * cmsCreateProofingTransform(char * InputProfile, int InputFormat, char * OutputProfile, int OutputFormat, char * ProofingProfile, int nIntent, int ProofingIntent, int dwFlags) {
+  cmsHPROFILE hInputProfile = cmsOpenProfileFromMem(InputProfile, strlen(InputProfile));
+  cmsHPROFILE hOutputProfile = cmsOpenProfileFromMem(OutputProfile, strlen(OutputProfile));
+  cmsHPROFILE hProofingProfile = cmsOpenProfileFromMem(ProofingProfile, strlen(ProofingProfile));
+
+  if (!hInputProfile || !hOutputProfile || !hProofingProfile) {
+    if (hInputProfile) cmsCloseProfile(hInputProfile);
+    if (hOutputProfile) cmsCloseProfile(hOutputProfile);
+    if (hProofingProfile) cmsCloseProfile(hProofingProfile);
+    return NULL;
+  }
+
+  char *result = (char *)cmsCreateProofingTransformTHR(hInputProfile, InputFormat, hOutputProfile, OutputFormat, hProofingProfile, nIntent, ProofingIntent, dwFlags);
+
+  cmsCloseProfile(hInputProfile);
+  cmsCloseProfile(hOutputProfile);
+  cmsCloseProfile(hProofingProfile);
+
+  return result;
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  if (size < 64) {
+    return 0;
+  }
+
+  int InputFormat = *((const uint32_t *)data + 0) % 13;
+  int OutputFormat = *((const uint32_t *)data + 1) % 13;
+  int nIntent = *((const uint32_t *)data + 2) % 16;
+  int ProofingIntent = *((const uint32_t *)data + 3) % 16;
+  int dwFlags = *((const uint32_t *)data + 4) % 10;
+  data += 20;
+  size -= 20;
+
+  char *InputProfile = (char *)data;
+  data += 32;
+  size -= 32;
+
+  char *OutputProfile = (char *)data;
+  data += 32;
+  size -= 32;
+
+  char *ProofingProfile = (char *)data;
+
+  char *result = cmsCreateProofingTransform(InputProfile, InputFormat, OutputProfile, OutputFormat, ProofingProfile, nIntent, ProofingIntent, dwFlags);
+
+  if (result) {
+    free(result);
+  }
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

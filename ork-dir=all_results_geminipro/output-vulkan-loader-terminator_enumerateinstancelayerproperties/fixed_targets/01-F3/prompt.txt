@@ -1,0 +1,54 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include "loader.h"
+
+extern "C" {
+#include "vulkan/vulkan.h"
+}
+
+static VkResult terminator_EnumerateInstanceLayerProperties(
+    VkEnumerateInstanceLayerPropertiesChain *chain, int *property_count,
+    VkLayerProperties *properties) {
+  return vkEnumerateInstanceLayerProperties(chain, property_count, properties);
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  VkEnumerateInstanceLayerPropertiesChain chain = {
+      .sType = VK_STRUCTURE_TYPE_ENUMERATE_INSTANCE_LAYER_PROPERTIES_CHAIN,
+      .pNext = NULL,
+  };
+  int property_count = stream.ConsumeIntegral<int>();
+  VkLayerProperties *properties =
+      (VkLayerProperties *)malloc(sizeof(VkLayerProperties) * property_count);
+  chain.propertyCount = property_count;
+  chain.pProperties = properties;
+  terminator_EnumerateInstanceLayerProperties(&chain, &property_count, properties);
+  free(properties);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

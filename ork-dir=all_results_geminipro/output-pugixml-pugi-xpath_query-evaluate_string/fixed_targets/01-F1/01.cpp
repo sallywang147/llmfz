@@ -1,0 +1,52 @@
+#include "../src/pugixml.hpp"
+#include "fuzzer/FuzzedDataProvider.h"
+
+#include <stdint.h>
+#include <string.h>
+#include <string>
+
+extern "C" {
+#include <libxml/parser.h>
+#include <libxml/xpath.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  FuzzedDataProvider fdp(Data, Size);
+  std::string text = fdp.ConsumeRandomLengthString(1024);
+
+#ifndef PUGIXML_NO_EXCEPTIONS
+  try
+#endif
+  {
+    pugi::xpath_variable_set vars;
+    size_t var_count = fdp.ConsumeIntegralInRange<size_t>(0, 50);
+    std::vector<std::string> var_name_storage;
+    for (size_t i = 0; i < var_count; ++i) {
+      var_name_storage.push_back(fdp.ConsumeRandomLengthString(128));
+
+      const int xpath_value_type_count = pugi::xpath_type_boolean + 1;
+      pugi::xpath_value_type value_type = static_cast<pugi::xpath_value_type>(fdp.ConsumeIntegralInRange(0, xpath_value_type_count));
+      vars.add(var_name_storage.back().c_str(), value_type);
+    }
+    pugi::xpath_query q(text.c_str(), &vars);
+
+    std::vector<uint8_t> xml_buffer = fdp.ConsumeBytes<uint8_t>(fdp.ConsumeIntegralInRange(0, 1024));
+    pugi::xml_document doc;
+    doc.load_buffer(xml_buffer.data(), xml_buffer.size(), pugi::parse_full);
+
+    size_t buffer_size = fdp.ConsumeIntegralInRange<size_t>(0, 1024);
+    std::vector<char> buffer(buffer_size);
+    q.evaluate_string(&buffer[0], buffer_size, doc.first_child());
+  }
+#ifndef PUGIXML_NO_EXCEPTIONS
+  catch (pugi::xpath_exception &) {
+  }
+#endif
+  return 0;
+}
+```
+
+The fix includes the following changes:
+1. Add `extern "C" {}` around the `#include` directives for `libxml/parser.h` and `libxml/xpath.h`. This is necessary because these headers are written in C and not C++, and the compiler needs to be told to use the C calling convention when including them.
+2. Include the necessary headers for `libxml` (`<libxml/parser.h>` and `<libxml/xpath.h>`).
+3. Change the `xml_document` to use `pugi::xml_document` instead of `xmlDocPtr`.

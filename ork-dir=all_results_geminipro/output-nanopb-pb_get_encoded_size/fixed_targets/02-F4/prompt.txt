@@ -1,0 +1,52 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+#include <stdint.h>
+#include <fuzzer/FuzzedDataProvider.h>
+#include "pb.h"
+
+extern "C" {
+#include "pb_decode.h"
+}
+
+struct pb_msgdesc_s {
+  uint32_t size;
+  const char *name;
+  const pb_field_t *fields;
+};
+
+bool pb_get_encoded_size(size_t *size, struct pb_msgdesc_s *fields, char *src_struct) {
+  return pb_get_encoded_size(size, fields, src_struct);
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider fdp(data, size);
+  struct pb_msgdesc_s fields;
+  char src_struct[1024];
+  size_t encoded_size;
+  if (!pb_get_encoded_size(&encoded_size, &fields, src_struct)) {
+    return 0;
+  }
+  char *encoded_data = new char[encoded_size];
+  pb_encode(&fields, src_struct, encoded_data);
+  delete[] encoded_data;
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

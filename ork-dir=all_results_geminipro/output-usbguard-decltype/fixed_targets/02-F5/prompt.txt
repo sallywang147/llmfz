@@ -1,0 +1,56 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+#include <fuzzer/FuzzedDataProvider.h>
+#include <tao/pegtl.hpp>
+#include <tao/pegtl/contrib/tracer.hpp>
+#include <usbguard/Rule.hpp>
+
+using namespace tao::pegtl;
+using namespace usbguard;
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  std::string input = stream.ConsumeRemainingBytesAsString();
+  string_input in(input.data(), input.data() + input.size());
+
+  Rule rule;
+  if (!rule.parse(in)) {  // Check if there are any errors in the parsing process
+    tracer trace(in, &rule, &trace);
+    for (const auto& error : trace.errors) {
+      std::cerr << error << std::endl;
+    }
+    return 1;  // Return a non-zero value to indicate that the input is invalid
+  }
+
+  return 0;
+}
+
+bool parse_rule(string_input *in, Rule *rule, tracer *trace) {
+  return rule->parse(*in);  // Call the parse function of the Rule class
+}
+```
+
+In this corrected code, the `parse_rule` function is defined, which takes three arguments: `string_input *in`, `Rule *rule`, and `tracer *trace`. This function is called inside the `LLVMFuzzerTestOneInput` function, which is required to resolve the build error.
+</code>
+
+The code has the following build issues:
+<error>
+The target function `bool decltype (struct tao::pegtl::string_input * , usbguard::Rule * , struct tao::pegtl::tracer * )` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `bool decltype (struct tao::pegtl::string_input * , usbguard::Rule * , struct tao::pegtl::tracer * )` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

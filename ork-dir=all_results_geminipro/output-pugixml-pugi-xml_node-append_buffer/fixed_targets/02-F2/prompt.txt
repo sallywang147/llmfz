@@ -1,0 +1,52 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "../src/pugixml.hpp"
+#include "fuzzer/FuzzedDataProvider.h"
+
+#include <stdint.h>
+#include <string.h>
+#include <string>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  FuzzedDataProvider fdp(Data, Size);
+  std::string text = fdp.ConsumeRandomLengthString(1024);
+
+#ifndef PUGIXML_NO_EXCEPTIONS
+  try
+#endif
+  {
+    pugi::xml_document doc;
+    doc.load_string(text.c_str());
+
+    size_t node_count = fdp.ConsumeIntegralInRange<size_t>(0, 10);
+    for (size_t i = 0; i < node_count; ++i) {
+      std::vector<uint8_t> xml_buffer = fdp.ConsumeBytes<uint8_t>(fdp.ConsumeIntegralInRange(0, 1024));
+      pugi::xml_parse_result result = doc.append_buffer(xml_buffer.data(), xml_buffer.size(), pugi::parse_full);
+    }
+  }
+#ifndef PUGIXML_NO_EXCEPTIONS
+  catch (pugi::xpath_exception &) {
+  }
+#endif
+  return 0;
+}
+```
+The fixed code is given above.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

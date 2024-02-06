@@ -1,0 +1,58 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <dwarf.h>
+#include <stddef.h>
+#include <stdint.h>
+
+extern "C" {
+#include <libdwarf.h>
+
+// Declare the function that is missing from the header file.
+int dwarf_reg_states_table_iterate(struct dwarf_cursor* cursor,
+                                   int (*callback)(struct dwarf_reg_state_table*, void*),
+                                   void* arg);
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  // Create a fake DWARF cursor.
+  struct dwarf_cursor cursor;
+  cursor.cu_length = stream.ConsumeIntegral<uint32_t>();
+  cursor.cu_offset = stream.ConsumeIntegral<uint32_t>();
+  cursor.section_offset = stream.ConsumeIntegral<uint32_t>();
+  cursor.end_section = stream.ConsumeIntegral<uint32_t>();
+  cursor.image_base = stream.ConsumeIntegral<uint64_t>();
+
+  // Create a fake callback function.
+  int callback(struct dwarf_reg_state_table* table, void* arg) {
+    return 0;
+  }
+
+  // Call the function to be fuzzed.
+  dwarf_reg_states_table_iterate(&cursor, callback, nullptr);
+
+  return 0;
+}
+```
+The issue in the original code was that the `dwarf_reg_states_table_iterate` function was not declared in the `libdwarf.h` header file. To fix this, we declared the function prototype ourselves inside the `extern "C" {}` block. This ensures that the function is properly declared and can be called from the `LLVMFuzzerTestOneInput` function.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

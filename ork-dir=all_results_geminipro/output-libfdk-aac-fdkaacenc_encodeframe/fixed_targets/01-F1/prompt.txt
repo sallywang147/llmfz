@@ -1,0 +1,114 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <vector>
+
+#include "fdk-aac/aacenc_lib.h"
+#include "fdk-aac/transport.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const uint8_t channels = stream.ConsumeIntegral<uint8_t>();
+  const uint8_t bitrate = stream.ConsumeIntegral<uint8_t>();
+  const uint8_t sample_rate = stream.ConsumeIntegral<uint8_t>();
+  const uint8_t profile = stream.ConsumeIntegral<uint8_t>();
+  const uint8_t channel_mode = stream.ConsumeIntegral<uint8_t>();
+  const uint8_t frame_length = stream.ConsumeIntegral<uint8_t>();
+
+  AACENC_InfoStruct info = {0};
+  AACENC_ERROR err = aacEncOpen(&info.enchandler, 0, channels);
+  if (err != AACENC_OK) {
+    return 0;
+  }
+
+  err = aacEncoder_SetParam(info.enchandler, AACENC_AOT, AOT_AAC_LC);
+  if (err != AACENC_OK) {
+    aacEncClose(&info.enchandler);
+    return 0;
+  }
+
+  err = aacEncoder_SetParam(info.enchandler, AACENC_BITRATE, bitrate);
+  if (err != AACENC_OK) {
+    aacEncClose(&info.enchandler);
+    return 0;
+  }
+
+  err = aacEncoder_SetParam(info.enchandler, AACENC_SAMPLERATE, sample_rate);
+  if (err != AACENC_OK) {
+    aacEncClose(&info.enchandler);
+    return 0;
+  }
+
+  err = aacEncoder_SetParam(info.enchandler, AACENC_CHANNELMODE, channel_mode);
+  if (err != AACENC_OK) {
+    aacEncClose(&info.enchandler);
+    return 0;
+  }
+
+  err = aacEncoder_SetParam(info.enchandler, AACENC_AACPROFILE, profile);
+  if (err != AACENC_OK) {
+    aacEncClose(&info.enchandler);
+    return 0;
+  }
+
+  err = aacEncoder_SetParam(info.enchandler, AACENC_FRAME_LENGTH, frame_length);
+  if (err != AACENC_OK) {
+    aacEncClose(&info.enchandler);
+    return 0;
+  }
+
+  AACENC_BufDesc in_buf = {0};
+  AACENC_BufDesc out_buf = {0};
+  int in_identifier = IN_AUDIO_DATA;
+  int in_size, in_elem_size;
+  int out_identifier = OUT_BITSTREAM_DATA;
+  int out_size, out_elem_size;
+
+  const size_t input_buffer_size = stream.ConsumeIntegralInRange<size_t>(
+      1, std::numeric_limits<size_t>::max());
+  std::vector<int16_t> input_buffer(input_buffer_size);
+  for (size_t i = 0; i < input_buffer_size; ++i) {
+    input_buffer[i] = stream.ConsumeIntegral<int16_t>();
+  }
+
+  in_buf.numBufs = 1;
+  in_buf.bufs = &input_buffer[0];
+  in_buf.bufSizes = &input_buffer_size;
+  in_buf.bufferIdentifiers = &in_identifier;
+
+  out_buf.numBufs = 1;
+  out_buf.bufs = nullptr;
+  out_buf.bufSizes = &out_size;
+  out_buf.bufferIdentifiers = &out_identifier;
+
+  err = aacEncEncode(info.enchandler, &in_buf, &out_buf);
+  if (err != AACENC_OK) {
+    aacEncClose(&info.enchandler);
+    return 0;
+  }
+
+  aacEncClose(&info.enchandler);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+The target function `int FDKaacEnc_EncodeFrame(struct AAC_ENC * hAacEnc, struct TRANSPORTENC * hTpEnc, short * inputBuffer, int inputBufferBufSize, int * nOutBytes, struct AACENC_EXT_PAYLOAD * extPayload)` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `int FDKaacEnc_EncodeFrame(struct AAC_ENC * hAacEnc, struct TRANSPORTENC * hTpEnc, short * inputBuffer, int inputBufferBufSize, int * nOutBytes, struct AACENC_EXT_PAYLOAD * extPayload)` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

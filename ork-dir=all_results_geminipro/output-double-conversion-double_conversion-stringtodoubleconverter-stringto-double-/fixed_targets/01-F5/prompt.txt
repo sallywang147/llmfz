@@ -1,0 +1,45 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+
+#include "double-conversion.h"
+
+extern "C" {
+#include "double-conversion.h"
+}
+
+using double_conversion::StringToDoubleConverter;
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  StringToDoubleConverter converter(StringToDoubleConverter::ALLOW_HEX | StringToDoubleConverter::ALLOW_OCTALS | StringToDoubleConverter::ALLOW_TRAILING_JUNK | StringToDoubleConverter::ALLOW_LEADING_SPACES | StringToDoubleConverter::ALLOW_TRAILING_SPACES | StringToDoubleConverter::ALLOW_SPACES_AFTER_SIGN | StringToDoubleConverter::ALLOW_CASE_INSENSIBILITY | StringToDoubleConverter::ALLOW_HEX_FLOATS,
+                                    /*empty_string_value=*/0.0,
+                                    /*junk_string_value=*/0.0, "inf", "nan");
+  double num_digits_unused;
+  converter.StringToDouble(reinterpret_cast<char *>(data), static_cast<int>(size), &num_digits_unused);
+  return 0;
+}
+```
+
+The issue in the original code was that the `StringToDouble` function was not called inside the `LLVMFuzzerTestOneInput` function. To fix this, the `StringToDouble` function was added to the `LLVMFuzzerTestOneInput` function.
+
+The corrected code now calls the `StringToDouble` function, which resolves the build error and allows the code to compile successfully.
+</code>
+
+The code has the following build issues:
+<error>
+The target function `double double_conversion::StringToDoubleConverter::StringTo<double>(double_conversion::StringToDoubleConverter * this, char * buffer, int length, int * processed_characters_count) const` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `double double_conversion::StringToDoubleConverter::StringTo<double>(double_conversion::StringToDoubleConverter * this, char * buffer, int length, int * processed_characters_count) const` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

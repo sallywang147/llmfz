@@ -1,0 +1,267 @@
+<system>
+You are a security testing engineer who wants to write a C++ program to execute all lines in a given function by defining and initializing its parameters in a suitable way before fuzzing the function through <code>LLVMFuzzerTestOneInput</code>.
+
+Carefully study the function signature and its parameters, then follow the example problems and solutions to answer the final problem. YOU MUST call the function to fuzz in the solution.
+
+Try as many variations of these inputs as possible. Do not use a random number generator such as <code>rand()</code>.
+
+Use <code>FuzzedDataProvider</code> to generate these inputs. You MUST declare it in <code>LLVMFuzzerTestOneInput</code>, like this:
+<code>
+FuzzedDataProvider stream(data, size);
+</code>
+
+Include <code>#include <fuzzer/FuzzedDataProvider.h></code> in the solution.
+
+This code shows example of using it:
+<code>
+// Extract integral values
+int int_arg = stream.ConsumeIntegral<int>();
+int int_arg_in_range = stream.ConsumeIntegralInRange(-100, 100);
+bool bool_arg = stream.ConsumeBool();
+
+// Extract floating point values
+float probability = stream.ConsumeProbability();
+double double_arg = stream.ConsumeFloatingPoint<double>();
+double double_arg_in_range = stream.ConsumeFloatingPointInRange(-1.0, 1.0);
+
+// Extract value from predefined set, such as enum or array
+EnumType enum = stream.ConsumeEnum<EnumType>();
+int valid_values = stream.PickValueInArray({FLAG_1, FLAG_2, FLAG_3});
+
+// Extract an array of bytes as a vector. You MUST call <code>.data()</code> to use result as pointer.
+std::vector<uint8_t> bytes = stream.ConsumeBytes<uint8_t>(stream.ConsumeIntegralInRange(0, max_size));
+void *data_ptr = bytes.data();
+std::vector<uint8_t> bytes2 = stream.ConsumeBytes<uint8_t>(requested_size);
+void *data2_ptr = bytes2.data();
+
+// Extract a string. You MUST use <code>.c_str()</code> to use result as pointer
+std::string str = stream.ConsumeBytesAsString(stream.ConsumeIntegralInRange(0, max_size));
+char *ptr = str.c_str();
+std::string str2 = stream.ConsumeBytesAsString(requested_size);
+char *ptr2 = str2.c_str();
+std::string str3 = stream.ConsumeRandomLengthString();
+char *ptr3 = str3.c_str();
+
+// Extract to user defined object
+struct_type_t obj;
+size_t consumed = stream.ConsumeData(&obj, sizeof(obj));
+</code>
+
+There MUST be AT MOST ONE call to <code>ConsumeRemainingBytes</code> to consume remaining input!
+<code>
+FuzzedDataProvider stream(data, size);
+
+std::vector<uint8_t> bytes3 = stream.ConsumeRemainingBytes();
+void *data3_ptr = bytes3.data();
+</code>
+
+All variables used MUST be declared and initialized. Carefully make sure that the variable and argument types in your code match and compiles successfully. Add type casts to make types match.
+
+Do not create new variables with the same names as existing variables.
+WRONG:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  void* data = Foo();
+}
+</code>
+
+EXTREMELY IMPORTANT: If you write code using <code>goto</code>, you MUST MUST also declare all variables BEFORE the <code>goto</code>. Never introduce new variables after the <code>goto</code>.
+WRONG:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int a = bar();
+  if (!some_function()) goto EXIT;
+  Foo b = target_function(data, size);
+  int c = another_func();
+EXIT:
+  return 0;
+}
+</code>
+
+CORRECT:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int a = bar();
+  Foo b;
+  int c;
+
+  if (!some_function()) goto EXIT;
+  b = target_function(data, size);
+  c = another_func()
+EXIT:
+  return 0;
+}
+</code>
+
+If an example provided for the same library includes a unique header file, then it must be included in the solution as well.
+</system>
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+void auto iter::impl::ChainMaker::operator(iter::impl::Chained * this, iter::impl::ChainMaker * cs, std::vector * cs, std::vector * cs, std::vector * ) const
+</function header>
+</task>
+
+<solution>
+
+#include <chain.hpp>
+#include <combinations.hpp>
+#include <compress.hpp>
+#include <cycle.hpp>
+#include <groupby.hpp>
+
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <iterator>
+#include <string>
+#include <utility>
+#include <vector>
+
+using iter::chain;
+using iter::combinations;
+using iter::compress;
+using iter::cycle;
+using iter::groupby;
+
+void FuzzChained(const uint8_t *data, size_t size) {
+  FuzzedDataProvider fdp(data, size);
+  std::vector<char> v;
+  for (int i = 0; i < fdp.ConsumeIntegralInRange<int>(1, 1024); i++) {
+    v.push_back((char)fdp.ConsumeIntegral<char>());
+  }
+  const auto ch = chain(v, v, v);
+  std::vector<char> v2(std::begin(ch), std::end(ch));
+}
+
+int length(const std::string &s) { return s.size(); }
+
+void FuzzGroupby(const uint8_t *data, size_t size) {
+  FuzzedDataProvider fdp(data, size);
+  std::vector<std::string> v;
+  for (int i = 0; i < fdp.ConsumeIntegralInRange<int>(1, 1024); i++) {
+    v.push_back(fdp.ConsumeRandomLengthString());
+  }
+  for (auto &&gb : groupby(v, length)) {
+  }
+}
+
+void FuzzCycle(const uint8_t *data, size_t size) {
+  FuzzedDataProvider fdp(data, size);
+  std::vector<int> v;
+  for (int i = 0; i < fdp.ConsumeIntegralInRange<int>(1, 1024); i++) {
+    v.push_back(fdp.ConsumeIntegral<int>());
+  }
+  auto ch = cycle(v);
+
+  std::vector<int> o;
+  size_t count = 0;
+  for (auto val : ch) {
+    o.push_back(val);
+    count++;
+    if (count > 1500) {
+      break;
+    }
+  }
+}
+
+void FuzzCombinations(const uint8_t *data, size_t size) {
+  FuzzedDataProvider fdp(data, size);
+  std::string s = fdp.ConsumeRandomLengthString();
+  std::vector<std::vector<char>> sc;
+  size_t count = 0;
+  for (auto &&v : combinations(s, fdp.ConsumeIntegralInRange(1, 16))) {
+    sc.emplace_back(std::begin(v), std::end(v));
+    count++;
+    if (count > 1500) {
+      break;
+    }
+  }
+}
+
+void FuzzCompress(const uint8_t *data, size_t size) {
+  FuzzedDataProvider fdp(data, size);
+  std::vector<int> ivec;
+  std::vector<bool> bvec;
+  for (int i = 0; i < 100; i++) {
+    ivec.push_back(fdp.ConsumeIntegralInRange(1, 1000000));
+    ivec.push_back(fdp.ConsumeBool());
+  }
+  auto c = compress(ivec, bvec);
+  std::vector<int> v(std::begin(c), std::end(c));
+  const auto &c2 = c;
+  (void)(std::begin(c) == std::end(c2));
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzChained(data, size);
+  FuzzGroupby(data, size);
+  FuzzCycle(data, size);
+  FuzzCombinations(data, size);
+  FuzzCompress(data, size);
+  return 0;
+}
+
+</solution>
+
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+BGD_DECLARE(void) gdImageString (gdImagePtr im, gdFontPtr f, int x, int y, unsigned char *s, int color)
+</function header>
+</task>
+
+<solution>
+
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+#include "gd.h"
+#include "gdfontg.h"
+#include "gdfontl.h"
+#include "gdfontmb.h"
+#include "gdfonts.h"
+#include "gdfontt.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const uint8_t slate_width = stream.ConsumeIntegral<uint8_t>();
+  const uint8_t slate_height = stream.ConsumeIntegral<uint8_t>();
+  gdImagePtr slate_image = gdImageCreateTrueColor(slate_width, slate_height);
+  if (slate_image == nullptr) {
+    return 0;
+  }
+
+  const int x_position = stream.ConsumeIntegral<int>();
+  const int y_position = stream.ConsumeIntegral<int>();
+  const int text_color = stream.ConsumeIntegral<int>();
+  const gdFontPtr font_ptr = stream.PickValueInArray(
+      {gdFontGetGiant(), gdFontGetLarge(), gdFontGetMediumBold(),
+       gdFontGetSmall(), gdFontGetTiny()});
+  const std::string text = stream.ConsumeRemainingBytesAsString();
+
+  gdImageString(slate_image, font_ptr, x_position, y_position,
+                reinterpret_cast<uint8_t*>(const_cast<char*>(text.c_str())),
+                text_color);
+  gdImageDestroy(slate_image);
+  return 0;
+}
+</solution>
+
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+void iter::impl::Combinator<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >&>::Iterator<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >&>::~Iterator(iter::impl::Combinator<std::string &>::Iterator * this)
+</function header>
+</task>
+You MUST call <code>
+void iter::impl::Combinator<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >&>::Iterator<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >&>::~Iterator(iter::impl::Combinator<std::string &>::Iterator * this)
+</code> in your solution!
+
+<solution>

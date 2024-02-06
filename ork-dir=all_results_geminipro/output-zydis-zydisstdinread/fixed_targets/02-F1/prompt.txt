@@ -1,0 +1,60 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <string>
+
+#include "Zydis/Zydis.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  std::string input = stream.ConsumeRemainingBytesAsString();
+  const char* input_ptr = input.c_str();
+  const size_t input_size = input.size();
+  char buf[1024];
+
+  ZydisDecoder decoder;
+  ZydisDecoderInit(&decoder, ZYDIS_MACHINE_MODE_LONG_64,
+                   ZYDIS_ADDRESS_WIDTH_64);
+  ZydisFormatter formatter;
+  ZydisFormatterInit(&formatter, ZYDIS_FORMATTER_STYLE_INTEL);
+
+  while (ZydisStdinRead(nullptr, buf, sizeof(buf)) != 0) {
+    ZydisDecodedInstruction instruction;
+    ZydisDecodedOperand operands[ZYDIS_MAX_OPERANDS];
+    ZydisDecodedRegister registers[ZYDIS_MAX_REGISTERS];
+    ZydisDecodedMemory memory;
+
+    ZydisDecoderDecodeBuffer(&decoder, buf, sizeof(buf), &instruction);
+
+    ZydisFormatterFormatInstruction(&formatter, &instruction, operands,
+                                   registers, &memory, buf, sizeof(buf));
+
+    printf("%s\n", buf);
+  }
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

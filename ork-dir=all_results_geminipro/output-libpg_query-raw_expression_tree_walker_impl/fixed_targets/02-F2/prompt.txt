@@ -1,0 +1,58 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include "raw_expression_tree.h"
+
+extern "C" {
+#include "raw_expression_tree_walker.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  struct Node* node =
+      stream.ConsumeBool()
+          ? raw_expression_tree_new_literal(stream.ConsumeIntegral<int>())
+          : raw_expression_tree_new_variable(stream.ConsumeBytesAsString(1));
+  if (node == NULL) {
+    return 0;
+  }
+  func_type* func = stream.PickValueInArray(
+      {raw_expression_tree_add, raw_expression_tree_sub, raw_expression_tree_mul,
+       raw_expression_tree_div, raw_expression_tree_mod, raw_expression_tree_pow});
+  char* buf = new char[size + 1];
+  if (buf == NULL) {
+    raw_expression_tree_free(node);
+    return 0;
+  }
+  memcpy(buf, data, size);
+  buf[size] = '\0';
+  bool result = raw_expression_tree_walker_impl(node, func, buf);
+  raw_expression_tree_free(node);
+  delete[] buf;
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

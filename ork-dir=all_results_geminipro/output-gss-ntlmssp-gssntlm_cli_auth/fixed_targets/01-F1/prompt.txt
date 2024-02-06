@@ -1,0 +1,52 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <gssapi.h>
+#include <krb5.h>
+#include <ntlmssp.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  OM_uint32 maj_stat, min_stat;
+  gss_ctx_id_t ctx = GSS_C_NO_CONTEXT;
+  gssntlm_cred cred = {0};
+  struct ntlm_buffer target_info = {0};
+  gss_channel_bindings_struct input_chan_bindings = {0};
+  int in_flags = 0;
+  int minor_status = 0;
+
+  // Parse the fuzzed data.
+  FuzzedDataProvider data_provider(Data, Size);
+  std::vector<uint8_t> target_info_data =
+      data_provider.ConsumeBytes<uint8_t>(data_provider.remaining_bytes());
+  target_info.length = target_info_data.size();
+  target_info.data = target_info_data.data();
+
+  // Call the function to be fuzzed.
+  maj_stat = gssntlm_cli_auth(&minor_status, &ctx, &cred, &target_info, in_flags,
+                              &input_chan_bindings);
+
+  // Clean up.
+  gss_release_cred(&min_stat, &cred.gss_cred);
+  free(target_info.data);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

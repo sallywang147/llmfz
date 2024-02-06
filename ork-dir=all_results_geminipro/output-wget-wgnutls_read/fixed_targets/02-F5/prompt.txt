@@ -1,0 +1,53 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+extern "C" {
+#include "wgnutls.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const int fd = stream.ConsumeIntegral<int>();
+  const size_t bufsize = stream.ConsumeIntegralInRange<size_t>(1, 1024);
+  char* buf = new char[bufsize];
+  const std::string arg = stream.ConsumeRemainingBytesAsString();
+  const double timeout = stream.ConsumeFloatingPoint<double>();
+
+  int ret = wgnutls_read(fd, buf, bufsize, arg.c_str(), timeout);
+  delete[] buf;
+  return ret;
+}
+```
+
+The original code has the following issues:
+
+- The `wgnutls.h` header is not wrapped with `extern "C" {}`. This is necessary because the header is written in C and not C++, and the C++ compiler needs to know that the functions and variables declared in the header are C-style, not C++-style.
+- The `wgnutls_read` function is declared as `int wgnutls_read(int, char*, size_t, const char*, double)`, but the `LLVMFuzzerTestOneInput` function calls it as `int wgnutls_read(int, char*, size_t, std::string, double)`. This is a type mismatch, and the compiler will generate an error.
+
+To fix the issues, we can wrap the `wgnutls.h` header with `extern "C" {}` and change the type of the fourth argument of `wgnutls_read` from `std::string` to `const char*`.
+
+The corrected code is shown above.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

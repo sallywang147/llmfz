@@ -1,0 +1,50 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+#include <fuzzer/FuzzedDataProvider.h>
+#include <fmt/format.h>
+
+extern "C" {
+#include <fmt/format.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider provider(data, size);
+
+  double value = provider.ConsumeFloatingPoint<double>();
+  int precision = provider.ConsumeIntegralInRange<int>(0, 100);
+  size_t width = provider.ConsumeIntegralInRange<size_t>(0, 100);
+
+  std::vector<char> buffer(width);
+  fmt::v9::detail::buffer<char> buf{buffer.data(), buffer.size()};
+
+  fmt::v9::detail::format_float<double>(value, precision, width, &buf);
+
+  return 0;
+}
+```
+
+In this code, we have wrapped the `#include <fmt/format.h>` directive with `extern "C" {}` to resolve the linking issue. This is necessary because the `fmt` library is written in C++, and the `LLVMFuzzerTestOneInput` function is defined in C. By wrapping the `#include` directive, we are telling the compiler to treat the `fmt` library as a C library, which allows the linking to succeed.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

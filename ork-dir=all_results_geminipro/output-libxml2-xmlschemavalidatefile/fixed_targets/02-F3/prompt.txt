@@ -1,0 +1,97 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <libxml/parser.h>
+#include <libxml/relaxng.h>
+#include <libxml/xmlschemastypes.h>
+#include <libxml/xmlschemas.h>
+#include <libxml/xmlschema.h>
+
+extern "C" {
+#include <stdlib.h>
+#include <string.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  xmlRelaxNGParserCtxtPtr rng_ctxt;
+  xmlRelaxNGPtr rng;
+  xmlSchemaParserCtxtPtr schema_ctxt;
+  xmlSchemaPtr schema;
+  xmlSchemaValidCtxtPtr valid_ctxt;
+  int ret;
+
+  rng_ctxt = xmlRelaxNGNewParserCtxt();
+  if (rng_ctxt == NULL) {
+    return 0;
+  }
+
+  rng = xmlRelaxNGParse(rng_ctxt, "test.rng");
+  if (rng == NULL) {
+    xmlRelaxNGFreeParserCtxt(rng_ctxt);
+    return 0;
+  }
+
+  schema_ctxt = xmlSchemaNewParserCtxt("test.xsd");
+  if (schema_ctxt == NULL) {
+    xmlRelaxNGFree(rng);
+    xmlRelaxNGFreeParserCtxt(rng_ctxt);
+    return 0;
+  }
+
+  schema = xmlSchemaParse(schema_ctxt);
+  if (schema == NULL) {
+    xmlSchemaFreeParserCtxt(schema_ctxt);
+    xmlRelaxNGFree(rng);
+    xmlRelaxNGFreeParserCtxt(rng_ctxt);
+    return 0;
+  }
+
+  valid_ctxt = xmlSchemaNewValidCtxt(schema);
+  if (valid_ctxt == NULL) {
+    xmlSchemaFree(schema);
+    xmlSchemaFreeParserCtxt(schema_ctxt);
+    xmlRelaxNGFree(rng);
+    xmlRelaxNGFreeParserCtxt(rng_ctxt);
+    return 0;
+  }
+
+  FuzzedDataProvider provider(data, size);
+  std::string filename = provider.ConsumeRandomLengthString(1024);
+
+  ret = xmlSchemaValidateFile(valid_ctxt, (char*)filename.c_str(), 0);
+  if (ret != 0) {
+    xmlSchemaFreeValidCtxt(valid_ctxt);
+    xmlSchemaFree(schema);
+    xmlSchemaFreeParserCtxt(schema_ctxt);
+    xmlRelaxNGFree(rng);
+    xmlRelaxNGFreeParserCtxt(rng_ctxt);
+    return 0;
+  }
+
+  xmlSchemaFreeValidCtxt(valid_ctxt);
+  xmlSchemaFree(schema);
+  xmlSchemaFreeParserCtxt(schema_ctxt);
+  xmlRelaxNGFree(rng);
+  xmlRelaxNGFreeParserCtxt(rng_ctxt);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

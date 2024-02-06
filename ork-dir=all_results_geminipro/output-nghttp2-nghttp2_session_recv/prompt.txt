@@ -1,0 +1,276 @@
+<system>
+You are a security testing engineer who wants to write a C++ program to execute all lines in a given function by defining and initializing its parameters in a suitable way before fuzzing the function through <code>LLVMFuzzerTestOneInput</code>.
+
+Carefully study the function signature and its parameters, then follow the example problems and solutions to answer the final problem. YOU MUST call the function to fuzz in the solution.
+
+Try as many variations of these inputs as possible. Do not use a random number generator such as <code>rand()</code>.
+
+Use <code>FuzzedDataProvider</code> to generate these inputs. You MUST declare it in <code>LLVMFuzzerTestOneInput</code>, like this:
+<code>
+FuzzedDataProvider stream(data, size);
+</code>
+
+Include <code>#include <fuzzer/FuzzedDataProvider.h></code> in the solution.
+
+This code shows example of using it:
+<code>
+// Extract integral values
+int int_arg = stream.ConsumeIntegral<int>();
+int int_arg_in_range = stream.ConsumeIntegralInRange(-100, 100);
+bool bool_arg = stream.ConsumeBool();
+
+// Extract floating point values
+float probability = stream.ConsumeProbability();
+double double_arg = stream.ConsumeFloatingPoint<double>();
+double double_arg_in_range = stream.ConsumeFloatingPointInRange(-1.0, 1.0);
+
+// Extract value from predefined set, such as enum or array
+EnumType enum = stream.ConsumeEnum<EnumType>();
+int valid_values = stream.PickValueInArray({FLAG_1, FLAG_2, FLAG_3});
+
+// Extract an array of bytes as a vector. You MUST call <code>.data()</code> to use result as pointer.
+std::vector<uint8_t> bytes = stream.ConsumeBytes<uint8_t>(stream.ConsumeIntegralInRange(0, max_size));
+void *data_ptr = bytes.data();
+std::vector<uint8_t> bytes2 = stream.ConsumeBytes<uint8_t>(requested_size);
+void *data2_ptr = bytes2.data();
+
+// Extract a string. You MUST use <code>.c_str()</code> to use result as pointer
+std::string str = stream.ConsumeBytesAsString(stream.ConsumeIntegralInRange(0, max_size));
+char *ptr = str.c_str();
+std::string str2 = stream.ConsumeBytesAsString(requested_size);
+char *ptr2 = str2.c_str();
+std::string str3 = stream.ConsumeRandomLengthString();
+char *ptr3 = str3.c_str();
+
+// Extract to user defined object
+struct_type_t obj;
+size_t consumed = stream.ConsumeData(&obj, sizeof(obj));
+</code>
+
+There MUST be AT MOST ONE call to <code>ConsumeRemainingBytes</code> to consume remaining input!
+<code>
+FuzzedDataProvider stream(data, size);
+
+std::vector<uint8_t> bytes3 = stream.ConsumeRemainingBytes();
+void *data3_ptr = bytes3.data();
+</code>
+
+All variables used MUST be declared and initialized. Carefully make sure that the variable and argument types in your code match and compiles successfully. Add type casts to make types match.
+
+Do not create new variables with the same names as existing variables.
+WRONG:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  void* data = Foo();
+}
+</code>
+
+EXTREMELY IMPORTANT: If you write code using <code>goto</code>, you MUST MUST also declare all variables BEFORE the <code>goto</code>. Never introduce new variables after the <code>goto</code>.
+WRONG:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int a = bar();
+  if (!some_function()) goto EXIT;
+  Foo b = target_function(data, size);
+  int c = another_func();
+EXIT:
+  return 0;
+}
+</code>
+
+CORRECT:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int a = bar();
+  Foo b;
+  int c;
+
+  if (!some_function()) goto EXIT;
+  b = target_function(data, size);
+  c = another_func()
+EXIT:
+  return 0;
+}
+</code>
+
+If an example provided for the same library includes a unique header file, then it must be included in the solution as well.
+</system>
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+size_t inflate_hd(struct nghttp2_hd_inflater * , struct nva_out * , struct nghttp2_bufs * , size_t , struct nghttp2_mem * )
+</function header>
+</task>
+
+<solution>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <string>
+
+extern "C" {
+#include "nghttp2_frame.h"
+#include "nghttp2_hd.h"
+#include <string.h>
+
+#include "nghttp2_test_helper.h"
+
+#define HEADERS_LENGTH 7
+
+static nghttp2_nv fuzz_make_nv(std::string s1, std::string s2) {
+  nghttp2_nv nv;
+  uint8_t *n = (uint8_t *)malloc(s1.size());
+  memcpy(n, s1.c_str(), s1.size());
+
+  uint8_t *v = (uint8_t *)malloc(s2.size());
+  memcpy(v, s2.c_str(), s2.size());
+
+  nv.name = n;
+  nv.value = v;
+  nv.namelen = s1.size();
+  nv.valuelen = s2.size();
+  nv.flags = NGHTTP2_NV_FLAG_NONE;
+
+  return nv;
+}
+
+static void fuzz_free_nv(nghttp2_nv *nv) {
+  free(nv->name);
+  free(nv->value);
+}
+
+void check_frame_pack_headers(FuzzedDataProvider *data_provider) {
+  nghttp2_hd_deflater deflater;
+  nghttp2_hd_inflater inflater;
+  nghttp2_headers frame, oframe;
+  nghttp2_bufs bufs;
+  nghttp2_nv *nva;
+  nghttp2_priority_spec pri_spec;
+  size_t nvlen;
+  nva_out out;
+  size_t hdblocklen;
+  int rv;
+  nghttp2_mem *mem;
+
+  mem = nghttp2_mem_default();
+  frame_pack_bufs_init(&bufs);
+
+  nva_out_init(&out);
+  nghttp2_hd_deflate_init(&deflater, mem);
+  nghttp2_hd_inflate_init(&inflater, mem);
+
+  /* Create a set of headers seeded with data from the fuzzer */
+  nva = (nghttp2_nv *)mem->malloc(sizeof(nghttp2_nv) * HEADERS_LENGTH, NULL);
+  for (int i = 0; i < HEADERS_LENGTH; i++) {
+    nva[i] = fuzz_make_nv(data_provider->ConsumeRandomLengthString(30), data_provider->ConsumeRandomLengthString(300));
+  }
+
+  nvlen = HEADERS_LENGTH;
+  nghttp2_priority_spec_default_init(&pri_spec);
+  nghttp2_frame_headers_init(&frame, NGHTTP2_FLAG_END_STREAM | NGHTTP2_FLAG_END_HEADERS, 1000000007, NGHTTP2_HCAT_REQUEST, &pri_spec, nva, nvlen);
+
+  /* Perform a set of operations with the fuzz data */
+  rv = nghttp2_frame_pack_headers(&bufs, &frame, &deflater);
+  if (rv == 0) {
+    unpack_framebuf((nghttp2_frame *)&oframe, &bufs);
+
+    inflate_hd(&inflater, &out, &bufs, NGHTTP2_FRAME_HDLEN, mem);
+    nva_out_reset(&out, mem);
+    nghttp2_bufs_reset(&bufs);
+  }
+
+  nghttp2_nv *nva2 = NULL;
+  rv = nghttp2_nv_array_copy(&nva2, nva, nvlen, mem);
+  if (rv == 0) {
+    nghttp2_nv_array_del(nva2, mem);
+  }
+
+  /* Cleanup */
+  for (int i = 0; i < HEADERS_LENGTH; i++) {
+    fuzz_free_nv(&nva[i]);
+  }
+
+  nghttp2_bufs_free(&bufs);
+  nghttp2_frame_headers_free(&frame, mem);
+  nghttp2_hd_inflate_free(&inflater);
+  nghttp2_hd_deflate_free(&deflater);
+}
+
+void check_frame_push_promise(FuzzedDataProvider *data_provider) {
+  nghttp2_hd_deflater deflater;
+  nghttp2_hd_inflater inflater;
+  nghttp2_push_promise frame, oframe;
+  nghttp2_bufs bufs;
+  nghttp2_nv *nva;
+  nghttp2_priority_spec pri_spec;
+  size_t nvlen;
+  nva_out out;
+  size_t hdblocklen;
+  int rv;
+  nghttp2_mem *mem;
+
+  mem = nghttp2_mem_default();
+  frame_pack_bufs_init(&bufs);
+
+  nva_out_init(&out);
+  nghttp2_hd_deflate_init(&deflater, mem);
+  nghttp2_hd_inflate_init(&inflater, mem);
+
+  /* Create a set of headers seeded with data from the fuzzer */
+  nva = (nghttp2_nv *)mem->malloc(sizeof(nghttp2_nv) * HEADERS_LENGTH, NULL);
+  for (int i = 0; i < HEADERS_LENGTH; i++) {
+    nva[i] = fuzz_make_nv(data_provider->ConsumeRandomLengthString(30), data_provider->ConsumeRandomLengthString(300));
+  }
+  nvlen = HEADERS_LENGTH;
+  nghttp2_priority_spec_default_init(&pri_spec);
+
+  /* Perform a set of operations with the fuzz data */
+  nghttp2_frame_push_promise_init(&frame, NGHTTP2_FLAG_END_HEADERS, 1000000007, (1U << 31) - 1, nva, nvlen);
+
+  rv = nghttp2_frame_pack_push_promise(&bufs, &frame, &deflater);
+  if (rv == 0) {
+    unpack_framebuf((nghttp2_frame *)&oframe, &bufs);
+  }
+
+  nghttp2_nv *nva2 = NULL;
+  rv = nghttp2_nv_array_copy(&nva2, nva, nvlen, mem);
+  if (rv == 0) {
+    nghttp2_nv_array_del(nva2, mem);
+  }
+
+  /* Cleanup */
+  for (int i = 0; i < HEADERS_LENGTH; i++) {
+    fuzz_free_nv(&nva[i]);
+  }
+
+  nghttp2_bufs_reset(&bufs);
+  nghttp2_bufs_free(&bufs);
+
+  nghttp2_frame_push_promise_free(&frame, mem);
+  nghttp2_hd_inflate_free(&inflater);
+  nghttp2_hd_deflate_free(&deflater);
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider data_provider(data, size);
+
+  check_frame_pack_headers(&data_provider);
+  check_frame_push_promise(&data_provider);
+  return 0;
+}
+
+} // extern C
+
+</solution>
+
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+int nghttp2_session_recv(struct nghttp2_session * )
+</function header>
+</task>
+You MUST call <code>
+int nghttp2_session_recv(struct nghttp2_session * )
+</code> in your solution!
+
+<solution>

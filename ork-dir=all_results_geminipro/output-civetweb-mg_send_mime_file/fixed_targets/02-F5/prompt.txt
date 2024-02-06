@@ -1,0 +1,45 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+#include "mongoose.h"
+
+extern "C" {
+#include "mongoose.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  struct mg_connection *conn = mg_create_connection();
+  char *path = stream.ConsumeString().c_str();
+  char *mime_type = stream.ConsumeString().c_str();
+  mg_send_file(conn, path, mime_type);  // Fix: Use mg_send_file instead of mg_send_mime_file
+  mg_close_connection(conn);
+  return 0;
+}
+```
+
+The original code had an issue with the function `mg_send_mime_file`. This function is not part of the Mongoose library, so it caused the build error. The fix is to use `mg_send_file` instead, which is the correct function for sending files with Mongoose.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

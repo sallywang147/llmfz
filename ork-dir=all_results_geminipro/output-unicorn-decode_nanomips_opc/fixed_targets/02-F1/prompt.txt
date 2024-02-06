@@ -1,0 +1,60 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+#include "qemu/osdep.h"
+#include "qemu/disas.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  // Initialize disassembler context.
+  DisasContext* ctx = disas_init(&default_disas_options);
+  if (ctx == NULL) {
+    fprintf(stderr, "Failed to initialize disassembler context.\n");
+    return 1;
+  }
+
+  // Initialize CPU state.
+  CPUMIPSState* env = cpu_init(MIPS_CPU_MIPS32);
+  if (env == NULL) {
+    fprintf(stderr, "Failed to initialize CPU state.\n");
+    disas_free(ctx);
+    return 1;
+  }
+
+  // Set the PC to the start of the input data.
+  env->pc = 0x1000;
+
+  // Decode the input data.
+  int ret = decode_nanomips_opc(env, ctx);
+  if (ret < 0) {
+    fprintf(stderr, "Failed to decode input data: %d\n", ret);
+  }
+
+  // Clean up.
+  cpu_deinit(env);
+  disas_free(ctx);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

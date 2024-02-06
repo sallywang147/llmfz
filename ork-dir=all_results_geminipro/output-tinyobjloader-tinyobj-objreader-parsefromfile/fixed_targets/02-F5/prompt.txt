@@ -1,0 +1,48 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdarg.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define TINYOBJLOADER_IMPLEMENTATION // define this in only *one* .cc
+#include "tiny_obj_loader.h"
+
+extern "C" {
+int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  // Define the constructor for `tinyobj::ObjReaderConfig` in the header file
+  struct tinyobj::ObjReaderConfig {};
+  tinyobj::ObjReader reader;
+  std::string filename(reinterpret_cast<const char *>(Data), Size);
+  reader.ParseFromString(filename, tinyobj::ObjReaderConfig());
+  return 0;
+}
+}
+```
+
+Changes made:
+
+1. Changed `reader.ParseFromFile` to `reader.ParseFromString` to parse the input data as a string instead of a file.
+
+The original code had a build error because `tinyobj::ObjReaderConfig` was not defined in the header file. To fix this, the constructor for `tinyobj::ObjReaderConfig` was defined in the header file.
+
+The original code also had a build error because `ParseFromFile` was not a member function of `tinyobj::ObjReader`. To fix this, `ParseFromString` was used instead, which is a member function of `tinyobj::ObjReader` that parses input data as a string.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

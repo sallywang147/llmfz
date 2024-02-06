@@ -1,0 +1,51 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "hal_thread.h"
+#include "iec61850_server.h"
+
+extern "C" {
+#include "mms_value.h"
+}
+
+int LLVMFuzzerTestOneInput(const char *data, size_t size) {
+  int out;
+  MmsValue *value = NULL;
+  value = MmsValue_decodeMmsData(data, 0, size, &out);
+
+  if (value != NULL) {
+    char *buffer = new char[1024];
+    MmsValue_encodeMmsData(value, buffer, 0, true);
+    delete[] buffer;
+
+    MmsValue_delete(value);
+  }
+
+  return 0;
+}
+```
+
+Changes made:
+
+* The `#include` directive for `mms_value.h` was wrapped with `extern "C" {}`.
+* The `MmsValue_delete` function was declared in the `mms_value.h` header file.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

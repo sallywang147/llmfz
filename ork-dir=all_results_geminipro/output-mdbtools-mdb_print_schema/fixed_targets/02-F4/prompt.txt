@@ -1,0 +1,46 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdio.h>
+#include <stdlib.h>
+#include <fuzzer/FuzzedDataProvider.h>
+
+extern "C" {
+#include "mdbtools.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  MdbHandle *mdb = mdb_open_buffer((void *)Data, Size, MDB_NOFLAGS);
+  if (mdb) {
+    FuzzedDataProvider stream(Data, Size);
+
+    std::string tabname = stream.ConsumeRemainingBytesAsString();
+    std::string dbnamespace = stream.ConsumeRemainingBytesAsString();
+    int export_options = stream.ConsumeIntegral<int>();
+
+    mdb_print_schema(mdb, stdout, const_cast<char *>(tabname.c_str()),
+                     const_cast<char *>(dbnamespace.c_str()), export_options);
+    mdb_close(mdb);
+  }
+  return 0;
+}
+```
+
+The fixed code includes the necessary C standard library headers `<stdio.h>` and `<stdlib.h>` and wraps the `mdbtools.h` header with `extern "C" {}`, resolving the build issues.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

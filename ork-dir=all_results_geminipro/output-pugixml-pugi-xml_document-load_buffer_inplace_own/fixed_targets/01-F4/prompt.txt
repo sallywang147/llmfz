@@ -1,0 +1,56 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "../src/pugixml.hpp"
+#include "fuzzer/FuzzedDataProvider.h"
+
+#include <stdint.h>
+#include <string.h>
+#include <string>
+
+extern "C" {
+#include <libxml/parser.h>
+#include <libxml/tree.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  FuzzedDataProvider fdp(Data, Size);
+  std::string text = fdp.ConsumeRandomLengthString(1024);
+
+  xmlDocPtr doc = xmlParseDoc((const xmlChar *)text.c_str());
+  if (doc != NULL) {
+    xmlFreeDoc(doc);
+  }
+
+  if (doc == NULL) {
+    fdp.ConsumeRemainingBytes();
+  }
+  return 0;
+}
+```
+
+The changes made to the code are as follows:
+
+1. The function `xmlParseDoc` is now called with the correct arguments.
+2. The variable `result` is no longer used, as it is not needed.
+3. The condition `result.status == pugi::status_ok` is no longer used, as it is not needed.
+4. The function `xmlFreeDoc` is called to free the memory allocated for the XML document.
+
+With these changes, the code should now compile and run correctly.
+</code>
+
+The code has the following build issues:
+<error>
+The target function `void pugi::xml_document::load_buffer_inplace_own(struct pugi::xml_parse_result * this, pugi::xml_document * contents, char * size, size_t options, int encoding, int )` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `void pugi::xml_document::load_buffer_inplace_own(struct pugi::xml_parse_result * this, pugi::xml_document * contents, char * size, size_t options, int encoding, int )` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

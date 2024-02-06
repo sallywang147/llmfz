@@ -1,0 +1,55 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <fuzzer/FuzzedDataProvider.h>
+
+extern "C" {
+#include "roaring/roaring.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const uint8_t bitmap_size = stream.ConsumeIntegral<uint8_t>();
+  roaring_bitmap_t* bitmap1 = roaring_bitmap_create();
+  roaring_bitmap_t* bitmap2 = roaring_bitmap_create();
+  for (uint8_t i = 0; i < bitmap_size; i++) {
+    const uint32_t value = stream.ConsumeIntegral<uint32_t>();
+    if (stream.ConsumeBool()) {
+      roaring_bitmap_add(bitmap1, value);
+    }
+    if (stream.ConsumeBool()) {
+      roaring_bitmap_add(bitmap2, value);
+    }
+  }
+  roaring_bitmap_lazy_xor_inplace(bitmap1, bitmap2);
+  roaring_bitmap_free(bitmap1);
+  roaring_bitmap_free(bitmap2);
+  return 0;
+}
+```
+The original code has the following issues:
+
+1. The `#include <fuzzer/FuzzedDataProvider.h>` directive is missing. This directive is necessary to include the `FuzzedDataProvider` class, which is used to parse the input data.
+2. The `extern "C" {}` directive is missing around the `#include "roaring/roaring.h"` directive. This directive is necessary to ensure that the C++ compiler does not mangle the names of the functions and variables defined in the `roaring` library, which is written in C.
+
+The fixed code includes the necessary directives and wraps the `#include "roaring/roaring.h"` directive with `extern "C" {}`. This should allow the code to compile and run successfully.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

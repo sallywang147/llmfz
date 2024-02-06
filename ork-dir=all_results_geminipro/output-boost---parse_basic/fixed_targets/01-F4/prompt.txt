@@ -1,0 +1,52 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <boost/regex.hpp>
+#include <fuzzer/FuzzedDataProvider.h>
+
+extern "C" {
+#include <regex>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  FuzzedDataProvider fuzzed_data(Data, Size);
+
+  // First value is length of the regex string
+  size_t regex_length = fuzzed_data.ConsumeIntegral<uint8_t>();
+  // Second value is regexp string whose length is `regex_length`
+  std::string regex_string = fuzzed_data.ConsumeBytesAsString(regex_length);
+
+  // Parse the regular expression string
+  boost::re_detail_500::basic_regex_parser<wchar_t, boost::c_regex_traits<wchar_t> > parser;
+  parser.parse(regex_string.c_str(), regex_string.c_str() + regex_length);
+
+  // Compile the regular expression
+  std::regex regex(regex_string);
+
+  return 0;
+}
+```
+
+The original code had two issues:
+
+1. The `parse_basic` method of the `boost::re_detail_500::basic_regex_parser` class was called incorrectly. The correct method is `parse`.
+2. The `std::regex` constructor was called with a `std::string` argument, but the `std::regex` constructor expects a `const char*` argument. To fix this, the `regex_string` variable was converted to a `const char*` using the `c_str()` method.
+
+With these changes, the code should now compile and run correctly.
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

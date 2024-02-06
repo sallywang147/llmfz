@@ -1,0 +1,40 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <http_parser.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
+extern "C" {
+#include <http_parser.h>
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  static const http_parser_settings settings_null = {.on_message_begin = 0, .on_header_field = 0, .on_header_value = 0, .on_url = 0, .on_status = 0, .on_body = 0, .on_headers_complete = 0, .on_message_complete = 0, .on_chunk_header = 0, .on_chunk_complete = 0};
+
+  http_parser parser;
+  http_parser_init(&parser, HTTP_BOTH);
+  http_parser_execute(&parser, &settings_null, (char *)data, size);
+
+  http_parser_pause(&parser, 1);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>
