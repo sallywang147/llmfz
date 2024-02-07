@@ -1,0 +1,41 @@
+INFO:__main__:Running: docker run --rm --privileged --shm-size=2g --platform linux/amd64 -e FUZZING_ENGINE=libfuzzer -e SANITIZER=address -e RUN_FUZZER_MODE=interactive -e HELPER=True -v /home/sallyjunsongwang/llmfz/comparative_results_gpt4/output-flex-main2/corpora/01.c:/tmp/fuzz-main_corpus -v /tmp/tmp30ke_lug/build/out/flex-main2-01:/out -t gcr.io/oss-fuzz-base/base-runner run_fuzzer fuzz-main -print_final_stats=1 -max_total_time=30 -len_control=0.
+rm: cannot remove '/tmp/fuzz-main_corpus': Device or resource busy
+/out/fuzz-main -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /tmp/fuzz-main_corpus -detect_leaks=0 < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 436025359
+INFO: Loaded 1 modules   (4094 inline 8-bit counters): 4094 [0x79ee80, 0x79fe7e), 
+INFO: Loaded 1 PC tables (4094 PCs): 4094 [0x6d50b0,0x6e5090), 
+INFO:        0 files found in /tmp/fuzz-main_corpus
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+[1m[31m==16==ERROR: AddressSanitizer: SEGV on unknown address 0x000000000000 (pc 0x0000005c7237 bp 0x7ffdbed829e0 sp 0x7ffdbed82920 T0)
+[1m[0m==16==The signal is caused by a READ memory access.
+==16==Hint: address points to the zero page.
+SCARINESS: 10 (null-deref)
+    #0 0x5c7237 in flexinit /src/flex/src/main.c:725:17
+    #1 0x5c68d2 in flex_main /src/flex/src/main.c:161:2
+    #2 0x5cb4bf in main2 /src/flex/src/main.c:286:9
+    #3 0x56cbf7 in LLVMFuzzerTestOneInput /src/fuzz-main.cpp:29:3
+    #4 0x43df23 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #5 0x43f2d4 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:804:3
+    #6 0x43f7a9 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #7 0x42ee0f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #8 0x458462 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #9 0x7f3400f9f082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #10 0x41f84d in _start (/out/fuzz-main+0x41f84d)
+
+DEDUP_TOKEN: flexinit--flex_main--main2
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: SEGV /src/flex/src/main.c:725:17 in flexinit
+==16==ABORTING
+MS: 0 ; base unit: 0000000000000000000000000000000000000000
+
+
+artifact_prefix='./'; Test unit written to ./crash-da39a3ee5e6b4b0d3255bfef95601890afd80709
+Base64: 
+stat::number_of_executed_units: 1
+stat::average_exec_per_sec:     0
+stat::new_units_added:          0
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              33

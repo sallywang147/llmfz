@@ -1,0 +1,21 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
++ make USE_SSL=0 static
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
+/usr/local/bin/clang-jcc -std=c99 -c -O3 -fPIC  -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Wall -Wextra -Wstrict-prototypes -Wwrite-strings -Wno-missing-field-initializers -Werror -g -ggdb  -pedantic alloc.c
+/usr/local/bin/clang-jcc -std=c99 -c -O3 -fPIC  -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Wall -Wextra -Wstrict-prototypes -Wwrite-strings -Wno-missing-field-initializers -Werror -g -ggdb  -pedantic net.c
+/usr/local/bin/clang-jcc -std=c99 -c -O3 -fPIC  -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Wall -Wextra -Wstrict-prototypes -Wwrite-strings -Wno-missing-field-initializers -Werror -g -ggdb  -pedantic hiredis.c
+/usr/local/bin/clang-jcc -std=c99 -c -O3 -fPIC  -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Wall -Wextra -Wstrict-prototypes -Wwrite-strings -Wno-missing-field-initializers -Werror -g -ggdb  -pedantic sds.c
+/usr/local/bin/clang-jcc -std=c99 -c -O3 -fPIC  -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Wall -Wextra -Wstrict-prototypes -Wwrite-strings -Wno-missing-field-initializers -Werror -g -ggdb  -pedantic async.c
+/usr/local/bin/clang-jcc -std=c99 -c -O3 -fPIC  -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Wall -Wextra -Wstrict-prototypes -Wwrite-strings -Wno-missing-field-initializers -Werror -g -ggdb  -pedantic read.c
+/usr/local/bin/clang-jcc -std=c99 -c -O3 -fPIC  -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Wall -Wextra -Wstrict-prototypes -Wwrite-strings -Wno-missing-field-initializers -Werror -g -ggdb  -pedantic sockcompat.c
+ar rcs libhiredis.a alloc.o net.o hiredis.o sds.o async.o read.o sockcompat.o
++ mv fuzzing/format_command_fuzzer.c .
++ /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -pedantic -c -O3 -fPIC format_command_fuzzer.c -o format_command_fuzzer.o
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -O3 -fPIC -fsanitize=fuzzer format_command_fuzzer.o -o /out/format_command_fuzzer libhiredis.a

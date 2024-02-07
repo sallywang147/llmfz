@@ -1,0 +1,32 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -DLODEPNG_MAX_ALLOC=100000000 lodepng.cpp lodepng_fuzzer.cpp -o /out/lodepng_fuzzer -fsanitize=fuzzer
+lodepng_fuzzer.cpp:22:3: error: no matching function for call to 'encode'
+  lodepng::encode(&filename, in.c_str(), w, h, colortype, bitdepth);
+  ^~~~~~~~~~~~~~~
+./lodepng.h:278:10: note: candidate function not viable: no known conversion from 'std::string *' (aka 'basic_string<char, char_traits<char>, allocator<char>> *') to 'std::vector<unsigned char> &' for 1st argument
+unsigned encode(std::vector<unsigned char>& out,
+         ^
+./lodepng.h:281:10: note: candidate function not viable: no known conversion from 'std::string *' (aka 'basic_string<char, char_traits<char>, allocator<char>> *') to 'std::vector<unsigned char> &' for 1st argument
+unsigned encode(std::vector<unsigned char>& out,
+         ^
+./lodepng.h:294:10: note: candidate function not viable: no known conversion from 'std::string *' (aka 'basic_string<char, char_traits<char>, allocator<char>> *') to 'const std::string' (aka 'const basic_string<char, char_traits<char>, allocator<char>>') for 1st argument; remove &
+unsigned encode(const std::string& filename,
+         ^
+./lodepng.h:297:10: note: candidate function not viable: no known conversion from 'std::string *' (aka 'basic_string<char, char_traits<char>, allocator<char>> *') to 'const std::string' (aka 'const basic_string<char, char_traits<char>, allocator<char>>') for 1st argument; remove &
+unsigned encode(const std::string& filename,
+         ^
+./lodepng.h:1116:10: note: candidate function not viable: requires 5 arguments, but 6 were provided
+unsigned encode(std::vector<unsigned char>& out,
+         ^
+./lodepng.h:1119:10: note: candidate function not viable: requires 5 arguments, but 6 were provided
+unsigned encode(std::vector<unsigned char>& out,
+         ^
+1 error generated.

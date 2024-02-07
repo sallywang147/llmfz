@@ -1,0 +1,17 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -DLODEPNG_MAX_ALLOC=100000000 lodepng.cpp lodepng_fuzzer.cpp -o /out/lodepng_fuzzer -fsanitize=fuzzer
+lodepng_fuzzer.cpp:24:3: error: no matching function for call to 'lodepng_encode24_file'
+  lodepng_encode24_file(const_cast<char*>(filename.c_str()), const_cast<char*>(image.c_str()), w, h);
+  ^~~~~~~~~~~~~~~~~~~~~
+./lodepng.h:244:10: note: candidate function not viable: no known conversion from 'char *' to 'const unsigned char *' for 2nd argument
+unsigned lodepng_encode24_file(const char* filename,
+         ^
+1 error generated.
