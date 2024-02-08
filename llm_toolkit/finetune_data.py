@@ -45,6 +45,7 @@ def jdump(obj, f, mode="w", indent=4, default=str):
 def gpt4_data_prep(result_dir,train_file): 
         data_list = []   
         train_file_path = os.path.join(result_dir, train_file)
+        #train_data = open(train_file_path, "a+") 
         for (root, directories, files) in os.walk(result_dir, topdown=False):
                 data = OrderedDict()
                 prompt = ""
@@ -127,8 +128,8 @@ def contextualized_data_prep(result_dir,train_file):
         train_data.close()
 
 RESULT_DIR = '/home/sallyjunsongwang/llmfz/comparative_results_gpt4'
-ONE_STEP = "onestep.json"
-GPT4_DATA = "gpt4.json"
+ONE_STEP = "onestep.json" 
+GPT4_DATA = "gpt4.jsonl"
 CONTEXTUALIZED = "context.txt"
 
 def main():
