@@ -17,7 +17,7 @@ def maybe_load_models():
 
     if model is None:
         model = LlamaForCausalLM.from_pretrained(
-            "decapoda-research/llama-7b-hf",
+            "baffo32/decapoda-research-llama-7B-hf",
             load_in_8bit=True,
             torch_dtype=torch.float16,
             device_map= "auto",
@@ -25,7 +25,7 @@ def maybe_load_models():
 
     if tokenizer is None:
         tokenizer = LlamaTokenizer.from_pretrained(
-            "decapoda-research/llama-7b-hf",
+            "baffo32/decapoda-research-llama-7B-hf",
         )
 
 def reset_models():
