@@ -1,7 +1,7 @@
 **Caution for users: this fine-tuning section is under active development and fine-tuning code has not been reviewed. It likely contains errors, ommissions, and hidden bugs.**
 
-# Fine-tuning Dataset Generation
-In the llm_toolkit directorym run the following command:
+# Fine-tuning Datasets Generation
+In the llm_toolkit directory, please run the following command:
 `python finetune_data.py --results <results_dir>`
 
  `<results_dir>` is the directory, where prompting only results are obtained. Please see [user guide](https://github.com/sallywang147/llmfz/blob/main/USAGE.md) on
