@@ -62,5 +62,19 @@ We plan to expand the finetuing pipeline to support mmore models
 
  # GPT4 Fine-tuning 
 
+Note: I actually don't recommend fine-tuning GPT4. It requires a very rigid dataset format, which the raw data might not satisfy. 
+
  GPT4 fine-tuning dataset has strict requirements. So it requires further processing to get the format right. See [dataset formatting](https://platform.openai.com/docs/guides/fine-tuning/preparing-your-dataset)
- 
+
+ 1. After generating training data (assuming your results are stored in the `train_data` directory, run `python reformmat.py` to generate openAI supported dataset
+ 2. run `curl https://api.openai.com/v1/files -H "Authorization: Bearer $OPENAI_API_KEY"` in terminal to check training data is successfully uploaded and obtain data_id
+ 3. start fine-tunning job according to this [procedure](https://platform.openai.com/docs/guides/fine-tuning/create-a-fine-tuned-model)
+ 4. you are done!
+
+ # Results
+
+ ##contextualized fine-tuning 
+ [deployed peft llama](https://huggingface.co/sallywww/llama_fuzz_targets)
+
+ More evaluations to come...
+
