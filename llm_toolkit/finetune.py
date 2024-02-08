@@ -30,6 +30,7 @@ def maybe_load_models(model=None, tokenizer=None):
         tokenizer = AutoTokenizer.from_pretrained(
             "codellama/CodeLlama-7b-hf",
         )
+    return model, tokenizer
     #The commented out code below can be adapted for other PEFT models 
     '''
     model = AutoModelForCausalLM.from_pretrained(
@@ -55,7 +56,7 @@ def tokenize_and_train(
     model_name,
     model=None,
     tokenizer=None):
-    maybe_load_models(model, tokenizer)
+    model, tokenizer = maybe_load_models(model, tokenizer)
     #tokenizer.pad_token_id = 0
     samples = training_data.split("<end of text>")
     print("Number of samples: " + str(len(samples)))
