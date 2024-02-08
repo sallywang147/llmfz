@@ -30,7 +30,8 @@ def maybe_load_models(model=None, tokenizer=None):
         tokenizer = AutoTokenizer.from_pretrained(
             "codellama/CodeLlama-7b-hf",
         )
-
+    #The commented out code below can be adapted for other PEFT models 
+    '''
     model = AutoModelForCausalLM.from_pretrained(
         model,
         load_in_8bit=True,
@@ -40,7 +41,7 @@ def maybe_load_models(model=None, tokenizer=None):
     tokenizer =  AutoTokenizer.from_pretrained(
         tokenizer
         )
-
+    '''
 def tokenize_and_train(
     training_data,
     max_seq_length,
