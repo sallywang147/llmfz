@@ -62,6 +62,7 @@ def tokenize_and_train(
     print("Number of samples: " + str(len(samples)))
         
     def tokenize(item):
+        tokenizer.add_special_tokens({'pad_token': '[PAD]'})
         result = tokenizer(
             item["text"],
             truncation=True,
