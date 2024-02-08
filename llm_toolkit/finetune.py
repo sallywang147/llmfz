@@ -56,7 +56,7 @@ def tokenize_and_train(
     model=None,
     tokenizer=None):
     maybe_load_models(model, tokenizer)
-    tokenizer.pad_token_id = 0
+    #tokenizer.pad_token_id = 0
     samples = training_data.split("<end of text>")
     print("Number of samples: " + str(len(samples)))
         
