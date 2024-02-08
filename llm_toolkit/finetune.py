@@ -2,6 +2,7 @@ import os
 import argparse
 import random
 import torch
+import sys
 import transformers
 from datasets import Dataset
 from transformers import (
@@ -30,31 +31,17 @@ def maybe_load_models(model=None, tokenizer=None):
             "codellama/CodeLlama-7b-hf",
         )
 
-     model = AutoModelForCausalLM.from_pretrained(
-            model,
-            load_in_8bit=True,
-            torch_dtype=torch.float16,
-            device_map= "auto",
+    model = AutoModelForCausalLM.from_pretrained(
+        model,
+        load_in_8bit=True,
+        torch_dtype=torch.float16,
+        device_map= "auto",
         )
-     tokenizer =  AutoTokenizer.from_pretrained(
-            tokenizer
+    tokenizer =  AutoTokenizer.from_pretrained(
+        tokenizer
         )
-
-
-def reset_models():
-    global model
-    global tokenizer
-
-    del model
-    del tokenizer
-
-    model = None
-    tokenizer = None
-
 
 def tokenize_and_train(
-    model=None,
-    tokenizer=None, 
     training_data,
     max_seq_length,
     micro_batch_size,
@@ -64,8 +51,9 @@ def tokenize_and_train(
     lora_r,
     lora_alpha,
     lora_dropout,
-    model_name):
-    reset_models()
+    model_name,
+    model=None,
+    tokenizer=None):
     maybe_load_models(model, tokenizer)
     tokenizer.pad_token_id = 0
     samples = training_data.split("<end of text>")
@@ -189,11 +177,11 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--train_file", type=str,
                         help="providing training data file.")
-    parser.add_argument("--model_name", action=str,
+    parser.add_argument("--model_name", type=str,
                         help="name of the trained peft model.")
 
     args = parser.parse_args()
-    train_file = = open(args.train_file, "r")
+    train_file = open(args.train_file, "r")
     train_data = train_file.read() 
     result = tokenize_and_train(train_data,
         max_seq_length=4096,
