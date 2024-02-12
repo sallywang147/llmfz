@@ -1,0 +1,46 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+#include <stdint.h>
+#include <hdf5.h>
+
+extern "C" {
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  struct H5D_t *dset_ptr = (struct H5D_t *)malloc(sizeof(struct H5D_t));
+  struct H5O_storage_virtual_t *storage_ptr = (struct H5O_storage_virtual_t *)malloc(sizeof(struct H5O_storage_virtual_t));
+  struct H5S_t *space_ptr = (struct H5S_t *)malloc(sizeof(struct H5S_t));
+  struct H5S_t *mem_space_ptr = (struct H5S_t *)malloc(sizeof(struct H5S_t));
+  size_t *nbytes_ptr = (size_t *)malloc(sizeof(size_t));
+
+  H5D__virtual_pre_io(dset_ptr, storage_ptr, space_ptr, mem_space_ptr, nbytes_ptr);
+
+  free(dset_ptr);
+  free(storage_ptr);
+  free(space_ptr);
+  free(mem_space_ptr);
+  free(nbytes_ptr);
+
+  return 0;
+}
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/h5_read_fuzzer.c:5:8: error: expected identifier or '('
+extern "C" {
+       ^
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,65 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  if (size < 16) {
+    return 0;
+  }
+  char *arg_fuzz = malloc(16);
+
+  memcpy(arg_fuzz, data, 15);
+  arg_fuzz[15] = 0;
+  data += 15;
+  size -= 15;
+
+  char *new_str = (char *)malloc(size + 1);
+  if (new_str == NULL) {
+    return 0;
+  }
+  memcpy(new_str, data, size);
+  new_str[size] = '\0';
+
+  char *my_argv[3];
+  my_argv[0] = "/tmp/fuzz/";
+  my_argv[1] = arg_fuzz;
+  my_argv[2] = new_str;
+
+  main2(3, my_argv);
+
+  free(new_str);
+  free(arg_fuzz);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/fuzz-main.c:5:8: error: expected identifier or '('
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+       ^
+1 error generated.
+
+Fix failure
+/src/fuzz-main.cpp:9:9: error: cannot initialize a variable of type 'char *' with an rvalue of type 'void *'
+  char *arg_fuzz = malloc(16);
+        ^          ~~~~~~~~~~
+/src/fuzz-main.cpp:28:3: error: use of undeclared identifier 'main2'
+  main2(3, my_argv);
+  ^
+2 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

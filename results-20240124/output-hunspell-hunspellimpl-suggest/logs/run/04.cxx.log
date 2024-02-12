@@ -1,0 +1,59 @@
+/workspace/out/libfuzzer-address-x86_64/fuzzer -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/fuzzer -max_len=262144 < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 3750774767
+INFO: Loaded 1 modules   (17576 inline 8-bit counters): 17576 [0x8a4d78, 0x8a9220), 
+INFO: Loaded 1 PC tables (17576 PCs): 17576 [0x7dd680,0x822100), 
+INFO:        0 files found in /workspace/corpus/fuzzer
+INFO: A corpus is not provided, starting from an empty corpus
+#2	INITED cov: 2 ft: 2 corp: 1/1b exec/s: 0 rss: 34Mb
+	NEW_FUNC[1/112]: 0x56eef0 in std::__1::basic_filebuf<char, std::__1::char_traits<char> >::~basic_filebuf() /usr/local/bin/../include/c++/v1/fstream:392
+	NEW_FUNC[2/112]: 0x56f760 in std::__1::basic_filebuf<char, std::__1::char_traits<char> >::setbuf(char*, long) /usr/local/bin/../include/c++/v1/fstream:866
+#6	NEW    cov: 929 ft: 930 corp: 2/26b lim: 262144 exec/s: 0 rss: 37Mb L: 25/25 MS: 4 CopyPart-ShuffleBytes-CrossOver-InsertRepeatedBytes-
+#11	NEW    cov: 933 ft: 964 corp: 3/39b lim: 262144 exec/s: 0 rss: 38Mb L: 13/25 MS: 5 CopyPart-ChangeBit-ChangeBinInt-ShuffleBytes-EraseBytes-
+#17	NEW    cov: 943 ft: 978 corp: 4/174b lim: 262144 exec/s: 0 rss: 38Mb L: 135/135 MS: 1 InsertRepeatedBytes-
+#18	NEW    cov: 943 ft: 979 corp: 5/199b lim: 262144 exec/s: 0 rss: 39Mb L: 25/135 MS: 1 CrossOver-
+#19	NEW    cov: 946 ft: 1063 corp: 6/224b lim: 262144 exec/s: 0 rss: 39Mb L: 25/135 MS: 1 ShuffleBytes-
+#21	NEW    cov: 969 ft: 1163 corp: 7/237b lim: 262144 exec/s: 0 rss: 40Mb L: 13/135 MS: 2 ShuffleBytes-CMP- DE: "\001\000\000\000\000\000\000\010"-
+#27	NEW    cov: 970 ft: 1246 corp: 8/275b lim: 262144 exec/s: 0 rss: 40Mb L: 38/135 MS: 1 CrossOver-
+#29	NEW    cov: 980 ft: 1317 corp: 9/414b lim: 262144 exec/s: 0 rss: 41Mb L: 139/139 MS: 2 PersAutoDict-CMP- DE: "\001\000\000\000\000\000\000\010"-"\000\000\000\012"-
+#30	NEW    cov: 980 ft: 1318 corp: 10/633b lim: 262144 exec/s: 0 rss: 41Mb L: 219/219 MS: 1 CopyPart-
+#32	REDUCE cov: 980 ft: 1318 corp: 10/582b lim: 262144 exec/s: 0 rss: 42Mb L: 88/219 MS: 2 ChangeBit-EraseBytes-
+#38	NEW    cov: 981 ft: 1327 corp: 11/742b lim: 262144 exec/s: 0 rss: 42Mb L: 160/219 MS: 1 CrossOver-
+#43	REDUCE cov: 981 ft: 1329 corp: 12/925b lim: 262144 exec/s: 0 rss: 43Mb L: 183/219 MS: 5 InsertRepeatedBytes-ChangeByte-ShuffleBytes-InsertByte-CMP- DE: "\001\000\000\000\000\004\210\236"-
+#47	NEW    cov: 981 ft: 1330 corp: 13/1152b lim: 262144 exec/s: 0 rss: 44Mb L: 227/227 MS: 4 ChangeBinInt-ChangeByte-InsertRepeatedBytes-PersAutoDict- DE: "\001\000\000\000\000\000\000\010"-
+#49	NEW    cov: 981 ft: 1362 corp: 14/1177b lim: 262144 exec/s: 0 rss: 45Mb L: 25/227 MS: 2 ChangeBinInt-CMP- DE: "\270\236\004\000\000\000\000\000"-
+#58	NEW    cov: 996 ft: 1408 corp: 15/1311b lim: 262144 exec/s: 0 rss: 45Mb L: 134/227 MS: 4 CopyPart-InsertByte-CopyPart-InsertRepeatedBytes-
+#59	NEW    cov: 996 ft: 1409 corp: 16/1334b lim: 262144 exec/s: 0 rss: 45Mb L: 23/227 MS: 1 InsertRepeatedBytes-
+#61	NEW    cov: 996 ft: 1412 corp: 17/1454b lim: 262144 exec/s: 0 rss: 45Mb L: 120/227 MS: 2 CrossOver-InsertRepeatedBytes-
+#64	NEW    cov: 1128 ft: 1615 corp: 18/1494b lim: 262144 exec/s: 0 rss: 46Mb L: 40/227 MS: 3 InsertByte-ChangeBit-CopyPart-
+#65	NEW    cov: 1128 ft: 1626 corp: 19/1534b lim: 262144 exec/s: 0 rss: 46Mb L: 40/227 MS: 1 ChangeByte-
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+==17==ERROR: AddressSanitizer: SEGV on unknown address 0x000000000000 (pc 0x00000056e2db bp 0x7ffff9302550 sp 0x7ffff9302440 T0)
+==17==The signal is caused by a READ memory access.
+==17==Hint: address points to the zero page.
+SCARINESS: 10 (null-deref)
+    #0 0x56e2db in LLVMFuzzerTestOneInput /src/hunspell/./src/tools/fuzzer.cxx:41:14
+    #1 0x43ec23 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #2 0x43e40a in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #3 0x43fad9 in fuzzer::Fuzzer::MutateAndTestOne() /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:757:19
+    #4 0x4407a5 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:895:5
+    #5 0x42fb0f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #6 0x459162 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #7 0x7f1c74f09082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #8 0x42054d in _start (out/libfuzzer-address-x86_64/fuzzer+0x42054d)
+
+DEDUP_TOKEN: LLVMFuzzerTestOneInput--fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long)--fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*)
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: SEGV /src/hunspell/./src/tools/fuzzer.cxx:41:14 in LLVMFuzzerTestOneInput
+==17==ABORTING
+MS: 2 CopyPart-ChangeBinInt-; base unit: 91e94de7ad0a6893cc782e2a9647a5ac20c91db1
+0x0,0x0,0x0,0x78,0xff,0xff,0xff,0xff,0xff,0xa,0xa,0xff,0xff,0xff,0xff,0xff,0xa,0xa,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xfd,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xb1,0xfd,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,
+\000\000\000x\377\377\377\377\377\012\012\377\377\377\377\377\012\012\377\377\377\377\377\377\377\375\377\377\377\377\377\377\377\377\377\377\377\377\377\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\261\375\377\377\377\377\377\377\377\377
+artifact_prefix='./'; Test unit written to ./crash-144845afbc3970ba1c821026b9f9e8a0afa6f9e4
+Base64: AAAAeP//////Cgr//////woK//////////3/////////////////sbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGx/f//////////
+stat::number_of_executed_units: 72
+stat::average_exec_per_sec:     0
+stat::new_units_added:          19
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              46

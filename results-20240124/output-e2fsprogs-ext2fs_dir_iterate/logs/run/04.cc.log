@@ -1,0 +1,32 @@
+/workspace/out/libfuzzer-address-x86_64/ext2fs_image_read_write_fuzzer -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/ext2fs_image_read_write_fuzzer < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 2324764574
+INFO: Loaded 1 modules   (7175 inline 8-bit counters): 7175 [0x70c620, 0x70e227), 
+INFO: Loaded 1 PC tables (7175 PCs): 7175 [0x695c80,0x6b1cf0), 
+INFO:        0 files found in /workspace/corpus/ext2fs_image_read_write_fuzzer
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: A corpus is not provided, starting from an empty corpus
+#2	INITED cov: 112 ft: 113 corp: 1/1b exec/s: 0 rss: 32Mb
+#3	NEW    cov: 113 ft: 115 corp: 2/3b lim: 4096 exec/s: 0 rss: 33Mb L: 2/2 MS: 1 CopyPart-
+#14	NEW    cov: 113 ft: 117 corp: 3/6b lim: 4096 exec/s: 0 rss: 33Mb L: 3/3 MS: 1 CopyPart-
+	NEW_FUNC[1/2]: 0x56d3b0 in std::__1::vector<char, std::__1::allocator<char> >::shrink_to_fit() /usr/local/bin/../include/c++/v1/vector:1497
+	NEW_FUNC[2/2]: 0x56d820 in std::__1::vector<char, std::__1::allocator<char> >::__construct_at_end(unsigned long) /usr/local/bin/../include/c++/v1/vector:979
+#17	NEW    cov: 124 ft: 130 corp: 4/16b lim: 4096 exec/s: 0 rss: 33Mb L: 10/10 MS: 3 ShuffleBytes-InsertByte-CMP- DE: "\005\267+\177\000\000\000\000"-
+#38	REDUCE cov: 124 ft: 130 corp: 4/13b lim: 4096 exec/s: 0 rss: 34Mb L: 7/7 MS: 1 EraseBytes-
+#99	NEW    cov: 124 ft: 131 corp: 5/17b lim: 4096 exec/s: 0 rss: 35Mb L: 4/7 MS: 1 InsertByte-
+#209	REDUCE cov: 124 ft: 131 corp: 5/16b lim: 4096 exec/s: 0 rss: 37Mb L: 6/6 MS: 5 ChangeBit-CopyPart-EraseBytes-ShuffleBytes-InsertByte-
+#32768	pulse  cov: 124 ft: 131 corp: 5/16b lim: 4096 exec/s: 16384 rss: 48Mb
+#65536	pulse  cov: 124 ft: 131 corp: 5/16b lim: 4096 exec/s: 16384 rss: 48Mb
+#131072	pulse  cov: 124 ft: 131 corp: 5/16b lim: 4096 exec/s: 18724 rss: 48Mb
+#262144	pulse  cov: 124 ft: 131 corp: 5/16b lim: 4096 exec/s: 20164 rss: 48Mb
+#524288	pulse  cov: 124 ft: 131 corp: 5/16b lim: 4096 exec/s: 21845 rss: 48Mb
+#655639	DONE   cov: 124 ft: 131 corp: 5/16b lim: 4096 exec/s: 21149 rss: 48Mb
+###### Recommended dictionary. ######
+"\005\267+\177\000\000\000\000" # Uses: 43777
+###### End of recommended dictionary. ######
+Done 655639 runs in 31 second(s)
+stat::number_of_executed_units: 655639
+stat::average_exec_per_sec:     21149
+stat::new_units_added:          6
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              48

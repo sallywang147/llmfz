@@ -1,0 +1,46 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <libunwind.h>
+#include <dlfcn.h>
+
+extern "C" {
+#include <libdwfl.h>
+}
+
+void __libdwfl_frame_unwind(struct Dwfl_Frame * state) {}
+
+int main() {
+  unw_context_t uc;
+  unw_getcontext(&uc);
+  unw_cursor_t cursor;
+  unw_init_local(&cursor, &uc);
+  int i = 0;
+  while (unw_step(&cursor) > 0) {
+    Dl_info info;
+    int ret = dladdr(unw_get_reg(&cursor, UNW_REG_IP), &info);
+    if (ret == 0) {
+      printf("failed to get dladdr\n");
+      continue;
+    }
+    printf("%d: %s\n", i++, info.dli_sname);
+  }
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

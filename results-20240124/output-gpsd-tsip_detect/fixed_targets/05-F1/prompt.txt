@@ -1,0 +1,57 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include "gpsd_config.h"  /* must be before all includes */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+#include "gpsd.h"
+
+extern int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) 
+{//gpsd/tests//test_packet.c
+
+    if (Size < 10 || Size > 9216){
+        return 0;
+    }
+
+    {
+        struct gps_device_t device;
+        struct gps_lexer_t lexer;
+
+        lexer_init(&lexer);
+        lexer.errout.debug = 0;
+
+        memcpy(lexer.inbufptr = lexer.inbuffer, Data, Size);
+        lexer.inbuflen = Size;
+
+        tsip_detect(&device);
+    }
+
+    return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+FuzzJson.c:21:26: error: too few arguments to function call, expected 2, have 1
+        lexer_init(&lexer);
+        ~~~~~~~~~~       ^
+../gpsd-3.25.1~dev/include/gpsd.h:307:13: note: 'lexer_init' declared here
+extern void lexer_init(struct gps_lexer_t *, struct gpsd_errout_t *);
+            ^
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

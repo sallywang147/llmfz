@@ -1,0 +1,1 @@
+error: undefined reference to `icu::RuleBasedNumberFormat::createInstance(icu::UnicodeString const&, icu::Locale const&, icu::UErrorCode&)'

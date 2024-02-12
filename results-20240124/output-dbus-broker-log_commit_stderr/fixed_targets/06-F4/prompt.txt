@@ -1,0 +1,55 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdarg.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "android-base/logging.h"
+
+#ifdef __cplusplus
+}
+#endif
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  // The log_commit_stderr function expects a struct Log, a format string, and a va_list.
+  // We'll create a dummy struct Log and va_list, and use the data as the format string.
+
+  struct Log log;
+  va_list args;
+
+  // Initialize the va_list with the data.
+  va_start(args, data);
+
+  // Call the log_commit_stderr function with the dummy struct Log, the data as the format string, and the va_list.
+  log_commit_stderr(&log, (char *)data, &args);
+
+  // Clean up the va_list.
+  va_end(args);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/fuzz-message.c:9:10: fatal error: 'android-base/logging.h' file not found
+#include "android-base/logging.h"
+         ^~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

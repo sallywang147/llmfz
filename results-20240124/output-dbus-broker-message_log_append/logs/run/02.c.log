@@ -1,0 +1,70 @@
+/workspace/out/libfuzzer-address-x86_64/fuzz-message -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/fuzz-message < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 319519078
+INFO: Loaded 1 modules   (1271 inline 8-bit counters): 1271 [0x6065d0, 0x606ac7), 
+INFO: Loaded 1 PC tables (1271 PCs): 1271 [0x606ac8,0x60ba38), 
+INFO:        0 files found in /workspace/corpus/fuzz-message
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: A corpus is not provided, starting from an empty corpus
+#2	INITED cov: 3 ft: 3 corp: 1/1b exec/s: 0 rss: 33Mb
+	NEW_FUNC[1/1]: 0x56c8c0 in message_new_incoming /src/dbus-broker/build/../src/dbus/message.c:51
+#11	NEW    cov: 7 ft: 8 corp: 2/85b lim: 4096 exec/s: 0 rss: 34Mb L: 84/84 MS: 4 InsertRepeatedBytes-CrossOver-CopyPart-InsertRepeatedBytes-
+#29	REDUCE cov: 7 ft: 8 corp: 2/60b lim: 4096 exec/s: 0 rss: 34Mb L: 59/59 MS: 3 InsertByte-ChangeBit-EraseBytes-
+#66	REDUCE cov: 7 ft: 8 corp: 2/53b lim: 4096 exec/s: 0 rss: 34Mb L: 52/52 MS: 2 ChangeBit-EraseBytes-
+#116	REDUCE cov: 7 ft: 8 corp: 2/48b lim: 4096 exec/s: 0 rss: 34Mb L: 47/47 MS: 5 ChangeBit-CopyPart-CrossOver-ChangeByte-EraseBytes-
+#147	REDUCE cov: 7 ft: 8 corp: 2/37b lim: 4096 exec/s: 0 rss: 34Mb L: 36/36 MS: 1 EraseBytes-
+#173	REDUCE cov: 7 ft: 8 corp: 2/30b lim: 4096 exec/s: 0 rss: 34Mb L: 29/29 MS: 1 EraseBytes-
+#179	REDUCE cov: 7 ft: 8 corp: 2/22b lim: 4096 exec/s: 0 rss: 34Mb L: 21/21 MS: 1 EraseBytes-
+#180	REDUCE cov: 7 ft: 8 corp: 2/19b lim: 4096 exec/s: 0 rss: 34Mb L: 18/18 MS: 1 EraseBytes-
+#310	REDUCE cov: 7 ft: 8 corp: 2/18b lim: 4096 exec/s: 0 rss: 34Mb L: 17/17 MS: 5 ChangeBit-ChangeBinInt-EraseBytes-InsertByte-CMP- DE: "\000\000\000\000"-
+#735	REDUCE cov: 7 ft: 8 corp: 2/17b lim: 4096 exec/s: 0 rss: 34Mb L: 16/16 MS: 5 ChangeByte-ShuffleBytes-ShuffleBytes-CopyPart-EraseBytes-
+#2661	NEW    cov: 9 ft: 10 corp: 3/71b lim: 4096 exec/s: 0 rss: 34Mb L: 54/54 MS: 1 InsertRepeatedBytes-
+#2817	REDUCE cov: 9 ft: 10 corp: 3/59b lim: 4096 exec/s: 0 rss: 34Mb L: 42/42 MS: 1 EraseBytes-
+#2823	REDUCE cov: 9 ft: 10 corp: 3/44b lim: 4096 exec/s: 0 rss: 34Mb L: 27/27 MS: 1 EraseBytes-
+#2856	REDUCE cov: 9 ft: 10 corp: 3/37b lim: 4096 exec/s: 0 rss: 34Mb L: 20/20 MS: 3 InsertByte-InsertByte-EraseBytes-
+#2927	REDUCE cov: 9 ft: 10 corp: 3/36b lim: 4096 exec/s: 0 rss: 34Mb L: 19/19 MS: 1 EraseBytes-
+	NEW_FUNC[1/3]: 0x56cf80 in message_new /src/dbus-broker/build/../src/dbus/message.c:21
+	NEW_FUNC[2/3]: 0x56d9b0 in message_free /src/dbus-broker/build/../src/dbus/message.c:143
+#2961	REDUCE cov: 19 ft: 21 corp: 4/74b lim: 4096 exec/s: 0 rss: 35Mb L: 38/38 MS: 4 ChangeBinInt-InsertByte-ChangeByte-InsertRepeatedBytes-
+	NEW_FUNC[1/7]: 0x56da70 in message_parse_metadata /src/dbus-broker/build/../src/dbus/message.c:439
+	NEW_FUNC[2/7]: 0x5700f0 in c_dvar_read /src/dbus-broker/build/../subprojects/libcdvar-1/src/c-dvar.h:302
+#3028	NEW    cov: 66 ft: 69 corp: 5/108b lim: 4096 exec/s: 0 rss: 37Mb L: 34/38 MS: 2 ShuffleBytes-EraseBytes-
+#3039	REDUCE cov: 66 ft: 69 corp: 5/104b lim: 4096 exec/s: 0 rss: 37Mb L: 30/38 MS: 1 EraseBytes-
+#3071	REDUCE cov: 66 ft: 69 corp: 5/102b lim: 4096 exec/s: 0 rss: 37Mb L: 36/36 MS: 2 ChangeBit-EraseBytes-
+#3073	REDUCE cov: 67 ft: 70 corp: 6/134b lim: 4096 exec/s: 0 rss: 37Mb L: 32/36 MS: 2 PersAutoDict-CMP- DE: "\000\000\000\000"-"\001\000"-
+#3114	REDUCE cov: 67 ft: 70 corp: 6/132b lim: 4096 exec/s: 0 rss: 37Mb L: 28/36 MS: 1 EraseBytes-
+#3126	REDUCE cov: 67 ft: 70 corp: 6/131b lim: 4096 exec/s: 0 rss: 37Mb L: 18/36 MS: 2 ShuffleBytes-EraseBytes-
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+==13==ERROR: AddressSanitizer: SEGV on unknown address 0x000000000010 (pc 0x000000574295 bp 0x7ffca5b7a190 sp 0x7ffca5b7a140 T0)
+==13==The signal is caused by a READ memory access.
+==13==Hint: address points to the zero page.
+SCARINESS: 10 (null-deref)
+    #0 0x574295 in log_alloc /src/dbus-broker/build/../src/util/log.c:219:18
+    #1 0x5747a5 in log_vappendf /src/dbus-broker/build/../src/util/log.c:604:14
+    #2 0x570081 in log_appendf /src/dbus-broker/build/../src/util/log.h:97:9
+    #3 0x56fc47 in message_log_append /src/dbus-broker/build/../src/dbus/message.c:650:9
+    #4 0x56c76b in LLVMFuzzerTestOneInput /src/fuzz-message.c:29:9
+    #5 0x43de43 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #6 0x43d62a in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #7 0x43ecf9 in fuzzer::Fuzzer::MutateAndTestOne() /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:757:19
+    #8 0x43f9c5 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:895:5
+    #9 0x42ed2f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #10 0x458382 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #11 0x7f3873cb7082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #12 0x41f76d in _start (out/libfuzzer-address-x86_64/fuzz-message+0x41f76d)
+
+DEDUP_TOKEN: log_alloc--log_vappendf--log_appendf
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: SEGV /src/dbus-broker/build/../src/util/log.c:219:18 in log_alloc
+==13==ABORTING
+MS: 5 InsertRepeatedBytes-ChangeBinInt-InsertByte-InsertRepeatedBytes-ChangeBinInt-; base unit: 0a7824df81a329481a5af1d0d4c2f8a57089bbfa
+0x6c,0x40,0x6c,0x1,0x0,0x0,0x0,0x0,0xc8,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x88,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x2a,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x6c,0x90,0xd5,0x93,0xec,0x6c,0x6c,0x6c,0x6c,0x6c,0x6c,0xa,
+l@l\001\000\000\000\000\310\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\210\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000*\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000l\220\325\223\354llllll\012
+artifact_prefix='./'; Test unit written to ./crash-afc4c0afc0478acd7488b2e1ea688ede835f5694
+Base64: bEBsAQAAAADIAAAAAAAAAAAAAAAAAAAAAACIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAqAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABskNWT7GxsbGxsbAo=
+stat::number_of_executed_units: 3151
+stat::average_exec_per_sec:     0
+stat::new_units_added:          22
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              37

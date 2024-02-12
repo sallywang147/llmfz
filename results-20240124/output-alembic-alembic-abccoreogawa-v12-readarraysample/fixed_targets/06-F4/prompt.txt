@@ -1,0 +1,107 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <string>
+#include <vector>
+
+#include "alembic/lib/Alembic/AbcCoreOgawa/All.h"
+#include "alembic/lib/Alembic/AbcCoreAbstract/All.h"
+
+using Alembic::AbcCoreAbstract::DataType;
+using Alembic::AbcCoreAbstract::Dimensions;
+using Alembic::AbcCoreOgawa::ReadArraySampleID;
+using Alembic::AbcCoreOgawa::ReadDimensions;
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  std::shared_ptr<Dimensions> dims =
+      ReadDimensions(stream.ConsumeRemainingBytes<uint8_t>());
+  std::shared_ptr<DataType> dtype =
+      std::make_shared<DataType>(static_cast<DataType::EnumType>(
+          stream.ConsumeIntegralInRange<uint32_t>(0, 10)));
+  std::shared_ptr<void> data_ptr;
+  std::shared_ptr<void> sample_ptr;
+
+  ReadArraySampleID(dims.get(), dtype.get(), &data_ptr, 0, &sample_ptr);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/alembic_dump_info_fuzzer.cc:13:7: error: no member named 'ReadArraySampleID' in namespace 'Alembic::AbcCoreOgawa'; did you mean 'Alembic::AbcCoreAbstract::ReadArraySampleID'?
+using Alembic::AbcCoreOgawa::ReadArraySampleID;
+      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      Alembic::AbcCoreAbstract::ReadArraySampleID
+/src/alembic/lib/Alembic/AbcCoreAbstract/ReadArraySampleCache.h:51:7: note: 'Alembic::AbcCoreAbstract::ReadArraySampleID' declared here
+class ReadArraySampleID
+      ^
+/src/alembic_dump_info_fuzzer.cc:14:30: error: no member named 'ReadDimensions' in namespace 'Alembic::AbcCoreOgawa'
+using Alembic::AbcCoreOgawa::ReadDimensions;
+      ~~~~~~~~~~~~~~~~~~~~~~~^
+/src/alembic_dump_info_fuzzer.cc:19:7: error: use of undeclared identifier 'ReadDimensions'; did you mean 'Dimensions'?
+      ReadDimensions(stream.ConsumeRemainingBytes<uint8_t>());
+      ^
+/src/alembic_dump_info_fuzzer.cc:12:33: note: 'Dimensions' declared here
+using Alembic::AbcCoreAbstract::Dimensions;
+                                ^
+/src/alembic_dump_info_fuzzer.cc:21:56: error: no type named 'EnumType' in 'Alembic::AbcCoreAbstract::v12::DataType'
+      std::make_shared<DataType>(static_cast<DataType::EnumType>(
+                                             ~~~~~~~~~~^
+/src/alembic_dump_info_fuzzer.cc:26:3: error: no matching constructor for initialization of 'Alembic::AbcCoreAbstract::v12::ReadArraySampleID'
+  ReadArraySampleID(dims.get(), dtype.get(), &data_ptr, 0, &sample_ptr);
+  ^                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/alembic/lib/Alembic/AbcCoreAbstract/ReadArraySampleCache.h:63:5: note: candidate constructor not viable: requires 2 arguments, but 5 were provided
+    ReadArraySampleID( const ArraySample::Key &iSampleKey,
+    ^
+/src/alembic/lib/Alembic/AbcCoreAbstract/ReadArraySampleCache.h:51:7: note: candidate constructor (the implicit copy constructor) not viable: requires 1 argument, but 5 were provided
+class ReadArraySampleID
+      ^
+/src/alembic/lib/Alembic/AbcCoreAbstract/ReadArraySampleCache.h:51:7: note: candidate constructor (the implicit move constructor) not viable: requires 1 argument, but 5 were provided
+/src/alembic/lib/Alembic/AbcCoreAbstract/ReadArraySampleCache.h:60:5: note: candidate constructor not viable: requires 0 arguments, but 5 were provided
+    ReadArraySampleID() {}
+    ^
+In file included from /src/alembic_dump_info_fuzzer.cc:4:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:16:
+In file included from /usr/local/bin/../include/c++/v1/algorithm:684:
+In file included from /usr/local/bin/../include/c++/v1/functional:506:
+In file included from /usr/local/bin/../include/c++/v1/__functional/function.h:22:
+/usr/local/bin/../include/c++/v1/__memory/shared_ptr.h:294:37: error: no matching constructor for initialization of 'Alembic::AbcCoreAbstract::v12::DataType'
+        ::new ((void*)__get_elem()) _Tp(_VSTD::forward<_Args>(__args)...);
+                                    ^   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/local/bin/../include/c++/v1/__memory/shared_ptr.h:953:55: note: in instantiation of function template specialization 'std::__shared_ptr_emplace<Alembic::AbcCoreAbstract::v12::DataType, std::allocator<Alembic::AbcCoreAbstract::v12::DataType>>::__shared_ptr_emplace<unsigned int>' requested here
+    ::new ((void*)_VSTD::addressof(*__guard.__get())) _ControlBlock(__a, _VSTD::forward<_Args>(__args)...);
+                                                      ^
+/usr/local/bin/../include/c++/v1/__memory/shared_ptr.h:962:19: note: in instantiation of function template specialization 'std::allocate_shared<Alembic::AbcCoreAbstract::v12::DataType, std::allocator<Alembic::AbcCoreAbstract::v12::DataType>, unsigned int, void>' requested here
+    return _VSTD::allocate_shared<_Tp>(allocator<_Tp>(), _VSTD::forward<_Args>(__args)...);
+                  ^
+/src/alembic_dump_info_fuzzer.cc:21:12: note: in instantiation of function template specialization 'std::make_shared<Alembic::AbcCoreAbstract::v12::DataType, unsigned int, void>' requested here
+      std::make_shared<DataType>(static_cast<DataType::EnumType>(
+           ^
+/src/alembic/lib/Alembic/AbcCoreAbstract/DataType.h:50:22: note: candidate constructor (the implicit copy constructor) not viable: no known conversion from 'unsigned int' to 'const Alembic::AbcCoreAbstract::v12::DataType' for 1st argument
+class ALEMBIC_EXPORT DataType 
+                     ^
+/src/alembic/lib/Alembic/AbcCoreAbstract/DataType.h:50:22: note: candidate constructor (the implicit move constructor) not viable: no known conversion from 'unsigned int' to 'Alembic::AbcCoreAbstract::v12::DataType' for 1st argument
+/src/alembic/lib/Alembic/AbcCoreAbstract/DataType.h:66:14: note: candidate constructor not viable: no known conversion from 'unsigned int' to 'Alembic::Util::v12::PlainOldDataType' for 1st argument
+    explicit DataType( PlainOldDataType iPod, uint8_t iExtent = 1 )
+             ^
+/src/alembic/lib/Alembic/AbcCoreAbstract/DataType.h:59:5: note: candidate constructor not viable: requires 0 arguments, but 1 was provided
+    DataType()
+    ^
+6 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

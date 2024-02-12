@@ -1,0 +1,20 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ export 'CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -DCRYPTOFUZZ_NO_OPENSSL'
++ CXXFLAGS='-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -DCRYPTOFUZZ_NO_OPENSSL'
++ cd /src/
++ tar jxf boost_1_74_0.tar.bz2
++ cd boost_1_74_0/
++ CFLAGS=
++ CXXFLAGS=
++ ./bootstrap.sh
+Building Boost.Build engine with toolset gcc... 
+Failed to build Boost.Build build engine
+Consult 'bootstrap.log' for more details

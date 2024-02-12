@@ -1,0 +1,50 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <tpm2.h>
+
+extern "C" {
+#include <tss2/tss2_sys.h>
+}
+
+int main() {
+  TSS2_SYS_CONTEXT *sys_ctx;
+  TSS2_TCTI_CONTEXT *tcti_ctx;
+  TPM2B_SENSITIVE_CREATE inSensitive = {0};
+  TPM2B_PUBLIC inPublic = {0};
+  TPM2B_DATA outsideInfo = {0};
+  TPML_PCR_SELECTION creationPCR = {0};
+  TPM2B_PUBLIC *outPublic;
+  TPM2B_CREATION_DATA *creationData;
+  TPM2B_DIGEST *creationHash;
+  TPM2B_NAME *name;
+  TPM2_HANDLE handle;
+  UINT32 rval;
+
+  tcti_ctx = tss2_tcti_default_init();
+  sys_ctx = tss2_sys_init(tcti_ctx);
+
+  rval = TPM2_CreatePrimary(sys_ctx, TPM2_RH_OWNER, &inSensitive, &inPublic, &outsideInfo, &creationPCR, &handle, &outPublic, &creationData, &creationHash, &name);
+
+  tss2_sys_finalize(sys_ctx);
+  tss2_tcti_finalize(tcti_ctx);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

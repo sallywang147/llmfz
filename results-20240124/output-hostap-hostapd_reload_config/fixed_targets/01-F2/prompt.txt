@@ -1,0 +1,294 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstring>
+#include <string>
+
+#include "hostapd.h"
+#include "hostapd_iface.h"
+#include "hostapd_config.h"
+#include "hostapd_logger.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  struct hostapd_iface iface;
+  memset(&iface, 0, sizeof(iface));
+  iface.conf = new hostapd_config();
+  iface.conf->ssid = new char[1];
+  iface.conf->ssid[0] = 0;
+  iface.conf->ssid_len = 0;
+  iface.conf->wpa_passphrase = new char[1];
+  iface.conf->wpa_passphrase[0] = 0;
+  iface.conf->wpa_passphrase_len = 0;
+  iface.conf->wpa_key_mgmt = WPA_KEY_MGMT_NONE;
+  iface.conf->wpa = new struct hostapd_wpa_parameters();
+  iface.conf->wpa->key_mgmt = WPA_KEY_MGMT_NONE;
+  iface.conf->wpa->pairwise = WPA_CIPHER_NONE;
+  iface.conf->wpa->group = WPA_CIPHER_NONE;
+  iface.conf->wpa->wpa_strict_rekey = 0;
+  iface.conf->wpa->eap = new struct hostapd_eap_parameters();
+  iface.conf->wpa->eap->eap_server = EAP_SERVER_NONE;
+  iface.conf->wpa->eap->eap_sim_db = NULL;
+  iface.conf->wpa->eap->pac_key_lifetime = 0;
+  iface.conf->wpa->eap->pac_key_refresh_period = 0;
+  iface.conf->wpa->eap->eap_fast_a_id = NULL;
+  iface.conf->wpa->eap->eap_fast_a_id_len = 0;
+  iface.conf->wpa->eap->eap_fast_a_id_info = NULL;
+  iface.conf->wpa->eap->eap_fast_a_id_info_len = 0;
+  iface.conf->wpa->eap->eap_fast_prov = 0;
+  iface.conf->wpa->eap->eap_fast_prov_reauth_period = 0;
+  iface.conf->wpa->eap->eap_fast_prov_reauth_request = 0;
+  iface.conf->wpa->eap->eap_fast_imsi = NULL;
+  iface.conf->wpa->eap->eap_fast_imsi_len = 0;
+  iface.conf->wpa->eap->eap_fast_imsi_info = NULL;
+  iface.conf->wpa->eap->eap_fast_imsi_info_len = 0;
+  iface.conf->wpa->eap->eap_fast_priority = 0;
+  iface.conf->wpa->eap->eap_sim_aka_result_ind = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_server_cert = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_server_cert_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_server_cert_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_server_cert_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_client_cert = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_client_cert_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_client_cert_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_client_cert_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_server_key = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_server_key_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_server_key_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_server_key_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_client_key = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_client_key_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_client_key_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_client_key_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_otp = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_otp_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_otp_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_otp_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_result_ind = 0;
+  iface.conf->wpa->eap->eap_sim_aka_result_ind_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_result_ind_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_result_ind_hash = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_result_ind_hash_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_result_ind_hash_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_result_ind_hash_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_result_auth = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_result_auth_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_result_auth_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_result_auth_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_result_conf = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_result_conf_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_result_conf_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_result_conf_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_result_nonce = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_result_nonce_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_result_nonce_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_result_nonce_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_result_res = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_result_res_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_result_res_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_result_res_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_result_mac = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_result_mac_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_result_mac_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_result_mac_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_salt = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_salt_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_salt_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_salt_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_iteration_count = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_iteration_count_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_iteration_count_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_prf = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_prf_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_prf_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_prf_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_hash = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_hash_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_hash_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_hash_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_salt_hex = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_salt_hex_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_salt_hex_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_salt_hex_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_prf_hex = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_prf_hex_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_prf_hex_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_prf_hex_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_hash_hex = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_hash_hex_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_hash_hex_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_hash_hex_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_identity = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_identity_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_identity_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_identity_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_identity_hex = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_identity_hex_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_identity_hex_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_identity_hex_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_password = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_password_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_password_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_password_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_password_hex = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_password_hex_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_password_hex_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_password_hex_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_realm = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_realm_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_realm_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_realm_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_realm_hex = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_realm_hex_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_realm_hex_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_realm_hex_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_domain_suffix_match = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_domain_suffix_match_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_domain_suffix_match_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_hex = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_hex_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_hex_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_hex_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_hex = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_hex_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_hex_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_hex_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_match = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_match_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_match_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_match_realm = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_match_realm_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_match_realm_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_match_realm_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_match_realm_hex = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_match_realm_hex_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_match_realm_hex_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_match_realm_hex_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_match_realm_data = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_match_realm_data_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_match_realm_data_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_match_realm_data_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_match_realm_data_hex = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_match_realm_data_hex_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_match_realm_data_hex_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_match_realm_data_hex_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_hex = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_hex_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_hex_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_hex_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_data = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_data_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_data_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_data_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_data_hex = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_data_hex_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_data_hex_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_data_hex_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_hex = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_hex_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_hex_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_hex_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_data = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_data_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_data_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_data_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_data_hex = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_data_hex_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_data_hex_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_data_hex_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_hex = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_hex_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_hex_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_hex_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_data = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_data_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_data_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_data_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_data_hex = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_data_hex_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_data_hex_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_data_hex_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_match = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_match_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_match_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_match_realm = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_match_realm_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_match_realm_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_match_realm_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_match_realm_hex = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_match_realm_hex_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_match_realm_hex_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_match_realm_hex_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_match_realm_data = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_match_realm_data_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_match_realm_data_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_match_realm_data_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_match_realm_data_hex = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_match_realm_data_hex_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_match_realm_data_hex_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_match_realm_data_hex_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_match_realm_match = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_match_realm_match_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_match_realm_match_info_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_match_realm_match_realm = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_match_realm_match_realm_len = 0;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_match_realm_match_realm_info = NULL;
+  iface.conf->wpa->eap->eap_sim_aka_identity_hint_nai_realm_data_match_realm_match_realm_match_realm_match_realm_match_realm
+</code>
+
+The code has the following build issues:
+<error>
+The target function `int hostapd_reload_config(struct hostapd_iface * iface)` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `int hostapd_reload_config(struct hostapd_iface * iface)` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

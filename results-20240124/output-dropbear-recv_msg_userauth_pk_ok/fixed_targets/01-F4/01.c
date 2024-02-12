@@ -1,0 +1,1 @@
+undefined reference to `ssh2_userauth_pk_ok'

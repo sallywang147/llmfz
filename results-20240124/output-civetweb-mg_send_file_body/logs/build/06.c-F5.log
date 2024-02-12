@@ -1,0 +1,166 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ sed -i 's/CFLAGS += -g -fsanitize=address,fuzzer,undefined/#CFLAGS += -g -fsanitize=address,fuzzer,undefined/' ./Makefile
++ export 'LDFLAGS=-fsanitize=fuzzer -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link'
++ LDFLAGS='-fsanitize=fuzzer -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link'
++ chmod +x ./fuzztest/build.sh
++ ./fuzztest/build.sh
+rm -rf out
+rm -rf libcivetweb.a
+rm -rf libcivetweb.so
+rm -rf libcivetweb.so.1
+rm -rf libcivetweb.so.1.17.0
+rm -rf civetweb
+rm -f civetweb_test
+rm: cannot remove 'civetweb_fuzz?': No such file or directory
+clang -c -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Wall -Wextra -Wshadow -Wformat-security -Winit-self -Wmissing-prototypes -DLINUX -Iinclude  -DUSE_STACK_SIZE=102400 -DTEST_FUZZ1 -DOPENSSL_API_1_1 -fPIC src/civetweb.c -o out/src/civetweb.o
+clang -c -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Wall -Wextra -Wshadow -Wformat-security -Winit-self -Wmissing-prototypes -DLINUX -Iinclude  -DUSE_STACK_SIZE=102400 -DTEST_FUZZ1 -DOPENSSL_API_1_1 fuzztest/fuzzmain.c -o out/fuzztest/fuzzmain.o
+fuzztest/fuzzmain.c:64:2: warning: implicitly declaring library function 'memset' with type 'void *(void *, int, unsigned long)' [-Wimplicit-function-declaration]
+        memset(&callbacks, 0, sizeof(callbacks));
+        ^
+fuzztest/fuzzmain.c:64:2: note: include the header <string.h> or explicitly provide a declaration for 'memset'
+fuzztest/fuzzmain.c:71:3: warning: implicitly declaring library function 'abort' with type 'void (void) __attribute__((noreturn))' [-Wimplicit-function-declaration]
+                TESTabort();
+                ^
+fuzztest/fuzzmain.c:29:3: note: expanded from macro 'TESTabort'
+                abort();                                                               \
+                ^
+fuzztest/fuzzmain.c:71:3: note: include the header <stdlib.h> or explicitly provide a declaration for 'abort'
+fuzztest/fuzzmain.c:29:3: note: expanded from macro 'TESTabort'
+                abort();                                                               \
+                ^
+fuzztest/fuzzmain.c:95:2: warning: implicit declaration of function 'atexit' is invalid in C99 [-Wimplicit-function-declaration]
+        atexit(civetweb_exit);
+        ^
+fuzztest/fuzzmain.c:117:32: warning: implicit declaration of function 'strcmp' is invalid in C99 [-Wimplicit-function-declaration]
+        if ((client == NULL) || (0 != strcmp(client_err_buf, ""))) {
+                                      ^
+fuzztest/fuzzmain.c:203:3: warning: implicitly declaring library function 'memcpy' with type 'void *(void *, const void *, unsigned long)' [-Wimplicit-function-declaration]
+                memcpy(URI, data, size);
+                ^
+fuzztest/fuzzmain.c:203:3: note: include the header <string.h> or explicitly provide a declaration for 'memcpy'
+fuzztest/fuzzmain.c:512:9: error: expected identifier or '('
+        extern "C" {
+               ^
+5 warnings and 1 error generated.
+make: *** [Makefile:437: out/fuzztest/fuzzmain.o] Error 1
+mv: cannot stat 'civetweb': No such file or directory
+clang -c -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Wall -Wextra -Wshadow -Wformat-security -Winit-self -Wmissing-prototypes -DLINUX -Iinclude  -DUSE_STACK_SIZE=102400 -DTEST_FUZZ2 -DOPENSSL_API_1_1 -fPIC src/civetweb.c -o out/src/civetweb.o
+clang -c -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Wall -Wextra -Wshadow -Wformat-security -Winit-self -Wmissing-prototypes -DLINUX -Iinclude  -DUSE_STACK_SIZE=102400 -DTEST_FUZZ2 -DOPENSSL_API_1_1 fuzztest/fuzzmain.c -o out/fuzztest/fuzzmain.o
+fuzztest/fuzzmain.c:64:2: warning: implicitly declaring library function 'memset' with type 'void *(void *, int, unsigned long)' [-Wimplicit-function-declaration]
+        memset(&callbacks, 0, sizeof(callbacks));
+        ^
+fuzztest/fuzzmain.c:64:2: note: include the header <string.h> or explicitly provide a declaration for 'memset'
+fuzztest/fuzzmain.c:71:3: warning: implicitly declaring library function 'abort' with type 'void (void) __attribute__((noreturn))' [-Wimplicit-function-declaration]
+                TESTabort();
+                ^
+fuzztest/fuzzmain.c:29:3: note: expanded from macro 'TESTabort'
+                abort();                                                               \
+                ^
+fuzztest/fuzzmain.c:71:3: note: include the header <stdlib.h> or explicitly provide a declaration for 'abort'
+fuzztest/fuzzmain.c:29:3: note: expanded from macro 'TESTabort'
+                abort();                                                               \
+                ^
+fuzztest/fuzzmain.c:95:2: warning: implicit declaration of function 'atexit' is invalid in C99 [-Wimplicit-function-declaration]
+        atexit(civetweb_exit);
+        ^
+fuzztest/fuzzmain.c:226:7: error: use of undeclared identifier 'errno'
+                r = errno;
+                    ^
+fuzztest/fuzzmain.c:227:57: warning: implicitly declaring library function 'strerror' with type 'char *(int)' [-Wimplicit-function-declaration]
+                fprintf(stderr, "Error: Cannot create socket [%s]\n", strerror(r));
+                                                                      ^
+fuzztest/fuzzmain.c:227:57: note: include the header <string.h> or explicitly provide a declaration for 'strerror'
+fuzztest/fuzzmain.c:237:7: error: use of undeclared identifier 'errno'
+                r = errno;
+                    ^
+fuzztest/fuzzmain.c:512:9: error: expected identifier or '('
+        extern "C" {
+               ^
+4 warnings and 3 errors generated.
+make: *** [Makefile:437: out/fuzztest/fuzzmain.o] Error 1
+mv: cannot stat 'civetweb': No such file or directory
+clang -c -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Wall -Wextra -Wshadow -Wformat-security -Winit-self -Wmissing-prototypes -DLINUX -Iinclude  -DUSE_STACK_SIZE=102400 -DTEST_FUZZ3 -DOPENSSL_API_1_1 -fPIC src/civetweb.c -o out/src/civetweb.o
+clang -c -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Wall -Wextra -Wshadow -Wformat-security -Winit-self -Wmissing-prototypes -DLINUX -Iinclude  -DUSE_STACK_SIZE=102400 -DTEST_FUZZ3 -DOPENSSL_API_1_1 fuzztest/fuzzmain.c -o out/fuzztest/fuzzmain.o
+fuzztest/fuzzmain.c:305:3: warning: implicitly declaring library function 'free' with type 'void (void *)' [-Wimplicit-function-declaration]
+                free(arg);
+                ^
+fuzztest/fuzzmain.c:305:3: note: include the header <stdlib.h> or explicitly provide a declaration for 'free'
+fuzztest/fuzzmain.c:318:3: warning: implicitly declaring library function 'memset' with type 'void *(void *, int, unsigned long)' [-Wimplicit-function-declaration]
+                memset(&cliadr, 0, sizeof(cliadr));
+                ^
+fuzztest/fuzzmain.c:318:3: note: include the header <string.h> or explicitly provide a declaration for 'memset'
+fuzztest/fuzzmain.c:323:13: error: use of undeclared identifier 'errno'
+                        int er = errno;
+                                 ^
+fuzztest/fuzzmain.c:324:51: warning: implicitly declaring library function 'strerror' with type 'char *(int)' [-Wimplicit-function-declaration]
+                        fprintf(stderr, "Error: Accept failed [%s]\n", strerror(er));
+                                                                       ^
+fuzztest/fuzzmain.c:324:51: note: include the header <string.h> or explicitly provide a declaration for 'strerror'
+fuzztest/fuzzmain.c:336:9: warning: implicit declaration of function 'strstr' is invalid in C99 [-Wimplicit-function-declaration]
+                                if (strstr(req, "\r\n\r\n") != NULL) {
+                                    ^
+fuzztest/fuzzmain.c:336:33: warning: comparison between pointer and integer ('int' and 'void *') [-Wpointer-integer-compare]
+                                if (strstr(req, "\r\n\r\n") != NULL) {
+                                    ~~~~~~~~~~~~~~~~~~~~~~~ ^  ~~~~
+fuzztest/fuzzmain.c:341:14: error: use of undeclared identifier 'errno'
+                                int er = errno;
+                                         ^
+fuzztest/fuzzmain.c:367:7: error: use of undeclared identifier 'errno'
+                r = errno;
+                    ^
+fuzztest/fuzzmain.c:369:3: warning: implicitly declaring library function 'abort' with type 'void (void) __attribute__((noreturn))' [-Wimplicit-function-declaration]
+                TESTabort();
+                ^
+fuzztest/fuzzmain.c:29:3: note: expanded from macro 'TESTabort'
+                abort();                                                               \
+                ^
+fuzztest/fuzzmain.c:369:3: note: include the header <stdlib.h> or explicitly provide a declaration for 'abort'
+fuzztest/fuzzmain.c:29:3: note: expanded from macro 'TESTabort'
+                abort();                                                               \
+                ^
+fuzztest/fuzzmain.c:383:7: error: use of undeclared identifier 'errno'
+                r = errno;
+                    ^
+fuzztest/fuzzmain.c:397:7: error: use of undeclared identifier 'errno'
+                r = errno;
+                    ^
+fuzztest/fuzzmain.c:408:38: warning: implicitly declaring library function 'malloc' with type 'void *(unsigned long)' [-Wimplicit-function-declaration]
+        thread_prm = (struct tcp_func_prm *)malloc(sizeof(struct tcp_func_prm));
+                                            ^
+fuzztest/fuzzmain.c:408:38: note: include the header <stdlib.h> or explicitly provide a declaration for 'malloc'
+fuzztest/fuzzmain.c:424:7: error: use of undeclared identifier 'errno'
+                r = errno;
+                    ^
+fuzztest/fuzzmain.c:431:2: warning: implicit declaration of function 'atexit' is invalid in C99 [-Wimplicit-function-declaration]
+        atexit(mock_server_exit);
+        ^
+fuzztest/fuzzmain.c:447:2: warning: implicitly declaring library function 'memcpy' with type 'void *(void *, const void *, unsigned long)' [-Wimplicit-function-declaration]
+        memcpy(RESPONSE.data, data, size);
+        ^
+fuzztest/fuzzmain.c:447:2: note: include the header <string.h> or explicitly provide a declaration for 'memcpy'
+fuzztest/fuzzmain.c:512:9: error: expected identifier or '('
+        extern "C" {
+               ^
+9 warnings and 7 errors generated.
+make: *** [Makefile:437: out/fuzztest/fuzzmain.o] Error 1
+mv: cannot stat 'civetweb': No such file or directory
+
+=====================
+== Build completed ==
+=====================
+
+ls: cannot access 'civetweb*': No such file or directory
+md5sum: 'civetweb_fuzz*': No such file or directory
+
+=====================
+
++ mv 'civetweb_fuzz*' /workspace/out/libfuzzer-address-x86_64/
+mv: cannot stat 'civetweb_fuzz*': No such file or directory

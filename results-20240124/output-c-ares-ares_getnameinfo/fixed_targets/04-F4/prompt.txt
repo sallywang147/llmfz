@@ -1,0 +1,53 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+#include <arpa/inet.h>
+
+#include "ares.h"
+
+extern "C" {
+#include <ares_version.h>
+#include <ares.h>
+}
+
+// Entrypoint for Clang's libfuzzer
+int LLVMFuzzerTestOneInput(const unsigned char *data,
+                           unsigned long size) {
+  // Feed the data into each of the ares_parse_*_reply functions.
+  ares_channel channel;
+  char addr[128];
+  int err;
+  int flags = ARES_NI_NOFQDN | ARES_NI_NUMERICHOST;
+  ares_getnameinfo(&channel, (struct sockaddr*)data, size, flags, NULL, addr);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/c-ares/test/ares-test-fuzz-name.c:6:8: error: expected identifier or '('
+extern "C" {
+       ^
+1 error generated.
+
+Fix failure
+/src/c-ares/test/ares-test-fuzz-name.cpp:19:3: error: no matching function for call to 'ares_getnameinfo'
+  ares_getnameinfo(&channel, (struct sockaddr*)data, size, flags, NULL, addr);
+  ^~~~~~~~~~~~~~~~
+include/ares.h:489:19: note: candidate function not viable: no known conversion from 'ares_channel *' (aka 'ares_channeldata **') to 'ares_channel_t *' (aka 'ares_channeldata *') for 1st argument; remove &
+CARES_EXTERN void ares_getnameinfo(ares_channel_t        *channel,
+                  ^
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

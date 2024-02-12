@@ -1,0 +1,1 @@
+void event_hooks(apr_pool_t *pool);

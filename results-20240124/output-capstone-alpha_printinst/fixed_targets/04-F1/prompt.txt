@@ -1,0 +1,89 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+#include "llvm/MC/MCAsmInfo.h"
+#include "llvm/MC/MCContext.h"
+#include "llvm/MC/MCInst.h"
+#include "llvm/MC/MCInstPrinter.h"
+#include "llvm/MC/MCObjectFileInfo.h"
+#include "llvm/MC/MCRegisterInfo.h"
+#include "llvm/MC/MCStreamer.h"
+#include "llvm/MC/MCSubtargetInfo.h"
+#include "llvm/MC/MCObjectWriter.h"
+#include "llvm/MC/MCWriter.h"
+#include "llvm/Support/SourceMgr.h"
+#include "llvm/Support/TargetRegistry.h"
+#include "llvm/Support/TargetSelect.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const std::string target_triple = stream.ConsumeRandomLengthString();
+  const std::string cpu = stream.ConsumeRandomLengthString();
+  const std::string features = stream.ConsumeRandomLengthString();
+  const std::string reloc_model = stream.ConsumeRandomLengthString();
+  const std::string code_model = stream.ConsumeRandomLengthString();
+  const std::string asm_dialect = stream.ConsumeRandomLengthString();
+  const std::string obj_format = stream.ConsumeRandomLengthString();
+  const std::string arch_name = stream.ConsumeRandomLengthString();
+  const std::string subtarget = stream.ConsumeRandomLengthString();
+
+  llvm::InitializeAllTargetInfos();
+  llvm::InitializeAllTargetMCs();
+  llvm::InitializeAllAsmPrinters();
+  llvm::InitializeAllAsmParsers();
+
+  llvm::TargetRegistry* registry = llvm::TargetRegistry::get();
+  llvm::Target* target = registry->findTargetByTriple(target_triple);
+  if (!target) {
+    return 0;
+  }
+  llvm::MCSubtargetInfo subtarget_info(target, cpu, features);
+  llvm::MCRegisterInfo register_info(target);
+  llvm::MCAsmInfo asm_info(target->createMCAsmInfo(arch_name, subtarget, reloc_model,
+                                                  code_model, asm_dialect, obj_format));
+  llvm::MCObjectFileInfo object_file_info;
+  llvm::MCContext context(register_info, asm_info, object_file_info);
+  llvm::MCStreamer streamer(context, nullptr, nullptr);
+  llvm::MCInstPrinter printer(subtarget_info, register_info, asm_info, *target->createMCInstPrinter(
+      asm_dialect, asm_info, subtarget_info, object_file_info, streamer));
+
+  llvm::MCInst inst;
+  if (!inst.parse(stream.ConsumeRemainingBytesAsString(), context)) {
+    Alpha_printInst(&inst, &streamer.getCommentOS(), nullptr);
+  }
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:16:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:17:10: fatal error: 'llvm/MC/MCWriter.h' file not found
+#include "llvm/MC/MCWriter.h"
+         ^~~~~~~~~~~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

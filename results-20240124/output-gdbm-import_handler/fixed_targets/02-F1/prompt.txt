@@ -1,0 +1,65 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+#include <vector>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const uint8_t command_param_count = stream.ConsumeIntegral<uint8_t>();
+  std::vector<std::string> command_param_list;
+  for (uint8_t i = 0; i < command_param_count; ++i) {
+    command_param_list.push_back(stream.ConsumeRemainingBytesAsString());
+  }
+  const std::string command_environ_param =
+      stream.ConsumeRemainingBytesAsString();
+
+  struct command_param param;
+  param.param_list = command_param_list;
+  struct command_environ cenv;
+  cenv.param = command_environ_param;
+
+  import_handler(&param, &cenv);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:16:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+gdbm_fuzzer.cpp:19:24: error: variable has incomplete type 'struct command_param'
+  struct command_param param;
+                       ^
+gdbm_fuzzer.cpp:19:10: note: forward declaration of 'command_param'
+  struct command_param param;
+         ^
+gdbm_fuzzer.cpp:21:26: error: variable has incomplete type 'struct command_environ'
+  struct command_environ cenv;
+                         ^
+gdbm_fuzzer.cpp:21:10: note: forward declaration of 'command_environ'
+  struct command_environ cenv;
+         ^
+2 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

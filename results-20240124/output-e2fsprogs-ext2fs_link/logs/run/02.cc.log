@@ -1,0 +1,39 @@
+/workspace/out/libfuzzer-address-x86_64/ext2fs_image_read_write_fuzzer -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/ext2fs_image_read_write_fuzzer < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 2442316433
+INFO: Loaded 1 modules   (7175 inline 8-bit counters): 7175 [0x70c620, 0x70e227), 
+INFO: Loaded 1 PC tables (7175 PCs): 7175 [0x695c80,0x6b1cf0), 
+INFO:        0 files found in /workspace/corpus/ext2fs_image_read_write_fuzzer
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: A corpus is not provided, starting from an empty corpus
+#2	INITED cov: 112 ft: 113 corp: 1/1b exec/s: 0 rss: 30Mb
+#3	NEW    cov: 113 ft: 115 corp: 2/3b lim: 4096 exec/s: 0 rss: 31Mb L: 2/2 MS: 1 CopyPart-
+#4	NEW    cov: 113 ft: 117 corp: 3/6b lim: 4096 exec/s: 0 rss: 31Mb L: 3/3 MS: 1 CrossOver-
+#7	NEW    cov: 113 ft: 119 corp: 4/10b lim: 4096 exec/s: 0 rss: 31Mb L: 4/4 MS: 3 ChangeBit-EraseBytes-CrossOver-
+#15	NEW    cov: 114 ft: 121 corp: 5/15b lim: 4096 exec/s: 0 rss: 31Mb L: 5/5 MS: 3 ChangeBit-ShuffleBytes-CrossOver-
+	NEW_FUNC[1/2]: 0x56d3b0 in std::__1::vector<char, std::__1::allocator<char> >::shrink_to_fit() /usr/local/bin/../include/c++/v1/vector:1497
+	NEW_FUNC[2/2]: 0x56d820 in std::__1::vector<char, std::__1::allocator<char> >::__construct_at_end(unsigned long) /usr/local/bin/../include/c++/v1/vector:979
+#17	NEW    cov: 124 ft: 131 corp: 6/84b lim: 4096 exec/s: 0 rss: 31Mb L: 69/69 MS: 2 ChangeBinInt-InsertRepeatedBytes-
+#34	REDUCE cov: 124 ft: 131 corp: 6/52b lim: 4096 exec/s: 0 rss: 32Mb L: 37/37 MS: 2 CopyPart-EraseBytes-
+#217	REDUCE cov: 124 ft: 131 corp: 6/44b lim: 4096 exec/s: 0 rss: 35Mb L: 29/29 MS: 3 ChangeBinInt-CrossOver-EraseBytes-
+#414	REDUCE cov: 124 ft: 131 corp: 6/41b lim: 4096 exec/s: 0 rss: 38Mb L: 26/26 MS: 2 ChangeByte-EraseBytes-
+#437	REDUCE cov: 124 ft: 131 corp: 6/33b lim: 4096 exec/s: 0 rss: 38Mb L: 18/18 MS: 3 ChangeBinInt-CMP-EraseBytes- DE: "\377\377\377\377"-
+#453	REDUCE cov: 124 ft: 131 corp: 6/26b lim: 4096 exec/s: 0 rss: 39Mb L: 11/11 MS: 1 EraseBytes-
+#705	REDUCE cov: 124 ft: 131 corp: 6/25b lim: 4096 exec/s: 0 rss: 42Mb L: 10/10 MS: 2 CrossOver-EraseBytes-
+#943	REDUCE cov: 124 ft: 131 corp: 6/22b lim: 4096 exec/s: 0 rss: 46Mb L: 7/7 MS: 3 CrossOver-PersAutoDict-EraseBytes- DE: "\377\377\377\377"-
+#988	REDUCE cov: 124 ft: 131 corp: 6/21b lim: 4096 exec/s: 0 rss: 46Mb L: 6/6 MS: 5 ChangeByte-CopyPart-CrossOver-PersAutoDict-EraseBytes- DE: "\377\377\377\377"-
+#32768	pulse  cov: 124 ft: 131 corp: 6/21b lim: 4096 exec/s: 16384 rss: 47Mb
+#65536	pulse  cov: 124 ft: 131 corp: 6/21b lim: 4096 exec/s: 16384 rss: 47Mb
+#131072	pulse  cov: 124 ft: 131 corp: 6/21b lim: 4096 exec/s: 18724 rss: 47Mb
+#262144	pulse  cov: 124 ft: 131 corp: 6/21b lim: 4096 exec/s: 20164 rss: 47Mb
+#524288	pulse  cov: 124 ft: 131 corp: 6/21b lim: 4096 exec/s: 20971 rss: 47Mb
+#646068	DONE   cov: 124 ft: 131 corp: 6/21b lim: 4096 exec/s: 20840 rss: 47Mb
+###### Recommended dictionary. ######
+"\377\377\377\377" # Uses: 54336
+###### End of recommended dictionary. ######
+Done 646068 runs in 31 second(s)
+stat::number_of_executed_units: 646068
+stat::average_exec_per_sec:     20840
+stat::new_units_added:          13
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              47

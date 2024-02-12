@@ -1,0 +1,54 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <stdint.h>
+#include "guetzli/jpeg_data.h"
+#include "guetzli/jpeg_data_reader.h"
+#include "guetzli/processor.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  std::string jpeg_data(reinterpret_cast<const char*>(data), size);
+
+  // Ignore large images, to prevent timeouts.
+  guetzli::JPEGData jpg_header;
+  if (!guetzli::ReadJpeg(data, size, guetzli::JPEG_READ_HEADER, &jpg_header)) {
+    return 0;
+  }
+  static constexpr int kMaxPixels = 10000;
+  if (static_cast<int64_t>(jpg_header.width) * jpg_header.height > kMaxPixels) {
+    return 0;
+  }
+
+  // TODO(robryk): Use nondefault parameters.
+  guetzli::Params params;
+  std::vector<uint8_t> jpeg_out;
+  (void)guetzli::Process(params, nullptr, &jpeg_out, 0, 0, nullptr);
+  // TODO(robryk): Verify output distance if Process() succeeded.
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+fuzz_target.cc:22:9: error: no matching function for call to 'Process'
+  (void)guetzli::Process(params, nullptr, &jpeg_out, 0, 0, nullptr);
+        ^~~~~~~~~~~~~~~~
+./guetzli/processor.h:54:6: note: candidate function not viable: no known conversion from 'std::vector<uint8_t> *' (aka 'vector<unsigned char> *') to 'const std::vector<uint8_t>' (aka 'const vector<unsigned char>') for 3rd argument; remove &
+bool Process(const Params& params, ProcessStats* stats,
+     ^
+./guetzli/processor.h:39:6: note: candidate function not viable: requires 4 arguments, but 6 were provided
+bool Process(const Params& params, ProcessStats* stats,
+     ^
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

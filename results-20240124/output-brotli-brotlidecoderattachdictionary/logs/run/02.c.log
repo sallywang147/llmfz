@@ -1,0 +1,32 @@
+Using seed corpus: decode_fuzzer_seed_corpus.zip
+/workspace/out/libfuzzer-address-x86_64/decode_fuzzer -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/decode_fuzzer < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 2027673307
+INFO: Loaded 1 modules   (1252 inline 8-bit counters): 1252 [0x63fd20, 0x640204), 
+INFO: Loaded 1 PC tables (1252 PCs): 1252 [0x640208,0x645048), 
+INFO:       58 files found in /workspace/corpus/decode_fuzzer
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 15392 bytes
+INFO: seed corpus: files: 58 min: 1b max: 15392b total: 27809b rss: 33Mb
+#59	INITED cov: 30 ft: 31 corp: 3/12b exec/s: 0 rss: 35Mb
+#100	NEW    cov: 31 ft: 32 corp: 4/61b lim: 15392 exec/s: 0 rss: 36Mb L: 49/49 MS: 1 InsertRepeatedBytes-
+#186	REDUCE cov: 31 ft: 32 corp: 4/45b lim: 15392 exec/s: 0 rss: 36Mb L: 33/33 MS: 1 EraseBytes-
+#312	REDUCE cov: 31 ft: 32 corp: 4/38b lim: 15392 exec/s: 0 rss: 37Mb L: 26/26 MS: 1 EraseBytes-
+#518	REDUCE cov: 31 ft: 32 corp: 4/32b lim: 15392 exec/s: 0 rss: 38Mb L: 20/20 MS: 1 EraseBytes-
+#545	REDUCE cov: 31 ft: 32 corp: 4/31b lim: 15392 exec/s: 0 rss: 38Mb L: 19/19 MS: 2 ChangeBit-EraseBytes-
+#576	REDUCE cov: 31 ft: 32 corp: 4/26b lim: 15392 exec/s: 0 rss: 38Mb L: 14/14 MS: 1 EraseBytes-
+#607	REDUCE cov: 31 ft: 32 corp: 4/23b lim: 15392 exec/s: 0 rss: 39Mb L: 4/14 MS: 1 EraseBytes-
+#733	REDUCE cov: 31 ft: 32 corp: 4/21b lim: 15392 exec/s: 0 rss: 39Mb L: 12/12 MS: 1 EraseBytes-
+#830	REDUCE cov: 31 ft: 32 corp: 4/18b lim: 15392 exec/s: 0 rss: 40Mb L: 9/9 MS: 2 ShuffleBytes-EraseBytes-
+#901	REDUCE cov: 31 ft: 32 corp: 4/14b lim: 15392 exec/s: 0 rss: 40Mb L: 5/5 MS: 1 EraseBytes-
+#1777	REDUCE cov: 31 ft: 32 corp: 4/13b lim: 15392 exec/s: 0 rss: 46Mb L: 4/4 MS: 1 EraseBytes-
+#524288	pulse  cov: 31 ft: 32 corp: 4/13b lim: 15392 exec/s: 262144 rss: 48Mb
+#1048576	pulse  cov: 31 ft: 32 corp: 4/13b lim: 15392 exec/s: 262144 rss: 48Mb
+#2097152	pulse  cov: 31 ft: 32 corp: 4/13b lim: 15392 exec/s: 233016 rss: 48Mb
+#4194304	pulse  cov: 31 ft: 32 corp: 4/13b lim: 15392 exec/s: 233016 rss: 48Mb
+#6855152	DONE   cov: 31 ft: 32 corp: 4/13b lim: 15392 exec/s: 221133 rss: 48Mb
+Done 6855152 runs in 31 second(s)
+stat::number_of_executed_units: 6855152
+stat::average_exec_per_sec:     221133
+stat::new_units_added:          11
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              48

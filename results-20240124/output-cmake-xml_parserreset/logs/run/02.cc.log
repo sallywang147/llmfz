@@ -1,0 +1,157 @@
+Using seed corpus: xml_parser_fuzzer_seed_corpus.zip
+/workspace/out/libfuzzer-address-x86_64/xml_parser_fuzzer -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/xml_parser_fuzzer < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 4121294514
+INFO: Loaded 1 modules   (7020 inline 8-bit counters): 7020 [0x74b068, 0x74cbd4), 
+INFO: Loaded 1 PC tables (7020 PCs): 7020 [0x6bc4c8,0x6d7b88), 
+INFO:        1 files found in /workspace/corpus/xml_parser_fuzzer
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: seed corpus: files: 1 min: 867b max: 867b total: 867b rss: 32Mb
+
+=================================================================
+==14==ERROR: LeakSanitizer: detected memory leaks
+
+Indirect leak of 1024 byte(s) in 1 object(s) allocated from:
+    #0 0x52fe66 in __interceptor_malloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:69:3
+    #1 0x57909b in parserCreate /src/CMake/Utilities/cmexpat/lib/xmlparse.c:1018:21
+    #2 0x56d347 in LLVMFuzzerTestOneInput /src/CMake/Tests/Fuzzing/./jcc-corrected-xml_parser_fuzzer.cc:9:23
+    #3 0x43ecd3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #4 0x440084 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:804:3
+    #5 0x440559 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #6 0x42fbbf in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #7 0x459212 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #8 0x7f648d08e082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_malloc--parserCreate--LLVMFuzzerTestOneInput
+Indirect leak of 1024 byte(s) in 1 object(s) allocated from:
+    #0 0x52fe66 in __interceptor_malloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:69:3
+    #1 0x57909b in parserCreate /src/CMake/Utilities/cmexpat/lib/xmlparse.c:1018:21
+    #2 0x56d347 in LLVMFuzzerTestOneInput /src/CMake/Tests/Fuzzing/./jcc-corrected-xml_parser_fuzzer.cc:9:23
+    #3 0x43ecd3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #4 0x43e4ba in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #5 0x440324 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:826:7
+    #6 0x440559 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #7 0x42fbbf in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #8 0x459212 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #9 0x7f648d08e082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_malloc--parserCreate--LLVMFuzzerTestOneInput
+Indirect leak of 896 byte(s) in 1 object(s) allocated from:
+    #0 0x52fe66 in __interceptor_malloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:69:3
+    #1 0x578f1c in parserCreate /src/CMake/Utilities/cmexpat/lib/xmlparse.c:986:26
+    #2 0x56d347 in LLVMFuzzerTestOneInput /src/CMake/Tests/Fuzzing/./jcc-corrected-xml_parser_fuzzer.cc:9:23
+    #3 0x43ecd3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #4 0x43e4ba in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #5 0x440324 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:826:7
+    #6 0x440559 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #7 0x42fbbf in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #8 0x459212 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #9 0x7f648d08e082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_malloc--parserCreate--LLVMFuzzerTestOneInput
+Indirect leak of 896 byte(s) in 1 object(s) allocated from:
+    #0 0x52fe66 in __interceptor_malloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:69:3
+    #1 0x578f1c in parserCreate /src/CMake/Utilities/cmexpat/lib/xmlparse.c:986:26
+    #2 0x56d347 in LLVMFuzzerTestOneInput /src/CMake/Tests/Fuzzing/./jcc-corrected-xml_parser_fuzzer.cc:9:23
+    #3 0x43ecd3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #4 0x440084 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:804:3
+    #5 0x440559 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #6 0x42fbbf in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #7 0x459212 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #8 0x7f648d08e082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_malloc--parserCreate--LLVMFuzzerTestOneInput
+Indirect leak of 512 byte(s) in 1 object(s) allocated from:
+    #0 0x52fe66 in __interceptor_malloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:69:3
+    #1 0x579047 in parserCreate /src/CMake/Utilities/cmexpat/lib/xmlparse.c:1003:22
+    #2 0x56d347 in LLVMFuzzerTestOneInput /src/CMake/Tests/Fuzzing/./jcc-corrected-xml_parser_fuzzer.cc:9:23
+    #3 0x43ecd3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #4 0x43e4ba in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #5 0x440324 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:826:7
+    #6 0x440559 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #7 0x42fbbf in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #8 0x459212 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #9 0x7f648d08e082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_malloc--parserCreate--LLVMFuzzerTestOneInput
+Indirect leak of 512 byte(s) in 1 object(s) allocated from:
+    #0 0x52fe66 in __interceptor_malloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:69:3
+    #1 0x579047 in parserCreate /src/CMake/Utilities/cmexpat/lib/xmlparse.c:1003:22
+    #2 0x56d347 in LLVMFuzzerTestOneInput /src/CMake/Tests/Fuzzing/./jcc-corrected-xml_parser_fuzzer.cc:9:23
+    #3 0x43ecd3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #4 0x440084 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:804:3
+    #5 0x440559 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #6 0x42fbbf in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #7 0x459212 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #8 0x7f648d08e082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_malloc--parserCreate--LLVMFuzzerTestOneInput
+Indirect leak of 320 byte(s) in 1 object(s) allocated from:
+    #0 0x52fe66 in __interceptor_malloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:69:3
+    #1 0x579111 in dtdCreate /src/CMake/Utilities/cmexpat/lib/xmlparse.c:6565:12
+    #2 0x579111 in parserCreate /src/CMake/Utilities/cmexpat/lib/xmlparse.c:1032:21
+    #3 0x56d347 in LLVMFuzzerTestOneInput /src/CMake/Tests/Fuzzing/./jcc-corrected-xml_parser_fuzzer.cc:9:23
+    #4 0x43ecd3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #5 0x440084 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:804:3
+    #6 0x440559 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #7 0x42fbbf in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #8 0x459212 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #9 0x7f648d08e082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_malloc--dtdCreate--parserCreate
+Indirect leak of 320 byte(s) in 1 object(s) allocated from:
+    #0 0x52fe66 in __interceptor_malloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:69:3
+    #1 0x579111 in dtdCreate /src/CMake/Utilities/cmexpat/lib/xmlparse.c:6565:12
+    #2 0x579111 in parserCreate /src/CMake/Utilities/cmexpat/lib/xmlparse.c:1032:21
+    #3 0x56d347 in LLVMFuzzerTestOneInput /src/CMake/Tests/Fuzzing/./jcc-corrected-xml_parser_fuzzer.cc:9:23
+    #4 0x43ecd3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #5 0x43e4ba in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #6 0x440324 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:826:7
+    #7 0x440559 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #8 0x42fbbf in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #9 0x459212 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #10 0x7f648d08e082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_malloc--dtdCreate--parserCreate
+Indirect leak of 14 byte(s) in 1 object(s) allocated from:
+    #0 0x52fe66 in __interceptor_malloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:69:3
+    #1 0x57a6c6 in copyString /src/CMake/Utilities/cmexpat/lib/xmlparse.c:7497:12
+    #2 0x57a6c6 in parserInit /src/CMake/Utilities/cmexpat/lib/xmlparse.c:1089:38
+    #3 0x57a6c6 in XML_ParserReset /src/CMake/Utilities/cmexpat/lib/xmlparse.c:1215:3
+    #4 0x56d3b5 in LLVMFuzzerTestOneInput /src/CMake/Tests/Fuzzing/./jcc-corrected-xml_parser_fuzzer.cc:21:7
+    #5 0x43ecd3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #6 0x43e4ba in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #7 0x440324 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:826:7
+    #8 0x440559 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #9 0x42fbbf in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #10 0x459212 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #11 0x7f648d08e082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_malloc--copyString--parserInit
+Indirect leak of 14 byte(s) in 1 object(s) allocated from:
+    #0 0x52fe66 in __interceptor_malloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:69:3
+    #1 0x57a6c6 in copyString /src/CMake/Utilities/cmexpat/lib/xmlparse.c:7497:12
+    #2 0x57a6c6 in parserInit /src/CMake/Utilities/cmexpat/lib/xmlparse.c:1089:38
+    #3 0x57a6c6 in XML_ParserReset /src/CMake/Utilities/cmexpat/lib/xmlparse.c:1215:3
+    #4 0x56d3b5 in LLVMFuzzerTestOneInput /src/CMake/Tests/Fuzzing/./jcc-corrected-xml_parser_fuzzer.cc:21:7
+    #5 0x43ecd3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #6 0x440084 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:804:3
+    #7 0x440559 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #8 0x42fbbf in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #9 0x459212 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #10 0x7f648d08e082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_malloc--copyString--parserInit
+SUMMARY: AddressSanitizer: 5532 byte(s) leaked in 10 allocation(s).
+
+INFO: a leak has been found in the initial corpus.
+
+INFO: to ignore leaks on libFuzzer side use -detect_leaks=0.
+
+MS: 0 ; base unit: 0000000000000000000000000000000000000000
+artifact_prefix='./'; Test unit written to ./leak-96a02fd9fada187c96f00c9bfbedc1fae126a6ee
+stat::number_of_executed_units: 3
+stat::average_exec_per_sec:     0
+stat::new_units_added:          0
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              33

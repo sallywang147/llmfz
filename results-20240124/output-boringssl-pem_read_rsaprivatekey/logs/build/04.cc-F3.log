@@ -1,0 +1,1067 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ mkdir -p /work/boringssl
++ cd /work/boringssl
++ CFLAGS='-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -DBORINGSSL_UNSAFE_FUZZER_MODE'
++ CXXFLAGS='-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -DBORINGSSL_UNSAFE_FUZZER_MODE'
++ CMAKE_DEFINES=-DBORINGSSL_ALLOW_CXX_RUNTIME=1
++ [[ -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -DBORINGSSL_UNSAFE_FUZZER_MODE = *sanitize=memory* ]]
++ cmake -GNinja -DCMAKE_C_COMPILER=/usr/local/bin/clang-jcc -DCMAKE_CXX_COMPILER=/usr/local/bin/clang++-jcc '-DCMAKE_C_FLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -DBORINGSSL_UNSAFE_FUZZER_MODE' '-DCMAKE_CXX_FLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -DBORINGSSL_UNSAFE_FUZZER_MODE' -DBORINGSSL_ALLOW_CXX_RUNTIME=1 /src/boringssl/
+-- The C compiler identification is Clang 15.0.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/local/bin/clang-jcc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- The CXX compiler identification is Clang 15.0.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/local/bin/clang++-jcc - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found Perl: /usr/bin/perl (found version "5.30.0") 
+-- Checking for module 'libunwind-generic>=1.3.0'
+--   No package 'libunwind-generic' found
+libunwind not found. Disabling unwind tests.
+-- The ASM compiler identification is Clang with GNU-like command-line
+-- Found assembler: /usr/local/bin/clang-jcc
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE  
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /work/boringssl
++ ninja
+[1/758] Generating bn-armv8-apple.S
+[2/758] Generating bn-armv8-linux.S
+[3/758] Generating bn-armv8-win.S
+[4/758] Generating ghash-neon-armv8-apple.S
+[5/758] Generating ghash-neon-armv8-win.S
+[6/758] Generating p256_beeu-armv8-asm-win.S
+[7/758] Generating aesv8-armv8-apple.S
+[8/758] Generating aesv8-armv8-win.S
+[9/758] Generating ghash-neon-armv8-linux.S
+[10/758] Generating p256_beeu-armv8-asm-apple.S
+[11/758] Generating p256_beeu-armv8-asm-linux.S
+[12/758] Generating aesv8-armv8-linux.S
+[13/758] Generating ghashv8-armv8-apple.S
+[14/758] Generating ghashv8-armv8-linux.S
+[15/758] Generating ghashv8-armv8-win.S
+[16/758] Generating sha1-armv8-linux.S
+[17/758] Generating armv8-mont-win.S
+[18/758] Generating armv8-mont-linux.S
+[19/758] Generating sha1-armv8-win.S
+[20/758] Generating sha1-armv8-apple.S
+[21/758] Generating sha256-armv8-apple.S
+[22/758] Generating armv8-mont-apple.S
+[23/758] Generating sha256-armv8-linux.S
+[24/758] Generating ghash-armv4-linux.S
+[25/758] Generating sha256-armv8-win.S
+[26/758] Generating aesv8-gcm-armv8-linux.S
+[27/758] Generating vpaes-armv8-apple.S
+[28/758] Generating ghashv8-armv7-linux.S
+[29/758] Generating p256-armv8-asm-apple.S
+[30/758] Generating p256-armv8-asm-win.S
+[31/758] Generating ghash-armv4-apple.S
+[32/758] Generating aesv8-gcm-armv8-win.S
+[33/758] Generating p256-armv8-asm-linux.S
+[34/758] Generating vpaes-armv8-win.S
+[35/758] Generating aesv8-armv7-apple.S
+[36/758] Generating aesv8-gcm-armv8-apple.S
+[37/758] Generating vpaes-armv8-linux.S
+[38/758] Generating armv4-mont-linux.S
+[39/758] Generating aesv8-armv7-linux.S
+[40/758] Generating sha512-armv8-win.S
+[41/758] Generating sha512-armv8-apple.S
+[42/758] Generating sha512-armv8-linux.S
+[43/758] Generating ghash-ssse3-x86-apple.S
+[44/758] Generating ghash-ssse3-x86-linux.S
+[45/758] Generating armv4-mont-apple.S
+[46/758] Generating bsaes-armv7-apple.S
+[47/758] Generating ghashv8-armv7-apple.S
+[48/758] Generating sha512-armv4-apple.S
+[49/758] Generating vpaes-armv7-apple.S
+[50/758] Generating vpaes-armv7-linux.S
+[51/758] Generating bn-586-apple.S
+[52/758] Generating bn-586-linux.S
+[53/758] Generating co-586-apple.S
+[54/758] Generating co-586-linux.S
+[55/758] Generating ghash-x86-apple.S
+[56/758] Generating ghash-x86-linux.S
+[57/758] Generating md5-586-apple.S
+[58/758] Generating md5-586-linux.S
+[59/758] Generating bsaes-armv7-linux.S
+[60/758] Generating vpaes-x86-apple.S
+[61/758] Generating sha1-armv4-large-apple.S
+[62/758] Generating x86-mont-linux.S
+[63/758] Generating x86-mont-apple.S
+[64/758] Generating sha1-armv4-large-linux.S
+[65/758] Generating vpaes-x86-linux.S
+[66/758] Generating sha512-armv4-linux.S
+[67/758] Generating rdrand-x86_64-apple.S
+[68/758] Generating aesni-x86-apple.S
+[69/758] Generating rdrand-x86_64-linux.S
+[70/758] Generating sha256-armv4-apple.S
+[71/758] Generating sha256-armv4-linux.S
+[72/758] Generating p256_beeu-x86_64-asm-apple.S
+[73/758] Generating p256_beeu-x86_64-asm-linux.S
+[74/758] Generating sha512-586-apple.S
+[75/758] Generating ghash-ssse3-x86_64-linux.S
+[76/758] Generating ghash-ssse3-x86_64-apple.S
+[77/758] Generating sha512-586-linux.S
+[78/758] Generating aesni-x86-linux.S
+[79/758] Generating sha256-586-linux.S
+[80/758] Generating md5-x86_64-apple.S
+[81/758] Generating sha1-586-linux.S
+[82/758] Generating md5-x86_64-linux.S
+[83/758] Generating sha1-586-apple.S
+[84/758] Generating aesni-gcm-x86_64-apple.S
+[85/758] Generating aesni-gcm-x86_64-linux.S
+[86/758] Generating ghash-x86_64-apple.S
+[87/758] Generating sha256-586-apple.S
+[88/758] Generating ghash-x86_64-linux.S
+[89/758] Generating x86_64-mont-apple.S
+[90/758] Generating vpaes-x86_64-linux.S
+[91/758] Generating vpaes-x86_64-apple.S
+[92/758] Generating x86_64-mont-linux.S
+[93/758] Generating rsaz-avx2-apple.S
+[94/758] Generating aesni-x86_64-linux.S
+[95/758] Generating rsaz-avx2-linux.S
+[96/758] Generating sha512-x86_64-linux.S
+[97/758] Generating p256-x86_64-asm-apple.S
+[98/758] Generating p256-x86_64-asm-linux.S
+[99/758] Generating aesni-x86_64-apple.S
+[100/758] Generating x86_64-mont5-linux.S
+[101/758] Generating sha512-x86_64-apple.S
+[102/758] Generating x86_64-mont5-apple.S
+[103/758] Generating sha1-x86_64-linux.S
+[104/758] Generating sha256-x86_64-apple.S
+[105/758] Generating sha256-x86_64-linux.S
+[106/758] Generating sha1-x86_64-apple.S
+[107/758] Building C object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/fips_shared_support.c.o
+[108/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/aesv8-gcm-armv8-linux.S.o
+[109/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/aesv8-gcm-armv8-win.S.o
+[110/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/armv8-mont-apple.S.o
+[111/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/aesv8-gcm-armv8-apple.S.o
+[112/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/aesv8-armv8-linux.S.o
+[113/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/aesv8-armv8-win.S.o
+[114/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/aesv8-armv8-apple.S.o
+[115/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/armv8-mont-linux.S.o
+[116/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/armv8-mont-win.S.o
+[117/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/ghash-neon-armv8-apple.S.o
+[118/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/p256_beeu-armv8-asm-win.S.o
+[119/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/bn-armv8-linux.S.o
+[120/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/ghash-neon-armv8-linux.S.o
+[121/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/ghash-neon-armv8-win.S.o
+[122/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/p256_beeu-armv8-asm-apple.S.o
+[123/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/p256-armv8-asm-linux.S.o
+[124/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/ghashv8-armv8-apple.S.o
+[125/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/ghashv8-armv8-win.S.o
+[126/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/p256-armv8-asm-apple.S.o
+[127/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/sha1-armv8-win.S.o
+[128/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/bn-armv8-apple.S.o
+[129/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/p256-armv8-asm-win.S.o
+[130/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/sha1-armv8-linux.S.o
+[131/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/bn-armv8-win.S.o
+[132/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/ghashv8-armv8-linux.S.o
+[133/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/sha256-armv8-apple.S.o
+[134/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/p256_beeu-armv8-asm-linux.S.o
+[135/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/sha1-armv8-apple.S.o
+[136/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/sha256-armv8-linux.S.o
+[137/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/sha256-armv8-win.S.o
+[138/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/sha512-armv8-apple.S.o
+[139/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/sha512-armv8-linux.S.o
+[140/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/sha512-armv8-win.S.o
+[141/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/vpaes-armv8-apple.S.o
+[142/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/vpaes-armv8-linux.S.o
+[143/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/vpaes-armv8-win.S.o
+[144/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/aesv8-armv7-apple.S.o
+[145/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/aesv8-armv7-linux.S.o
+[146/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/armv4-mont-apple.S.o
+[147/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/armv4-mont-linux.S.o
+[148/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/bsaes-armv7-apple.S.o
+[149/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/ghash-armv4-linux.S.o
+[150/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/ghashv8-armv7-apple.S.o
+[151/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/bsaes-armv7-linux.S.o
+[152/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/ghash-armv4-apple.S.o
+[153/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/sha1-armv4-large-apple.S.o
+[154/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/sha1-armv4-large-linux.S.o
+[155/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/sha256-armv4-apple.S.o
+[156/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/sha256-armv4-linux.S.o
+[157/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/vpaes-armv7-apple.S.o
+[158/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/ghashv8-armv7-linux.S.o
+[159/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/sha512-armv4-apple.S.o
+[160/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/aesni-x86-linux.S.o
+[161/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/sha512-armv4-linux.S.o
+[162/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/vpaes-armv7-linux.S.o
+[163/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/aesni-x86-apple.S.o
+[164/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/bn-586-apple.S.o
+[165/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/bn-586-linux.S.o
+[166/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/co-586-linux.S.o
+[167/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/ghash-ssse3-x86-apple.S.o
+[168/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/co-586-apple.S.o
+[169/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/ghash-ssse3-x86-linux.S.o
+[170/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/md5-586-apple.S.o
+[171/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/ghash-x86-linux.S.o
+[172/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/sha256-586-apple.S.o
+[173/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/ghash-x86-apple.S.o
+[174/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/sha1-586-apple.S.o
+[175/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/sha1-586-linux.S.o
+[176/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/md5-586-linux.S.o
+[177/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/sha256-586-linux.S.o
+[178/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/sha512-586-apple.S.o
+[179/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/sha512-586-linux.S.o
+[180/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/vpaes-x86-apple.S.o
+[181/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/vpaes-x86-linux.S.o
+[182/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/x86-mont-apple.S.o
+[183/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/x86-mont-linux.S.o
+[184/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/aesni-gcm-x86_64-apple.S.o
+[185/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/ghash-x86_64-apple.S.o
+[186/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/aesni-x86_64-apple.S.o
+[187/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/ghash-ssse3-x86_64-apple.S.o
+[188/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/ghash-ssse3-x86_64-linux.S.o
+[189/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/aesni-gcm-x86_64-linux.S.o
+[190/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/md5-x86_64-apple.S.o
+[191/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/p256_beeu-x86_64-asm-linux.S.o
+[192/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/md5-x86_64-linux.S.o
+[193/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/aesni-x86_64-linux.S.o
+[194/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/p256-x86_64-asm-apple.S.o
+[195/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/rdrand-x86_64-apple.S.o
+[196/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/ghash-x86_64-linux.S.o
+[197/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/p256_beeu-x86_64-asm-apple.S.o
+[198/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/rdrand-x86_64-linux.S.o
+[199/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/rsaz-avx2-apple.S.o
+[200/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/sha1-x86_64-apple.S.o
+[201/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/vpaes-x86_64-apple.S.o
+[202/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/rsaz-avx2-linux.S.o
+[203/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/sha256-x86_64-apple.S.o
+[204/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/sha512-x86_64-apple.S.o
+[205/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/sha512-x86_64-linux.S.o
+[206/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/x86_64-mont5-apple.S.o
+[207/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/sha256-x86_64-linux.S.o
+[208/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/x86_64-mont-linux.S.o
+[209/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/p256-x86_64-asm-linux.S.o
+[210/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/x86_64-mont-apple.S.o
+[211/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/vpaes-x86_64-linux.S.o
+[212/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/sha1-x86_64-linux.S.o
+[213/758] Building ASM object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/x86_64-mont5-linux.S.o
+[214/758] Generating crypto_test_data.cc
+[215/758] Building CXX object CMakeFiles/crypto_test_data.dir/crypto_test_data.cc.o
+[216/758] Building CXX object CMakeFiles/boringssl_gtest.dir/third_party/googletest/googlemock/src/gmock-all.cc.o
+[217/758] Building C object crypto/fipsmodule/CMakeFiles/fipsmodule.dir/bcm.c.o
+[218/758] Generating test/trampoline-x86-apple.S
+[219/758] Generating test/trampoline-x86-linux.S
+[220/758] Generating test/trampoline-armv8-apple.S
+[221/758] Generating test/trampoline-armv4-apple.S
+[222/758] Generating test/trampoline-armv4-linux.S
+[223/758] Generating test/trampoline-armv8-linux.S
+[224/758] Generating chacha/chacha-x86-apple.S
+[225/758] Generating test/trampoline-armv8-win.S
+[226/758] Generating chacha/chacha-x86-linux.S
+[227/758] Generating test/trampoline-x86_64-linux.S
+[228/758] Generating test/trampoline-x86_64-apple.S
+[229/758] Generating chacha/chacha-armv4-apple.S
+[230/758] Generating chacha/chacha-armv4-linux.S
+[231/758] Generating cipher_extra/chacha20_poly1305_armv8-win.S
+[232/758] Generating cipher_extra/chacha20_poly1305_armv8-linux.S
+[233/758] Generating chacha/chacha-armv8-win.S
+[234/758] Generating chacha/chacha-armv8-linux.S
+[235/758] Generating chacha/chacha-x86_64-linux.S
+[236/758] Generating chacha/chacha-x86_64-apple.S
+[237/758] Generating cipher_extra/chacha20_poly1305_armv8-apple.S
+[238/758] Generating chacha/chacha-armv8-apple.S
+[239/758] Generating cipher_extra/aes128gcmsiv-x86_64-linux.S
+[240/758] Generating cipher_extra/aes128gcmsiv-x86_64-apple.S
+[241/758] Generating err_data.c
+[242/758] Generating cipher_extra/chacha20_poly1305_x86_64-apple.S
+[243/758] Generating cipher_extra/chacha20_poly1305_x86_64-linux.S
+[244/758] Building CXX object CMakeFiles/test_support_lib.dir/crypto/test/test_util.cc.o
+[245/758] Building CXX object CMakeFiles/test_support_lib.dir/crypto/test/wycheproof_util.cc.o
+[246/758] Building CXX object CMakeFiles/urandom_test.dir/crypto/fipsmodule/rand/urandom_test.cc.o
+[247/758] Building CXX object CMakeFiles/boringssl_gtest.dir/third_party/googletest/googletest/src/gtest-all.cc.o
+[248/758] Building CXX object CMakeFiles/test_support_lib.dir/crypto/test/abi_test.cc.o
+[249/758] Linking CXX static library libboringssl_gtest.a
+[250/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/cpu_arm_linux_test.cc.o
+[251/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/crypto_test.cc.o
+[252/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/chacha/chacha_test.cc.o
+[253/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/blake2/blake2_test.cc.o
+[254/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/curve25519/spake25519_test.cc.o
+[255/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/evp/pbkdf_test.cc.o
+[256/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/abi_self_test.cc.o
+[257/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/compiler_test.cc.o
+[258/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/curve25519/ed25519_test.cc.o
+[259/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/constant_time_test.cc.o
+[260/758] Building CXX object CMakeFiles/test_support_lib.dir/crypto/test/file_test.cc.o
+[261/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/evp/scrypt_test.cc.o
+[262/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/curve25519/x25519_test.cc.o
+[263/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/fipsmodule/ec/p256_test.cc.o
+[264/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/buf/buf_test.cc.o
+[265/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/fipsmodule/md5/md5_test.cc.o
+[266/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/dsa/dsa_test.cc.o
+[267/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/digest_extra/digest_test.cc.o
+[268/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/ecdh_extra/ecdh_test.cc.o
+[269/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/fipsmodule/service_indicator/service_indicator_test.cc.o
+[270/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/base64/base64_test.cc.o
+[271/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/fipsmodule/sha/sha_test.cc.o
+[272/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/err/err_test.cc.o
+[273/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/fipsmodule/rand/fork_detect_test.cc.o
+[274/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/fipsmodule/modes/gcm_test.cc.o
+[275/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/fipsmodule/rand/ctrdrbg_test.cc.o
+[276/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/rand_extra/getentropy_test.cc.o
+[277/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/keccak/keccak_test.cc.o
+[278/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/pem/pem_test.cc.o
+[279/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/fipsmodule/cmac/cmac_test.cc.o
+[280/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/obj/obj_test.cc.o
+[281/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/impl_dispatch_test.cc.o
+[282/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/hrss/hrss_test.cc.o
+[283/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/lhash/lhash_test.cc.o
+[284/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/dh_extra/dh_test.cc.o
+[285/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/hmac_extra/hmac_test.cc.o
+[286/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/kyber/kyber_test.cc.o
+[287/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/fipsmodule/ec/p256-nistz_test.cc.o
+[288/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/self_test.cc.o
+[289/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/rand_extra/rand_test.cc.o
+[290/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/fipsmodule/aes/aes_test.cc.o
+[291/758] Building C object CMakeFiles/ssl_test.dir/ssl/ssl_c_test.c.o
+[292/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/pkcs8/pkcs8_test.cc.o
+[293/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/poly1305/poly1305_test.cc.o
+[294/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/refcount_test.cc.o
+[295/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/test/file_test_gtest.cc.o
+[296/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/conf/conf_test.cc.o
+[297/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/test/gtest_main.cc.o
+[298/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/evp/evp_extra_test.cc.o
+[299/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/fipsmodule/hkdf/hkdf_test.cc.o
+[300/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/siphash/siphash_test.cc.o
+[301/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/x509/tab_test.cc.o
+[302/758] Building CXX object CMakeFiles/ssl_test.dir/crypto/test/gtest_main.cc.o
+[303/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/spx/spx_test.cc.o
+[304/758] Building CXX object CMakeFiles/pki.dir/pki/cert_error_id.cc.o
+[305/758] Building CXX object CMakeFiles/decrepit_test.dir/decrepit/evp/evp_test.cc.o
+[306/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/thread_test.cc.o
+[307/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/x509/x509_time_test.cc.o
+[308/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/fipsmodule/ecdsa/ecdsa_test.cc.o
+[309/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/pool/pool_test.cc.o
+[310/758] Building CXX object CMakeFiles/decrepit_test.dir/crypto/test/gtest_main.cc.o
+[311/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/evp/evp_test.cc.o
+[312/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/cipher_extra/cipher_test.cc.o
+[313/758] Building CXX object CMakeFiles/pki.dir/pki/cert_error_params.cc.o
+[314/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/hpke/hpke_test.cc.o
+[315/758] Building CXX object CMakeFiles/pki.dir/pki/encode_values.cc.o
+[316/758] Building CXX object CMakeFiles/pki.dir/pki/ip_util.cc.o
+[317/758] Building CXX object CMakeFiles/ssl_test.dir/ssl/span_test.cc.o
+[318/758] Building CXX object CMakeFiles/pki.dir/pki/common_cert_errors.cc.o
+[319/758] Building CXX object CMakeFiles/pki.dir/pki/input.cc.o
+[320/758] Building CXX object CMakeFiles/pki.dir/pki/extended_key_usage.cc.o
+[321/758] Building CXX object CMakeFiles/pki.dir/pki/ocsp_verify_result.cc.o
+[322/758] Building CXX object CMakeFiles/decrepit_test.dir/decrepit/ripemd/ripemd_test.cc.o
+[323/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/pkcs8/pkcs12_test.cc.o
+[324/758] Building CXX object CMakeFiles/pki.dir/pki/cert_issuer_source_static.cc.o
+[325/758] Building CXX object CMakeFiles/pki.dir/pki/general_names.cc.o
+[326/758] Building CXX object CMakeFiles/pki.dir/pki/name_constraints.cc.o
+[327/758] Building CXX object CMakeFiles/pki.dir/pki/parser.cc.o
+[328/758] Building CXX object CMakeFiles/decrepit_test.dir/decrepit/cfb/cfb_test.cc.o
+[329/758] Building CXX object CMakeFiles/pki.dir/pki/revocation_util.cc.o
+[330/758] Building CXX object CMakeFiles/decrepit_test.dir/decrepit/cast/cast_test.cc.o
+[331/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/pkcs7/pkcs7_test.cc.o
+[332/758] Building CXX object CMakeFiles/pki.dir/pki/certificate_policies.cc.o
+[333/758] Building CXX object CMakeFiles/pki.dir/pki/tag.cc.o
+[334/758] Building CXX object CMakeFiles/pki.dir/pki/crl.cc.o
+[335/758] Building CXX object CMakeFiles/pki.dir/pki/pem.cc.o
+[336/758] Building CXX object CMakeFiles/pki.dir/pki/parse_values.cc.o
+[337/758] Building CXX object CMakeFiles/pki.dir/pki/signature_algorithm.cc.o
+[338/758] Building CXX object CMakeFiles/pki.dir/pki/cert_errors.cc.o
+[339/758] Building CXX object CMakeFiles/decrepit_test.dir/decrepit/blowfish/blowfish_test.cc.o
+[340/758] Building CXX object CMakeFiles/pki.dir/pki/parse_name.cc.o
+[341/758] Building CXX object CMakeFiles/pki.dir/pki/simple_path_builder_delegate.cc.o
+[342/758] Building CXX object CMakeFiles/pki.dir/pki/parsed_certificate.cc.o
+[343/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/bio/bio_test.cc.o
+[344/758] Building CXX object CMakeFiles/pki.dir/pki/ocsp.cc.o
+[345/758] Building CXX object CMakeFiles/decrepit_test.dir/decrepit/xts/xts_test.cc.o
+[346/758] Building CXX object CMakeFiles/pki.dir/pki/trust_store_collection.cc.o
+[347/758] Building CXX object CMakeFiles/pki.dir/pki/trust_store.cc.o
+[348/758] Building CXX object CMakeFiles/pki.dir/pki/parse_certificate.cc.o
+[349/758] Building CXX object CMakeFiles/pki.dir/pki/verify_signed_data.cc.o
+[350/758] Building CXX object CMakeFiles/pki.dir/pki/string_util.cc.o
+[351/758] Building CXX object CMakeFiles/pki.dir/pki/verify_name_match.cc.o
+[352/758] Building CXX object CMakeFiles/pki_test.dir/pki/mock_signature_verify_cache.cc.o
+[353/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/cipher_extra/aead_test.cc.o
+[354/758] Building CXX object CMakeFiles/pki_test.dir/crypto/test/gtest_main.cc.o
+[355/758] Building CXX object CMakeFiles/pki.dir/pki/trust_store_in_memory.cc.o
+[356/758] Building CXX object CMakeFiles/pki_test.dir/pki/ip_util_unittest.cc.o
+[357/758] Building CXX object CMakeFiles/pki_test.dir/pki/extended_key_usage_unittest.cc.o
+[358/758] Building CXX object CMakeFiles/pki_test.dir/pki/encode_values_unittest.cc.o
+[359/758] Building CXX object CMakeFiles/pki_test.dir/pki/input_unittest.cc.o
+[360/758] Building CXX object CMakeFiles/pki_test.dir/pki/nist_pkits_unittest.cc.o
+[361/758] Building CXX object CMakeFiles/pki.dir/pki/verify_certificate_chain.cc.o
+[362/758] Building CXX object CMakeFiles/pki.dir/pki/path_builder.cc.o
+[363/758] Building CXX object CMakeFiles/pki_test.dir/pki/general_names_unittest.cc.o
+[364/758] Building CXX object CMakeFiles/pki_test.dir/pki/crl_unittest.cc.o
+[365/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/stack/stack_test.cc.o
+[366/758] Building CXX object CMakeFiles/pki_test.dir/pki/pem_unittest.cc.o
+[367/758] Building CXX object CMakeFiles/pki_test.dir/pki/parser_unittest.cc.o
+[368/758] Building CXX object CMakeFiles/pki_test.dir/pki/trust_store_in_memory_unittest.cc.o
+[369/758] Building CXX object CMakeFiles/bssl.dir/tool/args.cc.o
+[370/758] Building CXX object CMakeFiles/bssl.dir/tool/const.cc.o
+[371/758] Building CXX object CMakeFiles/bssl.dir/tool/ciphers.cc.o
+[372/758] Building CXX object CMakeFiles/pki_test.dir/pki/trust_store_collection_unittest.cc.o
+[373/758] Building CXX object CMakeFiles/pki_test.dir/pki/parse_values_unittest.cc.o
+[374/758] Building CXX object CMakeFiles/pki_test.dir/pki/ocsp_unittest.cc.o
+[375/758] Building CXX object CMakeFiles/pki_test.dir/pki/cert_issuer_source_static_unittest.cc.o
+[376/758] Building CXX object CMakeFiles/pki_test.dir/pki/parse_name_unittest.cc.o
+[377/758] Building CXX object CMakeFiles/bssl.dir/tool/fd.cc.o
+[378/758] Building CXX object CMakeFiles/pki_test.dir/pki/string_util_unittest.cc.o
+[379/758] Building CXX object CMakeFiles/bssl.dir/tool/file.cc.o
+[380/758] Building CXX object CMakeFiles/bssl.dir/tool/generate_ed25519.cc.o
+[381/758] Building CXX object CMakeFiles/bssl.dir/tool/genrsa.cc.o
+[382/758] Building CXX object CMakeFiles/pki_test.dir/pki/simple_path_builder_delegate_unittest.cc.o
+[383/758] Building C object crypto/CMakeFiles/crypto.dir/asn1/a_bitstr.c.o
+[384/758] Building ASM object crypto/CMakeFiles/crypto.dir/curve25519/asm/x25519-asm-arm.S.o
+[385/758] Building ASM object crypto/CMakeFiles/crypto.dir/hrss/asm/poly_rq_mul.S.o
+[386/758] Building ASM object crypto/CMakeFiles/crypto.dir/poly1305/poly1305_arm_asm.S.o
+[387/758] Building ASM object crypto/CMakeFiles/crypto.dir/__/third_party/fiat/asm/fiat_curve25519_adx_mul.S.o
+[388/758] Building CXX object CMakeFiles/bssl.dir/tool/digest.cc.o
+[389/758] Building CXX object CMakeFiles/pki_test.dir/pki/signature_algorithm_unittest.cc.o
+[390/758] Building C object crypto/CMakeFiles/crypto.dir/asn1/a_bool.c.o
+[391/758] Building C object crypto/CMakeFiles/crypto.dir/asn1/a_d2i_fp.c.o
+[392/758] Building C object crypto/CMakeFiles/crypto.dir/asn1/a_dup.c.o
+[393/758] Building C object crypto/CMakeFiles/crypto.dir/asn1/a_i2d_fp.c.o
+[394/758] Building C object crypto/CMakeFiles/crypto.dir/asn1/a_gentm.c.o
+[395/758] Building CXX object CMakeFiles/bssl.dir/tool/rand.cc.o
+[396/758] Building CXX object CMakeFiles/bssl.dir/tool/generate_ech.cc.o
+[397/758] Building C object crypto/CMakeFiles/crypto.dir/asn1/a_octet.c.o
+[398/758] Building C object crypto/CMakeFiles/crypto.dir/asn1/a_mbstr.c.o
+[399/758] Building C object crypto/CMakeFiles/crypto.dir/asn1/a_object.c.o
+[400/758] Building CXX object CMakeFiles/pki_test.dir/pki/certificate_policies_unittest.cc.o
+[401/758] Building C object crypto/CMakeFiles/crypto.dir/asn1/a_type.c.o
+[402/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/fipsmodule/ec/ec_test.cc.o
+[403/758] Building C object crypto/CMakeFiles/crypto.dir/asn1/a_time.c.o
+[404/758] Building C object crypto/CMakeFiles/crypto.dir/asn1/a_int.c.o
+[405/758] Building C object crypto/CMakeFiles/crypto.dir/asn1/a_utctm.c.o
+[406/758] Building C object crypto/CMakeFiles/crypto.dir/asn1/asn1_par.c.o
+[407/758] Building C object crypto/CMakeFiles/crypto.dir/asn1/asn1_lib.c.o
+[408/758] Building C object crypto/CMakeFiles/crypto.dir/asn1/asn_pack.c.o
+[409/758] Building C object crypto/CMakeFiles/crypto.dir/asn1/a_strex.c.o
+[410/758] Building C object crypto/CMakeFiles/crypto.dir/asn1/a_strnid.c.o
+[411/758] Building C object crypto/CMakeFiles/crypto.dir/asn1/f_string.c.o
+[412/758] Building C object crypto/CMakeFiles/crypto.dir/asn1/f_int.c.o
+[413/758] Building CXX object CMakeFiles/bssl.dir/tool/pkcs12.cc.o
+[414/758] Building C object crypto/CMakeFiles/crypto.dir/asn1/tasn_fre.c.o
+[415/758] Building C object crypto/CMakeFiles/crypto.dir/asn1/tasn_new.c.o
+[416/758] Building CXX object CMakeFiles/bssl.dir/tool/tool.cc.o
+[417/758] Building CXX object CMakeFiles/bssl.dir/tool/client.cc.o
+[418/758] Building CXX object CMakeFiles/pki_test.dir/pki/verify_signed_data_unittest.cc.o
+[419/758] Building C object crypto/CMakeFiles/crypto.dir/asn1/posix_time.c.o
+[420/758] Building C object crypto/CMakeFiles/crypto.dir/asn1/tasn_utl.c.o
+[421/758] Building C object crypto/CMakeFiles/crypto.dir/asn1/tasn_typ.c.o
+[422/758] Building C object crypto/CMakeFiles/crypto.dir/bio/errno.c.o
+[423/758] Building C object crypto/CMakeFiles/crypto.dir/bio/bio_mem.c.o
+[424/758] Building C object crypto/CMakeFiles/crypto.dir/bio/fd.c.o
+[425/758] Building C object crypto/CMakeFiles/crypto.dir/bio/printf.c.o
+[426/758] Building C object crypto/CMakeFiles/crypto.dir/bio/socket.c.o
+[427/758] Building C object crypto/CMakeFiles/crypto.dir/bio/file.c.o
+[428/758] Building C object crypto/CMakeFiles/crypto.dir/bio/hexdump.c.o
+[429/758] Building C object crypto/CMakeFiles/crypto.dir/base64/base64.c.o
+[430/758] Building C object crypto/CMakeFiles/crypto.dir/asn1/tasn_enc.c.o
+[431/758] Building C object crypto/CMakeFiles/crypto.dir/bn_extra/bn_asn1.c.o
+[432/758] Building C object crypto/CMakeFiles/crypto.dir/bio/connect.c.o
+[433/758] Building C object crypto/CMakeFiles/crypto.dir/bio/socket_helper.c.o
+[434/758] Building C object crypto/CMakeFiles/crypto.dir/bytestring/asn1_compat.c.o
+[435/758] Building C object crypto/CMakeFiles/crypto.dir/asn1/tasn_dec.c.o
+[436/758] Building C object crypto/CMakeFiles/crypto.dir/bio/pair.c.o
+[437/758] Building CXX object CMakeFiles/bssl.dir/tool/sign.cc.o
+[438/758] Building C object crypto/CMakeFiles/crypto.dir/buf/buf.c.o
+[439/758] Building C object crypto/CMakeFiles/crypto.dir/bytestring/unicode.c.o
+[440/758] Building C object crypto/CMakeFiles/crypto.dir/cipher_extra/derive_key.c.o
+[441/758] Building C object crypto/CMakeFiles/crypto.dir/bytestring/ber.c.o
+[442/758] Building C object crypto/CMakeFiles/crypto.dir/cipher_extra/cipher_extra.c.o
+[443/758] Building C object crypto/CMakeFiles/crypto.dir/blake2/blake2.c.o
+[444/758] Building C object crypto/CMakeFiles/crypto.dir/cipher_extra/e_null.c.o
+[445/758] Building C object crypto/CMakeFiles/crypto.dir/bio/bio.c.o
+[446/758] Building C object crypto/CMakeFiles/crypto.dir/cipher_extra/e_aesctrhmac.c.o
+[447/758] Building C object crypto/CMakeFiles/crypto.dir/cipher_extra/e_rc4.c.o
+[448/758] Building C object crypto/CMakeFiles/crypto.dir/cipher_extra/e_des.c.o
+[449/758] Building C object crypto/CMakeFiles/crypto.dir/cpu_aarch64_openbsd.c.o
+[450/758] Building C object crypto/CMakeFiles/crypto.dir/bn_extra/convert.c.o
+[451/758] Building C object crypto/CMakeFiles/crypto.dir/chacha/chacha.c.o
+[452/758] Building C object crypto/CMakeFiles/crypto.dir/cpu_aarch64_fuchsia.c.o
+[453/758] Building C object crypto/CMakeFiles/crypto.dir/cpu_aarch64_apple.c.o
+[454/758] Building C object crypto/CMakeFiles/crypto.dir/cpu_aarch64_linux.c.o
+[455/758] Building C object crypto/CMakeFiles/crypto.dir/cpu_aarch64_sysreg.c.o
+[456/758] Building C object crypto/CMakeFiles/crypto.dir/cipher_extra/e_chacha20poly1305.c.o
+[457/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/bytestring/bytestring_test.cc.o
+[458/758] Building C object crypto/CMakeFiles/crypto.dir/cpu_arm_freebsd.c.o
+[459/758] Building C object crypto/CMakeFiles/crypto.dir/cpu_aarch64_win.c.o
+[460/758] Building C object crypto/CMakeFiles/crypto.dir/cpu_arm_linux.c.o
+[461/758] Building CXX object CMakeFiles/bssl.dir/tool/transport_common.cc.o
+[462/758] Building C object crypto/CMakeFiles/crypto.dir/cpu_intel.c.o
+[463/758] Building C object crypto/CMakeFiles/crypto.dir/crypto.c.o
+[464/758] Building C object crypto/CMakeFiles/crypto.dir/cipher_extra/e_tls.c.o
+[465/758] Building CXX object CMakeFiles/pki_test.dir/pki/test_helpers.cc.o
+[466/758] Building C object crypto/CMakeFiles/crypto.dir/cipher_extra/e_aesgcmsiv.c.o
+[467/758] Building C object crypto/CMakeFiles/crypto.dir/dh_extra/dh_asn1.c.o
+[468/758] Building C object crypto/CMakeFiles/crypto.dir/cipher_extra/tls_cbc.c.o
+[469/758] Building C object crypto/CMakeFiles/crypto.dir/cipher_extra/e_rc2.c.o
+[470/758] Building C object crypto/CMakeFiles/crypto.dir/curve25519/spake25519.c.o
+[471/758] Building C object crypto/CMakeFiles/crypto.dir/dh_extra/params.c.o
+[472/758] Building C object crypto/CMakeFiles/crypto.dir/digest_extra/digest_extra.c.o
+[473/758] Building C object crypto/CMakeFiles/crypto.dir/ecdh_extra/ecdh_extra.c.o
+[474/758] Building C object crypto/CMakeFiles/crypto.dir/err_data.c.o
+[475/758] Building C object crypto/CMakeFiles/crypto.dir/ec_extra/ec_derive.c.o
+[476/758] Building C object crypto/CMakeFiles/crypto.dir/conf/conf.c.o
+[477/758] Building C object crypto/CMakeFiles/crypto.dir/engine/engine.c.o
+[478/758] Building C object crypto/CMakeFiles/crypto.dir/ecdsa_extra/ecdsa_asn1.c.o
+[479/758] Building C object crypto/CMakeFiles/crypto.dir/dsa/dsa_asn1.c.o
+[480/758] Building C object crypto/CMakeFiles/crypto.dir/evp/p_ec.c.o
+[481/758] Building C object crypto/CMakeFiles/crypto.dir/bytestring/cbb.c.o
+[482/758] Building C object crypto/CMakeFiles/crypto.dir/evp/p_ed25519.c.o
+[483/758] Building CXX object CMakeFiles/bssl.dir/tool/server.cc.o
+[484/758] Building C object crypto/CMakeFiles/crypto.dir/ec_extra/hash_to_curve.c.o
+[485/758] Building C object crypto/CMakeFiles/crypto.dir/evp/p_dsa_asn1.c.o
+[486/758] Building C object crypto/CMakeFiles/crypto.dir/evp/p_ec_asn1.c.o
+[487/758] Building C object crypto/CMakeFiles/crypto.dir/dsa/dsa.c.o
+[488/758] Building C object crypto/CMakeFiles/crypto.dir/ec_extra/ec_asn1.c.o
+[489/758] Building C object crypto/CMakeFiles/crypto.dir/evp/evp_ctx.c.o
+[490/758] Building C object crypto/CMakeFiles/crypto.dir/bytestring/cbs.c.o
+[491/758] Building C object crypto/CMakeFiles/crypto.dir/evp/evp.c.o
+[492/758] Building C object crypto/CMakeFiles/crypto.dir/evp/evp_asn1.c.o
+[493/758] Building C object crypto/CMakeFiles/crypto.dir/evp/p_ed25519_asn1.c.o
+[494/758] Building C object crypto/CMakeFiles/crypto.dir/evp/p_x25519.c.o
+[495/758] Building C object crypto/CMakeFiles/crypto.dir/evp/p_hkdf.c.o
+[496/758] Building C object crypto/CMakeFiles/crypto.dir/evp/sign.c.o
+[497/758] Building C object crypto/CMakeFiles/crypto.dir/evp/pbkdf.c.o
+[498/758] Building C object crypto/CMakeFiles/crypto.dir/evp/p_rsa_asn1.c.o
+[499/758] Building C object crypto/CMakeFiles/crypto.dir/err/err.c.o
+[500/758] Building C object crypto/CMakeFiles/crypto.dir/ex_data.c.o
+[501/758] Building C object crypto/CMakeFiles/crypto.dir/evp/p_x25519_asn1.c.o
+[502/758] Building C object crypto/CMakeFiles/crypto.dir/obj/obj_xref.c.o
+[503/758] Building C object crypto/CMakeFiles/crypto.dir/evp/print.c.o
+[504/758] Building C object crypto/CMakeFiles/crypto.dir/evp/scrypt.c.o
+[505/758] Building C object crypto/CMakeFiles/crypto.dir/evp/p_rsa.c.o
+[506/758] Building C object crypto/CMakeFiles/crypto.dir/keccak/keccak.c.o
+[507/758] Building C object crypto/CMakeFiles/crypto.dir/pem/pem_oth.c.o
+[508/758] Building C object crypto/CMakeFiles/crypto.dir/lhash/lhash.c.o
+[509/758] Building ASM object crypto/CMakeFiles/crypto.dir/test/trampoline-armv4-linux.S.o
+[510/758] Building C object crypto/CMakeFiles/crypto.dir/pem/pem_pk8.c.o
+[511/758] Building C object crypto/CMakeFiles/crypto.dir/pem/pem_info.c.o
+[512/758] Building C object crypto/CMakeFiles/crypto.dir/pem/pem_pkey.c.o
+[513/758] Building C object crypto/CMakeFiles/crypto.dir/mem.c.o
+[514/758] Building C object crypto/CMakeFiles/crypto.dir/pem/pem_x509.c.o
+[515/758] Building C object crypto/CMakeFiles/crypto.dir/pkcs7/pkcs7.c.o
+[516/758] Building C object crypto/CMakeFiles/crypto.dir/pem/pem_xaux.c.o
+[517/758] Building C object crypto/CMakeFiles/crypto.dir/pem/pem_all.c.o
+[518/758] Building C object crypto/CMakeFiles/crypto.dir/hpke/hpke.c.o
+[519/758] Building C object crypto/CMakeFiles/crypto.dir/poly1305/poly1305.c.o
+[520/758] Building C object crypto/CMakeFiles/crypto.dir/poly1305/poly1305_arm.c.o
+[521/758] Building C object crypto/CMakeFiles/crypto.dir/rand_extra/deterministic.c.o
+[522/758] Building C object crypto/CMakeFiles/crypto.dir/rand_extra/forkunsafe.c.o
+[523/758] Building C object crypto/CMakeFiles/crypto.dir/rand_extra/ios.c.o
+[524/758] Building C object crypto/CMakeFiles/crypto.dir/rand_extra/passive.c.o
+[525/758] Building C object crypto/CMakeFiles/crypto.dir/rand_extra/getentropy.c.o
+[526/758] Building C object crypto/CMakeFiles/crypto.dir/rand_extra/rand_extra.c.o
+[527/758] Building C object crypto/CMakeFiles/crypto.dir/pool/pool.c.o
+[528/758] Building C object crypto/CMakeFiles/crypto.dir/obj/obj.c.o
+[529/758] Building C object crypto/CMakeFiles/crypto.dir/rc4/rc4.c.o
+[530/758] Building C object crypto/CMakeFiles/crypto.dir/rand_extra/windows.c.o
+[531/758] Building C object crypto/CMakeFiles/crypto.dir/rand_extra/trusty.c.o
+[532/758] Building C object crypto/CMakeFiles/crypto.dir/pkcs8/p5_pbev2.c.o
+[533/758] Building C object crypto/CMakeFiles/crypto.dir/curve25519/curve25519_64_adx.c.o
+[534/758] Building C object crypto/CMakeFiles/crypto.dir/refcount.c.o
+[535/758] Building C object crypto/CMakeFiles/crypto.dir/rsa_extra/rsa_print.c.o
+[536/758] Building C object crypto/CMakeFiles/crypto.dir/pkcs7/pkcs7_x509.c.o
+[537/758] Building C object crypto/CMakeFiles/crypto.dir/pkcs8/pkcs8.c.o
+[538/758] Building C object crypto/CMakeFiles/crypto.dir/spx/address.c.o
+[539/758] Building C object crypto/CMakeFiles/crypto.dir/spx/spx.c.o
+[540/758] Building C object crypto/CMakeFiles/crypto.dir/spx/merkle.c.o
+[541/758] Building C object crypto/CMakeFiles/crypto.dir/pem/pem_lib.c.o
+[542/758] Building C object crypto/CMakeFiles/crypto.dir/kyber/kyber.c.o
+[543/758] Building C object crypto/CMakeFiles/crypto.dir/spx/spx_util.c.o
+[544/758] Building C object crypto/CMakeFiles/crypto.dir/spx/fors.c.o
+[545/758] Building C object crypto/CMakeFiles/crypto.dir/spx/thash.c.o
+[546/758] Building C object crypto/CMakeFiles/crypto.dir/thread_none.c.o
+[547/758] Building C object crypto/CMakeFiles/crypto.dir/thread.c.o
+[548/758] Building C object crypto/CMakeFiles/crypto.dir/thread_win.c.o
+[549/758] Building C object crypto/CMakeFiles/crypto.dir/spx/wots.c.o
+[550/758] Building C object crypto/CMakeFiles/crypto.dir/siphash/siphash.c.o
+[551/758] Building C object crypto/CMakeFiles/crypto.dir/des/des.c.o
+[552/758] Building C object crypto/CMakeFiles/crypto.dir/rsa_extra/rsa_asn1.c.o
+[553/758] Building C object crypto/CMakeFiles/crypto.dir/thread_pthread.c.o
+[554/758] Building C object crypto/CMakeFiles/crypto.dir/rsa_extra/rsa_crypt.c.o
+[555/758] Building C object crypto/CMakeFiles/crypto.dir/x509/a_digest.c.o
+[556/758] Building CXX object CMakeFiles/pki_test.dir/pki/parsed_certificate_unittest.cc.o
+[557/758] Building C object crypto/CMakeFiles/crypto.dir/x509/a_verify.c.o
+[558/758] Building C object crypto/CMakeFiles/crypto.dir/x509/a_sign.c.o
+[559/758] Building C object crypto/CMakeFiles/crypto.dir/poly1305/poly1305_vec.c.o
+[560/758] Building C object crypto/CMakeFiles/crypto.dir/x509/i2d_pr.c.o
+[561/758] Building C object crypto/CMakeFiles/crypto.dir/x509/algorithm.c.o
+[562/758] Building C object crypto/CMakeFiles/crypto.dir/stack/stack.c.o
+[563/758] Building C object crypto/CMakeFiles/crypto.dir/x509/by_file.c.o
+[564/758] Building C object crypto/CMakeFiles/crypto.dir/x509/name_print.c.o
+[565/758] Building C object crypto/CMakeFiles/crypto.dir/pkcs8/pkcs8_x509.c.o
+[566/758] Building C object crypto/CMakeFiles/crypto.dir/x509/t_crl.c.o
+[567/758] Building C object crypto/CMakeFiles/crypto.dir/x509/by_dir.c.o
+[568/758] Building C object crypto/CMakeFiles/crypto.dir/trust_token/trust_token.c.o
+[569/758] Building C object crypto/CMakeFiles/crypto.dir/x509/t_req.c.o
+[570/758] Building C object crypto/CMakeFiles/crypto.dir/x509/t_x509a.c.o
+[571/758] Building C object crypto/CMakeFiles/crypto.dir/x509/v3_akeya.c.o
+[572/758] Building C object crypto/CMakeFiles/crypto.dir/x509/v3_akey.c.o
+[573/758] Building C object crypto/CMakeFiles/crypto.dir/x509/asn1_gen.c.o
+[574/758] Building C object crypto/CMakeFiles/crypto.dir/x509/t_x509.c.o
+[575/758] Building C object crypto/CMakeFiles/crypto.dir/x509/rsa_pss.c.o
+[576/758] Building C object crypto/CMakeFiles/crypto.dir/x509/v3_bcons.c.o
+[577/758] Building C object crypto/CMakeFiles/crypto.dir/hrss/hrss.c.o
+[578/758] Building C object crypto/CMakeFiles/crypto.dir/x509/v3_bitst.c.o
+[579/758] Building C object crypto/CMakeFiles/crypto.dir/x509/v3_enum.c.o
+[580/758] Building C object crypto/CMakeFiles/crypto.dir/x509/v3_extku.c.o
+[581/758] Building C object crypto/CMakeFiles/crypto.dir/x509/v3_ia5.c.o
+[582/758] Building C object crypto/CMakeFiles/crypto.dir/x509/v3_int.c.o
+[583/758] Building C object crypto/CMakeFiles/crypto.dir/x509/v3_ocsp.c.o
+[584/758] Building C object crypto/CMakeFiles/crypto.dir/x509/v3_conf.c.o
+[585/758] Building C object crypto/CMakeFiles/crypto.dir/x509/v3_genn.c.o
+[586/758] Building C object crypto/CMakeFiles/crypto.dir/x509/v3_info.c.o
+[587/758] Building C object crypto/CMakeFiles/crypto.dir/x509/v3_alt.c.o
+[588/758] Building C object crypto/CMakeFiles/crypto.dir/x509/v3_pcons.c.o
+[589/758] Building C object crypto/CMakeFiles/crypto.dir/x509/v3_pmaps.c.o
+[590/758] Building C object crypto/CMakeFiles/crypto.dir/x509/v3_prn.c.o
+[591/758] Building C object crypto/CMakeFiles/crypto.dir/trust_token/voprf.c.o
+[592/758] Building C object crypto/CMakeFiles/crypto.dir/x509/v3_lib.c.o
+[593/758] Building C object crypto/CMakeFiles/crypto.dir/x509/v3_crld.c.o
+[594/758] Building C object crypto/CMakeFiles/crypto.dir/x509/x_attrib.c.o
+[595/758] Building C object crypto/CMakeFiles/crypto.dir/x509/x_algor.c.o
+[596/758] Building C object crypto/CMakeFiles/crypto.dir/x509/v3_skey.c.o
+[597/758] Building C object crypto/CMakeFiles/crypto.dir/x509/v3_cpols.c.o
+[598/758] Building C object crypto/CMakeFiles/crypto.dir/x509/x_exten.c.o
+[599/758] Building C object crypto/CMakeFiles/crypto.dir/x509/policy.c.o
+[600/758] Building C object crypto/CMakeFiles/crypto.dir/x509/v3_ncons.c.o
+[601/758] Building CXX object CMakeFiles/pki_test.dir/pki/path_builder_verify_certificate_chain_unittest.cc.o
+[602/758] Building C object crypto/CMakeFiles/crypto.dir/x509/x_sig.c.o
+[603/758] Building C object crypto/CMakeFiles/crypto.dir/trust_token/pmbtoken.c.o
+[604/758] Building C object crypto/CMakeFiles/crypto.dir/x509/x_val.c.o
+[605/758] Building C object crypto/CMakeFiles/crypto.dir/x509/x_req.c.o
+[606/758] Building C object crypto/CMakeFiles/crypto.dir/x509/x_spki.c.o
+[607/758] Building C object crypto/CMakeFiles/crypto.dir/x509/x_pubkey.c.o
+[608/758] Building C object crypto/CMakeFiles/crypto.dir/x509/x509_d2.c.o
+[609/758] Building C object crypto/CMakeFiles/crypto.dir/x509/x509_def.c.o
+[610/758] Building C object crypto/CMakeFiles/crypto.dir/x509/x_crl.c.o
+[611/758] Building C object crypto/CMakeFiles/crypto.dir/x509/x_x509a.c.o
+[612/758] Building C object crypto/CMakeFiles/crypto.dir/x509/x509_att.c.o
+[613/758] Building C object crypto/CMakeFiles/crypto.dir/x509/v3_purp.c.o
+[614/758] Building C object crypto/CMakeFiles/crypto.dir/x509/x_name.c.o
+[615/758] Building C object crypto/CMakeFiles/crypto.dir/x509/x509_txt.c.o
+[616/758] Building C object crypto/CMakeFiles/crypto.dir/x509/x_x509.c.o
+[617/758] Building C object crypto/CMakeFiles/crypto.dir/x509/x509_ext.c.o
+[618/758] Building C object crypto/CMakeFiles/crypto.dir/x509/x509.c.o
+[619/758] Building ASM object crypto/CMakeFiles/crypto.dir/__/third_party/fiat/asm/fiat_curve25519_adx_square.S.o
+[620/758] Building C object crypto/CMakeFiles/crypto.dir/x509/x509_trs.c.o
+[621/758] Building C object crypto/CMakeFiles/crypto.dir/x509/x509_cmp.c.o
+[622/758] Building C object crypto/CMakeFiles/crypto.dir/x509/x509_set.c.o
+[623/758] Building ASM object crypto/CMakeFiles/crypto.dir/__/third_party/fiat/asm/fiat_p256_adx_sqr.S.o
+[624/758] Building C object crypto/CMakeFiles/crypto.dir/x509/x509_obj.c.o
+[625/758] Building ASM object crypto/CMakeFiles/crypto.dir/__/third_party/fiat/asm/fiat_p256_adx_mul.S.o
+[626/758] Building ASM object crypto/CMakeFiles/crypto.dir/chacha/chacha-armv8-apple.S.o
+[627/758] Building ASM object crypto/CMakeFiles/crypto.dir/chacha/chacha-armv8-win.S.o
+[628/758] Building ASM object crypto/CMakeFiles/crypto.dir/chacha/chacha-armv8-linux.S.o
+[629/758] Building C object crypto/CMakeFiles/crypto.dir/x509/x509_req.c.o
+[630/758] Building ASM object crypto/CMakeFiles/crypto.dir/test/trampoline-armv8-apple.S.o
+[631/758] Building ASM object crypto/CMakeFiles/crypto.dir/cipher_extra/chacha20_poly1305_armv8-apple.S.o
+[632/758] Building C object crypto/CMakeFiles/crypto.dir/x509/x509_v3.c.o
+[633/758] Building C object crypto/CMakeFiles/crypto.dir/x509/x509rset.c.o
+[634/758] Building ASM object crypto/CMakeFiles/crypto.dir/cipher_extra/chacha20_poly1305_armv8-linux.S.o
+[635/758] Building ASM object crypto/CMakeFiles/crypto.dir/test/trampoline-armv8-linux.S.o
+[636/758] Building ASM object crypto/CMakeFiles/crypto.dir/cipher_extra/chacha20_poly1305_armv8-win.S.o
+[637/758] Building ASM object crypto/CMakeFiles/crypto.dir/test/trampoline-armv8-win.S.o
+[638/758] Building ASM object crypto/CMakeFiles/crypto.dir/chacha/chacha-armv4-apple.S.o
+[639/758] Building C object crypto/CMakeFiles/crypto.dir/curve25519/curve25519.c.o
+[640/758] Building ASM object crypto/CMakeFiles/crypto.dir/test/trampoline-armv4-apple.S.o
+[641/758] Building ASM object crypto/CMakeFiles/crypto.dir/chacha/chacha-x86-apple.S.o
+[642/758] Building ASM object crypto/CMakeFiles/crypto.dir/chacha/chacha-armv4-linux.S.o
+[643/758] Building ASM object crypto/CMakeFiles/crypto.dir/test/trampoline-x86-linux.S.o
+[644/758] Building C object crypto/CMakeFiles/crypto.dir/x509/x509cset.c.o
+[645/758] Building ASM object crypto/CMakeFiles/crypto.dir/test/trampoline-x86-apple.S.o
+[646/758] Building C object crypto/CMakeFiles/crypto.dir/x509/x509spki.c.o
+[647/758] Building C object crypto/CMakeFiles/crypto.dir/x509/x509_vpm.c.o
+[648/758] Building ASM object crypto/CMakeFiles/crypto.dir/chacha/chacha-x86-linux.S.o
+[649/758] Building ASM object crypto/CMakeFiles/crypto.dir/chacha/chacha-x86_64-apple.S.o
+[650/758] Building ASM object crypto/CMakeFiles/crypto.dir/cipher_extra/aes128gcmsiv-x86_64-apple.S.o
+[651/758] Building ASM object crypto/CMakeFiles/crypto.dir/cipher_extra/aes128gcmsiv-x86_64-linux.S.o
+[652/758] Building ASM object crypto/CMakeFiles/crypto.dir/chacha/chacha-x86_64-linux.S.o
+[653/758] Building ASM object crypto/CMakeFiles/crypto.dir/test/trampoline-x86_64-apple.S.o
+[654/758] Building ASM object crypto/CMakeFiles/crypto.dir/test/trampoline-x86_64-linux.S.o
+[655/758] Building C object crypto/CMakeFiles/crypto.dir/x509/x_all.c.o
+[656/758] Building ASM object crypto/CMakeFiles/crypto.dir/cipher_extra/chacha20_poly1305_x86_64-apple.S.o
+[657/758] Building ASM object crypto/CMakeFiles/crypto.dir/cipher_extra/chacha20_poly1305_x86_64-linux.S.o
+[658/758] Building C object crypto/CMakeFiles/crypto.dir/x509/x509name.c.o
+[659/758] Building C object crypto/CMakeFiles/crypto.dir/x509/v3_utl.c.o
+[660/758] Building C object crypto/CMakeFiles/crypto.dir/x509/x509_lu.c.o
+[661/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/rsa_extra/rsa_test.cc.o
+[662/758] Building CXX object ssl/CMakeFiles/ssl.dir/bio_ssl.cc.o
+[663/758] Building C object crypto/CMakeFiles/crypto.dir/x509/x509_vfy.c.o
+[664/758] Linking C static library crypto/libcrypto.a
+[665/758] Linking CXX static library libtest_support_lib.a
+[666/758] Building CXX object ssl/CMakeFiles/ssl.dir/dtls_method.cc.o
+[667/758] Building CXX object ssl/CMakeFiles/ssl.dir/d1_pkt.cc.o
+[668/758] Linking CXX static library libpki.a
+[669/758] Building CXX object ssl/CMakeFiles/ssl.dir/dtls_record.cc.o
+[670/758] Building CXX object ssl/CMakeFiles/ssl.dir/d1_lib.cc.o
+[671/758] Building CXX object ssl/CMakeFiles/ssl.dir/d1_srtp.cc.o
+[672/758] Building CXX object ssl/CMakeFiles/ssl.dir/ssl_buffer.cc.o
+[673/758] Linking CXX executable urandom_test
+[674/758] Building CXX object ssl/CMakeFiles/ssl.dir/s3_pkt.cc.o
+[675/758] Building CXX object ssl/CMakeFiles/ssl.dir/ssl_aead_ctx.cc.o
+[676/758] Building CXX object ssl/CMakeFiles/ssl.dir/s3_both.cc.o
+[677/758] Building CXX object ssl/CMakeFiles/ssl.dir/s3_lib.cc.o
+[678/758] Building CXX object ssl/CMakeFiles/ssl.dir/d1_both.cc.o
+[679/758] Building CXX object ssl/CMakeFiles/ssl.dir/ssl_asn1.cc.o
+[680/758] Building CXX object ssl/CMakeFiles/ssl.dir/handshake.cc.o
+[681/758] Building CXX object ssl/CMakeFiles/ssl.dir/encrypted_client_hello.cc.o
+[682/758] Building CXX object CMakeFiles/pki_test.dir/pki/parse_certificate_unittest.cc.o
+[683/758] Building CXX object ssl/CMakeFiles/ssl.dir/ssl_file.cc.o
+[684/758] Building CXX object ssl/CMakeFiles/ssl.dir/ssl_stat.cc.o
+[685/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/trust_token/trust_token_test.cc.o
+[686/758] Building CXX object ssl/CMakeFiles/ssl.dir/ssl_transcript.cc.o
+[687/758] Building CXX object ssl/CMakeFiles/ssl.dir/ssl_cert.cc.o
+[688/758] Building CXX object ssl/CMakeFiles/ssl.dir/ssl_key_share.cc.o
+[689/758] Building CXX object ssl/CMakeFiles/ssl.dir/handoff.cc.o
+[690/758] Building CXX object ssl/CMakeFiles/ssl.dir/tls_method.cc.o
+[691/758] Building CXX object ssl/CMakeFiles/ssl.dir/ssl_versions.cc.o
+[692/758] Building CXX object ssl/CMakeFiles/ssl.dir/ssl_cipher.cc.o
+[693/758] Building CXX object ssl/CMakeFiles/ssl.dir/tls_record.cc.o
+[694/758] Building CXX object ssl/test/CMakeFiles/bssl_shim.dir/async_bio.cc.o
+[695/758] Building CXX object ssl/CMakeFiles/ssl.dir/t1_enc.cc.o
+[696/758] Building CXX object ssl/CMakeFiles/ssl.dir/ssl_privkey.cc.o
+[697/758] Building CXX object ssl/test/CMakeFiles/bssl_shim.dir/packeted_bio.cc.o
+[698/758] Building CXX object ssl/test/CMakeFiles/handshaker.dir/async_bio.cc.o
+[699/758] Building CXX object ssl/CMakeFiles/ssl.dir/tls13_both.cc.o
+[700/758] Building CXX object ssl/CMakeFiles/ssl.dir/ssl_session.cc.o
+[701/758] Building CXX object CMakeFiles/pki_test.dir/pki/verify_certificate_chain_unittest.cc.o
+[702/758] Building CXX object ssl/test/CMakeFiles/handshaker.dir/packeted_bio.cc.o
+[703/758] Building C object decrepit/CMakeFiles/decrepit.dir/cast/cast_tables.c.o
+[704/758] Building CXX object ssl/CMakeFiles/ssl.dir/tls13_enc.cc.o
+[705/758] Building C object decrepit/CMakeFiles/decrepit.dir/bio/base64_bio.c.o
+[706/758] Building CXX object ssl/CMakeFiles/ssl.dir/handshake_client.cc.o
+[707/758] Building CXX object ssl/test/CMakeFiles/bssl_shim.dir/settings_writer.cc.o
+[708/758] Building C object decrepit/CMakeFiles/decrepit.dir/cfb/cfb.c.o
+[709/758] Building CXX object ssl/CMakeFiles/ssl.dir/extensions.cc.o
+[710/758] Building CXX object ssl/test/CMakeFiles/bssl_shim.dir/mock_quic_transport.cc.o
+[711/758] Building C object decrepit/CMakeFiles/decrepit.dir/dh/dh_decrepit.c.o
+[712/758] Building C object decrepit/CMakeFiles/decrepit.dir/evp/dss1.c.o
+[713/758] Building C object decrepit/CMakeFiles/decrepit.dir/dsa/dsa_decrepit.c.o
+[714/758] Building CXX object ssl/CMakeFiles/ssl.dir/ssl_x509.cc.o
+[715/758] Building C object decrepit/CMakeFiles/decrepit.dir/rc4/rc4_decrepit.c.o
+[716/758] Building C object decrepit/CMakeFiles/decrepit.dir/evp/evp_do_all.c.o
+[717/758] Building C object decrepit/CMakeFiles/decrepit.dir/obj/obj_decrepit.c.o
+[718/758] Building C object decrepit/CMakeFiles/decrepit.dir/rsa/rsa_decrepit.c.o
+[719/758] Building CXX object ssl/CMakeFiles/ssl.dir/handshake_server.cc.o
+[720/758] Building C object decrepit/CMakeFiles/decrepit.dir/x509/x509_decrepit.c.o
+[721/758] Building C object decrepit/CMakeFiles/decrepit.dir/ssl/ssl_decrepit.c.o
+[722/758] Building C object decrepit/CMakeFiles/decrepit.dir/xts/xts.c.o
+[723/758] Building C object decrepit/CMakeFiles/decrepit.dir/des/cfb64ede.c.o
+[724/758] Building C object decrepit/CMakeFiles/decrepit.dir/blowfish/blowfish.c.o
+[725/758] Building CXX object ssl/test/CMakeFiles/bssl_shim.dir/test_state.cc.o
+[726/758] Building CXX object ssl/test/CMakeFiles/handshaker.dir/mock_quic_transport.cc.o
+[727/758] Building CXX object ssl/test/CMakeFiles/handshaker.dir/settings_writer.cc.o
+[728/758] Building C object decrepit/CMakeFiles/decrepit.dir/ripemd/ripemd.c.o
+[729/758] Building C object decrepit/CMakeFiles/decrepit.dir/cast/cast.c.o
+[730/758] Building CXX object ssl/CMakeFiles/ssl.dir/tls13_client.cc.o
+[731/758] Building CXX object ssl/CMakeFiles/ssl.dir/ssl_lib.cc.o
+[732/758] Building CXX object ssl/test/CMakeFiles/handshaker.dir/test_state.cc.o
+[733/758] Building CXX object ssl/test/CMakeFiles/handshaker.dir/handshaker.cc.o
+[734/758] Building CXX object ssl/CMakeFiles/ssl.dir/tls13_server.cc.o
+[735/758] Linking CXX static library ssl/libssl.a
+[736/758] Linking CXX static library decrepit/libdecrepit.a
+[737/758] Building CXX object ssl/test/CMakeFiles/handshaker.dir/handshake_util.cc.o
+[738/758] Building CXX object ssl/test/CMakeFiles/bssl_shim.dir/handshake_util.cc.o
+[739/758] Linking CXX executable decrepit_test
+[740/758] Building CXX object ssl/test/CMakeFiles/bssl_shim.dir/bssl_shim.cc.o
+[741/758] Building CXX object CMakeFiles/bssl.dir/tool/speed.cc.o
+[742/758] Building CXX object CMakeFiles/pki_test.dir/pki/verify_name_match_unittest.cc.o
+[743/758] Linking CXX executable bssl
+[744/758] Building CXX object ssl/test/CMakeFiles/bssl_shim.dir/test_config.cc.o
+[745/758] Building CXX object ssl/test/CMakeFiles/handshaker.dir/test_config.cc.o
+[746/758] Linking CXX executable ssl/test/bssl_shim
+[747/758] Linking CXX executable ssl/test/handshaker
+[748/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/fipsmodule/bn/bn_test.cc.o
+[749/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/asn1/asn1_test.cc.o
+[750/758] Building CXX object CMakeFiles/pki_test.dir/pki/name_constraints_unittest.cc.o
+[751/758] Building CXX object CMakeFiles/pki_test.dir/pki/path_builder_unittest.cc.o
+[752/758] Building CXX object CMakeFiles/pki_test.dir/pki/verify_certificate_chain_pkits_unittest.cc.o
+[753/758] Building CXX object CMakeFiles/ssl_test.dir/ssl/ssl_test.cc.o
+[754/758] Linking CXX executable ssl_test
+[755/758] Building CXX object CMakeFiles/crypto_test.dir/crypto/x509/x509_test.cc.o
+[756/758] Linking CXX executable crypto_test
+[757/758] Building CXX object CMakeFiles/pki_test.dir/pki/path_builder_pkits_unittest.cc.o
+[758/758] Linking CXX executable pki_test
+++ find /src/boringssl/fuzz/ -name '*.cc'
++ fuzzerFiles='/src/boringssl/fuzz/crl_getcrlstatusforcert_fuzzer.cc
+/src/boringssl/fuzz/crl_parse_crl_certificatelist_fuzzer.cc
+/src/boringssl/fuzz/read_pem.cc
+/src/boringssl/fuzz/bn_mod_exp.cc
+/src/boringssl/fuzz/ssl_ctx_api.cc
+/src/boringssl/fuzz/ocsp_parse_ocsp_single_response_fuzzer.cc
+/src/boringssl/fuzz/verify_name_match_fuzzer.cc
+/src/boringssl/fuzz/client.cc
+/src/boringssl/fuzz/verify_name_match_verifynameinsubtree_fuzzer.cc
+/src/boringssl/fuzz/spki.cc
+/src/boringssl/fuzz/parse_crldp_fuzzer.cc
+/src/boringssl/fuzz/der_roundtrip.cc
+/src/boringssl/fuzz/decode_client_hello_inner.cc
+/src/boringssl/fuzz/verify_name_match_normalizename_fuzzer.cc
+/src/boringssl/fuzz/ocsp_parse_ocsp_response_data_fuzzer.cc
+/src/boringssl/fuzz/arm_cpuinfo.cc
+/src/boringssl/fuzz/conf.cc
+/src/boringssl/fuzz/dtls_client.cc
+/src/boringssl/fuzz/ocsp_parse_ocsp_cert_id_fuzzer.cc
+/src/boringssl/fuzz/cert.cc
+/src/boringssl/fuzz/session.cc
+/src/boringssl/fuzz/bn_div.cc
+/src/boringssl/fuzz/parse_authority_key_identifier_fuzzer.cc
+/src/boringssl/fuzz/dtls_server.cc
+/src/boringssl/fuzz/privkey.cc
+/src/boringssl/fuzz/pkcs12.cc
+/src/boringssl/fuzz/parse_certificate_fuzzer.cc
+/src/boringssl/fuzz/crl_parse_issuing_distribution_point_fuzzer.cc
+/src/boringssl/fuzz/server.cc
+/src/boringssl/fuzz/crl_parse_crl_tbscertlist_fuzzer.cc
+/src/boringssl/fuzz/pkcs8.cc
+/src/boringssl/fuzz/ocsp_parse_ocsp_response_fuzzer.cc'
++ find . -name '*.a'
+./libboringssl_gtest.a
+./decrepit/libdecrepit.a
+./ssl/libssl.a
+./crypto/libcrypto.a
+./libtest_support_lib.a
+./libpki.a
++ for F in $fuzzerFiles
+++ basename /src/boringssl/fuzz/crl_getcrlstatusforcert_fuzzer.cc .cc
++ fuzzerName=crl_getcrlstatusforcert_fuzzer
++ echo 'Building fuzzer crl_getcrlstatusforcert_fuzzer'
+Building fuzzer crl_getcrlstatusforcert_fuzzer
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -DBORINGSSL_UNSAFE_FUZZER_MODE -D_BORINGSSL_LIBPKI_ -std=c++1z -o /workspace/out/libfuzzer-address-x86_64/crl_getcrlstatusforcert_fuzzer -fsanitize=fuzzer /src/boringssl/fuzz/crl_getcrlstatusforcert_fuzzer.cc -I /src/boringssl/include ./libpki.a ./ssl/libssl.a ./crypto/libcrypto.a
++ '[' -d /src/boringssl/fuzz/crl_getcrlstatusforcert_fuzzer_corpus ']'
++ zip -j /workspace/out/libfuzzer-address-x86_64/crl_getcrlstatusforcert_fuzzer_seed_corpus.zip /src/boringssl/fuzz/crl_getcrlstatusforcert_fuzzer_corpus/bad_empty_extensions /src/boringssl/fuzz/crl_getcrlstatusforcert_fuzzer_corpus/bad_empty_sequence /src/boringssl/fuzz/crl_getcrlstatusforcert_fuzzer_corpus/good /src/boringssl/fuzz/crl_getcrlstatusforcert_fuzzer_corpus/good_no_extensions
+  adding: bad_empty_extensions (stored 0%)
+  adding: bad_empty_sequence (stored 0%)
+  adding: good (stored 0%)
+  adding: good_no_extensions (stored 0%)
++ for F in $fuzzerFiles
+++ basename /src/boringssl/fuzz/crl_parse_crl_certificatelist_fuzzer.cc .cc
++ fuzzerName=crl_parse_crl_certificatelist_fuzzer
++ echo 'Building fuzzer crl_parse_crl_certificatelist_fuzzer'
+Building fuzzer crl_parse_crl_certificatelist_fuzzer
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -DBORINGSSL_UNSAFE_FUZZER_MODE -D_BORINGSSL_LIBPKI_ -std=c++1z -o /workspace/out/libfuzzer-address-x86_64/crl_parse_crl_certificatelist_fuzzer -fsanitize=fuzzer /src/boringssl/fuzz/crl_parse_crl_certificatelist_fuzzer.cc -I /src/boringssl/include ./libpki.a ./ssl/libssl.a ./crypto/libcrypto.a
++ '[' -d /src/boringssl/fuzz/crl_parse_crl_certificatelist_fuzzer_corpus ']'
++ zip -j /workspace/out/libfuzzer-address-x86_64/crl_parse_crl_certificatelist_fuzzer_seed_corpus.zip /src/boringssl/fuzz/crl_parse_crl_certificatelist_fuzzer_corpus/good_minimal
+  adding: good_minimal (stored 0%)
++ for F in $fuzzerFiles
+++ basename /src/boringssl/fuzz/read_pem.cc .cc
++ fuzzerName=read_pem
++ echo 'Building fuzzer read_pem'
+Building fuzzer read_pem
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -DBORINGSSL_UNSAFE_FUZZER_MODE -D_BORINGSSL_LIBPKI_ -std=c++1z -o /workspace/out/libfuzzer-address-x86_64/read_pem -fsanitize=fuzzer /src/boringssl/fuzz/read_pem.cc -I /src/boringssl/include ./libpki.a ./ssl/libssl.a ./crypto/libcrypto.a
++ '[' -d /src/boringssl/fuzz/read_pem_corpus ']'
++ zip -j /workspace/out/libfuzzer-address-x86_64/read_pem_seed_corpus.zip /src/boringssl/fuzz/read_pem_corpus/01270d57eecae64f59b9b27cc06e3f9eaf2304e2 /src/boringssl/fuzz/read_pem_corpus/0ab8318acaf6e678dd02e2b5c343ed41111b393d /src/boringssl/fuzz/read_pem_corpus/0b08765ad46bb11ac55348755ad5c8e4386bd2f3 /src/boringssl/fuzz/read_pem_corpus/0bdb9660f74f82a5471210026fdee0b674f1114e /src/boringssl/fuzz/read_pem_corpus/0c4287915a432e6b50e1c2eb0f4ca037b1730aa0 /src/boringssl/fuzz/read_pem_corpus/0d583f2aee2e15a7dc7eb93af1ecf44203b537f4 /src/boringssl/fuzz/read_pem_corpus/0e3deb2e809b535f39efded20697314a29c8335a /src/boringssl/fuzz/read_pem_corpus/0f29362dfb076a14a103e8bc2c9681fac93c237d /src/boringssl/fuzz/read_pem_corpus/1078e6b183abbe50aa19cffd741db1cb30e5cf4f /src/boringssl/fuzz/read_pem_corpus/149b4073e8ee2d37455c0d7867c7cffdecf0f8e1 /src/boringssl/fuzz/read_pem_corpus/15dd914fbdc4335ebc69caa9afe37681dd75cc32 /src/boringssl/fuzz/read_pem_corpus/18810634408061267ccb64d68fb85b4ed93515e8 /src/boringssl/fuzz/read_pem_corpus/20a000f3932e041a634b759b7cef8138b5b40f67 /src/boringssl/fuzz/read_pem_corpus/20d3859cd71d9b215f55983a5ac9cce7c0a36cc4 /src/boringssl/fuzz/read_pem_corpus/217d0e120e43e1899a8ab51009de55038fe52789 /src/boringssl/fuzz/read_pem_corpus/2493849afd1697d00f4c2f36af4522e6a9ba46b8 /src/boringssl/fuzz/read_pem_corpus/27c891aa76f51487ada28b1fc69ac13c7315c933 /src/boringssl/fuzz/read_pem_corpus/2904f9b6f6cb0ddf9248537b4fb4b2170174b74f /src/boringssl/fuzz/read_pem_corpus/2a7b8759f3267d3ddca22e936df0b21eabb1aeed /src/boringssl/fuzz/read_pem_corpus/318bcf81a2b6fa0ce680ec82cf11e8a6e4bd93f0 /src/boringssl/fuzz/read_pem_corpus/358ff4aeb6903affa5d080c317c3270ac4f13121 /src/boringssl/fuzz/read_pem_corpus/35bae979e092abdc6b31f8b3c52ddcafa4722a9a /src/boringssl/fuzz/read_pem_corpus/38fccbaee723a06ca137a952843b58d32d35ef25 /src/boringssl/fuzz/read_pem_corpus/3b981c1e4697103278b32ee4e29e3a7b5225d798 /src/boringssl/fuzz/read_pem_corpus/3bff6c9ef0381ea1080fdfb5b4f9c02e95f549b2 /src/boringssl/fuzz/read_pem_corpus/3cdb51f7ffc8ef0bd03265c3a414069815821d18 /src/boringssl/fuzz/read_pem_corpus/3f46a93da1448c00d2a9f3a62117bd522ce8de64 /src/boringssl/fuzz/read_pem_corpus/42650de48dbf62d86a91ede484061f834214915d /src/boringssl/fuzz/read_pem_corpus/488ae502baabc6506f8722dcdc5294940fa5d588 /src/boringssl/fuzz/read_pem_corpus/4aa25eda7560bbd746d9a69b63965c0de21bb53e /src/boringssl/fuzz/read_pem_corpus/4b32aa9edbd17b2d63390a41cc98739be7d45596 /src/boringssl/fuzz/read_pem_corpus/548649f5502df5e77b9d332d3f1e29dedd7afdb2 /src/boringssl/fuzz/read_pem_corpus/55885a3f94688b36e34fac8ce1fd7fcc7bb7208c /src/boringssl/fuzz/read_pem_corpus/5891dd7c6715eca7f427ed9267de9da72b8e82e8 /src/boringssl/fuzz/read_pem_corpus/58bdb0aea139a2790c2e1a3b25e302892a6c4b55 /src/boringssl/fuzz/read_pem_corpus/5c720dc0326e4ffa322f706337df9bc87f42fd96 /src/boringssl/fuzz/read_pem_corpus/667da9df1cde33d635bbde1986827573ed686a7e /src/boringssl/fuzz/read_pem_corpus/66f8b696c46c10a6db20b690e4431b72745f4760 /src/boringssl/fuzz/read_pem_corpus/699044ddfe4887d6081ce2a36c1302814294eb68 /src/boringssl/fuzz/read_pem_corpus/6d1d12ef00c585b4c859479bfa2522f4a447d907 /src/boringssl/fuzz/read_pem_corpus/6d67bafd83bed7aadd641417671e6864dc87073c /src/boringssl/fuzz/read_pem_corpus/6dcb7976d9af4a72b3667926f1fe7642c75685b2 /src/boringssl/fuzz/read_pem_corpus/729be2837328d9f25597b1d605188bc724c632e6 /src/boringssl/fuzz/read_pem_corpus/74a4f38726a49f3a8c06763d58d8fc229b2aa915 /src/boringssl/fuzz/read_pem_corpus/74b9536c60def2f9cb8e83512b80ff8406d12567 /src/boringssl/fuzz/read_pem_corpus/74b97735df0ee03d5a912734de93772093826bda /src/boringssl/fuzz/read_pem_corpus/7539289d67a0974d16f0ed01ded0a58a02b21126 /src/boringssl/fuzz/read_pem_corpus/7a582440bd4712ab88a3e745f928202707585e6f /src/boringssl/fuzz/read_pem_corpus/7b8e2a5dfa03cc13b70eb5f77d61222c108ab6bd /src/boringssl/fuzz/read_pem_corpus/824b6dd27deb9ed157fdc80485f104268f7232fe /src/boringssl/fuzz/read_pem_corpus/825edbf21bc40ec23225772635ea6390e6d9fb4c /src/boringssl/fuzz/read_pem_corpus/874ed5d633d245b10fdda52c49627b43b3f2e25b /src/boringssl/fuzz/read_pem_corpus/88581ebac8ffbea71bb83f704e14d789dbc33f37 /src/boringssl/fuzz/read_pem_corpus/892155ce92d4c3293f48e6fc2097336ba882a0ad /src/boringssl/fuzz/read_pem_corpus/894e092b7fd9f4e0a5911ca106e097d3833d3491 /src/boringssl/fuzz/read_pem_corpus/8c07d6299f33fee89ab0c82e92e06cd558ade60f /src/boringssl/fuzz/read_pem_corpus/8e07fb01e0cfa23caddb6b0280c03d0ae2bac57e /src/boringssl/fuzz/read_pem_corpus/92207925db84106af0167e887696d936aa41e785 /src/boringssl/fuzz/read_pem_corpus/956c8cf1db9220ac8004eb9a75e3ebc1df33a33f /src/boringssl/fuzz/read_pem_corpus/97c5565f723c0e49787fdec9ed15354760fcb1e6 /src/boringssl/fuzz/read_pem_corpus/9832fea1fe1c8b575790f59f98404fb61672a3f3 /src/boringssl/fuzz/read_pem_corpus/9940bd2f440a8c1e07dba6476c219349afeae711 /src/boringssl/fuzz/read_pem_corpus/a2bc14d4be3bb4f4deb93ddaa77224db305158af /src/boringssl/fuzz/read_pem_corpus/a75abe0b4dd03dc232f9192666d6adb369beffca /src/boringssl/fuzz/read_pem_corpus/a92c58dfadb8195fbd90c70b4dc576986dbb7c46 /src/boringssl/fuzz/read_pem_corpus/aa82ef4cf1c3c2d7dd7811803227cc87d2429b3c /src/boringssl/fuzz/read_pem_corpus/ad49ff8fb9ff95a8f110b15702f8209df64f8fad /src/boringssl/fuzz/read_pem_corpus/af9207c320f7400ba18dea62fd4af98330ba260b /src/boringssl/fuzz/read_pem_corpus/b709f3412c5fb9a0b38a69eee59620a5c3990385 /src/boringssl/fuzz/read_pem_corpus/b92f0f72b6839f6c7ac10f4c663765b89e1fa513 /src/boringssl/fuzz/read_pem_corpus/bc205ed015bb01de66b5a6b5a631d167c8077a5c /src/boringssl/fuzz/read_pem_corpus/c0348b5dd7aaf73888372a5a6abef82bd0df97b9 /src/boringssl/fuzz/read_pem_corpus/c0596e573f43d2bd5a5d038bf4bd7d073141ddf0 /src/boringssl/fuzz/read_pem_corpus/c45f49452fcdf531f2bcfd100645c535e5b71205 /src/boringssl/fuzz/read_pem_corpus/c7e4b7f4c3bbc7c6ed4e3366d1d4c16ed44952f1 /src/boringssl/fuzz/read_pem_corpus/caf489bb8f6f48e35b95032b2824ca0ffc77d26a /src/boringssl/fuzz/read_pem_corpus/cf1b3d1ed204deed6c62f41d0e706ee47bc802e0 /src/boringssl/fuzz/read_pem_corpus/cfc3b1348ca73b8c02d9aed715d1e0681326888c /src/boringssl/fuzz/read_pem_corpus/d4f0a19ece82b78c82c81eae5b49dc662c6f4a89 /src/boringssl/fuzz/read_pem_corpus/d959c647c6a5ea641fec147b0de36187a9d2f8c5 /src/boringssl/fuzz/read_pem_corpus/df9fe7d51a89ee267034a2834025f71505d4a421 /src/boringssl/fuzz/read_pem_corpus/e1a6c4096b145ced5362ede6ffedbc49d16ba57e /src/boringssl/fuzz/read_pem_corpus/e3344ef8d734471ef90b16c719cb0f11af2ce743 /src/boringssl/fuzz/read_pem_corpus/e7ef91e03a3aa8bd53b2466a2207a5028185678f /src/boringssl/fuzz/read_pem_corpus/ebcae74985ccc7905a3800c0db2723392cfd2f2c /src/boringssl/fuzz/read_pem_corpus/ed31baee70d3b705762e808e494b4debf604c5fb /src/boringssl/fuzz/read_pem_corpus/ee06965764fdf6769657e744a61efe7d60d085fb /src/boringssl/fuzz/read_pem_corpus/f123c08d0a46b72fa8989296e82e7aa25ebf16f8 /src/boringssl/fuzz/read_pem_corpus/f18ebc593b87baa03b5e003b7540577001ba6aca /src/boringssl/fuzz/read_pem_corpus/f72115838630c70a067e89b98615357fcf19d058 /src/boringssl/fuzz/read_pem_corpus/f9f61f03681250b015a00df3010b89d2d776d8fc /src/boringssl/fuzz/read_pem_corpus/fad7e4071afc1e4f441e2cb65cf9b0da37dcd74e /src/boringssl/fuzz/read_pem_corpus/fb36b0ce1600b9399d552eab916600c239be5ad5 /src/boringssl/fuzz/read_pem_corpus/fb64fef6ea2f835804b69ae3d21fb2cac7e4973f /src/boringssl/fuzz/read_pem_corpus/fb6d4702bcb98df173527a5f08d5ac829adb2f9f /src/boringssl/fuzz/read_pem_corpus/fd1cc706033976b86a93d2b0c74b15bb2f31fccf /src/boringssl/fuzz/read_pem_corpus/ff7dcdb0fc13ddea6e82cac7bf3a0414cb772ded
+  adding: 01270d57eecae64f59b9b27cc06e3f9eaf2304e2 (deflated 25%)
+  adding: 0ab8318acaf6e678dd02e2b5c343ed41111b393d (stored 0%)
+  adding: 0b08765ad46bb11ac55348755ad5c8e4386bd2f3 (deflated 20%)
+  adding: 0bdb9660f74f82a5471210026fdee0b674f1114e (deflated 61%)
+  adding: 0c4287915a432e6b50e1c2eb0f4ca037b1730aa0 (deflated 18%)
+  adding: 0d583f2aee2e15a7dc7eb93af1ecf44203b537f4 (deflated 20%)
+  adding: 0e3deb2e809b535f39efded20697314a29c8335a (deflated 22%)
+  adding: 0f29362dfb076a14a103e8bc2c9681fac93c237d (deflated 22%)
+  adding: 1078e6b183abbe50aa19cffd741db1cb30e5cf4f (deflated 57%)
+  adding: 149b4073e8ee2d37455c0d7867c7cffdecf0f8e1 (deflated 56%)
+  adding: 15dd914fbdc4335ebc69caa9afe37681dd75cc32 (deflated 51%)
+  adding: 18810634408061267ccb64d68fb85b4ed93515e8 (deflated 73%)
+  adding: 20a000f3932e041a634b759b7cef8138b5b40f67 (deflated 15%)
+  adding: 20d3859cd71d9b215f55983a5ac9cce7c0a36cc4 (deflated 24%)
+  adding: 217d0e120e43e1899a8ab51009de55038fe52789 (deflated 49%)
+  adding: 2493849afd1697d00f4c2f36af4522e6a9ba46b8 (deflated 62%)
+  adding: 27c891aa76f51487ada28b1fc69ac13c7315c933 (deflated 9%)
+  adding: 2904f9b6f6cb0ddf9248537b4fb4b2170174b74f (deflated 14%)
+  adding: 2a7b8759f3267d3ddca22e936df0b21eabb1aeed (deflated 15%)
+  adding: 318bcf81a2b6fa0ce680ec82cf11e8a6e4bd93f0 (deflated 21%)
+  adding: 358ff4aeb6903affa5d080c317c3270ac4f13121 (stored 0%)
+  adding: 35bae979e092abdc6b31f8b3c52ddcafa4722a9a (deflated 41%)
+  adding: 38fccbaee723a06ca137a952843b58d32d35ef25 (deflated 9%)
+  adding: 3b981c1e4697103278b32ee4e29e3a7b5225d798 (deflated 47%)
+  adding: 3bff6c9ef0381ea1080fdfb5b4f9c02e95f549b2 (deflated 17%)
+  adding: 3cdb51f7ffc8ef0bd03265c3a414069815821d18 (deflated 54%)
+  adding: 3f46a93da1448c00d2a9f3a62117bd522ce8de64 (deflated 13%)
+  adding: 42650de48dbf62d86a91ede484061f834214915d (deflated 32%)
+  adding: 488ae502baabc6506f8722dcdc5294940fa5d588 (deflated 23%)
+  adding: 4aa25eda7560bbd746d9a69b63965c0de21bb53e (deflated 60%)
+  adding: 4b32aa9edbd17b2d63390a41cc98739be7d45596 (deflated 15%)
+  adding: 548649f5502df5e77b9d332d3f1e29dedd7afdb2 (deflated 15%)
+  adding: 55885a3f94688b36e34fac8ce1fd7fcc7bb7208c (deflated 15%)
+  adding: 5891dd7c6715eca7f427ed9267de9da72b8e82e8 (deflated 47%)
+  adding: 58bdb0aea139a2790c2e1a3b25e302892a6c4b55 (deflated 24%)
+  adding: 5c720dc0326e4ffa322f706337df9bc87f42fd96 (deflated 16%)
+  adding: 667da9df1cde33d635bbde1986827573ed686a7e (deflated 31%)
+  adding: 66f8b696c46c10a6db20b690e4431b72745f4760 (deflated 22%)
+  adding: 699044ddfe4887d6081ce2a36c1302814294eb68 (deflated 57%)
+  adding: 6d1d12ef00c585b4c859479bfa2522f4a447d907 (deflated 33%)
+  adding: 6d67bafd83bed7aadd641417671e6864dc87073c (deflated 54%)
+  adding: 6dcb7976d9af4a72b3667926f1fe7642c75685b2 (deflated 15%)
+  adding: 729be2837328d9f25597b1d605188bc724c632e6 (deflated 43%)
+  adding: 74a4f38726a49f3a8c06763d58d8fc229b2aa915 (deflated 23%)
+  adding: 74b9536c60def2f9cb8e83512b80ff8406d12567 (deflated 18%)
+  adding: 74b97735df0ee03d5a912734de93772093826bda (deflated 68%)
+  adding: 7539289d67a0974d16f0ed01ded0a58a02b21126 (stored 0%)
+  adding: 7a582440bd4712ab88a3e745f928202707585e6f (deflated 60%)
+  adding: 7b8e2a5dfa03cc13b70eb5f77d61222c108ab6bd (deflated 32%)
+  adding: 824b6dd27deb9ed157fdc80485f104268f7232fe (deflated 18%)
+  adding: 825edbf21bc40ec23225772635ea6390e6d9fb4c (deflated 20%)
+  adding: 874ed5d633d245b10fdda52c49627b43b3f2e25b (deflated 47%)
+  adding: 88581ebac8ffbea71bb83f704e14d789dbc33f37 (deflated 32%)
+  adding: 892155ce92d4c3293f48e6fc2097336ba882a0ad (deflated 43%)
+  adding: 894e092b7fd9f4e0a5911ca106e097d3833d3491 (deflated 27%)
+  adding: 8c07d6299f33fee89ab0c82e92e06cd558ade60f (deflated 49%)
+  adding: 8e07fb01e0cfa23caddb6b0280c03d0ae2bac57e (deflated 15%)
+  adding: 92207925db84106af0167e887696d936aa41e785 (deflated 25%)
+  adding: 956c8cf1db9220ac8004eb9a75e3ebc1df33a33f (deflated 21%)
+  adding: 97c5565f723c0e49787fdec9ed15354760fcb1e6 (deflated 7%)
+  adding: 9832fea1fe1c8b575790f59f98404fb61672a3f3 (deflated 26%)
+  adding: 9940bd2f440a8c1e07dba6476c219349afeae711 (deflated 33%)
+  adding: a2bc14d4be3bb4f4deb93ddaa77224db305158af (deflated 22%)
+  adding: a75abe0b4dd03dc232f9192666d6adb369beffca (deflated 49%)
+  adding: a92c58dfadb8195fbd90c70b4dc576986dbb7c46 (deflated 17%)
+  adding: aa82ef4cf1c3c2d7dd7811803227cc87d2429b3c (deflated 9%)
+  adding: ad49ff8fb9ff95a8f110b15702f8209df64f8fad (deflated 31%)
+  adding: af9207c320f7400ba18dea62fd4af98330ba260b (deflated 13%)
+  adding: b709f3412c5fb9a0b38a69eee59620a5c3990385 (deflated 44%)
+  adding: b92f0f72b6839f6c7ac10f4c663765b89e1fa513 (deflated 22%)
+  adding: bc205ed015bb01de66b5a6b5a631d167c8077a5c (deflated 46%)
+  adding: c0348b5dd7aaf73888372a5a6abef82bd0df97b9 (deflated 32%)
+  adding: c0596e573f43d2bd5a5d038bf4bd7d073141ddf0 (deflated 51%)
+  adding: c45f49452fcdf531f2bcfd100645c535e5b71205 (stored 0%)
+  adding: c7e4b7f4c3bbc7c6ed4e3366d1d4c16ed44952f1 (deflated 10%)
+  adding: caf489bb8f6f48e35b95032b2824ca0ffc77d26a (deflated 14%)
+  adding: cf1b3d1ed204deed6c62f41d0e706ee47bc802e0 (deflated 41%)
+  adding: cfc3b1348ca73b8c02d9aed715d1e0681326888c (deflated 54%)
+  adding: d4f0a19ece82b78c82c81eae5b49dc662c6f4a89 (deflated 14%)
+  adding: d959c647c6a5ea641fec147b0de36187a9d2f8c5 (deflated 33%)
+  adding: df9fe7d51a89ee267034a2834025f71505d4a421 (deflated 56%)
+  adding: e1a6c4096b145ced5362ede6ffedbc49d16ba57e (deflated 29%)
+  adding: e3344ef8d734471ef90b16c719cb0f11af2ce743 (deflated 13%)
+  adding: e7ef91e03a3aa8bd53b2466a2207a5028185678f (deflated 23%)
+  adding: ebcae74985ccc7905a3800c0db2723392cfd2f2c (deflated 56%)
+  adding: ed31baee70d3b705762e808e494b4debf604c5fb (deflated 63%)
+  adding: ee06965764fdf6769657e744a61efe7d60d085fb (stored 0%)
+  adding: f123c08d0a46b72fa8989296e82e7aa25ebf16f8 (deflated 56%)
+  adding: f18ebc593b87baa03b5e003b7540577001ba6aca (deflated 22%)
+  adding: f72115838630c70a067e89b98615357fcf19d058 (deflated 75%)
+  adding: f9f61f03681250b015a00df3010b89d2d776d8fc (deflated 16%)
+  adding: fad7e4071afc1e4f441e2cb65cf9b0da37dcd74e (deflated 8%)
+  adding: fb36b0ce1600b9399d552eab916600c239be5ad5 (deflated 16%)
+  adding: fb64fef6ea2f835804b69ae3d21fb2cac7e4973f (deflated 34%)
+  adding: fb6d4702bcb98df173527a5f08d5ac829adb2f9f (deflated 32%)
+  adding: fd1cc706033976b86a93d2b0c74b15bb2f31fccf (deflated 49%)
+  adding: ff7dcdb0fc13ddea6e82cac7bf3a0414cb772ded (deflated 65%)
++ for F in $fuzzerFiles
+++ basename /src/boringssl/fuzz/bn_mod_exp.cc .cc
++ fuzzerName=bn_mod_exp
++ echo 'Building fuzzer bn_mod_exp'
+Building fuzzer bn_mod_exp
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -DBORINGSSL_UNSAFE_FUZZER_MODE -D_BORINGSSL_LIBPKI_ -std=c++1z -o /workspace/out/libfuzzer-address-x86_64/bn_mod_exp -fsanitize=fuzzer /src/boringssl/fuzz/bn_mod_exp.cc -I /src/boringssl/include ./libpki.a ./ssl/libssl.a ./crypto/libcrypto.a
++ '[' -d /src/boringssl/fuzz/bn_mod_exp_corpus ']'
++ zip -j /workspace/out/libfuzzer-address-x86_64/bn_mod_exp_seed_corpus.zip /src/boringssl/fuzz/bn_mod_exp_corpus/00f534365f942fe096693fe535921ff99529a9b8 /src/boringssl/fuzz/bn_mod_exp_corpus/0415d6443d574d70c328713fae9f036d1d3a538f /src/boringssl/fuzz/bn_mod_exp_corpus/0eaaec6b9462d9679345db28517d3a3298db2183 /src/boringssl/fuzz/bn_mod_exp_corpus/10c6fe8d8e8b6b1729af6e18a810d2574a4e5bac /src/boringssl/fuzz/bn_mod_exp_corpus/1c4f3500fd06ce7640060869cb6a00b2164c54bb /src/boringssl/fuzz/bn_mod_exp_corpus/233880f6d297360e8c15876fb1c542b91d917593 /src/boringssl/fuzz/bn_mod_exp_corpus/24477f7df164c27c609ed4e826ac89086207bea4 /src/boringssl/fuzz/bn_mod_exp_corpus/25c0182f54d1646c1701cbba9208c27cb6d491f6 /src/boringssl/fuzz/bn_mod_exp_corpus/2638dec28b05837f0a7e5d909f13d4a1010c3133 /src/boringssl/fuzz/bn_mod_exp_corpus/310ee9f10a610166777befe13fa167de01d49ddf /src/boringssl/fuzz/bn_mod_exp_corpus/31a96425354abd29e3d406cd3c7b45941a56d5ba /src/boringssl/fuzz/bn_mod_exp_corpus/31f9f3515fa8537fdba7bb72f9f95922ee28a5e5 /src/boringssl/fuzz/bn_mod_exp_corpus/33e05978f5a4b051eab869b9bb758ad91230acc4 /src/boringssl/fuzz/bn_mod_exp_corpus/365dcef4d231a1971051088003f368ffa41c4513 /src/boringssl/fuzz/bn_mod_exp_corpus/3ee811b9dd0f12b92da0b35f944d8da2271444ce /src/boringssl/fuzz/bn_mod_exp_corpus/411ba7eacac8fd8dc081590bcef69816ee7b0983 /src/boringssl/fuzz/bn_mod_exp_corpus/470b2eb2332e52e33fb4e6331a46041d843fbf08 /src/boringssl/fuzz/bn_mod_exp_corpus/48e04e851db38f1137857d535b259632cddbdb4b /src/boringssl/fuzz/bn_mod_exp_corpus/49a1ee4773e81e36fa9d30d0d910683b0a9268f8 /src/boringssl/fuzz/bn_mod_exp_corpus/4a66c4e140f4fdc8e50d04fc2c5138e9ea8bc0e6 /src/boringssl/fuzz/bn_mod_exp_corpus/4c2ab744202abe9ab1ab5be3e7729cfe36ef2252 /src/boringssl/fuzz/bn_mod_exp_corpus/50fe9b46fb7ccf989c5c18adaae09ad94a2a7ba4 /src/boringssl/fuzz/bn_mod_exp_corpus/568411accf2ea14651edff9919eb355f3eb67168 /src/boringssl/fuzz/bn_mod_exp_corpus/56d2f13712a216b6a48f25696b1caed8cbabfd87 /src/boringssl/fuzz/bn_mod_exp_corpus/6351165cd1f725c617abf8f1d25711635fe91e02 /src/boringssl/fuzz/bn_mod_exp_corpus/6725ef75d309849c0ab011426b7f0dffb204b4b6 /src/boringssl/fuzz/bn_mod_exp_corpus/68014c66740d8d12fe474af21ff723572ecaec8a /src/boringssl/fuzz/bn_mod_exp_corpus/73c2e09b19974387bacd21dc5d1d9d5cc2b5536e /src/boringssl/fuzz/bn_mod_exp_corpus/7833060c25293069c46c551e3f642ea42c2fe6fe /src/boringssl/fuzz/bn_mod_exp_corpus/78d5ed530d5555f4dda00b2d7b6ce8f3df0ee06a /src/boringssl/fuzz/bn_mod_exp_corpus/7a88556b6faf1b03dbd318358c2e298ec9ca9cef /src/boringssl/fuzz/bn_mod_exp_corpus/7af72c5a0361dee6f9f14713a00513b18ce495e5 /src/boringssl/fuzz/bn_mod_exp_corpus/7da8111c805417199ef5485ae96bfbf38973cfe2 /src/boringssl/fuzz/bn_mod_exp_corpus/80ed7c38eb35b5d879be521b629313734acb49a8 /src/boringssl/fuzz/bn_mod_exp_corpus/83da4fcc6059cc60fedb27fb12ae6e54137a5fdc /src/boringssl/fuzz/bn_mod_exp_corpus/856c6e4d95157a56fe2dc5c48fdbfd3b532d4a9e /src/boringssl/fuzz/bn_mod_exp_corpus/8819d510168272f0373e2d09d838a51f7208804a /src/boringssl/fuzz/bn_mod_exp_corpus/88b768e22dde0cdca89b0229a72ac4a2e583eabe /src/boringssl/fuzz/bn_mod_exp_corpus/8b30c425cdc8833272c41b0d687a7cd17e482259 /src/boringssl/fuzz/bn_mod_exp_corpus/960cfef74e82e56cc85247556a693484e6a815ae /src/boringssl/fuzz/bn_mod_exp_corpus/96fd7ae97ebed97b3dc56b70dc75617aa094390a /src/boringssl/fuzz/bn_mod_exp_corpus/99eb779ab482c7e32f2e2b8c14f60a339f0220dd /src/boringssl/fuzz/bn_mod_exp_corpus/9aeb319b51a940cc41ee9a1b5bd60dcfbd16ec39 /src/boringssl/fuzz/bn_mod_exp_corpus/9facdafd1938c93598185fd0db046b3532a0cce2 /src/boringssl/fuzz/bn_mod_exp_corpus/a115e708bd4c50b29e4fc62b7dbf95376255bc07 /src/boringssl/fuzz/bn_mod_exp_corpus/a62baa87c61848fe52c27646363685f67011afbf /src/boringssl/fuzz/bn_mod_exp_corpus/ab2560a995cdb4ca495a45baabeb32471431950c /src/boringssl/fuzz/bn_mod_exp_corpus/ad923a40f08537e2de33ad148de3a4780036b857 /src/boringssl/fuzz/bn_mod_exp_corpus/ae6ac92384da3f4def47b587cff8a86d8f8c0711 /src/boringssl/fuzz/bn_mod_exp_corpus/b208049eea7e6ac1e5666321c427d4e761243f48 /src/boringssl/fuzz/bn_mod_exp_corpus/b2958e12f2cbfb7155057bcafc2f88f8ff153994 /src/boringssl/fuzz/bn_mod_exp_corpus/ba136b5e876b5a03aeea7dba7d0a89d6c3293f3c /src/boringssl/fuzz/bn_mod_exp_corpus/c06a506efb8a44ed81d75ab2623f75909d8f8651 /src/boringssl/fuzz/bn_mod_exp_corpus/cd32f1d618121ea039c2208db9c2abb67054fa63 /src/boringssl/fuzz/bn_mod_exp_corpus/ceed2eb46633f9632961cf6afce7d90a883c8b52 /src/boringssl/fuzz/bn_mod_exp_corpus/d02df9fd296ae8883904956a7b7660ab7a598bbf /src/boringssl/fuzz/bn_mod_exp_corpus/d29e2abc2737dd2215963c5ebca8a2d9c602fa56 /src/boringssl/fuzz/bn_mod_exp_corpus/d3da2d5faee70e4f37b297be18b01c18d4760ac6 /src/boringssl/fuzz/bn_mod_exp_corpus/d4f286933bc793a76a44143d22c0f9530983e9f6 /src/boringssl/fuzz/bn_mod_exp_corpus/dbed9c7798669142551e9dbc8caf64c3b9c701ee /src/boringssl/fuzz/bn_mod_exp_corpus/de299167e46caed650b8241cd35520ef9d28d9e3 /src/boringssl/fuzz/bn_mod_exp_corpus/e2633a66f260322a2d1c1ad0a9843c729cdd2ed5 /src/boringssl/fuzz/bn_mod_exp_corpus/e798cdac1d73bd2d274401a74fd89483b06c5cbb /src/boringssl/fuzz/bn_mod_exp_corpus/ea13724d9a6842f2b8d28ce07b017fa5224511a6 /src/boringssl/fuzz/bn_mod_exp_corpus/eb7a27f2a3c1a1f57798c31b104b91eb57b7d240 /src/boringssl/fuzz/bn_mod_exp_corpus/efaa53e5ee3b72da467ee6211a327953629276ef /src/boringssl/fuzz/bn_mod_exp_corpus/f0f1a7438bc6280c325705632c9191444f95f1d7 /src/boringssl/fuzz/bn_mod_exp_corpus/f399ddbc816381a607996d4e76f1f9be0042877c /src/boringssl/fuzz/bn_mod_exp_corpus/f6df0381cbab15d93c3920090155a42516748d25
+  adding: 00f534365f942fe096693fe535921ff99529a9b8 (stored 0%)
+  adding: 0415d6443d574d70c328713fae9f036d1d3a538f (stored 0%)
+  adding: 0eaaec6b9462d9679345db28517d3a3298db2183 (stored 0%)
+  adding: 10c6fe8d8e8b6b1729af6e18a810d2574a4e5bac (stored 0%)
+  adding: 1c4f3500fd06ce7640060869cb6a00b2164c54bb (stored 0%)
+  adding: 233880f6d297360e8c15876fb1c542b91d917593 (stored 0%)
+  adding: 24477f7df164c27c609ed4e826ac89086207bea4 (stored 0%)
+  adding: 25c0182f54d1646c1701cbba9208c27cb6d491f6 (stored 0%)
+  adding: 2638dec28b05837f0a7e5d909f13d4a1010c3133 (stored 0%)
+  adding: 310ee9f10a610166777befe13fa167de01d49ddf (stored 0%)
+  adding: 31a96425354abd29e3d406cd3c7b45941a56d5ba (stored 0%)
+  adding: 31f9f3515fa8537fdba7bb72f9f95922ee28a5e5 (stored 0%)
+  adding: 33e05978f5a4b051eab869b9bb758ad91230acc4 (stored 0%)
+  adding: 365dcef4d231a1971051088003f368ffa41c4513 (stored 0%)
+  adding: 3ee811b9dd0f12b92da0b35f944d8da2271444ce (deflated 26%)
+  adding: 411ba7eacac8fd8dc081590bcef69816ee7b0983 (stored 0%)
+  adding: 470b2eb2332e52e33fb4e6331a46041d843fbf08 (stored 0%)
+  adding: 48e04e851db38f1137857d535b259632cddbdb4b (stored 0%)
+  adding: 49a1ee4773e81e36fa9d30d0d910683b0a9268f8 (stored 0%)
+  adding: 4a66c4e140f4fdc8e50d04fc2c5138e9ea8bc0e6 (stored 0%)
+  adding: 4c2ab744202abe9ab1ab5be3e7729cfe36ef2252 (deflated 28%)
+  adding: 50fe9b46fb7ccf989c5c18adaae09ad94a2a7ba4 (stored 0%)
+  adding: 568411accf2ea14651edff9919eb355f3eb67168 (stored 0%)
+  adding: 56d2f13712a216b6a48f25696b1caed8cbabfd87 (stored 0%)
+  adding: 6351165cd1f725c617abf8f1d25711635fe91e02 (stored 0%)
+  adding: 6725ef75d309849c0ab011426b7f0dffb204b4b6 (deflated 28%)
+  adding: 68014c66740d8d12fe474af21ff723572ecaec8a (deflated 28%)
+  adding: 73c2e09b19974387bacd21dc5d1d9d5cc2b5536e (stored 0%)
+  adding: 7833060c25293069c46c551e3f642ea42c2fe6fe (stored 0%)
+  adding: 78d5ed530d5555f4dda00b2d7b6ce8f3df0ee06a (stored 0%)
+  adding: 7a88556b6faf1b03dbd318358c2e298ec9ca9cef (stored 0%)
+  adding: 7af72c5a0361dee6f9f14713a00513b18ce495e5 (deflated 28%)
+  adding: 7da8111c805417199ef5485ae96bfbf38973cfe2 (stored 0%)
+  adding: 80ed7c38eb35b5d879be521b629313734acb49a8 (stored 0%)
+  adding: 83da4fcc6059cc60fedb27fb12ae6e54137a5fdc (stored 0%)
+  adding: 856c6e4d95157a56fe2dc5c48fdbfd3b532d4a9e (stored 0%)
+  adding: 8819d510168272f0373e2d09d838a51f7208804a (stored 0%)
+  adding: 88b768e22dde0cdca89b0229a72ac4a2e583eabe (stored 0%)
+  adding: 8b30c425cdc8833272c41b0d687a7cd17e482259 (stored 0%)
+  adding: 960cfef74e82e56cc85247556a693484e6a815ae (stored 0%)
+  adding: 96fd7ae97ebed97b3dc56b70dc75617aa094390a (stored 0%)
+  adding: 99eb779ab482c7e32f2e2b8c14f60a339f0220dd (stored 0%)
+  adding: 9aeb319b51a940cc41ee9a1b5bd60dcfbd16ec39 (stored 0%)
+  adding: 9facdafd1938c93598185fd0db046b3532a0cce2 (deflated 20%)
+  adding: a115e708bd4c50b29e4fc62b7dbf95376255bc07 (deflated 26%)
+  adding: a62baa87c61848fe52c27646363685f67011afbf (stored 0%)
+  adding: ab2560a995cdb4ca495a45baabeb32471431950c (stored 0%)
+  adding: ad923a40f08537e2de33ad148de3a4780036b857 (stored 0%)
+  adding: ae6ac92384da3f4def47b587cff8a86d8f8c0711 (deflated 26%)
+  adding: b208049eea7e6ac1e5666321c427d4e761243f48 (stored 0%)
+  adding: b2958e12f2cbfb7155057bcafc2f88f8ff153994 (stored 0%)
+  adding: ba136b5e876b5a03aeea7dba7d0a89d6c3293f3c (stored 0%)
+  adding: c06a506efb8a44ed81d75ab2623f75909d8f8651 (stored 0%)
+  adding: cd32f1d618121ea039c2208db9c2abb67054fa63 (stored 0%)
+  adding: ceed2eb46633f9632961cf6afce7d90a883c8b52 (stored 0%)
+  adding: d02df9fd296ae8883904956a7b7660ab7a598bbf (stored 0%)
+  adding: d29e2abc2737dd2215963c5ebca8a2d9c602fa56 (stored 0%)
+  adding: d3da2d5faee70e4f37b297be18b01c18d4760ac6 (stored 0%)
+  adding: d4f286933bc793a76a44143d22c0f9530983e9f6 (deflated 88%)
+  adding: dbed9c7798669142551e9dbc8caf64c3b9c701ee (stored 0%)
+  adding: de299167e46caed650b8241cd35520ef9d28d9e3 (stored 0%)
+  adding: e2633a66f260322a2d1c1ad0a9843c729cdd2ed5 (stored 0%)
+  adding: e798cdac1d73bd2d274401a74fd89483b06c5cbb (stored 0%)
+  adding: ea13724d9a6842f2b8d28ce07b017fa5224511a6 (stored 0%)
+  adding: eb7a27f2a3c1a1f57798c31b104b91eb57b7d240 (stored 0%)
+  adding: efaa53e5ee3b72da467ee6211a327953629276ef (stored 0%)
+  adding: f0f1a7438bc6280c325705632c9191444f95f1d7 (deflated 26%)
+  adding: f399ddbc816381a607996d4e76f1f9be0042877c (stored 0%)
+  adding: f6df0381cbab15d93c3920090155a42516748d25 (stored 0%)
++ for F in $fuzzerFiles
+++ basename /src/boringssl/fuzz/ssl_ctx_api.cc .cc
++ fuzzerName=ssl_ctx_api
++ echo 'Building fuzzer ssl_ctx_api'
+Building fuzzer ssl_ctx_api
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -DBORINGSSL_UNSAFE_FUZZER_MODE -D_BORINGSSL_LIBPKI_ -std=c++1z -o /workspace/out/libfuzzer-address-x86_64/ssl_ctx_api -fsanitize=fuzzer /src/boringssl/fuzz/ssl_ctx_api.cc -I /src/boringssl/include ./libpki.a ./ssl/libssl.a ./crypto/libcrypto.a
+/src/boringssl/fuzz/ssl_ctx_api.cc:28:3: error: no matching function for call to 'PEM_read_RSAPrivateKey'
+  PEM_read_RSAPrivateKey(bio, &rsa2, nullptr, nullptr);
+  ^~~~~~~~~~~~~~~~~~~~~~
+/src/boringssl/include/openssl/pem.h:405:1: note: candidate function not viable: no known conversion from 'BIO *' (aka 'bio_st *') to 'FILE *' (aka '_IO_FILE *') for 1st argument
+DECLARE_PEM_rw_cb(RSAPrivateKey, RSA)
+^
+/src/boringssl/include/openssl/pem.h:309:3: note: expanded from macro 'DECLARE_PEM_rw_cb'
+  DECLARE_PEM_read(name, type)        \
+  ^
+/src/boringssl/include/openssl/pem.h:298:3: note: expanded from macro 'DECLARE_PEM_read'
+  DECLARE_PEM_read_fp(name, type)
+  ^
+/src/boringssl/include/openssl/pem.h:254:24: note: expanded from macro 'DECLARE_PEM_read_fp'
+  OPENSSL_EXPORT type *PEM_read_##name(FILE *fp, type **x, \
+                       ^
+<scratch space>:179:1: note: expanded from here
+PEM_read_RSAPrivateKey
+^
+1 error generated.

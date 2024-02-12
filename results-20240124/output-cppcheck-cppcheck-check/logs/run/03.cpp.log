@@ -1,0 +1,44 @@
+/workspace/out/libfuzzer-address-x86_64/oss-fuzz-client -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/oss-fuzz-client < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 2481013321
+INFO: Loaded 1 modules   (177070 inline 8-bit counters): 177070 [0x18154f0, 0x184089e), 
+INFO: Loaded 1 PC tables (177070 PCs): 177070 [0x1390ee0,0x16449c0), 
+INFO:        0 files found in /workspace/corpus/oss-fuzz-client
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+oss-fuzz-client: ../externals/simplecpp/simplecpp.cpp:388: FileStream::FileStream(const std::string &): Assertion `file != nullptr' failed.
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+==13==ERROR: AddressSanitizer: ABRT on unknown address 0x00000000000d (pc 0x7f413c15000b bp 0x7f413c2c5588 sp 0x7ffe9b549930 T0)
+SCARINESS: 10 (signal)
+    #0 0x7f413c15000b in raise (/lib/x86_64-linux-gnu/libc.so.6+0x4300b) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #1 0x7f413c12f858 in abort (/lib/x86_64-linux-gnu/libc.so.6+0x22858) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #2 0x7f413c12f728  (/lib/x86_64-linux-gnu/libc.so.6+0x22728) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #3 0x7f413c140fd5 in __assert_fail (/lib/x86_64-linux-gnu/libc.so.6+0x33fd5) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #4 0x5c67bc in FileStream /src/cppcheck/oss-fuzz/../externals/simplecpp/simplecpp.cpp:388:9
+    #5 0x5c67bc in simplecpp::TokenList::TokenList(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&, std::__1::vector<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >, std::__1::allocator<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > > >&, std::__1::list<simplecpp::Output, std::__1::allocator<simplecpp::Output> >*) /src/cppcheck/oss-fuzz/../externals/simplecpp/simplecpp.cpp:445:16
+    #6 0xad755f in createTokenList /src/cppcheck/oss-fuzz/../lib/cppcheck.cpp:591:12
+    #7 0xad755f in CppCheck::checkFile(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&, std::__1::basic_istream<char, std::__1::char_traits<char> >*) /src/cppcheck/oss-fuzz/../lib/cppcheck.cpp:652:40
+    #8 0xad4cf4 in CppCheck::check(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&) /src/cppcheck/oss-fuzz/../lib/cppcheck.cpp:550:12
+    #9 0x5ae4d7 in LLVMFuzzerTestOneInput /src/cppcheck/oss-fuzz/main.cpp:26:18
+    #10 0x47fb23 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #11 0x480ed4 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:804:3
+    #12 0x4813a9 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #13 0x470a0f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #14 0x49a062 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #15 0x7f413c131082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #16 0x46144d in _start (out/libfuzzer-address-x86_64/oss-fuzz-client+0x46144d)
+
+DEDUP_TOKEN: raise--abort--
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: ABRT (/lib/x86_64-linux-gnu/libc.so.6+0x4300b) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca) in raise
+==13==ABORTING
+MS: 0 ; base unit: 0000000000000000000000000000000000000000
+
+
+artifact_prefix='./'; Test unit written to ./crash-da39a3ee5e6b4b0d3255bfef95601890afd80709
+Base64: 
+stat::number_of_executed_units: 1
+stat::average_exec_per_sec:     0
+stat::new_units_added:          0
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              44

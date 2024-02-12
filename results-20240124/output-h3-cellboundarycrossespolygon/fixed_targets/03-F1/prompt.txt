@@ -1,0 +1,71 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+
+#include "cell_boundary.h"
+#include "geo_polygon.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  struct GeoPolygon polygon;
+  polygon.num_vertices = stream.ConsumeIntegral<uint32_t>();
+  polygon.vertices =
+      (struct GeoPoint*)malloc(polygon.num_vertices * sizeof(struct GeoPoint));
+  for (uint32_t i = 0; i < polygon.num_vertices; i++) {
+    polygon.vertices[i].lat = stream.ConsumeIntegral<double>();
+    polygon.vertices[i].lon = stream.ConsumeIntegral<double>();
+  }
+
+  struct BBox bbox;
+  bbox.min_lat = stream.ConsumeIntegral<double>();
+  bbox.min_lon = stream.ConsumeIntegral<double>();
+  bbox.max_lat = stream.ConsumeIntegral<double>();
+  bbox.max_lon = stream.ConsumeIntegral<double>();
+
+  struct CellBoundary boundary;
+  boundary.lat = stream.ConsumeIntegral<double>();
+  boundary.lon = stream.ConsumeIntegral<double>();
+  boundary.bearing = stream.ConsumeIntegral<double>();
+
+  struct BBox boundary_bbox;
+  boundary_bbox.min_lat = stream.ConsumeIntegral<double>();
+  boundary_bbox.min_lon = stream.ConsumeIntegral<double>();
+  boundary_bbox.max_lat = stream.ConsumeIntegral<double>();
+  boundary_bbox.max_lon = stream.ConsumeIntegral<double>();
+
+  cellBoundaryCrossesPolygon(&polygon, &bbox, &boundary, &boundary_bbox);
+
+  free(polygon.vertices);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:16:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+/src/h3//src/apps/fuzzers/fuzzerResolutions.cpp:7:10: fatal error: 'cell_boundary.h' file not found
+#include "cell_boundary.h"
+         ^~~~~~~~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

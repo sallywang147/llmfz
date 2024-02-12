@@ -1,0 +1,54 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <iostream>
+#include <string>
+#include <cstdint>
+#include <cstring>
+#include <cstdio>
+#include <cstdint>
+#include <fuzzer/FuzzedDataProvider.h>
+
+extern "C" {
+#include <unicode/rbnf.h>
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider fuzzed_data(data, size);
+  std::string pattern = fuzzed_data.ConsumeRandomLengthString(size);
+  std::string locale = fuzzed_data.ConsumeRandomLengthString(size);
+  std::string number = fuzzed_data.ConsumeRandomLengthString(size);
+  icu::UnicodeString pattern_icu(pattern.c_str(), pattern.size());
+  icu::UnicodeString locale_icu(locale.c_str(), locale.size());
+  icu::UnicodeString number_icu(number.c_str(), number.size());
+  icu::Locale loc(locale_icu.getBuffer());
+  icu::UErrorCode status = U_ZERO_ERROR;
+  icu::RuleBasedNumberFormat* formatter =
+      icu::RuleBasedNumberFormat::createInstance(pattern_icu, loc, status);
+  if (U_FAILURE(status)) {
+    return 0;
+  }
+  icu::UnicodeString formatted;
+  formatter->format(number_icu, formatted, status);
+  if (U_FAILURE(status)) {
+    return 0;
+  }
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

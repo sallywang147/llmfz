@@ -1,0 +1,195 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ mkdir my_build
++ pushd my_build/
+/src/coturn/my_build /src/coturn
++ cmake -DFUZZER=ON -DLIB_FUZZING_ENGINE=-fsanitize=fuzzer '-DCMAKE_EXE_LINKER_FLAGS=-Wl,-rpath,'\''$ORIGIN/lib'\''' -DWITH_MYSQL=OFF -Wno-dev ../.
+-- The C compiler identification is Clang 15.0.0
+-- The CXX compiler identification is Clang 15.0.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/local/bin/clang-jcc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/local/bin/clang++-jcc - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+BUILD_VERSION:4.6.2-r7-23-g1683054;
+-- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "1.1.1f") found components: Crypto SSL 
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE  
+-- Could NOT find Libevent (missing: Libevent_DIR)
+-- Could NOT find PkgConfig (missing: PKG_CONFIG_EXECUTABLE) 
+-- Found Libevent: /usr/lib/x86_64-linux-gnu/libevent_core.so;/usr/lib/x86_64-linux-gnu/libevent_extra.so;/usr/lib/x86_64-linux-gnu/libevent_openssl.so;/usr/lib/x86_64-linux-gnu/libevent_pthreads.so  
+CMake Warning at src/apps/common/CMakeLists.txt:53 (find_package):
+  By not providing "Findhiredis.cmake" in CMAKE_MODULE_PATH this project has
+  asked CMake to find a package configuration file provided by "hiredis", but
+  CMake did not find one.
+
+  Could not find a package configuration file provided by "hiredis" with any
+  of the following names:
+
+    hiredisConfig.cmake
+    hiredis-config.cmake
+
+  Add the installation prefix of "hiredis" to CMAKE_PREFIX_PATH or set
+  "hiredis_DIR" to a directory containing one of the above files.  If
+  "hiredis" provides a separate development package or SDK, be sure it has
+  been installed.
+
+
+COMMON_LIBS:OpenSSL::SSL;OpenSSL::Crypto;Threads::Threads;/usr/lib/x86_64-linux-gnu/libevent_core.so;/usr/lib/x86_64-linux-gnu/libevent_extra.so;/usr/lib/x86_64-linux-gnu/libevent_openssl.so;/usr/lib/x86_64-linux-gnu/libevent_pthreads.so
+-- Looking for pthread_barrier_init
+-- Looking for pthread_barrier_init - found
+-- SQLite not found, try -DSQLite_DIR=<path> (missing: SQLite_INCLUDE_DIR SQLite_LIBRARY) 
+-- PostgreSQL not found, try -DPostgreSQL_DIR=<path> (missing: PostgreSQL_INCLUDE_DIR PostgreSQL_LIBRARY) 
+CMake Warning at src/apps/relay/CMakeLists.txt:88 (find_package):
+  By not providing "Findmongo.cmake" in CMAKE_MODULE_PATH this project has
+  asked CMake to find a package configuration file provided by "mongo", but
+  CMake did not find one.
+
+  Could not find a package configuration file provided by "mongo" with any of
+  the following names:
+
+    mongoConfig.cmake
+    mongo-config.cmake
+
+  Add the installation prefix of "mongo" to CMAKE_PREFIX_PATH or set
+  "mongo_DIR" to a directory containing one of the above files.  If "mongo"
+  provides a separate development package or SDK, be sure it has been
+  installed.
+
+
+CMake Warning at src/apps/relay/CMakeLists.txt:98 (find_package):
+  By not providing "Findhiredis.cmake" in CMAKE_MODULE_PATH this project has
+  asked CMake to find a package configuration file provided by "hiredis", but
+  CMake did not find one.
+
+  Could not find a package configuration file provided by "hiredis" with any
+  of the following names:
+
+    hiredisConfig.cmake
+    hiredis-config.cmake
+
+  Add the installation prefix of "hiredis" to CMAKE_PREFIX_PATH or set
+  "hiredis_DIR" to a directory containing one of the above files.  If
+  "hiredis" provides a separate development package or SDK, be sure it has
+  been installed.
+
+
+CMake Warning at src/apps/relay/CMakeLists.txt:108 (find_package):
+  By not providing "Findlibsystemd.cmake" in CMAKE_MODULE_PATH this project
+  has asked CMake to find a package configuration file provided by
+  "libsystemd", but CMake did not find one.
+
+  Could not find a package configuration file provided by "libsystemd" with
+  any of the following names:
+
+    libsystemdConfig.cmake
+    libsystemd-config.cmake
+
+  Add the installation prefix of "libsystemd" to CMAKE_PREFIX_PATH or set
+  "libsystemd_DIR" to a directory containing one of the above files.  If
+  "libsystemd" provides a separate development package or SDK, be sure it has
+  been installed.
+
+
+-- Could NOT find PkgConfig (missing: PKG_CONFIG_EXECUTABLE) 
+-- Could NOT find Prometheus (missing: prom_libs prom_INCLUDE_DIR promhttp_libs promhttp_INCLUDE_DIR microhttpd_include_dir microhttpd_libs) 
+turnserver_LIBS:
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /src/coturn/my_build
+++ nproc
++ make -j32
+[  2%] Building C object src/apps/common/CMakeFiles/turncommon.dir/apputils.c.o
+[  4%] Building C object src/apps/common/CMakeFiles/turncommon.dir/ns_turn_utils.c.o
+[  6%] Building C object src/apps/common/CMakeFiles/turncommon.dir/stun_buffer.c.o
+[  8%] Linking C static library ../../../lib/libturncommon.a
+[  8%] Built target turncommon
+[ 10%] Building C object src/client/CMakeFiles/turnclient.dir/ns_turn_ioaddr.c.o
+[ 14%] Building C object src/client/CMakeFiles/turnclient.dir/ns_turn_msg_addr.c.o
+[ 14%] Building C object src/client/CMakeFiles/turnclient.dir/ns_turn_msg.c.o
+[ 16%] Linking C static library ../../lib/libturnclient.a
+[ 16%] Built target turnclient
+[ 18%] Building C object src/apps/natdiscovery/CMakeFiles/turnutils_natdiscovery.dir/natdiscovery.c.o
+[ 20%] Building C object src/server/CMakeFiles/turn_server.dir/ns_turn_allocation.c.o
+[ 25%] Building C object src/server/CMakeFiles/turn_server.dir/ns_turn_maps_rtcp.c.o
+[ 25%] Building C object src/apps/oauth/CMakeFiles/turnutils_oauth.dir/oauth.c.o
+[ 29%] Building C object src/server/CMakeFiles/turn_server.dir/ns_turn_server.c.o
+[ 35%] Building C object src/server/CMakeFiles/turn_server.dir/ns_turn_maps.c.o
+[ 35%] Building C object src/apps/stunclient/CMakeFiles/turnutils_stunclient.dir/stunclient.c.o
+[ 35%] Building C object src/apps/rfc5769/CMakeFiles/turnutils_rfc5769check.dir/rfc5769check.c.o
+[ 35%] Building C object src/apps/peer/CMakeFiles/turnutils_peer.dir/mainudpserver.c.o
+[ 37%] Building C object src/apps/peer/CMakeFiles/turnutils_peer.dir/udpserver.c.o
+[ 39%] Building C object src/apps/uclient/CMakeFiles/turnutils_uclient.dir/uclient.c.o
+[ 41%] Building C object fuzzing/CMakeFiles/FuzzStun.dir/FuzzStun.c.o
+[ 43%] Building C object src/apps/uclient/CMakeFiles/turnutils_uclient.dir/mainuclient.c.o
+[ 45%] Building C object src/apps/uclient/CMakeFiles/turnutils_uclient.dir/startuclient.c.o
+[ 47%] Building C object fuzzing/CMakeFiles/FuzzStunClient.dir/FuzzStunClient.c.o
+[ 50%] Building C object fuzzing/CMakeFiles/FuzzStunClient.dir/__/src/apps/common/stun_buffer.c.o
+[ 52%] Linking C executable FuzzStun
+[ 54%] Linking C executable FuzzStunClient
+[ 56%] Linking C executable ../../../bin/turnutils_peer
+[ 58%] Linking C executable ../../../bin/turnutils_oauth
+[ 60%] Linking C executable ../../../bin/turnutils_rfc5769check
+[ 62%] Linking C executable ../../../bin/turnutils_natdiscovery
+[ 64%] Linking C executable ../../../bin/turnutils_stunclient
+[ 64%] Built target turnutils_peer
+[ 64%] Built target FuzzStun
+[ 64%] Built target FuzzStunClient
+[ 64%] Built target turnutils_oauth
+[ 64%] Built target turnutils_rfc5769check
+[ 64%] Built target turnutils_stunclient
+[ 64%] Built target turnutils_natdiscovery
+[ 66%] Linking C executable ../../../bin/turnutils_uclient
+[ 66%] Built target turnutils_uclient
+[ 68%] Linking C static library ../../lib/libturn_server.a
+[ 68%] Built target turn_server
+[ 70%] Building C object src/apps/relay/CMakeFiles/turnserver.dir/mainrelay.c.o
+[ 72%] Building C object src/apps/relay/CMakeFiles/turnserver.dir/netengine.c.o
+[ 77%] Building C object src/apps/relay/CMakeFiles/turnserver.dir/libtelnet.c.o
+[ 77%] Building C object src/apps/relay/CMakeFiles/turnserver.dir/turn_admin_server.c.o
+[ 79%] Building C object src/apps/relay/CMakeFiles/turnserver.dir/tls_listener.c.o
+[ 81%] Building C object src/apps/relay/CMakeFiles/turnserver.dir/dtls_listener.c.o
+[ 83%] Building C object src/apps/relay/CMakeFiles/turnserver.dir/ns_ioalib_engine_impl.c.o
+[ 85%] Building C object src/apps/relay/CMakeFiles/turnserver.dir/turn_ports.c.o
+[ 87%] Building C object src/apps/relay/CMakeFiles/turnserver.dir/http_server.c.o
+[ 89%] Building C object src/apps/relay/CMakeFiles/turnserver.dir/acme.c.o
+[ 91%] Building C object src/apps/relay/CMakeFiles/turnserver.dir/userdb.c.o
+[ 93%] Building C object src/apps/relay/CMakeFiles/turnserver.dir/dbdrivers/dbdriver.c.o
+[ 95%] Building C object src/apps/relay/CMakeFiles/turnserver.dir/prom_server.c.o
+[ 97%] Building C object src/apps/relay/CMakeFiles/turnserver.dir/dbdrivers/dbd_redis.c.o
+[100%] Linking C executable ../../../bin/turnserver
+[100%] Built target turnserver
+[100%] Built target turnadmin
++ popd
+/src/coturn
++ pushd my_build/fuzzing/
+/src/coturn/my_build/fuzzing /src/coturn
++ cp FuzzStun /workspace/out/libfuzzer-address-x86_64/FuzzStun
++ cp FuzzStunClient /workspace/out/libfuzzer-address-x86_64/FuzzStunClient
++ popd
+/src/coturn
++ pushd fuzzing/input/
+/src/coturn/fuzzing/input /src/coturn
++ cp FuzzStun_seed_corpus.zip /workspace/out/libfuzzer-address-x86_64/FuzzStun_seed_corpus.zip
++ cp FuzzStunClient_seed_corpus.zip /workspace/out/libfuzzer-address-x86_64/FuzzStunClient_seed_corpus.zip
++ popd
+/src/coturn
++ pushd /lib/x86_64-linux-gnu/
+/lib/x86_64-linux-gnu /src/coturn
++ mkdir /workspace/out/libfuzzer-address-x86_64/lib/
++ cp libevent-2.1.so.7 libevent-2.1.so.7.0.0 libevent.a libevent.so libevent_core-2.1.so.7 libevent_core-2.1.so.7.0.0 libevent_core.a libevent_core.so libevent_extra-2.1.so.7 libevent_extra-2.1.so.7.0.0 libevent_extra.a libevent_extra.so libevent_openssl-2.1.so.7 libevent_openssl-2.1.so.7.0.0 libevent_openssl.a libevent_openssl.so libevent_pthreads-2.1.so.7 libevent_pthreads-2.1.so.7.0.0 libevent_pthreads.a libevent_pthreads.so /workspace/out/libfuzzer-address-x86_64/lib/.
++ popd
+/src/coturn

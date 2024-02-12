@@ -1,0 +1,59 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include <algorithm>
+#include <fuzzer/FuzzedDataProvider.h>
+
+extern "C" {
+#include <vector>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  int arg_count = stream.ConsumeIntegral<int>();
+  std::vector<char*> arg_list;
+  arg_list.push_back((char*)"");
+  for (int i = 0; i < arg_count; ++i) {
+    std::string arg = stream.ConsumeRemainingBytesAsString();
+    char* arg_ptr = (char*)malloc(arg.size() + 1);
+    memcpy(arg_ptr, arg.c_str(), arg.size());
+    arg_ptr[arg.size()] = '\0';
+    arg_list.push_back(arg_ptr);
+  }
+  char** arg_array = &arg_list[0];
+  int result = main2(arg_count + 1, arg_array);
+  for (int i = 1; i < arg_count + 1; ++i) {
+    free(arg_array[i]);
+  }
+  return result;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/fuzz-main.c:5:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+/src/fuzz-main.cpp:25:16: error: use of undeclared identifier 'main2'
+  int result = main2(arg_count + 1, arg_array);
+               ^
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,39 @@
+/workspace/out/libfuzzer-address-x86_64/ext2fs_image_read_write_fuzzer -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/ext2fs_image_read_write_fuzzer < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 2324072412
+INFO: Loaded 1 modules   (7175 inline 8-bit counters): 7175 [0x70c620, 0x70e227), 
+INFO: Loaded 1 PC tables (7175 PCs): 7175 [0x695c80,0x6b1cf0), 
+INFO:        0 files found in /workspace/corpus/ext2fs_image_read_write_fuzzer
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: A corpus is not provided, starting from an empty corpus
+#2	INITED cov: 112 ft: 113 corp: 1/1b exec/s: 0 rss: 30Mb
+#4	NEW    cov: 113 ft: 115 corp: 2/3b lim: 4096 exec/s: 0 rss: 31Mb L: 2/2 MS: 2 ChangeBit-InsertByte-
+	NEW_FUNC[1/2]: 0x56d3b0 in std::__1::vector<char, std::__1::allocator<char> >::shrink_to_fit() /usr/local/bin/../include/c++/v1/vector:1497
+	NEW_FUNC[2/2]: 0x56d820 in std::__1::vector<char, std::__1::allocator<char> >::__construct_at_end(unsigned long) /usr/local/bin/../include/c++/v1/vector:979
+#12	NEW    cov: 124 ft: 128 corp: 3/115b lim: 4096 exec/s: 0 rss: 31Mb L: 112/112 MS: 3 CopyPart-ChangeBinInt-InsertRepeatedBytes-
+#17	NEW    cov: 124 ft: 130 corp: 4/118b lim: 4096 exec/s: 0 rss: 32Mb L: 3/112 MS: 5 CrossOver-ShuffleBytes-ChangeBinInt-CrossOver-CrossOver-
+#28	NEW    cov: 124 ft: 131 corp: 5/122b lim: 4096 exec/s: 0 rss: 32Mb L: 4/112 MS: 1 InsertByte-
+#113	REDUCE cov: 124 ft: 131 corp: 5/72b lim: 4096 exec/s: 0 rss: 33Mb L: 62/62 MS: 5 ChangeByte-ChangeByte-CMP-ChangeBit-EraseBytes- DE: "\001\000\000\000\000\000\000\000"-
+#302	REDUCE cov: 124 ft: 131 corp: 5/62b lim: 4096 exec/s: 0 rss: 36Mb L: 52/52 MS: 4 CMP-InsertByte-ShuffleBytes-EraseBytes- DE: "\000\000\000\000"-
+#340	REDUCE cov: 124 ft: 131 corp: 5/45b lim: 4096 exec/s: 0 rss: 37Mb L: 35/35 MS: 3 ChangeByte-ChangeByte-EraseBytes-
+#498	REDUCE cov: 124 ft: 131 corp: 5/39b lim: 4096 exec/s: 0 rss: 39Mb L: 29/29 MS: 3 ShuffleBytes-CrossOver-EraseBytes-
+#739	REDUCE cov: 124 ft: 131 corp: 5/31b lim: 4096 exec/s: 0 rss: 43Mb L: 21/21 MS: 1 EraseBytes-
+#741	REDUCE cov: 124 ft: 131 corp: 5/21b lim: 4096 exec/s: 0 rss: 43Mb L: 11/11 MS: 2 CopyPart-EraseBytes-
+#917	REDUCE cov: 124 ft: 131 corp: 5/17b lim: 4096 exec/s: 0 rss: 46Mb L: 7/7 MS: 1 EraseBytes-
+#1086	REDUCE cov: 124 ft: 131 corp: 5/16b lim: 4096 exec/s: 0 rss: 46Mb L: 6/6 MS: 4 EraseBytes-ShuffleBytes-InsertByte-InsertByte-
+#32768	pulse  cov: 124 ft: 131 corp: 5/16b lim: 4096 exec/s: 16384 rss: 47Mb
+#65536	pulse  cov: 124 ft: 131 corp: 5/16b lim: 4096 exec/s: 16384 rss: 47Mb
+#131072	pulse  cov: 124 ft: 131 corp: 5/16b lim: 4096 exec/s: 18724 rss: 47Mb
+#262144	pulse  cov: 124 ft: 131 corp: 5/16b lim: 4096 exec/s: 21845 rss: 47Mb
+#524288	pulse  cov: 124 ft: 131 corp: 5/16b lim: 4096 exec/s: 21845 rss: 47Mb
+#682506	DONE   cov: 124 ft: 131 corp: 5/16b lim: 4096 exec/s: 22016 rss: 47Mb
+###### Recommended dictionary. ######
+"\001\000\000\000\000\000\000\000" # Uses: 22525
+"\000\000\000\000" # Uses: 27912
+###### End of recommended dictionary. ######
+Done 682506 runs in 31 second(s)
+stat::number_of_executed_units: 682506
+stat::average_exec_per_sec:     22016
+stat::new_units_added:          12
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              47

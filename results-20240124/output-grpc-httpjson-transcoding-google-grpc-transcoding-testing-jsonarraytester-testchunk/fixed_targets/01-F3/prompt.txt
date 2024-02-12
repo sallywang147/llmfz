@@ -1,0 +1,71 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <cstddef>
+#include <cstdint>
+#include <string>
+
+#include "grpc_transcoding/testing/json_array_tester.h"
+#include "test_common.h"
+
+namespace google {
+namespace grpc {
+namespace transcoding {
+namespace testing {
+namespace {
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider provider(data, size);
+
+  JsonArrayTester tester;
+  std::string input;
+  std::string output;
+  bool is_valid;
+
+  while (provider.remaining_bytes() > 0) {
+    // Add a few chucks of data to the input string.
+    for (int i = 0; i < provider.ConsumeIntegralInRange(0, 5); i++) {
+      input += provider.ConsumeRandomLengthString(100);
+    }
+
+    // Run the JSON array tester to check if the input is valid.
+    is_valid = tester.TestChunk(&input, &output);
+
+    // Handle end of input or error due to malformed bytes.
+    if (!is_valid) {
+      return 0;
+    }
+  }
+
+  return 0;
+}
+}
+}
+}
+}
+}
+</code>
+
+The code has the following build issues:
+<error>
+test/message_reader_fuzz_test.cc:6:10: fatal error: 'grpc_transcoding/testing/json_array_tester.h' file not found
+#include "grpc_transcoding/testing/json_array_tester.h"
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.
+test/message_reader_fuzz_test.cc:6:10: fatal error: 'grpc_transcoding/testing/json_array_tester.h' file not found
+#include "grpc_transcoding/testing/json_array_tester.h"
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

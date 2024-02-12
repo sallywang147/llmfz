@@ -1,0 +1,55 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+#include "avahi-common/defs.h"
+#include "avahi-common/error.h"
+#include "avahi-common/malloc.h"
+#include "avahi-core/util.h"
+
+void log_function(AvahiLogLevel level, const char *txt) {}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  avahi_set_log_function(log_function);
+
+  FuzzedDataProvider provider(data, size);
+  const char* name = provider.ConsumeRemainingBytesAsString().c_str();
+  char *hostname = avahi_get_host_name_strdup(name);
+  avahi_free(hostname);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:16:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+fuzz/fuzz-consume-record.cpp:13:19: error: unknown type name 'AvahiLogLevel'
+void log_function(AvahiLogLevel level, const char *txt) {}
+                  ^
+fuzz/fuzz-consume-record.cpp:20:20: error: use of undeclared identifier 'avahi_get_host_name_strdup'
+  char *hostname = avahi_get_host_name_strdup(name);
+                   ^
+2 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

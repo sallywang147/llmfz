@@ -1,0 +1,55 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+#include <ares.h>
+
+extern "C" {
+#include "ares.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const unsigned char *data,
+                           unsigned long size) {
+  // Feed the data into each of the ares_parse_*_reply functions.
+  struct ares_channel *channel;
+  struct sockaddr_in addr;
+  int addrlen = sizeof(addr);
+  int flags = ARES_NI_NOFQDN;
+  ares_callback callback = NULL;
+  char buf[1024];
+  ares_getnameinfo(channel, reinterpret_cast<struct sockaddr*>(&addr), addrlen,
+                   flags, callback, buf);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/c-ares/test/ares-test-fuzz-name.c:4:8: error: expected identifier or '('
+extern "C" {
+       ^
+/src/c-ares/test/ares-test-fuzz-name.c:8:8: error: expected identifier or '('
+extern "C" int LLVMFuzzerTestOneInput(const unsigned char *data,
+       ^
+2 errors generated.
+
+Fix failure
+/src/c-ares/test/ares-test-fuzz-name.cpp:11:10: error: typedef 'ares_channel' cannot be referenced with a struct specifier
+  struct ares_channel *channel;
+         ^
+include/ares.h:347:34: note: declared here
+typedef struct ares_channeldata *ares_channel;
+                                 ^
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

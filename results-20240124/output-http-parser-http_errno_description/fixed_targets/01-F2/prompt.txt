@@ -1,0 +1,46 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+#include "http_parser.h"
+
+extern "C" {
+#include "fuzzer_utils.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const http_errno error_code = static_cast<http_errno>(stream.ConsumeIntegral<int>());
+  char *error_description = http_errno_description(error_code);
+  free(error_description);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+fuzzers/fuzz_url.c:1:10: fatal error: 'cstdint' file not found
+#include <cstdint>
+         ^~~~~~~~~
+1 error generated.
+
+Fix failure
+fuzzers/fuzz_url.cpp:8:10: fatal error: 'fuzzer_utils.h' file not found
+#include "fuzzer_utils.h"
+         ^~~~~~~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

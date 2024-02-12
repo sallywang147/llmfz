@@ -1,0 +1,852 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ export ASAN_OPTIONS=detect_leaks=0
++ ASAN_OPTIONS=detect_leaks=0
++ [[ -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link = *sanitize=address* ]]
++ export 'CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -DASAN'
++ CXXFLAGS='-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -DASAN'
++ [[ -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link = *sanitize=memory* ]]
++ export 'CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FORTIFY_SOURCE=0'
++ CFLAGS='-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FORTIFY_SOURCE=0'
++ export 'CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -DASAN -D_FORTIFY_SOURCE=0 -D_GLIBCXX_DEBUG'
++ CXXFLAGS='-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -DASAN -D_FORTIFY_SOURCE=0 -D_GLIBCXX_DEBUG'
++ mkdir /src/libogg-install
++ cd /src/ogg
++ ./autogen.sh
+Updating build configuration files for libogg, please wait....
+libtoolize: putting auxiliary files in '.'.
+libtoolize: copying file './ltmain.sh'
+libtoolize: putting macros in AC_CONFIG_MACRO_DIRS, 'm4'.
+libtoolize: copying file 'm4/libtool.m4'
+libtoolize: copying file 'm4/ltoptions.m4'
+libtoolize: copying file 'm4/ltsugar.m4'
+libtoolize: copying file 'm4/ltversion.m4'
+libtoolize: copying file 'm4/lt~obsolete.m4'
+configure.ac:5: installing './compile'
+configure.ac:5: installing './config.guess'
+configure.ac:5: installing './config.sub'
+configure.ac:9: installing './install-sh'
+configure.ac:9: installing './missing'
+src/Makefile.am: installing './depcomp'
++ ./configure --disable-crc --disable-shared --prefix=/src/libogg-install
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... x86_64-pc-linux-gnu
+checking how to print strings... printf
+checking for gcc... /usr/local/bin/clang-jcc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether /usr/local/bin/clang-jcc accepts -g... yes
+checking for /usr/local/bin/clang-jcc option to accept ISO C89... none needed
+checking whether /usr/local/bin/clang-jcc understands -c and -o together... yes
+checking for a sed that does not truncate output... /usr/bin/sed
+checking for grep that handles long lines and -e... /usr/bin/grep
+checking for egrep... /usr/bin/grep -E
+checking for fgrep... /usr/bin/grep -F
+checking for ld used by /usr/local/bin/clang-jcc... /usr/bin/ld
+checking if the linker (/usr/bin/ld) is GNU ld... yes
+checking for BSD- or MS-compatible name lister (nm)... /usr/bin/nm -B
+checking the name lister (/usr/bin/nm -B) interface... BSD nm
+checking whether ln -s works... yes
+checking the maximum length of command line arguments... 1572864
+checking how to convert x86_64-pc-linux-gnu file names to x86_64-pc-linux-gnu format... func_convert_file_noop
+checking how to convert x86_64-pc-linux-gnu file names to toolchain format... func_convert_file_noop
+checking for /usr/bin/ld option to reload object files... -r
+checking for objdump... objdump
+checking how to recognize dependent libraries... pass_all
+checking for dlltool... no
+checking how to associate runtime and link libraries... printf %s\n
+checking for ar... ar
+checking for archiver @FILE support... @
+checking for strip... strip
+checking for ranlib... ranlib
+checking for gawk... no
+checking for mawk... mawk
+checking command to parse /usr/bin/nm -B output from /usr/local/bin/clang-jcc object... ok
+checking for sysroot... no
+checking for a working dd... /usr/bin/dd
+checking how to truncate binary pipes... /usr/bin/dd bs=4096 count=1
+checking for mt... no
+checking if : is a manifest tool... no
+checking how to run the C preprocessor... /usr/local/bin/clang-jcc -E
+checking for ANSI C header files... yes
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for memory.h... yes
+checking for strings.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for unistd.h... yes
+checking for dlfcn.h... yes
+checking for objdir... .libs
+checking if /usr/local/bin/clang-jcc supports -fno-rtti -fno-exceptions... yes
+checking for /usr/local/bin/clang-jcc option to produce PIC... -fPIC -DPIC
+checking if /usr/local/bin/clang-jcc PIC flag -fPIC -DPIC works... yes
+checking if /usr/local/bin/clang-jcc static flag -static works... no
+checking if /usr/local/bin/clang-jcc supports -c -o file.o... yes
+checking if /usr/local/bin/clang-jcc supports -c -o file.o... (cached) yes
+checking whether the /usr/local/bin/clang-jcc linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking dynamic linker characteristics... GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... no
+checking whether to build static libraries... yes
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for a thread-safe mkdir -p... /usr/bin/mkdir -p
+checking whether make sets $(MAKE)... yes
+checking whether make supports the include directive... yes (GNU style)
+checking whether make supports nested variables... yes
+checking dependency style of /usr/local/bin/clang-jcc... gcc3
+checking whether to enable maintainer-specific portions of Makefiles... yes
+checking for gcc... (cached) /usr/local/bin/clang-jcc
+checking whether we are using the GNU C compiler... (cached) yes
+checking whether /usr/local/bin/clang-jcc accepts -g... (cached) yes
+checking for /usr/local/bin/clang-jcc option to accept ISO C89... (cached) none needed
+checking whether /usr/local/bin/clang-jcc understands -c and -o together... (cached) yes
+checking for ANSI C header files... (cached) yes
+checking for inttypes.h... (cached) yes
+checking for stdint.h... (cached) yes
+checking for sys/types.h... (cached) yes
+checking for an ANSI C-conforming const... yes
+checking size of int16_t... 2
+checking size of uint16_t... 2
+checking size of u_int16_t... 2
+checking size of int32_t... 4
+checking size of uint32_t... 4
+checking size of u_int32_t... 4
+checking size of int64_t... 8
+checking size of uint64_t... 8
+checking size of short... 2
+checking size of int... 4
+checking size of long... 8
+checking size of long long... 8
+checking for working memcmp... yes
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating src/Makefile
+config.status: creating doc/Makefile
+config.status: creating doc/libogg/Makefile
+config.status: creating include/Makefile
+config.status: creating include/ogg/Makefile
+config.status: creating include/ogg/config_types.h
+config.status: creating libogg.spec
+config.status: creating ogg.pc
+config.status: creating ogg-uninstalled.pc
+config.status: creating config.h
+config.status: executing libtool commands
+config.status: executing depfiles commands
+++ nproc
++ make -j32
+make  all-recursive
+make[1]: Entering directory '/src/ogg'
+Making all in src
+make[2]: Entering directory '/src/ogg/src'
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..  -I../include -I../include  -D_V_SELFTEST -O2 -Wall -ffast-math -fsigned-char -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FORTIFY_SOURCE=0 -MT test_bitwise-bitwise.o -MD -MP -MF .deps/test_bitwise-bitwise.Tpo -c -o test_bitwise-bitwise.o `test -f 'bitwise.c' || echo './'`bitwise.c
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..  -I../include -I../include  -D_V_SELFTEST -O2 -Wall -ffast-math -fsigned-char -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FORTIFY_SOURCE=0 -MT test_framing-framing.o -MD -MP -MF .deps/test_framing-framing.Tpo -c -o test_framing-framing.o `test -f 'framing.c' || echo './'`framing.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..  -I../include -I../include   -O2 -Wall -ffast-math -fsigned-char -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FORTIFY_SOURCE=0 -MT framing.lo -MD -MP -MF .deps/framing.Tpo -c -o framing.lo framing.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..  -I../include -I../include   -O2 -Wall -ffast-math -fsigned-char -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FORTIFY_SOURCE=0 -MT bitwise.lo -MD -MP -MF .deps/bitwise.Tpo -c -o bitwise.lo bitwise.c
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I../include -I../include -O2 -Wall -ffast-math -fsigned-char -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FORTIFY_SOURCE=0 -MT framing.lo -MD -MP -MF .deps/framing.Tpo -c framing.c -o framing.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I../include -I../include -O2 -Wall -ffast-math -fsigned-char -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FORTIFY_SOURCE=0 -MT bitwise.lo -MD -MP -MF .deps/bitwise.Tpo -c bitwise.c -o bitwise.o
+mv -f .deps/bitwise.Tpo .deps/bitwise.Plo
+mv -f .deps/framing.Tpo .deps/framing.Plo
+/bin/bash ../libtool  --tag=CC   --mode=link /usr/local/bin/clang-jcc  -O2 -Wall -ffast-math -fsigned-char -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FORTIFY_SOURCE=0 -no-undefined -version-info 8:5:8  -o libogg.la -rpath /src/libogg-install/lib framing.lo bitwise.lo  
+libtool: link: ar cr .libs/libogg.a  framing.o bitwise.o
+libtool: link: ranlib .libs/libogg.a
+libtool: link: ( cd ".libs" && rm -f "libogg.la" && ln -s "../libogg.la" "libogg.la" )
+mv -f .deps/test_bitwise-bitwise.Tpo .deps/test_bitwise-bitwise.Po
+/bin/bash ../libtool  --tag=CC   --mode=link /usr/local/bin/clang-jcc -D_V_SELFTEST -O2 -Wall -ffast-math -fsigned-char -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FORTIFY_SOURCE=0   -o test_bitwise test_bitwise-bitwise.o  
+libtool: link: /usr/local/bin/clang-jcc -D_V_SELFTEST -O2 -Wall -ffast-math -fsigned-char -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FORTIFY_SOURCE=0 -o test_bitwise test_bitwise-bitwise.o 
+mv -f .deps/test_framing-framing.Tpo .deps/test_framing-framing.Po
+/bin/bash ../libtool  --tag=CC   --mode=link /usr/local/bin/clang-jcc -D_V_SELFTEST -O2 -Wall -ffast-math -fsigned-char -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FORTIFY_SOURCE=0   -o test_framing test_framing-framing.o  
+libtool: link: /usr/local/bin/clang-jcc -D_V_SELFTEST -O2 -Wall -ffast-math -fsigned-char -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FORTIFY_SOURCE=0 -o test_framing test_framing-framing.o 
+make[2]: Leaving directory '/src/ogg/src'
+Making all in include
+make[2]: Entering directory '/src/ogg/include'
+Making all in ogg
+make[3]: Entering directory '/src/ogg/include/ogg'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/src/ogg/include/ogg'
+make[3]: Entering directory '/src/ogg/include'
+make[3]: Nothing to be done for 'all-am'.
+make[3]: Leaving directory '/src/ogg/include'
+make[2]: Leaving directory '/src/ogg/include'
+Making all in doc
+make[2]: Entering directory '/src/ogg/doc'
+Making all in libogg
+make[3]: Entering directory '/src/ogg/doc/libogg'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/src/ogg/doc/libogg'
+make[3]: Entering directory '/src/ogg/doc'
+make[3]: Nothing to be done for 'all-am'.
+make[3]: Leaving directory '/src/ogg/doc'
+make[2]: Leaving directory '/src/ogg/doc'
+make[2]: Entering directory '/src/ogg'
+make[2]: Leaving directory '/src/ogg'
+make[1]: Leaving directory '/src/ogg'
++ make install
+Making install in src
+make[1]: Entering directory '/src/ogg/src'
+make[2]: Entering directory '/src/ogg/src'
+ /usr/bin/mkdir -p '/src/libogg-install/lib'
+ /bin/bash ../libtool   --mode=install /usr/bin/install -c   libogg.la '/src/libogg-install/lib'
+libtool: install: /usr/bin/install -c .libs/libogg.lai /src/libogg-install/lib/libogg.la
+libtool: install: /usr/bin/install -c .libs/libogg.a /src/libogg-install/lib/libogg.a
+libtool: install: chmod 644 /src/libogg-install/lib/libogg.a
+libtool: install: ranlib /src/libogg-install/lib/libogg.a
+libtool: finish: PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/out:/sbin" ldconfig -n /src/libogg-install/lib
+----------------------------------------------------------------------
+Libraries have been installed in:
+   /src/libogg-install/lib
+
+If you ever happen to want to link against installed libraries
+in a given directory, LIBDIR, you must either use libtool, and
+specify the full pathname of the library, or use the '-LLIBDIR'
+flag during linking and do at least one of the following:
+   - add LIBDIR to the 'LD_LIBRARY_PATH' environment variable
+     during execution
+   - add LIBDIR to the 'LD_RUN_PATH' environment variable
+     during linking
+   - use the '-Wl,-rpath -Wl,LIBDIR' linker flag
+   - have your system administrator add LIBDIR to '/etc/ld.so.conf'
+
+See any operating system documentation about shared libraries for
+more information, such as the ld(1) and ld.so(8) manual pages.
+----------------------------------------------------------------------
+make[2]: Nothing to be done for 'install-data-am'.
+make[2]: Leaving directory '/src/ogg/src'
+make[1]: Leaving directory '/src/ogg/src'
+Making install in include
+make[1]: Entering directory '/src/ogg/include'
+Making install in ogg
+make[2]: Entering directory '/src/ogg/include/ogg'
+make[3]: Entering directory '/src/ogg/include/ogg'
+make[3]: Nothing to be done for 'install-exec-am'.
+ /usr/bin/mkdir -p '/src/libogg-install/include/ogg'
+ /usr/bin/install -c -m 644 config_types.h '/src/libogg-install/include/ogg'
+ /usr/bin/mkdir -p '/src/libogg-install/include/ogg'
+ /usr/bin/install -c -m 644 ogg.h os_types.h '/src/libogg-install/include/ogg'
+make[3]: Leaving directory '/src/ogg/include/ogg'
+make[2]: Leaving directory '/src/ogg/include/ogg'
+make[2]: Entering directory '/src/ogg/include'
+make[3]: Entering directory '/src/ogg/include'
+make[3]: Nothing to be done for 'install-exec-am'.
+make[3]: Nothing to be done for 'install-data-am'.
+make[3]: Leaving directory '/src/ogg/include'
+make[2]: Leaving directory '/src/ogg/include'
+make[1]: Leaving directory '/src/ogg/include'
+Making install in doc
+make[1]: Entering directory '/src/ogg/doc'
+Making install in libogg
+make[2]: Entering directory '/src/ogg/doc/libogg'
+make[3]: Entering directory '/src/ogg/doc/libogg'
+make[3]: Nothing to be done for 'install-exec-am'.
+ /usr/bin/mkdir -p '/src/libogg-install/share/doc/libogg/libogg'
+ /usr/bin/install -c -m 644 bitpacking.html datastructures.html decoding.html encoding.html general.html index.html ogg_iovec_t.html ogg_packet.html ogg_packet_clear.html ogg_page.html ogg_page_bos.html ogg_page_checksum_set.html ogg_page_continued.html ogg_page_eos.html ogg_page_granulepos.html ogg_page_packets.html ogg_page_pageno.html ogg_page_serialno.html ogg_page_version.html ogg_stream_check.html ogg_stream_clear.html ogg_stream_destroy.html ogg_stream_eos.html ogg_stream_flush.html ogg_stream_flush_fill.html ogg_stream_init.html ogg_stream_iovecin.html ogg_stream_packetin.html ogg_stream_packetout.html ogg_stream_packetpeek.html ogg_stream_pagein.html ogg_stream_pageout.html ogg_stream_pageout_fill.html ogg_stream_reset.html ogg_stream_reset_serialno.html ogg_stream_state.html ogg_sync_buffer.html ogg_sync_check.html ogg_sync_clear.html ogg_sync_destroy.html '/src/libogg-install/share/doc/libogg/libogg'
+ /usr/bin/install -c -m 644 ogg_sync_init.html ogg_sync_pageout.html ogg_sync_pageseek.html ogg_sync_reset.html ogg_sync_state.html ogg_sync_wrote.html oggpack_adv.html oggpack_adv1.html oggpack_bits.html oggpack_buffer.html oggpack_bytes.html oggpack_get_buffer.html oggpack_look.html oggpack_look1.html oggpack_read.html oggpack_read1.html oggpack_readinit.html oggpack_reset.html oggpack_write.html oggpack_writealign.html oggpack_writecheck.html oggpack_writeclear.html oggpack_writecopy.html oggpack_writeinit.html oggpack_writetrunc.html overview.html reference.html style.css '/src/libogg-install/share/doc/libogg/libogg'
+make[3]: Leaving directory '/src/ogg/doc/libogg'
+make[2]: Leaving directory '/src/ogg/doc/libogg'
+make[2]: Entering directory '/src/ogg/doc'
+make[3]: Entering directory '/src/ogg/doc'
+make[3]: Nothing to be done for 'install-exec-am'.
+ /usr/bin/mkdir -p '/src/libogg-install/share/doc/libogg'
+ /usr/bin/install -c -m 644 framing.html index.html oggstream.html ogg-multiplex.html fish_xiph_org.png multiplex1.png packets.png pages.png stream.png vorbisword2.png white-ogg.png white-xifish.png rfc3533.txt rfc5334.txt skeleton.html '/src/libogg-install/share/doc/libogg'
+make[3]: Leaving directory '/src/ogg/doc'
+make[2]: Leaving directory '/src/ogg/doc'
+make[1]: Leaving directory '/src/ogg/doc'
+make[1]: Entering directory '/src/ogg'
+make[2]: Entering directory '/src/ogg'
+make[2]: Nothing to be done for 'install-exec-am'.
+ /usr/bin/mkdir -p '/src/libogg-install/share/aclocal'
+ /usr/bin/install -c -m 644 ogg.m4 '/src/libogg-install/share/aclocal'
+ /usr/bin/mkdir -p '/src/libogg-install/lib/pkgconfig'
+ /usr/bin/install -c -m 644 ogg.pc '/src/libogg-install/lib/pkgconfig'
+make[2]: Leaving directory '/src/ogg'
+make[1]: Leaving directory '/src/ogg'
++ cd /src/flac/
++ ./autogen.sh
+Using symlinks to autotool files (use --no-symlinks to copy instead).
+Updating build configuration files for FLAC, please wait....
+libtoolize: putting auxiliary files in '.'.
+libtoolize: linking file './ltmain.sh'
+libtoolize: putting macros in AC_CONFIG_MACRO_DIRS, 'm4'.
+libtoolize: linking file 'm4/libtool.m4'
+libtoolize: linking file 'm4/ltoptions.m4'
+libtoolize: linking file 'm4/ltsugar.m4'
+libtoolize: linking file 'm4/ltversion.m4'
+libtoolize: linking file 'm4/lt~obsolete.m4'
+configure.ac:36: installing './ar-lib'
+configure.ac:34: installing './compile'
+configure.ac:37: installing './config.guess'
+configure.ac:37: installing './config.sub'
+configure.ac:27: installing './install-sh'
+configure.ac:27: installing './missing'
+examples/c/decode/file/Makefile.am: installing './depcomp'
++ [[ -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FORTIFY_SOURCE=0 = *sanitize=memory* ]]
++ LD_LIBRARY_PATH=/src/libogg-install/lib
++ ./configure --with-ogg=/src/libogg-install --enable-static --disable-shared --disable-oggtest --disable-examples --disable-programs --disable-xmms-plugin --enable-oss-fuzzers
+configure: WARNING: unrecognized options: --disable-xmms-plugin
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for a thread-safe mkdir -p... /usr/bin/mkdir -p
+checking for gawk... no
+checking for mawk... mawk
+checking whether make sets $(MAKE)... yes
+checking whether make supports nested variables... yes
+checking how to create a pax tar archive... gnutar
+checking whether make supports nested variables... (cached) yes
+checking whether to enable debugging... no
+checking for gcc... /usr/local/bin/clang-jcc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether /usr/local/bin/clang-jcc accepts -g... yes
+checking for /usr/local/bin/clang-jcc option to accept ISO C89... none needed
+checking whether /usr/local/bin/clang-jcc understands -c and -o together... yes
+checking whether make supports the include directive... yes (GNU style)
+checking dependency style of /usr/local/bin/clang-jcc... gcc3
+checking how to run the C preprocessor... /usr/local/bin/clang-jcc -E
+checking for grep that handles long lines and -e... /usr/bin/grep
+checking for egrep... /usr/bin/grep -E
+checking for ANSI C header files... yes
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for memory.h... yes
+checking for strings.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for unistd.h... yes
+checking minix/config.h usability... no
+checking minix/config.h presence... no
+checking for minix/config.h... no
+checking whether it is safe to define __EXTENSIONS__... yes
+checking for ar... ar
+checking the archiver (ar) interface... ar
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... x86_64-pc-linux-gnu
+checking how to print strings... printf
+checking for a sed that does not truncate output... /usr/bin/sed
+checking for fgrep... /usr/bin/grep -F
+checking for ld used by /usr/local/bin/clang-jcc... /usr/bin/ld
+checking if the linker (/usr/bin/ld) is GNU ld... yes
+checking for BSD- or MS-compatible name lister (nm)... /usr/bin/nm -B
+checking the name lister (/usr/bin/nm -B) interface... BSD nm
+checking whether ln -s works... yes
+checking the maximum length of command line arguments... 1572864
+checking how to convert x86_64-pc-linux-gnu file names to x86_64-pc-linux-gnu format... func_convert_file_noop
+checking how to convert x86_64-pc-linux-gnu file names to toolchain format... func_convert_file_noop
+checking for /usr/bin/ld option to reload object files... -r
+checking for objdump... objdump
+checking how to recognize dependent libraries... pass_all
+checking for dlltool... no
+checking how to associate runtime and link libraries... printf %s\n
+checking for archiver @FILE support... @
+checking for strip... strip
+checking for ranlib... ranlib
+checking command to parse /usr/bin/nm -B output from /usr/local/bin/clang-jcc object... ok
+checking for sysroot... no
+checking for a working dd... /usr/bin/dd
+checking how to truncate binary pipes... /usr/bin/dd bs=4096 count=1
+checking for mt... no
+checking if : is a manifest tool... no
+checking for dlfcn.h... yes
+checking for objdir... .libs
+checking if /usr/local/bin/clang-jcc supports -fno-rtti -fno-exceptions... yes
+checking for /usr/local/bin/clang-jcc option to produce PIC... -fPIC -DPIC
+checking if /usr/local/bin/clang-jcc PIC flag -fPIC -DPIC works... yes
+checking if /usr/local/bin/clang-jcc static flag -static works... no
+checking if /usr/local/bin/clang-jcc supports -c -o file.o... yes
+checking if /usr/local/bin/clang-jcc supports -c -o file.o... (cached) yes
+checking whether the /usr/local/bin/clang-jcc linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking dynamic linker characteristics... GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... no
+checking whether to build static libraries... yes
+checking dependency style of /usr/local/bin/clang-jcc... gcc3
+checking whether we are using the GNU C++ compiler... yes
+checking whether /usr/local/bin/clang++-jcc accepts -g... yes
+checking dependency style of /usr/local/bin/clang++-jcc... gcc3
+checking how to run the C++ preprocessor... /usr/local/bin/clang++-jcc -E
+checking for ld used by /usr/local/bin/clang++-jcc... /usr/bin/ld -m elf_x86_64
+checking if the linker (/usr/bin/ld -m elf_x86_64) is GNU ld... yes
+checking whether the /usr/local/bin/clang++-jcc linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking for /usr/local/bin/clang++-jcc option to produce PIC... -fPIC -DPIC
+checking if /usr/local/bin/clang++-jcc PIC flag -fPIC -DPIC works... yes
+checking if /usr/local/bin/clang++-jcc static flag -static works... no
+checking if /usr/local/bin/clang++-jcc supports -c -o file.o... yes
+checking if /usr/local/bin/clang++-jcc supports -c -o file.o... (cached) yes
+checking whether the /usr/local/bin/clang++-jcc linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking dynamic linker characteristics... (cached) GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking whether we are using the CLANG C compiler... yes
+checking whether make sets $(MAKE)... (cached) yes
+checking for special C compiler options needed for large files... no
+checking for _FILE_OFFSET_BITS value needed for large files... no
+checking for _LARGEFILE_SOURCE value needed for large files... no
+checking size of off_t... 8
+checking size of void*... 8
+checking for library containing lround... none required
+checking for inline... inline
+checking for typeof syntax and keyword spelling... typeof
+checking for stdint.h... (cached) yes
+checking stdbool.h usability... yes
+checking stdbool.h presence... yes
+checking for stdbool.h... yes
+checking for inttypes.h... (cached) yes
+checking byteswap.h usability... yes
+checking byteswap.h presence... yes
+checking for byteswap.h... yes
+checking sys/auxv.h usability... yes
+checking sys/auxv.h presence... yes
+checking for sys/auxv.h... yes
+checking sys/param.h usability... yes
+checking sys/param.h presence... yes
+checking for sys/param.h... yes
+checking sys/ioctl.h usability... yes
+checking sys/ioctl.h presence... yes
+checking for sys/ioctl.h... yes
+checking termios.h usability... yes
+checking termios.h presence... yes
+checking for termios.h... yes
+checking x86intrin.h usability... yes
+checking x86intrin.h presence... yes
+checking for x86intrin.h... yes
+checking cpuid.h usability... yes
+checking cpuid.h presence... yes
+checking for cpuid.h... yes
+checking arm_neon.h usability... no
+checking arm_neon.h presence... no
+checking for arm_neon.h... no
+checking semaphore.h usability... yes
+checking semaphore.h presence... yes
+checking for semaphore.h... yes
+checking for bswap32 intrinsic... yes
+checking for bswap16 intrinsic... yes
+checking whether byte ordering is bigendian... no
+checking for getauxval... yes
+checking for getopt_long... yes
+checking size of void*... (cached) 8
+checking for doxygen... no
+checking for Ogg... yes
+checking whether /usr/local/bin/clang-jcc is Clang... yes
+checking whether pthreads work with "-pthread" and "-lpthread"... yes
+checking whether Clang needs flag to prevent "argument unused" warning when linking with -pthread... no
+checking for joinable pthread attribute... PTHREAD_CREATE_JOINABLE
+checking whether more special flags are required for pthreads... no
+checking for PTHREAD_PRIO_INHERIT... yes
+checking for ld used by /usr/local/bin/clang-jcc... /usr/bin/ld -m elf_x86_64
+checking if the linker (/usr/bin/ld -m elf_x86_64) is GNU ld... yes
+checking for shared library run path origin... done
+checking for iconv... yes
+checking for working iconv... yes
+checking for iconv declaration... 
+         extern size_t iconv (iconv_t cd, char * *inbuf, size_t *inbytesleft, char * *outbuf, size_t *outbytesleft);
+checking for nl_langinfo and CODESET... yes
+checking for pandoc... no
+checking for clock_gettime in -lrt... yes
+checking if /usr/local/bin/clang-jcc accepts -Wdeclaration-after-statement... yes
+checking if /usr/local/bin/clang++-jcc accepts -Weffc++... yes
+checking for git... yes
+checking whether C compiler accepts -fassociative-math -fno-signed-zeros -fno-trapping-math -freciprocal-math... yes
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating src/Makefile
+config.status: creating src/libFLAC/Makefile
+config.status: creating src/libFLAC/flac.pc
+config.status: creating src/libFLAC/include/Makefile
+config.status: creating src/libFLAC/include/private/Makefile
+config.status: creating src/libFLAC/include/protected/Makefile
+config.status: creating src/libFLAC++/Makefile
+config.status: creating src/libFLAC++/flac++.pc
+config.status: creating src/flac/Makefile
+config.status: creating src/metaflac/Makefile
+config.status: creating src/share/Makefile
+config.status: creating src/test_grabbag/Makefile
+config.status: creating src/test_grabbag/cuesheet/Makefile
+config.status: creating src/test_grabbag/picture/Makefile
+config.status: creating src/test_libs_common/Makefile
+config.status: creating src/test_libFLAC/Makefile
+config.status: creating src/test_libFLAC++/Makefile
+config.status: creating src/test_seeking/Makefile
+config.status: creating src/test_streams/Makefile
+config.status: creating src/utils/Makefile
+config.status: creating src/utils/flacdiff/Makefile
+config.status: creating src/utils/flactimer/Makefile
+config.status: creating examples/Makefile
+config.status: creating examples/c/Makefile
+config.status: creating examples/c/decode/Makefile
+config.status: creating examples/c/decode/file/Makefile
+config.status: creating examples/c/encode/Makefile
+config.status: creating examples/c/encode/file/Makefile
+config.status: creating examples/cpp/Makefile
+config.status: creating examples/cpp/decode/Makefile
+config.status: creating examples/cpp/decode/file/Makefile
+config.status: creating examples/cpp/encode/Makefile
+config.status: creating examples/cpp/encode/file/Makefile
+config.status: creating include/Makefile
+config.status: creating include/FLAC/Makefile
+config.status: creating include/FLAC++/Makefile
+config.status: creating include/share/Makefile
+config.status: creating include/share/grabbag/Makefile
+config.status: creating include/test_libs_common/Makefile
+config.status: creating doc/Doxyfile
+config.status: creating doc/Makefile
+config.status: creating doc/images/Makefile
+config.status: creating m4/Makefile
+config.status: creating man/Makefile
+config.status: creating test/common.sh
+config.status: creating test/Makefile
+config.status: creating test/cuesheets/Makefile
+config.status: creating test/foreign-metadata-test-files/Makefile
+config.status: creating test/flac-to-flac-metadata-test-files/Makefile
+config.status: creating test/metaflac-test-files/Makefile
+config.status: creating test/pictures/Makefile
+config.status: creating microbench/Makefile
+config.status: creating oss-fuzz/Makefile
+config.status: creating config.h
+config.status: executing depfiles commands
+config.status: executing libtool commands
+configure: WARNING: unrecognized options: --disable-xmms-plugin
+
+-=-=-=-=-=-=-=-=-=-= Configuration Complete =-=-=-=-=-=-=-=-=-=-
+
+  Configuration summary :
+
+    FLAC version : ............................ 1.4.3
+
+    Host CPU : ................................ x86_64
+    Host Vendor : ............................. pc
+    Host OS : ................................. linux-gnu
+
+
+    Compiler is GCC : ......................... no
+    Compiler is Clang : ....................... yes
+    Asm optimizations : ....................... yes
+    Ogg/FLAC support : ........................ yes
+    Multithreading   : ........................ yes
+    Stack protector  : ........................ no
+    Fuzzing support (Clang only) : ............ yes
+
+++ nproc
++ make -j32
+make  all-recursive
+make[1]: Entering directory '/src/flac'
+Making all in doc
+make[2]: Entering directory '/src/flac/doc'
+Making all in .
+make[3]: Entering directory '/src/flac/doc'
+make[3]: Nothing to be done for 'all-am'.
+make[3]: Leaving directory '/src/flac/doc'
+Making all in images
+make[3]: Entering directory '/src/flac/doc/images'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/src/flac/doc/images'
+make[2]: Leaving directory '/src/flac/doc'
+Making all in include
+make[2]: Entering directory '/src/flac/include'
+Making all in FLAC
+make[3]: Entering directory '/src/flac/include/FLAC'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/src/flac/include/FLAC'
+Making all in FLAC++
+make[3]: Entering directory '/src/flac/include/FLAC++'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/src/flac/include/FLAC++'
+Making all in share
+make[3]: Entering directory '/src/flac/include/share'
+Making all in grabbag
+make[4]: Entering directory '/src/flac/include/share/grabbag'
+make[4]: Nothing to be done for 'all'.
+make[4]: Leaving directory '/src/flac/include/share/grabbag'
+make[4]: Entering directory '/src/flac/include/share'
+make[4]: Nothing to be done for 'all-am'.
+make[4]: Leaving directory '/src/flac/include/share'
+make[3]: Leaving directory '/src/flac/include/share'
+Making all in test_libs_common
+make[3]: Entering directory '/src/flac/include/test_libs_common'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/src/flac/include/test_libs_common'
+make[3]: Entering directory '/src/flac/include'
+make[3]: Nothing to be done for 'all-am'.
+make[3]: Leaving directory '/src/flac/include'
+make[2]: Leaving directory '/src/flac/include'
+Making all in m4
+make[2]: Entering directory '/src/flac/m4'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/src/flac/m4'
+Making all in man
+make[2]: Entering directory '/src/flac/man'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/src/flac/man'
+Making all in src
+make[2]: Entering directory '/src/flac/src'
+Making all in libFLAC
+make[3]: Entering directory '/src/flac/src/libFLAC'
+Making all in include
+make[4]: Entering directory '/src/flac/src/libFLAC/include'
+Making all in private
+make[5]: Entering directory '/src/flac/src/libFLAC/include/private'
+make[5]: Nothing to be done for 'all'.
+make[5]: Leaving directory '/src/flac/src/libFLAC/include/private'
+Making all in protected
+make[5]: Entering directory '/src/flac/src/libFLAC/include/protected'
+make[5]: Nothing to be done for 'all'.
+make[5]: Leaving directory '/src/flac/src/libFLAC/include/protected'
+make[5]: Entering directory '/src/flac/src/libFLAC/include'
+make[5]: Nothing to be done for 'all-am'.
+make[5]: Leaving directory '/src/flac/src/libFLAC/include'
+make[4]: Leaving directory '/src/flac/src/libFLAC/include'
+Making all in .
+make[4]: Entering directory '/src/flac/src/libFLAC'
+  CC       bitmath.lo
+  CC       bitreader.lo
+  CC       bitwriter.lo
+  CC       cpu.lo
+  CC       crc.lo
+  CC       fixed.lo
+  CC       fixed_intrin_sse2.lo
+  CC       fixed_intrin_ssse3.lo
+  CC       fixed_intrin_sse42.lo
+  CC       fixed_intrin_avx2.lo
+  CC       float.lo
+  CC       format.lo
+  CC       lpc.lo
+  CC       lpc_intrin_sse2.lo
+  CC       lpc_intrin_sse41.lo
+  CC       lpc_intrin_avx2.lo
+  CC       lpc_intrin_fma.lo
+  CC       lpc_intrin_neon.lo
+  CC       md5.lo
+  CC       memory.lo
+  CC       metadata_iterators.lo
+  CC       metadata_object.lo
+  CC       stream_decoder.lo
+  CC       stream_encoder.lo
+  CC       stream_encoder_intrin_sse2.lo
+  CC       stream_encoder_intrin_ssse3.lo
+  CC       stream_encoder_intrin_avx2.lo
+  CC       stream_encoder_framing.lo
+  CC       window.lo
+  CC       ogg_decoder_aspect.lo
+  CC       ogg_encoder_aspect.lo
+  CC       ogg_helper.lo
+  CC       ogg_mapping.lo
+  CCLD     libFLAC.la
+  CCLD     libFLAC-static.la
+make[4]: Leaving directory '/src/flac/src/libFLAC'
+make[3]: Leaving directory '/src/flac/src/libFLAC'
+Making all in share
+make[3]: Entering directory '/src/flac/src/share'
+  CC       getopt/getopt.lo
+  CC       getopt/getopt1.lo
+  CC       grabbag/alloc.lo
+  CC       grabbag/cuesheet.lo
+  CC       grabbag/file.lo
+  CC       grabbag/picture.lo
+  CC       grabbag/replaygain.lo
+  CC       grabbag/seektable.lo
+  CC       grabbag/snprintf.lo
+  CC       utf8/charset.lo
+  CC       utf8/iconvert.lo
+  CC       utf8/utf8.lo
+  CC       replaygain_analysis/replaygain_analysis.lo
+  CC       replaygain_synthesis/libreplaygain_synthesis_la-replaygain_synthesis.lo
+  CCLD     utf8/libutf8.la
+  CCLD     replaygain_synthesis/libreplaygain_synthesis.la
+  CCLD     getopt/libgetopt.la
+  CCLD     replaygain_analysis/libreplaygain_analysis.la
+  CCLD     grabbag/libgrabbag.la
+make[3]: Leaving directory '/src/flac/src/share'
+Making all in test_grabbag
+make[3]: Entering directory '/src/flac/src/test_grabbag'
+Making all in cuesheet
+make[4]: Entering directory '/src/flac/src/test_grabbag/cuesheet'
+make[4]: Nothing to be done for 'all'.
+make[4]: Leaving directory '/src/flac/src/test_grabbag/cuesheet'
+Making all in picture
+make[4]: Entering directory '/src/flac/src/test_grabbag/picture'
+make[4]: Nothing to be done for 'all'.
+make[4]: Leaving directory '/src/flac/src/test_grabbag/picture'
+make[4]: Entering directory '/src/flac/src/test_grabbag'
+make[4]: Nothing to be done for 'all-am'.
+make[4]: Leaving directory '/src/flac/src/test_grabbag'
+make[3]: Leaving directory '/src/flac/src/test_grabbag'
+Making all in test_libs_common
+make[3]: Entering directory '/src/flac/src/test_libs_common'
+  CC       file_utils_flac.lo
+  CC       metadata_utils.lo
+  CCLD     libtest_libs_common.la
+make[3]: Leaving directory '/src/flac/src/test_libs_common'
+Making all in test_libFLAC
+make[3]: Entering directory '/src/flac/src/test_libFLAC'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/src/flac/src/test_libFLAC'
+Making all in test_seeking
+make[3]: Entering directory '/src/flac/src/test_seeking'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/src/flac/src/test_seeking'
+Making all in test_streams
+make[3]: Entering directory '/src/flac/src/test_streams'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/src/flac/src/test_streams'
+Making all in utils
+make[3]: Entering directory '/src/flac/src/utils'
+Making all in flacdiff
+make[4]: Entering directory '/src/flac/src/utils/flacdiff'
+make[4]: Nothing to be done for 'all'.
+make[4]: Leaving directory '/src/flac/src/utils/flacdiff'
+Making all in flactimer
+make[4]: Entering directory '/src/flac/src/utils/flactimer'
+make[4]: Nothing to be done for 'all'.
+make[4]: Leaving directory '/src/flac/src/utils/flactimer'
+make[4]: Entering directory '/src/flac/src/utils'
+make[4]: Nothing to be done for 'all-am'.
+make[4]: Leaving directory '/src/flac/src/utils'
+make[3]: Leaving directory '/src/flac/src/utils'
+Making all in libFLAC++
+make[3]: Entering directory '/src/flac/src/libFLAC++'
+  CXX      metadata.lo
+  CXX      stream_decoder.lo
+  CXX      stream_encoder.lo
+  CXXLD    libFLAC++.la
+  CXXLD    libFLAC++-static.la
+copying selected object files to avoid basename conflicts...
+make[3]: Leaving directory '/src/flac/src/libFLAC++'
+Making all in test_libFLAC++
+make[3]: Entering directory '/src/flac/src/test_libFLAC++'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/src/flac/src/test_libFLAC++'
+make[3]: Entering directory '/src/flac/src'
+make[3]: Nothing to be done for 'all-am'.
+make[3]: Leaving directory '/src/flac/src'
+make[2]: Leaving directory '/src/flac/src'
+Making all in test
+make[2]: Entering directory '/src/flac/test'
+Making all in cuesheets
+make[3]: Entering directory '/src/flac/test/cuesheets'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/src/flac/test/cuesheets'
+Making all in foreign-metadata-test-files
+make[3]: Entering directory '/src/flac/test/foreign-metadata-test-files'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/src/flac/test/foreign-metadata-test-files'
+Making all in flac-to-flac-metadata-test-files
+make[3]: Entering directory '/src/flac/test/flac-to-flac-metadata-test-files'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/src/flac/test/flac-to-flac-metadata-test-files'
+Making all in metaflac-test-files
+make[3]: Entering directory '/src/flac/test/metaflac-test-files'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/src/flac/test/metaflac-test-files'
+Making all in pictures
+make[3]: Entering directory '/src/flac/test/pictures'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/src/flac/test/pictures'
+make[3]: Entering directory '/src/flac/test'
+make[3]: Nothing to be done for 'all-am'.
+make[3]: Leaving directory '/src/flac/test'
+make[2]: Leaving directory '/src/flac/test'
+Making all in microbench
+make[2]: Entering directory '/src/flac/microbench'
+  CC       benchmark_residual.o
+  CC       util.o
+  CCLD     benchmark_residual
+make[2]: Leaving directory '/src/flac/microbench'
+Making all in oss-fuzz
+make[2]: Entering directory '/src/flac/oss-fuzz'
+  CXX      encoder.o
+  CXX      encoder_v2.o
+  CXX      decoder.o
+  CXX      seek.o
+  CXX      metadata.o
+  CXX      reencoder.o
+  CXX      empty.o
+  CC       tool_flac.o
+  CC       tool_metaflac.o
+  CC       ../src/flac/analyze.o
+  CC       ../src/flac/decode.o
+  CC       ../src/flac/foreign_metadata.o
+  CC       ../src/flac/encode.o
+  CC       ../src/flac/utils.o
+  CC       ../src/flac/local_string_utils.o
+  CC       ../src/flac/vorbiscomment.o
+  CC       ../src/metaflac/operations.o
+  CC       ../src/metaflac/operations_shorthand_cuesheet.o
+  CC       ../src/metaflac/operations_shorthand_picture.o
+  CC       ../src/metaflac/operations_shorthand_seektable.o
+  CC       ../src/metaflac/operations_shorthand_streaminfo.o
+  CC       ../src/metaflac/operations_shorthand_vorbiscomment.o
+  CC       ../src/metaflac/options.o
+  CC       ../src/metaflac/usage.o
+  CC       ../src/metaflac/utils.o
+seek.cc:12:89: error: use of undeclared identifier 'read_callback'
+  FLAC__StreamDecoderInitStatus init_status = FLAC__stream_decoder_init_stream(decoder, read_callback, seek_callback, tell_callback, length_callback, eof_callback, write_callback, metadata_callback, error_callback, client_data);
+                                                                                        ^
+seek.cc:12:104: error: use of undeclared identifier 'seek_callback'
+  FLAC__StreamDecoderInitStatus init_status = FLAC__stream_decoder_init_stream(decoder, read_callback, seek_callback, tell_callback, length_callback, eof_callback, write_callback, metadata_callback, error_callback, client_data);
+                                                                                                       ^
+seek.cc:12:119: error: use of undeclared identifier 'tell_callback'
+  FLAC__StreamDecoderInitStatus init_status = FLAC__stream_decoder_init_stream(decoder, read_callback, seek_callback, tell_callback, length_callback, eof_callback, write_callback, metadata_callback, error_callback, client_data);
+                                                                                                                      ^
+seek.cc:12:134: error: use of undeclared identifier 'length_callback'
+  FLAC__StreamDecoderInitStatus init_status = FLAC__stream_decoder_init_stream(decoder, read_callback, seek_callback, tell_callback, length_callback, eof_callback, write_callback, metadata_callback, error_callback, client_data);
+                                                                                                                                     ^
+seek.cc:12:151: error: use of undeclared identifier 'eof_callback'
+  FLAC__StreamDecoderInitStatus init_status = FLAC__stream_decoder_init_stream(decoder, read_callback, seek_callback, tell_callback, length_callback, eof_callback, write_callback, metadata_callback, error_callback, client_data);
+                                                                                                                                                      ^
+seek.cc:12:165: error: use of undeclared identifier 'write_callback'
+  FLAC__StreamDecoderInitStatus init_status = FLAC__stream_decoder_init_stream(decoder, read_callback, seek_callback, tell_callback, length_callback, eof_callback, write_callback, metadata_callback, error_callback, client_data);
+                                                                                                                                                                    ^
+seek.cc:12:181: error: use of undeclared identifier 'metadata_callback'
+  FLAC__StreamDecoderInitStatus init_status = FLAC__stream_decoder_init_stream(decoder, read_callback, seek_callback, tell_callback, length_callback, eof_callback, write_callback, metadata_callback, error_callback, client_data);
+                                                                                                                                                                                    ^
+seek.cc:12:200: error: use of undeclared identifier 'error_callback'
+  FLAC__StreamDecoderInitStatus init_status = FLAC__stream_decoder_init_stream(decoder, read_callback, seek_callback, tell_callback, length_callback, eof_callback, write_callback, metadata_callback, error_callback, client_data);
+                                                                                                                                                                                                       ^
+seek.cc:12:216: error: use of undeclared identifier 'client_data'
+  FLAC__StreamDecoderInitStatus init_status = FLAC__stream_decoder_init_stream(decoder, read_callback, seek_callback, tell_callback, length_callback, eof_callback, write_callback, metadata_callback, error_callback, client_data);
+                                                                                                                                                                                                                       ^
+seek.cc:18:80: error: use of undeclared identifier 'read_metadata_callback'
+  FLAC__bool metadata_read = FLAC__metadata_chain_read_with_callbacks(decoder, read_metadata_callback, tell_metadata_callback, length_metadata_callback, eof_metadata_callback, client_data);
+                                                                               ^
+seek.cc:18:104: error: use of undeclared identifier 'tell_metadata_callback'
+  FLAC__bool metadata_read = FLAC__metadata_chain_read_with_callbacks(decoder, read_metadata_callback, tell_metadata_callback, length_metadata_callback, eof_metadata_callback, client_data);
+                                                                                                       ^
+seek.cc:18:128: error: use of undeclared identifier 'length_metadata_callback'
+  FLAC__bool metadata_read = FLAC__metadata_chain_read_with_callbacks(decoder, read_metadata_callback, tell_metadata_callback, length_metadata_callback, eof_metadata_callback, client_data);
+                                                                                                                               ^
+seek.cc:18:154: error: use of undeclared identifier 'eof_metadata_callback'
+  FLAC__bool metadata_read = FLAC__metadata_chain_read_with_callbacks(decoder, read_metadata_callback, tell_metadata_callback, length_metadata_callback, eof_metadata_callback, client_data);
+                                                                                                                                                         ^
+seek.cc:18:177: error: use of undeclared identifier 'client_data'
+  FLAC__bool metadata_read = FLAC__metadata_chain_read_with_callbacks(decoder, read_metadata_callback, tell_metadata_callback, length_metadata_callback, eof_metadata_callback, client_data);
+                                                                                                                                                                                ^
+14 errors generated.
+make[2]: *** [Makefile:746: seek.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+make[2]: Leaving directory '/src/flac/oss-fuzz'
+make[1]: *** [Makefile:495: all-recursive] Error 1
+make[1]: Leaving directory '/src/flac'
+make: *** [Makefile:427: all] Error 2

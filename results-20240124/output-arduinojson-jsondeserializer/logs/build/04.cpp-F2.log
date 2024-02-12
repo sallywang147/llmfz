@@ -1,0 +1,78 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ cd extras/fuzzing
++ make
+/usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -I../../src -DARDUINOJSON_DEBUG=1 -std=c++11 json_fuzzer.cpp -o/workspace/out/libfuzzer-address-x86_64/json_fuzzer -fsanitize=fuzzer
+zip -j /workspace/out/libfuzzer-address-x86_64/json_fuzzer_seed_corpus.zip json_seed_corpus/EmptyObject.json json_seed_corpus/Strings.json json_seed_corpus/Comments.json json_seed_corpus/OpenWeatherMap.json json_seed_corpus/EmptyArray.json json_seed_corpus/ExcessiveNesting.json json_seed_corpus/IntegerOverflow.json json_seed_corpus/WeatherUnderground.json json_seed_corpus/Numbers.json
+  adding: EmptyObject.json (stored 0%)
+  adding: Strings.json (deflated 40%)
+  adding: Comments.json (deflated 65%)
+  adding: OpenWeatherMap.json (deflated 57%)
+  adding: EmptyArray.json (stored 0%)
+  adding: ExcessiveNesting.json (deflated 64%)
+  adding: IntegerOverflow.json (deflated 25%)
+  adding: WeatherUnderground.json (deflated 64%)
+  adding: Numbers.json (deflated 61%)
+/usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -I../../src -DARDUINOJSON_DEBUG=1 -std=c++11 msgpack_fuzzer.cpp -o/workspace/out/libfuzzer-address-x86_64/msgpack_fuzzer -fsanitize=fuzzer
+In file included from msgpack_fuzzer.cpp:5:
+../../src/ArduinoJson/compatibility.hpp:62:1: error: templates must have C++ linkage
+template <size_t N>
+^~~~~~~~~~~~~~~~~~~
+msgpack_fuzzer.cpp:3:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from msgpack_fuzzer.cpp:5:
+../../src/ArduinoJson/compatibility.hpp:74:1: error: templates must have C++ linkage
+template <typename TAllocator>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+msgpack_fuzzer.cpp:3:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from msgpack_fuzzer.cpp:5:
+../../src/ArduinoJson/compatibility.hpp:106:1: error: templates must have C++ linkage
+template <typename TAllocator>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+msgpack_fuzzer.cpp:3:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from msgpack_fuzzer.cpp:5:
+../../src/ArduinoJson/compatibility.hpp:125:58: error: redefinition of 'DynamicJsonDocument'
+class ARDUINOJSON_DEPRECATED("use JsonDocument instead") DynamicJsonDocument
+                                                         ^
+../../src/ArduinoJson.hpp:53:10: note: '../../src/ArduinoJson/compatibility.hpp' included multiple times, additional include site here
+#include "ArduinoJson/compatibility.hpp"
+         ^
+msgpack_fuzzer.cpp:5:10: note: '../../src/ArduinoJson/compatibility.hpp' included multiple times, additional include site here
+#include <ArduinoJson/compatibility.hpp>
+         ^
+../../src/ArduinoJson/compatibility.hpp:125:58: note: unguarded header; consider using #ifdef guards or #pragma once
+class ARDUINOJSON_DEPRECATED("use JsonDocument instead") DynamicJsonDocument
+                                                         ^
+In file included from msgpack_fuzzer.cpp:5:
+../../src/ArduinoJson/compatibility.hpp:140:30: error: redefinition of 'createNestedObject'
+inline JsonObject JsonArray::createNestedObject() const {
+                             ^
+../../src/ArduinoJson/compatibility.hpp:140:30: note: previous definition is here
+inline JsonObject JsonArray::createNestedObject() const {
+                             ^
+msgpack_fuzzer.cpp:10:24: error: use of class template 'ArduinoJson::detail::BoundedReader' requires template arguments
+  ArduinoJson::detail::BoundedReader reader(data, size);
+                       ^
+../../src/ArduinoJson/Deserialization/Reader.hpp:35:8: note: template is declared here
+struct BoundedReader {
+       ^
+msgpack_fuzzer.cpp:11:71: error: use of class template 'ArduinoJson::detail::BoundedReader' requires template arguments
+  ArduinoJson::V702HB4::detail::JsonDeserializer<ArduinoJson::detail::BoundedReader> deserializer(reader);
+                                                                      ^
+../../src/ArduinoJson/Deserialization/Reader.hpp:35:8: note: template is declared here
+struct BoundedReader {
+       ^
+7 errors generated.
+make: *** [Makefile:14: /workspace/out/libfuzzer-address-x86_64/msgpack_fuzzer] Error 1

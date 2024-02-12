@@ -1,0 +1,60 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "aflHarness.h"
+#include "geo.h"
+#include "geo_loop.h"
+#include "geo_types.h"
+
+typedef struct {
+    GeoLoop *geoloop;
+    BBox loopBBox;
+    CellBoundary boundary;
+    BBox boundaryBBox;
+} inputArgs;
+
+extern "C" {
+#include "geo.h"
+#include "geo_loop.h"
+#include "geo_types.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+    if (size < sizeof(inputArgs)) {
+        return 0;
+    }
+    const inputArgs *args = (const inputArgs *)data;
+
+    bool result = cellBoundaryCrossesGeoLoop(args->geoloop, &args->loopBBox,
+                                           &args->boundary, &args->boundaryBBox);
+
+    return 0;
+}
+
+AFL_HARNESS_MAIN(sizeof(inputArgs));
+</code>
+
+The code has the following build issues:
+<error>
+/src/h3//src/apps/fuzzers/fuzzerResolutions.c:2:10: fatal error: 'geo.h' file not found
+#include "geo.h"
+         ^~~~~~~
+1 error generated.
+
+Fix failure
+/src/h3//src/apps/fuzzers/fuzzerResolutions.cpp:2:10: fatal error: 'geo.h' file not found
+#include "geo.h"
+         ^~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

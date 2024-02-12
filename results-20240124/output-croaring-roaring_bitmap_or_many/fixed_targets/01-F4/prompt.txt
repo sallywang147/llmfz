@@ -1,0 +1,54 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdio.h>
+#include <stdlib.h>
+#include "roaring/roaring.h"
+
+extern "C" {
+#include "roaring/roaring_bitmap.h"
+}
+
+int main(int argc, char **argv) {
+  roaring_bitmap_t *bitmap = roaring_bitmap_create();
+  roaring_bitmap_add(bitmap, 1);
+  roaring_bitmap_add(bitmap, 2);
+  roaring_bitmap_add(bitmap, 3);
+
+  roaring_bitmap_t *bitmap2 = roaring_bitmap_create();
+  roaring_bitmap_add(bitmap2, 3);
+  roaring_bitmap_add(bitmap2, 4);
+  roaring_bitmap_add(bitmap2, 5);
+
+  roaring_bitmap_or_many(bitmap, 2, bitmap2, NULL);
+
+  for (uint32_t i = 0; i < roaring_bitmap_get_cardinality(bitmap); i++) {
+    printf("%d ", roaring_bitmap_inspect(bitmap, i));
+  }
+  printf("\n");
+
+  roaring_bitmap_free(bitmap);
+  roaring_bitmap_free(bitmap2);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/croaring_fuzzer_cc.cc:6:10: fatal error: 'roaring/roaring_bitmap.h' file not found
+#include "roaring/roaring_bitmap.h"
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,1 @@
+error: undefined reference to `draco::DecoderBuffer::Init(unsigned char const*, unsigned long)'

@@ -1,0 +1,1 @@
+error: undefined reference to '_scan_entity'

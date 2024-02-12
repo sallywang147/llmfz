@@ -1,0 +1,61 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <fmt/core.h>
+
+#include <cstdint>
+
+#include "fuzzer-common.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  // Always use a fixed location of the data.
+  static_assert(sizeof(uint64_t) <= fixed_size, "fixed size is too small");
+  if (size <= fixed_size + 1) return 0;
+
+  const uint64_t args = assign_from_buf<uint64_t>(data);
+  data += fixed_size;
+  size -= fixed_size;
+
+  // data is already allocated separately in libFuzzer so reading past the end
+  // will most likely be detected anyway.
+  const auto format_str = fmt::string_view(as_chars(data), size);
+
+  fmt::vprintln(stdout, format_str, args);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/fmt/test/fuzzing/chrono-timepoint.cc:20:37: error: no viable conversion from 'const uint64_t' (aka 'const unsigned long') to 'fmt::format_args' (aka 'basic_format_args<fmt::context>')
+  fmt::vprintln(stdout, format_str, args);
+                                    ^~~~
+/src/fmt/include/fmt/base.h:1787:35: note: candidate constructor (the implicit copy constructor) not viable: no known conversion from 'const uint64_t' (aka 'const unsigned long') to 'const fmt::basic_format_args<fmt::context> &' for 1st argument
+template <typename Context> class basic_format_args {
+                                  ^
+/src/fmt/include/fmt/base.h:1787:35: note: candidate constructor (the implicit move constructor) not viable: no known conversion from 'const uint64_t' (aka 'const unsigned long') to 'fmt::basic_format_args<fmt::context> &&' for 1st argument
+/src/fmt/include/fmt/base.h:1849:13: note: candidate constructor not viable: no known conversion from 'const uint64_t' (aka 'const unsigned long') to 'const dynamic_format_arg_store<fmt::context> &' for 1st argument
+  constexpr basic_format_args(const dynamic_format_arg_store<Context>& store)
+            ^
+/src/fmt/include/fmt/base.h:1831:31: note: candidate template ignored: could not match 'const detail::format_arg_store<context, NUM_ARGS, NUM_NAMED_ARGS, DESC>' against 'const uint64_t' (aka 'const unsigned long')
+  constexpr FMT_ALWAYS_INLINE basic_format_args(
+                              ^
+/src/fmt/include/fmt/base.h:1838:13: note: candidate template ignored: could not match 'const detail::format_arg_store<context, NUM_ARGS, NUM_NAMED_ARGS, DESC>' against 'const uint64_t' (aka 'const unsigned long')
+  constexpr basic_format_args(
+            ^
+/src/fmt/include/fmt/base.h:2966:61: note: passing argument to parameter 'args' here
+FMT_API void vprintln(FILE* f, string_view fmt, format_args args);
+                                                            ^
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

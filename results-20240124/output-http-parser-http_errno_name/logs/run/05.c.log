@@ -1,0 +1,75 @@
+/workspace/out/libfuzzer-address-x86_64/fuzz_url -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/fuzz_url < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 1732215668
+INFO: Loaded 1 modules   (903 inline 8-bit counters): 903 [0x603a70, 0x603df7), 
+INFO: Loaded 1 PC tables (903 PCs): 903 [0x5b9240,0x5bcab0), 
+INFO:        0 files found in /workspace/corpus/fuzz_url
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+=================================================================
+==13==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x602000000090 at pc 0x000000579fc8 bp 0x7ffe8badbc20 sp 0x7ffe8badbc18
+READ of size 4 at 0x602000000090 thread T0
+SCARINESS: 17 (4-byte-read-heap-buffer-overflow)
+    #0 0x579fc7 in LLVMFuzzerTestOneInput /src/http-parser/fuzzers/fuzz_url.c:8:11
+    #1 0x43ddc3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #2 0x43f174 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:804:3
+    #3 0x43f649 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #4 0x42ecaf in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #5 0x458302 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #6 0x7f13ad912082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #7 0x41f6ed in _start (out/libfuzzer-address-x86_64/fuzz_url+0x41f6ed)
+
+DEDUP_TOKEN: LLVMFuzzerTestOneInput--fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long)--fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&)
+0x602000000091 is located 0 bytes to the right of 1-byte region [0x602000000090,0x602000000091)
+allocated by thread T0 here:
+    #0 0x52ef56 in __interceptor_malloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:69:3
+    #1 0x4ad957 in operator new(unsigned long) cxa_noexception.cpp
+    #2 0x43f174 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:804:3
+    #3 0x43f649 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #4 0x42ecaf in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #5 0x458302 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #6 0x7f13ad912082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_malloc--operator new(unsigned long)--fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&)
+SUMMARY: AddressSanitizer: heap-buffer-overflow /src/http-parser/fuzzers/fuzz_url.c:8:11 in LLVMFuzzerTestOneInput
+Shadow bytes around the buggy address:
+  0x0c047fff7fc0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0c047fff7fd0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0c047fff7fe0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0c047fff7ff0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0c047fff8000: fa fa 00 00 fa fa 00 fa fa fa 00 fa fa fa 00 fa
+=>0x0c047fff8010: fa fa[01]fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0c047fff8020: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0c047fff8030: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0c047fff8040: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0c047fff8050: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0c047fff8060: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07 
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+==13==ABORTING
+MS: 0 ; base unit: 0000000000000000000000000000000000000000
+
+
+artifact_prefix='./'; Test unit written to ./crash-da39a3ee5e6b4b0d3255bfef95601890afd80709
+Base64: 
+stat::number_of_executed_units: 1
+stat::average_exec_per_sec:     0
+stat::new_units_added:          0
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              36

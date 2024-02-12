@@ -1,0 +1,59 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+
+extern "C" {
+#include "h2o.h"
+#include "h2o/ptls.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  struct st_ptls_emit_compressed_certificate_t* cert =
+      (struct st_ptls_emit_compressed_certificate_t*)malloc(
+          sizeof(struct st_ptls_emit_compressed_certificate_t));
+  if (cert == NULL) {
+    return 0;
+  }
+  struct st_h2o_iovec_t* iovec =
+      (struct st_h2o_iovec_t*)malloc(sizeof(struct st_h2o_iovec_t));
+  if (iovec == NULL) {
+    return 0;
+  }
+  const size_t cert_len = stream.ConsumeIntegralInRange<size_t>(0, size);
+  const char* cert_data = stream.ConsumeBytes<char>(cert_len).data();
+  const size_t data_len = stream.ConsumeIntegralInRange<size_t>(0, size);
+  const char* data_data = stream.ConsumeBytes<char>(data_len).data();
+  ptls_init_compressed_certificate(cert, iovec, cert_len,
+                                    const_cast<char*>(cert_data), data_len);
+  free(cert);
+  free(iovec);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/h2o/fuzz/driver_h3.cc:11:10: fatal error: 'h2o/ptls.h' file not found
+#include "h2o/ptls.h"
+         ^~~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

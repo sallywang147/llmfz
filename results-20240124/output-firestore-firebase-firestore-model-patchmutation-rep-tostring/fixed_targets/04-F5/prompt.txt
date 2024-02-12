@@ -1,0 +1,190 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstddef>
+#include <cstdint>
+#include <string>
+
+extern "C" {
+#include "Firestore/core/src/model/document_key.h"
+#include "Firestore/core/src/model/field_path.h"
+#include "Firestore/core/src/model/field_value.h"
+#include "Firestore/core/src/model/mutation.h"
+#include "Firestore/core/src/model/patch_mutation.h"
+#include "Firestore/core/src/model/value.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  const char* str_ptr = reinterpret_cast<const char*>(data);
+  std::string str{str_ptr, size};
+  PatchMutation::Rep::ToString(&str, nullptr);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/base/internal/throw_delegate.h:43:19: error: conflicting types for 'ThrowStdLogicError'
+[[noreturn]] void ThrowStdLogicError(const char* what_arg);
+                  ^
+/src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/base/internal/throw_delegate.h:42:19: note: previous declaration is here
+[[noreturn]] void ThrowStdLogicError(const std::string& what_arg);
+                  ^
+/src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/base/internal/throw_delegate.h:45:19: error: conflicting types for 'ThrowStdInvalidArgument'
+[[noreturn]] void ThrowStdInvalidArgument(const char* what_arg);
+                  ^
+/src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/base/internal/throw_delegate.h:44:19: note: previous declaration is here
+[[noreturn]] void ThrowStdInvalidArgument(const std::string& what_arg);
+                  ^
+/src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/base/internal/throw_delegate.h:47:19: error: conflicting types for 'ThrowStdDomainError'
+[[noreturn]] void ThrowStdDomainError(const char* what_arg);
+                  ^
+/src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/base/internal/throw_delegate.h:46:19: note: previous declaration is here
+[[noreturn]] void ThrowStdDomainError(const std::string& what_arg);
+                  ^
+/src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/base/internal/throw_delegate.h:49:19: error: conflicting types for 'ThrowStdLengthError'
+[[noreturn]] void ThrowStdLengthError(const char* what_arg);
+                  ^
+/src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/base/internal/throw_delegate.h:48:19: note: previous declaration is here
+[[noreturn]] void ThrowStdLengthError(const std::string& what_arg);
+                  ^
+/src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/base/internal/throw_delegate.h:51:19: error: conflicting types for 'ThrowStdOutOfRange'
+[[noreturn]] void ThrowStdOutOfRange(const char* what_arg);
+                  ^
+/src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/base/internal/throw_delegate.h:50:19: note: previous declaration is here
+[[noreturn]] void ThrowStdOutOfRange(const std::string& what_arg);
+                  ^
+/src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/base/internal/throw_delegate.h:53:19: error: conflicting types for 'ThrowStdRuntimeError'
+[[noreturn]] void ThrowStdRuntimeError(const char* what_arg);
+                  ^
+/src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/base/internal/throw_delegate.h:52:19: note: previous declaration is here
+[[noreturn]] void ThrowStdRuntimeError(const std::string& what_arg);
+                  ^
+/src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/base/internal/throw_delegate.h:55:19: error: conflicting types for 'ThrowStdRangeError'
+[[noreturn]] void ThrowStdRangeError(const char* what_arg);
+                  ^
+/src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/base/internal/throw_delegate.h:54:19: note: previous declaration is here
+[[noreturn]] void ThrowStdRangeError(const std::string& what_arg);
+                  ^
+/src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/base/internal/throw_delegate.h:57:19: error: conflicting types for 'ThrowStdOverflowError'
+[[noreturn]] void ThrowStdOverflowError(const char* what_arg);
+                  ^
+/src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/base/internal/throw_delegate.h:56:19: note: previous declaration is here
+[[noreturn]] void ThrowStdOverflowError(const std::string& what_arg);
+                  ^
+/src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/base/internal/throw_delegate.h:59:19: error: conflicting types for 'ThrowStdUnderflowError'
+[[noreturn]] void ThrowStdUnderflowError(const char* what_arg);
+                  ^
+/src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/base/internal/throw_delegate.h:58:19: note: previous declaration is here
+[[noreturn]] void ThrowStdUnderflowError(const std::string& what_arg);
+                  ^
+In file included from /src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:6:
+In file included from /src/firebase-ios-sdk/Firestore/core/src/model/document_key.h:26:
+In file included from /src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/strings/string_view.h:42:
+/src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/base/macros.h:52:1: error: templates must have C++ linkage
+template <typename T, size_t N>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:5:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:6:
+In file included from /src/firebase-ios-sdk/Firestore/core/src/model/document_key.h:26:
+/src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/strings/string_view.h:189:3: error: templates must have C++ linkage
+  template <typename Allocator>
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:5:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:6:
+In file included from /src/firebase-ios-sdk/Firestore/core/src/model/document_key.h:26:
+/src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/strings/string_view.h:371:3: error: templates must have C++ linkage
+  template <typename A>
+  ^~~~~~~~~~~~~~~~~~~~~
+/src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:5:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:6:
+In file included from /src/firebase-ios-sdk/Firestore/core/src/model/document_key.h:27:
+In file included from /src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/types/optional.h:39:
+In file included from /src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/utility/utility.h:49:
+In file included from /src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/base/internal/inline_variable.h:20:
+/src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/base/internal/identity.h:25:1: error: templates must have C++ linkage
+template <typename T>
+^~~~~~~~~~~~~~~~~~~~~
+/src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:5:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:6:
+In file included from /src/firebase-ios-sdk/Firestore/core/src/model/document_key.h:27:
+In file included from /src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/types/optional.h:39:
+In file included from /src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/utility/utility.h:49:
+In file included from /src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/base/internal/inline_variable.h:20:
+/src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/base/internal/identity.h:31:29: error: no template named 'identity'
+using identity_t = typename identity<T>::type;
+                            ^
+In file included from /src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:6:
+In file included from /src/firebase-ios-sdk/Firestore/core/src/model/document_key.h:27:
+In file included from /src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/types/optional.h:39:
+In file included from /src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/utility/utility.h:50:
+In file included from /src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/base/internal/invoke.h:64:
+/src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/meta/type_traits.h:62:1: error: templates must have C++ linkage
+template <typename T>
+^~~~~~~~~~~~~~~~~~~~~
+/src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:5:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:6:
+In file included from /src/firebase-ios-sdk/Firestore/core/src/model/document_key.h:27:
+In file included from /src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/types/optional.h:39:
+In file included from /src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/utility/utility.h:50:
+In file included from /src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/base/internal/invoke.h:64:
+/src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/meta/type_traits.h:66:1: error: templates must have C++ linkage
+template <typename T>
+^~~~~~~~~~~~~~~~~~~~~
+/src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:5:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:6:
+In file included from /src/firebase-ios-sdk/Firestore/core/src/model/document_key.h:27:
+In file included from /src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/types/optional.h:39:
+In file included from /src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/utility/utility.h:50:
+In file included from /src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/base/internal/invoke.h:64:
+/src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/meta/type_traits.h:77:1: error: templates must have C++ linkage
+template <class T>
+^~~~~~~~~~~~~~~~~~
+/src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:5:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:6:
+In file included from /src/firebase-ios-sdk/Firestore/core/src/model/document_key.h:27:
+In file included from /src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/types/optional.h:39:
+In file included from /src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/utility/utility.h:50:
+In file included from /src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/base/internal/invoke.h:64:
+/src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/meta/type_traits.h:87:1: error: templates must have C++ linkage
+template <class T>
+^~~~~~~~~~~~~~~~~~
+/src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:5:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:6:
+In file included from /src/firebase-ios-sdk/Firestore/core/src/model/document_key.h:27:
+In file included from /src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/types/optional.h:39:
+In file included from /src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/utility/utility.h:50:
+In file included from /src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/base/internal/invoke.h:64:
+/src/firebase-ios-sdk/build/external/src/abseil-cpp/absl/meta/type_traits.h:91:43: error: no member named 'SingleMemberUnion' in namespace 'absl::type_traits_internal'
+                    type_traits_internal::SingleMemberUnion<T>>::value &&
+                    ~~~~~~~~~~~~~~~~~~~~~~^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

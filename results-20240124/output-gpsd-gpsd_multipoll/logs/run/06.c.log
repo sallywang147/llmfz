@@ -1,0 +1,39 @@
+Using seed corpus: FuzzJson_seed_corpus.zip
+/workspace/out/libfuzzer-address-x86_64/FuzzJson -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/FuzzJson < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 4288273123
+INFO: Loaded 1 modules   (11857 inline 8-bit counters): 11857 [0x855f60, 0x858db1), 
+INFO: Loaded 1 PC tables (11857 PCs): 11857 [0x79f458,0x7cd968), 
+INFO:        4 files found in /workspace/corpus/FuzzJson
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: seed corpus: files: 4 min: 41b max: 177b total: 511b rss: 35Mb
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+==14==ERROR: AddressSanitizer: SEGV on unknown address 0x00000001294e (pc 0x0000005779fb bp 0x7fff0e16ef50 sp 0x7fff0e16ee80 T0)
+==14==The signal is caused by a READ memory access.
+SCARINESS: 20 (wild-addr-read)
+    #0 0x5779fb in gpsd_multipoll /src/gpsd/gpsd-3.25.1~dev/gpsd/libgpsd_core.c:2105:28
+    #1 0x56c64e in LLVMFuzzerTestOneInput /src/gpsd/fuzzer/FuzzJson.c:26:11
+    #2 0x43e013 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #3 0x43d7fa in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #4 0x43f664 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:826:7
+    #5 0x43f899 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #6 0x42eeff in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #7 0x458552 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #8 0x7f7636fc3082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #9 0x41f93d in _start (out/libfuzzer-address-x86_64/FuzzJson+0x41f93d)
+
+DEDUP_TOKEN: gpsd_multipoll--LLVMFuzzerTestOneInput--fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long)
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: SEGV /src/gpsd/gpsd-3.25.1~dev/gpsd/libgpsd_core.c:2105:28 in gpsd_multipoll
+==14==ABORTING
+MS: 0 ; base unit: 0000000000000000000000000000000000000000
+0x7b,0x22,0x63,0x6c,0x61,0x73,0x73,0x22,0x3a,0x22,0x54,0x4f,0x46,0x46,0x22,0x2c,0x22,0x64,0x65,0x76,0x69,0x63,0x65,0x22,0x3a,0x22,0x47,0x50,0x53,0x23,0x31,0x22,0x2c,0x22,0x72,0x65,0x61,0x6c,0x5f,0x73,0x65,0x63,0x22,0x3a,0x31,0x34,0x32,0x38,0x30,0x30,0x31,0x35,0x31,0x34,0x2c,0x20,0x22,0x72,0x65,0x61,0x6c,0x5f,0x6e,0x73,0x65,0x63,0x22,0x3a,0x31,0x30,0x30,0x30,0x30,0x30,0x30,0x2c,0x22,0x63,0x6c,0x6f,0x63,0x6b,0x5f,0x73,0x65,0x63,0x22,0x3a,0x31,0x34,0x32,0x38,0x30,0x30,0x31,0x35,0x31,0x33,0x2c,0x22,0x63,0x6c,0x6f,0x63,0x6b,0x5f,0x6e,0x73,0x65,0x63,0x22,0x3a,0x39,0x39,0x39,0x39,0x39,0x39,0x39,0x39,0x39,0x7d,0x0,
+{\"class\":\"TOFF\",\"device\":\"GPS#1\",\"real_sec\":1428001514, \"real_nsec\":1000000,\"clock_sec\":1428001513,\"clock_nsec\":999999999}\000
+artifact_prefix='./'; Test unit written to ./crash-493da534f803609e1c64176921b21abd512c3209
+Base64: eyJjbGFzcyI6IlRPRkYiLCJkZXZpY2UiOiJHUFMjMSIsInJlYWxfc2VjIjoxNDI4MDAxNTE0LCAicmVhbF9uc2VjIjoxMDAwMDAwLCJjbG9ja19zZWMiOjE0MjgwMDE1MTMsImNsb2NrX25zZWMiOjk5OTk5OTk5OX0A
+stat::number_of_executed_units: 3
+stat::average_exec_per_sec:     0
+stat::new_units_added:          0
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              36

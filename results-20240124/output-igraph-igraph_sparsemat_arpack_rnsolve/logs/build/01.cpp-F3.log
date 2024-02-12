@@ -1,0 +1,1592 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ export DEPS_PATH=/src/deps
++ DEPS_PATH=/src/deps
++ mkdir /src/deps
++ cd /src
++ wget https://download.gnome.org/sources/libxml2/2.12/libxml2-2.12.3.tar.xz
+--2024-01-24 04:44:09--  https://download.gnome.org/sources/libxml2/2.12/libxml2-2.12.3.tar.xz
+Resolving download.gnome.org (download.gnome.org)... 151.101.1.91, 151.101.129.91, 151.101.193.91, ...
+Connecting to download.gnome.org (download.gnome.org)|151.101.1.91|:443... connected.
+HTTP request sent, awaiting response... 302 Found
+Location: https://mirror.umd.edu/gnome/sources/libxml2/2.12/libxml2-2.12.3.tar.xz [following]
+--2024-01-24 04:44:09--  https://mirror.umd.edu/gnome/sources/libxml2/2.12/libxml2-2.12.3.tar.xz
+Resolving mirror.umd.edu (mirror.umd.edu)... 128.8.207.141
+Connecting to mirror.umd.edu (mirror.umd.edu)|128.8.207.141|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 2641720 (2.5M) [application/octet-stream]
+Saving to: 'libxml2-2.12.3.tar.xz'
+
+     0K .......... .......... .......... .......... ..........  1% 1.88M 1s
+    50K .......... .......... .......... .......... ..........  3% 1.87M 1s
+   100K .......... .......... .......... .......... ..........  5%  121M 1s
+   150K .......... .......... .......... .......... ..........  7% 1.91M 1s
+   200K .......... .......... .......... .......... ..........  9%  112M 1s
+   250K .......... .......... .......... .......... .......... 11%  130M 1s
+   300K .......... .......... .......... .......... .......... 13%  143M 1s
+   350K .......... .......... .......... .......... .......... 15% 1.96M 1s
+   400K .......... .......... .......... .......... .......... 17% 83.9M 0s
+   450K .......... .......... .......... .......... .......... 19%  117M 0s
+   500K .......... .......... .......... .......... .......... 21%  143M 0s
+   550K .......... .......... .......... .......... .......... 23%  126M 0s
+   600K .......... .......... .......... .......... .......... 25%  144M 0s
+   650K .......... .......... .......... .......... .......... 27%  141M 0s
+   700K .......... .......... .......... .......... .......... 29%  131M 0s
+   750K .......... .......... .......... .......... .......... 31%  122M 0s
+   800K .......... .......... .......... .......... .......... 32% 2.10M 0s
+   850K .......... .......... .......... .......... .......... 34% 70.5M 0s
+   900K .......... .......... .......... .......... .......... 36%  143M 0s
+   950K .......... .......... .......... .......... .......... 38%  124M 0s
+  1000K .......... .......... .......... .......... .......... 40%  143M 0s
+  1050K .......... .......... .......... .......... .......... 42%  146M 0s
+  1100K .......... .......... .......... .......... .......... 44%  128M 0s
+  1150K .......... .......... .......... .......... .......... 46%  124M 0s
+  1200K .......... .......... .......... .......... .......... 48%  143M 0s
+  1250K .......... .......... .......... .......... .......... 50%  144M 0s
+  1300K .......... .......... .......... .......... .......... 52%  145M 0s
+  1350K .......... .......... .......... .......... .......... 54%  126M 0s
+  1400K .......... .......... .......... .......... .......... 56%  144M 0s
+  1450K .......... .......... .......... .......... .......... 58%  146M 0s
+  1500K .......... .......... .......... .......... .......... 60%  143M 0s
+  1550K .......... .......... .......... .......... .......... 62%  123M 0s
+  1600K .......... .......... .......... .......... .......... 63% 2.49M 0s
+  1650K .......... .......... .......... .......... .......... 65% 41.2M 0s
+  1700K .......... .......... .......... .......... .......... 67%  141M 0s
+  1750K .......... .......... .......... .......... .......... 69%  123M 0s
+  1800K .......... .......... .......... .......... .......... 71%  142M 0s
+  1850K .......... .......... .......... .......... .......... 73%  143M 0s
+  1900K .......... .......... .......... .......... .......... 75%  141M 0s
+  1950K .......... .......... .......... .......... .......... 77%  119M 0s
+  2000K .......... .......... .......... .......... .......... 79%  144M 0s
+  2050K .......... .......... .......... .......... .......... 81%  141M 0s
+  2100K .......... .......... .......... .......... .......... 83%  143M 0s
+  2150K .......... .......... .......... .......... .......... 85%  127M 0s
+  2200K .......... .......... .......... .......... .......... 87%  137M 0s
+  2250K .......... .......... .......... .......... .......... 89%  144M 0s
+  2300K .......... .......... .......... .......... .......... 91%  135M 0s
+  2350K .......... .......... .......... .......... .......... 93%  122M 0s
+  2400K .......... .......... .......... .......... .......... 94%  145M 0s
+  2450K .......... .......... .......... .......... .......... 96%  144M 0s
+  2500K .......... .......... .......... .......... .......... 98%  142M 0s
+  2550K .......... .......... .........                       100%  130M=0.2s
+
+2024-01-24 04:44:09 (15.4 MB/s) - 'libxml2-2.12.3.tar.xz' saved [2641720/2641720]
+
++ tar xf libxml2-2.12.3.tar.xz
++ cd libxml2-2.12.3
++ mkdir build
++ cd build
++ cmake .. -DCMAKE_INSTALL_PREFIX=/src/deps -DBUILD_SHARED_LIBS=OFF -DLIBXML2_WITH_ICU=OFF -DLIBXML2_WITH_PYTHON=OFF -DLIBXML2_WITH_TESTS=OFF -DLIBXML2_WITH_ZLIB=OFF -DLIBXML2_WITH_LZMA=OFF -DLIBXML2_WITH_PROGRAMS=OFF -DLIBXML2_WITH_MODULES=OFF
+-- The C compiler identification is Clang 15.0.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/local/bin/clang-jcc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Could NOT find PkgConfig (missing: PKG_CONFIG_EXECUTABLE) 
+-- Performing Test Iconv_IS_BUILT_IN
+-- Performing Test Iconv_IS_BUILT_IN - Success
+-- Found Iconv: built in to C library  
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE  
+-- Performing Test HAVE_ATTRIBUTE_DESTRUCTOR
+-- Performing Test HAVE_ATTRIBUTE_DESTRUCTOR - Success
+-- Looking for include file arpa/inet.h
+-- Looking for include file arpa/inet.h - found
+-- Looking for class
+-- Looking for class - not found
+-- Looking for include file dlfcn.h
+-- Looking for include file dlfcn.h - found
+-- Looking for dlopen in dl
+-- Looking for dlopen in dl - found
+-- Looking for include file dl.h
+-- Looking for include file dl.h - not found
+-- Looking for include file fcntl.h
+-- Looking for include file fcntl.h - found
+-- Looking for fpclass
+-- Looking for fpclass - not found
+-- Looking for ftime
+-- Looking for ftime - found
+-- Looking for gettimeofday
+-- Looking for gettimeofday - found
+-- Looking for include file inttypes.h
+-- Looking for include file inttypes.h - found
+-- Looking for isascii
+-- Looking for isascii - found
+-- Looking for append_history in history
+-- Looking for append_history in history - not found
+-- Looking for readline in readline
+-- Looking for readline in readline - not found
+-- Looking for mmap
+-- Looking for mmap - found
+-- Looking for munmap
+-- Looking for munmap - found
+-- Looking for include file netdb.h
+-- Looking for include file netdb.h - found
+-- Looking for include file netinet/in.h
+-- Looking for include file netinet/in.h - found
+-- Looking for include file poll.h
+-- Looking for include file poll.h - found
+-- Looking for shl_load in dld
+-- Looking for shl_load in dld - not found
+-- Looking for stat
+-- Looking for stat - found
+-- Looking for include file stdint.h
+-- Looking for include file stdint.h - found
+-- Looking for include file sys/mman.h
+-- Looking for include file sys/mman.h - found
+-- Looking for include file sys/select.h
+-- Looking for include file sys/select.h - found
+-- Looking for include file sys/socket.h
+-- Looking for include file sys/socket.h - found
+-- Looking for include file sys/stat.h
+-- Looking for include file sys/stat.h - found
+-- Looking for include file sys/timeb.h
+-- Looking for include file sys/timeb.h - found
+-- Looking for include file sys/time.h
+-- Looking for include file sys/time.h - found
+-- Looking for include file unistd.h
+-- Looking for include file unistd.h - found
+-- Looking for va_copy
+-- Looking for va_copy - found
+-- Looking for __va_copy
+-- Looking for __va_copy - found
+-- Performing Test VA_LIST_IS_ARRAY_TEST
+-- Performing Test VA_LIST_IS_ARRAY_TEST - Failed
+-- Performing Test XML_SOCKLEN_T_SOCKLEN_T
+-- Performing Test XML_SOCKLEN_T_SOCKLEN_T - Success
+-- Looking for include file pthread.h
+-- Looking for include file pthread.h - found
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /src/libxml2-2.12.3/build
+++ nproc
++ make install -j32
+[  2%] Building C object CMakeFiles/LibXml2.dir/buf.c.o
+[  4%] Building C object CMakeFiles/LibXml2.dir/c14n.c.o
+[  6%] Building C object CMakeFiles/LibXml2.dir/catalog.c.o
+[  8%] Building C object CMakeFiles/LibXml2.dir/chvalid.c.o
+[ 11%] Building C object CMakeFiles/LibXml2.dir/debugXML.c.o
+[ 13%] Building C object CMakeFiles/LibXml2.dir/dict.c.o
+[ 15%] Building C object CMakeFiles/LibXml2.dir/encoding.c.o
+[ 17%] Building C object CMakeFiles/LibXml2.dir/entities.c.o
+[ 20%] Building C object CMakeFiles/LibXml2.dir/error.c.o
+[ 22%] Building C object CMakeFiles/LibXml2.dir/globals.c.o
+[ 24%] Building C object CMakeFiles/LibXml2.dir/hash.c.o
+[ 26%] Building C object CMakeFiles/LibXml2.dir/HTMLparser.c.o
+[ 28%] Building C object CMakeFiles/LibXml2.dir/HTMLtree.c.o
+[ 33%] Building C object CMakeFiles/LibXml2.dir/list.c.o
+[ 33%] Building C object CMakeFiles/LibXml2.dir/legacy.c.o
+[ 35%] Building C object CMakeFiles/LibXml2.dir/nanoftp.c.o
+[ 40%] Building C object CMakeFiles/LibXml2.dir/nanohttp.c.o
+[ 37%] Building C object CMakeFiles/LibXml2.dir/parser.c.o
+[ 42%] Building C object CMakeFiles/LibXml2.dir/parserInternals.c.o
+[ 44%] Building C object CMakeFiles/LibXml2.dir/pattern.c.o
+[ 46%] Building C object CMakeFiles/LibXml2.dir/relaxng.c.o
+[ 48%] Building C object CMakeFiles/LibXml2.dir/SAX.c.o
+[ 51%] Building C object CMakeFiles/LibXml2.dir/SAX2.c.o
+[ 53%] Building C object CMakeFiles/LibXml2.dir/schematron.c.o
+[ 55%] Building C object CMakeFiles/LibXml2.dir/tree.c.o
+[ 57%] Building C object CMakeFiles/LibXml2.dir/threads.c.o
+[ 60%] Building C object CMakeFiles/LibXml2.dir/uri.c.o
+[ 62%] Building C object CMakeFiles/LibXml2.dir/valid.c.o
+[ 64%] Building C object CMakeFiles/LibXml2.dir/xinclude.c.o
+[ 66%] Building C object CMakeFiles/LibXml2.dir/xlink.c.o
+[ 68%] Building C object CMakeFiles/LibXml2.dir/xmlmemory.c.o
+[ 71%] Building C object CMakeFiles/LibXml2.dir/xmlmodule.c.o
+[ 73%] Building C object CMakeFiles/LibXml2.dir/xmlreader.c.o
+[ 75%] Building C object CMakeFiles/LibXml2.dir/xmlIO.c.o
+[ 77%] Building C object CMakeFiles/LibXml2.dir/xmlregexp.c.o
+[ 80%] Building C object CMakeFiles/LibXml2.dir/xmlsave.c.o
+[ 82%] Building C object CMakeFiles/LibXml2.dir/xmlschemas.c.o
+[ 84%] Building C object CMakeFiles/LibXml2.dir/xmlschemastypes.c.o
+[ 86%] Building C object CMakeFiles/LibXml2.dir/xmlstring.c.o
+[ 88%] Building C object CMakeFiles/LibXml2.dir/xmlunicode.c.o
+[ 91%] Building C object CMakeFiles/LibXml2.dir/xmlwriter.c.o
+[ 93%] Building C object CMakeFiles/LibXml2.dir/xpath.c.o
+[ 95%] Building C object CMakeFiles/LibXml2.dir/xpointer.c.o
+[ 97%] Building C object CMakeFiles/LibXml2.dir/xzlib.c.o
+[100%] Linking C static library libxml2.a
+[100%] Built target LibXml2
+Install the project...
+-- Install configuration: ""
+-- Installing: /src/deps/include/libxml2/libxml/c14n.h
+-- Installing: /src/deps/include/libxml2/libxml/catalog.h
+-- Installing: /src/deps/include/libxml2/libxml/chvalid.h
+-- Installing: /src/deps/include/libxml2/libxml/debugXML.h
+-- Installing: /src/deps/include/libxml2/libxml/dict.h
+-- Installing: /src/deps/include/libxml2/libxml/encoding.h
+-- Installing: /src/deps/include/libxml2/libxml/entities.h
+-- Installing: /src/deps/include/libxml2/libxml/globals.h
+-- Installing: /src/deps/include/libxml2/libxml/hash.h
+-- Installing: /src/deps/include/libxml2/libxml/HTMLparser.h
+-- Installing: /src/deps/include/libxml2/libxml/HTMLtree.h
+-- Installing: /src/deps/include/libxml2/libxml/list.h
+-- Installing: /src/deps/include/libxml2/libxml/nanoftp.h
+-- Installing: /src/deps/include/libxml2/libxml/nanohttp.h
+-- Installing: /src/deps/include/libxml2/libxml/parser.h
+-- Installing: /src/deps/include/libxml2/libxml/parserInternals.h
+-- Installing: /src/deps/include/libxml2/libxml/pattern.h
+-- Installing: /src/deps/include/libxml2/libxml/relaxng.h
+-- Installing: /src/deps/include/libxml2/libxml/SAX.h
+-- Installing: /src/deps/include/libxml2/libxml/SAX2.h
+-- Installing: /src/deps/include/libxml2/libxml/schemasInternals.h
+-- Installing: /src/deps/include/libxml2/libxml/schematron.h
+-- Installing: /src/deps/include/libxml2/libxml/threads.h
+-- Installing: /src/deps/include/libxml2/libxml/tree.h
+-- Installing: /src/deps/include/libxml2/libxml/uri.h
+-- Installing: /src/deps/include/libxml2/libxml/valid.h
+-- Installing: /src/deps/include/libxml2/libxml/xinclude.h
+-- Installing: /src/deps/include/libxml2/libxml/xlink.h
+-- Installing: /src/deps/include/libxml2/libxml/xmlIO.h
+-- Installing: /src/deps/include/libxml2/libxml/xmlautomata.h
+-- Installing: /src/deps/include/libxml2/libxml/xmlerror.h
+-- Installing: /src/deps/include/libxml2/libxml/xmlexports.h
+-- Installing: /src/deps/include/libxml2/libxml/xmlmemory.h
+-- Installing: /src/deps/include/libxml2/libxml/xmlmodule.h
+-- Installing: /src/deps/include/libxml2/libxml/xmlreader.h
+-- Installing: /src/deps/include/libxml2/libxml/xmlregexp.h
+-- Installing: /src/deps/include/libxml2/libxml/xmlsave.h
+-- Installing: /src/deps/include/libxml2/libxml/xmlschemas.h
+-- Installing: /src/deps/include/libxml2/libxml/xmlschemastypes.h
+-- Installing: /src/deps/include/libxml2/libxml/xmlstring.h
+-- Installing: /src/deps/include/libxml2/libxml/xmlunicode.h
+-- Installing: /src/deps/include/libxml2/libxml/xmlwriter.h
+-- Installing: /src/deps/include/libxml2/libxml/xpath.h
+-- Installing: /src/deps/include/libxml2/libxml/xpathInternals.h
+-- Installing: /src/deps/include/libxml2/libxml/xpointer.h
+-- Installing: /src/deps/lib/libxml2.a
+-- Installing: /src/deps/share/man/man1/xml2-config.1
+-- Installing: /src/deps/share/man/man1/xmlcatalog.1
+-- Installing: /src/deps/share/man/man1/xmllint.1
+-- Installing: /src/deps/share/doc/libxml2
+-- Installing: /src/deps/share/doc/libxml2/xmlcatalog.html
+-- Installing: /src/deps/share/doc/libxml2/xmllint.html
+-- Installing: /src/deps/share/doc/libxml2/tutorial
+-- Installing: /src/deps/share/doc/libxml2/tutorial/images
+-- Installing: /src/deps/share/doc/libxml2/tutorial/images/next.png
+-- Installing: /src/deps/share/doc/libxml2/tutorial/images/toc-blank.png
+-- Installing: /src/deps/share/doc/libxml2/tutorial/images/home.png
+-- Installing: /src/deps/share/doc/libxml2/tutorial/images/toc-minus.png
+-- Installing: /src/deps/share/doc/libxml2/tutorial/images/callouts
+-- Installing: /src/deps/share/doc/libxml2/tutorial/images/callouts/5.png
+-- Installing: /src/deps/share/doc/libxml2/tutorial/images/callouts/2.png
+-- Installing: /src/deps/share/doc/libxml2/tutorial/images/callouts/9.png
+-- Installing: /src/deps/share/doc/libxml2/tutorial/images/callouts/3.png
+-- Installing: /src/deps/share/doc/libxml2/tutorial/images/callouts/1.png
+-- Installing: /src/deps/share/doc/libxml2/tutorial/images/callouts/8.png
+-- Installing: /src/deps/share/doc/libxml2/tutorial/images/callouts/7.png
+-- Installing: /src/deps/share/doc/libxml2/tutorial/images/callouts/6.png
+-- Installing: /src/deps/share/doc/libxml2/tutorial/images/callouts/10.png
+-- Installing: /src/deps/share/doc/libxml2/tutorial/images/callouts/4.png
+-- Installing: /src/deps/share/doc/libxml2/tutorial/images/caution.png
+-- Installing: /src/deps/share/doc/libxml2/tutorial/images/tip.png
+-- Installing: /src/deps/share/doc/libxml2/tutorial/images/draft.png
+-- Installing: /src/deps/share/doc/libxml2/tutorial/images/up.png
+-- Installing: /src/deps/share/doc/libxml2/tutorial/images/important.png
+-- Installing: /src/deps/share/doc/libxml2/tutorial/images/prev.png
+-- Installing: /src/deps/share/doc/libxml2/tutorial/images/blank.png
+-- Installing: /src/deps/share/doc/libxml2/tutorial/images/toc-plus.png
+-- Installing: /src/deps/share/doc/libxml2/tutorial/images/warning.png
+-- Installing: /src/deps/share/doc/libxml2/tutorial/images/note.png
+-- Installing: /src/deps/share/doc/libxml2/tutorial/ar01s02.html
+-- Installing: /src/deps/share/doc/libxml2/tutorial/ar01s04.html
+-- Installing: /src/deps/share/doc/libxml2/tutorial/ar01s06.html
+-- Installing: /src/deps/share/doc/libxml2/tutorial/ape.html
+-- Installing: /src/deps/share/doc/libxml2/tutorial/includeconvert.c
+-- Installing: /src/deps/share/doc/libxml2/tutorial/apg.html
+-- Installing: /src/deps/share/doc/libxml2/tutorial/ar01s09.html
+-- Installing: /src/deps/share/doc/libxml2/tutorial/ix01.html
+-- Installing: /src/deps/share/doc/libxml2/tutorial/apf.html
+-- Installing: /src/deps/share/doc/libxml2/tutorial/includeaddattribute.c
+-- Installing: /src/deps/share/doc/libxml2/tutorial/apa.html
+-- Installing: /src/deps/share/doc/libxml2/tutorial/ar01s03.html
+-- Installing: /src/deps/share/doc/libxml2/tutorial/ar01s08.html
+-- Installing: /src/deps/share/doc/libxml2/tutorial/aph.html
+-- Installing: /src/deps/share/doc/libxml2/tutorial/ar01s07.html
+-- Installing: /src/deps/share/doc/libxml2/tutorial/includegetattribute.c
+-- Installing: /src/deps/share/doc/libxml2/tutorial/includekeyword.c
+-- Installing: /src/deps/share/doc/libxml2/tutorial/apc.html
+-- Installing: /src/deps/share/doc/libxml2/tutorial/apb.html
+-- Installing: /src/deps/share/doc/libxml2/tutorial/index.html
+-- Installing: /src/deps/share/doc/libxml2/tutorial/apd.html
+-- Installing: /src/deps/share/doc/libxml2/tutorial/ar01s05.html
+-- Installing: /src/deps/share/doc/libxml2/tutorial/includexpath.c
+-- Installing: /src/deps/share/doc/libxml2/tutorial/includeaddkeyword.c
+-- Installing: /src/deps/share/doc/libxml2/tutorial/api.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-xmlerror.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-dict.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-xpathInternals.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-hash.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/home.png
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-schemasInternals.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-debugXML.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-threads.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-xmlschemastypes.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/general.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-xmlautomata.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-uri.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/right.png
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-xmlunicode.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-parserInternals.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-xmlstring.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-xpath.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-HTMLtree.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/style.css
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-SAX2.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-xlink.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-catalog.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-encoding.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-xmlschemas.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-valid.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-xmlregexp.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-xmlversion.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-xinclude.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/up.png
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-xmlreader.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-nanohttp.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-nanoftp.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-xmlsave.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-c14n.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-chvalid.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-xpointer.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2.devhelp2
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-HTMLparser.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-xmlexports.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-entities.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-xmlmodule.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-tree.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-pattern.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-list.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-relaxng.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-xmlmemory.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/left.png
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-SAX.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-xmlwriter.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/index.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-parser.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-globals.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-schematron.html
+-- Installing: /src/deps/share/doc/libxml2/devhelp/libxml2-xmlIO.html
+-- Installing: /src/deps/share/doc/libxml2/examples
+-- Installing: /src/deps/share/doc/libxml2/examples/reader4.c
+-- Installing: /src/deps/share/doc/libxml2/examples/parse2.c
+-- Installing: /src/deps/share/doc/libxml2/examples/xpath1.c
+-- Installing: /src/deps/share/doc/libxml2/examples/reader3.c
+-- Installing: /src/deps/share/doc/libxml2/examples/parse1.c
+-- Installing: /src/deps/share/doc/libxml2/examples/xpath2.c
+-- Installing: /src/deps/share/doc/libxml2/examples/io2.c
+-- Installing: /src/deps/share/doc/libxml2/examples/parse4.c
+-- Installing: /src/deps/share/doc/libxml2/examples/tree2.c
+-- Installing: /src/deps/share/doc/libxml2/examples/parse3.c
+-- Installing: /src/deps/share/doc/libxml2/examples/reader1.c
+-- Installing: /src/deps/share/doc/libxml2/examples/tree1.c
+-- Installing: /src/deps/share/doc/libxml2/examples/reader2.c
+-- Installing: /src/deps/share/doc/libxml2/examples/io1.c
+-- Installing: /src/deps/share/doc/libxml2/examples/testWriter.c
+-- Installing: /src/deps/share/doc/libxml2/examples/index.html
+-- Installing: /src/deps/lib/cmake/libxml2-2.12.3/libxml2-config.cmake
+-- Installing: /src/deps/lib/cmake/libxml2-2.12.3/libxml2-config-version.cmake
+-- Installing: /src/deps/lib/cmake/libxml2-2.12.3/libxml2-export.cmake
+-- Installing: /src/deps/lib/cmake/libxml2-2.12.3/libxml2-export-noconfig.cmake
+-- Installing: /src/deps/include/libxml2/libxml/xmlversion.h
+-- Installing: /src/deps/lib/pkgconfig/libxml-2.0.pc
+-- Installing: /src/deps/bin/xml2-config
+-- Installing: /src/deps/share/aclocal/libxml.m4
++ cd /src/igraph
++ mkdir build
++ cd build
++ cmake .. -DIGRAPH_WARNINGS_AS_ERRORS=OFF -DCMAKE_BUILD_TYPE=None -DCMAKE_PREFIX_PATH=/src/deps -DFLEX_KEEP_LINE_NUMBERS=ON
+-- Version number from Git: 0.10.8-64-g64adc59cf
+-- The C compiler identification is Clang 15.0.0
+-- The CXX compiler identification is Clang 15.0.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/local/bin/clang-jcc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/local/bin/clang++-jcc - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Performing Test COMPILER_SUPPORTS_UNKNOWN_WARNING_OPTION_FLAG
+-- Performing Test COMPILER_SUPPORTS_UNKNOWN_WARNING_OPTION_FLAG - Success
+-- Performing Test COMPILER_HAS_DEPRECATED_ENUMVAL_ATTR
+-- Performing Test COMPILER_HAS_DEPRECATED_ENUMVAL_ATTR - Success
+-- Thread-local storage: supported (__thread)
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE  
+-- Found FLEX: /usr/bin/flex (found version "2.6.4") 
+-- Found BISON: /usr/bin/bison (found version "3.5.1") 
+-- Looking for strcasecmp
+-- Looking for strcasecmp - found
+-- Looking for strncasecmp
+-- Looking for strncasecmp - found
+-- Looking for _stricmp
+-- Looking for _stricmp - not found
+-- Looking for _strnicmp
+-- Looking for _strnicmp - not found
+-- Looking for strdup
+-- Looking for strdup - found
+-- Looking for strndup
+-- Looking for strndup - found
+-- Looking for include file xlocale.h
+-- Looking for include file xlocale.h - not found
+-- Looking for uselocale
+-- Looking for uselocale - found
+-- Looking for _configthreadlocale
+-- Looking for _configthreadlocale - not found
+-- Performing Test HAVE__UMUL128
+-- Performing Test HAVE__UMUL128 - Failed
+-- Performing Test HAVE___UMULH
+-- Performing Test HAVE___UMULH - Failed
+-- Looking for C++ include sys/types.h
+-- Looking for C++ include sys/types.h - found
+-- Looking for C++ include stdint.h
+-- Looking for C++ include stdint.h - found
+-- Looking for C++ include stddef.h
+-- Looking for C++ include stddef.h - found
+-- Check size of __uint128_t
+-- Check size of __uint128_t - done
+-- Performing Test HAVE_BUILTIN_OVERFLOW
+-- Performing Test HAVE_BUILTIN_OVERFLOW - Success
+-- Looking for _LIBCPP_VERSION
+-- Looking for _LIBCPP_VERSION - found
+-- Looking for __GLIBCXX__
+-- Looking for __GLIBCXX__ - not found
+-- Performing Test COMPILER_HAS_HIDDEN_VISIBILITY
+-- Performing Test COMPILER_HAS_HIDDEN_VISIBILITY - Success
+-- Performing Test COMPILER_HAS_HIDDEN_INLINE_VISIBILITY
+-- Performing Test COMPILER_HAS_HIDDEN_INLINE_VISIBILITY - Success
+-- Performing Test COMPILER_HAS_DEPRECATED_ATTR
+-- Performing Test COMPILER_HAS_DEPRECATED_ATTR - Success
+-- Performing Test HAVE_ENABLE_NEW_DTAGS
+-- Performing Test HAVE_ENABLE_NEW_DTAGS - Success
+-- Found Python3: /usr/local/bin/python3.8 (found version "3.8.3") found components: Interpreter 
+--  
+-- -----[ Build configuration ]----
+-- Version:    0.10.8-64-g64adc59cf
+-- CMake build type:           None
+-- Library type:             static
+-- igraph_integer_t size:   64 bits
+--  
+-- ----------[ Features ]----------
+-- GLPK for optimization:       yes
+-- Reading GraphML files:       yes
+-- Thread-local storage:        yes
+-- Link-time optimization:       no
+--  
+-- --------[ Dependencies ]--------
+-- ARPACK:                 vendored
+-- BISON:                       yes
+-- BLAS:                   vendored
+-- FLEX:                        yes
+-- GLPK:                   vendored
+-- GMP:                    vendored
+-- LAPACK:                 vendored
+-- LibXml2:                     yes
+-- OpenMP:                       no
+-- PLFIT:                  vendored
+--  
+-- -----------[ Testing ]----------
+-- Diff tool:                  diff
+-- Sanitizers:                 none
+-- Code coverage:                no
+-- Verify 'finally' stack:       no
+--  
+-- --------[ Documentation ]-------
+-- HTML:                         no
+-- PDF:                          no
+-- INFO:                         no
+--  
+-- igraph configured successfully.
+--  
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /src/igraph/build
+++ nproc
++ make -j32
+[  0%] Building CXX object src/isomorphism/bliss/CMakeFiles/bliss.dir/defs.cc.o
+[  0%] Building CXX object src/isomorphism/bliss/CMakeFiles/bliss.dir/graph.cc.o
+[  0%] Building CXX object src/isomorphism/bliss/CMakeFiles/bliss.dir/heap.cc.o
+[  0%] Building CXX object src/isomorphism/bliss/CMakeFiles/bliss.dir/orbit.cc.o
+[  0%] Building C object vendor/f2c/CMakeFiles/arithchk.dir/arithchk.c.o
+[  0%] Building CXX object src/isomorphism/bliss/CMakeFiles/bliss.dir/partition.cc.o
+[  0%] Building C object vendor/mini-gmp/CMakeFiles/gmp_vendored.dir/mini-gmp.c.o
+[  0%] Building CXX object src/isomorphism/bliss/CMakeFiles/bliss.dir/uintseqhash.cc.o
+[  0%] Building CXX object src/isomorphism/bliss/CMakeFiles/bliss.dir/utils.cc.o
+[  0%] Building C object vendor/pcg/CMakeFiles/pcg.dir/pcg-advance-64.c.o
+[  0%] Building C object vendor/pcg/CMakeFiles/pcg.dir/pcg-advance-128.c.o
+[  0%] [FLEX][dl_lexer] Building scanner with flex 2.6.4
+[  0%] Building C object vendor/plfit/CMakeFiles/plfit_vendored.dir/gss.c.o
+[  0%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_add.c.o
+[  0%] Building C object vendor/pcg/CMakeFiles/pcg.dir/pcg-output-32.c.o
+[  0%] [BISON][dl_parser] Building parser with bison 3.5.1
+[  0%] Building C object src/cliques/cliquer/CMakeFiles/cliquer.dir/cliquer.c.o
+[  0%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_amd.c.o
+[  0%] Building C object vendor/plfit/CMakeFiles/plfit_vendored.dir/hzeta.c.o
+[  0%] Building C object vendor/pcg/CMakeFiles/pcg.dir/pcg-output-64.c.o
+[  0%] [FLEX][gml_lexer] Building scanner with flex 2.6.4
+[  0%] Building C object vendor/pcg/CMakeFiles/pcg.dir/pcg-output-128.c.o
+[  0%] Building C object vendor/plfit/CMakeFiles/plfit_vendored.dir/lbfgs.c.o
+[  0%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_cholsol.c.o
+[  2%] [BISON][gml_parser] Building parser with bison 3.5.1
+[  2%] Building CXX object src/centrality/prpack/CMakeFiles/prpack.dir/prpack_igraph_graph.cpp.o
+[  2%] Building C object vendor/plfit/CMakeFiles/plfit_vendored.dir/kolmogorov.c.o
+[  2%] Building CXX object src/centrality/prpack/CMakeFiles/prpack.dir/prpack_base_graph.cpp.o
+[  2%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_chol.c.o
+[  2%] Building C object vendor/pcg/CMakeFiles/pcg.dir/pcg-rngs-64.c.o
+[  2%] Building C object src/cliques/cliquer/CMakeFiles/cliquer.dir/cliquer_graph.c.o
+/src/igraph/src/io/dl-parser.y: warning: 20 shift/reduce conflicts [-Wconflicts-sr]
+/src/igraph/src/io/dl-parser.y: warning: 3 reduce/reduce conflicts [-Wconflicts-rr]
+[  2%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/amd/amd_1.c.o
+[  2%] Building C object src/cliques/cliquer/CMakeFiles/cliquer.dir/reorder.c.o
+[  2%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_compress.c.o
+[  2%] Building C object vendor/pcg/CMakeFiles/pcg.dir/pcg-rngs-128.c.o
+[  2%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_counts.c.o
+[  2%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/amd/amd_2.c.o
+[  2%] [FLEX][lgl_lexer] Building scanner with flex 2.6.4
+[  2%] Building CXX object src/centrality/prpack/CMakeFiles/prpack.dir/prpack_preprocessed_ge_graph.cpp.o
+[  2%] Building CXX object src/centrality/prpack/CMakeFiles/prpack.dir/prpack_preprocessed_gs_graph.cpp.o
+[  2%] Building C object vendor/plfit/CMakeFiles/plfit_vendored.dir/mt.c.o
+[  2%] Linking C executable arithchk
+[  2%] Building C object vendor/plfit/CMakeFiles/plfit_vendored.dir/options.c.o
+[  2%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_cumsum.c.o
+[  2%] [BISON][lgl_parser] Building parser with bison 3.5.1
+[  4%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_dfs.c.o
+[  4%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/amd/amd_aat.c.o
+[  4%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_dmperm.c.o
+[  4%] Building CXX object src/centrality/prpack/CMakeFiles/prpack.dir/prpack_preprocessed_scc_graph.cpp.o
+[  4%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/amd/amd_control.c.o
+[  4%] Building C object vendor/plfit/CMakeFiles/plfit_vendored.dir/platform.c.o
+[  4%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/amd/amd_defaults.c.o
+[  4%] Building C object vendor/plfit/CMakeFiles/plfit_vendored.dir/plfit.c.o
+[  4%] [FLEX][ncol_lexer] Building scanner with flex 2.6.4
+[  4%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/amd/amd_info.c.o
+[  4%] Building C object vendor/plfit/CMakeFiles/plfit_vendored.dir/plfit_error.c.o
+[  4%] [BISON][ncol_parser] Building parser with bison 3.5.1
+[  4%] Building CXX object src/centrality/prpack/CMakeFiles/prpack.dir/prpack_result.cpp.o
+[  4%] Building CXX object src/centrality/prpack/CMakeFiles/prpack.dir/prpack_preprocessed_schur_graph.cpp.o
+[  4%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_droptol.c.o
+[  4%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_dropzeros.c.o
+[  4%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/amd/amd_order.c.o
+[  4%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_dupl.c.o
+[  4%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/amd/amd_post_tree.c.o
+[  4%] [FLEX][pajek_lexer] Building scanner with flex 2.6.4
+[  4%] Building C object vendor/plfit/CMakeFiles/plfit_vendored.dir/rbinom.c.o
+[  7%] [BISON][pajek_parser] Building parser with bison 3.5.1
+[  9%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/amd/amd_postorder.c.o
+/src/igraph/src/io/pajek-parser.y: warning: 7 shift/reduce conflicts [-Wconflicts-sr]
+/src/igraph/src/io/pajek-parser.y: warning: 1 reduce/reduce conflict [-Wconflicts-rr]
+[  9%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_entry.c.o
+[  9%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/amd/amd_preprocess.c.o
+[  9%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_ereach.c.o
+[  9%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_etree.c.o
+[  9%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/amd/amd_valid.c.o
+[  9%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_fkeep.c.o
+[  9%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/advbas.c.o
+[  9%] Building CXX object src/centrality/prpack/CMakeFiles/prpack.dir/prpack_solver.cpp.o
+[  9%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_gaxpy.c.o
+[  9%] Built target arithchk
+[  9%] Building C object vendor/plfit/CMakeFiles/plfit_vendored.dir/sampling.c.o
+[  9%] Generating arith.h for f2c...
+[  9%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_house.c.o
+[  9%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_happly.c.o
+[  9%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/asnhall.c.o
+[  9%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_ipvec.c.o
+[  9%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/abort_.c.o
+[  9%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/asnlp.c.o
+[  9%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_load.c.o
+[  9%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_leaf.c.o
+[  9%] Building CXX object src/centrality/prpack/CMakeFiles/prpack.dir/prpack_utils.cpp.o
+[  9%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_lsolve.c.o
+[  9%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/asnokalg.c.o
+[  9%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_ltsolve.c.o
+[ 11%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/dolio.c.o
+[ 11%] Built target parsersources
+[ 11%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_lu.c.o
+[ 11%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/r_sin.c.o
+[ 11%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/ckasn.c.o
+[ 11%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_lusol.c.o
+[ 11%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/dummy.c.o
+[ 11%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_malloc.c.o
+[ 14%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_maxtrans.c.o
+[ 14%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_multiply.c.o
+[ 14%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/dtime_.c.o
+[ 14%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/iio.c.o
+[ 14%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_norm.c.o
+[ 14%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/ckcnf.c.o
+[ 14%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/cplex.c.o
+[ 14%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/cpp.c.o
+[ 14%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_permute.c.o
+[ 14%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/cpxbas.c.o
+[ 14%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/r_sinh.c.o
+[ 14%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/backspac.c.o
+[ 14%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_pinv.c.o
+[ 14%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_post.c.o
+[ 14%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_pvec.c.o
+[ 14%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_qr.c.o
+[ 14%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_qrsol.c.o
+[ 14%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/due.c.o
+[ 14%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/graph.c.o
+[ 14%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/ilnw.c.o
+[ 14%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/r_sqrt.c.o
+[ 14%] Built target pcg
+[ 14%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/gridgen.c.o
+[ 14%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_randperm.c.o
+[ 14%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_reach.c.o
+[ 14%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_scatter.c.o
+[ 14%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/c_abs.c.o
+[ 14%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/ef1asc_.c.o
+[ 14%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_scc.c.o
+[ 14%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/inquire.c.o
+[ 14%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/r_tan.c.o
+[ 14%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_schol.c.o
+[ 14%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_spsolve.c.o
+[ 14%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/intfeas1.c.o
+[ 14%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/c_cos.c.o
+[ 14%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/ef1cmc_.c.o
+[ 14%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/maxffalg.c.o
+[ 14%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_sqr.c.o
+[ 14%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/l_ge.c.o
+[ 14%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_symperm.c.o
+[ 14%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/maxflp.c.o
+[ 14%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/mcflp.c.o
+[ 14%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/mcfokalg.c.o
+[ 14%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/mcfrelax.c.o
+[ 16%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/minisat1.c.o
+[ 16%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/c_div.c.o
+[ 16%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/mpl.c.o
+[ 16%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/r_tanh.c.o
+[ 16%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/endfile.c.o
+[ 16%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_tdfs.c.o
+[ 19%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/l_gt.c.o
+[ 19%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/mps.c.o
+[ 19%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_transpose.c.o
+[ 19%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_updown.c.o
+[ 19%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/rdfmt.c.o
+[ 19%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/c_exp.c.o
+[ 19%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/erf_.c.o
+[ 19%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/l_le.c.o
+[ 21%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_usolve.c.o
+[ 21%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/rewind.c.o
+[ 21%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_util.c.o
+[ 21%] Building C object vendor/cs/CMakeFiles/cxsparse_vendored.dir/cs_utsolve.c.o
+[ 21%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/netgen.c.o
+[ 21%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/c_log.c.o
+[ 21%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/npp.c.o
+[ 21%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/erfc_.c.o
+[ 21%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/pript.c.o
+[ 21%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/prmip.c.o
+[ 21%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/prob1.c.o
+[ 21%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/prob2.c.o
+[ 21%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/l_lt.c.o
+[ 21%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/prob3.c.o
+[ 21%] Built target plfit_vendored
+[ 21%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/c_sin.c.o
+[ 21%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/rsfe.c.o
+[ 21%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/err.c.o
+[ 21%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/lbitbits.c.o
+[ 21%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/rsli.c.o
+[ 21%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/prob4.c.o
+[ 21%] Built target cliquer
+[ 21%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/prob5.c.o
+[ 21%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/c_sqrt.c.o
+[ 21%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/etime_.c.o
+[ 21%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/prrngs.c.o
+[ 21%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/prsol.c.o
+[ 21%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/rdasn.c.o
+[ 21%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/lbitshft.c.o
+[ 21%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/rdcc.c.o
+[ 21%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/rsne.c.o
+[ 21%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/rdcnf.c.o
+[ 21%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/cabs.c.o
+[ 21%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/rdipt.c.o
+[ 21%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/exit_.c.o
+[ 23%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/lread.c.o
+[ 23%] Built target cxsparse_vendored
+[ 23%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/s_cat.c.o
+[ 23%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/close.c.o
+[ 23%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/rdmaxf.c.o
+[ 23%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/f77_aloc.c.o
+[ 23%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/rdmcf.c.o
+[ 23%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/lwrite.c.o
+[ 23%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/s_cmp.c.o
+[ 26%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/rdmip.c.o
+[ 26%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/ctype.c.o
+[ 26%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/rdprob.c.o
+[ 26%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/rdsol.c.o
+[ 26%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/rmfgen.c.o
+[ 26%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/f77vers.c.o
+[ 26%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/strong.c.o
+[ 26%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/topsort.c.o
+[ 26%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/wcliqex.c.o
+[ 26%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/s_copy.c.o
+[ 26%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/d_abs.c.o
+[ 26%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/fmt.c.o
+[ 26%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/open.c.o
+[ 26%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/s_paus.c.o
+[ 26%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/weak.c.o
+[ 26%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/d_acos.c.o
+[ 26%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/fmtlib.c.o
+[ 26%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/wrasn.c.o
+[ 26%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/wrcc.c.o
+[ 26%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/pow_ci.c.o
+[ 26%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/wrcnf.c.o
+[ 26%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/wript.c.o
+[ 26%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/s_rnge.c.o
+[ 26%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/d_asin.c.o
+[ 26%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/ftell_.c.o
+[ 26%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/wrmaxf.c.o
+[ 26%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/wrmcf.c.o
+[ 26%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/pow_dd.c.o
+[ 26%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/wrmip.c.o
+[ 26%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/wrprob.c.o
+[ 28%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/s_stop.c.o
+[ 28%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/api/wrsol.c.o
+[ 28%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/d_atan.c.o
+[ 28%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/pow_di.c.o
+[ 28%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/bflib/btf.c.o
+[ 28%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/sfe.c.o
+[ 28%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/d_atn2.c.o
+[ 28%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/bflib/btfint.c.o
+[ 28%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/bflib/fhv.c.o
+[ 28%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/getenv_.c.o
+[ 30%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/bflib/fhvint.c.o
+[ 30%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/bflib/ifu.c.o
+[ 30%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/pow_hh.c.o
+[ 30%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/sig_die.c.o
+[ 30%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/bflib/luf.c.o
+[ 30%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/d_cnjg.c.o
+[ 30%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/bflib/lufint.c.o
+[ 30%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/bflib/scf.c.o
+[ 30%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/h_abs.c.o
+[ 30%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/bflib/scfint.c.o
+[ 30%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/pow_ii.c.o
+[ 30%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/bflib/sgf.c.o
+[ 30%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/bflib/sva.c.o
+[ 30%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/signal_.c.o
+[ 30%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/d_cos.c.o
+[ 30%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/h_dim.c.o
+[ 30%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/colamd/colamd.c.o
+[ 30%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/pow_ri.c.o
+[ 30%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/signbit.c.o
+[ 30%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/d_cosh.c.o
+[ 30%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/draft/bfd.c.o
+[ 30%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/h_dnnt.c.o
+[ 30%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/draft/bfx.c.o
+[ 30%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/pow_zi.c.o
+[ 30%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/sue.c.o
+[ 30%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/draft/glpapi06.c.o
+[ 33%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/d_dim.c.o
+[ 33%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/draft/glpapi07.c.o
+[ 33%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/h_indx.c.o
+[ 33%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/draft/glpapi08.c.o
+[ 33%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/pow_zz.c.o
+[ 33%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/system_.c.o
+[ 33%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/d_exp.c.o
+[ 33%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/draft/glpapi09.c.o
+[ 33%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/h_len.c.o
+[ 33%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/r_abs.c.o
+[ 33%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/draft/glpapi10.c.o
+[ 33%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/typesize.c.o
+[ 33%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/d_imag.c.o
+[ 33%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/h_mod.c.o
+[ 33%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/r_acos.c.o
+[ 33%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/draft/glpapi12.c.o
+[ 33%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/draft/glpapi13.c.o
+[ 33%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/uio.c.o
+[ 33%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/draft/glpios01.c.o
+[ 33%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/d_int.c.o
+[ 33%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/h_nint.c.o
+[ 33%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/draft/glpios02.c.o
+[ 33%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/r_asin.c.o
+[ 33%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/draft/glpios07.c.o
+[ 35%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/draft/glpios03.c.o
+[ 35%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/uninit.c.o
+[ 35%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/d_lg10.c.o
+[ 35%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/h_sign.c.o
+[ 35%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/r_atan.c.o
+[ 35%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/draft/glpios09.c.o
+[ 35%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/util.c.o
+[ 38%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/d_log.c.o
+[ 38%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/draft/glpios11.c.o
+[ 38%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/draft/glpios12.c.o
+[ 38%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/hl_ge.c.o
+[ 38%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/r_atn2.c.o
+[ 38%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/draft/glpipm.c.o
+[ 38%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/wref.c.o
+[ 38%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/d_mod.c.o
+[ 38%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/hl_gt.c.o
+[ 38%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/draft/glpmat.c.o
+[ 38%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/draft/glpscl.c.o
+[ 38%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/r_cnjg.c.o
+[ 38%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/wrtfmt.c.o
+[ 38%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/d_nint.c.o
+[ 38%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/draft/glpssx01.c.o
+[ 38%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/r_cos.c.o
+[ 38%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/hl_le.c.o
+[ 38%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/draft/glpssx02.c.o
+[ 38%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/wsfe.c.o
+[ 38%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/draft/lux.c.o
+[ 38%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/d_prod.c.o
+[ 38%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/hl_lt.c.o
+[ 38%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/r_cosh.c.o
+[ 38%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/env/alloc.c.o
+[ 38%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/env/dlsup.c.o
+[ 38%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/wsle.c.o
+[ 38%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/d_sign.c.o
+[ 38%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/env/env.c.o
+[ 38%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/env/error.c.o
+[ 38%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/i77vers.c.o
+[ 38%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/r_dim.c.o
+[ 38%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/wsne.c.o
+[ 38%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/env/stdout.c.o
+[ 40%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/env/stream.c.o
+[ 40%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/d_sin.c.o
+[ 40%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/env/stdc.c.o
+[ 40%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/env/time.c.o
+[ 40%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/i_abs.c.o
+[ 40%] Built target prpack
+[ 40%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/env/tls.c.o
+[ 40%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/r_exp.c.o
+[ 40%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/xwsne.c.o
+[ 42%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/intopt/cfg.c.o
+[ 42%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/d_sinh.c.o
+[ 42%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/intopt/cfg1.c.o
+[ 42%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/i_dim.c.o
+[ 42%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/intopt/cfg2.c.o
+[ 42%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/intopt/clqcut.c.o
+[ 42%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/intopt/covgen.c.o
+[ 42%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/intopt/fpump.c.o
+[ 42%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/intopt/gmicut.c.o
+[ 42%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/r_imag.c.o
+[ 42%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/z_abs.c.o
+[ 42%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/intopt/gmigen.c.o
+[ 42%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/d_sqrt.c.o
+[ 42%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/intopt/mirgen.c.o
+[ 42%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/intopt/spv.c.o
+[ 42%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/minisat/minisat.c.o
+[ 42%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/i_dnnt.c.o
+[ 42%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/z_cos.c.o
+[ 42%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/r_int.c.o
+[ 42%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/i_indx.c.o
+[ 42%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/d_tan.c.o
+[ 42%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/r_lg10.c.o
+[ 42%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/misc/avl.c.o
+[ 42%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/z_div.c.o
+[ 42%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/misc/bignum.c.o
+[ 42%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/d_tanh.c.o
+[ 42%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/i_len.c.o
+[ 42%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/r_log.c.o
+[ 42%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/misc/dimacs.c.o
+[ 42%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/z_exp.c.o
+[ 45%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/derf_.c.o
+[ 45%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/misc/dmp.c.o
+[ 45%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/misc/ffalg.c.o
+[ 45%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/i_mod.c.o
+[ 45%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/misc/fp2rat.c.o
+[ 45%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/r_mod.c.o
+[ 45%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/z_log.c.o
+[ 45%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/derfc_.c.o
+[ 45%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/misc/fvs.c.o
+[ 45%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/misc/gcd.c.o
+[ 45%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/i_nint.c.o
+[ 45%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/r_nint.c.o
+[ 45%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/misc/hbm.c.o
+[ 45%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/z_sin.c.o
+[ 45%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/dfe.c.o
+[ 47%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/misc/jd.c.o
+[ 47%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/misc/keller.c.o
+[ 47%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/i_sign.c.o
+[ 47%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/r_sign.c.o
+[ 47%] Building C object vendor/f2c/CMakeFiles/f2c_vendored.dir/z_sqrt.c.o
+[ 47%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/misc/ks.c.o
+[ 47%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/misc/mc13d.c.o
+[ 47%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/misc/mc21a.c.o
+[ 47%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/misc/mt1.c.o
+[ 47%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/misc/mygmp.c.o
+[ 47%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/misc/okalg.c.o
+[ 47%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/misc/qmd.c.o
+[ 47%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/misc/rgr.c.o
+[ 47%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/misc/relax4.c.o
+[ 47%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/misc/rng.c.o
+[ 47%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/misc/rng1.c.o
+[ 47%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/misc/round2n.c.o
+[ 47%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/misc/spm.c.o
+[ 47%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/misc/str2int.c.o
+[ 47%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/misc/str2num.c.o
+[ 47%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/misc/strspx.c.o
+[ 47%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/misc/strtrim.c.o
+[ 47%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/misc/triang.c.o
+[ 50%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/misc/wclique.c.o
+[ 50%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/misc/wclique1.c.o
+[ 50%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/mpl/mpl1.c.o
+[ 50%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/mpl/mpl2.c.o
+[ 50%] Built target f2c_vendored
+[ 50%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/mpl/mpl3.c.o
+[ 50%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/mpl/mpl5.c.o
+[ 50%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/mpl/mpl6.c.o
+[ 50%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/mpl/mpl4.c.o
+[ 50%] Building C object vendor/lapack/CMakeFiles/blas_vendored.dir/dscal.c.o
+[ 50%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/mpl/mplsql.c.o
+[ 50%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/npp/npp1.c.o
+[ 50%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/npp/npp2.c.o
+[ 50%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/npp/npp3.c.o
+[ 50%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/npp/npp4.c.o
+[ 50%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/npp/npp5.c.o
+[ 50%] Building C object vendor/lapack/CMakeFiles/blas_vendored.dir/dswap.c.o
+[ 50%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/npp/npp6.c.o
+[ 50%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/proxy/proxy.c.o
+[ 50%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/proxy/proxy1.c.o
+[ 50%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/simplex/spxat.c.o
+[ 50%] Building C object vendor/lapack/CMakeFiles/blas_vendored.dir/lsame.c.o
+[ 50%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/simplex/spxchuzc.c.o
+[ 50%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/simplex/spxchuzr.c.o
+[ 50%] Building C object vendor/lapack/CMakeFiles/blas_vendored.dir/dnrm2.c.o
+[ 52%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/simplex/spxlp.c.o
+[ 52%] Building C object vendor/lapack/CMakeFiles/blas_vendored.dir/daxpy.c.o
+[ 52%] Building C object vendor/lapack/CMakeFiles/blas_vendored.dir/dgemv.c.o
+[ 52%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/simplex/spxnt.c.o
+[ 52%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/simplex/spxprim.c.o
+[ 52%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/simplex/spxprob.c.o
+[ 52%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/simplex/spychuzc.c.o
+[ 52%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/simplex/spychuzr.c.o
+[ 52%] Building C object vendor/lapack/CMakeFiles/blas_vendored.dir/dger.c.o
+[ 52%] Building C object vendor/glpk/CMakeFiles/glpk_vendored.dir/simplex/spydual.c.o
+[ 52%] Building C object vendor/lapack/CMakeFiles/blas_vendored.dir/dgemm.c.o
+[ 52%] Building C object vendor/lapack/CMakeFiles/blas_vendored.dir/dcopy.c.o
+[ 52%] Building C object vendor/lapack/CMakeFiles/blas_vendored.dir/dtrmm.c.o
+[ 52%] Building C object vendor/lapack/CMakeFiles/blas_vendored.dir/dtrmv.c.o
+[ 52%] Building C object vendor/lapack/CMakeFiles/blas_vendored.dir/drot.c.o
+[ 52%] Building C object vendor/lapack/CMakeFiles/blas_vendored.dir/ddot.c.o
+[ 52%] Building C object vendor/lapack/CMakeFiles/blas_vendored.dir/dasum.c.o
+[ 52%] Building C object vendor/lapack/CMakeFiles/blas_vendored.dir/dsymv.c.o
+[ 52%] Building C object vendor/lapack/CMakeFiles/blas_vendored.dir/dsyr2k.c.o
+[ 52%] Building C object vendor/lapack/CMakeFiles/blas_vendored.dir/dsyr2.c.o
+[ 52%] Building C object vendor/lapack/CMakeFiles/blas_vendored.dir/dtrsm.c.o
+[ 52%] Building C object vendor/lapack/CMakeFiles/blas_vendored.dir/dsyrk.c.o
+[ 54%] Building C object vendor/lapack/CMakeFiles/blas_vendored.dir/dtrsv.c.o
+[ 54%] Building C object vendor/lapack/CMakeFiles/blas_vendored.dir/idamax.c.o
+[ 54%] Building C object vendor/lapack/CMakeFiles/arpack_vendored.dir/dnaupd.c.o
+[ 54%] Building C object vendor/lapack/CMakeFiles/arpack_vendored.dir/dnaup2.c.o
+[ 54%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dgeev.c.o
+[ 54%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dgebak.c.o
+[ 54%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dgebal.c.o
+[ 54%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/disnan.c.o
+[ 54%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlaisnan.c.o
+[ 54%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dgehrd.c.o
+[ 54%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dgehd2.c.o
+[ 54%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlarf.c.o
+[ 54%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/iladlc.c.o
+[ 54%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/iladlr.c.o
+[ 54%] Building C object vendor/lapack/CMakeFiles/arpack_vendored.dir/dgetv0.c.o
+[ 54%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlarfg.c.o
+[ 54%] Building C object vendor/lapack/CMakeFiles/arpack_vendored.dir/dvout.c.o
+[ 54%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlapy2.c.o
+[ 54%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlahr2.c.o
+[ 54%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlacpy.c.o
+[ 57%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlarfb.c.o
+[ 57%] Building C object vendor/lapack/CMakeFiles/arpack_vendored.dir/second.c.o
+[ 57%] Building C object vendor/lapack/CMakeFiles/arpack_vendored.dir/dmout.c.o
+[ 57%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/ilaenv.c.o
+[ 57%] Building C object vendor/lapack/CMakeFiles/arpack_vendored.dir/dnaitr.c.o
+[ 57%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/ieeeck.c.o
+[ 57%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/iparmq.c.o
+[ 57%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dhseqr.c.o
+[ 57%] Building C object vendor/lapack/CMakeFiles/arpack_vendored.dir/ivout.c.o
+[ 57%] Building C object vendor/lapack/CMakeFiles/arpack_vendored.dir/dnapps.c.o
+[ 57%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlahqr.c.o
+[ 57%] Building C object vendor/lapack/CMakeFiles/arpack_vendored.dir/dnconv.c.o
+[ 57%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlabad.c.o
+[ 57%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlanv2.c.o
+[ 57%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlaqr0.c.o
+[ 57%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlaqr3.c.o
+[ 57%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlaqr4.c.o
+[ 57%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlaqr2.c.o
+[ 57%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlaset.c.o
+[ 57%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dormhr.c.o
+[ 57%] Building C object vendor/lapack/CMakeFiles/arpack_vendored.dir/dneigh.c.o
+[ 57%] Building C object vendor/lapack/CMakeFiles/arpack_vendored.dir/dlaqrb.c.o
+[ 57%] Building C object vendor/lapack/CMakeFiles/arpack_vendored.dir/dngets.c.o
+[ 57%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dormqr.c.o
+[ 57%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlarft.c.o
+[ 57%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dorm2r.c.o
+[ 57%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dtrexc.c.o
+[ 57%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlaexc.c.o
+[ 57%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlange.c.o
+[ 57%] Building C object vendor/lapack/CMakeFiles/arpack_vendored.dir/dsortc.c.o
+[ 59%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlassq.c.o
+[ 59%] Building C object vendor/lapack/CMakeFiles/arpack_vendored.dir/dstatn.c.o
+[ 59%] Building C object vendor/lapack/CMakeFiles/arpack_vendored.dir/dneupd.c.o
+[ 59%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlarfx.c.o
+[ 59%] Built target blas_vendored
+[ 59%] Building C object vendor/lapack/CMakeFiles/arpack_vendored.dir/dsaupd.c.o
+[ 59%] Building C object vendor/lapack/CMakeFiles/arpack_vendored.dir/dsaup2.c.o
+[ 61%] Building C object vendor/lapack/CMakeFiles/arpack_vendored.dir/dsaitr.c.o
+[ 61%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlartg.c.o
+[ 61%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlasy2.c.o
+[ 61%] Building C object vendor/lapack/CMakeFiles/arpack_vendored.dir/dsapps.c.o
+[ 61%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlaqr5.c.o
+[ 61%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlaqr1.c.o
+[ 61%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlascl.c.o
+[ 61%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dorghr.c.o
+[ 61%] Building C object vendor/lapack/CMakeFiles/arpack_vendored.dir/dsconv.c.o
+[ 61%] Building C object vendor/lapack/CMakeFiles/arpack_vendored.dir/dseigt.c.o
+[ 61%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dorgqr.c.o
+[ 61%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dorg2r.c.o
+[ 61%] Building C object vendor/lapack/CMakeFiles/arpack_vendored.dir/dstqrb.c.o
+[ 61%] Building C object vendor/lapack/CMakeFiles/arpack_vendored.dir/dsgets.c.o
+[ 61%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dtrevc.c.o
+[ 61%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlaln2.c.o
+[ 61%] Building C object vendor/lapack/CMakeFiles/arpack_vendored.dir/dsortr.c.o
+[ 61%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dladiv.c.o
+[ 61%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dsyevr.c.o
+[ 61%] Building C object vendor/lapack/CMakeFiles/arpack_vendored.dir/dstats.c.o
+[ 61%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlansy.c.o
+[ 61%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dormtr.c.o
+[ 61%] Building C object vendor/lapack/CMakeFiles/arpack_vendored.dir/dseupd.c.o
+[ 61%] Building C object vendor/lapack/CMakeFiles/arpack_vendored.dir/dsesrt.c.o
+[ 61%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dormql.c.o
+[ 61%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dstebz.c.o
+[ 64%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dstein.c.o
+[ 64%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlaebz.c.o
+[ 64%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dorm2l.c.o
+[ 64%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlagtf.c.o
+[ 64%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlagts.c.o
+[ 64%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlarnv.c.o
+[ 64%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlaruv.c.o
+[ 64%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dstemr.c.o
+[ 64%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlae2.c.o
+[ 64%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlaev2.c.o
+[ 64%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlanst.c.o
+[ 64%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlarrc.c.o
+[ 64%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlarre.c.o
+[ 64%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlarra.c.o
+[ 64%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlarrb.c.o
+[ 64%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlaneg.c.o
+[ 64%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlarrd.c.o
+[ 64%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlarrk.c.o
+[ 64%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlasq3.c.o
+[ 64%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlasq2.c.o
+[ 64%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlasq4.c.o
+[ 64%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlasq5.c.o
+[ 66%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlasq6.c.o
+[ 66%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlasrt.c.o
+[ 66%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlarrj.c.o
+[ 66%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlarrr.c.o
+[ 66%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlarrv.c.o
+[ 66%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlar1v.c.o
+[ 66%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlarrf.c.o
+[ 66%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dsterf.c.o
+[ 66%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dsytrd.c.o
+[ 66%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlatrd.c.o
+[ 66%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dsytd2.c.o
+[ 66%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlanhs.c.o
+[ 66%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dgeqr2.c.o
+[ 66%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dtrsen.c.o
+[ 66%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlacn2.c.o
+[ 66%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dtrsyl.c.o
+[ 66%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlasr.c.o
+[ 66%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dsteqr.c.o
+[ 66%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dgeevx.c.o
+[ 66%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dtrsna.c.o
+[ 69%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlaqtr.c.o
+[ 69%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dgetrf.c.o
+[ 69%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dgetf2.c.o
+[ 69%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlaswp.c.o
+[ 69%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dgetrs.c.o
+[ 69%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dgesv.c.o
+[ 69%] Built target arpack_vendored
+[ 69%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dpotrf.c.o
+[ 69%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dpotf2.c.o
+[ 69%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/xerbla.c.o
+[ 69%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/len_trim.c.o
+[ 69%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/dlamch.c.o
+[ 69%] Building C object vendor/lapack/CMakeFiles/lapack_vendored.dir/fortran_intrinsics.c.o
+[ 69%] Built target gmp_vendored
+[ 69%] Built target lapack_vendored
+[ 69%] Built target glpk_vendored
+[ 69%] Built target bliss
+[ 69%] Building C object src/CMakeFiles/igraph.dir/core/array.c.o
+[ 69%] Building C object src/CMakeFiles/igraph.dir/core/buckets.c.o
+[ 69%] Building C object src/CMakeFiles/igraph.dir/core/cutheap.c.o
+[ 69%] Building C object src/CMakeFiles/igraph.dir/core/dqueue.c.o
+[ 69%] Building C object src/CMakeFiles/igraph.dir/core/error.c.o
+[ 69%] Building C object src/CMakeFiles/igraph.dir/core/estack.c.o
+[ 69%] Building C object src/CMakeFiles/igraph.dir/core/fixed_vectorlist.c.o
+[ 69%] Building C object src/CMakeFiles/igraph.dir/core/genheap.c.o
+[ 69%] Building C object src/CMakeFiles/igraph.dir/core/grid.c.o
+[ 69%] Building C object src/CMakeFiles/igraph.dir/core/heap.c.o
+[ 69%] Building C object src/CMakeFiles/igraph.dir/core/indheap.c.o
+[ 69%] Building C object src/CMakeFiles/igraph.dir/core/interruption.c.o
+[ 71%] Building C object src/CMakeFiles/igraph.dir/core/matrix.c.o
+[ 71%] Building C object src/CMakeFiles/igraph.dir/core/marked_queue.c.o
+[ 71%] Building C object src/CMakeFiles/igraph.dir/core/matrix_list.c.o
+[ 71%] Building C object src/CMakeFiles/igraph.dir/core/printing.c.o
+[ 71%] Building C object src/CMakeFiles/igraph.dir/core/progress.c.o
+[ 71%] Building C object src/CMakeFiles/igraph.dir/core/memory.c.o
+[ 71%] Building C object src/CMakeFiles/igraph.dir/core/psumtree.c.o
+[ 71%] Building C object src/CMakeFiles/igraph.dir/core/set.c.o
+[ 71%] Building C object src/CMakeFiles/igraph.dir/core/sparsemat.c.o
+[ 71%] Building C object src/CMakeFiles/igraph.dir/core/stack.c.o
+[ 71%] Building C object src/CMakeFiles/igraph.dir/core/strvector.c.o
+[ 71%] Building C object src/CMakeFiles/igraph.dir/core/statusbar.c.o
+[ 71%] Building C object src/CMakeFiles/igraph.dir/core/trie.c.o
+[ 71%] Building C object src/CMakeFiles/igraph.dir/core/vector.c.o
+[ 71%] Building C object src/CMakeFiles/igraph.dir/core/vector_list.c.o
+[ 71%] Building C object src/CMakeFiles/igraph.dir/core/vector_ptr.c.o
+[ 71%] Building C object src/CMakeFiles/igraph.dir/math/safe_intop.c.o
+[ 71%] Building C object src/CMakeFiles/igraph.dir/math/utils.c.o
+[ 71%] Building C object src/CMakeFiles/igraph.dir/linalg/arpack.c.o
+[ 71%] Building C object src/CMakeFiles/igraph.dir/math/complex.c.o
+[ 73%] Building C object src/CMakeFiles/igraph.dir/linalg/blas.c.o
+[ 73%] Building C object src/CMakeFiles/igraph.dir/linalg/eigen.c.o
+[ 73%] Building C object src/CMakeFiles/igraph.dir/linalg/lapack.c.o
+[ 73%] Building C object src/CMakeFiles/igraph.dir/random/random.c.o
+[ 73%] Building C object src/CMakeFiles/igraph.dir/random/rng_glibc2.c.o
+[ 73%] Building C object src/CMakeFiles/igraph.dir/random/rng_mt19937.c.o
+[ 73%] Building C object src/CMakeFiles/igraph.dir/random/rng_pcg32.c.o
+[ 73%] Building C object src/CMakeFiles/igraph.dir/random/rng_pcg64.c.o
+[ 73%] Building C object src/CMakeFiles/igraph.dir/graph/adjlist.c.o
+[ 73%] Building C object src/CMakeFiles/igraph.dir/graph/attributes.c.o
+[ 73%] Building C object src/CMakeFiles/igraph.dir/graph/basic_query.c.o
+[ 73%] Building C object src/CMakeFiles/igraph.dir/graph/caching.c.o
+[ 73%] Building C object src/CMakeFiles/igraph.dir/graph/cattributes.c.o
+[ 73%] Building C object src/CMakeFiles/igraph.dir/graph/graph_list.c.o
+[ 73%] Building C object src/CMakeFiles/igraph.dir/graph/iterators.c.o
+[ 73%] Building C object src/CMakeFiles/igraph.dir/graph/type_common.c.o
+[ 73%] Building C object src/CMakeFiles/igraph.dir/graph/visitors.c.o
+[ 73%] Building C object src/CMakeFiles/igraph.dir/graph/type_indexededgelist.c.o
+[ 73%] Building C object src/CMakeFiles/igraph.dir/constructors/adjacency.c.o
+[ 73%] Building C object src/CMakeFiles/igraph.dir/constructors/atlas.c.o
+[ 76%] Building C object src/CMakeFiles/igraph.dir/constructors/basic_constructors.c.o
+[ 76%] Building C object src/CMakeFiles/igraph.dir/constructors/circulant.c.o
+[ 76%] Building C object src/CMakeFiles/igraph.dir/constructors/de_bruijn.c.o
+[ 76%] Building C object src/CMakeFiles/igraph.dir/constructors/famous.c.o
+[ 76%] Building C object src/CMakeFiles/igraph.dir/constructors/full.c.o
+[ 76%] Building C object src/CMakeFiles/igraph.dir/constructors/generalized_petersen.c.o
+[ 76%] Building C object src/CMakeFiles/igraph.dir/constructors/kautz.c.o
+[ 76%] Building C object src/CMakeFiles/igraph.dir/constructors/lattices.c.o
+[ 76%] Building C object src/CMakeFiles/igraph.dir/constructors/lcf.c.o
+[ 76%] Building C object src/CMakeFiles/igraph.dir/constructors/linegraph.c.o
+[ 76%] Building C object src/CMakeFiles/igraph.dir/constructors/prufer.c.o
+[ 76%] Building C object src/CMakeFiles/igraph.dir/constructors/regular.c.o
+[ 76%] Building C object src/CMakeFiles/igraph.dir/constructors/trees.c.o
+[ 76%] Building C object src/CMakeFiles/igraph.dir/games/barabasi.c.o
+[ 76%] Building C object src/CMakeFiles/igraph.dir/games/callaway_traits.c.o
+[ 76%] Building C object src/CMakeFiles/igraph.dir/games/citations.c.o
+[ 76%] Building C object src/CMakeFiles/igraph.dir/games/correlated.c.o
+[ 76%] Building CXX object src/CMakeFiles/igraph.dir/games/degree_sequence_vl/gengraph_degree_sequence.cpp.o
+[ 76%] Building CXX object src/CMakeFiles/igraph.dir/games/degree_sequence_vl/gengraph_graph_molloy_hash.cpp.o
+[ 76%] Building CXX object src/CMakeFiles/igraph.dir/games/degree_sequence_vl/gengraph_graph_molloy_optimized.cpp.o
+[ 78%] Building CXX object src/CMakeFiles/igraph.dir/games/degree_sequence_vl/gengraph_mr-connected.cpp.o
+[ 78%] Building C object src/CMakeFiles/igraph.dir/games/degree_sequence.c.o
+[ 78%] Building C object src/CMakeFiles/igraph.dir/games/dotproduct.c.o
+[ 78%] Building C object src/CMakeFiles/igraph.dir/games/erdos_renyi.c.o
+[ 78%] Building C object src/CMakeFiles/igraph.dir/games/establishment.c.o
+[ 78%] Building C object src/CMakeFiles/igraph.dir/games/forestfire.c.o
+[ 78%] Building C object src/CMakeFiles/igraph.dir/games/grg.c.o
+[ 78%] Building C object src/CMakeFiles/igraph.dir/games/growing_random.c.o
+[ 78%] Building C object src/CMakeFiles/igraph.dir/games/islands.c.o
+[ 78%] Building C object src/CMakeFiles/igraph.dir/games/k_regular.c.o
+[ 78%] Building C object src/CMakeFiles/igraph.dir/games/preference.c.o
+[ 78%] Building C object src/CMakeFiles/igraph.dir/games/recent_degree.c.o
+[ 78%] Building C object src/CMakeFiles/igraph.dir/games/sbm.c.o
+[ 78%] Building C object src/CMakeFiles/igraph.dir/games/static_fitness.c.o
+[ 78%] Building C object src/CMakeFiles/igraph.dir/games/tree.c.o
+[ 78%] Building C object src/CMakeFiles/igraph.dir/games/watts_strogatz.c.o
+[ 78%] Building C object src/CMakeFiles/igraph.dir/centrality/centrality_other.c.o
+[ 78%] Building C object src/CMakeFiles/igraph.dir/centrality/betweenness.c.o
+[ 78%] Building C object src/CMakeFiles/igraph.dir/centrality/centralization.c.o
+[ 78%] Building C object src/CMakeFiles/igraph.dir/centrality/closeness.c.o
+[ 80%] Building C object src/CMakeFiles/igraph.dir/centrality/coreness.c.o
+[ 80%] Building C object src/CMakeFiles/igraph.dir/centrality/eigenvector.c.o
+[ 80%] Building C object src/CMakeFiles/igraph.dir/centrality/hub_authority.c.o
+[ 80%] Building C object src/CMakeFiles/igraph.dir/centrality/pagerank.c.o
+[ 80%] Building CXX object src/CMakeFiles/igraph.dir/centrality/truss.cpp.o
+[ 80%] Building CXX object src/CMakeFiles/igraph.dir/centrality/prpack.cpp.o
+[ 80%] Building C object src/CMakeFiles/igraph.dir/cliques/cliquer_wrapper.c.o
+[ 80%] Building C object src/CMakeFiles/igraph.dir/cliques/cliques.c.o
+[ 80%] Building C object src/CMakeFiles/igraph.dir/cliques/maximal_cliques.c.o
+[ 80%] Building C object src/CMakeFiles/igraph.dir/cliques/glet.c.o
+[ 80%] Building C object src/CMakeFiles/igraph.dir/community/community_misc.c.o
+[ 80%] Building C object src/CMakeFiles/igraph.dir/community/edge_betweenness.c.o
+[ 80%] Building C object src/CMakeFiles/igraph.dir/community/fast_modularity.c.o
+[ 80%] Building C object src/CMakeFiles/igraph.dir/community/fluid.c.o
+[ 80%] Building CXX object src/CMakeFiles/igraph.dir/community/infomap/infomap_FlowGraph.cc.o
+[ 80%] Building CXX object src/CMakeFiles/igraph.dir/community/infomap/infomap_Greedy.cc.o
+[ 80%] Building CXX object src/CMakeFiles/igraph.dir/community/infomap/infomap.cc.o
+[ 80%] Building C object src/CMakeFiles/igraph.dir/community/label_propagation.c.o
+[ 80%] Building C object src/CMakeFiles/igraph.dir/community/leading_eigenvector.c.o
+[ 80%] Building C object src/CMakeFiles/igraph.dir/community/leiden.c.o
+[ 83%] Building C object src/CMakeFiles/igraph.dir/community/louvain.c.o
+[ 83%] Building C object src/CMakeFiles/igraph.dir/community/modularity.c.o
+[ 83%] Building C object src/CMakeFiles/igraph.dir/community/optimal_modularity.c.o
+[ 83%] Building CXX object src/CMakeFiles/igraph.dir/community/spinglass/clustertool.cpp.o
+[ 83%] Building CXX object src/CMakeFiles/igraph.dir/community/spinglass/NetDataTypes.cpp.o
+[ 83%] Building CXX object src/CMakeFiles/igraph.dir/community/spinglass/NetRoutines.cpp.o
+[ 83%] Building CXX object src/CMakeFiles/igraph.dir/community/spinglass/pottsmodel_2.cpp.o
+[ 83%] Building C object src/CMakeFiles/igraph.dir/community/voronoi.c.o
+[ 83%] Building CXX object src/CMakeFiles/igraph.dir/community/walktrap/walktrap_communities.cpp.o
+[ 83%] Building CXX object src/CMakeFiles/igraph.dir/community/walktrap/walktrap_graph.cpp.o
+[ 83%] Building CXX object src/CMakeFiles/igraph.dir/community/walktrap/walktrap_heap.cpp.o
+[ 83%] Building CXX object src/CMakeFiles/igraph.dir/community/walktrap/walktrap.cpp.o
+[ 83%] Building C object src/CMakeFiles/igraph.dir/connectivity/cohesive_blocks.c.o
+[ 83%] Building C object src/CMakeFiles/igraph.dir/connectivity/components.c.o
+[ 83%] Building C object src/CMakeFiles/igraph.dir/connectivity/separators.c.o
+[ 83%] Building C object src/CMakeFiles/igraph.dir/flow/flow.c.o
+[ 83%] Building C object src/CMakeFiles/igraph.dir/flow/flow_conversion.c.o
+[ 83%] Building C object src/CMakeFiles/igraph.dir/flow/st-cuts.c.o
+[ 83%] Building CXX object src/CMakeFiles/igraph.dir/hrg/hrg_types.cc.o
+[ 83%] Building CXX object src/CMakeFiles/igraph.dir/hrg/hrg.cc.o
+[ 85%] Building C object src/CMakeFiles/igraph.dir/io/dimacs.c.o
+[ 85%] Building C object src/CMakeFiles/igraph.dir/io/dl.c.o
+[ 85%] Building C object src/CMakeFiles/igraph.dir/io/dot.c.o
+[ 85%] Building C object src/CMakeFiles/igraph.dir/io/edgelist.c.o
+[ 85%] Building C object src/CMakeFiles/igraph.dir/io/graphml.c.o
+[ 85%] Building C object src/CMakeFiles/igraph.dir/io/gml-tree.c.o
+[ 85%] Building C object src/CMakeFiles/igraph.dir/io/gml.c.o
+[ 85%] Building C object src/CMakeFiles/igraph.dir/io/graphdb.c.o
+[ 85%] Building C object src/CMakeFiles/igraph.dir/io/leda.c.o
+[ 85%] Building C object src/CMakeFiles/igraph.dir/io/ncol.c.o
+[ 85%] Building C object src/CMakeFiles/igraph.dir/io/lgl.c.o
+[ 85%] Building C object src/CMakeFiles/igraph.dir/io/pajek.c.o
+[ 85%] Building C object src/CMakeFiles/igraph.dir/io/parse_utils.c.o
+[ 85%] Building C object src/CMakeFiles/igraph.dir/io/parsers/dl-parser.c.o
+[ 85%] Building C object src/CMakeFiles/igraph.dir/io/parsers/dl-lexer.c.o
+[ 85%] Building C object src/CMakeFiles/igraph.dir/io/parsers/gml-parser.c.o
+[ 85%] Building C object src/CMakeFiles/igraph.dir/io/parsers/gml-lexer.c.o
+[ 85%] Building C object src/CMakeFiles/igraph.dir/io/parsers/lgl-parser.c.o
+[ 85%] Building C object src/CMakeFiles/igraph.dir/io/parsers/lgl-lexer.c.o
+[ 85%] Building C object src/CMakeFiles/igraph.dir/io/parsers/ncol-parser.c.o
+[ 88%] Building C object src/CMakeFiles/igraph.dir/io/parsers/ncol-lexer.c.o
+[ 88%] Building C object src/CMakeFiles/igraph.dir/io/parsers/pajek-parser.c.o
+[ 88%] Building C object src/CMakeFiles/igraph.dir/io/parsers/pajek-lexer.c.o
+[ 88%] Building C object src/CMakeFiles/igraph.dir/layout/circular.c.o
+[ 88%] Building C object src/CMakeFiles/igraph.dir/layout/davidson_harel.c.o
+[ 88%] Building CXX object src/CMakeFiles/igraph.dir/layout/drl/DensityGrid.cpp.o
+[ 88%] Building CXX object src/CMakeFiles/igraph.dir/layout/drl/DensityGrid_3d.cpp.o
+[ 88%] Building CXX object src/CMakeFiles/igraph.dir/layout/drl/drl_graph.cpp.o
+[ 88%] Building CXX object src/CMakeFiles/igraph.dir/layout/drl/drl_graph_3d.cpp.o
+[ 88%] Building CXX object src/CMakeFiles/igraph.dir/layout/drl/drl_layout.cpp.o
+[ 88%] Building CXX object src/CMakeFiles/igraph.dir/layout/drl/drl_layout_3d.cpp.o
+[ 88%] Building C object src/CMakeFiles/igraph.dir/layout/fruchterman_reingold.c.o
+[ 88%] Building C object src/CMakeFiles/igraph.dir/layout/gem.c.o
+[ 88%] Building C object src/CMakeFiles/igraph.dir/layout/graphopt.c.o
+[ 88%] Building C object src/CMakeFiles/igraph.dir/layout/kamada_kawai.c.o
+[ 88%] Building C object src/CMakeFiles/igraph.dir/layout/large_graph.c.o
+[ 88%] Building C object src/CMakeFiles/igraph.dir/layout/layout_bipartite.c.o
+[ 88%] Building C object src/CMakeFiles/igraph.dir/layout/layout_grid.c.o
+[ 88%] Building C object src/CMakeFiles/igraph.dir/layout/layout_random.c.o
+[ 88%] Building C object src/CMakeFiles/igraph.dir/layout/mds.c.o
+[ 90%] Building C object src/CMakeFiles/igraph.dir/layout/merge_dla.c.o
+[ 90%] Building C object src/CMakeFiles/igraph.dir/layout/merge_grid.c.o
+[ 90%] Building C object src/CMakeFiles/igraph.dir/layout/reingold_tilford.c.o
+[ 90%] Building C object src/CMakeFiles/igraph.dir/layout/sugiyama.c.o
+[ 90%] Building C object src/CMakeFiles/igraph.dir/layout/umap.c.o
+[ 90%] Building C object src/CMakeFiles/igraph.dir/operators/add_edge.c.o
+[ 90%] Building C object src/CMakeFiles/igraph.dir/operators/complementer.c.o
+[ 90%] Building C object src/CMakeFiles/igraph.dir/operators/compose.c.o
+[ 90%] Building C object src/CMakeFiles/igraph.dir/operators/connect_neighborhood.c.o
+[ 90%] Building C object src/CMakeFiles/igraph.dir/operators/contract.c.o
+[ 90%] Building C object src/CMakeFiles/igraph.dir/operators/difference.c.o
+[ 90%] Building C object src/CMakeFiles/igraph.dir/operators/disjoint_union.c.o
+[ 90%] Building C object src/CMakeFiles/igraph.dir/operators/intersection.c.o
+[ 90%] Building C object src/CMakeFiles/igraph.dir/operators/misc_internal.c.o
+[ 90%] Building C object src/CMakeFiles/igraph.dir/operators/permute.c.o
+[ 90%] Building C object src/CMakeFiles/igraph.dir/operators/reverse.c.o
+[ 90%] Building C object src/CMakeFiles/igraph.dir/operators/rewire.c.o
+[ 90%] Building C object src/CMakeFiles/igraph.dir/operators/rewire_edges.c.o
+[ 90%] Building C object src/CMakeFiles/igraph.dir/operators/simplify.c.o
+[ 90%] Building C object src/CMakeFiles/igraph.dir/operators/subgraph.c.o
+[ 92%] Building C object src/CMakeFiles/igraph.dir/operators/union.c.o
+[ 92%] Building C object src/CMakeFiles/igraph.dir/paths/all_shortest_paths.c.o
+[ 92%] Building C object src/CMakeFiles/igraph.dir/paths/astar.c.o
+[ 92%] Building C object src/CMakeFiles/igraph.dir/paths/bellman_ford.c.o
+[ 92%] Building C object src/CMakeFiles/igraph.dir/paths/dijkstra.c.o
+[ 92%] Building C object src/CMakeFiles/igraph.dir/paths/distances.c.o
+[ 92%] Building C object src/CMakeFiles/igraph.dir/paths/eulerian.c.o
+[ 92%] Building C object src/CMakeFiles/igraph.dir/paths/floyd_warshall.c.o
+[ 92%] Building C object src/CMakeFiles/igraph.dir/paths/johnson.c.o
+[ 92%] Building C object src/CMakeFiles/igraph.dir/paths/histogram.c.o
+[ 92%] Building C object src/CMakeFiles/igraph.dir/paths/random_walk.c.o
+[ 92%] Building C object src/CMakeFiles/igraph.dir/paths/shortest_paths.c.o
+[ 92%] Building C object src/CMakeFiles/igraph.dir/paths/simple_paths.c.o
+[ 92%] Building C object src/CMakeFiles/igraph.dir/paths/sparsifier.c.o
+[ 92%] Building C object src/CMakeFiles/igraph.dir/paths/unweighted.c.o
+[ 92%] Building C object src/CMakeFiles/igraph.dir/paths/voronoi.c.o
+[ 92%] Building C object src/CMakeFiles/igraph.dir/paths/widest_paths.c.o
+[ 92%] Building C object src/CMakeFiles/igraph.dir/properties/basic_properties.c.o
+[ 92%] Building C object src/CMakeFiles/igraph.dir/properties/constraint.c.o
+[ 92%] Building C object src/CMakeFiles/igraph.dir/properties/convergence_degree.c.o
+[ 95%] Building C object src/CMakeFiles/igraph.dir/properties/dag.c.o
+[ 95%] Building C object src/CMakeFiles/igraph.dir/properties/degrees.c.o
+[ 95%] Building C object src/CMakeFiles/igraph.dir/properties/ecc.c.o
+[ 95%] Building C object src/CMakeFiles/igraph.dir/properties/girth.c.o
+[ 95%] Building C object src/CMakeFiles/igraph.dir/properties/loops.c.o
+[ 95%] Building C object src/CMakeFiles/igraph.dir/properties/multiplicity.c.o
+[ 95%] Building C object src/CMakeFiles/igraph.dir/properties/neighborhood.c.o
+[ 95%] Building C object src/CMakeFiles/igraph.dir/properties/perfect.c.o
+[ 95%] Building C object src/CMakeFiles/igraph.dir/properties/spectral.c.o
+[ 95%] Building C object src/CMakeFiles/igraph.dir/properties/trees.c.o
+[ 95%] Building C object src/CMakeFiles/igraph.dir/properties/triangles.c.o
+[ 95%] Building CXX object src/CMakeFiles/igraph.dir/isomorphism/bliss.cc.o
+[ 95%] Building C object src/CMakeFiles/igraph.dir/isomorphism/isoclasses.c.o
+[ 95%] Building C object src/CMakeFiles/igraph.dir/isomorphism/lad.c.o
+[ 95%] Building C object src/CMakeFiles/igraph.dir/isomorphism/isomorphism_misc.c.o
+[ 95%] Building C object src/CMakeFiles/igraph.dir/isomorphism/queries.c.o
+[ 95%] Building C object src/CMakeFiles/igraph.dir/isomorphism/vf2.c.o
+[ 95%] Building C object src/CMakeFiles/igraph.dir/misc/bipartite.c.o
+[ 95%] Building C object src/CMakeFiles/igraph.dir/misc/chordality.c.o
+[ 95%] Building C object src/CMakeFiles/igraph.dir/misc/cocitation.c.o
+[ 97%] Building C object src/CMakeFiles/igraph.dir/misc/coloring.c.o
+[ 97%] Building C object src/CMakeFiles/igraph.dir/misc/conversion.c.o
+[ 97%] Building C object src/CMakeFiles/igraph.dir/misc/cycle_bases.c.o
+[ 97%] Building CXX object src/CMakeFiles/igraph.dir/misc/degree_sequence.cpp.o
+[ 97%] Building C object src/CMakeFiles/igraph.dir/misc/embedding.c.o
+[ 97%] Building C object src/CMakeFiles/igraph.dir/misc/feedback_arc_set.c.o
+[ 97%] Building C object src/CMakeFiles/igraph.dir/misc/graphicality.c.o
+[ 97%] Building C object src/CMakeFiles/igraph.dir/misc/matching.c.o
+[ 97%] Building C object src/CMakeFiles/igraph.dir/misc/microscopic_update.c.o
+[ 97%] Building C object src/CMakeFiles/igraph.dir/misc/mixing.c.o
+[ 97%] Building C object src/CMakeFiles/igraph.dir/misc/motifs.c.o
+[ 97%] Building CXX object src/CMakeFiles/igraph.dir/misc/order_cycle.cpp.o
+[ 97%] Building C object src/CMakeFiles/igraph.dir/misc/other.c.o
+[ 97%] Building C object src/CMakeFiles/igraph.dir/misc/power_law_fit.c.o
+[ 97%] Building C object src/CMakeFiles/igraph.dir/misc/scan.c.o
+[ 97%] Building C object src/CMakeFiles/igraph.dir/misc/sir.c.o
+[ 97%] Building C object src/CMakeFiles/igraph.dir/misc/spanning_trees.c.o
+[ 97%] Building C object src/CMakeFiles/igraph.dir/internal/glpk_support.c.o
+[ 97%] Building C object src/CMakeFiles/igraph.dir/internal/hacks.c.o
+[ 97%] Building C object src/CMakeFiles/igraph.dir/internal/lsap.c.o
+[100%] Building C object src/CMakeFiles/igraph.dir/internal/qsort_r.c.o
+[100%] Building C object src/CMakeFiles/igraph.dir/internal/qsort.c.o
+[100%] Building C object src/CMakeFiles/igraph.dir/internal/utils.c.o
+[100%] Building C object src/CMakeFiles/igraph.dir/internal/zeroin.c.o
+[100%] Building C object src/CMakeFiles/igraph.dir/version.c.o
+[100%] Linking CXX static library libigraph.a
+[100%] Built target igraph
+[100%] Building C object tests/CMakeFiles/test_utilities.dir/unit/test_utilities.c.o
+[100%] Built target test_utilities
++ zip /workspace/out/libfuzzer-address-x86_64/read_edgelist_seed_corpus.zip /src/igraph/fuzzing/test_inputs/t1.el /src/igraph/fuzzing/test_inputs/t2.el /src/igraph/fuzzing/test_inputs/t3.el /src/igraph/fuzzing/test_inputs/t4.el /src/igraph/fuzzing/test_inputs/t5.el
+  adding: src/igraph/fuzzing/test_inputs/t1.el (deflated 13%)
+  adding: src/igraph/fuzzing/test_inputs/t2.el (stored 0%)
+  adding: src/igraph/fuzzing/test_inputs/t3.el (stored 0%)
+  adding: src/igraph/fuzzing/test_inputs/t4.el (stored 0%)
+  adding: src/igraph/fuzzing/test_inputs/t5.el (stored 0%)
++ zip /workspace/out/libfuzzer-address-x86_64/read_dimacs_flow_seed_corpus.zip /src/igraph/examples/simple/ak-4102.max /src/igraph/tests/unit/ak-4102.max /src/igraph/fuzzing/test_inputs/simple.max
+  adding: src/igraph/examples/simple/ak-4102.max (deflated 74%)
+  adding: src/igraph/tests/unit/ak-4102.max (deflated 74%)
+  adding: src/igraph/fuzzing/test_inputs/simple.max (deflated 34%)
++ zip /workspace/out/libfuzzer-address-x86_64/read_dl_seed_corpus.zip /src/igraph/examples/simple/edgelist1.dl /src/igraph/examples/simple/edgelist2.dl /src/igraph/examples/simple/edgelist3.dl /src/igraph/examples/simple/edgelist4.dl /src/igraph/examples/simple/edgelist5.dl /src/igraph/examples/simple/edgelist6.dl /src/igraph/examples/simple/edgelist7.dl /src/igraph/examples/simple/fullmatrix1.dl /src/igraph/examples/simple/fullmatrix2.dl /src/igraph/examples/simple/fullmatrix3.dl /src/igraph/examples/simple/fullmatrix4.dl /src/igraph/examples/simple/nodelist1.dl /src/igraph/examples/simple/nodelist2.dl /src/igraph/tests/unit/input.dl '/src/igraph/fuzzing/test_inputs/*.dl'
+	zip warning: name not matched: /src/igraph/fuzzing/test_inputs/*.dl
+  adding: src/igraph/examples/simple/edgelist1.dl (deflated 9%)
+  adding: src/igraph/examples/simple/edgelist2.dl (deflated 23%)
+  adding: src/igraph/examples/simple/edgelist3.dl (deflated 33%)
+  adding: src/igraph/examples/simple/edgelist4.dl (deflated 11%)
+  adding: src/igraph/examples/simple/edgelist5.dl (deflated 27%)
+  adding: src/igraph/examples/simple/edgelist6.dl (deflated 35%)
+  adding: src/igraph/examples/simple/edgelist7.dl (stored 0%)
+  adding: src/igraph/examples/simple/fullmatrix1.dl (deflated 40%)
+  adding: src/igraph/examples/simple/fullmatrix2.dl (deflated 27%)
+  adding: src/igraph/examples/simple/fullmatrix3.dl (deflated 28%)
+  adding: src/igraph/examples/simple/fullmatrix4.dl (deflated 29%)
+  adding: src/igraph/examples/simple/nodelist1.dl (deflated 8%)
+  adding: src/igraph/examples/simple/nodelist2.dl (deflated 16%)
+  adding: src/igraph/tests/unit/input.dl (deflated 62%)
++ zip /workspace/out/libfuzzer-address-x86_64/read_gml_seed_corpus.zip /src/igraph/examples/simple/celegansneural.gml /src/igraph/examples/simple/karate.gml /src/igraph/examples/simple/weighted.gml /src/igraph/tests/regression/invalid1.gml /src/igraph/tests/regression/invalid2.gml /src/igraph/tests/regression/invalid4.gml /src/igraph/tests/regression/invalid5.gml /src/igraph/tests/regression/invalid6.gml /src/igraph/tests/unit/graph1.gml /src/igraph/tests/unit/graph2.gml /src/igraph/tests/unit/graph3.gml /src/igraph/fuzzing/test_inputs/graph1.gml
+  adding: src/igraph/examples/simple/celegansneural.gml (deflated 92%)
+  adding: src/igraph/examples/simple/karate.gml (deflated 89%)
+  adding: src/igraph/examples/simple/weighted.gml (deflated 43%)
+  adding: src/igraph/tests/regression/invalid1.gml (deflated 89%)
+  adding: src/igraph/tests/regression/invalid2.gml (stored 0%)
+  adding: src/igraph/tests/regression/invalid4.gml (stored 0%)
+  adding: src/igraph/tests/regression/invalid5.gml (stored 0%)
+  adding: src/igraph/tests/regression/invalid6.gml (deflated 4%)
+  adding: src/igraph/tests/unit/graph1.gml (deflated 52%)
+  adding: src/igraph/tests/unit/graph2.gml (deflated 33%)
+  adding: src/igraph/tests/unit/graph3.gml (deflated 3%)
+  adding: src/igraph/fuzzing/test_inputs/graph1.gml (deflated 75%)
++ zip /workspace/out/libfuzzer-address-x86_64/read_graphdb_seed_corpus.zip /src/igraph/fuzzing/test_inputs/si2_b06m_m1000.A14 /src/igraph/fuzzing/test_inputs/si2_b06m_m1000.A22 /src/igraph/fuzzing/test_inputs/si2_b06m_m200.A00 /src/igraph/fuzzing/test_inputs/si2_b06m_m200.A05 /src/igraph/fuzzing/test_inputs/si2_b06m_m200.A11 /src/igraph/fuzzing/test_inputs/si2_b06m_m200.A37 /src/igraph/fuzzing/test_inputs/si2_b06m_m200.A43 /src/igraph/fuzzing/test_inputs/si2_b06m_m400.A05 /src/igraph/fuzzing/test_inputs/si2_b06m_m400.A09 /src/igraph/fuzzing/test_inputs/si2_b06m_m400.A17 /src/igraph/fuzzing/test_inputs/si2_b06m_m600.A11 /src/igraph/fuzzing/test_inputs/si2_b06m_m600.A16 /src/igraph/fuzzing/test_inputs/si2_b06m_m600.A22 /src/igraph/fuzzing/test_inputs/si2_b06m_m800.A32 /src/igraph/fuzzing/test_inputs/si2_b06m_m800.A37 /src/igraph/fuzzing/test_inputs/si2_b06m_m800.A41 /src/igraph/fuzzing/test_inputs/si2_b06m_s20.A00 /src/igraph/fuzzing/test_inputs/si2_b06m_s20.A04 /src/igraph/fuzzing/test_inputs/si2_b06m_s20.A12 /src/igraph/fuzzing/test_inputs/si2_b06m_s20.A18 /src/igraph/fuzzing/test_inputs/si2_b06m_s20.A26 /src/igraph/fuzzing/test_inputs/si2_b06m_s20.A31 /src/igraph/fuzzing/test_inputs/si2_b06m_s40.A27 /src/igraph/fuzzing/test_inputs/si2_b06m_s40.A32 /src/igraph/fuzzing/test_inputs/si2_b06m_s40.A46 /src/igraph/fuzzing/test_inputs/si2_b06m_s40.A54 /src/igraph/fuzzing/test_inputs/si2_b06m_s60.A51 /src/igraph/fuzzing/test_inputs/si2_b06m_s60.A59 /src/igraph/fuzzing/test_inputs/si2_b06m_s80.A03 /src/igraph/fuzzing/test_inputs/si2_b06m_s80.A56 /src/igraph/fuzzing/test_inputs/si2_b06m_m1000.B14 /src/igraph/fuzzing/test_inputs/si2_b06m_m1000.B18 /src/igraph/fuzzing/test_inputs/si2_b06m_m1000.B23 /src/igraph/fuzzing/test_inputs/si2_b06m_m1000.B97 /src/igraph/fuzzing/test_inputs/si2_b06m_m200.B54 /src/igraph/fuzzing/test_inputs/si2_b06m_m200.B61 /src/igraph/fuzzing/test_inputs/si2_b06m_m200.B65 /src/igraph/fuzzing/test_inputs/si2_b06m_m400.B02 /src/igraph/fuzzing/test_inputs/si2_b06m_m400.B08 /src/igraph/fuzzing/test_inputs/si2_b06m_m400.B16 /src/igraph/fuzzing/test_inputs/si2_b06m_m600.B07 /src/igraph/fuzzing/test_inputs/si2_b06m_m600.B15 /src/igraph/fuzzing/test_inputs/si2_b06m_m600.B26 /src/igraph/fuzzing/test_inputs/si2_b06m_m800.B54 /src/igraph/fuzzing/test_inputs/si2_b06m_m800.B60 /src/igraph/fuzzing/test_inputs/si2_b06m_m800.B94 /src/igraph/fuzzing/test_inputs/si2_b06m_s100.B93 /src/igraph/fuzzing/test_inputs/si2_b06m_s20.B02 /src/igraph/fuzzing/test_inputs/si2_b06m_s20.B42 /src/igraph/fuzzing/test_inputs/si2_b06m_s20.B72 /src/igraph/fuzzing/test_inputs/si2_b06m_s40.B00 /src/igraph/fuzzing/test_inputs/si2_b06m_s40.B16 /src/igraph/fuzzing/test_inputs/si2_b06m_s60.B74 /src/igraph/fuzzing/test_inputs/si2_b06m_s60.B95 /src/igraph/examples/simple/iso_b03_m1000.A00
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_m1000.A14 (deflated 42%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_m1000.A22 (deflated 42%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_m200.A00 (deflated 46%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_m200.A05 (deflated 45%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_m200.A11 (deflated 45%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_m200.A37 (deflated 44%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_m200.A43 (deflated 45%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_m400.A05 (deflated 43%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_m400.A09 (deflated 45%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_m400.A17 (deflated 44%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_m600.A11 (deflated 46%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_m600.A16 (deflated 42%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_m600.A22 (deflated 42%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_m800.A32 (deflated 41%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_m800.A37 (deflated 41%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_m800.A41 (deflated 42%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_s20.A00 (deflated 44%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_s20.A04 (deflated 22%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_s20.A12 (deflated 33%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_s20.A18 (deflated 27%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_s20.A26 (deflated 31%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_s20.A31 (deflated 18%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_s40.A27 (deflated 40%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_s40.A32 (deflated 27%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_s40.A46 (deflated 29%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_s40.A54 (deflated 38%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_s60.A51 (deflated 42%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_s60.A59 (deflated 35%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_s80.A03 (deflated 39%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_s80.A56 (deflated 38%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_m1000.B14 (deflated 31%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_m1000.B18 (deflated 32%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_m1000.B23 (deflated 32%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_m1000.B97 (deflated 32%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_m200.B54 (deflated 36%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_m200.B61 (deflated 38%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_m200.B65 (deflated 36%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_m400.B02 (deflated 34%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_m400.B08 (deflated 35%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_m400.B16 (deflated 34%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_m600.B07 (deflated 33%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_m600.B15 (deflated 33%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_m600.B26 (deflated 34%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_m800.B54 (deflated 33%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_m800.B60 (deflated 33%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_m800.B94 (deflated 33%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_s100.B93 (deflated 40%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_s20.B02 (deflated 44%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_s20.B42 (deflated 46%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_s20.B72 (deflated 45%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_s40.B00 (deflated 43%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_s40.B16 (deflated 43%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_s60.B74 (deflated 43%)
+  adding: src/igraph/fuzzing/test_inputs/si2_b06m_s60.B95 (deflated 44%)
+  adding: src/igraph/examples/simple/iso_b03_m1000.A00 (deflated 37%)
++ zip /workspace/out/libfuzzer-address-x86_64/read_graphml_seed_corpus.zip /src/igraph/examples/simple/test.graphml /src/igraph/tests/unit/test.graphml /src/igraph/tests/regression/bug_1970.graphml /src/igraph/tests/regression/cattr_bool_bug.graphml /src/igraph/tests/regression/cattr_bool_bug2.graphml /src/igraph/tests/regression/invalid1.graphml /src/igraph/tests/regression/invalid2.graphml /src/igraph/tests/regression/invalid3.graphml /src/igraph/tests/regression/invalid4.graphml /src/igraph/tests/regression/invalid5.graphml /src/igraph/fuzzing/test_inputs/yfiles.graphml
+  adding: src/igraph/examples/simple/test.graphml (deflated 68%)
+  adding: src/igraph/tests/unit/test.graphml (deflated 68%)
+  adding: src/igraph/tests/regression/bug_1970.graphml (deflated 39%)
+  adding: src/igraph/tests/regression/cattr_bool_bug.graphml (deflated 78%)
+  adding: src/igraph/tests/regression/cattr_bool_bug2.graphml (deflated 44%)
+  adding: src/igraph/tests/regression/invalid1.graphml (deflated 56%)
+  adding: src/igraph/tests/regression/invalid2.graphml (deflated 69%)
+  adding: src/igraph/tests/regression/invalid3.graphml (stored 0%)
+  adding: src/igraph/tests/regression/invalid4.graphml (deflated 70%)
+  adding: src/igraph/tests/regression/invalid5.graphml (deflated 63%)
+  adding: src/igraph/fuzzing/test_inputs/yfiles.graphml (deflated 79%)
++ zip /workspace/out/libfuzzer-address-x86_64/read_lgl_seed_corpus.zip /src/igraph/examples/simple/igraph_read_graph_lgl-1.lgl /src/igraph/examples/simple/igraph_read_graph_lgl-2.lgl /src/igraph/examples/simple/igraph_read_graph_lgl-3.lgl '/src/igraph/tests/unit/*.lgl' '/src/igraph/fuzzing/test_inputs/*.lgl'
+	zip warning: name not matched: /src/igraph/tests/unit/*.lgl
+	zip warning: name not matched: /src/igraph/fuzzing/test_inputs/*.lgl
+  adding: src/igraph/examples/simple/igraph_read_graph_lgl-1.lgl (deflated 24%)
+  adding: src/igraph/examples/simple/igraph_read_graph_lgl-2.lgl (deflated 23%)
+  adding: src/igraph/examples/simple/igraph_read_graph_lgl-3.lgl (stored 0%)
++ zip /workspace/out/libfuzzer-address-x86_64/read_ncol_seed_corpus.zip '/src/igraph/examples/simple/*.ncol' '/src/igraph/tests/unit/*.ncol' /src/igraph/fuzzing/test_inputs/graph1.ncol /src/igraph/fuzzing/test_inputs/graph2.ncol /src/igraph/fuzzing/test_inputs/graph3.ncol
+	zip warning: name not matched: /src/igraph/examples/simple/*.ncol
+	zip warning: name not matched: /src/igraph/tests/unit/*.ncol
+  adding: src/igraph/fuzzing/test_inputs/graph1.ncol (stored 0%)
+  adding: src/igraph/fuzzing/test_inputs/graph2.ncol (stored 0%)
+  adding: src/igraph/fuzzing/test_inputs/graph3.ncol (deflated 8%)
++ zip /workspace/out/libfuzzer-address-x86_64/read_pajek_seed_corpus.zip /src/igraph/examples/simple/links.net /src/igraph/tests/unit/bipartite.net /src/igraph/tests/unit/pajek1.net /src/igraph/tests/unit/pajek2.net /src/igraph/tests/unit/pajek3.net /src/igraph/tests/unit/pajek4.net /src/igraph/tests/unit/pajek5.net /src/igraph/tests/unit/pajek6.net /src/igraph/tests/unit/pajek_bip.net /src/igraph/tests/unit/pajek_bip2.net /src/igraph/tests/unit/pajek_signed.net /src/igraph/tests/regression/invalid_pajek1.net /src/igraph/tests/regression/invalid_pajek2.net /src/igraph/tests/regression/invalid_pajek3.net '/src/igraph/fuzzing/test_inputs/*.net'
+	zip warning: name not matched: /src/igraph/fuzzing/test_inputs/*.net
+  adding: src/igraph/examples/simple/links.net (deflated 59%)
+  adding: src/igraph/tests/unit/bipartite.net (deflated 31%)
+  adding: src/igraph/tests/unit/pajek1.net (deflated 71%)
+  adding: src/igraph/tests/unit/pajek2.net (deflated 71%)
+  adding: src/igraph/tests/unit/pajek3.net (deflated 71%)
+  adding: src/igraph/tests/unit/pajek4.net (deflated 71%)
+  adding: src/igraph/tests/unit/pajek5.net (deflated 71%)
+  adding: src/igraph/tests/unit/pajek6.net (deflated 72%)
+  adding: src/igraph/tests/unit/pajek_bip.net (deflated 46%)
+  adding: src/igraph/tests/unit/pajek_bip2.net (deflated 46%)
+  adding: src/igraph/tests/unit/pajek_signed.net (deflated 52%)
+  adding: src/igraph/tests/regression/invalid_pajek1.net (stored 0%)
+  adding: src/igraph/tests/regression/invalid_pajek2.net (stored 0%)
+  adding: src/igraph/tests/regression/invalid_pajek3.net (stored 0%)
++ cd /src/igraph
+++ /src/deps/bin/xml2-config --cflags --libs
++ XML2_FLAGS='-I/src/deps/include/libxml2 -DLIBXML_STATIC -L/src/deps/lib -lxml2 -lm'
++ TARGETS='read_edgelist read_dl read_gml read_graphdb read_graphml read_lgl read_ncol read_pajek bliss edge_connectivity vertex_separators'
++ '[' address == 'undefined]'
+/src/build.sh: line 84: [: missing `]'
++ for TARGET in $TARGETS
++ '[' -e ./fuzzing/read_edgelist.dict ']'
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -I/src/igraph/build/include -I/src/igraph/include -o read_edgelist.o -c ./fuzzing/read_edgelist.cpp
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -fsanitize=fuzzer read_edgelist.o -o /workspace/out/libfuzzer-address-x86_64/read_edgelist ./build/src/libigraph.a -I/src/deps/include/libxml2 -DLIBXML_STATIC -L/src/deps/lib -lxml2 -lm
++ for TARGET in $TARGETS
++ '[' -e ./fuzzing/read_dl.dict ']'
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -I/src/igraph/build/include -I/src/igraph/include -o read_dl.o -c ./fuzzing/read_dl.cpp
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -fsanitize=fuzzer read_dl.o -o /workspace/out/libfuzzer-address-x86_64/read_dl ./build/src/libigraph.a -I/src/deps/include/libxml2 -DLIBXML_STATIC -L/src/deps/lib -lxml2 -lm
++ for TARGET in $TARGETS
++ '[' -e ./fuzzing/read_gml.dict ']'
++ cp ./fuzzing/read_gml.dict /workspace/out/libfuzzer-address-x86_64
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -I/src/igraph/build/include -I/src/igraph/include -o read_gml.o -c ./fuzzing/read_gml.cpp
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -fsanitize=fuzzer read_gml.o -o /workspace/out/libfuzzer-address-x86_64/read_gml ./build/src/libigraph.a -I/src/deps/include/libxml2 -DLIBXML_STATIC -L/src/deps/lib -lxml2 -lm
++ for TARGET in $TARGETS
++ '[' -e ./fuzzing/read_graphdb.dict ']'
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -I/src/igraph/build/include -I/src/igraph/include -o read_graphdb.o -c ./fuzzing/read_graphdb.cpp
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -fsanitize=fuzzer read_graphdb.o -o /workspace/out/libfuzzer-address-x86_64/read_graphdb ./build/src/libigraph.a -I/src/deps/include/libxml2 -DLIBXML_STATIC -L/src/deps/lib -lxml2 -lm
++ for TARGET in $TARGETS
++ '[' -e ./fuzzing/read_graphml.dict ']'
++ cp ./fuzzing/read_graphml.dict /workspace/out/libfuzzer-address-x86_64
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -I/src/igraph/build/include -I/src/igraph/include -o read_graphml.o -c ./fuzzing/read_graphml.cpp
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -fsanitize=fuzzer read_graphml.o -o /workspace/out/libfuzzer-address-x86_64/read_graphml ./build/src/libigraph.a -I/src/deps/include/libxml2 -DLIBXML_STATIC -L/src/deps/lib -lxml2 -lm
++ for TARGET in $TARGETS
++ '[' -e ./fuzzing/read_lgl.dict ']'
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -I/src/igraph/build/include -I/src/igraph/include -o read_lgl.o -c ./fuzzing/read_lgl.cpp
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -fsanitize=fuzzer read_lgl.o -o /workspace/out/libfuzzer-address-x86_64/read_lgl ./build/src/libigraph.a -I/src/deps/include/libxml2 -DLIBXML_STATIC -L/src/deps/lib -lxml2 -lm
++ for TARGET in $TARGETS
++ '[' -e ./fuzzing/read_ncol.dict ']'
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -I/src/igraph/build/include -I/src/igraph/include -o read_ncol.o -c ./fuzzing/read_ncol.cpp
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -fsanitize=fuzzer read_ncol.o -o /workspace/out/libfuzzer-address-x86_64/read_ncol ./build/src/libigraph.a -I/src/deps/include/libxml2 -DLIBXML_STATIC -L/src/deps/lib -lxml2 -lm
++ for TARGET in $TARGETS
++ '[' -e ./fuzzing/read_pajek.dict ']'
++ cp ./fuzzing/read_pajek.dict /workspace/out/libfuzzer-address-x86_64
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -I/src/igraph/build/include -I/src/igraph/include -o read_pajek.o -c ./fuzzing/read_pajek.cpp
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -fsanitize=fuzzer read_pajek.o -o /workspace/out/libfuzzer-address-x86_64/read_pajek ./build/src/libigraph.a -I/src/deps/include/libxml2 -DLIBXML_STATIC -L/src/deps/lib -lxml2 -lm
++ for TARGET in $TARGETS
++ '[' -e ./fuzzing/bliss.dict ']'
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -I/src/igraph/build/include -I/src/igraph/include -o bliss.o -c ./fuzzing/bliss.cpp
+./fuzzing/bliss.cpp:57:53: error: use of undeclared identifier 'IGRAPH_SPARSEMAT_CSR'
+    check_err(igraph_sparsemat_init(&spmat, &graph, IGRAPH_SPARSEMAT_CSR, IGRAPH_SPARSEMAT_UPPER, 0));
+                                                    ^
+./fuzzing/bliss.cpp:57:75: error: use of undeclared identifier 'IGRAPH_SPARSEMAT_UPPER'
+    check_err(igraph_sparsemat_init(&spmat, &graph, IGRAPH_SPARSEMAT_CSR, IGRAPH_SPARSEMAT_UPPER, 0));
+                                                                          ^
+./fuzzing/bliss.cpp:58:5: error: no matching function for call to 'check_err'
+    check_err(igraph_arpack_options_init(&options));
+    ^~~~~~~~~
+./fuzzing/bliss.cpp:29:13: note: candidate function not viable: cannot convert argument of incomplete type 'void' to 'igraph_error_t' (aka 'igraph_error_type_t') for 1st argument
+inline void check_err(igraph_error_t err) {
+            ^
+./fuzzing/bliss.cpp:66:5: error: use of undeclared identifier 'igraph_arpack_options_destroy'
+    igraph_arpack_options_destroy(&options);
+    ^
+./fuzzing/bliss.cpp:78:53: error: use of undeclared identifier 'IGRAPH_SPARSEMAT_CSR'
+    check_err(igraph_sparsemat_init(&spmat, &graph, IGRAPH_SPARSEMAT_CSR, IGRAPH_SPARSEMAT_UPPER, 0));
+                                                    ^
+./fuzzing/bliss.cpp:78:75: error: use of undeclared identifier 'IGRAPH_SPARSEMAT_UPPER'
+    check_err(igraph_sparsemat_init(&spmat, &graph, IGRAPH_SPARSEMAT_CSR, IGRAPH_SPARSEMAT_UPPER, 0));
+                                                                          ^
+./fuzzing/bliss.cpp:79:5: error: no matching function for call to 'check_err'
+    check_err(igraph_arpack_options_init(&options));
+    ^~~~~~~~~
+./fuzzing/bliss.cpp:29:13: note: candidate function not viable: cannot convert argument of incomplete type 'void' to 'igraph_error_t' (aka 'igraph_error_type_t') for 1st argument
+inline void check_err(igraph_error_t err) {
+            ^
+./fuzzing/bliss.cpp:87:5: error: use of undeclared identifier 'igraph_arpack_options_destroy'
+    igraph_arpack_options_destroy(&options);
+    ^
+8 errors generated.

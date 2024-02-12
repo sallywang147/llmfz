@@ -1,0 +1,82 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <stddef.h>
+
+#include "ares.h"
+
+// Entrypoint for Clang's libfuzzer
+int LLVMFuzzerTestOneInput(const unsigned char *data,
+                           unsigned long size) {
+  // Feed the data into each of the ares_parse_*_reply functions.
+  struct hostent *host = NULL;
+  struct ares_addrttl info[5];
+  int count = 5;
+  ares_parse_a_reply(data, size, &host, info, &count);
+  if (host) ares_free_hostent(host);
+
+  host = NULL;
+  struct ares_addr6ttl info6[5];
+  count = 5;
+  ares_parse_aaaa_reply(data, size, &host, info6, &count);
+  if (host) ares_free_hostent(host);
+
+  host = NULL;
+  unsigned char addrv4[4] = {0x10, 0x20, 0x30, 0x40};
+  ares_parse_ptr_reply(data, size, addrv4, sizeof(addrv4), AF_INET, &host);
+  if (host) ares_free_hostent(host);
+
+  host = NULL;
+  ares_parse_ns_reply(data, size, &host);
+  if (host) ares_free_hostent(host);
+
+  struct ares_srv_reply* srv = NULL;
+  ares_parse_srv_reply(data, size, &srv);
+  if (srv) ares_free_data(srv);
+
+  struct ares_mx_reply* mx = NULL;
+  ares_parse_mx_reply(data, size, &mx);
+  if (mx) ares_free_data(mx);
+
+  struct ares_txt_reply* txt = NULL;
+  ares_parse_txt_reply(data, size, &txt);
+  if (txt) ares_free_data(txt);
+
+  struct ares_soa_reply* soa = NULL;
+  ares_parse_soa_reply(data, size, &soa);
+  if (soa) ares_free_data(soa);
+
+  struct ares_naptr_reply* naptr = NULL;
+  ares_parse_naptr_reply(data, size, &naptr);
+  if (naptr) ares_free_data(naptr);
+
+  struct ares_caa_reply* caa = NULL;
+  ares_parse_caa_reply(data, size, &caa);
+  if (caa) ares_free_data(caa);
+
+  struct ares_uri_reply* uri = NULL;
+  ares_parse_uri_reply(data, size, &uri);
+  if (uri) ares_free_data(uri);
+
+  // Call the function to be fuzzed.
+  addr_callback(data, size, 0, data, size);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+ares-test-fuzz-name.c:(.text.LLVMFuzzerTestOneInput[LLVMFuzzerTestOneInput]+0x5f8): undefined reference to `addr_callback'
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

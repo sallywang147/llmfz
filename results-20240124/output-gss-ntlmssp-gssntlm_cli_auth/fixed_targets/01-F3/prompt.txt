@@ -1,0 +1,73 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdint.h>
+#include <string.h>
+
+extern "C" {
+#include <krb5.h>
+#include <gssapi.h>
+#include "gss_ntlmssp.h"
+}
+
+extern int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+    OM_uint32 maj_stat, min_stat;
+
+    gss_ctx_id_t ctx = GSS_C_NO_CONTEXT;
+    gss_cred_id_t cred = GSS_C_NO_CREDENTIAL;
+    ntlm_buffer target_info;
+    ntlm_buffer_init(&target_info);
+    gss_channel_bindings_t input_chan_bindings = GSS_C_NO_CHANNEL_BINDINGS;
+
+    if (Size < sizeof(unsigned short))
+        return 0;
+
+    unsigned short target_info_length = *(unsigned short *)Data;
+
+    Data += sizeof(target_info_length);
+    Size -= sizeof(target_info_length);
+
+    if (target_info_length > Size)
+        return 0;
+
+    target_info.length = target_info_length;
+    target_info.value = malloc(target_info_length);
+    memcpy(target_info.value, Data, target_info_length);
+
+    Data += target_info_length;
+    Size -= target_info_length;
+
+    maj_stat = gssntlm_cli_auth(
+        &min_stat,
+        &ctx,
+        &cred,
+        &target_info,
+        0, /* in_flags */
+        input_chan_bindings
+    );
+
+    ntlm_buffer_free(&target_info);
+
+    gss_delete_sec_context(&min_stat, &ctx, GSS_C_NO_BUFFER);
+
+    gss_release_cred(&min_stat, &cred);
+
+    return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

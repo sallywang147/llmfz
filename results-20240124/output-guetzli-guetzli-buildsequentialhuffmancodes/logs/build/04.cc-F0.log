@@ -1,0 +1,48 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ make guetzli_static
+==== Building guetzli_static (release) ====
+Creating bin/Release
+Creating obj/Release/guetzli_static
+butteraugli_comparator.cc
+dct_double.cc
+debug_print.cc
+entropy_encode.cc
+fdct.cc
+gamma_correct.cc
+idct.cc
+jpeg_data.cc
+jpeg_data_decoder.cc
+jpeg_data_encoder.cc
+jpeg_data_reader.cc
+jpeg_data_writer.cc
+jpeg_huffman_decode.cc
+output_image.cc
+preprocess_downsample.cc
+processor.cc
+quality.cc
+quantize.cc
+score.cc
+butteraugli.cc
+Linking guetzli_static
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -std=c++11 -I. fuzz_target.cc -fsanitize=fuzzer -o /workspace/out/libfuzzer-address-x86_64/guetzli_fuzzer bin/Release/libguetzli_static.a
+fuzz_target.cc:11:17: error: no member named 'ReadJpeg' in namespace 'guetzli'
+  if (!guetzli::ReadJpeg(data, size, guetzli::JPEG_READ_HEADER, &jpg_header)) {
+       ~~~~~~~~~^
+fuzz_target.cc:11:47: error: no member named 'JPEG_READ_HEADER' in namespace 'guetzli'
+  if (!guetzli::ReadJpeg(data, size, guetzli::JPEG_READ_HEADER, &jpg_header)) {
+                                     ~~~~~~~~~^
+fuzz_target.cc:26:24: error: no member named 'HuffmanCode' in namespace 'guetzli'
+  std::vector<guetzli::HuffmanCode> dc_codes;
+              ~~~~~~~~~^
+fuzz_target.cc:27:24: error: no member named 'HuffmanCode' in namespace 'guetzli'
+  std::vector<guetzli::HuffmanCode> ac_codes;
+              ~~~~~~~~~^
+4 errors generated.

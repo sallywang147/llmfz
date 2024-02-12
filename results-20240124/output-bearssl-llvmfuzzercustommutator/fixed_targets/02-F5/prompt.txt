@@ -1,0 +1,44 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+#include <stdint.h>
+#include <fuzzer/FuzzedDataProvider.h>
+
+extern "C" {
+#include "llvm/Fuzz.h"
+}
+
+// Custom mutator for LLVMFuzzerTestOneInput.
+// This mutator flips a single bit in the input buffer.
+static size_t LLVMFuzzerCustomMutator(uint8_t *Data, size_t Size,
+                                        size_t MaxSize) {
+  FuzzedDataProvider DataProvider(Data, Size);
+  // Flip a single bit in the input buffer.
+  size_t Index = DataProvider.ConsumeIntegralInRange<size_t>(0, Size - 1);
+  Data[Index] ^= 1;
+  return Size;
+}
+
+// Entry point for the fuzzer.
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  // Do something with the input data here.
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

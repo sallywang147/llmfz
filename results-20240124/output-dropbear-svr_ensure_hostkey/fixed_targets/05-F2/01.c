@@ -1,0 +1,1 @@
+extern void svr_ensure_hostkey(void);

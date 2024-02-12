@@ -1,0 +1,52 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <iostream>
+#include <vector>
+
+extern "C" {
+#include <stdlib.h>
+}
+
+using namespace std;
+
+extern "C" int LLVMFuzzerTestOneInput(const unsigned char *data, size_t size) {
+  // Create a vector of integers
+  vector<int> numbers;
+
+  // Add some numbers to the vector
+  numbers.push_back(1);
+  numbers.push_back(2);
+  numbers.push_back(3);
+
+  // Print the numbers in the vector
+  for (int i = 0; i < numbers.size(); i++) {
+    cout << numbers[i] << endl;
+  }
+
+  // Call the global variable initializer
+  __cxx_global_var_init();
+
+  return 0;
+}
+
+int main() {
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

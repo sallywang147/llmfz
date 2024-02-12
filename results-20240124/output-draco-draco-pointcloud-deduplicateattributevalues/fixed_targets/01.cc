@@ -1,0 +1,1 @@
+error: undefined reference to 'draco::PointCloud::AddAttribute(draco::PointCloud::Attribute const&)'

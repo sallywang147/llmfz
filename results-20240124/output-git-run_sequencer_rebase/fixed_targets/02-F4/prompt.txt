@@ -1,0 +1,241 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <algorithm>
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+#include <string>
+
+#include "fuzzer/FuzzedDataProvider.h"
+#include "sequencer.h"
+
+extern "C" {
+#include "strbuf.h"
+#include "strvec.h"
+#include "wt-status.h"
+#include "remote.h"
+#include "hash-ll.h"
+#include "hashmap.h"
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  struct rebase_options opts;
+  memset(&opts, 0, sizeof(opts));
+  opts.force = stream.ConsumeBool();
+  opts.quiet = stream.ConsumeBool();
+  opts.verbose = stream.ConsumeBool();
+  opts.dry_run = stream.ConsumeBool();
+  opts.signoff = stream.ConsumeBool();
+  opts.signoff_keyid = stream.ConsumeIntegral<unsigned int>();
+  opts.signoff_key = stream.ConsumeBytes<uint8_t>(stream.ConsumeIntegral<size_t>());
+  opts.signoff_key_len = opts.signoff_key.size();
+  opts.signoff_passphrase = stream.ConsumeBytes<uint8_t>(stream.ConsumeIntegral<size_t>());
+  opts.signoff_passphrase_len = opts.signoff_passphrase.size();
+  opts.signoff_timestamp = stream.ConsumeIntegral<time_t>();
+  opts.signoff_expire = stream.ConsumeIntegral<time_t>();
+  opts.signoff_reason = stream.ConsumeBytes<uint8_t>(stream.ConsumeIntegral<size_t>());
+  opts.signoff_reason_len = opts.signoff_reason.size();
+  opts.signoff_email = stream.ConsumeBytes<uint8_t>(stream.ConsumeIntegral<size_t>());
+  opts.signoff_email_len = opts.signoff_email.size();
+  opts.signoff_name = stream.ConsumeBytes<uint8_t>(stream.ConsumeIntegral<size_t>());
+  opts.signoff_name_len = opts.signoff_name.size();
+  opts.signoff_committer = stream.ConsumeBool();
+  opts.signoff_no_committer = stream.ConsumeBool();
+  opts.signoff_no_signer = stream.ConsumeBool();
+  opts.signoff_no_timestamp = stream.ConsumeBool();
+  opts.signoff_no_expire = stream.ConsumeBool();
+  opts.signoff_no_reason = stream.ConsumeBool();
+  opts.signoff_no_email = stream.ConsumeBool();
+  opts.signoff_no_name = stream.ConsumeBool();
+  opts.signoff_no_gpg = stream.ConsumeBool();
+  opts.signoff_no_ds = stream.ConsumeBool();
+  opts.signoff_no_ed25519 = stream.ConsumeBool();
+  opts.signoff_no_rsa = stream.ConsumeBool();
+  opts.signoff_no_ecdsa = stream.ConsumeBool();
+  opts.signoff_no_annotate = stream.ConsumeBool();
+  opts.signoff_no_verify = stream.ConsumeBool();
+  opts.signoff_no_check_committer = stream.ConsumeBool();
+  opts.signoff_no_check_signer = stream.ConsumeBool();
+  opts.signoff_no_check_timestamp = stream.ConsumeBool();
+  opts.signoff_no_check_expire = stream.ConsumeBool();
+  opts.signoff_no_check_reason = stream.ConsumeBool();
+  opts.signoff_no_check_email = stream.ConsumeBool();
+  opts.signoff_no_check_name = stream.ConsumeBool();
+  opts.signoff_no_check_gpg = stream.ConsumeBool();
+  opts.signoff_no_check_ds = stream.ConsumeBool();
+  opts.signoff_no_check_ed25519 = stream.ConsumeBool();
+  opts.signoff_no_check_rsa = stream.ConsumeBool();
+  opts.signoff_no_check_ecdsa = stream.ConsumeBool();
+  opts.signoff_no_check_annotate = stream.ConsumeBool();
+  opts.signoff_no_check_verify = stream.ConsumeBool();
+  opts.signoff_no_check_committer_date = stream.ConsumeBool();
+  opts.signoff_no_check_signer_date = stream.ConsumeBool();
+  opts.signoff_no_check_timestamp_date = stream.ConsumeBool();
+  opts.signoff_no_check_expire_date = stream.ConsumeBool();
+  opts.signoff_no_check_reason_date = stream.ConsumeBool();
+  opts.signoff_no_check_email_date = stream.ConsumeBool();
+  opts.signoff_no_check_name_date = stream.ConsumeBool();
+  opts.signoff_no_check_gpg_date = stream.ConsumeBool();
+  opts.signoff_no_check_ds_date = stream.ConsumeBool();
+  opts.signoff_no_check_ed25519_date = stream.ConsumeBool();
+  opts.signoff_no_check_rsa_date = stream.ConsumeBool();
+  opts.signoff_no_check_ecdsa_date = stream.ConsumeBool();
+  opts.signoff_no_check_annotate_date = stream.ConsumeBool();
+  opts.signoff_no_check_verify_date = stream.ConsumeBool();
+  opts.signoff_no_check_committer_email = stream.ConsumeBool();
+  opts.signoff_no_check_signer_email = stream.ConsumeBool();
+  opts.signoff_no_check_timestamp_email = stream.ConsumeBool();
+  opts.signoff_no_check_expire_email = stream.ConsumeBool();
+  opts.signoff_no_check_reason_email = stream.ConsumeBool();
+  opts.signoff_no_check_email_email = stream.ConsumeBool();
+  opts.signoff_no_check_name_email = stream.ConsumeBool();
+  opts.signoff_no_check_gpg_email = stream.ConsumeBool();
+  opts.signoff_no_check_ds_email = stream.ConsumeBool();
+  opts.signoff_no_check_ed25519_email = stream.ConsumeBool();
+  opts.signoff_no_check_rsa_email = stream.ConsumeBool();
+  opts.signoff_no_check_ecdsa_email = stream.ConsumeBool();
+  opts.signoff_no_check_annotate_email = stream.ConsumeBool();
+  opts.signoff_no_check_verify_email = stream.ConsumeBool();
+  opts.signoff_no_check_committer_keyid = stream.ConsumeBool();
+  opts.signoff_no_check_signer_keyid = stream.ConsumeBool();
+  opts.signoff_no_check_timestamp_keyid = stream.ConsumeBool();
+  opts.signoff_no_check_expire_keyid = stream.ConsumeBool();
+  opts.signoff_no_check_reason_keyid = stream.ConsumeBool();
+  opts.signoff_no_check_email_keyid = stream.ConsumeBool();
+  opts.signoff_no_check_name_keyid = stream.ConsumeBool();
+  opts.signoff_no_check_gpg_keyid = stream.ConsumeBool();
+  opts.signoff_no_check_ds_keyid = stream.ConsumeBool();
+  opts.signoff_no_check_ed25519_keyid = stream.ConsumeBool();
+  opts.signoff_no_check_rsa_keyid = stream.ConsumeBool();
+  opts.signoff_no_check_ecdsa_keyid = stream.ConsumeBool();
+  opts.signoff_no_check_annotate_keyid = stream.ConsumeBool();
+  opts.signoff_no_check_verify_keyid = stream.ConsumeBool();
+  opts.signoff_no_check_committer_name = stream.ConsumeBool();
+  opts.signoff_no_check_signer_name = stream.ConsumeBool();
+  opts.signoff_no_check_timestamp_name = stream.ConsumeBool();
+  opts.signoff_no_check_expire_name = stream.ConsumeBool();
+  opts.signoff_no_check_reason_name = stream.ConsumeBool();
+  opts.signoff_no_check_email_name = stream.ConsumeBool();
+  opts.signoff_no_check_name_name = stream.ConsumeBool();
+  opts.signoff_no_check_gpg_name = stream.ConsumeBool();
+  opts.signoff_no_check_ds_name = stream.ConsumeBool();
+  opts.signoff_no_check_ed25519_name = stream.ConsumeBool();
+  opts.signoff_no_check_rsa_name = stream.ConsumeBool();
+  opts.signoff_no_check_ecdsa_name = stream.ConsumeBool();
+  opts.signoff_no_check_annotate_name = stream.ConsumeBool();
+  opts.signoff_no_check_verify_name = stream.ConsumeBool();
+
+  run_sequencer_rebase(&opts);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+oss-fuzz/fuzz-date.c:1:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+In file included from oss-fuzz/fuzz-date.cpp:9:
+In file included from ./sequencer.h:4:
+./strbuf.h:131:2: error: use of undeclared identifier 'SWAP'
+        SWAP(*a, *b);
+        ^
+./strbuf.h:167:3: error: use of undeclared identifier 'BUG'
+                BUG("strbuf_setlen() beyond buffer");
+                ^
+./strbuf.h:172:3: error: use of undeclared identifier 'assert'
+                assert(!strbuf_slopbuf[0]);
+                ^
+./strbuf.h:524:6: error: use of undeclared identifier 'strip_suffix_mem'
+        if (strip_suffix_mem(sb->buf, &sb->len, suffix)) {
+            ^
+./strbuf.h:703:9: error: use of undeclared identifier 'strip_suffix'
+        return strip_suffix(str, suffix, &len);
+               ^
+In file included from oss-fuzz/fuzz-date.cpp:9:
+In file included from ./sequencer.h:5:
+./strvec.h:61:1: error: unknown type name 'LAST_ARG_MUST_BE_NULL'
+LAST_ARG_MUST_BE_NULL
+^
+In file included from oss-fuzz/fuzz-date.cpp:9:
+In file included from ./sequencer.h:6:
+In file included from ./wt-status.h:6:
+./pathspec.h:144:10: error: member access into incomplete type 'const struct pathspec_item'
+        if (item->magic & PATHSPEC_ICASE)
+                ^
+./pathspec.h:141:43: note: forward declaration of 'pathspec_item'
+static inline int ps_strncmp(const struct pathspec_item *item,
+                                          ^
+./pathspec.h:153:10: error: member access into incomplete type 'const struct pathspec_item'
+        if (item->magic & PATHSPEC_ICASE)
+                ^
+./pathspec.h:141:43: note: forward declaration of 'pathspec_item'
+static inline int ps_strncmp(const struct pathspec_item *item,
+                                          ^
+In file included from oss-fuzz/fuzz-date.cpp:9:
+In file included from ./sequencer.h:6:
+In file included from ./wt-status.h:7:
+In file included from ./remote.h:4:
+./hash-ll.h:277:26: error: use of undeclared identifier 'xmalloc'; did you mean 'malloc'?
+        struct object_id *dst = xmalloc(sizeof(struct object_id));
+                                ^~~~~~~
+                                malloc
+/usr/include/stdlib.h:539:14: note: 'malloc' declared here
+extern void *malloc (size_t __size) __THROW __attribute_malloc__
+             ^
+In file included from oss-fuzz/fuzz-date.cpp:9:
+In file included from ./sequencer.h:6:
+In file included from ./wt-status.h:7:
+In file included from ./remote.h:4:
+./hash-ll.h:277:20: error: cannot initialize a variable of type 'struct object_id *' with an rvalue of type 'void *'
+        struct object_id *dst = xmalloc(sizeof(struct object_id));
+                          ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from oss-fuzz/fuzz-date.cpp:9:
+In file included from ./sequencer.h:6:
+In file included from ./wt-status.h:7:
+In file included from ./remote.h:5:
+./hashmap.h:308:2: error: use of undeclared identifier 'BUG'
+        BUG("hashmap_get_size: size not set");
+        ^
+./hashmap.h:574:9: error: cannot initialize return object of type 'const char *' with an rvalue of type 'const void *'
+        return memintern(string, strlen(string));
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from oss-fuzz/fuzz-date.cpp:9:
+In file included from ./sequencer.h:6:
+In file included from ./wt-status.h:7:
+./remote.h:199:12: error: use of undeclared identifier 'FLEX_ARRAY'
+        char name[FLEX_ARRAY]; /* more */
+                  ^
+./remote.h:335:59: error: invalid parameter name: 'explicit' is a keyword
+const char *remote_for_branch(struct branch *branch, int *explicit);
+                                                          ^
+./remote.h:336:63: error: invalid parameter name: 'explicit' is a keyword
+const char *pushremote_for_branch(struct branch *branch, int *explicit);
+                                                              ^
+oss-fuzz/fuzz-date.cpp:23:25: error: variable has incomplete type 'struct rebase_options'
+  struct rebase_options opts;
+                        ^
+oss-fuzz/fuzz-date.cpp:23:10: note: forward declaration of 'rebase_options'
+  struct rebase_options opts;
+         ^
+16 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

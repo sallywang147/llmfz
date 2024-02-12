@@ -1,0 +1,1 @@
+error: undefined reference to 'hermes::vm::HermesRuntime::isHermesBytecode(uint8_t const*, unsigned long)'

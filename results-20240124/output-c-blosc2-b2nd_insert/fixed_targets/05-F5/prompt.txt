@@ -1,0 +1,88 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <inttypes.h>
+
+#include <b2nd.h>
+
+#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  struct b2nd_array_t *array = NULL;
+  char *key = NULL;
+  char value = 0;
+  size_t key_len = 0;
+
+  if (size < 1) {
+    return 0;
+  }
+
+  b2nd_init();
+
+  array = b2nd_new();
+  if (array == NULL) {
+    b2nd_destroy();
+    return 0;
+  }
+
+  key_len = data[0] % 1024;
+  if (key_len > 0) {
+    key = (char *)malloc(key_len + 1);
+    if (key == NULL) {
+      b2nd_destroy();
+      return 0;
+    }
+    memcpy(key, data + 1, key_len);
+    key[key_len] = '\0';
+  }
+
+  value = data[key_len + 1];
+
+  b2nd_insert(array, key, key_len, value, size - key_len - 2);
+
+  b2nd_free(array);
+  free(key);
+
+  b2nd_destroy();
+  return 0;
+}
+
+#ifdef __cplusplus
+}
+#endif
+
+// Add the following code to the end of the file:
+extern "C" {
+void b2nd_init(void) {}
+struct b2nd_array_t *b2nd_new(void) { return NULL; }
+void b2nd_destroy(void) {}
+void b2nd_insert(struct b2nd_array_t *array, const char *key, size_t key_len, char value, size_t value_len) {}
+void b2nd_free(struct b2nd_array_t *array) {}
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/c-blosc2/tests/fuzz/fuzz_decompress_frame.c:59:8: error: expected identifier or '('
+extern "C" {
+       ^
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

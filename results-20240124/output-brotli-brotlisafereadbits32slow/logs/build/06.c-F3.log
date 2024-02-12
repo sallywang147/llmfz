@@ -1,0 +1,59 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ cmake . -DBUILD_TESTING=OFF -DBUILD_SHARED_LIBS=OFF
+-- The C compiler identification is Clang 15.0.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/local/bin/clang-jcc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Setting build type to Release as none was specified.
+-- Performing Test BROTLI_EMSCRIPTEN
+-- Performing Test BROTLI_EMSCRIPTEN - Failed
+-- Compiler is not EMSCRIPTEN
+-- Looking for log2 in m
+-- Looking for log2 in m - found
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /src/brotli
++ make clean
+++ nproc
++ make -j32 brotlidec
+[  8%] Building C object CMakeFiles/brotlicommon.dir/c/common/constants.c.o
+[ 16%] Building C object CMakeFiles/brotlicommon.dir/c/common/context.c.o
+[ 25%] Building C object CMakeFiles/brotlicommon.dir/c/common/dictionary.c.o
+[ 41%] Building C object CMakeFiles/brotlicommon.dir/c/common/shared_dictionary.c.o
+[ 41%] Building C object CMakeFiles/brotlicommon.dir/c/common/platform.c.o
+[ 50%] Building C object CMakeFiles/brotlicommon.dir/c/common/transform.c.o
+[ 58%] Linking C static library libbrotlicommon.a
+[ 58%] Built target brotlicommon
+[ 75%] Building C object CMakeFiles/brotlidec.dir/c/dec/bit_reader.c.o
+[ 75%] Building C object CMakeFiles/brotlidec.dir/c/dec/decode.c.o
+[ 83%] Building C object CMakeFiles/brotlidec.dir/c/dec/huffman.c.o
+[ 91%] Building C object CMakeFiles/brotlidec.dir/c/dec/state.c.o
+[100%] Linking C static library libbrotlidec.a
+[100%] Built target brotlidec
++ /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -c -std=c99 -I. -I./c/include c/fuzz/decode_fuzzer.c
+c/fuzz/decode_fuzzer.c:5:8: error: expected identifier or '('
+extern "C" {
+       ^
+c/fuzz/decode_fuzzer.c:13:3: error: use of undeclared identifier 'BrotliBitReader'
+  BrotliBitReader br;
+  ^
+c/fuzz/decode_fuzzer.c:14:24: error: use of undeclared identifier 'br'
+  BrotliInitBitReader(&br, data, size);
+                       ^
+c/fuzz/decode_fuzzer.c:17:31: error: use of undeclared identifier 'br'
+    BrotliSafeReadBits32Slow(&br, 1, &pos);
+                              ^
+4 errors generated.
+
+Fix failure
+error: invalid argument '-std=c99' not allowed with 'C++'

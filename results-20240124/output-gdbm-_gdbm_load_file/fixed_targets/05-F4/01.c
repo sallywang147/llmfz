@@ -1,0 +1,1 @@
+error: undefined reference to '_gdbm_load_file'

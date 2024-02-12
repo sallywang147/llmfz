@@ -1,0 +1,1289 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ pushd /src/aspell-fuzz
+/src/aspell-fuzz /src/aspell-fuzz
++ ./ossfuzz.sh
+CC: /usr/local/bin/clang-jcc
+CXX: /usr/local/bin/clang++-jcc
+LIB_FUZZING_ENGINE: -fsanitize=fuzzer
+CFLAGS: -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -g
+CXXFLAGS: -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g
+OUT: /workspace/out/libfuzzer-address-x86_64
+Reading package lists...
+Building dependency tree...
+Reading state information...
+bzip2 is already the newest version (1.0.8-2).
+wget is already the newest version (1.20.3-1ubuntu2).
+The following additional packages will be installed:
+  autoconf autotools-dev file gettext-base libauthen-sasl-perl libcroco3
+  libdata-dump-perl libencode-locale-perl libfile-listing-perl
+  libfont-afm-perl libglib2.0-0 libglib2.0-data libhtml-form-perl
+  libhtml-format-perl libhtml-parser-perl libhtml-tagset-perl
+  libhtml-tree-perl libhttp-cookies-perl libhttp-daemon-perl libhttp-date-perl
+  libhttp-message-perl libhttp-negotiate-perl libicu66 libio-html-perl
+  libio-socket-ssl-perl libltdl-dev libltdl7 liblwp-mediatypes-perl
+  liblwp-protocol-https-perl libmagic-mgc libmagic1 libmailtools-perl
+  libnet-http-perl libnet-smtp-ssl-perl libnet-ssleay-perl libsigsegv2
+  libtext-unidecode-perl libtimedate-perl libtry-tiny-perl liburi-perl
+  libwww-perl libwww-robotrules-perl libxml-libxml-perl
+  libxml-namespacesupport-perl libxml-parser-perl libxml-sax-base-perl
+  libxml-sax-expat-perl libxml-sax-perl libxml2 m4 perl-openssl-defaults
+  shared-mime-info tex-common ucf xdg-user-dirs
+Suggested packages:
+  autoconf-archive gnu-standards autoconf-doc gettext-doc libasprintf-dev
+  libgettextpo-dev libdigest-hmac-perl libgssapi-perl libtool-doc
+  libcrypt-ssleay-perl gfortran | fortran95-compiler gcj-jdk
+  libauthen-ntlm-perl libxml-sax-expatxs-perl m4-doc debhelper texlive-base
+  texlive-latex-base texlive-plain-generic texlive-fonts-recommended
+The following NEW packages will be installed:
+  autoconf automake autopoint autotools-dev file gettext gettext-base
+  libauthen-sasl-perl libcroco3 libdata-dump-perl libencode-locale-perl
+  libfile-listing-perl libfont-afm-perl libglib2.0-0 libglib2.0-data
+  libhtml-form-perl libhtml-format-perl libhtml-parser-perl
+  libhtml-tagset-perl libhtml-tree-perl libhttp-cookies-perl
+  libhttp-daemon-perl libhttp-date-perl libhttp-message-perl
+  libhttp-negotiate-perl libicu66 libio-html-perl libio-socket-ssl-perl
+  libltdl-dev libltdl7 liblwp-mediatypes-perl liblwp-protocol-https-perl
+  libmagic-mgc libmagic1 libmailtools-perl libnet-http-perl
+  libnet-smtp-ssl-perl libnet-ssleay-perl libsigsegv2 libtext-unidecode-perl
+  libtimedate-perl libtool libtry-tiny-perl liburi-perl libwww-perl
+  libwww-robotrules-perl libxml-libxml-perl libxml-namespacesupport-perl
+  libxml-parser-perl libxml-sax-base-perl libxml-sax-expat-perl
+  libxml-sax-perl libxml2 m4 perl-openssl-defaults shared-mime-info tex-common
+  texinfo ucf xdg-user-dirs
+0 upgraded, 60 newly installed, 0 to remove and 0 not upgraded.
+Need to get 17.8 MB of archives.
+After this operation, 80.5 MB of additional disk space will be used.
+Get:1 http://archive.ubuntu.com/ubuntu focal/main amd64 ucf all 3.0038+nmu1 [51.6 kB]
+Get:2 http://archive.ubuntu.com/ubuntu focal/universe amd64 tex-common all 6.13 [32.7 kB]
+Get:3 http://archive.ubuntu.com/ubuntu focal/main amd64 libmagic-mgc amd64 1:5.38-4 [218 kB]
+Get:4 http://archive.ubuntu.com/ubuntu focal/main amd64 libmagic1 amd64 1:5.38-4 [75.9 kB]
+Get:5 http://archive.ubuntu.com/ubuntu focal/main amd64 file amd64 1:5.38-4 [23.3 kB]
+Get:6 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libglib2.0-0 amd64 2.64.6-1~ubuntu20.04.6 [1289 kB]
+Get:7 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libglib2.0-data all 2.64.6-1~ubuntu20.04.6 [6032 B]
+Get:8 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libicu66 amd64 66.1-2ubuntu2.1 [8515 kB]
+Get:9 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libxml2 amd64 2.9.10+dfsg-5ubuntu0.20.04.6 [640 kB]
+Get:10 http://archive.ubuntu.com/ubuntu focal/main amd64 shared-mime-info amd64 1.15-1 [430 kB]
+Get:11 http://archive.ubuntu.com/ubuntu focal/main amd64 xdg-user-dirs amd64 0.17-2ubuntu1 [48.3 kB]
+Get:12 http://archive.ubuntu.com/ubuntu focal/main amd64 gettext-base amd64 0.19.8.1-10build1 [50.2 kB]
+Get:13 http://archive.ubuntu.com/ubuntu focal/main amd64 libsigsegv2 amd64 2.12-2 [13.9 kB]
+Get:14 http://archive.ubuntu.com/ubuntu focal/main amd64 m4 amd64 1.4.18-4 [199 kB]
+Get:15 http://archive.ubuntu.com/ubuntu focal/main amd64 autoconf all 2.69-11.1 [321 kB]
+Get:16 http://archive.ubuntu.com/ubuntu focal/main amd64 autotools-dev all 20180224.1 [39.6 kB]
+Get:17 http://archive.ubuntu.com/ubuntu focal/main amd64 automake all 1:1.16.1-4ubuntu6 [522 kB]
+Get:18 http://archive.ubuntu.com/ubuntu focal/main amd64 autopoint all 0.19.8.1-10build1 [412 kB]
+Get:19 http://archive.ubuntu.com/ubuntu focal/main amd64 libcroco3 amd64 0.6.13-1 [82.5 kB]
+Get:20 http://archive.ubuntu.com/ubuntu focal/main amd64 gettext amd64 0.19.8.1-10build1 [895 kB]
+Get:21 http://archive.ubuntu.com/ubuntu focal/main amd64 libdata-dump-perl all 1.23-1 [27.0 kB]
+Get:22 http://archive.ubuntu.com/ubuntu focal/main amd64 libencode-locale-perl all 1.05-1 [12.3 kB]
+Get:23 http://archive.ubuntu.com/ubuntu focal/main amd64 libtimedate-perl all 2.3200-1 [34.0 kB]
+Get:24 http://archive.ubuntu.com/ubuntu focal/main amd64 libhttp-date-perl all 6.05-1 [9920 B]
+Get:25 http://archive.ubuntu.com/ubuntu focal/main amd64 libfile-listing-perl all 6.04-1 [9774 B]
+Get:26 http://archive.ubuntu.com/ubuntu focal/main amd64 libfont-afm-perl all 1.20-2 [13.2 kB]
+Get:27 http://archive.ubuntu.com/ubuntu focal/main amd64 libhtml-tagset-perl all 3.20-4 [12.5 kB]
+Get:28 http://archive.ubuntu.com/ubuntu focal/main amd64 liburi-perl all 1.76-2 [77.5 kB]
+Get:29 http://archive.ubuntu.com/ubuntu focal/main amd64 libhtml-parser-perl amd64 3.72-5 [86.3 kB]
+Get:30 http://archive.ubuntu.com/ubuntu focal/main amd64 libio-html-perl all 1.001-1 [14.9 kB]
+Get:31 http://archive.ubuntu.com/ubuntu focal/main amd64 liblwp-mediatypes-perl all 6.04-1 [19.5 kB]
+Get:32 http://archive.ubuntu.com/ubuntu focal/main amd64 libhttp-message-perl all 6.22-1 [76.1 kB]
+Get:33 http://archive.ubuntu.com/ubuntu focal/main amd64 libhtml-form-perl all 6.07-1 [22.2 kB]
+Get:34 http://archive.ubuntu.com/ubuntu focal/main amd64 libhtml-tree-perl all 5.07-2 [200 kB]
+Get:35 http://archive.ubuntu.com/ubuntu focal/main amd64 libhtml-format-perl all 2.12-1 [41.3 kB]
+Get:36 http://archive.ubuntu.com/ubuntu focal/main amd64 libhttp-cookies-perl all 6.08-1 [18.3 kB]
+Get:37 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libhttp-daemon-perl all 6.06-1ubuntu0.1 [22.0 kB]
+Get:38 http://archive.ubuntu.com/ubuntu focal/main amd64 libhttp-negotiate-perl all 6.01-1 [12.5 kB]
+Get:39 http://archive.ubuntu.com/ubuntu focal/main amd64 perl-openssl-defaults amd64 4 [7192 B]
+Get:40 http://archive.ubuntu.com/ubuntu focal/main amd64 libnet-ssleay-perl amd64 1.88-2ubuntu1 [291 kB]
+Get:41 http://archive.ubuntu.com/ubuntu focal/main amd64 libio-socket-ssl-perl all 2.067-1 [176 kB]
+Get:42 http://archive.ubuntu.com/ubuntu focal/main amd64 libltdl7 amd64 2.4.6-14 [38.5 kB]
+Get:43 http://archive.ubuntu.com/ubuntu focal/main amd64 libltdl-dev amd64 2.4.6-14 [162 kB]
+Get:44 http://archive.ubuntu.com/ubuntu focal/main amd64 libnet-http-perl all 6.19-1 [22.8 kB]
+Get:45 http://archive.ubuntu.com/ubuntu focal/main amd64 libtry-tiny-perl all 0.30-1 [20.5 kB]
+Get:46 http://archive.ubuntu.com/ubuntu focal/main amd64 libwww-robotrules-perl all 6.02-1 [12.6 kB]
+Get:47 http://archive.ubuntu.com/ubuntu focal/main amd64 libwww-perl all 6.43-1 [140 kB]
+Get:48 http://archive.ubuntu.com/ubuntu focal/main amd64 liblwp-protocol-https-perl all 6.07-2ubuntu2 [8560 B]
+Get:49 http://archive.ubuntu.com/ubuntu focal/main amd64 libnet-smtp-ssl-perl all 1.04-1 [5948 B]
+Get:50 http://archive.ubuntu.com/ubuntu focal/main amd64 libmailtools-perl all 2.21-1 [80.7 kB]
+Get:51 http://archive.ubuntu.com/ubuntu focal/universe amd64 libtext-unidecode-perl all 1.30-1 [99.0 kB]
+Get:52 http://archive.ubuntu.com/ubuntu focal/main amd64 libtool all 2.4.6-14 [161 kB]
+Get:53 http://archive.ubuntu.com/ubuntu focal/main amd64 libxml-namespacesupport-perl all 1.12-1 [13.2 kB]
+Get:54 http://archive.ubuntu.com/ubuntu focal/main amd64 libxml-sax-base-perl all 1.09-1 [18.8 kB]
+Get:55 http://archive.ubuntu.com/ubuntu focal/main amd64 libxml-sax-perl all 1.02+dfsg-1 [56.2 kB]
+Get:56 http://archive.ubuntu.com/ubuntu focal/main amd64 libxml-libxml-perl amd64 2.0134+dfsg-1build1 [320 kB]
+Get:57 http://archive.ubuntu.com/ubuntu focal/main amd64 libxml-parser-perl amd64 2.46-1 [193 kB]
+Get:58 http://archive.ubuntu.com/ubuntu focal/main amd64 libxml-sax-expat-perl all 0.51-1 [10.5 kB]
+Get:59 http://archive.ubuntu.com/ubuntu focal/universe amd64 texinfo amd64 6.7.0.dfsg.2-5 [1375 kB]
+Get:60 http://archive.ubuntu.com/ubuntu focal/main amd64 libauthen-sasl-perl all 2.1600-1 [48.7 kB]
+debconf: delaying package configuration, since apt-utils is not installed
+Fetched 17.8 MB in 7s (2525 kB/s)
+Selecting previously unselected package ucf.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 17384 files and directories currently installed.)
+Preparing to unpack .../00-ucf_3.0038+nmu1_all.deb ...
+Moving old data out of the way
+Unpacking ucf (3.0038+nmu1) ...
+Selecting previously unselected package tex-common.
+Preparing to unpack .../01-tex-common_6.13_all.deb ...
+Unpacking tex-common (6.13) ...
+Selecting previously unselected package libmagic-mgc.
+Preparing to unpack .../02-libmagic-mgc_1%3a5.38-4_amd64.deb ...
+Unpacking libmagic-mgc (1:5.38-4) ...
+Selecting previously unselected package libmagic1:amd64.
+Preparing to unpack .../03-libmagic1_1%3a5.38-4_amd64.deb ...
+Unpacking libmagic1:amd64 (1:5.38-4) ...
+Selecting previously unselected package file.
+Preparing to unpack .../04-file_1%3a5.38-4_amd64.deb ...
+Unpacking file (1:5.38-4) ...
+Selecting previously unselected package libglib2.0-0:amd64.
+Preparing to unpack .../05-libglib2.0-0_2.64.6-1~ubuntu20.04.6_amd64.deb ...
+Unpacking libglib2.0-0:amd64 (2.64.6-1~ubuntu20.04.6) ...
+Selecting previously unselected package libglib2.0-data.
+Preparing to unpack .../06-libglib2.0-data_2.64.6-1~ubuntu20.04.6_all.deb ...
+Unpacking libglib2.0-data (2.64.6-1~ubuntu20.04.6) ...
+Selecting previously unselected package libicu66:amd64.
+Preparing to unpack .../07-libicu66_66.1-2ubuntu2.1_amd64.deb ...
+Unpacking libicu66:amd64 (66.1-2ubuntu2.1) ...
+Selecting previously unselected package libxml2:amd64.
+Preparing to unpack .../08-libxml2_2.9.10+dfsg-5ubuntu0.20.04.6_amd64.deb ...
+Unpacking libxml2:amd64 (2.9.10+dfsg-5ubuntu0.20.04.6) ...
+Selecting previously unselected package shared-mime-info.
+Preparing to unpack .../09-shared-mime-info_1.15-1_amd64.deb ...
+Unpacking shared-mime-info (1.15-1) ...
+Selecting previously unselected package xdg-user-dirs.
+Preparing to unpack .../10-xdg-user-dirs_0.17-2ubuntu1_amd64.deb ...
+Unpacking xdg-user-dirs (0.17-2ubuntu1) ...
+Selecting previously unselected package gettext-base.
+Preparing to unpack .../11-gettext-base_0.19.8.1-10build1_amd64.deb ...
+Unpacking gettext-base (0.19.8.1-10build1) ...
+Selecting previously unselected package libsigsegv2:amd64.
+Preparing to unpack .../12-libsigsegv2_2.12-2_amd64.deb ...
+Unpacking libsigsegv2:amd64 (2.12-2) ...
+Selecting previously unselected package m4.
+Preparing to unpack .../13-m4_1.4.18-4_amd64.deb ...
+Unpacking m4 (1.4.18-4) ...
+Selecting previously unselected package autoconf.
+Preparing to unpack .../14-autoconf_2.69-11.1_all.deb ...
+Unpacking autoconf (2.69-11.1) ...
+Selecting previously unselected package autotools-dev.
+Preparing to unpack .../15-autotools-dev_20180224.1_all.deb ...
+Unpacking autotools-dev (20180224.1) ...
+Selecting previously unselected package automake.
+Preparing to unpack .../16-automake_1%3a1.16.1-4ubuntu6_all.deb ...
+Unpacking automake (1:1.16.1-4ubuntu6) ...
+Selecting previously unselected package autopoint.
+Preparing to unpack .../17-autopoint_0.19.8.1-10build1_all.deb ...
+Unpacking autopoint (0.19.8.1-10build1) ...
+Selecting previously unselected package libcroco3:amd64.
+Preparing to unpack .../18-libcroco3_0.6.13-1_amd64.deb ...
+Unpacking libcroco3:amd64 (0.6.13-1) ...
+Selecting previously unselected package gettext.
+Preparing to unpack .../19-gettext_0.19.8.1-10build1_amd64.deb ...
+Unpacking gettext (0.19.8.1-10build1) ...
+Selecting previously unselected package libdata-dump-perl.
+Preparing to unpack .../20-libdata-dump-perl_1.23-1_all.deb ...
+Unpacking libdata-dump-perl (1.23-1) ...
+Selecting previously unselected package libencode-locale-perl.
+Preparing to unpack .../21-libencode-locale-perl_1.05-1_all.deb ...
+Unpacking libencode-locale-perl (1.05-1) ...
+Selecting previously unselected package libtimedate-perl.
+Preparing to unpack .../22-libtimedate-perl_2.3200-1_all.deb ...
+Unpacking libtimedate-perl (2.3200-1) ...
+Selecting previously unselected package libhttp-date-perl.
+Preparing to unpack .../23-libhttp-date-perl_6.05-1_all.deb ...
+Unpacking libhttp-date-perl (6.05-1) ...
+Selecting previously unselected package libfile-listing-perl.
+Preparing to unpack .../24-libfile-listing-perl_6.04-1_all.deb ...
+Unpacking libfile-listing-perl (6.04-1) ...
+Selecting previously unselected package libfont-afm-perl.
+Preparing to unpack .../25-libfont-afm-perl_1.20-2_all.deb ...
+Unpacking libfont-afm-perl (1.20-2) ...
+Selecting previously unselected package libhtml-tagset-perl.
+Preparing to unpack .../26-libhtml-tagset-perl_3.20-4_all.deb ...
+Unpacking libhtml-tagset-perl (3.20-4) ...
+Selecting previously unselected package liburi-perl.
+Preparing to unpack .../27-liburi-perl_1.76-2_all.deb ...
+Unpacking liburi-perl (1.76-2) ...
+Selecting previously unselected package libhtml-parser-perl.
+Preparing to unpack .../28-libhtml-parser-perl_3.72-5_amd64.deb ...
+Unpacking libhtml-parser-perl (3.72-5) ...
+Selecting previously unselected package libio-html-perl.
+Preparing to unpack .../29-libio-html-perl_1.001-1_all.deb ...
+Unpacking libio-html-perl (1.001-1) ...
+Selecting previously unselected package liblwp-mediatypes-perl.
+Preparing to unpack .../30-liblwp-mediatypes-perl_6.04-1_all.deb ...
+Unpacking liblwp-mediatypes-perl (6.04-1) ...
+Selecting previously unselected package libhttp-message-perl.
+Preparing to unpack .../31-libhttp-message-perl_6.22-1_all.deb ...
+Unpacking libhttp-message-perl (6.22-1) ...
+Selecting previously unselected package libhtml-form-perl.
+Preparing to unpack .../32-libhtml-form-perl_6.07-1_all.deb ...
+Unpacking libhtml-form-perl (6.07-1) ...
+Selecting previously unselected package libhtml-tree-perl.
+Preparing to unpack .../33-libhtml-tree-perl_5.07-2_all.deb ...
+Unpacking libhtml-tree-perl (5.07-2) ...
+Selecting previously unselected package libhtml-format-perl.
+Preparing to unpack .../34-libhtml-format-perl_2.12-1_all.deb ...
+Unpacking libhtml-format-perl (2.12-1) ...
+Selecting previously unselected package libhttp-cookies-perl.
+Preparing to unpack .../35-libhttp-cookies-perl_6.08-1_all.deb ...
+Unpacking libhttp-cookies-perl (6.08-1) ...
+Selecting previously unselected package libhttp-daemon-perl.
+Preparing to unpack .../36-libhttp-daemon-perl_6.06-1ubuntu0.1_all.deb ...
+Unpacking libhttp-daemon-perl (6.06-1ubuntu0.1) ...
+Selecting previously unselected package libhttp-negotiate-perl.
+Preparing to unpack .../37-libhttp-negotiate-perl_6.01-1_all.deb ...
+Unpacking libhttp-negotiate-perl (6.01-1) ...
+Selecting previously unselected package perl-openssl-defaults:amd64.
+Preparing to unpack .../38-perl-openssl-defaults_4_amd64.deb ...
+Unpacking perl-openssl-defaults:amd64 (4) ...
+Selecting previously unselected package libnet-ssleay-perl.
+Preparing to unpack .../39-libnet-ssleay-perl_1.88-2ubuntu1_amd64.deb ...
+Unpacking libnet-ssleay-perl (1.88-2ubuntu1) ...
+Selecting previously unselected package libio-socket-ssl-perl.
+Preparing to unpack .../40-libio-socket-ssl-perl_2.067-1_all.deb ...
+Unpacking libio-socket-ssl-perl (2.067-1) ...
+Selecting previously unselected package libltdl7:amd64.
+Preparing to unpack .../41-libltdl7_2.4.6-14_amd64.deb ...
+Unpacking libltdl7:amd64 (2.4.6-14) ...
+Selecting previously unselected package libltdl-dev:amd64.
+Preparing to unpack .../42-libltdl-dev_2.4.6-14_amd64.deb ...
+Unpacking libltdl-dev:amd64 (2.4.6-14) ...
+Selecting previously unselected package libnet-http-perl.
+Preparing to unpack .../43-libnet-http-perl_6.19-1_all.deb ...
+Unpacking libnet-http-perl (6.19-1) ...
+Selecting previously unselected package libtry-tiny-perl.
+Preparing to unpack .../44-libtry-tiny-perl_0.30-1_all.deb ...
+Unpacking libtry-tiny-perl (0.30-1) ...
+Selecting previously unselected package libwww-robotrules-perl.
+Preparing to unpack .../45-libwww-robotrules-perl_6.02-1_all.deb ...
+Unpacking libwww-robotrules-perl (6.02-1) ...
+Selecting previously unselected package libwww-perl.
+Preparing to unpack .../46-libwww-perl_6.43-1_all.deb ...
+Unpacking libwww-perl (6.43-1) ...
+Selecting previously unselected package liblwp-protocol-https-perl.
+Preparing to unpack .../47-liblwp-protocol-https-perl_6.07-2ubuntu2_all.deb ...
+Unpacking liblwp-protocol-https-perl (6.07-2ubuntu2) ...
+Selecting previously unselected package libnet-smtp-ssl-perl.
+Preparing to unpack .../48-libnet-smtp-ssl-perl_1.04-1_all.deb ...
+Unpacking libnet-smtp-ssl-perl (1.04-1) ...
+Selecting previously unselected package libmailtools-perl.
+Preparing to unpack .../49-libmailtools-perl_2.21-1_all.deb ...
+Unpacking libmailtools-perl (2.21-1) ...
+Selecting previously unselected package libtext-unidecode-perl.
+Preparing to unpack .../50-libtext-unidecode-perl_1.30-1_all.deb ...
+Unpacking libtext-unidecode-perl (1.30-1) ...
+Selecting previously unselected package libtool.
+Preparing to unpack .../51-libtool_2.4.6-14_all.deb ...
+Unpacking libtool (2.4.6-14) ...
+Selecting previously unselected package libxml-namespacesupport-perl.
+Preparing to unpack .../52-libxml-namespacesupport-perl_1.12-1_all.deb ...
+Unpacking libxml-namespacesupport-perl (1.12-1) ...
+Selecting previously unselected package libxml-sax-base-perl.
+Preparing to unpack .../53-libxml-sax-base-perl_1.09-1_all.deb ...
+Unpacking libxml-sax-base-perl (1.09-1) ...
+Selecting previously unselected package libxml-sax-perl.
+Preparing to unpack .../54-libxml-sax-perl_1.02+dfsg-1_all.deb ...
+Unpacking libxml-sax-perl (1.02+dfsg-1) ...
+Selecting previously unselected package libxml-libxml-perl.
+Preparing to unpack .../55-libxml-libxml-perl_2.0134+dfsg-1build1_amd64.deb ...
+Unpacking libxml-libxml-perl (2.0134+dfsg-1build1) ...
+Selecting previously unselected package libxml-parser-perl.
+Preparing to unpack .../56-libxml-parser-perl_2.46-1_amd64.deb ...
+Unpacking libxml-parser-perl (2.46-1) ...
+Selecting previously unselected package libxml-sax-expat-perl.
+Preparing to unpack .../57-libxml-sax-expat-perl_0.51-1_all.deb ...
+Unpacking libxml-sax-expat-perl (0.51-1) ...
+Selecting previously unselected package texinfo.
+Preparing to unpack .../58-texinfo_6.7.0.dfsg.2-5_amd64.deb ...
+Unpacking texinfo (6.7.0.dfsg.2-5) ...
+Selecting previously unselected package libauthen-sasl-perl.
+Preparing to unpack .../59-libauthen-sasl-perl_2.1600-1_all.deb ...
+Unpacking libauthen-sasl-perl (2.1600-1) ...
+Setting up libfont-afm-perl (1.20-2) ...
+Setting up xdg-user-dirs (0.17-2ubuntu1) ...
+Setting up libmagic-mgc (1:5.38-4) ...
+Setting up libglib2.0-0:amd64 (2.64.6-1~ubuntu20.04.6) ...
+No schema files found: doing nothing.
+Setting up libicu66:amd64 (66.1-2ubuntu2.1) ...
+Setting up libhtml-tagset-perl (3.20-4) ...
+Setting up libauthen-sasl-perl (2.1600-1) ...
+Setting up liblwp-mediatypes-perl (6.04-1) ...
+Setting up libtry-tiny-perl (0.30-1) ...
+Setting up libmagic1:amd64 (1:5.38-4) ...
+Setting up perl-openssl-defaults:amd64 (4) ...
+Setting up libxml-namespacesupport-perl (1.12-1) ...
+Setting up gettext-base (0.19.8.1-10build1) ...
+Setting up libencode-locale-perl (1.05-1) ...
+Setting up file (1:5.38-4) ...
+Setting up libxml-sax-base-perl (1.09-1) ...
+Setting up autotools-dev (20180224.1) ...
+Setting up libglib2.0-data (2.64.6-1~ubuntu20.04.6) ...
+Setting up libdata-dump-perl (1.23-1) ...
+Setting up libsigsegv2:amd64 (2.12-2) ...
+Setting up libio-html-perl (1.001-1) ...
+Setting up autopoint (0.19.8.1-10build1) ...
+Setting up ucf (3.0038+nmu1) ...
+Setting up libltdl7:amd64 (2.4.6-14) ...
+Setting up libtimedate-perl (2.3200-1) ...
+Setting up libtext-unidecode-perl (1.30-1) ...
+Setting up libxml2:amd64 (2.9.10+dfsg-5ubuntu0.20.04.6) ...
+Setting up liburi-perl (1.76-2) ...
+Setting up libnet-ssleay-perl (1.88-2ubuntu1) ...
+Setting up libhttp-date-perl (6.05-1) ...
+Setting up libfile-listing-perl (6.04-1) ...
+Setting up libtool (2.4.6-14) ...
+Setting up libnet-http-perl (6.19-1) ...
+Setting up m4 (1.4.18-4) ...
+Setting up libxml-sax-perl (1.02+dfsg-1) ...
+update-perl-sax-parsers: Registering Perl SAX parser XML::SAX::PurePerl with priority 10...
+update-perl-sax-parsers: Updating overall Perl SAX parser modules info file...
+
+Creating config file /etc/perl/XML/SAX/ParserDetails.ini with new version
+Setting up tex-common (6.13) ...
+update-language: texlive-base not installed and configured, doing nothing!
+Setting up shared-mime-info (1.15-1) ...
+Setting up libcroco3:amd64 (0.6.13-1) ...
+Setting up autoconf (2.69-11.1) ...
+Setting up libxml-libxml-perl (2.0134+dfsg-1build1) ...
+update-perl-sax-parsers: Registering Perl SAX parser XML::LibXML::SAX::Parser with priority 50...
+update-perl-sax-parsers: Registering Perl SAX parser XML::LibXML::SAX with priority 50...
+update-perl-sax-parsers: Updating overall Perl SAX parser modules info file...
+Replacing config file /etc/perl/XML/SAX/ParserDetails.ini with new version
+Setting up libwww-robotrules-perl (6.02-1) ...
+Setting up libhtml-parser-perl (3.72-5) ...
+Setting up libio-socket-ssl-perl (2.067-1) ...
+Setting up libhttp-message-perl (6.22-1) ...
+Setting up libhtml-form-perl (6.07-1) ...
+Setting up automake (1:1.16.1-4ubuntu6) ...
+update-alternatives: using /usr/bin/automake-1.16 to provide /usr/bin/automake (automake) in auto mode
+update-alternatives: warning: skip creation of /usr/share/man/man1/automake.1.gz because associated file /usr/share/man/man1/automake-1.16.1.gz (of link group automake) doesn't exist
+update-alternatives: warning: skip creation of /usr/share/man/man1/aclocal.1.gz because associated file /usr/share/man/man1/aclocal-1.16.1.gz (of link group automake) doesn't exist
+Setting up libhttp-negotiate-perl (6.01-1) ...
+Setting up gettext (0.19.8.1-10build1) ...
+Setting up libhttp-cookies-perl (6.08-1) ...
+Setting up libhtml-tree-perl (5.07-2) ...
+Setting up libhtml-format-perl (2.12-1) ...
+Setting up libltdl-dev:amd64 (2.4.6-14) ...
+Setting up libnet-smtp-ssl-perl (1.04-1) ...
+Setting up libmailtools-perl (2.21-1) ...
+Setting up texinfo (6.7.0.dfsg.2-5) ...
+Setting up libhttp-daemon-perl (6.06-1ubuntu0.1) ...
+Setting up liblwp-protocol-https-perl (6.07-2ubuntu2) ...
+Setting up libwww-perl (6.43-1) ...
+Setting up libxml-parser-perl (2.46-1) ...
+Setting up libxml-sax-expat-perl (0.51-1) ...
+update-perl-sax-parsers: Registering Perl SAX parser XML::SAX::Expat with priority 50...
+update-perl-sax-parsers: Updating overall Perl SAX parser modules info file...
+Replacing config file /etc/perl/XML/SAX/ParserDetails.ini with new version
+Processing triggers for libc-bin (2.31-0ubuntu9.14) ...
+/src/aspell /src/aspell-fuzz
+Useless use of \E at MkSrc/Util.pm line 103.
+Creating "interfaces/cc/aspell.h".
+Creating "common/type_id.hpp".
+Will not write over "common/mutable_container.hpp".
+Creating "common/key_info.hpp".
+Will not write over "common/error.hpp".
+Will not write over "common/can_have_error.hpp".
+Creating "common/errors.hpp".
+Creating "common/word_list.hpp".
+Will not write over "common/string_enumeration.hpp".
+Will not write over "common/info.hpp".
+Will not write over "common/string_list.hpp".
+Will not write over "common/string_map.hpp".
+Will not write over "common/string_pair.hpp".
+Creating "common/string_pair_enumeration.hpp".
+Creating "lib/mutable_container-c.cpp".
+Creating "lib/config-c.cpp".
+Creating "lib/error-c.cpp".
+Creating "lib/can_have_error-c.cpp".
+Creating "lib/speller-c.cpp".
+Creating "lib/filter-c.cpp".
+Creating "lib/document_checker-c.cpp".
+Creating "lib/word_list-c.cpp".
+Creating "lib/string_enumeration-c.cpp".
+Will not write over "lib/info-c.cpp".
+Creating "lib/string_list-c.cpp".
+Creating "lib/string_map-c.cpp".
+Creating "lib/string_pair_enumeration-c.cpp".
+Creating "common/errors.cpp".
+Copying file ABOUT-NLS
+Copying file config.rpath
+Copying file m4/codeset.m4
+Copying file m4/extern-inline.m4
+Copying file m4/fcntl-o.m4
+Copying file m4/gettext.m4
+Copying file m4/glibc2.m4
+Copying file m4/glibc21.m4
+Copying file m4/iconv.m4
+Copying file m4/intdiv0.m4
+Copying file m4/intl.m4
+Copying file m4/intldir.m4
+Copying file m4/intlmacosx.m4
+Copying file m4/intmax.m4
+Copying file m4/inttypes-pri.m4
+Copying file m4/inttypes_h.m4
+Copying file m4/lcmessage.m4
+Copying file m4/lib-ld.m4
+Copying file m4/lib-link.m4
+Copying file m4/lib-prefix.m4
+Copying file m4/lock.m4
+Copying file m4/longlong.m4
+Copying file m4/nls.m4
+Copying file m4/po.m4
+Copying file m4/printf-posix.m4
+Copying file m4/progtest.m4
+Copying file m4/size_max.m4
+Copying file m4/stdint_h.m4
+Copying file m4/threadlib.m4
+Copying file m4/uintmax_t.m4
+Copying file m4/visibility.m4
+Copying file m4/wchar_t.m4
+Copying file m4/wint_t.m4
+Copying file m4/xsize.m4
+Copying file po/Makefile.in.in
+Copying file po/Makevars.template
+Copying file po/Rules-quot
+Copying file po/boldquot.sed
+Copying file po/en@boldquot.header
+Copying file po/en@quot.header
+Copying file po/insert-header.sin
+Copying file po/quot.sed
+Copying file po/remove-potcdate.sin
+configure.ac:105: installing './compile'
+configure.ac:3: installing './config.guess'
+configure.ac:3: installing './config.sub'
+configure.ac:4: installing './install-sh'
+configure.ac:4: installing './missing'
+Makefile.am: installing './depcomp'
+manual/Makefile.am:2: installing 'manual/mdate-sh'
+manual/Makefile.am:2: installing 'manual/texinfo.tex'
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... x86_64-pc-linux-gnu
+checking target system type... x86_64-pc-linux-gnu
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for a thread-safe mkdir -p... /usr/bin/mkdir -p
+checking for gawk... no
+checking for mawk... mawk
+checking whether make sets $(MAKE)... yes
+checking whether make supports nested variables... yes
+checking whether to enable maintainer-specific portions of Makefiles... yes
+checking whether the C++ compiler works... yes
+checking for C++ compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether we are using the GNU C++ compiler... yes
+checking whether /usr/local/bin/clang++-jcc accepts -g... yes
+checking whether make supports the include directive... yes (GNU style)
+checking dependency style of /usr/local/bin/clang++-jcc... gcc3
+checking for gcc... /usr/local/bin/clang-jcc
+checking whether we are using the GNU C compiler... yes
+checking whether /usr/local/bin/clang-jcc accepts -g... yes
+checking for /usr/local/bin/clang-jcc option to accept ISO C89... none needed
+checking whether /usr/local/bin/clang-jcc understands -c and -o together... yes
+checking dependency style of /usr/local/bin/clang-jcc... gcc3
+checking how to print strings... printf
+checking for a sed that does not truncate output... /usr/bin/sed
+checking for grep that handles long lines and -e... /usr/bin/grep
+checking for egrep... /usr/bin/grep -E
+checking for fgrep... /usr/bin/grep -F
+checking for ld used by /usr/local/bin/clang-jcc... /usr/bin/ld
+checking if the linker (/usr/bin/ld) is GNU ld... yes
+checking for BSD- or MS-compatible name lister (nm)... /usr/bin/nm -B
+checking the name lister (/usr/bin/nm -B) interface... BSD nm
+checking whether ln -s works... yes
+checking the maximum length of command line arguments... 1572864
+checking how to convert x86_64-pc-linux-gnu file names to x86_64-pc-linux-gnu format... func_convert_file_noop
+checking how to convert x86_64-pc-linux-gnu file names to toolchain format... func_convert_file_noop
+checking for /usr/bin/ld option to reload object files... -r
+checking for objdump... objdump
+checking how to recognize dependent libraries... pass_all
+checking for dlltool... no
+checking how to associate runtime and link libraries... printf %s\n
+checking for ar... ar
+checking for archiver @FILE support... @
+checking for strip... strip
+checking for ranlib... ranlib
+checking command to parse /usr/bin/nm -B output from /usr/local/bin/clang-jcc object... ok
+checking for sysroot... no
+checking for a working dd... /usr/bin/dd
+checking how to truncate binary pipes... /usr/bin/dd bs=4096 count=1
+checking for mt... no
+checking if : is a manifest tool... no
+checking how to run the C preprocessor... /usr/local/bin/clang-jcc -E
+checking for ANSI C header files... yes
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for memory.h... yes
+checking for strings.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for unistd.h... yes
+checking for dlfcn.h... yes
+checking for objdir... .libs
+checking if /usr/local/bin/clang-jcc supports -fno-rtti -fno-exceptions... yes
+checking for /usr/local/bin/clang-jcc option to produce PIC... -fPIC -DPIC
+checking if /usr/local/bin/clang-jcc PIC flag -fPIC -DPIC works... yes
+checking if /usr/local/bin/clang-jcc static flag -static works... no
+checking if /usr/local/bin/clang-jcc supports -c -o file.o... yes
+checking if /usr/local/bin/clang-jcc supports -c -o file.o... (cached) yes
+checking whether the /usr/local/bin/clang-jcc linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking dynamic linker characteristics... GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking for shl_load... no
+checking for shl_load in -ldld... no
+checking for dlopen... yes
+checking whether a program can dlopen itself... yes
+checking whether a statically linked program can dlopen itself... yes
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... no
+checking whether to build static libraries... yes
+checking how to run the C++ preprocessor... /usr/local/bin/clang++-jcc -E
+checking for ld used by /usr/local/bin/clang++-jcc... /usr/bin/ld -m elf_x86_64
+checking if the linker (/usr/bin/ld -m elf_x86_64) is GNU ld... yes
+checking whether the /usr/local/bin/clang++-jcc linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking for /usr/local/bin/clang++-jcc option to produce PIC... -fPIC -DPIC
+checking if /usr/local/bin/clang++-jcc PIC flag -fPIC -DPIC works... yes
+checking if /usr/local/bin/clang++-jcc static flag -static works... no
+checking if /usr/local/bin/clang++-jcc supports -c -o file.o... yes
+checking if /usr/local/bin/clang++-jcc supports -c -o file.o... (cached) yes
+checking whether the /usr/local/bin/clang++-jcc linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking dynamic linker characteristics... (cached) GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking for dlfcn.h... (cached) yes
+checking for dlopen... (cached) yes
+checking for sed... /usr/bin/sed
+checking for perl... /usr/bin/perl
+checking whether NLS is requested... yes
+checking for msgfmt... /usr/bin/msgfmt
+checking for gmsgfmt... /usr/bin/msgfmt
+checking for xgettext... /usr/bin/xgettext
+checking for msgmerge... /usr/bin/msgmerge
+checking for ld used by /usr/local/bin/clang-jcc... /usr/bin/ld -m elf_x86_64
+checking if the linker (/usr/bin/ld -m elf_x86_64) is GNU ld... yes
+checking for shared library run path origin... done
+checking for CFPreferencesCopyAppValue... no
+checking for CFLocaleCopyCurrent... no
+checking for GNU gettext in libc... yes
+checking whether to use NLS... yes
+checking where the gettext function comes from... libc
+checking for dlfcn.h... (cached) yes
+checking for dlopen in -ldl... yes
+checking if file locking and truncating is supported... yes
+checking if mmap and friends is supported... yes
+checking if file ino is supported... yes
+checking if posix locals are supported... yes
+checking if posix regex are supported... yes
+checking for nl_langinfo and CODESET... yes
+checking if posix mutexes are supported... yes
+checking if mblen is supported... yes
+checking for working curses library... not found
+checking if posix termios is supported... yes
+checking for STL rel_ops pollution... no
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating gen/Makefile
+config.status: creating common/Makefile
+config.status: creating lib/Makefile
+config.status: creating data/Makefile
+config.status: creating auto/Makefile
+config.status: creating modules/Makefile
+config.status: creating modules/tokenizer/Makefile
+config.status: creating modules/speller/Makefile
+config.status: creating modules/speller/default/Makefile
+config.status: creating interfaces/Makefile
+config.status: creating interfaces/cc/Makefile
+config.status: creating scripts/Makefile
+config.status: creating examples/Makefile
+config.status: creating prog/Makefile
+config.status: creating manual/Makefile
+config.status: creating po/Makefile.in
+config.status: creating m4/Makefile
+config.status: creating modules/filter/Makefile
+config.status: creating myspell/Makefile
+config.status: creating lib5/Makefile
+config.status: creating gen/settings.h
+config.status: executing depfiles commands
+config.status: executing libtool commands
+config.status: executing po-directories commands
+config.status: creating po/POTFILES
+config.status: creating po/Makefile
+Making all in .
+make[1]: Entering directory '/src/aspell'
+perl ./gen/mk-dirs_h.pl /workspace/out/libfuzzer-address-x86_64/deps /workspace/out/libfuzzer-address-x86_64/dict /workspace/out/libfuzzer-address-x86_64/dict  /workspace/out/libfuzzer-address-x86_64/deps/etc >  gen/dirs.h
+depbase=`echo prog/prezip.o | sed 's|[^/]*$|.deps/&|;s|\.o$||'`;\
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -g -MT prog/prezip.o -MD -MP -MF $depbase.Tpo -c -o prog/prezip.o prog/prezip.c &&\
+mv -f $depbase.Tpo $depbase.Po
+sh ./scripts/run-with-aspell.create /workspace/out/libfuzzer-address-x86_64/dict > scripts/run-with-aspell
+/usr/bin/perl ./gen/mk-filter-pot.pl
+chmod 755 scripts/run-with-aspell
+depbase=`echo prog/compress.o | sed 's|[^/]*$|.deps/&|;s|\.o$||'`;\
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -g -MT prog/compress.o -MD -MP -MF $depbase.Tpo -c -o prog/compress.o prog/compress.c &&\
+mv -f $depbase.Tpo $depbase.Po
+depbase=`echo prog/aspell.o | sed 's|[^/]*$|.deps/&|;s|\.o$||'`;\
+/usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT prog/aspell.o -MD -MP -MF $depbase.Tpo -c -o prog/aspell.o prog/aspell.cpp &&\
+mv -f $depbase.Tpo $depbase.Po
+depbase=`echo prog/check_funs.o | sed 's|[^/]*$|.deps/&|;s|\.o$||'`;\
+/usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT prog/check_funs.o -MD -MP -MF $depbase.Tpo -c -o prog/check_funs.o prog/check_funs.cpp &&\
+mv -f $depbase.Tpo $depbase.Po
+depbase=`echo prog/checker_string.o | sed 's|[^/]*$|.deps/&|;s|\.o$||'`;\
+/usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT prog/checker_string.o -MD -MP -MF $depbase.Tpo -c -o prog/checker_string.o prog/checker_string.cpp &&\
+mv -f $depbase.Tpo $depbase.Po
+depbase=`echo common/cache.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT common/cache.lo -MD -MP -MF $depbase.Tpo -c -o common/cache.lo common/cache.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo common/string.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT common/string.lo -MD -MP -MF $depbase.Tpo -c -o common/string.lo common/string.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo common/getdata.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT common/getdata.lo -MD -MP -MF $depbase.Tpo -c -o common/getdata.lo common/getdata.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo common/itemize.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT common/itemize.lo -MD -MP -MF $depbase.Tpo -c -o common/itemize.lo common/itemize.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo common/file_util.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT common/file_util.lo -MD -MP -MF $depbase.Tpo -c -o common/file_util.lo common/file_util.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo common/string_map.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT common/string_map.lo -MD -MP -MF $depbase.Tpo -c -o common/string_map.lo common/string_map.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo common/string_list.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT common/string_list.lo -MD -MP -MF $depbase.Tpo -c -o common/string_list.lo common/string_list.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo common/config.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT common/config.lo -MD -MP -MF $depbase.Tpo -c -o common/config.lo common/config.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo common/version.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT common/version.lo -MD -MP -MF $depbase.Tpo -c -o common/version.lo common/version.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo common/posib_err.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT common/posib_err.lo -MD -MP -MF $depbase.Tpo -c -o common/posib_err.lo common/posib_err.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo common/errors.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT common/errors.lo -MD -MP -MF $depbase.Tpo -c -o common/errors.lo common/errors.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo common/error.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT common/error.lo -MD -MP -MF $depbase.Tpo -c -o common/error.lo common/error.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo common/fstream.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT common/fstream.lo -MD -MP -MF $depbase.Tpo -c -o common/fstream.lo common/fstream.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo common/iostream.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT common/iostream.lo -MD -MP -MF $depbase.Tpo -c -o common/iostream.lo common/iostream.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo common/info.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT common/info.lo -MD -MP -MF $depbase.Tpo -c -o common/info.lo common/info.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo common/can_have_error.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT common/can_have_error.lo -MD -MP -MF $depbase.Tpo -c -o common/can_have_error.lo common/can_have_error.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo common/convert.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT common/convert.lo -MD -MP -MF $depbase.Tpo -c -o common/convert.lo common/convert.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo common/tokenizer.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT common/tokenizer.lo -MD -MP -MF $depbase.Tpo -c -o common/tokenizer.lo common/tokenizer.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo common/speller.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT common/speller.lo -MD -MP -MF $depbase.Tpo -c -o common/speller.lo common/speller.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo common/document_checker.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT common/document_checker.lo -MD -MP -MF $depbase.Tpo -c -o common/document_checker.lo common/document_checker.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo common/filter.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT common/filter.lo -MD -MP -MF $depbase.Tpo -c -o common/filter.lo common/filter.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo common/objstack.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT common/objstack.lo -MD -MP -MF $depbase.Tpo -c -o common/objstack.lo common/objstack.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo common/strtonum.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT common/strtonum.lo -MD -MP -MF $depbase.Tpo -c -o common/strtonum.lo common/strtonum.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo common/gettext_init.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT common/gettext_init.lo -MD -MP -MF $depbase.Tpo -c -o common/gettext_init.lo common/gettext_init.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo common/file_data_util.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT common/file_data_util.lo -MD -MP -MF $depbase.Tpo -c -o common/file_data_util.lo common/file_data_util.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo modules/speller/default/readonly_ws.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT modules/speller/default/readonly_ws.lo -MD -MP -MF $depbase.Tpo -c -o modules/speller/default/readonly_ws.lo modules/speller/default/readonly_ws.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo modules/speller/default/suggest.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT modules/speller/default/suggest.lo -MD -MP -MF $depbase.Tpo -c -o modules/speller/default/suggest.lo modules/speller/default/suggest.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT common/string.lo -MD -MP -MF common/.deps/string.Tpo -c common/string.cpp -o common/string.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT common/posib_err.lo -MD -MP -MF common/.deps/posib_err.Tpo -c common/posib_err.cpp -o common/posib_err.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT common/itemize.lo -MD -MP -MF common/.deps/itemize.Tpo -c common/itemize.cpp -o common/itemize.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT common/config.lo -MD -MP -MF common/.deps/config.Tpo -c common/config.cpp -o common/config.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT common/can_have_error.lo -MD -MP -MF common/.deps/can_have_error.Tpo -c common/can_have_error.cpp -o common/can_have_error.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT common/file_util.lo -MD -MP -MF common/.deps/file_util.Tpo -c common/file_util.cpp -o common/file_util.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT common/fstream.lo -MD -MP -MF common/.deps/fstream.Tpo -c common/fstream.cpp -o common/fstream.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT common/tokenizer.lo -MD -MP -MF common/.deps/tokenizer.Tpo -c common/tokenizer.cpp -o common/tokenizer.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT common/convert.lo -MD -MP -MF common/.deps/convert.Tpo -c common/convert.cpp -o common/convert.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT common/getdata.lo -MD -MP -MF common/.deps/getdata.Tpo -c common/getdata.cpp -o common/getdata.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT common/objstack.lo -MD -MP -MF common/.deps/objstack.Tpo -c common/objstack.cpp -o common/objstack.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT common/cache.lo -MD -MP -MF common/.deps/cache.Tpo -c common/cache.cpp -o common/cache.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT common/string_list.lo -MD -MP -MF common/.deps/string_list.Tpo -c common/string_list.cpp -o common/string_list.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT common/strtonum.lo -MD -MP -MF common/.deps/strtonum.Tpo -c common/strtonum.cpp -o common/strtonum.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT common/speller.lo -MD -MP -MF common/.deps/speller.Tpo -c common/speller.cpp -o common/speller.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT modules/speller/default/readonly_ws.lo -MD -MP -MF modules/speller/default/.deps/readonly_ws.Tpo -c modules/speller/default/readonly_ws.cpp -o modules/speller/default/readonly_ws.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT common/gettext_init.lo -MD -MP -MF common/.deps/gettext_init.Tpo -c common/gettext_init.cpp -o common/gettext_init.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT common/string_map.lo -MD -MP -MF common/.deps/string_map.Tpo -c common/string_map.cpp -o common/string_map.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT modules/speller/default/suggest.lo -MD -MP -MF modules/speller/default/.deps/suggest.Tpo -c modules/speller/default/suggest.cpp -o modules/speller/default/suggest.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT common/info.lo -MD -MP -MF common/.deps/info.Tpo -c common/info.cpp -o common/info.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT common/version.lo -MD -MP -MF common/.deps/version.Tpo -c common/version.cpp -o common/version.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT common/errors.lo -MD -MP -MF common/.deps/errors.Tpo -c common/errors.cpp -o common/errors.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT common/error.lo -MD -MP -MF common/.deps/error.Tpo -c common/error.cpp -o common/error.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT common/file_data_util.lo -MD -MP -MF common/.deps/file_data_util.Tpo -c common/file_data_util.cpp -o common/file_data_util.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT common/filter.lo -MD -MP -MF common/.deps/filter.Tpo -c common/filter.cpp -o common/filter.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT common/iostream.lo -MD -MP -MF common/.deps/iostream.Tpo -c common/iostream.cpp -o common/iostream.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT common/document_checker.lo -MD -MP -MF common/.deps/document_checker.Tpo -c common/document_checker.cpp -o common/document_checker.o
+depbase=`echo modules/speller/default/data.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT modules/speller/default/data.lo -MD -MP -MF $depbase.Tpo -c -o modules/speller/default/data.lo modules/speller/default/data.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo modules/speller/default/multi_ws.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT modules/speller/default/multi_ws.lo -MD -MP -MF $depbase.Tpo -c -o modules/speller/default/multi_ws.lo modules/speller/default/multi_ws.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo modules/speller/default/phonetic.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT modules/speller/default/phonetic.lo -MD -MP -MF $depbase.Tpo -c -o modules/speller/default/phonetic.lo modules/speller/default/phonetic.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo modules/speller/default/writable.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT modules/speller/default/writable.lo -MD -MP -MF $depbase.Tpo -c -o modules/speller/default/writable.lo modules/speller/default/writable.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo modules/speller/default/speller_impl.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT modules/speller/default/speller_impl.lo -MD -MP -MF $depbase.Tpo -c -o modules/speller/default/speller_impl.lo modules/speller/default/speller_impl.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo modules/speller/default/phonet.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT modules/speller/default/phonet.lo -MD -MP -MF $depbase.Tpo -c -o modules/speller/default/phonet.lo modules/speller/default/phonet.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo modules/speller/default/typo_editdist.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT modules/speller/default/typo_editdist.lo -MD -MP -MF $depbase.Tpo -c -o modules/speller/default/typo_editdist.lo modules/speller/default/typo_editdist.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT modules/speller/default/data.lo -MD -MP -MF modules/speller/default/.deps/data.Tpo -c modules/speller/default/data.cpp -o modules/speller/default/data.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT modules/speller/default/phonetic.lo -MD -MP -MF modules/speller/default/.deps/phonetic.Tpo -c modules/speller/default/phonetic.cpp -o modules/speller/default/phonetic.o
+depbase=`echo modules/speller/default/editdist.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT modules/speller/default/editdist.lo -MD -MP -MF $depbase.Tpo -c -o modules/speller/default/editdist.lo modules/speller/default/editdist.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo modules/speller/default/primes.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT modules/speller/default/primes.lo -MD -MP -MF $depbase.Tpo -c -o modules/speller/default/primes.lo modules/speller/default/primes.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT modules/speller/default/multi_ws.lo -MD -MP -MF modules/speller/default/.deps/multi_ws.Tpo -c modules/speller/default/multi_ws.cpp -o modules/speller/default/multi_ws.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT modules/speller/default/writable.lo -MD -MP -MF modules/speller/default/.deps/writable.Tpo -c modules/speller/default/writable.cpp -o modules/speller/default/writable.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT modules/speller/default/speller_impl.lo -MD -MP -MF modules/speller/default/.deps/speller_impl.Tpo -c modules/speller/default/speller_impl.cpp -o modules/speller/default/speller_impl.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT modules/speller/default/phonet.lo -MD -MP -MF modules/speller/default/.deps/phonet.Tpo -c modules/speller/default/phonet.cpp -o modules/speller/default/phonet.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT modules/speller/default/typo_editdist.lo -MD -MP -MF modules/speller/default/.deps/typo_editdist.Tpo -c modules/speller/default/typo_editdist.cpp -o modules/speller/default/typo_editdist.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT modules/speller/default/editdist.lo -MD -MP -MF modules/speller/default/.deps/editdist.Tpo -c modules/speller/default/editdist.cpp -o modules/speller/default/editdist.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT modules/speller/default/primes.lo -MD -MP -MF modules/speller/default/.deps/primes.Tpo -c modules/speller/default/primes.cpp -o modules/speller/default/primes.o
+depbase=`echo modules/speller/default/language.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT modules/speller/default/language.lo -MD -MP -MF $depbase.Tpo -c -o modules/speller/default/language.lo modules/speller/default/language.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo modules/speller/default/leditdist.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT modules/speller/default/leditdist.lo -MD -MP -MF $depbase.Tpo -c -o modules/speller/default/leditdist.lo modules/speller/default/leditdist.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT modules/speller/default/language.lo -MD -MP -MF modules/speller/default/.deps/language.Tpo -c modules/speller/default/language.cpp -o modules/speller/default/language.o
+depbase=`echo modules/speller/default/affix.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT modules/speller/default/affix.lo -MD -MP -MF $depbase.Tpo -c -o modules/speller/default/affix.lo modules/speller/default/affix.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo modules/tokenizer/basic.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT modules/tokenizer/basic.lo -MD -MP -MF $depbase.Tpo -c -o modules/tokenizer/basic.lo modules/tokenizer/basic.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo lib/filter-c.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT lib/filter-c.lo -MD -MP -MF $depbase.Tpo -c -o lib/filter-c.lo lib/filter-c.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT modules/speller/default/leditdist.lo -MD -MP -MF modules/speller/default/.deps/leditdist.Tpo -c modules/speller/default/leditdist.cpp -o modules/speller/default/leditdist.o
+depbase=`echo lib/word_list-c.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT lib/word_list-c.lo -MD -MP -MF $depbase.Tpo -c -o lib/word_list-c.lo lib/word_list-c.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo lib/info-c.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT lib/info-c.lo -MD -MP -MF $depbase.Tpo -c -o lib/info-c.lo lib/info-c.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT modules/speller/default/affix.lo -MD -MP -MF modules/speller/default/.deps/affix.Tpo -c modules/speller/default/affix.cpp -o modules/speller/default/affix.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT modules/tokenizer/basic.lo -MD -MP -MF modules/tokenizer/.deps/basic.Tpo -c modules/tokenizer/basic.cpp -o modules/tokenizer/basic.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT lib/filter-c.lo -MD -MP -MF lib/.deps/filter-c.Tpo -c lib/filter-c.cpp -o lib/filter-c.o
+depbase=`echo lib/mutable_container-c.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT lib/mutable_container-c.lo -MD -MP -MF $depbase.Tpo -c -o lib/mutable_container-c.lo lib/mutable_container-c.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT lib/word_list-c.lo -MD -MP -MF lib/.deps/word_list-c.Tpo -c lib/word_list-c.cpp -o lib/word_list-c.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT lib/info-c.lo -MD -MP -MF lib/.deps/info-c.Tpo -c lib/info-c.cpp -o lib/info-c.o
+depbase=`echo lib/error-c.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT lib/error-c.lo -MD -MP -MF $depbase.Tpo -c -o lib/error-c.lo lib/error-c.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo lib/document_checker-c.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT lib/document_checker-c.lo -MD -MP -MF $depbase.Tpo -c -o lib/document_checker-c.lo lib/document_checker-c.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo lib/string_map-c.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT lib/string_map-c.lo -MD -MP -MF $depbase.Tpo -c -o lib/string_map-c.lo lib/string_map-c.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT lib/mutable_container-c.lo -MD -MP -MF lib/.deps/mutable_container-c.Tpo -c lib/mutable_container-c.cpp -o lib/mutable_container-c.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT lib/error-c.lo -MD -MP -MF lib/.deps/error-c.Tpo -c lib/error-c.cpp -o lib/error-c.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT lib/document_checker-c.lo -MD -MP -MF lib/.deps/document_checker-c.Tpo -c lib/document_checker-c.cpp -o lib/document_checker-c.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT lib/string_map-c.lo -MD -MP -MF lib/.deps/string_map-c.Tpo -c lib/string_map-c.cpp -o lib/string_map-c.o
+depbase=`echo lib/new_config.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT lib/new_config.lo -MD -MP -MF $depbase.Tpo -c -o lib/new_config.lo lib/new_config.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo lib/config-c.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT lib/config-c.lo -MD -MP -MF $depbase.Tpo -c -o lib/config-c.lo lib/config-c.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT lib/new_config.lo -MD -MP -MF lib/.deps/new_config.Tpo -c lib/new_config.cpp -o lib/new_config.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT lib/config-c.lo -MD -MP -MF lib/.deps/config-c.Tpo -c lib/config-c.cpp -o lib/config-c.o
+depbase=`echo lib/string_enumeration-c.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT lib/string_enumeration-c.lo -MD -MP -MF $depbase.Tpo -c -o lib/string_enumeration-c.lo lib/string_enumeration-c.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo lib/can_have_error-c.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT lib/can_have_error-c.lo -MD -MP -MF $depbase.Tpo -c -o lib/can_have_error-c.lo lib/can_have_error-c.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo lib/dummy.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT lib/dummy.lo -MD -MP -MF $depbase.Tpo -c -o lib/dummy.lo lib/dummy.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT lib/string_enumeration-c.lo -MD -MP -MF lib/.deps/string_enumeration-c.Tpo -c lib/string_enumeration-c.cpp -o lib/string_enumeration-c.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT lib/can_have_error-c.lo -MD -MP -MF lib/.deps/can_have_error-c.Tpo -c lib/can_have_error-c.cpp -o lib/can_have_error-c.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT lib/dummy.lo -MD -MP -MF lib/.deps/dummy.Tpo -c lib/dummy.cpp -o lib/dummy.o
+/usr/bin/perl ./gen/mk-static-filter.pl ./modules/filter/url-filter.info ./modules/filter/email-filter.info ./modules/filter/tex-filter.info ./modules/filter/sgml-filter.info ./modules/filter/markdown-filter.info ./modules/filter/html-filter.info ./modules/filter/context-filter.info ./modules/filter/nroff-filter.info ./modules/filter/texinfo-filter.info
+depbase=`echo lib/new_fmode.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT lib/new_fmode.lo -MD -MP -MF $depbase.Tpo -c -o lib/new_fmode.lo lib/new_fmode.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo lib/string_list-c.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT lib/string_list-c.lo -MD -MP -MF $depbase.Tpo -c -o lib/string_list-c.lo lib/string_list-c.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo lib/find_speller.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT lib/find_speller.lo -MD -MP -MF $depbase.Tpo -c -o lib/find_speller.lo lib/find_speller.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo lib/speller-c.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT lib/speller-c.lo -MD -MP -MF $depbase.Tpo -c -o lib/speller-c.lo lib/speller-c.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT lib/new_fmode.lo -MD -MP -MF lib/.deps/new_fmode.Tpo -c lib/new_fmode.cpp -o lib/new_fmode.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT lib/string_list-c.lo -MD -MP -MF lib/.deps/string_list-c.Tpo -c lib/string_list-c.cpp -o lib/string_list-c.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT lib/find_speller.lo -MD -MP -MF lib/.deps/find_speller.Tpo -c lib/find_speller.cpp -o lib/find_speller.o
+depbase=`echo lib/string_pair_enumeration-c.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT lib/string_pair_enumeration-c.lo -MD -MP -MF $depbase.Tpo -c -o lib/string_pair_enumeration-c.lo lib/string_pair_enumeration-c.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT lib/speller-c.lo -MD -MP -MF lib/.deps/speller-c.Tpo -c lib/speller-c.cpp -o lib/speller-c.o
+depbase=`echo lib/new_checker.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT lib/new_checker.lo -MD -MP -MF $depbase.Tpo -c -o lib/new_checker.lo lib/new_checker.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT lib/string_pair_enumeration-c.lo -MD -MP -MF lib/.deps/string_pair_enumeration-c.Tpo -c lib/string_pair_enumeration-c.cpp -o lib/string_pair_enumeration-c.o
+depbase=`echo modules/filter/url.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT modules/filter/url.lo -MD -MP -MF $depbase.Tpo -c -o modules/filter/url.lo modules/filter/url.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo modules/filter/email.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT modules/filter/email.lo -MD -MP -MF $depbase.Tpo -c -o modules/filter/email.lo modules/filter/email.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo modules/filter/tex.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT modules/filter/tex.lo -MD -MP -MF $depbase.Tpo -c -o modules/filter/tex.lo modules/filter/tex.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT lib/new_checker.lo -MD -MP -MF lib/.deps/new_checker.Tpo -c lib/new_checker.cpp -o lib/new_checker.o
+depbase=`echo modules/filter/sgml.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT modules/filter/sgml.lo -MD -MP -MF $depbase.Tpo -c -o modules/filter/sgml.lo modules/filter/sgml.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo modules/filter/markdown.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT modules/filter/markdown.lo -MD -MP -MF $depbase.Tpo -c -o modules/filter/markdown.lo modules/filter/markdown.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT modules/filter/email.lo -MD -MP -MF modules/filter/.deps/email.Tpo -c modules/filter/email.cpp -o modules/filter/email.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT modules/filter/url.lo -MD -MP -MF modules/filter/.deps/url.Tpo -c modules/filter/url.cpp -o modules/filter/url.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT modules/filter/tex.lo -MD -MP -MF modules/filter/.deps/tex.Tpo -c modules/filter/tex.cpp -o modules/filter/tex.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT modules/filter/sgml.lo -MD -MP -MF modules/filter/.deps/sgml.Tpo -c modules/filter/sgml.cpp -o modules/filter/sgml.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT modules/filter/markdown.lo -MD -MP -MF modules/filter/.deps/markdown.Tpo -c modules/filter/markdown.cpp -o modules/filter/markdown.o
+depbase=`echo modules/filter/context.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT modules/filter/context.lo -MD -MP -MF $depbase.Tpo -c -o modules/filter/context.lo modules/filter/context.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo modules/filter/nroff.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT modules/filter/nroff.lo -MD -MP -MF $depbase.Tpo -c -o modules/filter/nroff.lo modules/filter/nroff.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo modules/filter/texinfo.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT modules/filter/texinfo.lo -MD -MP -MF $depbase.Tpo -c -o modules/filter/texinfo.lo modules/filter/texinfo.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT modules/filter/context.lo -MD -MP -MF modules/filter/.deps/context.Tpo -c modules/filter/context.cpp -o modules/filter/context.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT modules/filter/nroff.lo -MD -MP -MF modules/filter/.deps/nroff.Tpo -c modules/filter/nroff.cpp -o modules/filter/nroff.o
+/bin/bash ./libtool  --tag=CC   --mode=link /usr/local/bin/clang-jcc  -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -g   -o prezip-bin prog/prezip.o  -ldl -lpthread
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT modules/filter/texinfo.lo -MD -MP -MF modules/filter/.deps/texinfo.Tpo -c modules/filter/texinfo.cpp -o modules/filter/texinfo.o
+/bin/bash ./libtool  --tag=CC   --mode=link /usr/local/bin/clang-jcc  -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -g   -o word-list-compress prog/compress.o  -ldl -lpthread
+depbase=`echo lib/new_filter.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen  -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR="/workspace/out/libfuzzer-address-x86_64/deps/share/locale"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -MT lib/new_filter.lo -MD -MP -MF $depbase.Tpo -c -o lib/new_filter.lo lib/new_filter.cpp &&\
+mv -f $depbase.Tpo $depbase.Plo
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I./gen -I./gen -I./common -I./interfaces/cc/ -I./modules/speller/default/ -DLOCALEDIR=/workspace/out/libfuzzer-address-x86_64/deps/share/locale -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -MT lib/new_filter.lo -MD -MP -MF lib/.deps/new_filter.Tpo -c lib/new_filter.cpp -o lib/new_filter.o
+libtool: link: /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -g -o prezip-bin prog/prezip.o  -ldl -lpthread
+libtool: link: /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -g -o word-list-compress prog/compress.o  -ldl -lpthread
+/bin/bash ./libtool  --tag=CXX   --mode=link /usr/local/bin/clang++-jcc  -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions  -version-info 18:1:3 -no-undefined  -o libaspell.la -rpath /workspace/out/libfuzzer-address-x86_64/deps/lib common/cache.lo common/string.lo common/getdata.lo common/itemize.lo common/file_util.lo common/string_map.lo common/string_list.lo common/config.lo common/version.lo common/posib_err.lo common/errors.lo common/error.lo common/fstream.lo common/iostream.lo common/info.lo common/can_have_error.lo common/convert.lo common/tokenizer.lo common/speller.lo common/document_checker.lo common/filter.lo common/objstack.lo common/strtonum.lo common/gettext_init.lo common/file_data_util.lo modules/speller/default/readonly_ws.lo modules/speller/default/suggest.lo modules/speller/default/data.lo modules/speller/default/multi_ws.lo modules/speller/default/phonetic.lo modules/speller/default/writable.lo modules/speller/default/speller_impl.lo modules/speller/default/phonet.lo modules/speller/default/typo_editdist.lo modules/speller/default/editdist.lo modules/speller/default/primes.lo modules/speller/default/language.lo modules/speller/default/leditdist.lo modules/speller/default/affix.lo modules/tokenizer/basic.lo lib/filter-c.lo lib/word_list-c.lo lib/info-c.lo lib/mutable_container-c.lo lib/error-c.lo lib/document_checker-c.lo lib/string_map-c.lo lib/new_config.lo lib/config-c.lo lib/string_enumeration-c.lo lib/can_have_error-c.lo lib/dummy.lo lib/new_filter.lo lib/new_fmode.lo lib/string_list-c.lo lib/find_speller.lo lib/speller-c.lo lib/string_pair_enumeration-c.lo lib/new_checker.lo modules/filter/url.lo modules/filter/email.lo modules/filter/tex.lo modules/filter/sgml.lo modules/filter/markdown.lo modules/filter/context.lo modules/filter/nroff.lo modules/filter/texinfo.lo   -ldl -lpthread
+libtool: link: ar cr .libs/libaspell.a  common/cache.o common/string.o common/getdata.o common/itemize.o common/file_util.o common/string_map.o common/string_list.o common/config.o common/version.o common/posib_err.o common/errors.o common/error.o common/fstream.o common/iostream.o common/info.o common/can_have_error.o common/convert.o common/tokenizer.o common/speller.o common/document_checker.o common/filter.o common/objstack.o common/strtonum.o common/gettext_init.o common/file_data_util.o modules/speller/default/readonly_ws.o modules/speller/default/suggest.o modules/speller/default/data.o modules/speller/default/multi_ws.o modules/speller/default/phonetic.o modules/speller/default/writable.o modules/speller/default/speller_impl.o modules/speller/default/phonet.o modules/speller/default/typo_editdist.o modules/speller/default/editdist.o modules/speller/default/primes.o modules/speller/default/language.o modules/speller/default/leditdist.o modules/speller/default/affix.o modules/tokenizer/basic.o lib/filter-c.o lib/word_list-c.o lib/info-c.o lib/mutable_container-c.o lib/error-c.o lib/document_checker-c.o lib/string_map-c.o lib/new_config.o lib/config-c.o lib/string_enumeration-c.o lib/can_have_error-c.o lib/dummy.o lib/new_filter.o lib/new_fmode.o lib/string_list-c.o lib/find_speller.o lib/speller-c.o lib/string_pair_enumeration-c.o lib/new_checker.o modules/filter/url.o modules/filter/email.o modules/filter/tex.o modules/filter/sgml.o modules/filter/markdown.o modules/filter/context.o modules/filter/nroff.o modules/filter/texinfo.o
+libtool: link: ranlib .libs/libaspell.a
+libtool: link: ( cd ".libs" && rm -f "libaspell.la" && ln -s "../libaspell.la" "libaspell.la" )
+/bin/bash ./libtool  --tag=CXX   --mode=link /usr/local/bin/clang++-jcc  -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions    -o aspell prog/aspell.o prog/check_funs.o prog/checker_string.o libaspell.la  -ldl -lpthread
+libtool: link: /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fno-exceptions -o aspell prog/aspell.o prog/check_funs.o prog/checker_string.o  ./.libs/libaspell.a -ldl -lpthread
+make[1]: Leaving directory '/src/aspell'
+Making all in po
+make[1]: Entering directory '/src/aspell/po'
+test ! -f ./aspell.pot || \
+  test -z "ast.gmo be.gmo ca.gmo cs.gmo da.gmo de.gmo en_GB.gmo eo.gmo es.gmo fi.gmo fr.gmo fur.gmo ga.gmo hr.gmo hu.gmo id.gmo it.gmo ja.gmo ka.gmo mn.gmo ms.gmo nl.gmo pl.gmo pt.gmo pt_BR.gmo ro.gmo ru.gmo rw.gmo sk.gmo sl.gmo sq.gmo sr.gmo sv.gmo tg.gmo uk.gmo vi.gmo wa.gmo zh_CN.gmo" || make ast.gmo be.gmo ca.gmo cs.gmo da.gmo de.gmo en_GB.gmo eo.gmo es.gmo fi.gmo fr.gmo fur.gmo ga.gmo hr.gmo hu.gmo id.gmo it.gmo ja.gmo ka.gmo mn.gmo ms.gmo nl.gmo pl.gmo pt.gmo pt_BR.gmo ro.gmo ru.gmo rw.gmo sk.gmo sl.gmo sq.gmo sr.gmo sv.gmo tg.gmo uk.gmo vi.gmo wa.gmo zh_CN.gmo
+make[2]: Entering directory '/src/aspell/po'
+rm -f ast.gmo && /usr/bin/msgfmt -c --statistics --verbose -o ast.gmo ast.po
+rm -f be.gmo && /usr/bin/msgfmt -c --statistics --verbose -o be.gmo be.po
+rm -f ca.gmo && /usr/bin/msgfmt -c --statistics --verbose -o ca.gmo ca.po
+rm -f cs.gmo && /usr/bin/msgfmt -c --statistics --verbose -o cs.gmo cs.po
+rm -f da.gmo && /usr/bin/msgfmt -c --statistics --verbose -o da.gmo da.po
+rm -f de.gmo && /usr/bin/msgfmt -c --statistics --verbose -o de.gmo de.po
+rm -f en_GB.gmo && /usr/bin/msgfmt -c --statistics --verbose -o en_GB.gmo en_GB.po
+rm -f eo.gmo && /usr/bin/msgfmt -c --statistics --verbose -o eo.gmo eo.po
+rm -f es.gmo && /usr/bin/msgfmt -c --statistics --verbose -o es.gmo es.po
+rm -f fr.gmo && /usr/bin/msgfmt -c --statistics --verbose -o fr.gmo fr.po
+rm -f fi.gmo && /usr/bin/msgfmt -c --statistics --verbose -o fi.gmo fi.po
+rm -f fur.gmo && /usr/bin/msgfmt -c --statistics --verbose -o fur.gmo fur.po
+rm -f ga.gmo && /usr/bin/msgfmt -c --statistics --verbose -o ga.gmo ga.po
+rm -f hr.gmo && /usr/bin/msgfmt -c --statistics --verbose -o hr.gmo hr.po
+rm -f hu.gmo && /usr/bin/msgfmt -c --statistics --verbose -o hu.gmo hu.po
+rm -f it.gmo && /usr/bin/msgfmt -c --statistics --verbose -o it.gmo it.po
+rm -f id.gmo && /usr/bin/msgfmt -c --statistics --verbose -o id.gmo id.po
+rm -f ja.gmo && /usr/bin/msgfmt -c --statistics --verbose -o ja.gmo ja.po
+rm -f ka.gmo && /usr/bin/msgfmt -c --statistics --verbose -o ka.gmo ka.po
+rm -f ms.gmo && /usr/bin/msgfmt -c --statistics --verbose -o ms.gmo ms.po
+rm -f nl.gmo && /usr/bin/msgfmt -c --statistics --verbose -o nl.gmo nl.po
+rm -f mn.gmo && /usr/bin/msgfmt -c --statistics --verbose -o mn.gmo mn.po
+rm -f pl.gmo && /usr/bin/msgfmt -c --statistics --verbose -o pl.gmo pl.po
+rm -f pt.gmo && /usr/bin/msgfmt -c --statistics --verbose -o pt.gmo pt.po
+rm -f pt_BR.gmo && /usr/bin/msgfmt -c --statistics --verbose -o pt_BR.gmo pt_BR.po
+be.po: 80 translated messages, 57 fuzzy translations, 166 untranslated messages.
+cs.po: 303 translated messages.
+rm -f ro.gmo && /usr/bin/msgfmt -c --statistics --verbose -o ro.gmo ro.po
+rm -f ru.gmo && /usr/bin/msgfmt -c --statistics --verbose -o ru.gmo ru.po
+ast.po: 287 translated messages, 9 fuzzy translations, 7 untranslated messages.
+rm -f sk.gmo && /usr/bin/msgfmt -c --statistics --verbose -o sk.gmo sk.po
+da.po: 303 translated messages.
+rm -f sl.gmo && /usr/bin/msgfmt -c --statistics --verbose -o sl.gmo sl.po
+rm -f rw.gmo && /usr/bin/msgfmt -c --statistics --verbose -o rw.gmo rw.po
+rm -f sq.gmo && /usr/bin/msgfmt -c --statistics --verbose -o sq.gmo sq.po
+ca.po: 283 translated messages, 11 fuzzy translations, 9 untranslated messages.
+de.po: 303 translated messages.
+fr.po: 303 translated messages.
+es.po: 303 translated messages.
+en_GB.po: 261 translated messages, 22 fuzzy translations, 20 untranslated messages.
+fi.po: 303 translated messages.
+eo.po: 303 translated messages.
+hu.po: 303 translated messages.
+fur.po: 303 translated messages.
+ga.po: 289 translated messages, 8 fuzzy translations, 6 untranslated messages.
+hr.po: 303 translated messages.
+ms.po: 25 translated messages, 278 untranslated messages.
+nl.po: 303 translated messages.
+ka.po: 188 translated messages, 115 untranslated messages.
+id.po: 303 translated messages.
+it.po: 303 translated messages.
+ja.po: 299 translated messages, 4 fuzzy translations.
+mn.po: 261 translated messages, 22 fuzzy translations, 20 untranslated messages.
+sl.po: 301 translated messages, 2 fuzzy translations.
+rm -f sv.gmo && /usr/bin/msgfmt -c --statistics --verbose -o sv.gmo sv.po
+rm -f uk.gmo && /usr/bin/msgfmt -c --statistics --verbose -o uk.gmo uk.po
+rm -f tg.gmo && /usr/bin/msgfmt -c --statistics --verbose -o tg.gmo tg.po
+pt.po: 301 translated messages, 2 fuzzy translations.
+rw.po: 18 translated messages, 251 fuzzy translations, 34 untranslated messages.
+rm -f vi.gmo && /usr/bin/msgfmt -c --statistics --verbose -o vi.gmo vi.po
+sq.po: 267 translated messages, 36 untranslated messages.
+rm -f sr.gmo && /usr/bin/msgfmt -c --statistics --verbose -o sr.gmo sr.po
+rm -f wa.gmo && /usr/bin/msgfmt -c --statistics --verbose -o wa.gmo wa.po
+ro.po: 303 translated messages.
+pl.po: 303 translated messages.
+rm -f zh_CN.gmo && /usr/bin/msgfmt -c --statistics --verbose -o zh_CN.gmo zh_CN.po
+ru.po: 301 translated messages, 2 fuzzy translations.
+pt_BR.po: 303 translated messages.
+sk.po: 289 translated messages, 8 fuzzy translations, 6 untranslated messages.
+sv.po: 303 translated messages.
+tg.po: 111 translated messages, 68 fuzzy translations, 124 untranslated messages.
+uk.po: 303 translated messages.
+zh_CN.po: 295 translated messages, 2 fuzzy translations, 6 untranslated messages.
+wa.po: 216 translated messages, 6 fuzzy translations, 81 untranslated messagesvi.po: .
+289 translated messages, 8 fuzzy translations, 6 untranslated messages.
+sr.po: 303 translated messages.
+make[2]: Leaving directory '/src/aspell/po'
+touch stamp-po
+make[1]: Leaving directory '/src/aspell/po'
+Making all in manual
+make[1]: Entering directory '/src/aspell/manual'
+restore=: && backupdir=".am$$" && \
+am__cwd=`pwd` && CDPATH="${ZSH_VERSION+.}:" && cd . && \
+rm -rf $backupdir && mkdir $backupdir && \
+if (/bin/bash /src/aspell/missing makeinfo --version) >/dev/null 2>&1; then \
+  for f in aspell-dev.info aspell-dev.info-[0-9] aspell-dev.info-[0-9][0-9] aspell-dev.i[0-9] aspell-dev.i[0-9][0-9]; do \
+    if test -f $f; then mv $f $backupdir; restore=mv; else :; fi; \
+  done; \
+else :; fi && \
+cd "$am__cwd"; \
+if /bin/bash /src/aspell/missing makeinfo --enable-encoding --set-customization-variable 'EXTRA_HEAD <meta name=viewport content="width=device-width, initial-scale=1">' --css-include=custom.css  -I . \
+ -o aspell-dev.info aspell-dev.texi; \
+then \
+  rc=0; \
+  CDPATH="${ZSH_VERSION+.}:" && cd .; \
+else \
+  rc=$?; \
+  CDPATH="${ZSH_VERSION+.}:" && cd . && \
+  $restore $backupdir/* `echo "./aspell-dev.info" | sed 's|[^/]*$||'`; \
+fi; \
+rm -rf $backupdir; exit $rc
+Updating ./version.texi
+restore=: && backupdir=".am$$" && \
+am__cwd=`pwd` && CDPATH="${ZSH_VERSION+.}:" && cd . && \
+rm -rf $backupdir && mkdir $backupdir && \
+if (/bin/bash /src/aspell/missing makeinfo --version) >/dev/null 2>&1; then \
+  for f in aspell.info aspell.info-[0-9] aspell.info-[0-9][0-9] aspell.i[0-9] aspell.i[0-9][0-9]; do \
+    if test -f $f; then mv $f $backupdir; restore=mv; else :; fi; \
+  done; \
+else :; fi && \
+cd "$am__cwd"; \
+if /bin/bash /src/aspell/missing makeinfo --enable-encoding --set-customization-variable 'EXTRA_HEAD <meta name=viewport content="width=device-width, initial-scale=1">' --css-include=custom.css  -I . \
+ -o aspell.info aspell.texi; \
+then \
+  rc=0; \
+  CDPATH="${ZSH_VERSION+.}:" && cd .; \
+else \
+  rc=$?; \
+  CDPATH="${ZSH_VERSION+.}:" && cd . && \
+  $restore $backupdir/* `echo "./aspell.info" | sed 's|[^/]*$||'`; \
+fi; \
+rm -rf $backupdir; exit $rc
+make[1]: Leaving directory '/src/aspell/manual'
+Making install in .
+make[1]: Entering directory '/src/aspell'
+make[2]: Entering directory '/src/aspell'
+ /usr/bin/mkdir -p '/workspace/out/libfuzzer-address-x86_64/deps/bin'
+ /usr/bin/mkdir -p '/workspace/out/libfuzzer-address-x86_64/dict'
+ /usr/bin/mkdir -p '/workspace/out/libfuzzer-address-x86_64/deps/include'
+ /usr/bin/install -c scripts/run-with-aspell scripts/aspell-import scripts/prezip scripts/preunzip scripts/precat '/workspace/out/libfuzzer-address-x86_64/deps/bin'
+ /usr/bin/install -c -m 644 modules/filter/modes/html.amf modules/filter/modes/sgml.amf modules/filter/modes/markdown.amf modules/filter/modes/tex.amf modules/filter/modes/email.amf modules/filter/modes/ccpp.amf modules/filter/modes/none.amf modules/filter/modes/perl.amf modules/filter/modes/url.amf modules/filter/modes/comment.amf modules/filter/modes/nroff.amf modules/filter/modes/texinfo.amf '/workspace/out/libfuzzer-address-x86_64/dict'
+ /usr/bin/install -c -m 644 interfaces/cc/aspell.h '/workspace/out/libfuzzer-address-x86_64/deps/include'
+ /usr/bin/mkdir -p '/workspace/out/libfuzzer-address-x86_64/dict'
+ /usr/bin/mkdir -p '/workspace/out/libfuzzer-address-x86_64/dict'
+ /usr/bin/mkdir -p '/workspace/out/libfuzzer-address-x86_64/deps/lib'
+ /usr/bin/install -c scripts/spell scripts/ispell '/workspace/out/libfuzzer-address-x86_64/dict'
+ /usr/bin/install -c -m 644 data/cp1250.cmap data/cp1250.cset data/cp1251.cmap data/cp1251.cset data/cp1252.cmap data/cp1252.cset data/cp1253.cmap data/cp1253.cset data/cp1254.cmap data/cp1254.cset data/cp1255.cmap data/cp1255.cset data/cp1256.cmap data/cp1256.cset data/cp1257.cmap data/cp1257.cset data/cp1258.cmap data/cp1258.cset data/iso-8859-1.cmap data/iso-8859-1.cset data/iso-8859-2.cmap data/iso-8859-2.cset data/iso-8859-3.cmap data/iso-8859-3.cset data/iso-8859-4.cmap data/iso-8859-4.cset data/iso-8859-5.cmap data/iso-8859-5.cset data/iso-8859-6.cmap data/iso-8859-6.cset data/iso-8859-7.cmap data/iso-8859-7.cset data/iso-8859-8.cmap data/iso-8859-8.cset data/iso-8859-9.cmap data/iso-8859-9.cset data/iso-8859-10.cmap data/iso-8859-10.cset data/iso-8859-11.cmap data/iso-8859-11.cset '/workspace/out/libfuzzer-address-x86_64/dict'
+ /bin/bash ./libtool   --mode=install /usr/bin/install -c   libaspell.la '/workspace/out/libfuzzer-address-x86_64/deps/lib'
+ /usr/bin/install -c -m 644 data/iso-8859-13.cmap data/iso-8859-13.cset data/iso-8859-14.cmap data/iso-8859-14.cset data/iso-8859-15.cmap data/iso-8859-15.cset data/iso-8859-16.cmap data/iso-8859-16.cset data/koi8-r.cmap data/koi8-r.cset data/koi8-u.cmap data/koi8-u.cset data/dvorak.kbd data/split.kbd data/standard.kbd '/workspace/out/libfuzzer-address-x86_64/dict'
+libtool: install: /usr/bin/install -c .libs/libaspell.lai /workspace/out/libfuzzer-address-x86_64/deps/lib/libaspell.la
+libtool: install: /usr/bin/install -c .libs/libaspell.a /workspace/out/libfuzzer-address-x86_64/deps/lib/libaspell.a
+libtool: install: chmod 644 /workspace/out/libfuzzer-address-x86_64/deps/lib/libaspell.a
+libtool: install: ranlib /workspace/out/libfuzzer-address-x86_64/deps/lib/libaspell.a
+libtool: finish: PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/out:/sbin" ldconfig -n /workspace/out/libfuzzer-address-x86_64/deps/lib
+----------------------------------------------------------------------
+Libraries have been installed in:
+   /workspace/out/libfuzzer-address-x86_64/deps/lib
+
+If you ever happen to want to link against installed libraries
+in a given directory, LIBDIR, you must either use libtool, and
+specify the full pathname of the library, or use the '-LLIBDIR'
+flag during linking and do at least one of the following:
+   - add LIBDIR to the 'LD_LIBRARY_PATH' environment variable
+     during execution
+   - add LIBDIR to the 'LD_RUN_PATH' environment variable
+     during linking
+   - use the '-Wl,-rpath -Wl,LIBDIR' linker flag
+   - have your system administrator add LIBDIR to '/etc/ld.so.conf'
+
+See any operating system documentation about shared libraries for
+more information, such as the ld(1) and ld.so(8) manual pages.
+----------------------------------------------------------------------
+ /usr/bin/mkdir -p '/workspace/out/libfuzzer-address-x86_64/deps/bin'
+  /bin/bash ./libtool   --mode=install /usr/bin/install -c word-list-compress aspell prezip-bin '/workspace/out/libfuzzer-address-x86_64/deps/bin'
+libtool: install: /usr/bin/install -c word-list-compress /workspace/out/libfuzzer-address-x86_64/deps/bin/word-list-compress
+libtool: install: /usr/bin/install -c aspell /workspace/out/libfuzzer-address-x86_64/deps/bin/aspell
+libtool: install: /usr/bin/install -c prezip-bin /workspace/out/libfuzzer-address-x86_64/deps/bin/prezip-bin
+make[2]: Leaving directory '/src/aspell'
+make[1]: Leaving directory '/src/aspell'
+Making install in po
+make[1]: Entering directory '/src/aspell/po'
+installing ast.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/ast/LC_MESSAGES/aspell.mo
+installing be.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/be/LC_MESSAGES/aspell.mo
+installing ca.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/ca/LC_MESSAGES/aspell.mo
+installing cs.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/cs/LC_MESSAGES/aspell.mo
+installing da.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/da/LC_MESSAGES/aspell.mo
+installing de.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/de/LC_MESSAGES/aspell.mo
+installing en_GB.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/en_GB/LC_MESSAGES/aspell.mo
+installing eo.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/eo/LC_MESSAGES/aspell.mo
+installing es.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/es/LC_MESSAGES/aspell.mo
+installing fi.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/fi/LC_MESSAGES/aspell.mo
+installing fr.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/fr/LC_MESSAGES/aspell.mo
+installing fur.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/fur/LC_MESSAGES/aspell.mo
+installing ga.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/ga/LC_MESSAGES/aspell.mo
+installing hr.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/hr/LC_MESSAGES/aspell.mo
+installing hu.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/hu/LC_MESSAGES/aspell.mo
+installing id.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/id/LC_MESSAGES/aspell.mo
+installing it.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/it/LC_MESSAGES/aspell.mo
+installing ja.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/ja/LC_MESSAGES/aspell.mo
+installing ka.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/ka/LC_MESSAGES/aspell.mo
+installing mn.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/mn/LC_MESSAGES/aspell.mo
+installing ms.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/ms/LC_MESSAGES/aspell.mo
+installing nl.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/nl/LC_MESSAGES/aspell.mo
+installing pl.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/pl/LC_MESSAGES/aspell.mo
+installing pt.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/pt/LC_MESSAGES/aspell.mo
+installing pt_BR.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/pt_BR/LC_MESSAGES/aspell.mo
+installing ro.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/ro/LC_MESSAGES/aspell.mo
+installing ru.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/ru/LC_MESSAGES/aspell.mo
+installing rw.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/rw/LC_MESSAGES/aspell.mo
+installing sk.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/sk/LC_MESSAGES/aspell.mo
+installing sl.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/sl/LC_MESSAGES/aspell.mo
+installing sq.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/sq/LC_MESSAGES/aspell.mo
+installing sr.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/sr/LC_MESSAGES/aspell.mo
+installing sv.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/sv/LC_MESSAGES/aspell.mo
+installing tg.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/tg/LC_MESSAGES/aspell.mo
+installing uk.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/uk/LC_MESSAGES/aspell.mo
+installing vi.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/vi/LC_MESSAGES/aspell.mo
+installing wa.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/wa/LC_MESSAGES/aspell.mo
+installing zh_CN.gmo as /workspace/out/libfuzzer-address-x86_64/deps/share/locale/zh_CN/LC_MESSAGES/aspell.mo
+if test "aspell" = "gettext-tools"; then \
+  /usr/bin/mkdir -p /workspace/out/libfuzzer-address-x86_64/deps/share/gettext/po; \
+  for file in Makefile.in.in remove-potcdate.sin quot.sed boldquot.sed en@quot.header en@boldquot.header insert-header.sin Rules-quot   Makevars.template; do \
+    /usr/bin/install -c -m 644 ./$file \
+		    /workspace/out/libfuzzer-address-x86_64/deps/share/gettext/po/$file; \
+  done; \
+  for file in Makevars; do \
+    rm -f /workspace/out/libfuzzer-address-x86_64/deps/share/gettext/po/$file; \
+  done; \
+else \
+  : ; \
+fi
+make[1]: Leaving directory '/src/aspell/po'
+Making install in manual
+make[1]: Entering directory '/src/aspell/manual'
+make[2]: Entering directory '/src/aspell/manual'
+make[2]: Nothing to be done for 'install-exec-am'.
+ /usr/bin/mkdir -p '/workspace/out/libfuzzer-address-x86_64/deps/share/man/man1'
+ /usr/bin/mkdir -p '/workspace/out/libfuzzer-address-x86_64/deps/share/info'
+ /usr/bin/install -c -m 644 aspell.1 pspell-config.1 word-list-compress.1 aspell-import.1 run-with-aspell.1 prezip-bin.1 '/workspace/out/libfuzzer-address-x86_64/deps/share/man/man1'
+ /usr/bin/install -c -m 644 ./aspell.info ./aspell-dev.info '/workspace/out/libfuzzer-address-x86_64/deps/share/info'
+make[2]: Leaving directory '/src/aspell/manual'
+make[1]: Leaving directory '/src/aspell/manual'
+/src/aspell-fuzz
+aclocal: warning: couldn't open directory 'm4': No such file or directory
+libtoolize: putting auxiliary files in '.'.
+libtoolize: copying file './ltmain.sh'
+libtoolize: putting macros in AC_CONFIG_MACRO_DIRS, 'm4'.
+libtoolize: copying file 'm4/libtool.m4'
+libtoolize: copying file 'm4/ltoptions.m4'
+libtoolize: copying file 'm4/ltsugar.m4'
+libtoolize: copying file 'm4/ltversion.m4'
+libtoolize: copying file 'm4/lt~obsolete.m4'
+configure.ac:23: installing './compile'
+configure.ac:23: installing './config.guess'
+configure.ac:23: installing './config.sub'
+configure.ac:2: installing './install-sh'
+configure.ac:2: installing './missing'
+Makefile.am: installing './depcomp'
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for a thread-safe mkdir -p... /usr/bin/mkdir -p
+checking for gawk... no
+checking for mawk... mawk
+checking whether make sets $(MAKE)... yes
+checking whether make supports nested variables... yes
+checking for /workspace/out/libfuzzer-address-x86_64/deps/lib/libaspell.a... yes
+checking whether the C++ compiler works... yes
+checking for C++ compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether we are using the GNU C++ compiler... yes
+checking whether /usr/local/bin/clang++-jcc accepts -g... yes
+checking whether make supports the include directive... yes (GNU style)
+checking dependency style of /usr/local/bin/clang++-jcc... gcc3
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... x86_64-pc-linux-gnu
+checking how to print strings... printf
+checking for gcc... /usr/local/bin/clang-jcc
+checking whether we are using the GNU C compiler... yes
+checking whether /usr/local/bin/clang-jcc accepts -g... yes
+checking for /usr/local/bin/clang-jcc option to accept ISO C89... none needed
+checking whether /usr/local/bin/clang-jcc understands -c and -o together... yes
+checking dependency style of /usr/local/bin/clang-jcc... gcc3
+checking for a sed that does not truncate output... /usr/bin/sed
+checking for grep that handles long lines and -e... /usr/bin/grep
+checking for egrep... /usr/bin/grep -E
+checking for fgrep... /usr/bin/grep -F
+checking for ld used by /usr/local/bin/clang-jcc... /usr/bin/ld
+checking if the linker (/usr/bin/ld) is GNU ld... yes
+checking for BSD- or MS-compatible name lister (nm)... /usr/bin/nm -B
+checking the name lister (/usr/bin/nm -B) interface... BSD nm
+checking whether ln -s works... yes
+checking the maximum length of command line arguments... 1572864
+checking how to convert x86_64-pc-linux-gnu file names to x86_64-pc-linux-gnu format... func_convert_file_noop
+checking how to convert x86_64-pc-linux-gnu file names to toolchain format... func_convert_file_noop
+checking for /usr/bin/ld option to reload object files... -r
+checking for objdump... objdump
+checking how to recognize dependent libraries... pass_all
+checking for dlltool... no
+checking how to associate runtime and link libraries... printf %s\n
+checking for ar... ar
+checking for archiver @FILE support... @
+checking for strip... strip
+checking for ranlib... ranlib
+checking command to parse /usr/bin/nm -B output from /usr/local/bin/clang-jcc object... ok
+checking for sysroot... no
+checking for a working dd... /usr/bin/dd
+checking how to truncate binary pipes... /usr/bin/dd bs=4096 count=1
+checking for mt... no
+checking if : is a manifest tool... no
+checking how to run the C preprocessor... /usr/local/bin/clang-jcc -E
+checking for ANSI C header files... yes
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for memory.h... yes
+checking for strings.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for unistd.h... yes
+checking for dlfcn.h... yes
+checking for objdir... .libs
+checking if /usr/local/bin/clang-jcc supports -fno-rtti -fno-exceptions... yes
+checking for /usr/local/bin/clang-jcc option to produce PIC... -fPIC -DPIC
+checking if /usr/local/bin/clang-jcc PIC flag -fPIC -DPIC works... yes
+checking if /usr/local/bin/clang-jcc static flag -static works... no
+checking if /usr/local/bin/clang-jcc supports -c -o file.o... yes
+checking if /usr/local/bin/clang-jcc supports -c -o file.o... (cached) yes
+checking whether the /usr/local/bin/clang-jcc linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking whether -lc should be explicitly linked in... no
+checking dynamic linker characteristics... GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking for shl_load... no
+checking for shl_load in -ldld... no
+checking for dlopen... yes
+checking whether a program can dlopen itself... yes
+checking whether a statically linked program can dlopen itself... yes
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... yes
+checking whether to build static libraries... yes
+checking how to run the C++ preprocessor... /usr/local/bin/clang++-jcc -E
+checking for ld used by /usr/local/bin/clang++-jcc... /usr/bin/ld -m elf_x86_64
+checking if the linker (/usr/bin/ld -m elf_x86_64) is GNU ld... yes
+checking whether the /usr/local/bin/clang++-jcc linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking for /usr/local/bin/clang++-jcc option to produce PIC... -fPIC -DPIC
+checking if /usr/local/bin/clang++-jcc PIC flag -fPIC -DPIC works... yes
+checking if /usr/local/bin/clang++-jcc static flag -static works... no
+checking if /usr/local/bin/clang++-jcc supports -c -o file.o... yes
+checking if /usr/local/bin/clang++-jcc supports -c -o file.o... (cached) yes
+checking whether the /usr/local/bin/clang++-jcc linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking dynamic linker characteristics... (cached) GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: executing depfiles commands
+config.status: executing libtool commands
+/usr/local/bin/clang++-jcc -DPACKAGE_NAME=\"GNU\ Aspell\ Fuzzer\" -DPACKAGE_TARNAME=\"aspell-fuzzer\" -DPACKAGE_VERSION=\"-\" -DPACKAGE_STRING=\"GNU\ Aspell\ Fuzzer\ -\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"http://www.gnu.org/software/aspell-fuzzer/\" -DPACKAGE=\"aspell-fuzzer\" -DVERSION=\"-\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_DLFCN_H=1 -DLT_OBJDIR=\".libs/\"   -I/workspace/out/libfuzzer-address-x86_64/deps/include   -fsanitize=fuzzer -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -MT aspell_fuzzer-aspell_fuzzer.o -MD -MP -MF .deps/aspell_fuzzer-aspell_fuzzer.Tpo -c -o aspell_fuzzer-aspell_fuzzer.o `test -f 'aspell_fuzzer.cpp' || echo './'`aspell_fuzzer.cpp
+/usr/local/bin/clang++-jcc -DPACKAGE_NAME=\"GNU\ Aspell\ Fuzzer\" -DPACKAGE_TARNAME=\"aspell-fuzzer\" -DPACKAGE_VERSION=\"-\" -DPACKAGE_STRING=\"GNU\ Aspell\ Fuzzer\ -\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"http://www.gnu.org/software/aspell-fuzzer/\" -DPACKAGE=\"aspell-fuzzer\" -DVERSION=\"-\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_DLFCN_H=1 -DLT_OBJDIR=\".libs/\"   -I/workspace/out/libfuzzer-address-x86_64/deps/include   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -MT libstandaloneengine_a-standaloneengine.o -MD -MP -MF .deps/libstandaloneengine_a-standaloneengine.Tpo -c -o libstandaloneengine_a-standaloneengine.o `test -f 'standaloneengine.cpp' || echo './'`standaloneengine.cpp
+mv -f .deps/libstandaloneengine_a-standaloneengine.Tpo .deps/libstandaloneengine_a-standaloneengine.Po
+rm -f libstandaloneengine.a
+ar cru libstandaloneengine.a libstandaloneengine_a-standaloneengine.o 
+ar: `u' modifier ignored since `D' is the default (see `U')
+ranlib libstandaloneengine.a
+aspell_fuzzer.cpp:8:10: fatal error: 'acommon.h' file not found
+#include "acommon.h"
+         ^~~~~~~~~~~
+1 error generated.
+make: *** [Makefile:488: aspell_fuzzer-aspell_fuzzer.o] Error 1

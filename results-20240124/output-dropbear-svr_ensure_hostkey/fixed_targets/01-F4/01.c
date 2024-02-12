@@ -1,0 +1,1 @@
+error: undefined reference to `svr_ensure_hostkey'

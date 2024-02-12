@@ -1,0 +1,95 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <ArduinoJson.h>
+
+extern "C" {
+#include <ArduinoJson/Deserialization/Reader.hpp>
+#include <ArduinoJson/compatibility.hpp>
+#include <ArduinoJson/Namespace.hpp>
+#include <ArduinoJson/Polyfills/preprocessor.hpp>
+
+int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  BoundedReader reader(data, size);
+  ArduinoJson::V702HB4::detail::JsonDeserializer<BoundedReader> deserializer(reader);
+  deserializer.read();
+  return 0;
+}
+}
+</code>
+
+The code has the following build issues:
+<error>
+../../src/ArduinoJson/compatibility.hpp:62:1: error: templates must have C++ linkage
+template <size_t N>
+^~~~~~~~~~~~~~~~~~~
+msgpack_fuzzer.cpp:3:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from msgpack_fuzzer.cpp:5:
+../../src/ArduinoJson/compatibility.hpp:74:1: error: templates must have C++ linkage
+template <typename TAllocator>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+msgpack_fuzzer.cpp:3:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from msgpack_fuzzer.cpp:5:
+../../src/ArduinoJson/compatibility.hpp:106:1: error: templates must have C++ linkage
+template <typename TAllocator>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+msgpack_fuzzer.cpp:3:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from msgpack_fuzzer.cpp:5:
+../../src/ArduinoJson/compatibility.hpp:125:58: error: redefinition of 'DynamicJsonDocument'
+class ARDUINOJSON_DEPRECATED("use JsonDocument instead") DynamicJsonDocument
+                                                         ^
+../../src/ArduinoJson.hpp:53:10: note: '../../src/ArduinoJson/compatibility.hpp' included multiple times, additional include site here
+#include "ArduinoJson/compatibility.hpp"
+         ^
+msgpack_fuzzer.cpp:5:10: note: '../../src/ArduinoJson/compatibility.hpp' included multiple times, additional include site here
+#include <ArduinoJson/compatibility.hpp>
+         ^
+../../src/ArduinoJson/compatibility.hpp:125:58: note: unguarded header; consider using #ifdef guards or #pragma once
+class ARDUINOJSON_DEPRECATED("use JsonDocument instead") DynamicJsonDocument
+                                                         ^
+In file included from msgpack_fuzzer.cpp:5:
+../../src/ArduinoJson/compatibility.hpp:140:30: error: redefinition of 'createNestedObject'
+inline JsonObject JsonArray::createNestedObject() const {
+                             ^
+../../src/ArduinoJson/compatibility.hpp:140:30: note: previous definition is here
+inline JsonObject JsonArray::createNestedObject() const {
+                             ^
+msgpack_fuzzer.cpp:10:3: error: use of undeclared identifier 'BoundedReader'; did you mean 'ArduinoJson::detail::BoundedReader'?
+  BoundedReader reader(data, size);
+  ^~~~~~~~~~~~~
+  ArduinoJson::detail::BoundedReader
+../../src/ArduinoJson/Deserialization/Reader.hpp:35:8: note: 'ArduinoJson::detail::BoundedReader' declared here
+struct BoundedReader {
+       ^
+msgpack_fuzzer.cpp:10:3: error: unknown type name 'BoundedReader'
+  BoundedReader reader(data, size);
+  ^
+msgpack_fuzzer.cpp:11:50: error: use of undeclared identifier 'BoundedReader'; did you mean 'ArduinoJson::detail::BoundedReader'?
+  ArduinoJson::V702HB4::detail::JsonDeserializer<BoundedReader> deserializer(reader);
+                                                 ^~~~~~~~~~~~~
+                                                 ArduinoJson::detail::BoundedReader
+../../src/ArduinoJson/Deserialization/Reader.hpp:35:8: note: 'ArduinoJson::detail::BoundedReader' declared here
+struct BoundedReader {
+       ^
+msgpack_fuzzer.cpp:11:50: error: use of undeclared identifier 'BoundedReader'
+  ArduinoJson::V702HB4::detail::JsonDeserializer<BoundedReader> deserializer(reader);
+                                                 ^
+9 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

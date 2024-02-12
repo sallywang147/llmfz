@@ -1,0 +1,116 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdint.h>
+#include <stdlib.h>
+
+#include <b2nd.h>
+
+#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  struct b2nd_context_s *ctx = b2nd_new_context();
+  if (ctx == NULL) {
+    return 0;
+  }
+
+  struct b2nd_array_t *arr = b2nd_new_array(ctx);
+  if (arr == NULL) {
+    b2nd_free_context(ctx);
+    return 0;
+  }
+
+  struct b2nd_array_t **arr2 = (struct b2nd_array_t **)malloc(sizeof(struct b2nd_array_t *));
+  if (arr2 == NULL) {
+    b2nd_free_array(arr);
+    b2nd_free_context(ctx);
+    return 0;
+  }
+
+  int ret = b2nd_copy(ctx, arr, arr2);
+
+  b2nd_free_array(arr);
+  b2nd_free_context(ctx);
+  free(arr2);
+
+  return ret;
+}
+
+#ifdef __cplusplus
+}
+#endif
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+struct b2nd_context_s *b2nd_new_context(void) {
+  return NULL;
+}
+
+struct b2nd_array_t *b2nd_new_array(struct b2nd_context_s *ctx) {
+  return NULL;
+}
+
+void b2nd_free_array(struct b2nd_array_t *arr) {}
+
+void b2nd_free_context(struct b2nd_context_s *ctx) {}
+
+int b2nd_copy(struct b2nd_context_s *ctx, struct b2nd_array_t *arr, struct b2nd_array_t **arr2) {
+  return 0;
+}
+
+#ifdef __cplusplus
+}
+#endif
+</code>
+
+The code has the following build issues:
+<error>
+/src/c-blosc2/tests/fuzz/fuzz_decompress_frame.c:48:24: error: conflicting types for 'b2nd_new_context'
+struct b2nd_context_s *b2nd_new_context(void) {
+                       ^
+/src/c-blosc2/tests/fuzz/fuzz_decompress_frame.c:13:32: note: previous implicit declaration is here
+  struct b2nd_context_s *ctx = b2nd_new_context();
+                               ^
+/src/c-blosc2/tests/fuzz/fuzz_decompress_frame.c:52:22: error: conflicting types for 'b2nd_new_array'
+struct b2nd_array_t *b2nd_new_array(struct b2nd_context_s *ctx) {
+                     ^
+/src/c-blosc2/tests/fuzz/fuzz_decompress_frame.c:18:30: note: previous implicit declaration is here
+  struct b2nd_array_t *arr = b2nd_new_array(ctx);
+                             ^
+/src/c-blosc2/tests/fuzz/fuzz_decompress_frame.c:56:6: error: conflicting types for 'b2nd_free_array'
+void b2nd_free_array(struct b2nd_array_t *arr) {}
+     ^
+/src/c-blosc2/tests/fuzz/fuzz_decompress_frame.c:26:5: note: previous implicit declaration is here
+    b2nd_free_array(arr);
+    ^
+/src/c-blosc2/tests/fuzz/fuzz_decompress_frame.c:58:6: error: conflicting types for 'b2nd_free_context'
+void b2nd_free_context(struct b2nd_context_s *ctx) {}
+     ^
+/src/c-blosc2/tests/fuzz/fuzz_decompress_frame.c:20:5: note: previous implicit declaration is here
+    b2nd_free_context(ctx);
+    ^
+/src/c-blosc2/tests/fuzz/fuzz_decompress_frame.c:60:5: error: conflicting types for 'b2nd_copy'
+int b2nd_copy(struct b2nd_context_s *ctx, struct b2nd_array_t *arr, struct b2nd_array_t **arr2) {
+    ^
+/src/c-blosc2/include/b2nd.h:391:18: note: previous declaration is here
+BLOSC_EXPORT int b2nd_copy(b2nd_context_t *ctx, const b2nd_array_t *src, b2nd_array_t **array);
+                 ^
+5 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

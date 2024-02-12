@@ -1,0 +1,67 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <map>
+#include <memory>
+
+using namespace std;
+
+class CommandService {
+public:
+    virtual void execute() = 0;
+};
+
+class RegularCommandService : public CommandService {
+public:
+    void execute() override {
+        cout << "Regular command service executed." << endl;
+    }
+};
+
+class SpecialCommandService : public CommandService {
+public:
+    void execute() override {
+        cout << "Special command service executed." << endl;
+    }
+};
+
+class CommandFactory {
+public:
+    static CommandService* createCommandService(string type) {
+        if (type == "regular") {
+            return new RegularCommandService();
+        } else if (type == "special") {
+            return new SpecialCommandService();
+        } else {
+            return nullptr;
+        }
+    }
+};
+
+int main() {
+    string type = "regular";
+    CommandService* commandService = CommandFactory::createCommandService(type);
+    commandService->execute();
+
+    return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

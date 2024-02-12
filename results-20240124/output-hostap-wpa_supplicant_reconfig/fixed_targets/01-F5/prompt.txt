@@ -1,0 +1,85 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "utils/includes.h"
+
+#include "utils/common.h"
+#include "utils/eloop.h"
+#include "common/ieee802_11_defs.h"
+#include "common/ieee802_11_common.h"
+#include "wpa_supplicant_i.h"
+
+extern "C" {
+#include "wpa_supplicant_private.h" // Included the missing header file
+}
+
+#include "../fuzzer-common.h"
+
+
+static void wpa_supplicant_reconfig(int sig, char * signal_ctx)
+{
+	wpa_printf(MSG_DEBUG, "SUPP: %s", __func__);
+}
+
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
+{
+	struct wpa_supplicant wpa_s;
+	struct wpa_global wpa_g;
+
+	wpa_fuzzer_set_debug_level();
+
+	if (os_program_init())
+		return -1;
+
+	os_memset(&wpa_s, 0, sizeof(wpa_s));
+	os_memset(&wpa_g, 0, sizeof(wpa_g));
+
+	wpa_s.global = &wpa_g;
+	wpa_s.conf = os_zalloc(sizeof(*wpa_s.conf));
+	if (!wpa_s.conf)
+		return -1;
+
+	if (eloop_init()) {
+		wpa_printf(MSG_ERROR, "Failed to initialize event loop");
+		goto fail;
+	}
+
+	wpa_supplicant_reconfig(0, NULL);
+
+fail:
+	eloop_destroy();
+
+	os_program_deinit();
+
+	return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+../fuzzer-common.c:9:8: error: expected identifier or '('
+extern "C" {
+       ^
+../fuzzer-common.c:10:10: fatal error: 'wpa_supplicant_private.h' file not found
+#include "wpa_supplicant_private.h" // Included the missing header file
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+2 errors generated.
+
+Fix failure
+../fuzzer-common.cpp:10:10: fatal error: 'wpa_supplicant_private.h' file not found
+#include "wpa_supplicant_private.h" // Included the missing header file
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

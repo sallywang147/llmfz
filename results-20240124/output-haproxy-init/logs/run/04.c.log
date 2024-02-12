@@ -1,0 +1,33 @@
+/workspace/out/libfuzzer-address-x86_64/fuzz_cfg_parser -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/fuzz_cfg_parser < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 2936697492
+INFO: Loaded 1 modules   (30 inline 8-bit counters): 30 [0x613fa0, 0x613fbe), 
+INFO: Loaded 1 PC tables (30 PCs): 30 [0x5c79e0,0x5c7bc0), 
+INFO:        0 files found in /workspace/corpus/fuzz_cfg_parser
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+==13==WARNING: AddressSanitizer failed to allocate 0xffffffffffffffff bytes
+=================================================================
+==13==ERROR: AddressSanitizer: allocator is out of memory trying to allocate 0xffffffffffffffff bytes
+    #0 0x569f0d in operator new[](unsigned long) /src/llvm-project/compiler-rt/lib/asan/asan_new_delete.cpp:98:3
+    #1 0x56c56c in LLVMFuzzerTestOneInput /src/haproxy/fuzz_cfg_parser.cpp:15:17
+    #2 0x43de23 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #3 0x43f1d4 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:804:3
+    #4 0x43f6a9 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #5 0x42ed0f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #6 0x458362 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #7 0x7f158bee0082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: operator new[](unsigned long)--LLVMFuzzerTestOneInput--fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long)
+==13==HINT: if you don't care about these errors you may set allocator_may_return_null=1
+SUMMARY: AddressSanitizer: out-of-memory /src/llvm-project/compiler-rt/lib/asan/asan_new_delete.cpp:98:3 in operator new[](unsigned long)
+==13==ABORTING
+MS: 0 ; base unit: 0000000000000000000000000000000000000000
+
+
+artifact_prefix='./'; Test unit written to ./crash-da39a3ee5e6b4b0d3255bfef95601890afd80709
+Base64: 
+stat::number_of_executed_units: 1
+stat::average_exec_per_sec:     0
+stat::new_units_added:          0
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              33

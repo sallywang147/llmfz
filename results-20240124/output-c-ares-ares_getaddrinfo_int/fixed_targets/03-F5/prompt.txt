@@ -1,0 +1,90 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+
+#include "ares.h"
+
+extern "C" {
+#include <ares.h>
+}
+
+typedef struct ares_channeldata ares_channel;
+
+// Entrypoint for Clang's libfuzzer
+extern "C" int LLVMFuzzerTestOneInput(const unsigned char *data,
+                                      unsigned long size) {
+  struct ares_channel *channel;
+  struct ares_addrinfo_hints hints;
+  int status;
+
+  status = ares_library_init(ARES_LIB_INIT_ALL);
+  if (status != ARES_SUCCESS) {
+    return 0;
+  }
+
+  status = ares_init(&channel);
+  if (status != ARES_SUCCESS) {
+    ares_library_cleanup();
+    return 0;
+  }
+
+  hints.ai_flags = ARES_AI_CANONNAME;
+  hints.ai_family = AF_UNSPEC;
+  hints.ai_socktype = SOCK_STREAM;
+  hints.ai_protocol = IPPROTO_TCP;
+
+  ares_getaddrinfo_ext(channel, "example.com", "80", &hints, nullptr, nullptr);
+
+  // Call the missing function
+  ares_getaddrinfo_int(channel->data, "example.com", "80", &hints, nullptr, nullptr);
+
+  ares_destroy(channel);
+  ares_library_cleanup();
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/c-ares/test/ares-test-fuzz-name.c:5:8: error: expected identifier or '('
+extern "C" {
+       ^
+/src/c-ares/test/ares-test-fuzz-name.c:9:33: error: typedef redefinition with different types ('struct ares_channeldata' vs 'struct ares_channeldata *')
+typedef struct ares_channeldata ares_channel;
+                                ^
+include/ares.h:347:34: note: previous definition is here
+typedef struct ares_channeldata *ares_channel;
+                                 ^
+/src/c-ares/test/ares-test-fuzz-name.c:12:8: error: expected identifier or '('
+extern "C" int LLVMFuzzerTestOneInput(const unsigned char *data,
+       ^
+3 errors generated.
+
+Fix failure
+/src/c-ares/test/ares-test-fuzz-name.cpp:9:33: error: typedef redefinition with different types ('struct ares_channeldata' vs 'struct ares_channeldata *')
+typedef struct ares_channeldata ares_channel;
+                                ^
+include/ares.h:347:34: note: previous definition is here
+typedef struct ares_channeldata *ares_channel;
+                                 ^
+/src/c-ares/test/ares-test-fuzz-name.cpp:14:10: error: typedef 'ares_channel' cannot be referenced with a struct specifier
+  struct ares_channel *channel;
+         ^
+include/ares.h:347:34: note: declared here
+typedef struct ares_channeldata *ares_channel;
+                                 ^
+2 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

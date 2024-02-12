@@ -1,0 +1,33 @@
+/workspace/out/libfuzzer-address-x86_64/fuzz_cfg_parser -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/fuzz_cfg_parser < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 2667778799
+INFO: Loaded 1 modules   (17 inline 8-bit counters): 17 [0x5eaf00, 0x5eaf11), 
+INFO: Loaded 1 PC tables (17 PCs): 17 [0x5a7ad8,0x5a7be8), 
+INFO:        0 files found in /workspace/corpus/fuzz_cfg_parser
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+==13==ERROR: AddressSanitizer: stack-overflow on address 0x7ffa621bed58 (pc 0x00000056c54f bp 0x7ffe621bee60 sp 0x7ffa621bed60 T0)
+SCARINESS: 10 (stack-overflow)
+    #0 0x56c54f in LLVMFuzzerTestOneInput /src/haproxy/fuzz_cfg_parser.cpp:21:3
+    #1 0x43ddb3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #2 0x43f164 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:804:3
+    #3 0x43f639 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #4 0x42ec9f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #5 0x4582f2 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #6 0x7f3d68ddb082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #7 0x41f6dd in _start (out/libfuzzer-address-x86_64/fuzz_cfg_parser+0x41f6dd)
+
+DEDUP_TOKEN: LLVMFuzzerTestOneInput--fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long)--fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&)
+SUMMARY: AddressSanitizer: stack-overflow /src/haproxy/fuzz_cfg_parser.cpp:21:3 in LLVMFuzzerTestOneInput
+==13==ABORTING
+MS: 0 ; base unit: 0000000000000000000000000000000000000000
+
+
+artifact_prefix='./'; Test unit written to ./crash-da39a3ee5e6b4b0d3255bfef95601890afd80709
+Base64: 
+stat::number_of_executed_units: 1
+stat::average_exec_per_sec:     0
+stat::new_units_added:          0
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              31

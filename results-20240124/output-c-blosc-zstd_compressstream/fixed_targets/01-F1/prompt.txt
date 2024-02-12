@@ -1,0 +1,76 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <vector>
+
+#include "zstd.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  ZSTD_CCtx* cctx = ZSTD_createCCtx();
+  if (cctx == nullptr) {
+    return 0;
+  }
+  ZSTD_inBuffer in_buffer;
+  ZSTD_inBuffer out_buffer;
+  in_buffer.src = stream.ConsumeRemainingBytes();
+  in_buffer.size = in_buffer.src.size();
+  in_buffer.pos = 0;
+  out_buffer.dst = std::vector<uint8_t>(stream.ConsumeIntegralInRange<size_t>(
+      0,
+      1 << 20));
+  out_buffer.size = out_buffer.dst.size();
+  out_buffer.pos = 0;
+  size_t ret = ZSTD_compressStream(cctx, &out_buffer, &in_buffer);
+  ZSTD_freeCCtx(cctx);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:16:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+/src/c-blosc/tests/fuzz/fuzz_compress.cpp:18:26: error: no matching member function for call to 'ConsumeRemainingBytes'
+  in_buffer.src = stream.ConsumeRemainingBytes();
+                  ~~~~~~~^~~~~~~~~~~~~~~~~~~~~
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:128:36: note: candidate template ignored: couldn't infer template argument 'T'
+std::vector<T> FuzzedDataProvider::ConsumeRemainingBytes() {
+                                   ^
+/src/c-blosc/tests/fuzz/fuzz_compress.cpp:19:33: error: member reference base type 'const void *' is not a structure or union
+  in_buffer.size = in_buffer.src.size();
+                   ~~~~~~~~~~~~~^~~~~
+/src/c-blosc/tests/fuzz/fuzz_compress.cpp:21:14: error: no member named 'dst' in 'ZSTD_inBuffer_s'
+  out_buffer.dst = std::vector<uint8_t>(stream.ConsumeIntegralInRange<size_t>(
+  ~~~~~~~~~~ ^
+/src/c-blosc/tests/fuzz/fuzz_compress.cpp:24:32: error: no member named 'dst' in 'ZSTD_inBuffer_s'
+  out_buffer.size = out_buffer.dst.size();
+                    ~~~~~~~~~~ ^
+/src/c-blosc/tests/fuzz/fuzz_compress.cpp:26:16: error: no matching function for call to 'ZSTD_compressStream'
+  size_t ret = ZSTD_compressStream(cctx, &out_buffer, &in_buffer);
+               ^~~~~~~~~~~~~~~~~~~
+/src/c-blosc/internal-complibs/zstd-1.5.5/zstd.h:826:20: note: candidate function not viable: no known conversion from 'ZSTD_inBuffer *' (aka 'ZSTD_inBuffer_s *') to 'ZSTD_outBuffer *' (aka 'ZSTD_outBuffer_s *') for 2nd argument
+ZSTDLIB_API size_t ZSTD_compressStream(ZSTD_CStream* zcs, ZSTD_outBuffer* output, ZSTD_inBuffer* input);
+                   ^
+5 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

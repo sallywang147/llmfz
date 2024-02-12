@@ -1,0 +1,56 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include "Tpm.h"
+
+extern "C" {
+#include "TpmTypes.h"
+#include "CreateLoaded_fp.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  if (Data == NULL || Size == 0) {
+    return 0;
+  }
+
+  struct CreateLoaded_In in;
+  struct CreateLoaded_Out out;
+
+  if (TPM2_CreateLoaded(&in, &out) != 0) {
+    return 0;
+  }
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+fuzzer.cc:16:10: error: typedef 'CreateLoaded_In' cannot be referenced with a struct specifier
+  struct CreateLoaded_In in;
+         ^
+./CreateLoaded_fp.h:71:3: note: declared here
+} CreateLoaded_In;
+  ^
+fuzzer.cc:17:10: error: typedef 'CreateLoaded_Out' cannot be referenced with a struct specifier
+  struct CreateLoaded_Out out;
+         ^
+./CreateLoaded_fp.h:82:3: note: declared here
+} CreateLoaded_Out;
+  ^
+2 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

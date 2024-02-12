@@ -1,0 +1,109 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <err.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+#include "alembic/lib/Alembic/AbcCoreAbstract/All.h"
+#include "alembic/lib/Alembic/AbcCoreOgawa/All.h"
+
+#include "fuzzer_temp_file.h"
+
+using Alembic::AbcCoreAbstract::ArchiveInfo;
+using Alembic::AbcCoreAbstract::ReadArraySampleCachePtr;
+using Alembic::AbcCoreAbstract::ReadObjectHeaderPtr;
+using Alembic::AbcCoreOgawa::v12::AprImpl;
+using Alembic::AbcCoreOgawa::v12::OgawaArchive;
+using Alembic::AbcCoreOgawa::v12::OgawaDataPtr;
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzerTemporaryFile tempFile(data, size);
+
+  OgawaArchive archive;
+  ArchiveInfo archiveInfo;
+  archiveInfo.setArchive(tempFile.filename());
+  archive.open(archiveInfo);
+
+  if (archive.valid()) {
+    const ReadObjectHeaderPtr header = archive.getTop();
+    std::shared_ptr<ReadArraySampleCachePtr> cache;
+    AprImpl::getSample(header.get(), 0, &cache);
+  }
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/alembic_dump_info_fuzzer.cc:15:33: error: no member named 'ArchiveInfo' in namespace 'Alembic::AbcCoreAbstract'
+using Alembic::AbcCoreAbstract::ArchiveInfo;
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+/src/alembic_dump_info_fuzzer.cc:17:33: error: no member named 'ReadObjectHeaderPtr' in namespace 'Alembic::AbcCoreAbstract'; did you mean 'ObjectReaderPtr'?
+using Alembic::AbcCoreAbstract::ReadObjectHeaderPtr;
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
+                                ObjectReaderPtr
+/src/alembic/lib/Alembic/AbcCoreAbstract/ForwardDeclarations.h:91:49: note: 'ObjectReaderPtr' declared here
+typedef Alembic::Util::shared_ptr<ObjectReader> ObjectReaderPtr;
+                                                ^
+/src/alembic_dump_info_fuzzer.cc:18:35: error: no member named 'AprImpl' in namespace 'Alembic::AbcCoreOgawa::v12'
+using Alembic::AbcCoreOgawa::v12::AprImpl;
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+/src/alembic_dump_info_fuzzer.cc:19:35: error: no member named 'OgawaArchive' in namespace 'Alembic::AbcCoreOgawa::v12'; did you mean 'ReadArchive'?
+using Alembic::AbcCoreOgawa::v12::OgawaArchive;
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+                                  ReadArchive
+/src/alembic/lib/Alembic/AbcCoreOgawa/ReadWrite.h:66:22: note: 'ReadArchive' declared here
+class ALEMBIC_EXPORT ReadArchive
+                     ^
+/src/alembic_dump_info_fuzzer.cc:20:35: error: no member named 'OgawaDataPtr' in namespace 'Alembic::AbcCoreOgawa::v12'
+using Alembic::AbcCoreOgawa::v12::OgawaDataPtr;
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+/src/alembic_dump_info_fuzzer.cc:25:3: error: unknown type name 'OgawaArchive'; did you mean 'ReadArchive'?
+  OgawaArchive archive;
+  ^~~~~~~~~~~~
+  ReadArchive
+/src/alembic_dump_info_fuzzer.cc:19:35: note: 'ReadArchive' declared here
+using Alembic::AbcCoreOgawa::v12::OgawaArchive;
+                                  ^
+/src/alembic_dump_info_fuzzer.cc:26:3: error: unknown type name 'ArchiveInfo'
+  ArchiveInfo archiveInfo;
+  ^
+/src/alembic_dump_info_fuzzer.cc:28:11: error: no member named 'open' in 'Alembic::AbcCoreOgawa::v12::ReadArchive'
+  archive.open(archiveInfo);
+  ~~~~~~~ ^
+/src/alembic_dump_info_fuzzer.cc:30:15: error: no member named 'valid' in 'Alembic::AbcCoreOgawa::v12::ReadArchive'
+  if (archive.valid()) {
+      ~~~~~~~ ^
+/src/alembic_dump_info_fuzzer.cc:31:11: error: unknown type name 'ReadObjectHeaderPtr'; did you mean 'ObjectReaderPtr'?
+    const ReadObjectHeaderPtr header = archive.getTop();
+          ^~~~~~~~~~~~~~~~~~~
+          ObjectReaderPtr
+/src/alembic_dump_info_fuzzer.cc:17:33: note: 'ObjectReaderPtr' declared here
+using Alembic::AbcCoreAbstract::ReadObjectHeaderPtr;
+                                ^
+/src/alembic_dump_info_fuzzer.cc:31:48: error: no member named 'getTop' in 'Alembic::AbcCoreOgawa::v12::ReadArchive'
+    const ReadObjectHeaderPtr header = archive.getTop();
+                                       ~~~~~~~ ^
+/src/alembic_dump_info_fuzzer.cc:33:5: error: use of undeclared identifier 'AprImpl'
+    AprImpl::getSample(header.get(), 0, &cache);
+    ^
+12 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

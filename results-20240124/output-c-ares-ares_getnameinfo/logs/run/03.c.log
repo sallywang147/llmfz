@@ -1,0 +1,44 @@
+Using seed corpus: ares_create_query_fuzzer_seed_corpus.zip
+/workspace/out/libfuzzer-address-x86_64/ares_create_query_fuzzer -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/ares_create_query_fuzzer < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 657541051
+INFO: Loaded 1 modules   (5650 inline 8-bit counters): 5650 [0x66b880, 0x66ce92), 
+INFO: Loaded 1 PC tables (5650 PCs): 5650 [0x605b68,0x61bc88), 
+INFO:        9 files found in /workspace/corpus/ares_create_query_fuzzer
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+==14==ERROR: AddressSanitizer: SEGV on unknown address 0x000000000000 (pc 0x000000000000 bp 0x7ffd3a1a6bf0 sp 0x7ffd3a1a6b18 T0)
+==14==Hint: pc points to the zero page.
+==14==The signal is caused by a READ memory access.
+==14==Hint: address points to the zero page.
+SCARINESS: 10 (null-deref)
+    #0 0x0  (<unknown module>)
+    #1 0x5b5378 in end_aquery /src/c-ares/src/lib/ares_gethostbyaddr.c:191:3
+    #2 0x5b5378 in next_lookup /src/c-ares/src/lib/ares_gethostbyaddr.c:151:11
+    #3 0x5b4c83 in ares_gethostbyaddr_int /src/c-ares/src/lib/ares_gethostbyaddr.c:111:3
+    #4 0x5b4c83 in ares_gethostbyaddr /src/c-ares/src/lib/ares_gethostbyaddr.c:121:3
+    #5 0x56f4bb in ares_getnameinfo_int /src/c-ares/src/lib/ares_getnameinfo.c
+    #6 0x56f4bb in ares_getnameinfo /src/c-ares/src/lib/ares_getnameinfo.c:198:3
+    #7 0x56c6d0 in LLVMFuzzerTestOneInput /src/c-ares/test/ares-test-fuzz-name.cpp:38:3
+    #8 0x43df03 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #9 0x43f2b4 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:804:3
+    #10 0x43f789 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #11 0x42edef in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #12 0x458442 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #13 0x7f90f2e2f082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: end_aquery--next_lookup
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: SEGV (<unknown module>) 
+==14==ABORTING
+MS: 0 ; base unit: 0000000000000000000000000000000000000000
+
+
+artifact_prefix='./'; Test unit written to ./crash-da39a3ee5e6b4b0d3255bfef95601890afd80709
+Base64: 
+stat::number_of_executed_units: 1
+stat::average_exec_per_sec:     0
+stat::new_units_added:          0
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              35

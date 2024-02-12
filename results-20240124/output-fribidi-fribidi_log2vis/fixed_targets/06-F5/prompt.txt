@@ -1,0 +1,126 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdint.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
+#include <assert.h>
+
+extern "C" {
+#include <fribidi.h>
+}
+
+int LLVMFuzzerTestOneInput (const uint8_t *data, size_t size)
+{
+  const FriBidiStrIndex str_len = size / 4;
+  const FriBidiChar *str = (const FriBidiChar *) data;
+
+  FriBidiCharType *types = (FriBidiCharType *)calloc (str_len, sizeof (FriBidiCharType));
+  FriBidiBracketType *btypes = (FriBidiBracketType *)calloc (str_len, sizeof (FriBidiBracketType));
+  FriBidiLevel *levels = (FriBidiLevel *)calloc (str_len, sizeof (FriBidiLevel));
+  fribidi_get_bidi_types (str, str_len, types);
+  fribidi_get_bracket_types (str, str_len, types, btypes);
+  FriBidiParType par_type = FRIBIDI_PAR_ON;
+  FriBidiLevel level = fribidi_get_par_embedding_levels_ex (types, btypes, str_len, &par_type, levels);
+  if ((0)) assert (level);
+  int *visual_str = (int *)malloc (str_len * sizeof (FriBidiChar));
+  int *positions_L_to_V = (int *)malloc (str_len * sizeof (FriBidiStrIndex));
+  int *positions_V_to_L = (int *)malloc (str_len * sizeof (FriBidiStrIndex));
+  fribidi_log2vis ((FriBidiChar *)str, str_len, 0, visual_str, positions_L_to_V, positions_V_to_L, NULL);
+  free (types);
+  free (btypes);
+  free (levels);
+  free (visual_str);
+  free (positions_L_to_V);
+  free (positions_V_to_L);
+  return 0;
+}
+
+/* Editor directions:
+ * vim:textwidth=78:tabstop=8:shiftwidth=2:autoindent:cindent
+ */
+</code>
+
+The code has the following build issues:
+<error>
+../../src/fribidi/bin/fribidi-fuzzer.c:7:8: error: expected identifier or '('
+extern "C" {
+       ^
+../../src/fribidi/bin/fribidi-fuzzer.c:13:9: error: unknown type name 'FriBidiStrIndex'
+  const FriBidiStrIndex str_len = size / 4;
+        ^
+../../src/fribidi/bin/fribidi-fuzzer.c:14:9: error: unknown type name 'FriBidiChar'
+  const FriBidiChar *str = (const FriBidiChar *) data;
+        ^
+../../src/fribidi/bin/fribidi-fuzzer.c:14:35: error: unknown type name 'FriBidiChar'
+  const FriBidiChar *str = (const FriBidiChar *) data;
+                                  ^
+../../src/fribidi/bin/fribidi-fuzzer.c:16:3: error: use of undeclared identifier 'FriBidiCharType'
+  FriBidiCharType *types = (FriBidiCharType *)calloc (str_len, sizeof (FriBidiCharType));
+  ^
+../../src/fribidi/bin/fribidi-fuzzer.c:16:20: error: use of undeclared identifier 'types'
+  FriBidiCharType *types = (FriBidiCharType *)calloc (str_len, sizeof (FriBidiCharType));
+                   ^
+../../src/fribidi/bin/fribidi-fuzzer.c:16:46: error: expected expression
+  FriBidiCharType *types = (FriBidiCharType *)calloc (str_len, sizeof (FriBidiCharType));
+                                             ^
+../../src/fribidi/bin/fribidi-fuzzer.c:16:29: error: use of undeclared identifier 'FriBidiCharType'
+  FriBidiCharType *types = (FriBidiCharType *)calloc (str_len, sizeof (FriBidiCharType));
+                            ^
+../../src/fribidi/bin/fribidi-fuzzer.c:17:3: error: use of undeclared identifier 'FriBidiBracketType'
+  FriBidiBracketType *btypes = (FriBidiBracketType *)calloc (str_len, sizeof (FriBidiBracketType));
+  ^
+../../src/fribidi/bin/fribidi-fuzzer.c:17:23: error: use of undeclared identifier 'btypes'
+  FriBidiBracketType *btypes = (FriBidiBracketType *)calloc (str_len, sizeof (FriBidiBracketType));
+                      ^
+../../src/fribidi/bin/fribidi-fuzzer.c:17:53: error: expected expression
+  FriBidiBracketType *btypes = (FriBidiBracketType *)calloc (str_len, sizeof (FriBidiBracketType));
+                                                    ^
+../../src/fribidi/bin/fribidi-fuzzer.c:17:33: error: use of undeclared identifier 'FriBidiBracketType'
+  FriBidiBracketType *btypes = (FriBidiBracketType *)calloc (str_len, sizeof (FriBidiBracketType));
+                                ^
+../../src/fribidi/bin/fribidi-fuzzer.c:18:3: error: use of undeclared identifier 'FriBidiLevel'
+  FriBidiLevel *levels = (FriBidiLevel *)calloc (str_len, sizeof (FriBidiLevel));
+  ^
+../../src/fribidi/bin/fribidi-fuzzer.c:18:17: error: use of undeclared identifier 'levels'
+  FriBidiLevel *levels = (FriBidiLevel *)calloc (str_len, sizeof (FriBidiLevel));
+                ^
+../../src/fribidi/bin/fribidi-fuzzer.c:18:41: error: expected expression
+  FriBidiLevel *levels = (FriBidiLevel *)calloc (str_len, sizeof (FriBidiLevel));
+                                        ^
+../../src/fribidi/bin/fribidi-fuzzer.c:18:27: error: use of undeclared identifier 'FriBidiLevel'
+  FriBidiLevel *levels = (FriBidiLevel *)calloc (str_len, sizeof (FriBidiLevel));
+                          ^
+../../src/fribidi/bin/fribidi-fuzzer.c:19:41: error: use of undeclared identifier 'types'
+  fribidi_get_bidi_types (str, str_len, types);
+                                        ^
+../../src/fribidi/bin/fribidi-fuzzer.c:20:44: error: use of undeclared identifier 'types'
+  fribidi_get_bracket_types (str, str_len, types, btypes);
+                                           ^
+../../src/fribidi/bin/fribidi-fuzzer.c:20:51: error: use of undeclared identifier 'btypes'
+  fribidi_get_bracket_types (str, str_len, types, btypes);
+                                                  ^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+
+Fix failure
+../../src/fribidi/bin/fribidi-fuzzer.cpp:27:3: error: no matching function for call to 'fribidi_log2vis'
+  fribidi_log2vis ((FriBidiChar *)str, str_len, 0, visual_str, positions_L_to_V, positions_V_to_L, NULL);
+  ^~~~~~~~~~~~~~~
+../../src/fribidi/lib/fribidi.h:99:28: note: candidate function not viable: no known conversion from 'int *' to 'FriBidiChar *' (aka 'unsigned int *') for 4th argument
+FRIBIDI_ENTRY FriBidiLevel fribidi_log2vis (
+                           ^
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

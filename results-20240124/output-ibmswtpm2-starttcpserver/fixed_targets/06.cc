@@ -1,0 +1,1 @@
+undefined reference to `boost::asio::ip::tcp::acceptor::async_accept(boost::asio::ip::tcp::socket&, boost::asio::io_service::strand::async_completion_handler<boost::asio::ip::tcp::acceptor::accept_handler>)'

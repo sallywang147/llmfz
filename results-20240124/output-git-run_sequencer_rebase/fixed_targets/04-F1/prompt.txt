@@ -1,0 +1,263 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+#include "rebase.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  struct rebase_options options;
+  options.verbose = stream.ConsumeBool();
+  options.quiet = stream.ConsumeBool();
+  options.signoff = stream.ConsumeBool();
+  options.force = stream.ConsumeBool();
+  options.verbose_show_object_id = stream.ConsumeBool();
+  options.verbose_show_commit_id = stream.ConsumeBool();
+  options.verbose_show_parent_id = stream.ConsumeBool();
+  options.verbose_show_date = stream.ConsumeBool();
+  options.verbose_show_author = stream.ConsumeBool();
+  options.verbose_show_committer = stream.ConsumeBool();
+  options.verbose_show_message = stream.ConsumeBool();
+  options.verbose_show_reflog = stream.ConsumeBool();
+  options.verbose_show_notes = stream.ConsumeBool();
+  options.verbose_show_notes_ref = stream.ConsumeBool();
+  options.verbose_show_notes_commit = stream.ConsumeBool();
+  options.verbose_show_notes_message = stream.ConsumeBool();
+  options.verbose_show_notes_object = stream.ConsumeBool();
+  options.verbose_show_notes_author = stream.ConsumeBool();
+  options.verbose_show_notes_committer = stream.ConsumeBool();
+  options.verbose_show_notes_date = stream.ConsumeBool();
+  options.verbose_show_notes_reflog = stream.ConsumeBool();
+  options.verbose_show_notes_object_id = stream.ConsumeBool();
+  options.verbose_show_notes_commit_id = stream.ConsumeBool();
+  options.verbose_show_notes_parent_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag = stream.ConsumeBool();
+  options.verbose_show_notes_tag_message = stream.ConsumeBool();
+  options.verbose_show_notes_tag_object = stream.ConsumeBool();
+  options.verbose_show_notes_tag_object_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_commit_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_parent_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_date = stream.ConsumeBool();
+  options.verbose_show_notes_tag_author = stream.ConsumeBool();
+  options.verbose_show_notes_tag_committer = stream.ConsumeBool();
+  options.verbose_show_notes_tag_reflog = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_ref = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_commit = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_message = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_object = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_author = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_committer = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_date = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_reflog = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_object_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_commit_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_parent_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_message = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_object = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_object_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_commit_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_parent_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_date = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_author = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_committer = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_reflog = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_ref = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_commit = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_message = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_object = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_author = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_committer = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_date = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_reflog = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_object_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_commit_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_parent_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_message = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_object = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_object_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_commit_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_parent_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_date = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_author = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_committer = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_reflog = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_ref = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_commit = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_message = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_object = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_author = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_committer = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_date = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_reflog = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_object_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_commit_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_parent_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_message = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_object = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_object_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_commit_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_parent_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_date = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_author = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_committer = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_reflog = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_ref = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_commit = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_message = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_object = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_author = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_committer = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_date = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_reflog = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_object_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_commit_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_parent_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_message = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_object = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_object_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_commit_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_parent_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_date = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_author = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_committer = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_reflog = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_ref = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_commit = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_message = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_object = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_author = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_committer = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_date = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_reflog = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_object_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_commit_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_parent_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_message = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_object = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_object_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_commit_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_parent_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_date = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_author = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_committer = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_reflog = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_ref = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_commit = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_message = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_object = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_author = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_committer = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_date = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_reflog = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_object_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_commit_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_parent_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_message = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_object = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_object_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_commit_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_parent_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_date = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_author = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_committer = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_reflog = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_ref = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_commit = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_message = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_object = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_author = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_committer = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_date = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_reflog = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_object_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_commit_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_parent_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_message = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_object = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_object_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_commit_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_parent_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_date = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_author = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_committer = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_reflog = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_ref = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_commit = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_message = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_object = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_author = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_committer = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_date = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_reflog = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_object_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_commit_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_parent_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_message = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_object = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_object_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_commit_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_parent_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_date = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_author = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_committer = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_reflog = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_ref = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_commit = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_message = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_object = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_author = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_committer = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_date = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_reflog = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_object_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_commit_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_parent_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_message = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_object = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_object_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_commit_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_parent_id = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_date = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_author = stream.ConsumeBool();
+  options.verbose_show_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes_tag_notes
+</code>
+
+The code has the following build issues:
+<error>
+The target function `int run_sequencer_rebase(struct rebase_options * )` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `int run_sequencer_rebase(struct rebase_options * )` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

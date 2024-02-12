@@ -1,0 +1,63 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdio.h>
+#include <unistd.h>
+
+#include <gpac/constants.h>
+#include <gpac/filters.h>
+
+extern "C" {
+#include <ctxload.h>
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  char filename[256];
+  GF_Err e;
+  sprintf(filename, "/tmp/libfuzzer.%d", getpid());
+
+  FILE *fp = fopen(filename, "wb");
+  if (!fp)
+    return 0;
+  fwrite(data, size, 1, fp);
+  fclose(fp);
+
+  GF_FilterSession *fs = gf_fs_new_defaults(0);
+  GF_Filter *src = gf_fs_load_source(fs, filename, NULL, NULL, &e);
+  GF_Filter *ctx = gf_fs_load_filter(fs, "ctxload:deep:analyze=bs", &e);
+  gf_fs_run(fs);
+  ctxload_process(ctx);
+  gf_fs_del(fs);
+
+  unlink(filename);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/testsuite/oss-fuzzers/fuzz_parse.c:7:8: error: expected identifier or '('
+extern "C" {
+       ^
+/src/testsuite/oss-fuzzers/fuzz_parse.c:8:10: fatal error: 'ctxload.h' file not found
+#include <ctxload.h>
+         ^~~~~~~~~~~
+2 errors generated.
+
+Fix failure
+/src/testsuite/oss-fuzzers/fuzz_parse.cpp:8:10: fatal error: 'ctxload.h' file not found
+#include <ctxload.h>
+         ^~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

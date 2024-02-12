@@ -1,0 +1,301 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+#include "problem_rdft.h"
+#include "planner.h"
+#include "P.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  struct problem_rdft problem_rdft;
+  problem_rdft.N = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_log2 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_1 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_2 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_3 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_4 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_5 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_6 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_7 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_8 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_9 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_10 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_11 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_12 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_13 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_14 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_15 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_16 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_17 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_18 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_19 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_20 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_21 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_22 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_23 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_24 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_25 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_26 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_27 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_28 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_29 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_30 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_31 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_32 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_33 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_34 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_35 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_36 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_37 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_38 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_39 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_40 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_41 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_42 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_43 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_44 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_45 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_46 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_47 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_48 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_49 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_50 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_51 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_52 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_53 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_54 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_55 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_56 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_57 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_58 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_59 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_60 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_61 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_62 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_63 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_64 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_65 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_66 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_67 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_68 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_69 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_70 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_71 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_72 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_73 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_74 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_75 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_76 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_77 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_78 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_79 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_80 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_81 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_82 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_83 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_84 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_85 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_86 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_87 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_88 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_89 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_90 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_91 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_92 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_93 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_94 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_95 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_96 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_97 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_98 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_99 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_100 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_101 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_102 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_103 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_104 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_105 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_106 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_107 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_108 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_109 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_110 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_111 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_112 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_113 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_114 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_115 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_116 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_117 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_118 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_119 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_120 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_121 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_122 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_123 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_124 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_125 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_126 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_127 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_128 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_129 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_130 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_131 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_132 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_133 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_134 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_135 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_136 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_137 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_138 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_139 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_140 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_141 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_142 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_143 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_144 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_145 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_146 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_147 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_148 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_149 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_150 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_151 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_152 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_153 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_154 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_155 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_156 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_157 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_158 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_159 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_160 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_161 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_162 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_163 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_164 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_165 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_166 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_167 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_168 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_169 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_170 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_171 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_172 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_173 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_174 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_175 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_176 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_177 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_178 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_179 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_180 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_181 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_182 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_183 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_184 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_185 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_186 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_187 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_188 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_189 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_190 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_191 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_192 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_193 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_194 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_195 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_196 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_197 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_198 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_199 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_200 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_201 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_202 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_203 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_204 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_205 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_206 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_207 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_208 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_209 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_210 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_211 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_212 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_213 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_214 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_215 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_216 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_217 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_218 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_219 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_220 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_221 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_222 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_223 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_224 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_225 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_226 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_227 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_228 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_229 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_230 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_231 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_232 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_233 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_234 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_235 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_236 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_237 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_238 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_239 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_240 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_241 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_242 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_243 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_244 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_245 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_246 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_247 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_248 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_249 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_250 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_251 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_252 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_253 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_254 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_255 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_256 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_257 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_258 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_259 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_260 = stream.ConsumeIntegral<uint32_t>();
+  problem_rdft.N_fft_log2_plus_261 = stream.ConsumeIntegral<uint32_t>();
+
+  struct planner_s plnr;
+  planner_
+</code>
+
+The code has the following build issues:
+<error>
+The target function `int mkcldrn_cut(struct problem_rdft * p, struct planner_s * plnr, struct P_s * ego)` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `int mkcldrn_cut(struct problem_rdft * p, struct planner_s * plnr, struct P_s * ego)` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

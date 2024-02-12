@@ -1,0 +1,76 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <stdint.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
+#include <assert.h>
+
+#include <fribidi.h>
+
+int LLVMFuzzerTestOneInput (const uint8_t *data, size_t size)
+{
+  const FriBidiStrIndex str_len = size / 4;
+  FriBidiChar *str = (FriBidiChar *) data;
+
+  FriBidiCharType *types = calloc (str_len, sizeof (FriBidiCharType));
+  FriBidiBracketType *btypes = calloc (str_len, sizeof (FriBidiBracketType));
+  FriBidiLevel *levels = calloc (str_len, sizeof (FriBidiLevel));
+  FriBidiArabicShapeOptions options = FRIBIDI_ARABIC_SHAPE_DEFAULT;
+  fribidi_get_bidi_types (str, str_len, types);
+  fribidi_get_bracket_types (str, str_len, types, btypes);
+  FriBidiParType par_type = FRIBIDI_PAR_ON;
+  FriBidiLevel level = fribidi_get_par_embedding_levels_ex (types, btypes, str_len, &par_type, levels);
+  if ((0)) assert (level);
+  fribidi_shape_arabic (options, levels, str_len, NULL, str);
+  free (types);
+  free (btypes);
+  free (levels);
+  return 0;
+}
+
+/* Editor directions:
+ * vim:textwidth=78:tabstop=8:shiftwidth=2:autoindent:cindent
+ */
+</code>
+
+The code has the following build issues:
+<error>
+../../src/fribidi/bin/fribidi-fuzzer.c:17:3: error: use of undeclared identifier 'FriBidiArabicShapeOptions'
+  FriBidiArabicShapeOptions options = FRIBIDI_ARABIC_SHAPE_DEFAULT;
+  ^
+../../src/fribidi/bin/fribidi-fuzzer.c:23:25: error: use of undeclared identifier 'options'
+  fribidi_shape_arabic (options, levels, str_len, NULL, str);
+                        ^
+2 errors generated.
+
+Fix failure
+../../src/fribidi/bin/fribidi-fuzzer.cpp:14:20: error: cannot initialize a variable of type 'FriBidiCharType *' (aka 'unsigned int *') with an rvalue of type 'void *'
+  FriBidiCharType *types = calloc (str_len, sizeof (FriBidiCharType));
+                   ^       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../src/fribidi/bin/fribidi-fuzzer.cpp:15:23: error: cannot initialize a variable of type 'FriBidiBracketType *' (aka 'unsigned int *') with an rvalue of type 'void *'
+  FriBidiBracketType *btypes = calloc (str_len, sizeof (FriBidiBracketType));
+                      ^        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../src/fribidi/bin/fribidi-fuzzer.cpp:16:17: error: cannot initialize a variable of type 'FriBidiLevel *' (aka 'signed char *') with an rvalue of type 'void *'
+  FriBidiLevel *levels = calloc (str_len, sizeof (FriBidiLevel));
+                ^        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../src/fribidi/bin/fribidi-fuzzer.cpp:17:3: error: unknown type name 'FriBidiArabicShapeOptions'
+  FriBidiArabicShapeOptions options = FRIBIDI_ARABIC_SHAPE_DEFAULT;
+  ^
+../../src/fribidi/bin/fribidi-fuzzer.cpp:17:39: error: use of undeclared identifier 'FRIBIDI_ARABIC_SHAPE_DEFAULT'
+  FriBidiArabicShapeOptions options = FRIBIDI_ARABIC_SHAPE_DEFAULT;
+                                      ^
+5 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

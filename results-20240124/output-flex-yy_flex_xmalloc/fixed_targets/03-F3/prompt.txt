@@ -1,0 +1,168 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <algorithm>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+
+extern "C" {
+#include <FlexLexer.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const int size_to_allocate = stream.ConsumeIntegral<int>();
+  char *ptr = yy_flex_xmalloc(size_to_allocate);
+  free(ptr);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/fuzz-main.c:1:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+In file included from /src/fuzz-main.cpp:9:
+In file included from /src/flex/src/FlexLexer.h:51:
+In file included from /usr/local/bin/../include/c++/v1/iostream:37:
+In file included from /usr/local/bin/../include/c++/v1/ios:215:
+In file included from /usr/local/bin/../include/c++/v1/__locale:19:
+In file included from /usr/local/bin/../include/c++/v1/mutex:190:
+In file included from /usr/local/bin/../include/c++/v1/__mutex_base:17:
+/usr/local/bin/../include/c++/v1/system_error:162:1: error: templates must have C++ linkage
+template <class _Tp>
+^~~~~~~~~~~~~~~~~~~~
+/src/fuzz-main.cpp:8:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-main.cpp:9:
+In file included from /src/flex/src/FlexLexer.h:51:
+In file included from /usr/local/bin/../include/c++/v1/iostream:37:
+In file included from /usr/local/bin/../include/c++/v1/ios:215:
+In file included from /usr/local/bin/../include/c++/v1/__locale:19:
+In file included from /usr/local/bin/../include/c++/v1/mutex:190:
+In file included from /usr/local/bin/../include/c++/v1/__mutex_base:17:
+/usr/local/bin/../include/c++/v1/system_error:173:1: error: templates must have C++ linkage
+template <class _Tp>
+^~~~~~~~~~~~~~~~~~~~
+/src/fuzz-main.cpp:8:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-main.cpp:9:
+In file included from /src/flex/src/FlexLexer.h:51:
+In file included from /usr/local/bin/../include/c++/v1/iostream:37:
+In file included from /usr/local/bin/../include/c++/v1/ios:215:
+In file included from /usr/local/bin/../include/c++/v1/__locale:19:
+In file included from /usr/local/bin/../include/c++/v1/mutex:190:
+In file included from /usr/local/bin/../include/c++/v1/__mutex_base:17:
+/usr/local/bin/../include/c++/v1/system_error:183:29: error: explicit specialization of undeclared template struct 'is_error_condition_enum'
+struct _LIBCPP_TEMPLATE_VIS is_error_condition_enum<errc>
+                            ^                      ~~~~~~
+/usr/local/bin/../include/c++/v1/system_error:257:57: error: expected '>'
+              typename enable_if<is_error_condition_enum<_Ep>::value>::type* = nullptr
+                                                        ^
+/usr/local/bin/../include/c++/v1/system_error:257:33: note: to match this '<'
+              typename enable_if<is_error_condition_enum<_Ep>::value>::type* = nullptr
+                                ^
+/usr/local/bin/../include/c++/v1/system_error:257:57: error: expected ')'
+              typename enable_if<is_error_condition_enum<_Ep>::value>::type* = nullptr
+                                                        ^
+/usr/local/bin/../include/c++/v1/system_error:256:24: note: to match this '('
+        error_condition(_Ep __e,
+                       ^
+/usr/local/bin/../include/c++/v1/system_error:254:5: error: templates must have C++ linkage
+    template <class _Ep>
+    ^~~~~~~~~~~~~~~~~~~~
+/src/fuzz-main.cpp:8:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-main.cpp:9:
+In file included from /src/flex/src/FlexLexer.h:51:
+In file included from /usr/local/bin/../include/c++/v1/iostream:37:
+In file included from /usr/local/bin/../include/c++/v1/ios:215:
+In file included from /usr/local/bin/../include/c++/v1/__locale:19:
+In file included from /usr/local/bin/../include/c++/v1/mutex:190:
+In file included from /usr/local/bin/../include/c++/v1/__mutex_base:17:
+/usr/local/bin/../include/c++/v1/system_error:272:36: error: expected '>'
+            is_error_condition_enum<_Ep>::value,
+                                   ^
+/usr/local/bin/../include/c++/v1/system_error:271:9: note: to match this '<'
+        <
+        ^
+/usr/local/bin/../include/c++/v1/system_error:272:36: error: expected member name or ';' after declaration specifiers
+            is_error_condition_enum<_Ep>::value,
+                                   ^
+/usr/local/bin/../include/c++/v1/system_error:307:16: error: no member named 'category' in 'std::error_condition'
+    return __x.category() < __y.category()
+           ~~~ ^
+/usr/local/bin/../include/c++/v1/system_error:307:33: error: no member named 'category' in 'std::error_condition'
+    return __x.category() < __y.category()
+                            ~~~ ^
+/usr/local/bin/../include/c++/v1/system_error:308:17: error: no member named 'category' in 'std::error_condition'
+        || (__x.category() == __y.category() && __x.value() < __y.value());
+            ~~~ ^
+/usr/local/bin/../include/c++/v1/system_error:308:35: error: no member named 'category' in 'std::error_condition'
+        || (__x.category() == __y.category() && __x.value() < __y.value());
+                              ~~~ ^
+/usr/local/bin/../include/c++/v1/system_error:308:53: error: no member named 'value' in 'std::error_condition'
+        || (__x.category() == __y.category() && __x.value() < __y.value());
+                                                ~~~ ^
+/usr/local/bin/../include/c++/v1/system_error:308:67: error: no member named 'value' in 'std::error_condition'
+        || (__x.category() == __y.category() && __x.value() < __y.value());
+                                                              ~~~ ^
+/usr/local/bin/../include/c++/v1/system_error:328:39: error: no template named 'is_error_code_enum'
+                   typename enable_if<is_error_code_enum<_Ep>::value>::type* = nullptr
+                                      ^
+/usr/local/bin/../include/c++/v1/system_error:325:5: error: templates must have C++ linkage
+    template <class _Ep>
+    ^~~~~~~~~~~~~~~~~~~~
+/src/fuzz-main.cpp:8:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-main.cpp:9:
+In file included from /src/flex/src/FlexLexer.h:51:
+In file included from /usr/local/bin/../include/c++/v1/iostream:37:
+In file included from /usr/local/bin/../include/c++/v1/ios:215:
+In file included from /usr/local/bin/../include/c++/v1/__locale:19:
+In file included from /usr/local/bin/../include/c++/v1/mutex:190:
+In file included from /usr/local/bin/../include/c++/v1/__mutex_base:17:
+/usr/local/bin/../include/c++/v1/system_error:343:13: error: no template named 'is_error_code_enum'
+            is_error_code_enum<_Ep>::value,
+            ^
+/usr/local/bin/../include/c++/v1/system_error:339:5: error: templates must have C++ linkage
+    template <class _Ep>
+    ^~~~~~~~~~~~~~~~~~~~
+/src/fuzz-main.cpp:8:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-main.cpp:9:
+In file included from /src/flex/src/FlexLexer.h:51:
+In file included from /usr/local/bin/../include/c++/v1/iostream:37:
+In file included from /usr/local/bin/../include/c++/v1/ios:215:
+In file included from /usr/local/bin/../include/c++/v1/__locale:19:
+In file included from /usr/local/bin/../include/c++/v1/mutex:190:
+In file included from /usr/local/bin/../include/c++/v1/__mutex_base:17:
+/usr/local/bin/../include/c++/v1/system_error:347:51: error: no viable conversion from returned value of type 'std::error_code' to function return type 'int'
+            {*this = make_error_code(__e); return *this;}
+                                                  ^~~~~
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

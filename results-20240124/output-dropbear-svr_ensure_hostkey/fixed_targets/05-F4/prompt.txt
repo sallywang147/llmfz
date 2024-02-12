@@ -1,0 +1,59 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <openssl/conf.h>
+#include <openssl/evp.h>
+#include <openssl/err.h>
+
+extern "C" {
+#include <libssh/libssh.h>
+}
+
+extern void svr_ensure_hostkey(void);
+
+int main(int argc, char **argv)
+{
+    ssh_session session = ssh_new();
+    if (session == NULL)
+    {
+        fprintf(stderr, "Error creating SSH session\n");
+        return EXIT_FAILURE;
+    }
+
+    ssh_options_set(session, SSH_OPTIONS_HOST, "localhost");
+    ssh_options_set(session, SSH_OPTIONS_USER, "username");
+
+    if (ssh_connect(session))
+    {
+        fprintf(stderr, "Error connecting to SSH server\n");
+        ssh_free(session);
+        return EXIT_FAILURE;
+    }
+
+    svr_ensure_hostkey();
+
+    ssh_disconnect(session);
+    ssh_free(session);
+
+    return EXIT_SUCCESS;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

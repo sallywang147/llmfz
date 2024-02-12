@@ -1,0 +1,78 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ bazel_build_fuzz_tests
+Using Bazel query to find fuzz targets: 
+        let all_fuzz_tests = attr(tags, "fuzz-test", "//...") in
+        let lang_fuzz_tests = attr(generator_function, "^cc_fuzz_test$", $all_fuzz_tests) in
+        $lang_fuzz_tests - attr(tags, "no-oss-fuzz", $lang_fuzz_tests)
+    
+2024/01/24 16:03:30 Downloading https://releases.bazel.build/4.0.0/release/bazel-4.0.0-linux-x86_64...
+Extracting Bazel installation...
+Starting local Bazel server and connecting to it...
+Loading: 0 packages loaded
+Loading: 0 packages loaded
+Loading: 0 packages loaded
+Loading: 0 packages loaded
+Loading: 3 packages loaded
+    currently loading: test
+Loading: 4 packages loaded
+Loading: 4 packages loaded
+Found 2 fuzz test packages:
+  //test:message_reader_fuzz_test_oss_fuzz
+  //test:http_template_fuzz_test_oss_fuzz
+Building the fuzz tests with the following Bazel options:
+  -c opt --@rules_fuzzing//fuzzing:cc_engine=@rules_fuzzing_oss_fuzz//:oss_fuzz_engine --@rules_fuzzing//fuzzing:java_engine=@rules_fuzzing_oss_fuzz//:oss_fuzz_java_engine --@rules_fuzzing//fuzzing:cc_engine_instrumentation=oss-fuzz --@rules_fuzzing//fuzzing:cc_engine_sanitizer=none --cxxopt=-stdlib=libc++ --linkopt=-lc++ --verbose_failures --spawn_strategy=standalone --action_env=CC=/usr/local/bin/clang-jcc --action_env=CXX=/usr/local/bin/clang++-jcc
+Loading:  (1 packages loaded)
+Loading: 1 packages loaded
+Analyzing: 2 targets (1 packages loaded, 0 targets configured)
+Analyzing: 2 targets (15 packages loaded, 15 targets configured)
+Analyzing: 2 targets (15 packages loaded, 15 targets configured)
+Analyzing: 2 targets (15 packages loaded, 15 targets configured)
+Analyzing: 2 targets (16 packages loaded, 28 targets configured)
+Analyzing: 2 targets (24 packages loaded, 321 targets configured)
+Analyzing: 2 targets (62 packages loaded, 1219 targets configured)
+INFO: Analyzed 2 targets (76 packages loaded, 2078 targets configured).
+INFO: Found 2 targets...
+[0 / 53] [Prepa] Writing file test/test_common.cppmap
+[639 / 1,239] Compiling src/http_template.cc; 1s local ... (31 actions, 30 running)
+INFO: From Linking test/http_template_fuzz_test_raw_:
+/usr/bin/ld.gold: warning: Cannot export local symbol '__asan_extra_spill_area'
+[648 / 1,239] Compiling src/google/protobuf/compiler/csharp/names.cc; 2s local ... (32 actions running)
+[657 / 1,239] Compiling src/google/protobuf/compiler/csharp/csharp_map_field.cc; 4s local ... (32 actions running)
+[678 / 1,239] Compiling src/google/protobuf/compiler/java/primitive_field.cc; 7s local ... (32 actions running)
+[709 / 1,239] Compiling src/google/protobuf/compiler/cpp/file.cc; 9s local ... (32 actions running)
+[753 / 1,239] Compiling src/google/protobuf/compiler/cpp/file.cc; 12s local ... (32 actions running)
+[818 / 1,239] Compiling src/google/protobuf/compiler/cpp/file.cc; 15s local ... (32 actions running)
+[870 / 1,239] Compiling src/google/protobuf/compiler/cpp/file.cc; 19s local ... (32 actions running)
+[916 / 1,239] Compiling src/google/protobuf/compiler/cpp/message.cc; 24s local ... (32 actions, 31 running)
+[963 / 1,239] Compiling src/google/protobuf/compiler/cpp/message.cc; 29s local ... (32 actions, 31 running)
+[1,021 / 1,239] Compiling src/google/protobuf/descriptor_database.cc; 5s local ... (32 actions, 31 running)
+[1,058 / 1,239] Compiling src/google/protobuf/descriptor.cc; 12s local ... (32 actions, 31 running)
+[1,139 / 1,239] Compiling src/google/protobuf/descriptor.cc; 23s local ... (9 actions running)
+INFO: From Generating C++ proto_library @com_google_googleapis//google/api:billing_proto:
+google/api/billing.proto:19:1: warning: Import google/api/metric.proto is unused.
+INFO: From Generating C++ proto_library @com_google_googleapis//google/api:service_proto:
+google/api/service.proto:27:1: warning: Import google/api/label.proto is unused.
+google/api/service.proto:38:1: warning: Import google/protobuf/any.proto is unused.
+google/api/service.proto:34:1: warning: Import google/api/resource.proto is unused.
+[1,236 / 1,239] Compiling src/google/protobuf/descriptor.cc; 26s local
+INFO: From Linking test/message_reader_fuzz_test_raw_:
+/usr/bin/ld.gold: warning: Cannot export local symbol '__asan_extra_spill_area'
+INFO: Elapsed time: 87.682s, Critical Path: 47.04s
+INFO: 1239 processes: 665 internal, 574 local.
+INFO: Build completed successfully, 1239 total actions
+INFO: Build completed successfully, 1239 total actions
+Extracting the fuzz test packages in the output directory.
+./
+./http_template_fuzz_test_seed_corpus.zip
+./http_template_fuzz_test
+./
+./message_reader_fuzz_test
+./message_reader_fuzz_test_seed_corpus.zip

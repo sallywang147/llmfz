@@ -1,0 +1,76 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "roaring/roaring.h"
+#include "fuzzer/FuzzedDataProvider.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider fdp(data, size);
+  struct roaring_bitmap_s *r1 = roaring_bitmap_create();
+  struct roaring_bitmap_s *r2 = roaring_bitmap_create();
+  std::vector<uint32_t> v1 = fdp.ConsumeIntegralVector<uint32_t>(fdp.ConsumeIntegralInRange<size_t>(0, 10000));
+  std::vector<uint32_t> v2 = fdp.ConsumeIntegralVector<uint32_t>(fdp.ConsumeIntegralInRange<size_t>(0, 10000));
+  roaring_bitmap_add_many(r1, v1.size(), v1.data());
+  roaring_bitmap_add_many(r2, v2.size(), v2.data());
+  roaring_bitmap_lazy_xor_inplace(r1, r2);
+  roaring_bitmap_free(r1);
+  roaring_bitmap_free(r2);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/croaring_fuzzer_cc.cc:8:34: error: no template named 'ConsumeIntegralVector' in 'FuzzedDataProvider'; did you mean 'ConsumeIntegral'?
+  std::vector<uint32_t> v1 = fdp.ConsumeIntegralVector<uint32_t>(fdp.ConsumeIntegralInRange<size_t>(0, 10000));
+                                 ^~~~~~~~~~~~~~~~~~~~~
+                                 ConsumeIntegral
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:194:45: note: 'ConsumeIntegral' declared here
+template <typename T> T FuzzedDataProvider::ConsumeIntegral() {
+                                            ^
+/src/croaring_fuzzer_cc.cc:8:34: error: no template named 'ConsumeIntegralVector' in 'FuzzedDataProvider'; did you mean 'ConsumeIntegral'?
+  std::vector<uint32_t> v1 = fdp.ConsumeIntegralVector<uint32_t>(fdp.ConsumeIntegralInRange<size_t>(0, 10000));
+                                 ^~~~~~~~~~~~~~~~~~~~~
+                                 ConsumeIntegral
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:194:45: note: 'ConsumeIntegral' declared here
+template <typename T> T FuzzedDataProvider::ConsumeIntegral() {
+                                            ^
+/src/croaring_fuzzer_cc.cc:8:56: error: unexpected type name 'uint32_t': expected expression
+  std::vector<uint32_t> v1 = fdp.ConsumeIntegralVector<uint32_t>(fdp.ConsumeIntegralInRange<size_t>(0, 10000));
+                                                       ^
+/src/croaring_fuzzer_cc.cc:8:34: error: no member named 'ConsumeIntegralVector' in 'FuzzedDataProvider'
+  std::vector<uint32_t> v1 = fdp.ConsumeIntegralVector<uint32_t>(fdp.ConsumeIntegralInRange<size_t>(0, 10000));
+                             ~~~ ^
+/src/croaring_fuzzer_cc.cc:9:34: error: no template named 'ConsumeIntegralVector' in 'FuzzedDataProvider'; did you mean 'ConsumeIntegral'?
+  std::vector<uint32_t> v2 = fdp.ConsumeIntegralVector<uint32_t>(fdp.ConsumeIntegralInRange<size_t>(0, 10000));
+                                 ^~~~~~~~~~~~~~~~~~~~~
+                                 ConsumeIntegral
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:194:45: note: 'ConsumeIntegral' declared here
+template <typename T> T FuzzedDataProvider::ConsumeIntegral() {
+                                            ^
+/src/croaring_fuzzer_cc.cc:9:34: error: no template named 'ConsumeIntegralVector' in 'FuzzedDataProvider'; did you mean 'ConsumeIntegral'?
+  std::vector<uint32_t> v2 = fdp.ConsumeIntegralVector<uint32_t>(fdp.ConsumeIntegralInRange<size_t>(0, 10000));
+                                 ^~~~~~~~~~~~~~~~~~~~~
+                                 ConsumeIntegral
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:194:45: note: 'ConsumeIntegral' declared here
+template <typename T> T FuzzedDataProvider::ConsumeIntegral() {
+                                            ^
+/src/croaring_fuzzer_cc.cc:9:56: error: unexpected type name 'uint32_t': expected expression
+  std::vector<uint32_t> v2 = fdp.ConsumeIntegralVector<uint32_t>(fdp.ConsumeIntegralInRange<size_t>(0, 10000));
+                                                       ^
+/src/croaring_fuzzer_cc.cc:9:34: error: no member named 'ConsumeIntegralVector' in 'FuzzedDataProvider'
+  std::vector<uint32_t> v2 = fdp.ConsumeIntegralVector<uint32_t>(fdp.ConsumeIntegralInRange<size_t>(0, 10000));
+                             ~~~ ^
+8 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

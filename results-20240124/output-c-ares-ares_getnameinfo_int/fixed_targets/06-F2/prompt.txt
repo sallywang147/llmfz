@@ -1,0 +1,90 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+
+#include "ares.h"
+
+// Entrypoint for Clang's libfuzzer
+extern "C" int LLVMFuzzerTestOneInput(const unsigned char *data,
+                                    unsigned long size) {
+  // Feed the data into each of the ares_parse_*_reply functions.
+  struct ares_channeldata channel;
+  struct sockaddr_in sin;
+  struct sockaddr_in6 sin6;
+  struct sockaddr *sa = (struct sockaddr *)&sin;
+  int salen = sizeof(sin);
+  ares_getnameinfo_type type = ares_getnameinfo_async;
+  char addr[16];
+  ares_getnameinfo_int(&channel, sa, salen, AF_INET, &type, addr);
+
+  sa = (struct sockaddr *)&sin6;
+  salen = sizeof(sin6);
+  ares_getnameinfo_int(&channel, sa, salen, AF_INET6, &type, addr);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/c-ares/test/ares-test-fuzz-name.c:6:8: error: expected identifier or '('
+extern "C" int LLVMFuzzerTestOneInput(const unsigned char *data,
+       ^
+1 error generated.
+
+Fix failure
+/src/c-ares/test/ares-test-fuzz-name.cpp:9:27: error: variable has incomplete type 'struct ares_channeldata'
+  struct ares_channeldata channel;
+                          ^
+include/ares.h:342:8: note: forward declaration of 'ares_channeldata'
+struct ares_channeldata;
+       ^
+/src/c-ares/test/ares-test-fuzz-name.cpp:14:3: error: use of undeclared identifier 'ares_getnameinfo_type'; did you mean 'ares_getnameinfo'?
+  ares_getnameinfo_type type = ares_getnameinfo_async;
+  ^~~~~~~~~~~~~~~~~~~~~
+  ares_getnameinfo
+include/ares.h:489:19: note: 'ares_getnameinfo' declared here
+CARES_EXTERN void ares_getnameinfo(ares_channel_t        *channel,
+                  ^
+/src/c-ares/test/ares-test-fuzz-name.cpp:14:24: error: expected ';' after expression
+  ares_getnameinfo_type type = ares_getnameinfo_async;
+                       ^
+                       ;
+/src/c-ares/test/ares-test-fuzz-name.cpp:14:25: error: use of undeclared identifier 'type'
+  ares_getnameinfo_type type = ares_getnameinfo_async;
+                        ^
+/src/c-ares/test/ares-test-fuzz-name.cpp:14:32: error: use of undeclared identifier 'ares_getnameinfo_async'; did you mean 'ares_getnameinfo'?
+  ares_getnameinfo_type type = ares_getnameinfo_async;
+                               ^~~~~~~~~~~~~~~~~~~~~~
+                               ares_getnameinfo
+include/ares.h:489:19: note: 'ares_getnameinfo' declared here
+CARES_EXTERN void ares_getnameinfo(ares_channel_t        *channel,
+                  ^
+/src/c-ares/test/ares-test-fuzz-name.cpp:16:55: error: use of undeclared identifier 'type'; did you mean 'true'?
+  ares_getnameinfo_int(&channel, sa, salen, AF_INET, &type, addr);
+                                                      ^~~~
+                                                      true
+/src/c-ares/test/ares-test-fuzz-name.cpp:16:54: error: cannot take the address of an rvalue of type 'bool'
+  ares_getnameinfo_int(&channel, sa, salen, AF_INET, &type, addr);
+                                                     ^~~~~
+/src/c-ares/test/ares-test-fuzz-name.cpp:20:56: error: use of undeclared identifier 'type'; did you mean 'true'?
+  ares_getnameinfo_int(&channel, sa, salen, AF_INET6, &type, addr);
+                                                       ^~~~
+                                                       true
+/src/c-ares/test/ares-test-fuzz-name.cpp:20:55: error: cannot take the address of an rvalue of type 'bool'
+  ares_getnameinfo_int(&channel, sa, salen, AF_INET6, &type, addr);
+                                                      ^~~~~
+9 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

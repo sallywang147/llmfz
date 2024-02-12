@@ -1,0 +1,100 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+namespace guetzli {
+
+void BuildSequentialHuffmanCodes(JPEGData* jdata,
+                                 std::vector<HuffmanCode>* codes,
+                                 std::vector<int>* code_lengths);
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  JPEGData* jdata = new JPEGData();
+  jdata->data = data;
+  jdata->size = size;
+
+  std::vector<HuffmanCode> codes;
+  std::vector<int> code_lengths;
+
+  BuildSequentialHuffmanCodes(jdata, &codes, &code_lengths);
+
+  delete jdata;
+
+  return 0;
+}
+
+}  // namespace guetzli
+</code>
+
+The code has the following build issues:
+<error>
+fuzz_target.cc:4:34: error: use of undeclared identifier 'std'
+                                 std::vector<HuffmanCode>* codes,
+                                 ^
+fuzz_target.cc:3:6: error: variable has incomplete type 'void'
+void BuildSequentialHuffmanCodes(JPEGData* jdata,
+     ^
+fuzz_target.cc:3:34: error: use of undeclared identifier 'JPEGData'
+void BuildSequentialHuffmanCodes(JPEGData* jdata,
+                                 ^
+fuzz_target.cc:3:44: error: use of undeclared identifier 'jdata'
+void BuildSequentialHuffmanCodes(JPEGData* jdata,
+                                           ^
+fuzz_target.cc:4:46: error: use of undeclared identifier 'HuffmanCode'
+                                 std::vector<HuffmanCode>* codes,
+                                             ^
+fuzz_target.cc:4:60: error: use of undeclared identifier 'codes'
+                                 std::vector<HuffmanCode>* codes,
+                                                           ^
+fuzz_target.cc:5:34: error: use of undeclared identifier 'std'
+                                 std::vector<int>* code_lengths);
+                                 ^
+fuzz_target.cc:5:49: error: expected '(' for function-style cast or type construction
+                                 std::vector<int>* code_lengths);
+                                             ~~~^
+fuzz_target.cc:5:52: error: use of undeclared identifier 'code_lengths'
+                                 std::vector<int>* code_lengths);
+                                                   ^
+fuzz_target.cc:7:45: error: unknown type name 'uint8_t'
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+                                            ^
+fuzz_target.cc:7:60: error: unknown type name 'size_t'
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+                                                           ^
+fuzz_target.cc:8:3: error: unknown type name 'JPEGData'
+  JPEGData* jdata = new JPEGData();
+  ^
+fuzz_target.cc:8:25: error: unknown type name 'JPEGData'
+  JPEGData* jdata = new JPEGData();
+                        ^
+fuzz_target.cc:12:3: error: use of undeclared identifier 'std'
+  std::vector<HuffmanCode> codes;
+  ^
+fuzz_target.cc:12:15: error: use of undeclared identifier 'HuffmanCode'
+  std::vector<HuffmanCode> codes;
+              ^
+fuzz_target.cc:12:28: error: use of undeclared identifier 'codes'
+  std::vector<HuffmanCode> codes;
+                           ^
+fuzz_target.cc:13:3: error: use of undeclared identifier 'std'
+  std::vector<int> code_lengths;
+  ^
+fuzz_target.cc:13:18: error: expected '(' for function-style cast or type construction
+  std::vector<int> code_lengths;
+              ~~~^
+fuzz_target.cc:13:20: error: use of undeclared identifier 'code_lengths'
+  std::vector<int> code_lengths;
+                   ^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

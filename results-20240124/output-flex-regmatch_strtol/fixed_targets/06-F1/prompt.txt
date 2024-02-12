@@ -1,0 +1,79 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <climits>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <string>
+
+#include <regex.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  const uint8_t regex_size = stream.ConsumeIntegral<uint8_t>();
+  const std::string regex = stream.ConsumeBytesAsString(regex_size);
+
+  const uint8_t input_size = stream.ConsumeIntegral<uint8_t>();
+  const std::string input = stream.ConsumeBytesAsString(input_size);
+
+  const uint8_t base = stream.ConsumeIntegral<uint8_t>();
+
+  regex_t re;
+  if (regcomp(&re, regex.c_str(), REG_EXTENDED) != 0) {
+    return 0;
+  }
+
+  regmatch_t matches[re.re_nsub + 1];
+  if (regexec(&re, input.c_str(), re.re_nsub + 1, matches, 0) != 0) {
+    regfree(&re);
+    return 0;
+  }
+
+  for (size_t i = 0; i <= re.re_nsub; i++) {
+    if (matches[i].rm_so == -1) {
+      continue;
+    }
+    const std::string match =
+        input.substr(matches[i].rm_so, matches[i].rm_eo - matches[i].rm_so);
+    char* endptr;
+    regmatch_strtol(&matches[i], const_cast<char*>(match.c_str()), &endptr, base);
+    if (endptr != match.c_str() + match.size()) {
+      fprintf(stderr, "regmatch_strtol failed\n");
+    }
+  }
+
+  regfree(&re);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:16:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+/src/fuzz-main.cpp:42:5: error: use of undeclared identifier 'regmatch_strtol'
+    regmatch_strtol(&matches[i], const_cast<char*>(match.c_str()), &endptr, base);
+    ^
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

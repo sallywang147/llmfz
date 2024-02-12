@@ -1,0 +1,1 @@
+error: undefined reference to 'boost::iostreams::gzip_compressor::gzip_compressor()'

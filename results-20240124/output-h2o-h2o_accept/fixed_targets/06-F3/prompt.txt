@@ -1,0 +1,55 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "h2o.h"
+#include "h2o/http1.h"
+
+extern "C" {
+#include "h2o/http2.h"
+}
+
+#error "Please defined one of HTTP1 or HTTP2"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  h2o_accept_ctx_t *ctx = h2o_accept_ctx_create();
+  h2o_socket_t *sock = h2o_socket_create(0, H2O_SOCKET_FLAG_TCP);
+  h2o_accept(ctx, sock);
+  h2o_socket_close(sock);
+  h2o_accept_ctx_destroy(ctx);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/h2o/fuzz/driver_h3.cc:8:2: error: "Please defined one of HTTP1 or HTTP2"
+#error "Please defined one of HTTP1 or HTTP2"
+ ^
+/src/h2o/fuzz/driver_h3.cc:11:27: error: use of undeclared identifier 'h2o_accept_ctx_create'; did you mean 'h2o_accept_ctx_t'?
+  h2o_accept_ctx_t *ctx = h2o_accept_ctx_create();
+                          ^
+/src/h2o/include/h2o.h:1429:3: note: 'h2o_accept_ctx_t' declared here
+} h2o_accept_ctx_t;
+  ^
+/src/h2o/fuzz/driver_h3.cc:12:45: error: use of undeclared identifier 'H2O_SOCKET_FLAG_TCP'
+  h2o_socket_t *sock = h2o_socket_create(0, H2O_SOCKET_FLAG_TCP);
+                                            ^
+/src/h2o/fuzz/driver_h3.cc:15:3: error: use of undeclared identifier 'h2o_accept_ctx_destroy'; did you mean 'h2o_accept_ctx_t'?
+  h2o_accept_ctx_destroy(ctx);
+  ^
+/src/h2o/include/h2o.h:1429:3: note: 'h2o_accept_ctx_t' declared here
+} h2o_accept_ctx_t;
+  ^
+4 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

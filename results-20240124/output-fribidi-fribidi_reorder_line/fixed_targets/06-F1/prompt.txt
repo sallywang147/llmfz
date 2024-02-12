@@ -1,0 +1,92 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <stdint.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
+#include <assert.h>
+
+#include <fribidi.h>
+
+int LLVMFuzzerTestOneInput (const uint8_t *data, size_t size)
+{
+  const FriBidiStrIndex str_len = size / 4;
+  FriBidiChar *str = (FriBidiChar *) data;
+
+  FriBidiCharType *types = calloc (str_len, sizeof (FriBidiCharType));
+  FriBidiLevel *levels = calloc (str_len, sizeof (FriBidiLevel));
+  fribidi_get_bidi_types (str, str_len, types);
+  fribidi_get_par_embedding_levels (types, str_len, &base_dir, levels);
+  int *visual_str = calloc (str_len, sizeof (int));
+  int *map = calloc (str_len, sizeof (int));
+  fribidi_reorder_line (FRIBIDI_LOG2VIS, types, str_len, False, base_dir, levels, visual_str, map);
+  free (types);
+  free (levels);
+  free (visual_str);
+  free (map);
+  return 0;
+}
+
+/* Editor directions:
+ * vim:textwidth=78:tabstop=8:shiftwidth=2:autoindent:cindent
+ */
+</code>
+
+The code has the following build issues:
+<error>
+../../src/fribidi/bin/fribidi-fuzzer.c:17:54: error: use of undeclared identifier 'base_dir'
+  fribidi_get_par_embedding_levels (types, str_len, &base_dir, levels);
+                                                     ^
+../../src/fribidi/bin/fribidi-fuzzer.c:20:58: error: use of undeclared identifier 'False'; did you mean 'else'?
+  fribidi_reorder_line (FRIBIDI_LOG2VIS, types, str_len, False, base_dir, levels, visual_str, map);
+                                                         ^~~~~
+                                                         else
+../../src/fribidi/bin/fribidi-fuzzer.c:20:58: error: expected expression
+../../src/fribidi/bin/fribidi-fuzzer.c:20:25: error: use of undeclared identifier 'FRIBIDI_LOG2VIS'
+  fribidi_reorder_line (FRIBIDI_LOG2VIS, types, str_len, False, base_dir, levels, visual_str, map);
+                        ^
+../../src/fribidi/bin/fribidi-fuzzer.c:20:65: error: use of undeclared identifier 'base_dir'
+  fribidi_reorder_line (FRIBIDI_LOG2VIS, types, str_len, False, base_dir, levels, visual_str, map);
+                                                                ^
+5 errors generated.
+
+Fix failure
+../../src/fribidi/bin/fribidi-fuzzer.cpp:14:20: error: cannot initialize a variable of type 'FriBidiCharType *' (aka 'unsigned int *') with an rvalue of type 'void *'
+  FriBidiCharType *types = calloc (str_len, sizeof (FriBidiCharType));
+                   ^       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../src/fribidi/bin/fribidi-fuzzer.cpp:15:17: error: cannot initialize a variable of type 'FriBidiLevel *' (aka 'signed char *') with an rvalue of type 'void *'
+  FriBidiLevel *levels = calloc (str_len, sizeof (FriBidiLevel));
+                ^        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../src/fribidi/bin/fribidi-fuzzer.cpp:17:54: error: use of undeclared identifier 'base_dir'
+  fribidi_get_par_embedding_levels (types, str_len, &base_dir, levels);
+                                                     ^
+../../src/fribidi/bin/fribidi-fuzzer.cpp:18:8: error: cannot initialize a variable of type 'int *' with an rvalue of type 'void *'
+  int *visual_str = calloc (str_len, sizeof (int));
+       ^            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../src/fribidi/bin/fribidi-fuzzer.cpp:19:8: error: cannot initialize a variable of type 'int *' with an rvalue of type 'void *'
+  int *map = calloc (str_len, sizeof (int));
+       ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../src/fribidi/bin/fribidi-fuzzer.cpp:20:58: error: use of undeclared identifier 'False'; did you mean 'false'?
+  fribidi_reorder_line (FRIBIDI_LOG2VIS, types, str_len, False, base_dir, levels, visual_str, map);
+                                                         ^~~~~
+                                                         false
+../../src/fribidi/bin/fribidi-fuzzer.cpp:20:25: error: use of undeclared identifier 'FRIBIDI_LOG2VIS'
+  fribidi_reorder_line (FRIBIDI_LOG2VIS, types, str_len, False, base_dir, levels, visual_str, map);
+                        ^
+../../src/fribidi/bin/fribidi-fuzzer.cpp:20:65: error: use of undeclared identifier 'base_dir'
+  fribidi_reorder_line (FRIBIDI_LOG2VIS, types, str_len, False, base_dir, levels, visual_str, map);
+                                                                ^
+8 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

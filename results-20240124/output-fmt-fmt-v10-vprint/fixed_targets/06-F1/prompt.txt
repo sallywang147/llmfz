@@ -1,0 +1,53 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstdint>
+#include <cstring>
+#include <iostream>
+#include <string>
+#include <vector>
+
+#include "fmt/core.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider provider(data, size);
+
+  std::string format_str = provider.ConsumeRemainingBytesAsString();
+  std::vector<std::string> args;
+  while (provider.remaining_bytes() > 0) {
+    args.push_back(provider.ConsumeRemainingBytesAsString());
+  }
+
+  FILE* f = fopen("/dev/null", "w");
+  fmt::vprint(f, format_str.c_str(), args.size(), args.size(), nullptr);
+  fclose(f);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/fmt/include/fmt/base.h:1597:3: error: static_assert failed due to requirement 'formattable' "Cannot format an argument. To make type T formattable provide a formatter<T> specialization: https://fmt.dev/latest/api.html#udt"
+  static_assert(
+  ^
+/src/fmt/include/fmt/base.h:1976:20: note: in instantiation of function template specialization 'fmt::detail::make_arg<true, fmt::context, std::vector<fmt::detail::value<fmt::context>>, 0>' requested here
+  return {{detail::make_arg<NUM_ARGS <= detail::max_packed_args, Context>(
+                   ^
+/src/fmt/test/fuzzing/chrono-timepoint.cc:21:45: note: in instantiation of function template specialization 'fmt::make_format_args<fmt::context, std::vector<fmt::detail::value<fmt::context>>, 1UL, 0UL, 15ULL, 0>' requested here
+  fmt::v10::vprint(stderr, format_str, fmt::make_format_args(values));
+                                            ^
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

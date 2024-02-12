@@ -1,0 +1,82 @@
+Using seed corpus: cjson_read_fuzzer_seed_corpus.zip
+/workspace/out/libfuzzer-address-x86_64/cjson_read_fuzzer -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/cjson_read_fuzzer -dict=cjson_read_fuzzer.dict < /dev/null
+Dictionary: 37 entries
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 4009331742
+INFO: Loaded 1 modules   (1230 inline 8-bit counters): 1230 [0x6015e0, 0x601aae), 
+INFO: Loaded 1 PC tables (1230 PCs): 1230 [0x5b7c10,0x5bc8f0), 
+INFO:       14 files found in /workspace/corpus/cjson_read_fuzzer
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: seed corpus: files: 14 min: 52b max: 3465b total: 9002b rss: 36Mb
+#15	INITED cov: 25 ft: 26 corp: 1/52b exec/s: 0 rss: 36Mb
+	NEW_FUNC[1/2]: 0x56f240 in buffer_skip_whitespace /src/cjson/cJSON.c:1044
+	NEW_FUNC[2/2]: 0x57a720 in parse_string /src/cjson/cJSON.c:779
+
+=================================================================
+==14==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 64 byte(s) in 1 object(s) allocated from:
+    #0 0x52ef66 in __interceptor_malloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:69:3
+    #1 0x56cfc6 in cJSON_New_Item /src/cjson/cJSON.c:243:27
+    #2 0x56cfc6 in cJSON_ParseWithLengthOpts /src/cjson/cJSON.c:1119:12
+    #3 0x56f452 in cJSON_ParseWithOpts /src/cjson/cJSON.c:1096:12
+    #4 0x56f452 in cJSON_Parse /src/cjson/cJSON.c:1182:12
+    #5 0x56c3ff in LLVMFuzzerTestOneInput /src/cjson/fuzzing/cjson_read_fuzzer.c:19:5
+    #6 0x43ddd3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #7 0x43d5ba in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #8 0x43ec89 in fuzzer::Fuzzer::MutateAndTestOne() /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:757:19
+    #9 0x43f955 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:895:5
+    #10 0x42ecbf in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #11 0x458312 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #12 0x7ff8706f8082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_malloc--cJSON_New_Item--cJSON_ParseWithLengthOpts
+Indirect leak of 128 byte(s) in 2 object(s) allocated from:
+    #0 0x52ef66 in __interceptor_malloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:69:3
+    #1 0x56e8dc in cJSON_New_Item /src/cjson/cJSON.c:243:27
+    #2 0x56e8dc in parse_object /src/cjson/cJSON.c:1642:27
+    #3 0x56e8dc in parse_value /src/cjson/cJSON.c:1365:16
+    #4 0x56d307 in cJSON_ParseWithLengthOpts /src/cjson/cJSON.c:1125:10
+    #5 0x56f452 in cJSON_ParseWithOpts /src/cjson/cJSON.c:1096:12
+    #6 0x56f452 in cJSON_Parse /src/cjson/cJSON.c:1182:12
+    #7 0x56c3ff in LLVMFuzzerTestOneInput /src/cjson/fuzzing/cjson_read_fuzzer.c:19:5
+    #8 0x43ddd3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #9 0x43d5ba in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #10 0x43ec89 in fuzzer::Fuzzer::MutateAndTestOne() /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:757:19
+    #11 0x43f955 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:895:5
+    #12 0x42ecbf in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #13 0x458312 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #14 0x7ff8706f8082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_malloc--cJSON_New_Item--parse_object
+Indirect leak of 6 byte(s) in 2 object(s) allocated from:
+    #0 0x52ef66 in __interceptor_malloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:69:3
+    #1 0x57a9db in parse_string /src/cjson/cJSON.c:817:34
+    #2 0x56e98b in parse_object /src/cjson/cJSON.c:1665:14
+    #3 0x56e98b in parse_value /src/cjson/cJSON.c:1365:16
+    #4 0x56d307 in cJSON_ParseWithLengthOpts /src/cjson/cJSON.c:1125:10
+    #5 0x56f452 in cJSON_ParseWithOpts /src/cjson/cJSON.c:1096:12
+    #6 0x56f452 in cJSON_Parse /src/cjson/cJSON.c:1182:12
+    #7 0x56c3ff in LLVMFuzzerTestOneInput /src/cjson/fuzzing/cjson_read_fuzzer.c:19:5
+    #8 0x43ddd3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #9 0x43d5ba in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #10 0x43ec89 in fuzzer::Fuzzer::MutateAndTestOne() /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:757:19
+    #11 0x43f955 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:895:5
+    #12 0x42ecbf in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #13 0x458312 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #14 0x7ff8706f8082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_malloc--parse_string--parse_object
+SUMMARY: AddressSanitizer: 198 byte(s) leaked in 5 allocation(s).
+INFO: to ignore leaks on libFuzzer side use -detect_leaks=0.
+
+MS: 1 ManualDict- DE: "{\"1\":1,\"2\":2}"-; base unit: 6e7ededecf2536d4e43e05f42c71f027c0f9e2c1
+0x7b,0x22,0x31,0x22,0x3a,0x31,0x2c,0x22,0x32,0x22,0x3a,0x32,0x7d,0x31,0x2c,0x20,0x30,0x5d,0x2c,0xa,0x20,0x20,0x20,0x20,0x5b,0x31,0x2c,0x20,0x30,0x2c,0x20,0x30,0x5d,0x2c,0xa,0x20,0x20,0x20,0x20,0x5b,0x30,0x2c,0x20,0x30,0x2c,0x20,0x31,0x5d,0xa,0x9,0x5d,0xa,
+{\"1\":1,\"2\":2}1, 0],\012    [1, 0, 0],\012    [0, 0, 1]\012\011]\012
+artifact_prefix='./'; Test unit written to ./leak-01ba1c90a0d3882f6a0d7087e8928e0be171de82
+Base64: eyIxIjoxLCIyIjoyfTEsIDBdLAogICAgWzEsIDAsIDBdLAogICAgWzAsIDAsIDFdCgldCg==
+stat::number_of_executed_units: 17
+stat::average_exec_per_sec:     0
+stat::new_units_added:          0
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              37

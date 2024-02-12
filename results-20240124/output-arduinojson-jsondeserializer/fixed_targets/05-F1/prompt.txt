@@ -1,0 +1,89 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <ArduinoJson.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  ArduinoJson::V701HB4::detail::JsonDeserializer<
+      ArduinoJson::V701HB4::detail::BoundedReader<unsigned char const*, void> >
+      deserializer;
+  deserializer.~JsonDeserializer();
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+msgpack_fuzzer.cpp:4:16: error: no member named 'V701HB4' in namespace 'ArduinoJson'; did you mean 'V702HB4'?
+  ArduinoJson::V701HB4::detail::JsonDeserializer<
+  ~~~~~~~~~~~~~^~~~~~~
+               V702HB4
+../../src/ArduinoJson/compatibility.hpp:59:1: note: 'V702HB4' declared here
+ARDUINOJSON_BEGIN_PUBLIC_NAMESPACE
+^
+../../src/ArduinoJson/Namespace.hpp:28:20: note: expanded from macro 'ARDUINOJSON_BEGIN_PUBLIC_NAMESPACE'
+  inline namespace ARDUINOJSON_VERSION_NAMESPACE {
+                   ^
+../../src/ArduinoJson/Namespace.hpp:14:5: note: expanded from macro 'ARDUINOJSON_VERSION_NAMESPACE'
+    ARDUINOJSON_CONCAT4(ARDUINOJSON_VERSION_MACRO,                         \
+    ^
+../../src/ArduinoJson/Polyfills/preprocessor.hpp:10:3: note: expanded from macro 'ARDUINOJSON_CONCAT4'
+  ARDUINOJSON_CONCAT2(ARDUINOJSON_CONCAT2(A, B), ARDUINOJSON_CONCAT2(C, D))
+  ^
+../../src/ArduinoJson/Polyfills/preprocessor.hpp:8:35: note: expanded from macro 'ARDUINOJSON_CONCAT2'
+#define ARDUINOJSON_CONCAT2(A, B) ARDUINOJSON_CONCAT_(A, B)
+                                  ^
+../../src/ArduinoJson/Polyfills/preprocessor.hpp:7:35: note: expanded from macro 'ARDUINOJSON_CONCAT_'
+#define ARDUINOJSON_CONCAT_(A, B) A##B
+                                  ^
+<scratch space>:32:1: note: expanded from here
+V702HB4
+^
+msgpack_fuzzer.cpp:5:20: error: no member named 'V701HB4' in namespace 'ArduinoJson'; did you mean 'V702HB4'?
+      ArduinoJson::V701HB4::detail::BoundedReader<unsigned char const*, void> >
+      ~~~~~~~~~~~~~^~~~~~~
+                   V702HB4
+../../src/ArduinoJson/compatibility.hpp:59:1: note: 'V702HB4' declared here
+ARDUINOJSON_BEGIN_PUBLIC_NAMESPACE
+^
+../../src/ArduinoJson/Namespace.hpp:28:20: note: expanded from macro 'ARDUINOJSON_BEGIN_PUBLIC_NAMESPACE'
+  inline namespace ARDUINOJSON_VERSION_NAMESPACE {
+                   ^
+../../src/ArduinoJson/Namespace.hpp:14:5: note: expanded from macro 'ARDUINOJSON_VERSION_NAMESPACE'
+    ARDUINOJSON_CONCAT4(ARDUINOJSON_VERSION_MACRO,                         \
+    ^
+../../src/ArduinoJson/Polyfills/preprocessor.hpp:10:3: note: expanded from macro 'ARDUINOJSON_CONCAT4'
+  ARDUINOJSON_CONCAT2(ARDUINOJSON_CONCAT2(A, B), ARDUINOJSON_CONCAT2(C, D))
+  ^
+../../src/ArduinoJson/Polyfills/preprocessor.hpp:8:35: note: expanded from macro 'ARDUINOJSON_CONCAT2'
+#define ARDUINOJSON_CONCAT2(A, B) ARDUINOJSON_CONCAT_(A, B)
+                                  ^
+../../src/ArduinoJson/Polyfills/preprocessor.hpp:7:35: note: expanded from macro 'ARDUINOJSON_CONCAT_'
+#define ARDUINOJSON_CONCAT_(A, B) A##B
+                                  ^
+<scratch space>:32:1: note: expanded from here
+V702HB4
+^
+msgpack_fuzzer.cpp:6:7: error: no matching constructor for initialization of 'ArduinoJson::V702HB4::detail::JsonDeserializer<ArduinoJson::V702HB4::detail::BoundedReader<const unsigned char *, void>>'
+      deserializer;
+      ^
+../../src/ArduinoJson/Json/JsonDeserializer.hpp:22:7: note: candidate constructor (the implicit copy constructor) not viable: requires 1 argument, but 0 were provided
+class JsonDeserializer {
+      ^
+../../src/ArduinoJson/Json/JsonDeserializer.hpp:22:7: note: candidate constructor (the implicit move constructor) not viable: requires 1 argument, but 0 were provided
+../../src/ArduinoJson/Json/JsonDeserializer.hpp:24:3: note: candidate constructor not viable: requires 2 arguments, but 0 were provided
+  JsonDeserializer(ResourceManager* resources, TReader reader)
+  ^
+3 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

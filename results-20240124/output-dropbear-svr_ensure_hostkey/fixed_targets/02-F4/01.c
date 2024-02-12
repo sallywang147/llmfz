@@ -1,0 +1,6 @@
+error: undefined reference to 'ssh_bind_options_set'
+error: undefined reference to 'ssh_server_options_set'
+error: undefined reference to 'ssh_server_start'
+error: undefined reference to 'ssh_get_error'
+error: undefined reference to 'ssh_server_join'
+error: undefined reference to 'ssh_server_free'

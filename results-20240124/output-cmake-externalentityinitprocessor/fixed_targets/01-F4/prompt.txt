@@ -1,0 +1,77 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "expat.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
+{
+  char* xml_data = (char*)malloc(size + 1);
+  memcpy(xml_data, data, size);
+  xml_data[size] = '\0';
+
+  XML_Parser parser = XML_ParserCreate(NULL);
+  if (!parser) {
+    free(xml_data);
+    return 0;
+  }
+
+  XML_SetElementHandler(parser, NULL, NULL);
+  XML_SetCharacterDataHandler(parser, NULL);
+  XML_SetExternalEntityRefHandler(parser, externalEntityInitProcessor);
+  XML_SetExternalEntityRefHandlerArg(parser, NULL);
+  XML_SetNamespaceDeclHandler(parser, NULL, NULL);
+  XML_SetUnparsedEntityDeclHandler(parser, NULL, NULL);
+  XML_SetNotationDeclHandler(parser, NULL, NULL);
+  XML_SetAttlistDeclHandler(parser, NULL);
+  XML_SetStartDoctypeDeclHandler(parser, NULL);
+  XML_SetEndDoctypeDeclHandler(parser, NULL);
+  XML_SetProcessingInstructionHandler(parser, NULL);
+  XML_SetCommentHandler(parser, NULL);
+  XML_SetStartCdataSectionHandler(parser, NULL);
+  XML_SetEndCdataSectionHandler(parser, NULL);
+  XML_SetDefaultHandler(parser, NULL);
+  XML_SetDefaultHandlerExpand(parser, NULL);
+  XML_SetNotStandaloneHandler(parser, NULL);
+  XML_SetUnknownEncodingHandler(parser, NULL, NULL);
+  XML_SetElementDeclHandler(parser, NULL, NULL);
+  XML_SetAttlistDeclHandlerArg(parser, NULL);
+  XML_SetEntityDeclHandler(parser, NULL, NULL);
+  XML_SetXmlDeclHandler(parser, NULL, NULL);
+  XML_SetXmlNsHandler(parser, NULL, NULL);
+  XML_SetParamEntityParsing(parser, XML_PARAM_ENTITY_PARSING_NEVER);
+  XML_UseParserAsHandlerArg(parser);
+
+  int ret = XML_Parse(parser, xml_data, size, 1);
+  if (!ret) {
+    fprintf(stderr, "XML parsing error: %s\n", XML_ErrorString(XML_GetErrorCode(parser)));
+  }
+
+  XML_ParserFree(parser);
+  free(xml_data);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+xml_parser_fuzzer.cc:5:10: fatal error: 'expat.h' file not found
+#include "expat.h"
+         ^~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

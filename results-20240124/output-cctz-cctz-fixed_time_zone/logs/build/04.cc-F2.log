@@ -1,0 +1,79 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ mkdir build
++ cd build
++ cmake -DBUILD_TESTING=OFF -DBUILD_BENCHMARK=OFF ../
+-- The C compiler identification is Clang 15.0.0
+-- The CXX compiler identification is Clang 15.0.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/local/bin/clang-jcc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/local/bin/clang++-jcc - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /src/cctz/build
++ make
+[  3%] Building CXX object CMakeFiles/cctz.dir/src/civil_time_detail.cc.o
+[  7%] Building CXX object CMakeFiles/cctz.dir/src/time_zone_fixed.cc.o
+[ 11%] Building CXX object CMakeFiles/cctz.dir/src/time_zone_format.cc.o
+[ 14%] Building CXX object CMakeFiles/cctz.dir/src/time_zone_if.cc.o
+[ 18%] Building CXX object CMakeFiles/cctz.dir/src/time_zone_impl.cc.o
+[ 22%] Building CXX object CMakeFiles/cctz.dir/src/time_zone_info.cc.o
+[ 25%] Building CXX object CMakeFiles/cctz.dir/src/time_zone_libc.cc.o
+[ 29%] Building CXX object CMakeFiles/cctz.dir/src/time_zone_lookup.cc.o
+[ 33%] Building CXX object CMakeFiles/cctz.dir/src/time_zone_posix.cc.o
+[ 37%] Building CXX object CMakeFiles/cctz.dir/src/zone_info_source.cc.o
+[ 40%] Linking CXX static library libcctz.a
+[ 40%] Built target cctz
+[ 44%] Building CXX object CMakeFiles/time_tool.dir/src/time_tool.cc.o
+[ 48%] Linking CXX executable time_tool
+[ 48%] Built target time_tool
+[ 51%] Building CXX object examples/CMakeFiles/classic.dir/classic.cc.o
+[ 55%] Linking CXX executable classic
+[ 55%] Built target classic
+[ 59%] Building CXX object examples/CMakeFiles/hello.dir/hello.cc.o
+[ 62%] Linking CXX executable hello
+[ 62%] Built target hello
+[ 66%] Building CXX object examples/CMakeFiles/epoch_shift.dir/epoch_shift.cc.o
+[ 70%] Linking CXX executable epoch_shift
+[ 70%] Built target epoch_shift
+[ 74%] Building CXX object examples/CMakeFiles/example1.dir/example1.cc.o
+[ 77%] Linking CXX executable example1
+[ 77%] Built target example1
+[ 81%] Building CXX object examples/CMakeFiles/example2.dir/example2.cc.o
+[ 85%] Linking CXX executable example2
+[ 85%] Built target example2
+[ 88%] Building CXX object examples/CMakeFiles/example3.dir/example3.cc.o
+[ 92%] Linking CXX executable example3
+[ 92%] Built target example3
+[ 96%] Building CXX object examples/CMakeFiles/example4.dir/example4.cc.o
+[100%] Linking CXX executable example4
+[100%] Built target example4
++ cp /src/fuzz_cctz.cc .
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -fsanitize=fuzzer ./fuzz_cctz.cc ./libcctz.a -I../include/ -o /workspace/out/libfuzzer-address-x86_64/fuzz_cctz
+./fuzz_cctz.cc:11:26: error: no viable conversion from 'cctz::time_zone' to 'cctz::time_zone::Impl *'
+        cctz::time_zone::Impl * tz = cctz::fixed_time_zone(
+                                ^    ~~~~~~~~~~~~~~~~~~~~~~
+./fuzz_cctz.cc:16:23: error: no matching function for call to 'convert'
+        cctz::format(format, cctz::convert(cctz::civil_second(
+                             ^~~~~~~~~~~~~
+../include/cctz/time_zone.h:255:28: note: candidate function not viable: cannot convert argument of incomplete type 'cctz::time_zone::Impl' to 'const cctz::time_zone' for 2nd argument
+inline time_point<seconds> convert(const civil_second& cs,
+                           ^
+../include/cctz/time_zone.h:246:21: note: candidate template ignored: could not match 'time_point' against 'civil_time'
+inline civil_second convert(const time_point<D>& tp, const time_zone& tz) {
+                    ^
+2 errors generated.

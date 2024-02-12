@@ -1,0 +1,195 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+#include <string>
+
+#include "llvm/MC/MCInst.h"
+#include "llvm/MC/MCParser/MCAsmParser.h"
+#include "llvm/MC/MCParser/MCParsedAsmOperand.h"
+#include "llvm/MC/MCParser/MCTargetAsmParser.h"
+#include "llvm/MC/MCRegisterInfo.h"
+#include "llvm/MC/MCStreamer.h"
+#include "llvm/MC/MCSubtargetInfo.h"
+#include "llvm/MC/MCInstrInfo.h"
+#include "llvm/MC/MCContext.h"
+#include "llvm/MC/MCObjectStreamer.h"
+#include "llvm/MC/MCSymbol.h"
+#include "llvm/MC/MCExpr.h"
+#include "llvm/MC/MCInstPrinter.h"
+#include "llvm/MC/MCInstPrinter.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  std::string mnemonic = stream.ConsumeRemainingBytesAsString();
+  const char* mnemonic_c = mnemonic.c_str();
+
+  llvm::MCContext context;
+  llvm::MCObjectStreamer str(context);
+  llvm::MCInstPrinter printer(nullptr, str);
+  llvm::MCSubtargetInfo STI;
+  llvm::MCRegisterInfo RI(STI);
+  llvm::MCAsmParser parser(STI, RI);
+  llvm::MCInst inst;
+
+  if (parser.parseOneInstruction(mnemonic_c, inst)) {
+    return 0;
+  }
+
+  Alpha_LLVM_printInstruction(&inst, &str.getCommentOS(), nullptr);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:16:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:29:19: error: no matching constructor for initialization of 'llvm::MCContext'
+  llvm::MCContext context;
+                  ^
+/usr/local/include/llvm/MC/MCContext.h:407:3: note: candidate constructor not viable: requires 1 argument, but 0 were provided
+  MCContext(const MCContext &) = delete;
+  ^
+/usr/local/include/llvm/MC/MCContext.h:401:12: note: candidate constructor not viable: requires at least 4 arguments, but 0 were provided
+  explicit MCContext(const Triple &TheTriple, const MCAsmInfo *MAI,
+           ^
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:30:26: error: variable type 'llvm::MCObjectStreamer' is an abstract class
+  llvm::MCObjectStreamer str(context);
+                         ^
+/usr/local/include/llvm/MC/MCStreamer.h:543:16: note: unimplemented pure virtual method 'emitSymbolAttribute' in 'MCObjectStreamer'
+  virtual bool emitSymbolAttribute(MCSymbol *Symbol,
+               ^
+/usr/local/include/llvm/MC/MCStreamer.h:652:16: note: unimplemented pure virtual method 'emitCommonSymbol' in 'MCObjectStreamer'
+  virtual void emitCommonSymbol(MCSymbol *Symbol, uint64_t Size,
+               ^
+/usr/local/include/llvm/MC/MCStreamer.h:670:16: note: unimplemented pure virtual method 'emitZerofill' in 'MCObjectStreamer'
+  virtual void emitZerofill(MCSection *Section, MCSymbol *Symbol = nullptr,
+               ^
+/usr/local/include/llvm/MC/MCObjectStreamer.h:69:16: note: unimplemented pure virtual method 'emitInstToData' in 'MCObjectStreamer'
+  virtual void emitInstToData(const MCInst &Inst, const MCSubtargetInfo&) = 0;
+               ^
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:31:23: error: variable type 'llvm::MCInstPrinter' is an abstract class
+  llvm::MCInstPrinter printer(nullptr, str);
+                      ^
+/usr/local/include/llvm/MC/MCInstPrinter.h:96:45: note: unimplemented pure virtual method 'getMnemonic' in 'MCInstPrinter'
+  virtual std::pair<const char *, uint64_t> getMnemonic(const MCInst *MI) = 0;
+                                            ^
+/usr/local/include/llvm/MC/MCInstPrinter.h:105:16: note: unimplemented pure virtual method 'printInst' in 'MCInstPrinter'
+  virtual void printInst(const MCInst *MI, uint64_t Address, StringRef Annot,
+               ^
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:32:25: error: call to deleted constructor of 'llvm::MCSubtargetInfo'
+  llvm::MCSubtargetInfo STI;
+                        ^
+/usr/local/include/llvm/MC/MCSubtargetInfo.h:103:3: note: 'MCSubtargetInfo' has been explicitly marked deleted here
+  MCSubtargetInfo() = delete;
+  ^
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:33:24: error: no matching constructor for initialization of 'llvm::MCRegisterInfo'
+  llvm::MCRegisterInfo RI(STI);
+                       ^  ~~~
+/usr/local/include/llvm/MC/MCRegisterInfo.h:135:7: note: candidate constructor (the implicit copy constructor) not viable: no known conversion from 'llvm::MCSubtargetInfo' to 'const llvm::MCRegisterInfo' for 1st argument
+class MCRegisterInfo {
+      ^
+/usr/local/include/llvm/MC/MCRegisterInfo.h:135:7: note: candidate constructor (the implicit move constructor) not viable: no known conversion from 'llvm::MCSubtargetInfo' to 'llvm::MCRegisterInfo' for 1st argument
+/usr/local/include/llvm/MC/MCRegisterInfo.h:135:7: note: candidate constructor (the implicit default constructor) not viable: requires 0 arguments, but 1 was provided
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:34:21: error: variable type 'llvm::MCAsmParser' is an abstract class
+  llvm::MCAsmParser parser(STI, RI);
+                    ^
+/usr/local/include/llvm/MC/MCParser/MCAsmParser.h:154:16: note: unimplemented pure virtual method 'addDirectiveHandler' in 'MCAsmParser'
+  virtual void addDirectiveHandler(StringRef Directive,
+               ^
+/usr/local/include/llvm/MC/MCParser/MCAsmParser.h:157:16: note: unimplemented pure virtual method 'addAliasForDirective' in 'MCAsmParser'
+  virtual void addAliasForDirective(StringRef Directive, StringRef Alias) = 0;
+               ^
+/usr/local/include/llvm/MC/MCParser/MCAsmParser.h:159:22: note: unimplemented pure virtual method 'getSourceManager' in 'MCAsmParser'
+  virtual SourceMgr &getSourceManager() = 0;
+                     ^
+/usr/local/include/llvm/MC/MCParser/MCAsmParser.h:161:23: note: unimplemented pure virtual method 'getLexer' in 'MCAsmParser'
+  virtual MCAsmLexer &getLexer() = 0;
+                      ^
+/usr/local/include/llvm/MC/MCParser/MCAsmParser.h:166:22: note: unimplemented pure virtual method 'getContext' in 'MCAsmParser'
+  virtual MCContext &getContext() = 0;
+                     ^
+/usr/local/include/llvm/MC/MCParser/MCAsmParser.h:169:23: note: unimplemented pure virtual method 'getStreamer' in 'MCAsmParser'
+  virtual MCStreamer &getStreamer() = 0;
+                      ^
+/usr/local/include/llvm/MC/MCParser/MCAsmParser.h:181:16: note: unimplemented pure virtual method 'Run' in 'MCAsmParser'
+  virtual bool Run(bool NoInitialTextSection, bool NoFinalize = false) = 0;
+               ^
+/usr/local/include/llvm/MC/MCParser/MCAsmParser.h:183:16: note: unimplemented pure virtual method 'setParsingMSInlineAsm' in 'MCAsmParser'
+  virtual void setParsingMSInlineAsm(bool V) = 0;
+               ^
+/usr/local/include/llvm/MC/MCParser/MCAsmParser.h:184:16: note: unimplemented pure virtual method 'isParsingMSInlineAsm' in 'MCAsmParser'
+  virtual bool isParsingMSInlineAsm() = 0;
+               ^
+/usr/local/include/llvm/MC/MCParser/MCAsmParser.h:205:16: note: unimplemented pure virtual method 'parseMSInlineAsm' in 'MCAsmParser'
+  virtual bool parseMSInlineAsm(
+               ^
+/usr/local/include/llvm/MC/MCParser/MCAsmParser.h:213:16: note: unimplemented pure virtual method 'Note' in 'MCAsmParser'
+  virtual void Note(SMLoc L, const Twine &Msg, SMRange Range = None) = 0;
+               ^
+/usr/local/include/llvm/MC/MCParser/MCAsmParser.h:218:16: note: unimplemented pure virtual method 'Warning' in 'MCAsmParser'
+  virtual bool Warning(SMLoc L, const Twine &Msg, SMRange Range = None) = 0;
+               ^
+/usr/local/include/llvm/MC/MCParser/MCAsmParser.h:231:16: note: unimplemented pure virtual method 'printError' in 'MCAsmParser'
+  virtual bool printError(SMLoc L, const Twine &Msg, SMRange Range = None) = 0;
+               ^
+/usr/local/include/llvm/MC/MCParser/MCAsmParser.h:250:27: note: unimplemented pure virtual method 'Lex' in 'MCAsmParser'
+  virtual const AsmToken &Lex() = 0;
+                          ^
+/usr/local/include/llvm/MC/MCParser/MCAsmParser.h:278:16: note: unimplemented pure virtual method 'parseIdentifier' in 'MCAsmParser'
+  virtual bool parseIdentifier(StringRef &Res) = 0;
+               ^
+/usr/local/include/llvm/MC/MCParser/MCAsmParser.h:283:21: note: unimplemented pure virtual method 'parseStringToEndOfStatement' in 'MCAsmParser'
+  virtual StringRef parseStringToEndOfStatement() = 0;
+                    ^
+/usr/local/include/llvm/MC/MCParser/MCAsmParser.h:287:16: note: unimplemented pure virtual method 'parseEscapedString' in 'MCAsmParser'
+  virtual bool parseEscapedString(std::string &Data) = 0;
+               ^
+/usr/local/include/llvm/MC/MCParser/MCAsmParser.h:291:16: note: unimplemented pure virtual method 'parseAngleBracketString' in 'MCAsmParser'
+  virtual bool parseAngleBracketString(std::string &Data) = 0;
+               ^
+/usr/local/include/llvm/MC/MCParser/MCAsmParser.h:294:16: note: unimplemented pure virtual method 'eatToEndOfStatement' in 'MCAsmParser'
+  virtual void eatToEndOfStatement() = 0;
+               ^
+/usr/local/include/llvm/MC/MCParser/MCAsmParser.h:301:16: note: unimplemented pure virtual method 'parseExpression' in 'MCAsmParser'
+  virtual bool parseExpression(const MCExpr *&Res, SMLoc &EndLoc) = 0;
+               ^
+/usr/local/include/llvm/MC/MCParser/MCAsmParser.h:309:16: note: unimplemented pure virtual method 'parsePrimaryExpr' in 'MCAsmParser'
+  virtual bool parsePrimaryExpr(const MCExpr *&Res, SMLoc &EndLoc,
+               ^
+/usr/local/include/llvm/MC/MCParser/MCAsmParser.h:318:16: note: unimplemented pure virtual method 'parseParenExpression' in 'MCAsmParser'
+  virtual bool parseParenExpression(const MCExpr *&Res, SMLoc &EndLoc) = 0;
+               ^
+/usr/local/include/llvm/MC/MCParser/MCAsmParser.h:325:16: note: unimplemented pure virtual method 'parseAbsoluteExpression' in 'MCAsmParser'
+  virtual bool parseAbsoluteExpression(int64_t &Res) = 0;
+               ^
+/usr/local/include/llvm/MC/MCParser/MCAsmParser.h:330:16: note: unimplemented pure virtual method 'checkForValidSection' in 'MCAsmParser'
+  virtual bool checkForValidSection() = 0;
+               ^
+/usr/local/include/llvm/MC/MCParser/MCAsmParser.h:340:16: note: unimplemented pure virtual method 'parseParenExprOfDepth' in 'MCAsmParser'
+  virtual bool parseParenExprOfDepth(unsigned ParenDepth, const MCExpr *&Res,
+               ^
+6 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

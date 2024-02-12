@@ -1,0 +1,47 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ /src/astc-encoder/Source/Fuzzers/build.sh
+astcenc_averages_and_directions
+astcenc_block_sizes
+astcenc_color_quantize
+astcenc_color_unquantize
+astcenc_compress_symbolic
+astcenc_compute_variance
+astcenc_decompress_symbolic
+astcenc_diagnostic_trace
+astcenc_entry
+astcenc_find_best_partitioning
+astcenc_ideal_endpoints_and_weights
+astcenc_image
+astcenc_integer_sequence
+astcenc_mathlib
+astcenc_mathlib_softfloat
+astcenc_partition_tables
+astcenc_percentile_tables
+astcenc_pick_best_endpoint_format
+astcenc_quantization
+astcenc_symbolic_physical
+astcenc_weight_align
+astcenc_weight_quant_xfer_tables
+astcenccli_entry
+astcenccli_error_metrics
+astcenccli_image
+astcenccli_image_external
+astcenccli_image_load_store
+astcenccli_platform_dependents
+astcenccli_toplevel
+astcenccli_toplevel_help
+./Fuzzers/fuzz_astc_physical_to_symbolic.cpp:12:10: error: no member named 'ReadData' in 'FuzzedDataProvider'
+  stream.ReadData(input_data, character_count);
+  ~~~~~~ ^
+./Fuzzers/fuzz_astc_physical_to_symbolic.cpp:15:3: error: use of undeclared identifier 'encode_ise'
+  encode_ise(quant_level, character_count, input_data, output_data, bit_offset);
+  ^
+2 errors generated.

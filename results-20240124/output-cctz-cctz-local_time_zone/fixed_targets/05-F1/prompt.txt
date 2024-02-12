@@ -1,0 +1,47 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <fuzzer/FuzzedDataProvider.h>
+
+#include <iostream>
+#include <string>
+
+#include "cctz/time_zone.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider fuzzed_data(data, size);
+  cctz::time_zone::Impl * tz = cctz::local_time_zone();
+  if (tz == nullptr) {
+    return 0;
+  }
+
+  std::string format = fuzzed_data.ConsumeRandomLengthString();
+  cctz::format(format, std::chrono::system_clock::now(), *tz);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+./fuzz_cctz.cc:10:27: error: no viable conversion from 'cctz::time_zone' to 'cctz::time_zone::Impl *'
+  cctz::time_zone::Impl * tz = cctz::local_time_zone();
+                          ^    ~~~~~~~~~~~~~~~~~~~~~~~
+./fuzz_cctz.cc:16:3: error: no matching function for call to 'format'
+  cctz::format(format, std::chrono::system_clock::now(), *tz);
+  ^~~~~~~~~~~~
+../include/cctz/time_zone.h:314:20: note: candidate function template not viable: cannot convert argument of incomplete type 'cctz::time_zone::Impl' to 'const cctz::time_zone' for 3rd argument
+inline std::string format(const std::string& fmt, const time_point<D>& tp,
+                   ^
+2 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

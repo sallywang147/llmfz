@@ -1,0 +1,85 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstdlib>
+#include <igraph.h>
+
+extern "C" {
+  #include <igraph_arpack.h>
+  #include <igraph_sparsemat.h>
+}
+
+inline void check_err(igraph_error_t err) {
+  if (err != IGRAPH_SUCCESS)
+    abort();
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  igraph_sparsemat_t A;
+  igraph_arpack_options_t options;
+  igraph_arpack_storage_t storage;
+  igraph_matrix_t values;
+  igraph_matrix_t vectors;
+
+  igraph_set_error_handler(igraph_error_handler_ignore);
+  igraph_set_warning_handler(igraph_warning_handler_ignore);
+
+  if (Size % 2 == 1 || Size > 512) {
+    return 0;
+  }
+
+  check_err(igraph_sparsemat_init(&A, Size, Size, IGRAPH_SPARSEMAT_CSR));
+  for (size_t i = 0; i < Size; ++i) {
+    A.rowptr[i] = Data[i];
+  }
+
+  check_err(igraph_arpack_options_init(&options, IGRAPH_ARPACK_OPTIONS_DEFAULT));
+  check_err(igraph_arpack_storage_init(&storage, Size, Size, 0, 0));
+  check_err(igraph_matrix_init(&values, 0, 0));
+  check_err(igraph_matrix_init(&vectors, 0, 0));
+
+  igraph_sparsemat_arpack_rnsolve(&A, &options, &storage, &values, &vectors);
+
+  igraph_sparsemat_destroy(&A);
+  igraph_arpack_options_destroy(&options); // Fix: add the destroy function
+  igraph_arpack_storage_destroy(&storage);
+  igraph_matrix_destroy(&values);
+  igraph_matrix_destroy(&vectors);
+
+  IGRAPH_ASSERT(IGRAPH_FINALLY_STACK_EMPTY);
+
+  return 0; // Non-zero return values are reserved for future use.
+}
+</code>
+
+The code has the following build issues:
+<error>
+./fuzzing/bliss.cpp:28:51: error: use of undeclared identifier 'IGRAPH_SPARSEMAT_CSR'; did you mean 'IGRAPH_SPARSEMAT_CC'?
+  check_err(igraph_sparsemat_init(&A, Size, Size, IGRAPH_SPARSEMAT_CSR));
+                                                  ^~~~~~~~~~~~~~~~~~~~
+                                                  IGRAPH_SPARSEMAT_CC
+/src/igraph/include/igraph_sparsemat.h:60:16: note: 'IGRAPH_SPARSEMAT_CC' declared here
+               IGRAPH_SPARSEMAT_CC
+               ^
+./fuzzing/bliss.cpp:30:7: error: no member named 'rowptr' in 'igraph_sparsemat_t'
+    A.rowptr[i] = Data[i];
+    ~ ^
+./fuzzing/bliss.cpp:33:50: error: use of undeclared identifier 'IGRAPH_ARPACK_OPTIONS_DEFAULT'
+  check_err(igraph_arpack_options_init(&options, IGRAPH_ARPACK_OPTIONS_DEFAULT));
+                                                 ^
+./fuzzing/bliss.cpp:41:3: error: use of undeclared identifier 'igraph_arpack_options_destroy'
+  igraph_arpack_options_destroy(&options); // Fix: add the destroy function
+  ^
+4 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

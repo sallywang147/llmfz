@@ -1,0 +1,162 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+/*
+   IGraph library.
+   Copyright (C) 2021-2022  The igraph development team
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+   02110-1301 USA
+*/
+
+#include <cstdlib>
+#include <igraph.h>
+
+extern "C" {
+#include <igraph_arpack.h>
+}
+
+inline void check_err(igraph_error_t err) {
+  if (err != IGRAPH_SUCCESS)
+    abort();
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  igraph_t graph;
+  igraph_vector_int_t edges;
+
+  igraph_set_error_handler(igraph_error_handler_ignore);
+  igraph_set_warning_handler(igraph_warning_handler_ignore);
+
+  if (Size % 2 == 1 || Size > 512) {
+    return 0;
+  }
+
+  check_err(igraph_vector_int_init(&edges, Size));
+  for (size_t i = 0; i < Size; ++i) {
+    VECTOR(edges)[i] = Data[i];
+  }
+
+  /* Undirected */
+  if (igraph_create(&graph, &edges, 0, IGRAPH_UNDIRECTED) == IGRAPH_SUCCESS) {
+    igraph_bool_t multi;
+
+    check_err(igraph_has_multiple(&graph, &multi));
+
+    /* ARPACK does not support multigraphs and the input is currently not checked */
+    if (!multi) {
+      igraph_arpack_options_t options;
+      igraph_arpack_storage_t storage;
+      igraph_matrix_t values;
+      igraph_matrix_t vectors;
+
+      check_err(igraph_arpack_options_init(&options));
+      check_err(igraph_arpack_storage_init(&storage, 0, 0));
+      check_err(igraph_matrix_init(&values, 0, 0));
+      check_err(igraph_matrix_init(&vectors, 0, 0));
+
+      check_err(igraph_arpack_rnsolve(nullptr, nullptr, &options, &storage, &values, &vectors));
+
+      igraph_matrix_destroy(&vectors);
+      igraph_matrix_destroy(&values);
+      igraph_arpack_storage_destroy(&storage);
+      igraph_arpack_options_destroy(&options);
+    }
+
+    igraph_destroy(&graph);
+  }
+
+  /* Directed */
+  if (igraph_create(&graph, &edges, 0, IGRAPH_DIRECTED) == IGRAPH_SUCCESS) {
+    igraph_bool_t multi;
+
+    check_err(igraph_has_multiple(&graph, &multi));
+
+    /* ARPACK does not support multigraphs and the input is currently not checked */
+    if (!multi) {
+      igraph_arpack_options_t options;
+      igraph_arpack_storage_t storage;
+      igraph_matrix_t values;
+      igraph_matrix_t vectors;
+
+      check_err(igraph_arpack_options_init(&options));
+      check_err(igraph_arpack_storage_init(&storage, 0, 0));
+      check_err(igraph_matrix_init(&values, 0, 0));
+      check_err(igraph_matrix_init(&vectors, 0, 0));
+
+      check_err(igraph_arpack_rnsolve(nullptr, nullptr, &options, &storage, &values, &vectors));
+
+      igraph_matrix_destroy(&vectors);
+      igraph_matrix_destroy(&values);
+      igraph_arpack_storage_destroy(&storage);
+      igraph_arpack_options_destroy(&options);
+    }
+
+    igraph_destroy(&graph);
+  }
+
+  igraph_vector_int_destroy(&edges);
+
+  IGRAPH_ASSERT(IGRAPH_FINALLY_STACK_EMPTY);
+
+  return 0; // Non-zero return values are reserved for future use.
+}
+</code>
+
+The code has the following build issues:
+<error>
+./fuzzing/bliss.cpp:62:7: error: no matching function for call to 'check_err'
+      check_err(igraph_arpack_options_init(&options));
+      ^~~~~~~~~
+./fuzzing/bliss.cpp:28:13: note: candidate function not viable: cannot convert argument of incomplete type 'void' to 'igraph_error_t' (aka 'igraph_error_type_t') for 1st argument
+inline void check_err(igraph_error_t err) {
+            ^
+./fuzzing/bliss.cpp:63:17: error: no matching function for call to 'igraph_arpack_storage_init'
+      check_err(igraph_arpack_storage_init(&storage, 0, 0));
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/igraph/include/igraph_arpack.h:298:30: note: candidate function not viable: requires 5 arguments, but 3 were provided
+IGRAPH_EXPORT igraph_error_t igraph_arpack_storage_init(igraph_arpack_storage_t *s, igraph_integer_t maxn,
+                             ^
+./fuzzing/bliss.cpp:72:7: error: use of undeclared identifier 'igraph_arpack_options_destroy'
+      igraph_arpack_options_destroy(&options);
+      ^
+./fuzzing/bliss.cpp:91:7: error: no matching function for call to 'check_err'
+      check_err(igraph_arpack_options_init(&options));
+      ^~~~~~~~~
+./fuzzing/bliss.cpp:28:13: note: candidate function not viable: cannot convert argument of incomplete type 'void' to 'igraph_error_t' (aka 'igraph_error_type_t') for 1st argument
+inline void check_err(igraph_error_t err) {
+            ^
+./fuzzing/bliss.cpp:92:17: error: no matching function for call to 'igraph_arpack_storage_init'
+      check_err(igraph_arpack_storage_init(&storage, 0, 0));
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/igraph/include/igraph_arpack.h:298:30: note: candidate function not viable: requires 5 arguments, but 3 were provided
+IGRAPH_EXPORT igraph_error_t igraph_arpack_storage_init(igraph_arpack_storage_t *s, igraph_integer_t maxn,
+                             ^
+./fuzzing/bliss.cpp:101:7: error: use of undeclared identifier 'igraph_arpack_options_destroy'
+      igraph_arpack_options_destroy(&options);
+      ^
+6 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

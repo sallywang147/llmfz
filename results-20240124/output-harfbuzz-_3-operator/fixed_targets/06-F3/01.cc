@@ -1,0 +1,1 @@
+error: undefined reference to 'hb_shape_justify::$_3::operator()(anon*, double) const'

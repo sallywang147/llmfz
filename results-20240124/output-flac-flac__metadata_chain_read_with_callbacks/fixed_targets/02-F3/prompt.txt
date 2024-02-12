@@ -1,0 +1,36 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+...
+#include "FLAC/metadata.h"
+#include "FLAC/stream_decoder.h"
+...
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+...
+	FLAC__IOCallbacks io_callbacks;
+	io_callbacks.read = read_callback;
+	io_callbacks.seek = seek_callback;
+	io_callbacks.tell = tell_callback;
+	io_callbacks.write = write_callback;
+	io_callbacks.close = close_callback;
+	FLAC__Metadata_Chain * chain = FLAC__metadata_chain_new();
+	FLAC__metadata_chain_read_with_callbacks(chain, filename, &io_callbacks);
+...
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,88 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "gpsd_config.h"  /* must be before all includes */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+#include "gpsd.h"
+
+#define kMinInputLength 10
+#define kMaxInputLength 9216
+
+extern "C" {
+#include "gps.h"  // for DEVICE_TYPE_SERIAL
+}
+
+extern int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+    if (Size < kMinInputLength || Size > kMaxInputLength) {
+        return 0;
+    }
+
+    {
+        struct gps_device_t device;
+        int nullfd = open("/dev/null", O_RDONLY);
+        ssize_t st;
+
+        device_init(&device);
+        device.gpsdata.dev.path = strdup("/dev/null");
+        device.gpsdata.dev.baudrate = 9600;
+        device.gpsdata.dev.settings = new struct devconfig_t;  // fix: add `new`
+        device.gpsdata.dev.settings->device_type = DEVICE_TYPE_SERIAL;  // fix: `->`
+
+        do {
+            st = gpsd_multipoll(false, &device, NULL, 0.1);
+        } while (st > 0);
+
+        close(nullfd);
+        free(device.gpsdata.dev.path);
+        delete device.gpsdata.dev.settings;  // fix: add `delete`
+    }
+
+    return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+FuzzJson.c:13:8: error: expected identifier or '('
+extern "C" {
+       ^
+FuzzJson.c:28:33: error: array type 'char[128]' is not assignable
+        device.gpsdata.dev.path = strdup("/dev/null");
+        ~~~~~~~~~~~~~~~~~~~~~~~ ^
+FuzzJson.c:30:28: error: no member named 'settings' in 'struct devconfig_t'
+        device.gpsdata.dev.settings = new struct devconfig_t;  // fix: add `new`
+        ~~~~~~~~~~~~~~~~~~ ^
+FuzzJson.c:30:42: error: expected ';' after expression
+        device.gpsdata.dev.settings = new struct devconfig_t;  // fix: add `new`
+                                         ^
+                                         ;
+FuzzJson.c:30:39: error: use of undeclared identifier 'new'
+        device.gpsdata.dev.settings = new struct devconfig_t;  // fix: add `new`
+                                      ^
+FuzzJson.c:31:28: error: no member named 'settings' in 'struct devconfig_t'
+        device.gpsdata.dev.settings->device_type = DEVICE_TYPE_SERIAL;  // fix: `->`
+        ~~~~~~~~~~~~~~~~~~ ^
+FuzzJson.c:31:52: error: use of undeclared identifier 'DEVICE_TYPE_SERIAL'
+        device.gpsdata.dev.settings->device_type = DEVICE_TYPE_SERIAL;  // fix: `->`
+                                                   ^
+FuzzJson.c:39:9: error: use of undeclared identifier 'delete'
+        delete device.gpsdata.dev.settings;  // fix: add `delete`
+        ^
+8 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

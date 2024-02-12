@@ -1,0 +1,101 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "gpsd_config.h"  /* must be before all includes */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+#include "gpsd.h"
+
+#define kMinInputLength 10
+#define kMaxInputLength 9216
+
+extern "C" {
+#include "gps.h"
+}
+
+extern int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+    // gpsd/tests//test_packet.c
+
+    if (Size < kMinInputLength || Size > kMaxInputLength) {
+        return 0;
+    }
+
+    {
+        struct gps_data_t device;
+
+        gps_open(NULL, NULL, &device);
+        device.errout.debug = 0;
+
+        memcpy(device.inbufptr = device.inbuffer, Data, Size);
+        device.inbuflen = Size;
+
+        parse_input(&device);
+    }
+    {
+        struct gps_data_t device;
+        int nullfd = open("/dev/null", O_RDONLY);
+        ssize_t st;
+
+        gps_open(NULL, NULL, &device);
+        device.errout.debug = 0;
+
+        memcpy(device.inbufptr = device.inbuffer, Data, Size);
+        device.inbuflen = Size;
+
+        do {
+            st = packet_get(nullfd, &device);
+        } while (st > 0);
+
+        close(nullfd);
+    }
+
+    return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+FuzzJson.c:13:8: error: expected identifier or '('
+extern "C" {
+       ^
+FuzzJson.c:28:16: error: no member named 'errout' in 'struct gps_data_t'
+        device.errout.debug = 0;
+        ~~~~~~ ^
+FuzzJson.c:30:23: error: no member named 'inbufptr' in 'struct gps_data_t'
+        memcpy(device.inbufptr = device.inbuffer, Data, Size);
+               ~~~~~~ ^
+FuzzJson.c:30:41: error: no member named 'inbuffer' in 'struct gps_data_t'
+        memcpy(device.inbufptr = device.inbuffer, Data, Size);
+                                 ~~~~~~ ^
+FuzzJson.c:31:16: error: no member named 'inbuflen' in 'struct gps_data_t'
+        device.inbuflen = Size;
+        ~~~~~~ ^
+FuzzJson.c:41:16: error: no member named 'errout' in 'struct gps_data_t'
+        device.errout.debug = 0;
+        ~~~~~~ ^
+FuzzJson.c:43:23: error: no member named 'inbufptr' in 'struct gps_data_t'
+        memcpy(device.inbufptr = device.inbuffer, Data, Size);
+               ~~~~~~ ^
+FuzzJson.c:43:41: error: no member named 'inbuffer' in 'struct gps_data_t'
+        memcpy(device.inbufptr = device.inbuffer, Data, Size);
+                                 ~~~~~~ ^
+FuzzJson.c:44:16: error: no member named 'inbuflen' in 'struct gps_data_t'
+        device.inbuflen = Size;
+        ~~~~~~ ^
+9 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

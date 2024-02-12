@@ -1,0 +1,94 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <cstdint>
+#include <cstdio>
+#include <cstring>
+#include <string>
+
+#include "fuzzer-common.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  if (size <= 1) return 0;
+  const auto args = data[0];
+  data += 1;
+  size -= 1;
+
+  const auto format_str = fmt::string_view(as_chars(data), size);
+
+  fmt::detail::value v[args];
+  for (size_t i = 0; i < args; ++i) {
+    v[i].int_value = i;
+  }
+
+  fmt::v10::vprint(stdout, const_cast<char*>(format_str.data()), args, 0, v);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/fmt/include/fmt/base.h:1287:39: error: no type named 'char_type' in 'std::string'
+  using char_type = typename Context::char_type;
+                    ~~~~~~~~~~~~~~~~~~^~~~~~~~~
+/src/fmt/test/fuzzing/chrono-timepoint.cc:21:22: note: in instantiation of template class 'fmt::detail::value<std::string>' requested here
+    values.push_back(fmt::detail::value<std::string>(std::string(reinterpret_cast<const char*>(data))));
+                     ^
+In file included from /src/fmt/test/fuzzing/chrono-timepoint.cc:1:
+In file included from /src/fmt/include/fmt/core.h:5:
+In file included from /src/fmt/include/fmt/format.h:54:
+/src/fmt/include/fmt/base.h:1279:43: error: no type named 'parse_context_type' in 'std::string'
+  using parse_context = typename Context::parse_context_type;
+                        ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+/src/fmt/include/fmt/base.h:1304:27: note: in instantiation of template class 'fmt::detail::custom_value<std::string>' requested here
+    custom_value<Context> custom;
+                          ^
+/src/fmt/include/fmt/base.h:1289:3: note: in instantiation of member class 'fmt::detail::value<std::string>::(anonymous)' requested here
+  union {
+  ^
+/src/fmt/test/fuzzing/chrono-timepoint.cc:21:22: note: in instantiation of template class 'fmt::detail::value<std::string>' requested here
+    values.push_back(fmt::detail::value<std::string>(std::string(reinterpret_cast<const char*>(data))));
+                     ^
+In file included from /src/fmt/test/fuzzing/chrono-timepoint.cc:1:
+In file included from /src/fmt/include/fmt/core.h:5:
+In file included from /src/fmt/include/fmt/format.h:54:
+/src/fmt/include/fmt/base.h:1320:31: error: multiple overloads of 'value' instantiate to the same signature 'void (fmt::detail::value<std::string>::char_type)' (aka 'void (int)')
+  constexpr FMT_ALWAYS_INLINE value(char_type val) : char_value(val) {}
+                              ^
+/src/fmt/test/fuzzing/chrono-timepoint.cc:21:22: note: in instantiation of template class 'fmt::detail::value<std::string>' requested here
+    values.push_back(fmt::detail::value<std::string>(std::string(reinterpret_cast<const char*>(data))));
+                     ^
+/src/fmt/include/fmt/base.h:1309:31: note: previous declaration is here
+  constexpr FMT_ALWAYS_INLINE value(int val) : int_value(val) {}
+                              ^
+/src/fmt/include/fmt/base.h:1356:51: error: no type named 'parse_context_type' in 'std::string'
+                                typename Context::parse_context_type& parse_ctx,
+                                ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+/src/fmt/test/fuzzing/chrono-timepoint.cc:22:27: error: no member named 'size' in 'fmt::detail::value<std::string>'
+    data += values.back().size() + 1;
+            ~~~~~~~~~~~~~ ^
+/src/fmt/test/fuzzing/chrono-timepoint.cc:23:27: error: no member named 'size' in 'fmt::detail::value<std::string>'
+    size -= values.back().size() + 1;
+            ~~~~~~~~~~~~~ ^
+/src/fmt/test/fuzzing/chrono-timepoint.cc:26:3: error: no matching function for call to 'vprint'
+  fmt::v10::vprint(reinterpret_cast<const char*>(data), num_args, values);
+  ^~~~~~~~~~~~~~~~
+/src/fmt/include/fmt/base.h:2965:14: note: candidate function not viable: no known conversion from 'const char *' to 'FILE *' (aka '_IO_FILE *') for 1st argument
+FMT_API void vprint(FILE* f, string_view fmt, format_args args);
+             ^
+/src/fmt/include/fmt/base.h:2964:14: note: candidate function not viable: requires 2 arguments, but 3 were provided
+FMT_API void vprint(string_view fmt, format_args args);
+             ^
+7 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

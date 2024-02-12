@@ -1,0 +1,1 @@
+error: undefined reference to 'cryptofuzz::module::Botan::OpECGDSA_Sign(std::optional<cryptofuzz::module::BearSSL>*, cryptofuzz::operation::ECDSA_Sign*, unsigned char const*, unsigned long)'

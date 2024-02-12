@@ -1,0 +1,167 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstdio>
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
+#include <string>
+#include <vector>
+
+#include "fuzzer-common.h"
+
+extern "C" {
+#include <fmt/core.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  if (size < 2) return 0;
+
+  const size_t count = assign_from_buf<size_t>(data);
+  data += sizeof(size_t);
+  size -= sizeof(size_t);
+
+  if (size < count) return 0;
+
+  // We use a fixed location for the buffer.
+  static_assert(sizeof(char) <= fixed_size, "fixed size is too small");
+  char buffer[fixed_size];
+  memcpy(buffer, data, count);
+  data += count;
+  size -= count;
+
+  // We use a fixed location for the FILE.
+  static_assert(sizeof(FILE) <= fixed_size, "fixed size is too small");
+  FILE* file = reinterpret_cast<FILE*>(buffer);
+  if (file == nullptr) return 0;
+
+  // Call the function `fmt::v10::detail::fwrite_fully` to fix the issue.
+  fmt::v10::detail::fwrite_fully(buffer, count, file);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/fmt/include/fmt/format.h:265:1: error: templates must have C++ linkage
+template <typename Char, typename Traits, typename Allocator>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fmt/test/fuzzing/chrono-timepoint.cc:11:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fmt/test/fuzzing/chrono-timepoint.cc:12:
+In file included from /src/fmt/include/fmt/core.h:5:
+/src/fmt/include/fmt/format.h:279:1: error: templates must have C++ linkage
+template <typename Char> using std_string_view = std::basic_string_view<Char>;
+^~~~~~~~~~~~~~~~~~~~~~~~
+/src/fmt/test/fuzzing/chrono-timepoint.cc:11:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fmt/test/fuzzing/chrono-timepoint.cc:12:
+In file included from /src/fmt/include/fmt/core.h:5:
+/src/fmt/include/fmt/format.h:285:1: error: templates must have C++ linkage
+template <typename To, typename From, FMT_ENABLE_IF(sizeof(To) == sizeof(From))>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fmt/test/fuzzing/chrono-timepoint.cc:11:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fmt/test/fuzzing/chrono-timepoint.cc:12:
+In file included from /src/fmt/include/fmt/core.h:5:
+/src/fmt/include/fmt/format.h:322:3: error: templates must have C++ linkage
+  template <typename T, FMT_ENABLE_IF(std::is_integral<T>::value)>
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fmt/test/fuzzing/chrono-timepoint.cc:11:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fmt/test/fuzzing/chrono-timepoint.cc:12:
+In file included from /src/fmt/include/fmt/core.h:5:
+/src/fmt/include/fmt/format.h:432:1: error: templates must have C++ linkage
+template <typename T> constexpr auto max_value() -> T {
+^~~~~~~~~~~~~~~~~~~~~
+/src/fmt/test/fuzzing/chrono-timepoint.cc:11:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fmt/test/fuzzing/chrono-timepoint.cc:12:
+In file included from /src/fmt/include/fmt/core.h:5:
+/src/fmt/include/fmt/format.h:435:1: error: templates must have C++ linkage
+template <typename T> constexpr auto num_bits() -> int {
+^~~~~~~~~~~~~~~~~~~~~
+/src/fmt/test/fuzzing/chrono-timepoint.cc:11:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fmt/test/fuzzing/chrono-timepoint.cc:12:
+In file included from /src/fmt/include/fmt/core.h:5:
+/src/fmt/include/fmt/format.h:439:1: error: templates must have C++ linkage
+template <> constexpr auto num_bits<int128_opt>() -> int { return 128; }
+^~~~~~~~~~~
+/src/fmt/test/fuzzing/chrono-timepoint.cc:11:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fmt/test/fuzzing/chrono-timepoint.cc:12:
+In file included from /src/fmt/include/fmt/core.h:5:
+/src/fmt/include/fmt/format.h:440:1: error: templates must have C++ linkage
+template <> constexpr auto num_bits<uint128_opt>() -> int { return 128; }
+^~~~~~~~~~~
+/src/fmt/test/fuzzing/chrono-timepoint.cc:11:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fmt/test/fuzzing/chrono-timepoint.cc:12:
+In file included from /src/fmt/include/fmt/core.h:5:
+/src/fmt/include/fmt/format.h:441:1: error: extraneous 'template<>' in declaration of variable 'num_bits'
+template <> constexpr auto num_bits<uint128_fallback>() -> int { return 128; }
+^~~~~~~~~~~
+/src/fmt/include/fmt/format.h:441:28: error: redefinition of 'num_bits' as different kind of symbol
+template <> constexpr auto num_bits<uint128_fallback>() -> int { return 128; }
+                           ^
+/src/fmt/include/fmt/format.h:439:28: note: previous definition is here
+template <> constexpr auto num_bits<int128_opt>() -> int { return 128; }
+                           ^
+/src/fmt/include/fmt/format.h:441:28: error: declaration of variable 'num_bits' with deduced type 'const auto' requires an initializer
+template <> constexpr auto num_bits<uint128_fallback>() -> int { return 128; }
+                           ^
+/src/fmt/include/fmt/format.h:441:36: error: expected ';' at end of declaration
+template <> constexpr auto num_bits<uint128_fallback>() -> int { return 128; }
+                                   ^
+                                   ;
+/src/fmt/include/fmt/format.h:441:36: error: expected unqualified-id
+/src/fmt/include/fmt/format.h:445:1: error: templates must have C++ linkage
+template <typename To, typename From, FMT_ENABLE_IF(sizeof(To) > sizeof(From))>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fmt/test/fuzzing/chrono-timepoint.cc:11:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fmt/test/fuzzing/chrono-timepoint.cc:12:
+In file included from /src/fmt/include/fmt/core.h:5:
+/src/fmt/include/fmt/format.h:454:44: error: expected '(' for function-style cast or type construction
+      result = (result << num_bits<unsigned>()) | data.value[i];
+                                   ~~~~~~~~^
+/src/fmt/include/fmt/format.h:454:46: error: expected expression
+      result = (result << num_bits<unsigned>()) | data.value[i];
+                                             ^
+/src/fmt/include/fmt/format.h:457:44: error: expected '(' for function-style cast or type construction
+      result = (result << num_bits<unsigned>()) | data.value[i];
+                                   ~~~~~~~~^
+/src/fmt/include/fmt/format.h:457:46: error: expected expression
+      result = (result << num_bits<unsigned>()) | data.value[i];
+                                             ^
+/src/fmt/include/fmt/format.h:462:1: error: templates must have C++ linkage
+template <typename UInt>
+^~~~~~~~~~~~~~~~~~~~~~~~
+/src/fmt/test/fuzzing/chrono-timepoint.cc:11:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

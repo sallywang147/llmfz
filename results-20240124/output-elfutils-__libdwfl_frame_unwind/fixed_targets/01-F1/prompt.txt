@@ -1,0 +1,60 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+#include <string>
+
+#include "libdwarf/libdwarf.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const uint8_t slate_width = stream.ConsumeIntegral<uint8_t>();
+  const uint8_t slate_height = stream.ConsumeIntegral<uint8_t>();
+  Dwarf_Debug dbg = dwarf_begin(data, size, DW_DLC_READ);
+  if (dbg == NULL) {
+    return 0;
+  }
+  Dwarf_Frame_Op* ops = (Dwarf_Frame_Op*)malloc(slate_width * slate_height * sizeof(Dwarf_Frame_Op));
+  Dwarf_Frame_Op* op = ops;
+  for (size_t i = 0; i < slate_width * slate_height; ++i) {
+    op->atom = DW_OP_reg0 + stream.ConsumeIntegral<uint8_t>();
+    op->offset = stream.ConsumeIntegral<uint8_t>();
+    op++;
+  }
+  Dwarf_Frame frame = {
+      .cfa = 0,
+      .pc = 0,
+      .fbreg = 0,
+      .cfa_set = false,
+      .pc_set = false,
+      .fbreg_set = false,
+      .ops = ops,
+      .nops = slate_width * slate_height,
+  };
+  __libdwfl_frame_unwind(&frame);
+  free(ops);
+  dwarf_end(dbg);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

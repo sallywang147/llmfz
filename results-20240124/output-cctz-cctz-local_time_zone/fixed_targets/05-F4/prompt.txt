@@ -1,0 +1,153 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <iostream>
+#include <string>
+
+extern "C" {
+#include "cctz/time_zone.h"
+#include "cctz/civil_time_detail.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider fuzzed_data(data, size);
+  cctz::time_zone tz = cctz::local_time_zone();
+  if (tz.impl_ == nullptr) {
+    return 0;
+  }
+
+  std::string format = fuzzed_data.ConsumeRandomLengthString();
+  cctz::format(format, std::chrono::system_clock::now(), tz);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+../include/cctz/civil_time_detail.h:238:20: error: conflicting types for 'step'
+CONSTEXPR_F fields step(minute_tag, fields f, diff_t n) noexcept {
+                   ^
+../include/cctz/civil_time_detail.h:235:20: note: previous definition is here
+CONSTEXPR_F fields step(second_tag, fields f, diff_t n) noexcept {
+                   ^
+../include/cctz/civil_time_detail.h:241:20: error: conflicting types for 'step'
+CONSTEXPR_F fields step(hour_tag, fields f, diff_t n) noexcept {
+                   ^
+../include/cctz/civil_time_detail.h:235:20: note: previous definition is here
+CONSTEXPR_F fields step(second_tag, fields f, diff_t n) noexcept {
+                   ^
+../include/cctz/civil_time_detail.h:244:20: error: conflicting types for 'step'
+CONSTEXPR_F fields step(day_tag, fields f, diff_t n) noexcept {
+                   ^
+../include/cctz/civil_time_detail.h:235:20: note: previous definition is here
+CONSTEXPR_F fields step(second_tag, fields f, diff_t n) noexcept {
+                   ^
+../include/cctz/civil_time_detail.h:247:20: error: conflicting types for 'step'
+CONSTEXPR_F fields step(month_tag, fields f, diff_t n) noexcept {
+                   ^
+../include/cctz/civil_time_detail.h:235:20: note: previous definition is here
+CONSTEXPR_F fields step(second_tag, fields f, diff_t n) noexcept {
+                   ^
+../include/cctz/civil_time_detail.h:250:20: error: conflicting types for 'step'
+CONSTEXPR_F fields step(year_tag, fields f, diff_t n) noexcept {
+                   ^
+../include/cctz/civil_time_detail.h:235:20: note: previous definition is here
+CONSTEXPR_F fields step(second_tag, fields f, diff_t n) noexcept {
+                   ^
+../include/cctz/civil_time_detail.h:301:20: error: conflicting types for 'difference'
+CONSTEXPR_F diff_t difference(month_tag, fields f1, fields f2) noexcept {
+                   ^
+../include/cctz/civil_time_detail.h:298:20: note: previous definition is here
+CONSTEXPR_F diff_t difference(year_tag, fields f1, fields f2) noexcept {
+                   ^
+../include/cctz/civil_time_detail.h:304:20: error: conflicting types for 'difference'
+CONSTEXPR_F diff_t difference(day_tag, fields f1, fields f2) noexcept {
+                   ^
+../include/cctz/civil_time_detail.h:298:20: note: previous definition is here
+CONSTEXPR_F diff_t difference(year_tag, fields f1, fields f2) noexcept {
+                   ^
+../include/cctz/civil_time_detail.h:307:20: error: conflicting types for 'difference'
+CONSTEXPR_F diff_t difference(hour_tag, fields f1, fields f2) noexcept {
+                   ^
+../include/cctz/civil_time_detail.h:298:20: note: previous definition is here
+CONSTEXPR_F diff_t difference(year_tag, fields f1, fields f2) noexcept {
+                   ^
+../include/cctz/civil_time_detail.h:310:20: error: conflicting types for 'difference'
+CONSTEXPR_F diff_t difference(minute_tag, fields f1, fields f2) noexcept {
+                   ^
+../include/cctz/civil_time_detail.h:298:20: note: previous definition is here
+CONSTEXPR_F diff_t difference(year_tag, fields f1, fields f2) noexcept {
+                   ^
+../include/cctz/civil_time_detail.h:313:20: error: conflicting types for 'difference'
+CONSTEXPR_F diff_t difference(second_tag, fields f1, fields f2) noexcept {
+                   ^
+../include/cctz/civil_time_detail.h:298:20: note: previous definition is here
+CONSTEXPR_F diff_t difference(year_tag, fields f1, fields f2) noexcept {
+                   ^
+../include/cctz/civil_time_detail.h:323:20: error: conflicting types for 'align'
+CONSTEXPR_F fields align(minute_tag, fields f) noexcept {
+                   ^
+../include/cctz/civil_time_detail.h:320:20: note: previous definition is here
+CONSTEXPR_F fields align(second_tag, fields f) noexcept {
+                   ^
+../include/cctz/civil_time_detail.h:326:20: error: conflicting types for 'align'
+CONSTEXPR_F fields align(hour_tag, fields f) noexcept {
+                   ^
+../include/cctz/civil_time_detail.h:320:20: note: previous definition is here
+CONSTEXPR_F fields align(second_tag, fields f) noexcept {
+                   ^
+../include/cctz/civil_time_detail.h:329:20: error: conflicting types for 'align'
+CONSTEXPR_F fields align(day_tag, fields f) noexcept {
+                   ^
+../include/cctz/civil_time_detail.h:320:20: note: previous definition is here
+CONSTEXPR_F fields align(second_tag, fields f) noexcept {
+                   ^
+../include/cctz/civil_time_detail.h:332:20: error: conflicting types for 'align'
+CONSTEXPR_F fields align(month_tag, fields f) noexcept {
+                   ^
+../include/cctz/civil_time_detail.h:320:20: note: previous definition is here
+CONSTEXPR_F fields align(second_tag, fields f) noexcept {
+                   ^
+../include/cctz/civil_time_detail.h:335:20: error: conflicting types for 'align'
+CONSTEXPR_F fields align(year_tag, fields f) noexcept {
+                   ^
+../include/cctz/civil_time_detail.h:320:20: note: previous definition is here
+CONSTEXPR_F fields align(second_tag, fields f) noexcept {
+                   ^
+../include/cctz/civil_time_detail.h:341:1: error: templates must have C++ linkage
+template <typename T>
+^~~~~~~~~~~~~~~~~~~~~
+./fuzz_cctz.cc:6:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from ./fuzz_cctz.cc:7:
+In file included from ../include/cctz/time_zone.h:30:
+In file included from ../include/cctz/civil_time.h:18:
+../include/cctz/civil_time_detail.h:442:30: error: no template named 'civil_time'
+CONSTEXPR_F diff_t operator-(civil_time<T>, civil_time<U>) = delete;
+                             ^
+../include/cctz/civil_time_detail.h:442:45: error: no template named 'civil_time'
+CONSTEXPR_F diff_t operator-(civil_time<T>, civil_time<U>) = delete;
+                                            ^
+../include/cctz/civil_time_detail.h:441:1: error: templates must have C++ linkage
+template <typename T, typename U>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./fuzz_cctz.cc:6:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

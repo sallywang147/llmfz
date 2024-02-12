@@ -1,0 +1,65 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include <algorithm>
+
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include "b2nd.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  struct b2nd_array_t *array = b2nd_create();
+  if (array == NULL) {
+    return 0;
+  }
+  size_t key_size = stream.ConsumeIntegralInRange<size_t>(1, 1024);
+  char *key = (char *)malloc(key_size);
+  if (key == NULL) {
+    b2nd_destroy(array);
+    return 0;
+  }
+  stream.ConsumeBytes(key, key_size);
+  size_t value_size = stream.ConsumeIntegralInRange<size_t>(1, 1024);
+  char *value = (char *)malloc(value_size);
+  if (value == NULL) {
+    free(key);
+    b2nd_destroy(array);
+    return 0;
+  }
+  stream.ConsumeBytes(value, value_size);
+  char delimiter = (char)stream.ConsumeIntegral<int>();
+  size_t max_num_values = stream.ConsumeIntegralInRange<size_t>(1, 1024);
+  int ret = b2nd_insert(array, key, key_size, delimiter, max_num_values);
+  if (ret == 0) {
+    ret = b2nd_insert(array, value, value_size, delimiter, max_num_values);
+  }
+  free(key);
+  free(value);
+  b2nd_destroy(array);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/c-blosc2/tests/fuzz/fuzz_decompress_frame.c:5:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,76 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdbool.h>
+#include <stdint.h>
+#include <string.h>
+
+#include "avahi-common/defs.h"
+#include "avahi-common/malloc.h"
+extern "C" {
+#include "avahi-core/string-list.h"
+}
+
+void log_function(AvahiLogLevel level, const char *txt) {}
+
+void domain_ends_with_mdns_suffix(const char *domain) {
+  avahi_domain_ends_with(domain, AVAHI_MDNS_SUFFIX_LOCAL);
+  avahi_domain_ends_with(domain, AVAHI_MDNS_SUFFIX_ADDR_IPV4);
+  avahi_domain_ends_with(domain, AVAHI_MDNS_SUFFIX_ADDR_IPV6);
+}
+
+struct AvahiStringList *avahi_string_list_add_printf(struct AvahiStringList *l, char *format) {
+  char *s;
+  struct AvahiStringList *ret;
+
+  if (!l)
+    return NULL;
+
+  if (vasprintf(&s, format, l->entries) < 0)
+    return NULL;
+
+  domain_ends_with_mdns_suffix(s);
+
+  ret = avahi_string_list_add_string(l, s);
+  free(s);
+
+  return ret;
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  struct AvahiStringList *list = avahi_string_list_new();
+  FuzzedDataProvider stream(data, size);
+  char *format = stream.ConsumeRemainingBytesAsString().c_str();
+  avahi_string_list_add_printf(list, format);
+  avahi_string_list_free(list);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+fuzz/fuzz-consume-record.c:7:8: error: expected identifier or '('
+extern "C" {
+       ^
+fuzz/fuzz-consume-record.c:8:10: fatal error: 'avahi-core/string-list.h' file not found
+#include "avahi-core/string-list.h"
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+2 errors generated.
+
+Fix failure
+fuzz/fuzz-consume-record.cpp:8:10: fatal error: 'avahi-core/string-list.h' file not found
+#include "avahi-core/string-list.h"
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

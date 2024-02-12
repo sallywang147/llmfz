@@ -1,0 +1,147 @@
+Using seed corpus: h2o-fuzzer-http3_seed_corpus.zip
+/workspace/out/libfuzzer-address-x86_64/h2o-fuzzer-http3 -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/h2o-fuzzer-http3 -close_fd_mask=3 -max_len=16384 -dict=http.dict < /dev/null
+Dictionary: 126 entries
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 1513142251
+INFO: Loaded 1 modules   (37976 inline 8-bit counters): 37976 [0xea44d4, 0xead92c), 
+INFO: Loaded 1 PC tables (37976 PCs): 37976 [0xce0498,0xd74a18), 
+INFO:      319 files found in /workspace/corpus/h2o-fuzzer-http3
+INFO: seed corpus: files: 319 min: 1b max: 915b total: 58545b rss: 39Mb
+
+=================================================================
+==18==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 88 byte(s) in 1 object(s) allocated from:
+    #0 0x503346 in __interceptor_malloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:69:3
+    #1 0x63b4d6 in h2o_mem_alloc /src/h2o/include/h2o/memory.h:441:15
+    #2 0x63b4d6 in h2o_mem_alloc_shared /src/h2o/lib/common/memory.c:230:52
+    #3 0x91b6af in h2o_compress_brotli_open /src/h2o/lib/handler/compress/brotli.c:116:40
+    #4 0x5408c6 in LLVMFuzzerTestOneInput /src/h2o/fuzz/driver_h3.cc:15:3
+    #5 0x93adf3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #6 0x93a5da in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #7 0x93c444 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:826:7
+    #8 0x93c679 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #9 0x92bcdf in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #10 0x955332 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #11 0x7f94e0174082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_malloc--h2o_mem_alloc--h2o_mem_alloc_shared
+Direct leak of 88 byte(s) in 1 object(s) allocated from:
+    #0 0x503346 in __interceptor_malloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:69:3
+    #1 0x63b4d6 in h2o_mem_alloc /src/h2o/include/h2o/memory.h:441:15
+    #2 0x63b4d6 in h2o_mem_alloc_shared /src/h2o/lib/common/memory.c:230:52
+    #3 0x91b6af in h2o_compress_brotli_open /src/h2o/lib/handler/compress/brotli.c:116:40
+    #4 0x5408c6 in LLVMFuzzerTestOneInput /src/h2o/fuzz/driver_h3.cc:15:3
+    #5 0x93adf3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #6 0x93c1a4 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:804:3
+    #7 0x93c679 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #8 0x92bcdf in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #9 0x955332 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #10 0x7f94e0174082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_malloc--h2o_mem_alloc--h2o_mem_alloc_shared
+Indirect leak of 5376 byte(s) in 1 object(s) allocated from:
+    #0 0x503346 in __interceptor_malloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:69:3
+    #1 0x8e021d in BrotliEncoderCreateInstance /src/h2o/deps/brotli/c/enc/encode.c:726:34
+    #2 0x91b735 in h2o_compress_brotli_open /src/h2o/lib/handler/compress/brotli.c:121:19
+    #3 0x5408c6 in LLVMFuzzerTestOneInput /src/h2o/fuzz/driver_h3.cc:15:3
+    #4 0x93adf3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #5 0x93a5da in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #6 0x93c444 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:826:7
+    #7 0x93c679 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #8 0x92bcdf in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #9 0x955332 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #10 0x7f94e0174082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_malloc--BrotliEncoderCreateInstance--h2o_compress_brotli_open
+Indirect leak of 5376 byte(s) in 1 object(s) allocated from:
+    #0 0x503346 in __interceptor_malloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:69:3
+    #1 0x8e021d in BrotliEncoderCreateInstance /src/h2o/deps/brotli/c/enc/encode.c:726:34
+    #2 0x91b735 in h2o_compress_brotli_open /src/h2o/lib/handler/compress/brotli.c:121:19
+    #3 0x5408c6 in LLVMFuzzerTestOneInput /src/h2o/fuzz/driver_h3.cc:15:3
+    #4 0x93adf3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #5 0x93c1a4 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:804:3
+    #6 0x93c679 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #7 0x92bcdf in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #8 0x955332 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #9 0x7f94e0174082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_malloc--BrotliEncoderCreateInstance--h2o_compress_brotli_open
+Indirect leak of 1024 byte(s) in 1 object(s) allocated from:
+    #0 0x503346 in __interceptor_malloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:69:3
+    #1 0x91b8ce in h2o_mem_alloc /src/h2o/include/h2o/memory.h:441:15
+    #2 0x91b8ce in expand_buf /src/h2o/lib/handler/compress/brotli.c:37:66
+    #3 0x91b8ce in h2o_compress_brotli_open /src/h2o/lib/handler/compress/brotli.c:130:5
+    #4 0x5408c6 in LLVMFuzzerTestOneInput /src/h2o/fuzz/driver_h3.cc:15:3
+    #5 0x93adf3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #6 0x93a5da in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #7 0x93c444 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:826:7
+    #8 0x93c679 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #9 0x92bcdf in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #10 0x955332 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #11 0x7f94e0174082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_malloc--h2o_mem_alloc--expand_buf
+Indirect leak of 1024 byte(s) in 1 object(s) allocated from:
+    #0 0x503346 in __interceptor_malloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:69:3
+    #1 0x91b8ce in h2o_mem_alloc /src/h2o/include/h2o/memory.h:441:15
+    #2 0x91b8ce in expand_buf /src/h2o/lib/handler/compress/brotli.c:37:66
+    #3 0x91b8ce in h2o_compress_brotli_open /src/h2o/lib/handler/compress/brotli.c:130:5
+    #4 0x5408c6 in LLVMFuzzerTestOneInput /src/h2o/fuzz/driver_h3.cc:15:3
+    #5 0x93adf3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #6 0x93c1a4 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:804:3
+    #7 0x93c679 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #8 0x92bcdf in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #9 0x955332 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #10 0x7f94e0174082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_malloc--h2o_mem_alloc--expand_buf
+Indirect leak of 128 byte(s) in 1 object(s) allocated from:
+    #0 0x50374c in __interceptor_realloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:85:3
+    #1 0x63dabc in h2o_mem_realloc /src/h2o/include/h2o/memory.h:460:18
+    #2 0x63dabc in h2o_vector__expand /src/h2o/lib/common/memory.c:550:23
+    #3 0x91b874 in h2o_vector__reserve /src/h2o/include/h2o/memory.h:594:9
+    #4 0x91b874 in expand_buf /src/h2o/lib/handler/compress/brotli.c:36:5
+    #5 0x91b874 in h2o_compress_brotli_open /src/h2o/lib/handler/compress/brotli.c:130:5
+    #6 0x5408c6 in LLVMFuzzerTestOneInput /src/h2o/fuzz/driver_h3.cc:15:3
+    #7 0x93adf3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #8 0x93a5da in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #9 0x93c444 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:826:7
+    #10 0x93c679 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #11 0x92bcdf in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #12 0x955332 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #13 0x7f94e0174082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_realloc--h2o_mem_realloc--h2o_vector__expand
+Indirect leak of 128 byte(s) in 1 object(s) allocated from:
+    #0 0x50374c in __interceptor_realloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:85:3
+    #1 0x63dabc in h2o_mem_realloc /src/h2o/include/h2o/memory.h:460:18
+    #2 0x63dabc in h2o_vector__expand /src/h2o/lib/common/memory.c:550:23
+    #3 0x91b874 in h2o_vector__reserve /src/h2o/include/h2o/memory.h:594:9
+    #4 0x91b874 in expand_buf /src/h2o/lib/handler/compress/brotli.c:36:5
+    #5 0x91b874 in h2o_compress_brotli_open /src/h2o/lib/handler/compress/brotli.c:130:5
+    #6 0x5408c6 in LLVMFuzzerTestOneInput /src/h2o/fuzz/driver_h3.cc:15:3
+    #7 0x93adf3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #8 0x93c1a4 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:804:3
+    #9 0x93c679 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #10 0x92bcdf in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #11 0x955332 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #12 0x7f94e0174082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_realloc--h2o_mem_realloc--h2o_vector__expand
+SUMMARY: AddressSanitizer: 13232 byte(s) leaked in 8 allocation(s).
+
+INFO: a leak has been found in the initial corpus.
+
+INFO: to ignore leaks on libFuzzer side use -detect_leaks=0.
+
+MS: 0 ; base unit: 0000000000000000000000000000000000000000
+0xc6,
+\306
+artifact_prefix='./'; Test unit written to ./leak-8b3291a6208fb6849c641e97ffe5b54c13ac84cb
+Base64: xg==
+stat::number_of_executed_units: 3
+stat::average_exec_per_sec:     0
+stat::new_units_added:          0
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              40

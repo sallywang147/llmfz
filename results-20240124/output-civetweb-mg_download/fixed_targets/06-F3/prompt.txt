@@ -1,0 +1,62 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "civetweb.h"
+
+extern "C" {
+int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  static bool initialized = false;
+  if (!initialized) {
+    mg_init_library(0);
+    initialized = true;
+  }
+  FuzzedDataProvider stream(data, size);
+  int port = stream.ConsumeIntegral<int>();
+  const char* host = stream.ConsumeRandomLengthString();
+  int use_ssl = stream.ConsumeBool();
+  char ebuf[256];
+  char fmt[256];
+  mg_download((char*)host, port, use_ssl, ebuf, sizeof(ebuf), fmt);
+  return 0;
+}
+}
+</code>
+
+The code has the following build issues:
+<error>
+fuzztest/fuzzmain.c:7:8: error: expected identifier or '('
+extern "C" {
+       ^
+1 error generated.
+make: *** [Makefile:437: out/fuzztest/fuzzmain.o] Error 1
+mv: cannot stat 'civetweb': No such file or directory
+clang -c -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Wall -Wextra -Wshadow -Wformat-security -Winit-self -Wmissing-prototypes -DLINUX -Iinclude  -DUSE_STACK_SIZE=102400 -DTEST_FUZZ2 -DOPENSSL_API_1_1 -fPIC src/civetweb.c -o out/src/civetweb.o
+clang -c -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Wall -Wextra -Wshadow -Wformat-security -Winit-self -Wmissing-prototypes -DLINUX -Iinclude  -DUSE_STACK_SIZE=102400 -DTEST_FUZZ2 -DOPENSSL_API_1_1 fuzztest/fuzzmain.c -o out/fuzztest/fuzzmain.o
+fuzztest/fuzzmain.c:7:8: error: expected identifier or '('
+extern "C" {
+       ^
+1 error generated.
+make: *** [Makefile:437: out/fuzztest/fuzzmain.o] Error 1
+mv: cannot stat 'civetweb': No such file or directory
+clang -c -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Wall -Wextra -Wshadow -Wformat-security -Winit-self -Wmissing-prototypes -DLINUX -Iinclude  -DUSE_STACK_SIZE=102400 -DTEST_FUZZ3 -DOPENSSL_API_1_1 -fPIC src/civetweb.c -o out/src/civetweb.o
+clang -c -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Wall -Wextra -Wshadow -Wformat-security -Winit-self -Wmissing-prototypes -DLINUX -Iinclude  -DUSE_STACK_SIZE=102400 -DTEST_FUZZ3 -DOPENSSL_API_1_1 fuzztest/fuzzmain.c -o out/fuzztest/fuzzmain.o
+fuzztest/fuzzmain.c:7:8: error: expected identifier or '('
+extern "C" {
+       ^
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

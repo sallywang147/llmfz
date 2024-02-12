@@ -1,0 +1,77 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "apputils.h"
+#include "ns_turn_utils.h"
+#include "stun_buffer.h"
+
+static SHATYPE shatype = SHATYPE_SHA1;
+
+#define kMinInputLength 10
+#define kMaxInputLength 5120
+
+extern int LLVMFuzzerTestOneInput(const uint8_t *Data,
+                                  size_t Size) { // rfc5769check
+
+  if (Size < kMinInputLength || Size > kMaxInputLength) {
+    return 1;
+  }
+
+  stun_set_binding_response(NULL, NULL, NULL, 0, (char *)Data);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+stun_buffer.c:(.text.stun_tid_from_message[stun_tid_from_message]+0x3d): undefined reference to `stun_tid_from_message_str'
+stun_buffer.c:(.text.stun_tid_generate_in_message[stun_tid_generate_in_message]+0x2b): undefined reference to `stun_tid_generate_in_message_str'
+stun_buffer.c:(.text.stun_is_command_message[stun_is_command_message]+0x66): undefined reference to `stun_is_command_message_str'
+stun_buffer.c:(.text.stun_is_request[stun_is_request]+0x3a): undefined reference to `stun_is_request_str'
+stun_buffer.c:(.text.stun_is_success_response[stun_is_success_response]+0x3a): undefined reference to `stun_is_success_response_str'
+stun_buffer.c:(.text.stun_is_error_response[stun_is_error_response]+0x43): undefined reference to `stun_is_error_response_str'
+stun_buffer.c:(.text.stun_is_response[stun_is_response]+0x3a): undefined reference to `stun_is_response_str'
+stun_buffer.c:(.text.stun_is_indication[stun_is_indication]+0x61): undefined reference to `is_channel_msg_str'
+/usr/bin/ld: stun_buffer.c:(.text.stun_is_indication[stun_is_indication]+0xc2): undefined reference to `stun_get_msg_type_str'
+stun_buffer.c:(.text.stun_get_method[stun_get_method]+0x3a): undefined reference to `stun_get_method_str'
+stun_buffer.c:(.text.stun_init_request[stun_init_request]+0x24): undefined reference to `stun_make_request'
+/usr/bin/ld: stun_buffer.c:(.text.stun_init_request[stun_init_request]+0x6b): undefined reference to `stun_init_command_str'
+stun_buffer.c:(.text.stun_init_indication[stun_init_indication]+0x24): undefined reference to `stun_make_indication'
+stun_buffer.c:(.text.stun_init_success_response[stun_init_success_response]+0x60): undefined reference to `stun_init_success_response_str'
+stun_buffer.c:(.text.stun_init_error_response[stun_init_error_response]+0x67): undefined reference to `stun_init_error_response_str'
+stun_buffer.c:(.text.stun_get_command_message_len[stun_get_command_message_len]+0x3a): undefined reference to `stun_get_command_message_len_str'
+stun_buffer.c:(.text.stun_init_channel_message[stun_init_channel_message]+0x32): undefined reference to `stun_init_channel_message_str'
+stun_buffer.c:(.text.stun_is_channel_message[stun_is_channel_message]+0x10a): undefined reference to `stun_is_channel_message_str'
+stun_buffer.c:(.text.stun_set_allocate_request[stun_set_allocate_request]+0x4d): undefined reference to `stun_set_allocate_request_str'
+stun_buffer.c:(.text.stun_set_allocate_response[stun_set_allocate_response]+0x5d): undefined reference to `stun_set_allocate_response_str'
+stun_buffer.c:(.text.stun_set_channel_bind_request[stun_set_channel_bind_request]+0x32): undefined reference to `stun_set_channel_bind_request_str'
+stun_buffer.c:(.text.stun_set_channel_bind_response[stun_set_channel_bind_response]+0x32): undefined reference to `stun_set_channel_bind_response_str'
+stun_buffer.c:(.text.stun_attr_get_first[stun_attr_get_first]+0x3a): undefined reference to `stun_attr_get_first_str'
+stun_buffer.c:(.text.stun_attr_get_next[stun_attr_get_next]+0x3d): undefined reference to `stun_attr_get_next_str'
+stun_buffer.c:(.text.stun_attr_add[stun_attr_add]+0x35): undefined reference to `stun_attr_add_str'
+stun_buffer.c:(.text.stun_attr_add_channel_number[stun_attr_add_channel_number]+0x2f): undefined reference to `stun_attr_add_channel_number_str'
+stun_buffer.c:(.text.stun_attr_add_addr[stun_attr_add_addr]+0x32): undefined reference to `stun_attr_add_addr_str'
+stun_buffer.c:(.text.stun_attr_get_addr[stun_attr_get_addr]+0x43): undefined reference to `stun_attr_get_addr_str'
+stun_buffer.c:(.text.stun_attr_get_first_addr[stun_attr_get_first_addr]+0x46): undefined reference to `stun_attr_get_first_addr_str'
+stun_buffer.c:(.text.stun_attr_get_first_channel_number[stun_attr_get_first_channel_number]+0x3a): undefined reference to `stun_attr_get_first_channel_number_str'
+stun_buffer.c:(.text.stun_attr_get_first_by_type[stun_attr_get_first_by_type]+0x40): undefined reference to `stun_attr_get_first_by_type_str'
+stun_buffer.c:(.text.stun_set_binding_request[stun_set_binding_request]+0x2a): undefined reference to `stun_set_binding_request_str'
+stun_buffer.c:(.text.stun_set_binding_response[stun_set_binding_response]+0x40): undefined reference to `stun_set_binding_response_str'
+stun_buffer.c:(.text.stun_is_binding_response[stun_is_binding_response]+0x3a): undefined reference to `stun_is_binding_response_str'
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

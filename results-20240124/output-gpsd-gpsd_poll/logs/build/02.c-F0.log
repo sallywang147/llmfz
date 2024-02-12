@@ -1,0 +1,404 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ export 'CC=/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link'
++ CC='/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link'
++ export 'CXX=/usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link'
++ CXX='/usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link'
++ export CFLAGS=
++ CFLAGS=
++ export CXXFLAGS=
++ CXXFLAGS=
++ scons
+scons: Reading SConscript files ...
+scons version: 3.1.2
+scons is running under Python version: 3.8.10.final.0
+gpsd version: 3.25.1~dev-g37c0b573f
+This system is: linux
+cc is /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link, version 9.4.0
+Checking whether the C compiler works... yes
+Checking if compiler accepts -pthread... yes
+Checking whether the C++ compiler works... yes
+Checking for C header file curses.h... no
+Turning off ncurses support, curses.h not found.
+Checking pkg-config for libusb-1.0... no
+Checking for C library librt... yes
+Checking for C library libnsl... yes
+Checking for C library libsocket... no
+Checking for C library libm... yes
+Checking for C library libthr... no
+Checking pkg-config for dbus-1... no
+Turning off dbus-export support, library not found.
+Checking pkg-config for bluez... no
+Turning off Bluetooth support, library not found.
+Checking for C type in_port_t... yes
+Checking whether SUN_LEN is declared... yes
+Checking for C header file linux/can.h... yes
+You have kernel CANbus available.
+Checking if compiler is C11... yes
+Checking whether __STDC_NO_ATOMICS__ is declared... no
+Checking for C header file stdatomic.h... yes
+Checking whether __ORDER_BIG_ENDIAN__ is declared... yes
+Checking whether __ORDER_LITTLE_ENDIAN__ is declared... yes
+Checking whether __BYTE_ORDER__ is declared... yes
+Your compiler has built-in endianness support.
+Checking for C header file arpa/inet.h... yes
+Checking for C header file linux/serial.h... yes
+Checking for C header file netdb.h... yes
+Checking for C header file netinet/in.h... yes
+Checking for C header file netinet/ip.h... yes
+Checking for C header file sys/sysmacros.h... yes
+Checking for C header file sys/socket.h... yes
+Checking for C header file sys/un.h... yes
+Checking for C header file syslog.h... yes
+Checking for C header file termios.h... yes
+Checking for C header file winsock2.h... no
+Checking FLT_EVAL_METHOD is 0... yes
+Checking if strerror_r() returns int... yes
+Checking time_t is 8 bytes... yes
+Checking for C function cfmakeraw()... yes
+Checking for C function clock_gettime()... yes
+Checking for C function daemon()... yes
+Checking for C function fcntl()... yes
+Checking for C function fork()... yes
+Checking for C function getopt_long()... yes
+Checking for C function gmtime_r()... yes
+Checking for C function inet_ntop()... yes
+Checking for C function strlcat()... no
+Checking for C function strlcpy()... no
+Checking for C function strnlen()... yes
+Checking for C function strptime()... yes
+Checking for C header file sys/timepps.h... no
+Forcing magic_hat=no since RFC2783 API is unavailable
+Checking whether TIOCMIWAIT is declared... yes
+WARNING: AsciiDoctor not found.
+WARNING: Some documentation and html will not be built.
+Checking pkg-config for QtNetwork... no
+Turning off Qt support, library not found.
+Checking if compiler accepts -Wall... yes
+Checking if compiler accepts -Wextra... yes
+Checking if compiler accepts --disable-excess-fp-precision... no
+Checking if compiler accepts -fexcess-precision=standard... yes
+Checking if compiler accepts -Wcast-align... yes
+Checking if compiler accepts -Wcast-qual... yes
+Checking if compiler accepts -Wimplicit-fallthrough... yes
+Checking if compiler accepts -Wmissing-declarations... yes
+Checking if compiler accepts -Wmissing-prototypes... yes
+Checking if compiler accepts -Wno-missing-field-initializers... yes
+Checking if compiler accepts -Wno-uninitialized... yes
+Checking if compiler accepts -Wpointer-arith... yes
+Checking if compiler accepts -Wreturn-type... yes
+Checking if compiler accepts -Wstrict-prototypes... yes
+Checking if compiler accepts -Wundef... yes
+Checking if compiler accepts -Wvla... yes
+Checking whether canplayer program exists...no
+Checking whether coverage program exists...no
+Checking whether cppcheck program exists...no
+Checking whether dia program exists...no
+Checking whether flake8 program exists...no
+Checking whether pycodestyle program exists...no
+Checking whether pylint program exists...no
+Checking whether scan-build program exists.../usr/local/bin/scan-build
+Checking whether smilint program exists...no
+Checking whether tar program exists.../usr/bin/tar
+Checking whether valgrind program exists...no
+Program canplayer not found -- skipping NMEA 2000 tests
+Program coverage not found -- skipping Python coverage
+Program cppcheck not found -- skipping cppcheck checks
+Program dia not found -- not rebuiding cycle.svg.
+Program flake8 not found -- skipping flake8 checks
+Program pycodestyle not found -- skipping pycodestyle checks
+Program pylint not found -- skipping pylint checks
+Program smilint not found -- skipping MIB checks
+Program valgrind not found -- skipping valgrind checks
+Checking whether python program exists.../usr/bin/python
+Checking Python lib dir... /usr/lib/python3/dist-packages
+System PYTHONPATH is empty
+Ensure your PYTHONPATH includes /usr/local/lib/python3/dist-packages/
+Checking Python config vars... ok
+Checking Python target version... 3.8
+Checking Python module serial (pyserial)... 
+WARNING: ubxtool and zerk are missing optional runtime module serial
+Checking Python module cairo (pycairo)... 
+WARNING: Python module cairo (pycairo) not found.
+Checking Python module gi (pygobject)... 
+WARNING: Python module gi (pygobject) not found.
+Checking pkg-config for gtk+-3.0... no
+WARNING: gtk+-3.0 not found.
+WARNING: xgps and xgpsspeed are missing runtime dependencies
+Checking Python module matplotlib... 
+WARNING: gpsplot is missing required runtime module matplotlib
+Altered configuration variables:
+dbus_export = False (default True): enable DBUS export support
+bluez = False (default True): BlueZ support for Bluetooth devices
+ncurses = False (default True): build with ncurses
+qt = False (default True): build Qt bindings
+magic_hat = False (default True): special Linux PPS hack for Raspberry Pi et al
+manbuild = 0 (default auto): build help in man and HTML formats.  No/Auto/Yes.
+WARNING: ncurses not found, not building cgps or gpsmon.
+NMEA2000 regression tests suppressed because rtcm104v2 is off or canplayer is missing.
+scons: done reading SConscript files.
+scons: Building targets ...
+Creating 'gpsd-3.25.1~dev/android/gpsd_config'
+chmod -w gpsd-3.25.1~dev/android/gpsd_config
+Creating 'gpsd-3.25.1~dev/gps/gps.py'
+chmod -w gpsd-3.25.1~dev/gps/gps.py
+chmod +x gpsd-3.25.1~dev/gps/gps.py
+Creating 'gpsd-3.25.1~dev/gps/__init__.py'
+chmod -w gpsd-3.25.1~dev/gps/__init__.py
+chmod +x gpsd-3.25.1~dev/gps/__init__.py
+PylibLink(["gpsd-3.25.1~dev/clients/gps"], [])
+Creating 'gpsd-3.25.1~dev/clients/gegps'
+chmod -w gpsd-3.25.1~dev/clients/gegps
+chmod +x gpsd-3.25.1~dev/clients/gegps
+Creating 'gpsd-3.25.1~dev/include/gpsd_config.h'
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/gpsd/crc24q.os -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread -fPIC gpsd-3.25.1~dev/gpsd/crc24q.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/drivers/driver_greis_checksum.os -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread -fPIC gpsd-3.25.1~dev/drivers/driver_greis_checksum.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/drivers/driver_rtcm2.os -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread -fPIC gpsd-3.25.1~dev/drivers/driver_rtcm2.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/gpspacket.os -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread -fPIC gpsd-3.25.1~dev/libgps/gpspacket.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/gpsd/isgps.os -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread -fPIC gpsd-3.25.1~dev/gpsd/isgps.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/hex.os -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread -fPIC gpsd-3.25.1~dev/libgps/hex.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/os_compat.os -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread -fPIC gpsd-3.25.1~dev/libgps/os_compat.c
+rm -f gpsd-3.25.1~dev/include/packet_names.h && sed -e '/^ *\([A-Z][A-Z0-9_]*\),/s// "\1",/' < gpsd-3.25.1~dev/include/packet_states.h > gpsd-3.25.1~dev/include/packet_names.h && chmod a-w gpsd-3.25.1~dev/include/packet_names.h
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/gpsd/packet.os -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread -fPIC gpsd-3.25.1~dev/gpsd/packet.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgpsdpacket.so.30.0.0 -pthread -shared -Wl,-Bsymbolic -Wl,-soname=libgpsdpacket.so.30 gpsd-3.25.1~dev/gpsd/crc24q.os gpsd-3.25.1~dev/drivers/driver_greis_checksum.os gpsd-3.25.1~dev/drivers/driver_rtcm2.os gpsd-3.25.1~dev/libgps/gpspacket.os gpsd-3.25.1~dev/gpsd/isgps.os gpsd-3.25.1~dev/libgps/hex.os gpsd-3.25.1~dev/libgps/os_compat.os gpsd-3.25.1~dev/gpsd/packet.os -Lgpsd-3.25.1~dev -lrt -lnsl -lm -lrt -lnsl
+Create symlinks for: 'gpsd-3.25.1~dev/libgpsdpacket.so.30.0.0': 'gpsd-3.25.1~dev/libgpsdpacket.so.30'->'gpsd-3.25.1~dev/libgpsdpacket.so.30.0.0', 'gpsd-3.25.1~dev/libgpsdpacket.so'->'gpsd-3.25.1~dev/libgpsdpacket.so.30.0.0'
+Creating 'gpsd-3.25.1~dev/gps/packet.py'
+chmod -w gpsd-3.25.1~dev/gps/packet.py
+chmod +x gpsd-3.25.1~dev/gps/packet.py
+Creating 'gpsd-3.25.1~dev/clients/gpscat'
+chmod -w gpsd-3.25.1~dev/clients/gpscat
+chmod +x gpsd-3.25.1~dev/clients/gpscat
+Creating 'gpsd-3.25.1~dev/clients/gpscsv'
+chmod -w gpsd-3.25.1~dev/clients/gpscsv
+chmod +x gpsd-3.25.1~dev/clients/gpscsv
+Creating 'gpsd-3.25.1~dev/clients/gpsd.php'
+chmod -w gpsd-3.25.1~dev/clients/gpsd.php
+Creating 'gpsd-3.25.1~dev/clients/gpsplot'
+chmod -w gpsd-3.25.1~dev/clients/gpsplot
+chmod +x gpsd-3.25.1~dev/clients/gpsplot
+Creating 'gpsd-3.25.1~dev/clients/gpsprof'
+chmod -w gpsd-3.25.1~dev/clients/gpsprof
+chmod +x gpsd-3.25.1~dev/clients/gpsprof
+Creating 'gpsd-3.25.1~dev/clients/gpssubframe'
+chmod -w gpsd-3.25.1~dev/clients/gpssubframe
+chmod +x gpsd-3.25.1~dev/clients/gpssubframe
+Creating 'gpsd-3.25.1~dev/clients/ubxtool'
+chmod -w gpsd-3.25.1~dev/clients/ubxtool
+chmod +x gpsd-3.25.1~dev/clients/ubxtool
+Creating 'gpsd-3.25.1~dev/clients/xgps'
+chmod -w gpsd-3.25.1~dev/clients/xgps
+chmod +x gpsd-3.25.1~dev/clients/xgps
+Creating 'gpsd-3.25.1~dev/clients/xgpsspeed'
+chmod -w gpsd-3.25.1~dev/clients/xgpsspeed
+chmod +x gpsd-3.25.1~dev/clients/xgpsspeed
+Creating 'gpsd-3.25.1~dev/clients/zerk'
+chmod -w gpsd-3.25.1~dev/clients/zerk
+chmod +x gpsd-3.25.1~dev/clients/zerk
+Creating 'gpsd-3.25.1~dev/contrib/ntpshmviz'
+chmod -w gpsd-3.25.1~dev/contrib/ntpshmviz
+chmod +x gpsd-3.25.1~dev/contrib/ntpshmviz
+Creating 'gpsd-3.25.1~dev/contrib/skyview2svg.py'
+chmod -w gpsd-3.25.1~dev/contrib/skyview2svg.py
+chmod +x gpsd-3.25.1~dev/contrib/skyview2svg.py
+Creating 'gpsd-3.25.1~dev/contrib/webgps'
+chmod -w gpsd-3.25.1~dev/contrib/webgps
+chmod +x gpsd-3.25.1~dev/contrib/webgps
+Creating 'gpsd-3.25.1~dev/control'
+chmod -w gpsd-3.25.1~dev/control
+Creating 'gpsd-3.25.1~dev/gpsd.rules'
+chmod -w gpsd-3.25.1~dev/gpsd.rules
+Creating 'gpsd-3.25.1~dev/gpsfake'
+chmod -w gpsd-3.25.1~dev/gpsfake
+chmod +x gpsd-3.25.1~dev/gpsfake
+Creating 'gpsd-3.25.1~dev/libgps.pc'
+chmod -w gpsd-3.25.1~dev/libgps.pc
+Creating 'gpsd-3.25.1~dev/libQgpsmm.prl'
+chmod -w gpsd-3.25.1~dev/libQgpsmm.prl
+Creating 'gpsd-3.25.1~dev/packaging/deb/etc_default_gpsd'
+chmod -w gpsd-3.25.1~dev/packaging/deb/etc_default_gpsd
+Creating 'gpsd-3.25.1~dev/packaging/deb/etc_init.d_gpsd'
+chmod -w gpsd-3.25.1~dev/packaging/deb/etc_init.d_gpsd
+Creating 'gpsd-3.25.1~dev/packaging/gpsd-setup.py'
+chmod -w gpsd-3.25.1~dev/packaging/gpsd-setup.py
+chmod +x gpsd-3.25.1~dev/packaging/gpsd-setup.py
+Creating 'gpsd-3.25.1~dev/packaging/rpm/gpsd.init'
+chmod -w gpsd-3.25.1~dev/packaging/rpm/gpsd.init
+Creating 'gpsd-3.25.1~dev/packaging/rpm/gpsd.spec'
+chmod -w gpsd-3.25.1~dev/packaging/rpm/gpsd.spec
+Creating 'gpsd-3.25.1~dev/packaging/X11/xgps.desktop'
+chmod -w gpsd-3.25.1~dev/packaging/X11/xgps.desktop
+Creating 'gpsd-3.25.1~dev/packaging/X11/xgpsspeed.desktop'
+chmod -w gpsd-3.25.1~dev/packaging/X11/xgpsspeed.desktop
+Creating 'gpsd-3.25.1~dev/Qgpsmm.pc'
+chmod -w gpsd-3.25.1~dev/Qgpsmm.pc
+Creating 'gpsd-3.25.1~dev/systemd/gpsdctl@.service'
+chmod -w gpsd-3.25.1~dev/systemd/gpsdctl@.service
+Creating 'gpsd-3.25.1~dev/systemd/gpsd.service'
+chmod -w gpsd-3.25.1~dev/systemd/gpsd.service
+Creating 'gpsd-3.25.1~dev/systemd/gpsd.socket'
+chmod -w gpsd-3.25.1~dev/systemd/gpsd.socket
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/clients/gps2udp.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/clients/gps2udp.c
+rm -f gpsd-3.25.1~dev/libgps/ais_json.i && /usr/bin/python3 gpsd-3.25.1~dev/libgps/jsongen.py --ais --target=parser > gpsd-3.25.1~dev/libgps/ais_json.i && chmod a-w gpsd-3.25.1~dev/libgps/ais_json.i
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/ais_json.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/libgps/ais_json.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/bits.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/libgps/bits.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/gpsdclient.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/libgps/gpsdclient.c
+rm -f gpsd-3.25.1~dev/libgps/gps_maskdump.c && /usr/bin/python3 gpsd-3.25.1~dev/maskaudit.py -c "/src/gpsd/gpsd-3.25.1~dev" > gpsd-3.25.1~dev/libgps/gps_maskdump.c && chmod a-w gpsd-3.25.1~dev/libgps/gps_maskdump.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/gps_maskdump.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/libgps/gps_maskdump.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/gpsutils.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/libgps/gpsutils.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/hex.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/libgps/hex.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/json.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/libgps/json.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/libgps_core.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/libgps/libgps_core.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/libgps_dbus.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/libgps/libgps_dbus.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/libgps_json.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/libgps/libgps_json.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/libgps_shm.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/libgps/libgps_shm.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/libgps_sock.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/libgps/libgps_sock.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/netlib.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/libgps/netlib.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/ntpshmread.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/libgps/ntpshmread.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/os_compat.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/libgps/os_compat.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/rtcm2_json.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/libgps/rtcm2_json.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/rtcm3_json.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/libgps/rtcm3_json.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/shared_json.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/libgps/shared_json.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/timespec_str.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/libgps/timespec_str.c
+/usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/libgpsmm.o -c -O2 -pthread gpsd-3.25.1~dev/libgps/libgpsmm.cpp
+ar rc gpsd-3.25.1~dev/libgps_static.a gpsd-3.25.1~dev/libgps/ais_json.o gpsd-3.25.1~dev/libgps/bits.o gpsd-3.25.1~dev/libgps/gpsdclient.o gpsd-3.25.1~dev/libgps/gps_maskdump.o gpsd-3.25.1~dev/libgps/gpsutils.o gpsd-3.25.1~dev/libgps/hex.o gpsd-3.25.1~dev/libgps/json.o gpsd-3.25.1~dev/libgps/libgps_core.o gpsd-3.25.1~dev/libgps/libgps_dbus.o gpsd-3.25.1~dev/libgps/libgps_json.o gpsd-3.25.1~dev/libgps/libgps_shm.o gpsd-3.25.1~dev/libgps/libgps_sock.o gpsd-3.25.1~dev/libgps/netlib.o gpsd-3.25.1~dev/libgps/ntpshmread.o gpsd-3.25.1~dev/libgps/os_compat.o gpsd-3.25.1~dev/libgps/rtcm2_json.o gpsd-3.25.1~dev/libgps/rtcm3_json.o gpsd-3.25.1~dev/libgps/shared_json.o gpsd-3.25.1~dev/libgps/timespec_str.o gpsd-3.25.1~dev/libgps/libgpsmm.o
+ranlib gpsd-3.25.1~dev/libgps_static.a
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/clients/gps2udp -pthread gpsd-3.25.1~dev/clients/gps2udp.o -Lgpsd-3.25.1~dev gpsd-3.25.1~dev/libgps_static.a -lm -lrt -lnsl
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/gpsctl.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/gpsctl.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/gpsd/bsd_base64.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/gpsd/bsd_base64.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/gpsd/crc24q.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/gpsd/crc24q.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/drivers/driver_ais.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/drivers/driver_ais.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/drivers/driver_evermore.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/drivers/driver_evermore.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/drivers/driver_garmin.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/drivers/driver_garmin.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/drivers/driver_garmin_txt.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/drivers/driver_garmin_txt.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/drivers/driver_geostar.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/drivers/driver_geostar.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/drivers/driver_greis.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/drivers/driver_greis.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/drivers/driver_greis_checksum.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/drivers/driver_greis_checksum.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/drivers/driver_italk.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/drivers/driver_italk.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/drivers/driver_navcom.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/drivers/driver_navcom.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/drivers/driver_nmea0183.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/drivers/driver_nmea0183.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/drivers/driver_nmea2000.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/drivers/driver_nmea2000.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/drivers/driver_oncore.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/drivers/driver_oncore.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/drivers/driver_rtcm2.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/drivers/driver_rtcm2.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/drivers/driver_rtcm3.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/drivers/driver_rtcm3.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/drivers/drivers.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/drivers/drivers.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/drivers/driver_sirf.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/drivers/driver_sirf.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/drivers/driver_skytraq.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/drivers/driver_skytraq.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/drivers/driver_superstar2.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/drivers/driver_superstar2.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/drivers/driver_tsip.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/drivers/driver_tsip.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/drivers/driver_ubx.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/drivers/driver_ubx.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/drivers/driver_zodiac.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/drivers/driver_zodiac.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/gpsd/geoid.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/gpsd/geoid.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/gpsd/gpsd_json.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/gpsd/gpsd_json.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/gpsd/isgps.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/gpsd/isgps.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/gpsd/libgpsd_core.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/gpsd/libgpsd_core.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/gpsd/matrix.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/gpsd/matrix.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/gpsd/net_dgpsip.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/gpsd/net_dgpsip.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/gpsd/net_gnss_dispatch.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/gpsd/net_gnss_dispatch.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/gpsd/net_ntrip.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/gpsd/net_ntrip.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/gpsd/ntpshmwrite.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/gpsd/ntpshmwrite.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/gpsd/packet.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/gpsd/packet.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/gpsd/ppsthread.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/gpsd/ppsthread.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/gpsd/pseudoais.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/gpsd/pseudoais.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/gpsd/pseudonmea.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/gpsd/pseudonmea.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/gpsd/serial.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/gpsd/serial.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/gpsd/subframe.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/gpsd/subframe.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/gpsd/timebase.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/gpsd/timebase.c
+ar rc gpsd-3.25.1~dev/libgpsd.a gpsd-3.25.1~dev/gpsd/bsd_base64.o gpsd-3.25.1~dev/gpsd/crc24q.o gpsd-3.25.1~dev/drivers/driver_ais.o gpsd-3.25.1~dev/drivers/driver_evermore.o gpsd-3.25.1~dev/drivers/driver_garmin.o gpsd-3.25.1~dev/drivers/driver_garmin_txt.o gpsd-3.25.1~dev/drivers/driver_geostar.o gpsd-3.25.1~dev/drivers/driver_greis.o gpsd-3.25.1~dev/drivers/driver_greis_checksum.o gpsd-3.25.1~dev/drivers/driver_italk.o gpsd-3.25.1~dev/drivers/driver_navcom.o gpsd-3.25.1~dev/drivers/driver_nmea0183.o gpsd-3.25.1~dev/drivers/driver_nmea2000.o gpsd-3.25.1~dev/drivers/driver_oncore.o gpsd-3.25.1~dev/drivers/driver_rtcm2.o gpsd-3.25.1~dev/drivers/driver_rtcm3.o gpsd-3.25.1~dev/drivers/drivers.o gpsd-3.25.1~dev/drivers/driver_sirf.o gpsd-3.25.1~dev/drivers/driver_skytraq.o gpsd-3.25.1~dev/drivers/driver_superstar2.o gpsd-3.25.1~dev/drivers/driver_tsip.o gpsd-3.25.1~dev/drivers/driver_ubx.o gpsd-3.25.1~dev/drivers/driver_zodiac.o gpsd-3.25.1~dev/gpsd/geoid.o gpsd-3.25.1~dev/gpsd/gpsd_json.o gpsd-3.25.1~dev/gpsd/isgps.o gpsd-3.25.1~dev/gpsd/libgpsd_core.o gpsd-3.25.1~dev/gpsd/matrix.o gpsd-3.25.1~dev/gpsd/net_dgpsip.o gpsd-3.25.1~dev/gpsd/net_gnss_dispatch.o gpsd-3.25.1~dev/gpsd/net_ntrip.o gpsd-3.25.1~dev/gpsd/ntpshmwrite.o gpsd-3.25.1~dev/gpsd/packet.o gpsd-3.25.1~dev/gpsd/ppsthread.o gpsd-3.25.1~dev/gpsd/pseudoais.o gpsd-3.25.1~dev/gpsd/pseudonmea.o gpsd-3.25.1~dev/gpsd/serial.o gpsd-3.25.1~dev/gpsd/subframe.o gpsd-3.25.1~dev/gpsd/timebase.o
+ranlib gpsd-3.25.1~dev/libgpsd.a
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/gpsctl -pthread gpsd-3.25.1~dev/gpsctl.o -Lgpsd-3.25.1~dev gpsd-3.25.1~dev/libgpsd.a gpsd-3.25.1~dev/libgps_static.a -lm -lrt -lnsl
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/clients/gpsdecode.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/clients/gpsdecode.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/clients/gpsdecode -pthread gpsd-3.25.1~dev/clients/gpsdecode.o -Lgpsd-3.25.1~dev gpsd-3.25.1~dev/libgpsd.a gpsd-3.25.1~dev/libgps_static.a -lm -lrt -lnsl
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/clients/gpspipe.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/clients/gpspipe.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/clients/gpspipe -pthread gpsd-3.25.1~dev/clients/gpspipe.o -Lgpsd-3.25.1~dev gpsd-3.25.1~dev/libgps_static.a -lm -lrt -lnsl
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/clients/gpsrinex.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/clients/gpsrinex.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/clients/gpsrinex -pthread gpsd-3.25.1~dev/clients/gpsrinex.o -Lgpsd-3.25.1~dev gpsd-3.25.1~dev/libgps_static.a -lm -lrt -lnsl
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/clients/gpssnmp.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/clients/gpssnmp.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/clients/gpssnmp -pthread gpsd-3.25.1~dev/clients/gpssnmp.o -Lgpsd-3.25.1~dev gpsd-3.25.1~dev/libgps_static.a -lm -lrt -lnsl
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/clients/gpxlogger.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/clients/gpxlogger.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/clients/gpxlogger -pthread gpsd-3.25.1~dev/clients/gpxlogger.o -Lgpsd-3.25.1~dev gpsd-3.25.1~dev/libgps_static.a -lm -lrt -lnsl
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/clients/lcdgps.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/clients/lcdgps.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/clients/lcdgps -pthread gpsd-3.25.1~dev/clients/lcdgps.o -Lgpsd-3.25.1~dev gpsd-3.25.1~dev/libgps_static.a -lm -lrt -lnsl
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/clients/ntpshmmon.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/clients/ntpshmmon.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/clients/ntpshmmon -pthread gpsd-3.25.1~dev/clients/ntpshmmon.o -Lgpsd-3.25.1~dev gpsd-3.25.1~dev/libgps_static.a -lm -lrt -lnsl
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/clients/ppscheck.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/clients/ppscheck.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/clients/ppscheck -pthread gpsd-3.25.1~dev/clients/ppscheck.o -Lgpsd-3.25.1~dev gpsd-3.25.1~dev/libgps_static.a -lm -lrt -lnsl
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/ais_json.os -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread -fPIC gpsd-3.25.1~dev/libgps/ais_json.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/bits.os -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread -fPIC gpsd-3.25.1~dev/libgps/bits.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/gpsdclient.os -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread -fPIC gpsd-3.25.1~dev/libgps/gpsdclient.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/gps_maskdump.os -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread -fPIC gpsd-3.25.1~dev/libgps/gps_maskdump.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/gpsutils.os -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread -fPIC gpsd-3.25.1~dev/libgps/gpsutils.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/json.os -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread -fPIC gpsd-3.25.1~dev/libgps/json.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/libgps_core.os -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread -fPIC gpsd-3.25.1~dev/libgps/libgps_core.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/libgps_dbus.os -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread -fPIC gpsd-3.25.1~dev/libgps/libgps_dbus.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/libgps_json.os -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread -fPIC gpsd-3.25.1~dev/libgps/libgps_json.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/libgps_shm.os -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread -fPIC gpsd-3.25.1~dev/libgps/libgps_shm.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/libgps_sock.os -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread -fPIC gpsd-3.25.1~dev/libgps/libgps_sock.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/netlib.os -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread -fPIC gpsd-3.25.1~dev/libgps/netlib.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/ntpshmread.os -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread -fPIC gpsd-3.25.1~dev/libgps/ntpshmread.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/rtcm2_json.os -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread -fPIC gpsd-3.25.1~dev/libgps/rtcm2_json.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/rtcm3_json.os -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread -fPIC gpsd-3.25.1~dev/libgps/rtcm3_json.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/shared_json.os -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread -fPIC gpsd-3.25.1~dev/libgps/shared_json.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/timespec_str.os -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread -fPIC gpsd-3.25.1~dev/libgps/timespec_str.c
+/usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps/libgpsmm.os -c -O2 -pthread -fPIC gpsd-3.25.1~dev/libgps/libgpsmm.cpp
+/usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/libgps.so.30.0.0 -pthread -shared -Wl,-Bsymbolic -Wl,-soname=libgps.so.30 gpsd-3.25.1~dev/libgps/ais_json.os gpsd-3.25.1~dev/libgps/bits.os gpsd-3.25.1~dev/libgps/gpsdclient.os gpsd-3.25.1~dev/libgps/gps_maskdump.os gpsd-3.25.1~dev/libgps/gpsutils.os gpsd-3.25.1~dev/libgps/hex.os gpsd-3.25.1~dev/libgps/json.os gpsd-3.25.1~dev/libgps/libgps_core.os gpsd-3.25.1~dev/libgps/libgps_dbus.os gpsd-3.25.1~dev/libgps/libgps_json.os gpsd-3.25.1~dev/libgps/libgps_shm.os gpsd-3.25.1~dev/libgps/libgps_sock.os gpsd-3.25.1~dev/libgps/netlib.os gpsd-3.25.1~dev/libgps/ntpshmread.os gpsd-3.25.1~dev/libgps/os_compat.os gpsd-3.25.1~dev/libgps/rtcm2_json.os gpsd-3.25.1~dev/libgps/rtcm3_json.os gpsd-3.25.1~dev/libgps/shared_json.os gpsd-3.25.1~dev/libgps/timespec_str.os gpsd-3.25.1~dev/libgps/libgpsmm.os -Lgpsd-3.25.1~dev -lrt -lnsl -lm -lrt -lnsl
+Create symlinks for: 'gpsd-3.25.1~dev/libgps.so.30.0.0': 'gpsd-3.25.1~dev/libgps.so.30'->'gpsd-3.25.1~dev/libgps.so.30.0.0', 'gpsd-3.25.1~dev/libgps.so'->'gpsd-3.25.1~dev/libgps.so.30.0.0'
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/gpsd/dbusexport.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/gpsd/dbusexport.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/gpsd/gpsd.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/gpsd/gpsd.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/gpsd/shmexport.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/gpsd/shmexport.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/gpsd/timehint.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/gpsd/timehint.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/gpsd/sd_socket.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/gpsd/sd_socket.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/gpsd/gpsd -pthread gpsd-3.25.1~dev/gpsd/dbusexport.o gpsd-3.25.1~dev/gpsd/gpsd.o gpsd-3.25.1~dev/gpsd/shmexport.o gpsd-3.25.1~dev/gpsd/timehint.o gpsd-3.25.1~dev/gpsd/sd_socket.o -Lgpsd-3.25.1~dev gpsd-3.25.1~dev/libgpsd.a gpsd-3.25.1~dev/libgps_static.a -lm -lrt -lnsl
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/clients/gpsdctl.o -c -pthread -Wall -Wextra -fexcess-precision=standard -Wcast-align -Wcast-qual -Wimplicit-fallthrough -Wmissing-declarations -Wmissing-prototypes -Wno-missing-field-initializers -Wno-uninitialized -Wpointer-arith -Wreturn-type -Wstrict-prototypes -Wundef -Wvla -O2 -pthread gpsd-3.25.1~dev/clients/gpsdctl.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o gpsd-3.25.1~dev/clients/gpsdctl -pthread gpsd-3.25.1~dev/clients/gpsdctl.o -Lgpsd-3.25.1~dev gpsd-3.25.1~dev/libgps_static.a -lm -lrt -lnsl
+Creating 'gpsd-3.25.1~dev/www/gpscap.py'
+chmod -w gpsd-3.25.1~dev/www/gpscap.py
+chmod +x gpsd-3.25.1~dev/www/gpscap.py
+Creating 'gpsd-3.25.1~dev/www/hardware-head.html'
+chmod -w gpsd-3.25.1~dev/www/hardware-head.html
+cd gpsd-3.25.1~dev/www; (cat hardware-head.html && PYTHONIOENCODING=utf-8 /usr/bin/python3 gpscap.py && cat hardware-tail.html) > hardware.html
+Creating 'gpsd-3.25.1~dev/www/faq.html'
+chmod -w gpsd-3.25.1~dev/www/faq.html
+Creating 'gpsd-3.25.1~dev/www/index.html'
+chmod -w gpsd-3.25.1~dev/www/index.html
+Creating 'gpsd-3.25.1~dev/www/hacking.html'
+chmod -w gpsd-3.25.1~dev/www/hacking.html
+Creating 'gpsd-3.25.1~dev/www/troubleshooting.html'
+chmod -w gpsd-3.25.1~dev/www/troubleshooting.html
+Creating 'gpsd-3.25.1~dev/www/gps_report.cgi'
+chmod -w gpsd-3.25.1~dev/www/gps_report.cgi
+cp gpsd-3.25.1~dev/NEWS gpsd-3.25.1~dev/www/NEWS
+cp gpsd-3.25.1~dev/TODO gpsd-3.25.1~dev/www/TODO
+cp gpsd-3.25.1~dev/clients/gpsdebuginfo gpsd-3.25.1~dev/www/gpsdebuginfo
+Creating 'gpsd-3.25.1~dev/gps-3.25.1~dev.egg-info'
+scons: done building targets.
+WARNING: ncurses not found, not building cgps or gpsmon.
+WARNING: gpsplot is missing required runtime module matplotlib
+WARNING: xgps and xgpsspeed are missing runtime dependencies
+WARNING: ubxtool and zerk are missing optional runtime module serial
+Ensure your PYTHONPATH includes /usr/local/lib/python3/dist-packages/
+WARNING: AsciiDoctor not found.
+WARNING: Some documentation and html will not be built.
++ pushd fuzzer/
+/src/gpsd/fuzzer /src/gpsd
++ make
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link  -I../gpsd-3.25.1~dev/include/ -Wall -Werror -pthread -std=c99 -c FuzzJson.c
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link  -I../gpsd-3.25.1~dev/include/ -Wall -Werror -pthread -std=c99 -c FuzzPacket.c
+/usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link  -L../gpsd-3.25.1~dev/ -o FuzzJson FuzzJson.o  -fsanitize=fuzzer -lgpsd -lgps_static
+/usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link  -L../gpsd-3.25.1~dev/ -o FuzzPacket FuzzPacket.o  -fsanitize=fuzzer -lgpsd -lgps_static
++ cp FuzzJson /workspace/out/libfuzzer-address-x86_64/FuzzJson
++ cp FuzzPacket /workspace/out/libfuzzer-address-x86_64/FuzzPacket
++ popd
+/src/gpsd
++ pushd /src/oss-fuzz-bloat/gpsd
+/src/oss-fuzz-bloat/gpsd /src/gpsd
++ cp FuzzJson_seed_corpus.zip /workspace/out/libfuzzer-address-x86_64/FuzzJson_seed_corpus.zip
++ cp FuzzPacket_seed_corpus.zip /workspace/out/libfuzzer-address-x86_64/FuzzPacket_seed_corpus.zip
++ popd
+/src/gpsd

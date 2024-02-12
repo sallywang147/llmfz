@@ -1,0 +1,67 @@
+/workspace/out/libfuzzer-address-x86_64/croaring_fuzzer_cc -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/croaring_fuzzer_cc < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 4137004512
+INFO: Loaded 1 modules   (6326 inline 8-bit counters): 6326 [0x6a7bc0, 0x6a9476), 
+INFO: Loaded 1 PC tables (6326 PCs): 6326 [0x6a9478,0x6c1fd8), 
+INFO:        0 files found in /workspace/corpus/croaring_fuzzer_cc
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: A corpus is not provided, starting from an empty corpus
+#2	INITED cov: 22 ft: 23 corp: 1/1b exec/s: 0 rss: 32Mb
+
+=================================================================
+==13==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 40 byte(s) in 1 object(s) allocated from:
+    #0 0x52ef56 in __interceptor_malloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:69:3
+    #1 0x576a51 in roaring_bitmap_copy /src/croaring/src/roaring.c:497:29
+    #2 0x57c0aa in roaring_bitmap_lazy_or /src/croaring/src/roaring.c
+    #3 0x56c487 in LLVMFuzzerTestOneInput /src/croaring_fuzzer_cc.cc:8:3
+    #4 0x43ddc3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #5 0x43d5aa in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #6 0x43f364 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:809:5
+    #7 0x43f649 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #8 0x42ecaf in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #9 0x458302 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #10 0x7f3b14c02082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_malloc--roaring_bitmap_copy--roaring_bitmap_lazy_or
+Direct leak of 40 byte(s) in 1 object(s) allocated from:
+    #0 0x52ef56 in __interceptor_malloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:69:3
+    #1 0x576a51 in roaring_bitmap_copy /src/croaring/src/roaring.c:497:29
+    #2 0x57c0aa in roaring_bitmap_lazy_or /src/croaring/src/roaring.c
+    #3 0x56c487 in LLVMFuzzerTestOneInput /src/croaring_fuzzer_cc.cc:8:3
+    #4 0x43ddc3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #5 0x43d5aa in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #6 0x43ec79 in fuzzer::Fuzzer::MutateAndTestOne() /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:757:19
+    #7 0x43f945 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:895:5
+    #8 0x42ecaf in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #9 0x458302 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #10 0x7f3b14c02082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_malloc--roaring_bitmap_copy--roaring_bitmap_lazy_or
+Direct leak of 40 byte(s) in 1 object(s) allocated from:
+    #0 0x52ef56 in __interceptor_malloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:69:3
+    #1 0x576a51 in roaring_bitmap_copy /src/croaring/src/roaring.c:497:29
+    #2 0x57c0aa in roaring_bitmap_lazy_or /src/croaring/src/roaring.c
+    #3 0x56c487 in LLVMFuzzerTestOneInput /src/croaring_fuzzer_cc.cc:8:3
+    #4 0x43ddc3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #5 0x43f174 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:804:3
+    #6 0x43f649 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #7 0x42ecaf in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #8 0x458302 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #9 0x7f3b14c02082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_malloc--roaring_bitmap_copy--roaring_bitmap_lazy_or
+SUMMARY: AddressSanitizer: 120 byte(s) leaked in 3 allocation(s).
+INFO: to ignore leaks on libFuzzer side use -detect_leaks=0.
+
+MS: 1 CrossOver-; base unit: adc83b19e793491b1c6ea0fd8b46cd9f32e592fc
+0xa,
+\012
+artifact_prefix='./'; Test unit written to ./leak-adc83b19e793491b1c6ea0fd8b46cd9f32e592fc
+Base64: Cg==
+stat::number_of_executed_units: 4
+stat::average_exec_per_sec:     4
+stat::new_units_added:          0
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              33

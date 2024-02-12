@@ -1,0 +1,614 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include "flb_fuzz_header.h"
+#include <fluent-bit/flb_config.h>
+#include <fluent-bit/flb_parser.h>
+#include <fluent-bit/flb_slist.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
+/* A sample of configurations */
+char conf_file[] = "# Parser: no_year\n"
+                   "# ===============\n"
+                   "# the given format don't contain the Year, this is a common\n"
+                   "# case on old Syslog implementations.\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        no_year\n"
+                   "    Format      json\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %b %d %H:%M:%S\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "# Parser: no_year_N\n"
+                   "# =================\n"
+                   "# Just for compatibility, check a string with no year but including Nanoseconds.\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        no_year_N\n"
+                   "    Format      json\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %b %d %H:%M:%S.%L\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "# Parser: no_year_NC\n"
+                   "# =================\n"
+                   "# Just for compatibility, check a string with no year but including Nanoseconds with comma as fractional separator.\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        no_year_NC\n"
+                   "    Format      json\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %b %d %H:%M:%S,%L\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "# Parser: no_year_TZ\n"
+                   "# =================\n"
+                   "# Time string with no year and including timezone\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        no_year_TZ\n"
+                   "    Format      json\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %b %d %H:%M:%S %z\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "# Parser: no_year_N_TZ\n"
+                   "# ====================\n"
+                   "# Time string with no year, nanoseconds and timezone\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        no_year_N_TZ\n"
+                   "    Format      json\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %b %d %H:%M:%S.%L %z\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "\n"
+                   "# Parser: no_year_NC_TZ\n"
+                   "# ====================\n"
+                   "# Time string with no year, nanoseconds and timezone with comma as fractional separator.\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        no_year_NC_TZ\n"
+                   "    Format      json\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %b %d %H:%M:%S,%L %z\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "\n"
+                   "# Parser: default_UTC\n"
+                   "# ===================\n"
+                   "# Time string with timezone in UTC\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        default_UTC\n"
+                   "    Format      json\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %m/%d/%Y %H:%M:%S\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "# Parser: default_UTC_Z\n"
+                   "# =====================\n"
+                   "# Time string with timezone in UTC and ending Z\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        default_UTC_Z\n"
+                   "    Format      json\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %m/%d/%Y %H:%M:%SZ\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "# Parser: default_UTC_N_Z\n"
+                   "# =======================\n"
+                   "# Time string with timezone in UTC, nanoseconds and ending Z\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        default_UTC_N_Z\n"
+                   "    Format      json\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %m/%d/%Y %H:%M:%S.%LZ\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "# Parser: default_UTC_NC_Z\n"
+                   "# =======================\n"
+                   "# Time string with timezone in UTC, nanoseconds with comma as fractional separator and ending Z\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        default_UTC_NC_Z\n"
+                   "    Format      json\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %m/%d/%Y %H:%M:%S,%LZ\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "# Parser: generic_TZ\n"
+                   "# ==================\n"
+                   "# Generic date with timezone\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        generic_TZ\n"
+                   "    Format      json\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %m/%d/%Y %H:%M:%S %z\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "# Parser: generic\n"
+                   "# ===============\n"
+                   "# Generic date\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        generic\n"
+                   "    Format      json\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %m/%d/%Y %H:%M:%S\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "# Parser: generic_N\n"
+                   "# ===============\n"
+                   "# Generic date with nanoseconds\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        generic_N\n"
+                   "    Format      json\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %m/%d/%Y %H:%M:%S.%L\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "# Parser: generic_NC\n"
+                   "# ===============\n"
+                   "# Generic date with nanoseconds with comma as fractional separator\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        generic_NC\n"
+                   "    Format      json\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %m/%d/%Y %H:%M:%S,%L\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "# Parser: generic_N_TZ\n"
+                   "# ====================\n"
+                   "# Generic date with nanoseconds and timezone\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        generic_N_TZ\n"
+                   "    Format      json\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %m/%d/%Y %H:%M:%S.%L %z\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "# Parser: generic_NC_TZ\n"
+                   "# ====================\n"
+                   "# Generic date with nanoseconds with comma as fractional separator and timezone\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        generic_NC_TZ\n"
+                   "    Format      json\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %m/%d/%Y %H:%M:%S,%L %z\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "# Parser: apache_error\n"
+                   "# ====================\n"
+                   "# Apache error log time format\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        apache_error\n"
+                   "    Format      json\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %a %b %d %H:%M:%S.%L %Y\n"
+                   "    Time_Keep   On\n"
+                   "# Parser: mysql_quoted_stuff\n"
+                   "# ====================\n"
+                   "# Apache error log time format\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        mysql_quoted_stuff\n"
+                   "    Format      regex\n"
+                   "    Regex       ^(?<time>.*?),(?<key001>.*)$\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %Y-%M-%S %H:%M:%S\n"
+                   "    Time_Keep   On\n"
+                   "    Decode_Field_As   mysql_quoted key001\n"
+                   "# Parser: REGEX_generic_NC_TZ\n"
+                   "# ====================\n"
+                   "# Generic date with nanoseconds with comma as fractional separator and timezone\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        REGEX_generic_NC_TZ\n"
+                   "    Format      regex\n"
+                   "    Regex       ^(?<key001>[^ ]*) (?<key002>[^ ]*) (?<time>.+)$\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %m/%d/%Y %H:%M:%S,%L %z\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "# Parser: REGEX_apache_error\n"
+                   "# ====================\n"
+                   "# Apache error log time format\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        REGEX_apache_error\n"
+                   "    Format      regex\n"
+                   "    Regex       ^(?<key001>[^ ]*) (?<key002>[^ ]*) (?<time>.+)$\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %a %b %d %H:%M:%S.%L %Y\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "\n"
+                   "\n"
+                   "# Parser: REGEX_mysql_quoted_stuff\n"
+                   "# ====================\n"
+                   "# Apache error log time format\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        REGEX_mysql_quoted_stuff\n"
+                   "    Format      regex\n"
+                   "    Regex       ^(?<time>.*?),(?<key001>.*)$\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %Y-%M-%S %H:%M:%S\n"
+                   "    Time_Keep   On\n"
+                   "    Decode_Field_As   mysql_quoted key001\n"
+                   "\n"
+                   "\n"
+                   "\n"
+                   "# Parser: REGEX2_mysql_quoted_stuff\n"
+                   "# ====================\n"
+                   "# Apache error log time format\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        REGEX2_mysql_quoted_stuff\n"
+                   "    Format      logfmt\n"
+                   "    Regex       ^(?<time>.*?),(?<key001>.*)$\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %Y-%M-%S %H:%M:%S\n"
+                   "    Time_Keep   On\n"
+                   "    Decode_Field_As   mysql_quoted key001\n"
+                   "    Types A1:integer A2:string A3:bool A4:float A5:hex\n"
+                   "\n"
+                   "\n"
+                   "\n"
+                   "# Parser: REGEX3_mysql_quoted_stuff\n"
+                   "# ====================\n"
+                   "# Apache error log time format\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        REGEX3_mysql_quoted_stuff\n"
+                   "    Format      json\n"
+                   "    Regex       ^(?<time>.*?),(?<key001>.*)$\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %Y-%M-%S %H:%M:%S\n"
+                   "    Time_Keep   On\n"
+                   "    Decode_Field_As   escaped_utf8 key001\n"
+                   "    Types A1:integer A2:string A3:bool A4:float A5:hex\n"
+                   "\n"
+                   "\n"
+                   "\n"
+                   "# Parser: REGEX33_mysql_quoted_stuff\n"
+                   "# ====================\n"
+                   "# Apache error log time format\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        REGEX33_mysql_quoted_stuff\n"
+                   "    Format      json\n"
+                   "    Regex       ^(?<time>.*?),(?<key001>.*)$\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %Y-%M-%S %H:%M:%S\n"
+                   "    Time_Keep   On\n"
+                   "    Decode_Field_As   escaped key001\n"
+                   "    Types A1:integer A2:string A3:bool A4:float A5:hex\n"
+                   "\n"
+                   "\n"
+                   "\n"
+                   "# Parser: REGEX4_mysql_quoted_stuff\n"
+                   "# ====================\n"
+                   "# Apache error log time format\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        REGEX4_mysql_quoted_stuff\n"
+                   "    Format      json\n"
+                   "    Regex       ^(?<time>.*?),(?<key001>.*)$\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %Y-%M-%S %H:%M:%S\n"
+                   "    Time_Keep   On\n"
+                   "    Decode_Field_As   json key001\n"
+                   "    Types A1:integer A2:string A3:bool A4:float A5:hex\n"
+                   "[MULTILINE_PARSER]\n"
+                   "    name          exception_test\n"
+                   "    type          regex\n"
+                   "    flush_timeout 1000\n"
+                   "    rule          \"start_state\"  \"/(Dec \\d+ \\d+\\:\\d+\\:\\d+)(.*)/\" \"cont\"\n"
+                   "    rule          \"cont\" \"/^\\s+at.*/\" \"cont\"\n";
+
+extern "C" {
+void *flb_malloc(const size_t size) {
+  if (flb_malloc_p == 0 && flb_malloc_mod > 0 && rand() % flb_malloc_mod == 0) {
+    return NULL;
+  }
+  return malloc(size);
+}
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  /* Set fuzzer-malloc chance of failure */
+  flb_malloc_p = 0;
+  flb_malloc_mod = 25000;
+
+  /* Limit the size of the config files to 32KB. */
+  if (size > 32768) {
+    return 0;
+  }
+
+  /* Write the config file to a location we know OSS-Fuzz has */
+  char filename[256];
+  sprintf(filename, "/tmp/libfuzzer.%d", getpid());
+  FILE *fp = fopen(filename, "wb");
+  if (!fp) {
+    return 0;
+  }
+  fwrite(conf_file, strlen(conf_file), 1, fp);
+  fclose(fp);
+
+  /* Now parse random data based on the config files */
+  struct flb_config *config = NULL;
+  config = flb_config_init();
+  int ret = flb_parser_conf_file(filename, config);
+  if (ret == 0) {
+    struct flb_cf *cf = flb_cf_create(config);
+    flb_config_load_config_format(config, cf);
+    flb_cf_destroy(cf);
+  }
+  flb_config_exit(config);
+
+  /* clean up the file */
+  unlink(filename);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/fluent-bit/include/fluent-bit/flb_mem.h:67:7: error: static declaration of 'flb_malloc' follows non-static declaration
+void *flb_malloc(const size_t size) {
+      ^
+/src/fluent-bit/tests/internal/fuzzers/flb_fuzz_header.h:30:15: note: previous implicit declaration is here
+  char *tmp = flb_malloc(size+1);
+              ^
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.c:320:8: error: expected identifier or '('
+extern "C" {
+       ^
+2 errors generated.
+
+Fix failure
+In file included from /src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:1:
+/src/fluent-bit/tests/internal/fuzzers/flb_fuzz_header.h:30:15: error: use of undeclared identifier 'flb_malloc'
+  char *tmp = flb_malloc(size+1);
+              ^
+/src/fluent-bit/tests/internal/fuzzers/flb_fuzz_header.h:32:11: error: use of undeclared identifier 'malloc'
+    tmp = malloc(size+1);
+          ^
+In file included from /src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:3:
+In file included from /src/fluent-bit/include/fluent-bit/flb_parser.h:27:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time.h:24:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time_utils.h:25:
+In file included from /src/fluent-bit/include/fluent-bit/flb_scheduler.h:25:
+In file included from /src/fluent-bit/include/fluent-bit/flb_task.h:25:
+/src/fluent-bit/include/fluent-bit/flb_input.h:479:14: error: assigning to 'struct flb_libco_in_params *' from incompatible type 'void *'
+    params = pthread_getspecific(libco_in_param_key);
+             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fluent-bit/include/fluent-bit/flb_input.h:481:18: error: assigning to 'struct flb_libco_in_params *' from incompatible type 'void *'
+        params = flb_calloc(1, sizeof(struct flb_libco_in_params));
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fluent-bit/include/fluent-bit/flb_input.h:503:14: error: assigning to 'struct flb_libco_in_params *' from incompatible type 'void *'
+    params = pthread_getspecific(libco_in_param_key);
+             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fluent-bit/include/fluent-bit/flb_input.h:505:18: error: assigning to 'struct flb_libco_in_params *' from incompatible type 'void *'
+        params = flb_calloc(1, sizeof(struct flb_libco_in_params));
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:3:
+In file included from /src/fluent-bit/include/fluent-bit/flb_parser.h:27:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time.h:24:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time_utils.h:25:
+In file included from /src/fluent-bit/include/fluent-bit/flb_scheduler.h:26:
+/src/fluent-bit/include/fluent-bit/flb_output.h:682:19: error: no matching function for call to 'flb_event_chunk_create'
+            tmp = flb_event_chunk_create(evc->type, records, evc->tag, flb_sds_len(evc->tag), p_buf, p_size);
+                  ^~~~~~~~~~~~~~~~~~~~~~
+/src/fluent-bit/include/fluent-bit/flb_event.h:50:25: note: candidate function not viable: cannot convert argument of incomplete type 'void *' to 'char *' for 5th argument
+struct flb_event_chunk *flb_event_chunk_create(int type,
+                        ^
+In file included from /src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:3:
+In file included from /src/fluent-bit/include/fluent-bit/flb_parser.h:27:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time.h:24:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time_utils.h:25:
+In file included from /src/fluent-bit/include/fluent-bit/flb_scheduler.h:26:
+/src/fluent-bit/include/fluent-bit/flb_output.h:739:29: error: assigning to 'char *' from incompatible type 'void *'
+                            flb_realloc(p_buf, p_size + serialized_context_size);
+                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fluent-bit/include/fluent-bit/flb_output.h:772:48: error: no matching function for call to 'flb_event_chunk_create'
+            out_flush->processed_event_chunk = flb_event_chunk_create(
+                                               ^~~~~~~~~~~~~~~~~~~~~~
+/src/fluent-bit/include/fluent-bit/flb_event.h:50:25: note: candidate function not viable: cannot convert argument of incomplete type 'void *' to 'char *' for 5th argument
+struct flb_event_chunk *flb_event_chunk_create(int type,
+                        ^
+In file included from /src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:3:
+In file included from /src/fluent-bit/include/fluent-bit/flb_parser.h:27:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time.h:24:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time_utils.h:25:
+In file included from /src/fluent-bit/include/fluent-bit/flb_scheduler.h:26:
+/src/fluent-bit/include/fluent-bit/flb_output.h:836:29: error: assigning to 'char *' from incompatible type 'void *'
+                            flb_realloc(p_buf, p_size + serialized_context_size);
+                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fluent-bit/include/fluent-bit/flb_output.h:869:48: error: no matching function for call to 'flb_event_chunk_create'
+            out_flush->processed_event_chunk = flb_event_chunk_create(
+                                               ^~~~~~~~~~~~~~~~~~~~~~
+/src/fluent-bit/include/fluent-bit/flb_event.h:50:25: note: candidate function not viable: cannot convert argument of incomplete type 'void *' to 'char *' for 5th argument
+struct flb_event_chunk *flb_event_chunk_create(int type,
+                        ^
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:321:7: error: redefinition of 'flb_malloc'
+void *flb_malloc(const size_t size) {
+      ^
+/src/fluent-bit/include/fluent-bit/flb_mem.h:67:7: note: previous definition is here
+void *flb_malloc(const size_t size) {
+      ^
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:354:25: error: no matching function for call to 'flb_cf_create'
+    struct flb_cf *cf = flb_cf_create(config);
+                        ^~~~~~~~~~~~~
+/src/fluent-bit/include/fluent-bit/config_format/flb_cf.h:123:16: note: candidate function not viable: requires 0 arguments, but 1 was provided
+struct flb_cf *flb_cf_create();
+               ^
+13 errors generated.
+make[2]: *** [tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-msgpack_to_gelf_fuzzer.dir/build.make:76: tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-msgpack_to_gelf_fuzzer.dir/msgpack_to_gelf_fuzzer.c.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:7949: tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-msgpack_to_gelf_fuzzer.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
+[ 89%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_input_trace.c.o
+[ 89%] Built target flb-it-fuzz-msgpack_parse_fuzzer_OSSFUZZ
+[ 89%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_input_thread.c.o
+[ 89%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_filter.c.o
+[ 89%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_output.c.o
+[ 89%] Built target flb-it-fuzz-aws_util_fuzzer
+[ 89%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_output_thread.c.o
+[ 89%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-msgpack_to_gelf_fuzzer_OSSFUZZ.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 89%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_config.c.o
+[ 89%] Built target flb-it-fuzz-engine_fuzzer
+[ 89%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_config_map.c.o
+[ 89%] Built target flb-it-fuzz-aws_credentials_fuzzer
+[ 89%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_socket.c.o
+[ 89%] Built target flb-it-fuzz-signv4_fuzzer
+[ 90%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_network.c.o
+[ 90%] Built target flb-it-fuzz-aws_credentials_fuzzer_OSSFUZZ
+[ 90%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_utils.c.o
+[ 90%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_slist.c.o
+[ 90%] Built target flb-it-fuzz-input_fuzzer
+[ 90%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_engine.c.o
+[ 90%] Built target flb-it-fuzz-engine_fuzzer_OSSFUZZ
+[ 90%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_engine_dispatch.c.o
+[ 90%] Built target flb-it-fuzz-aws_util_fuzzer_OSSFUZZ
+[ 90%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_task.c.o
+[ 90%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_unescape.c.o
+[ 90%] Built target flb-it-fuzz-config_random_fuzzer_OSSFUZZ
+[ 90%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_scheduler.c.o
+[ 90%] Built target flb-it-fuzz-signv4_fuzzer_OSSFUZZ
+[ 90%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_io.c.o
+[ 90%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_storage.c.o
+[ 90%] Built target flb-it-fuzz-config_random_fuzzer
+[ 90%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_connection.c.o
+[ 90%] Built target flb-it-fuzz-config_fuzzer
+[ 90%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_downstream.c.o
+[ 90%] Built target flb-it-fuzz-config_fuzzer_OSSFUZZ
+[ 91%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_upstream.c.o
+[ 91%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_upstream_ha.c.o
+[ 91%] Built target flb-it-fuzz-input_fuzzer_OSSFUZZ
+[ 91%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_upstream_node.c.o
+[ 91%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_router.c.o
+[ 91%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_worker.c.o
+[ 91%] Built target flb-it-fuzz-filter_stdout_fuzzer
+[ 91%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_coro.c.o
+[ 91%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_time.c.o
+[ 91%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_sosreport.c.o
+In file included from /src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.c:3:
+In file included from /src/fluent-bit/include/fluent-bit/flb_parser.h:27:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time.h:24:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time_utils.h:24:
+In file included from /src/fluent-bit/include/fluent-bit/flb_coro.h:35:
+/src/fluent-bit/include/fluent-bit/flb_mem.h:67:7: error: static declaration of 'flb_malloc' follows non-static declaration
+void *flb_malloc(const size_t size) {
+      ^
+/src/fluent-bit/tests/internal/fuzzers/flb_fuzz_header.h:30:15: note: previous implicit declaration is here
+  char *tmp = flb_malloc(size+1);
+              ^
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.c:320:8: error: expected identifier or '('
+extern "C" {
+       ^
+2 errors generated.
+
+Fix failure
+In file included from /src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:1:
+/src/fluent-bit/tests/internal/fuzzers/flb_fuzz_header.h:30:15: error: use of undeclared identifier 'flb_malloc'
+  char *tmp = flb_malloc(size+1);
+              ^
+/src/fluent-bit/tests/internal/fuzzers/flb_fuzz_header.h:32:11: error: use of undeclared identifier 'malloc'
+    tmp = malloc(size+1);
+          ^
+In file included from /src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:3:
+In file included from /src/fluent-bit/include/fluent-bit/flb_parser.h:27:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time.h:24:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time_utils.h:25:
+In file included from /src/fluent-bit/include/fluent-bit/flb_scheduler.h:25:
+In file included from /src/fluent-bit/include/fluent-bit/flb_task.h:25:
+/src/fluent-bit/include/fluent-bit/flb_input.h:479:14: error: assigning to 'struct flb_libco_in_params *' from incompatible type 'void *'
+    params = pthread_getspecific(libco_in_param_key);
+             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fluent-bit/include/fluent-bit/flb_input.h:481:18: error: assigning to 'struct flb_libco_in_params *' from incompatible type 'void *'
+        params = flb_calloc(1, sizeof(struct flb_libco_in_params));
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fluent-bit/include/fluent-bit/flb_input.h:503:14: error: assigning to 'struct flb_libco_in_params *' from incompatible type 'void *'
+    params = pthread_getspecific(libco_in_param_key);
+             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fluent-bit/include/fluent-bit/flb_input.h:505:18: error: assigning to 'struct flb_libco_in_params *' from incompatible type 'void *'
+        params = flb_calloc(1, sizeof(struct flb_libco_in_params));
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:3:
+In file included from /src/fluent-bit/include/fluent-bit/flb_parser.h:27:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time.h:24:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time_utils.h:25:
+In file included from /src/fluent-bit/include/fluent-bit/flb_scheduler.h:26:
+/src/fluent-bit/include/fluent-bit/flb_output.h:682:19: error: no matching function for call to 'flb_event_chunk_create'
+            tmp = flb_event_chunk_create(evc->type, records, evc->tag, flb_sds_len(evc->tag), p_buf, p_size);
+                  ^~~~~~~~~~~~~~~~~~~~~~
+/src/fluent-bit/include/fluent-bit/flb_event.h:50:25: note: candidate function not viable: cannot convert argument of incomplete type 'void *' to 'char *' for 5th argument
+struct flb_event_chunk *flb_event_chunk_create(int type,
+                        ^
+In file included from /src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:3:
+In file included from /src/fluent-bit/include/fluent-bit/flb_parser.h:27:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time.h:24:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time_utils.h:25:
+In file included from /src/fluent-bit/include/fluent-bit/flb_scheduler.h:26:
+/src/fluent-bit/include/fluent-bit/flb_output.h:739:29: error: assigning to 'char *' from incompatible type 'void *'
+                            flb_realloc(p_buf, p_size + serialized_context_size);
+                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fluent-bit/include/fluent-bit/flb_output.h:772:48: error: no matching function for call to 'flb_event_chunk_create'
+            out_flush->processed_event_chunk = flb_event_chunk_create(
+                                               ^~~~~~~~~~~~~~~~~~~~~~
+/src/fluent-bit/include/fluent-bit/flb_event.h:50:25: note: candidate function not viable: cannot convert argument of incomplete type 'void *' to 'char *' for 5th argument
+struct flb_event_chunk *flb_event_chunk_create(int type,
+                        ^
+In file included from /src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:3:
+In file included from /src/fluent-bit/include/fluent-bit/flb_parser.h:27:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time.h:24:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time_utils.h:25:
+In file included from /src/fluent-bit/include/fluent-bit/flb_scheduler.h:26:
+/src/fluent-bit/include/fluent-bit/flb_output.h:836:29: error: assigning to 'char *' from incompatible type 'void *'
+                            flb_realloc(p_buf, p_size + serialized_context_size);
+                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fluent-bit/include/fluent-bit/flb_output.h:869:48: error: no matching function for call to 'flb_event_chunk_create'
+            out_flush->processed_event_chunk = flb_event_chunk_create(
+                                               ^~~~~~~~~~~~~~~~~~~~~~
+/src/fluent-bit/include/fluent-bit/flb_event.h:50:25: note: candidate function not viable: cannot convert argument of incomplete type 'void *' to 'char *' for 5th argument
+struct flb_event_chunk *flb_event_chunk_create(int type,
+                        ^
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:321:7: error: redefinition of 'flb_malloc'
+void *flb_malloc(const size_t size) {
+      ^
+/src/fluent-bit/include/fluent-bit/flb_mem.h:67:7: note: previous definition is here
+void *flb_malloc(const size_t size) {
+      ^
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:354:25: error: no matching function for call to 'flb_cf_create'
+    struct flb_cf *cf = flb_cf_create(config);
+                        ^~~~~~~~~~~~~
+/src/fluent-bit/include/fluent-bit/config_format/flb_cf.h:123:16: note: candidate function not viable: requires 0 arguments, but 1 was provided
+struct flb_cf *flb_cf_create();
+               ^
+13 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

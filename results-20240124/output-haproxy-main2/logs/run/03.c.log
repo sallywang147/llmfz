@@ -1,0 +1,52 @@
+/workspace/out/libfuzzer-address-x86_64/fuzz_cfg_parser -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/fuzz_cfg_parser < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 1607940655
+INFO: Loaded 1 modules   (79 inline 8-bit counters): 79 [0x615020, 0x61506f), 
+INFO: Loaded 1 PC tables (79 PCs): 79 [0x5c8aa0,0x5c8f90), 
+INFO:        0 files found in /workspace/corpus/fuzz_cfg_parser
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: A corpus is not provided, starting from an empty corpus
+#2	INITED cov: 6 ft: 6 corp: 1/1b exec/s: 0 rss: 31Mb
+#3	NEW    cov: 6 ft: 8 corp: 2/3b lim: 4096 exec/s: 0 rss: 32Mb L: 2/2 MS: 1 CrossOver-
+#8	NEW    cov: 6 ft: 10 corp: 3/6b lim: 4096 exec/s: 0 rss: 32Mb L: 3/3 MS: 5 InsertByte-ShuffleBytes-CrossOver-CrossOver-InsertByte-
+#22	NEW    cov: 7 ft: 12 corp: 4/17b lim: 4096 exec/s: 0 rss: 32Mb L: 11/11 MS: 4 ShuffleBytes-EraseBytes-CopyPart-CMP- DE: "\377\377\377\377\377\377\377\377"-
+==13== ERROR: libFuzzer: out-of-memory (malloc(3221225472))
+   To change the out-of-memory limit use -rss_limit_mb=<N>
+
+    #0 0x539091 in __sanitizer_print_stack_trace /src/llvm-project/compiler-rt/lib/asan/asan_stack.cpp:87:3
+    #1 0x457ba8 in fuzzer::PrintStackTrace() /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerUtil.cpp:210:5
+    #2 0x43bb45 in fuzzer::Fuzzer::HandleMalloc(unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:131:3
+    #3 0x43ba5a in fuzzer::MallocHook(void const volatile*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:100:6
+    #4 0x540517 in __sanitizer::RunMallocHooks(void const*, unsigned long) /src/llvm-project/compiler-rt/lib/sanitizer_common/sanitizer_common.cpp:318:5
+    #5 0x4b06c4 in __asan::Allocator::Allocate(unsigned long, unsigned long, __sanitizer::BufferedStackTrace*, __asan::AllocType, bool) /src/llvm-project/compiler-rt/lib/asan/asan_allocator.cpp:600:5
+    #6 0x4b0d19 in __asan::asan_memalign(unsigned long, unsigned long, __sanitizer::BufferedStackTrace*, __asan::AllocType) /src/llvm-project/compiler-rt/lib/asan/asan_allocator.cpp:1013:16
+    #7 0x569e62 in operator new(unsigned long) /src/llvm-project/compiler-rt/lib/asan/asan_new_delete.cpp:95:3
+    #8 0x56d268 in void* std::__1::__libcpp_operator_new<unsigned long>(unsigned long) /usr/local/bin/../include/c++/v1/new:245:10
+    #9 0x56d268 in std::__1::__libcpp_allocate(unsigned long, unsigned long) /usr/local/bin/../include/c++/v1/new:271:10
+    #10 0x56d268 in std::__1::allocator<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > >::allocate(unsigned long) /usr/local/bin/../include/c++/v1/__memory/allocator.h:105:38
+    #11 0x56d268 in std::__1::allocator_traits<std::__1::allocator<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > > >::allocate(std::__1::allocator<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > >&, unsigned long) /usr/local/bin/../include/c++/v1/__memory/allocator_traits.h:262:20
+    #12 0x56d268 in std::__1::__split_buffer<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >, std::__1::allocator<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > >&>::__split_buffer(unsigned long, unsigned long, std::__1::allocator<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > >&) /usr/local/bin/../include/c++/v1/__split_buffer:306:29
+    #13 0x56d268 in void std::__1::vector<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >, std::__1::allocator<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > > >::__push_back_slow_path<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > >(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >&&) /usr/local/bin/../include/c++/v1/vector:1526:49
+    #14 0x56c7cc in std::__1::vector<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >, std::__1::allocator<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > > >::push_back(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >&&) /usr/local/bin/../include/c++/v1/vector:1558:9
+    #15 0x56c7cc in LLVMFuzzerTestOneInput /src/haproxy/fuzz_cfg_parser.cpp:23:10
+    #16 0x43de23 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #17 0x43d60a in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #18 0x43ecd9 in fuzzer::Fuzzer::MutateAndTestOne() /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:757:19
+    #19 0x43f9a5 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:895:5
+    #20 0x42ed0f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #21 0x458362 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #22 0x7f3e31466082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #23 0x41f74d in _start (out/libfuzzer-address-x86_64/fuzz_cfg_parser+0x41f74d)
+
+DEDUP_TOKEN: __sanitizer_print_stack_trace--fuzzer::PrintStackTrace()--fuzzer::Fuzzer::HandleMalloc(unsigned long)
+MS: 5 CopyPart-ChangeBit-EraseBytes-ShuffleBytes-InsertRepeatedBytes-; base unit: ff5b45fe7dac77b64de2dfafef2d419515fa48c7
+0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x9f,0x23,0xad,
+\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237\237#\255
+artifact_prefix='./'; Test unit written to ./oom-daef3cd618e55f47e6f67c2db27eafd3c212fcb5
+Base64: n5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fI60=
+SUMMARY: libFuzzer: out-of-memory
+stat::number_of_executed_units: 32
+stat::average_exec_per_sec:     2
+stat::new_units_added:          3
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              2048

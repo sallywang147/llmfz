@@ -1,0 +1,79 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fluent-bit/flb_info.h>
+#include <fluent-bit/flb_lib.h>
+#include <stdint.h>
+#include <stdlib.h>
+
+extern "C" {
+#include <fluent-bit/flb_lib.h>
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  struct flb_lib_ctx *ctx = flb_lib_ctx_create();
+  if (ctx == NULL) {
+    return 0;
+  }
+
+  flb_start_trace(ctx);
+  flb_lib_ctx_destroy(ctx);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.c:6:8: error: expected identifier or '('
+extern "C" {
+       ^
+1 error generated.
+
+Fix failure
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:11:29: error: use of undeclared identifier 'flb_lib_ctx_create'
+  struct flb_lib_ctx *ctx = flb_lib_ctx_create();
+                            ^
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:17:3: error: use of undeclared identifier 'flb_lib_ctx_destroy'
+  flb_lib_ctx_destroy(ctx);
+  ^
+2 errors generated.
+make[2]: *** [tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-msgpack_to_gelf_fuzzer.dir/build.make:76: tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-msgpack_to_gelf_fuzzer.dir/msgpack_to_gelf_fuzzer.c.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+[ 91%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-pack_json_state_fuzzer_OSSFUZZ.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 91%] Built target flb-it-fuzz-config_random_fuzzer_OSSFUZZ
+[ 91%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-pack_json_state_fuzzer.dir/local_test.c.o
+make[1]: *** [CMakeFiles/Makefile2:7949: tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-msgpack_to_gelf_fuzzer.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
+[ 91%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_upstream_ha.c.o
+[ 91%] Built target flb-it-fuzz-signv4_fuzzer_OSSFUZZ
+[ 91%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_upstream_node.c.o
+[ 91%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_router.c.o
+[ 91%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_worker.c.o
+[ 91%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-http_fuzzer.dir/local_test.c.o
+[ 91%] Built target flb-it-fuzz-msgpack_parse_fuzzer
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.c:6:8: error: expected identifier or '('
+extern "C" {
+       ^
+1 error generated.
+
+Fix failure
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:11:29: error: use of undeclared identifier 'flb_lib_ctx_create'
+  struct flb_lib_ctx *ctx = flb_lib_ctx_create();
+                            ^
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:17:3: error: use of undeclared identifier 'flb_lib_ctx_destroy'
+  flb_lib_ctx_destroy(ctx);
+  ^
+2 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

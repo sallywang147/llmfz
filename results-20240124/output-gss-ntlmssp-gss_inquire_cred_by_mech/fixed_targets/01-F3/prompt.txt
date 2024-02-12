@@ -1,0 +1,53 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <gssapi.h>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <algorithm>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  OM_uint32 minor_status = 0;
+  gss_cred_id_struct *cred_handle = GSS_C_NO_CREDENTIAL;
+  gss_OID_desc_struct mech_type = {0, NULL};
+  gss_name_struct **name = NULL;
+  int initiator_lifetime = 0;
+  int acceptor_lifetime = 0;
+  int cred_usage = 0;
+
+  gss_inquire_cred_by_mech(&minor_status, cred_handle, &mech_type, &name,
+                           &initiator_lifetime, &acceptor_lifetime,
+                           &cred_usage);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:16:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+fuzz-accept-sec-context.cpp:16:3: error: no matching function for call to 'gss_inquire_cred_by_mech'
+  gss_inquire_cred_by_mech(&minor_status, cred_handle, &mech_type, &name,
+  ^~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/gssapi/gssapi.h:649:1: note: candidate function not viable: no known conversion from 'gss_name_struct ***' to 'gss_name_t *' (aka 'gss_name_struct **') for 4th argument; remove &
+gss_inquire_cred_by_mech(
+^
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

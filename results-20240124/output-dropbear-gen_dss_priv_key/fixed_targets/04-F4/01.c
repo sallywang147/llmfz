@@ -1,0 +1,1 @@
+error: undefined reference to 'gen_dss_priv_key'

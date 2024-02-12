@@ -1,0 +1,64 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <algorithm>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+#include <vector>
+
+extern "C" {
+#include <capstone/capstone.h>
+#include <capstone/tricore.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const size_t handle = stream.ConsumeIntegral<size_t>();
+  const size_t byte_len = stream.ConsumeIntegral<size_t>();
+  const size_t address = stream.ConsumeIntegral<size_t>();
+  std::vector<char> bytes = stream.ConsumeBytes<char>(byte_len);
+  struct MCInst mi;
+  size_t size;
+  char info[100];
+  TriCore_getInstruction(handle, bytes.data(), byte_len, &mi, &size, address, info);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:16:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:21:17: error: variable has incomplete type 'struct MCInst'
+  struct MCInst mi;
+                ^
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:21:10: note: forward declaration of 'MCInst'
+  struct MCInst mi;
+         ^
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:22:10: error: redefinition of 'size'
+  size_t size;
+         ^
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:15:67: note: previous definition is here
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+                                                                  ^
+2 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

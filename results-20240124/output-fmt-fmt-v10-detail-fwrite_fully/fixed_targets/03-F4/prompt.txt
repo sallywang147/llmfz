@@ -1,0 +1,50 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+#include "fmt/format.h"
+#include "fmt/core.h" // Include the header for fwrite_fully
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  static bool initialized = false;
+  if (!initialized) {
+    fmt::print("Initializing\n");
+    initialized = true;
+  }
+
+  FuzzedDataProvider stream(data, size);
+  const size_t count = stream.ConsumeIntegral<size_t>();
+  const std::string text = stream.ConsumeRemainingBytesAsString();
+
+  std::vector<char> buffer(count);
+  fwrite_fully(buffer.data(), count, stdout); // Use fwrite_fully instead
+  fmt::print("Wrote {} bytes\n", count);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/fmt/test/fuzzing/chrono-timepoint.cc:24:3: error: use of undeclared identifier 'fwrite_fully'
+  fwrite_fully(buffer.data(), count, stdout); // Use fwrite_fully instead
+  ^
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

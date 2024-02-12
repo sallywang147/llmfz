@@ -1,0 +1,1 @@
+error: undefined reference to `capnp::_::initDynamicTestMessage(capnp::DynamicStruct::Builder*)'

@@ -1,0 +1,56 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+#include <ares.h>
+
+// Entrypoint for Clang's libfuzzer
+int LLVMFuzzerTestOneInput(const unsigned char *data,
+                           unsigned long size) {
+  // Feed the data into ares_getnameinfo_int.
+  extern "C" {
+    struct ares_channeldata channel;
+    int ares_getnameinfo_int(ares_channeldata *, struct sockaddr *, int, int, char *, char *);
+  }
+  struct sockaddr_in addr;
+  addr.sin_family = AF_INET;
+  addr.sin_port = 0;
+  addr.sin_addr.s_addr = 0;
+
+  ares_getnameinfo_int(&channel, (struct sockaddr *)&addr, sizeof(addr),
+                      ARES_NI_NUMERICHOST, NULL, NULL);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/c-ares/test/ares-test-fuzz-name.c:8:10: error: expected identifier or '('
+  extern "C" {
+         ^
+/src/c-ares/test/ares-test-fuzz-name.c:17:25: error: use of undeclared identifier 'channel'
+  ares_getnameinfo_int(&channel, (struct sockaddr *)&addr, sizeof(addr),
+                        ^
+2 errors generated.
+
+Fix failure
+/src/c-ares/test/ares-test-fuzz-name.cpp:8:10: error: expected unqualified-id
+  extern "C" {
+         ^
+/src/c-ares/test/ares-test-fuzz-name.cpp:17:25: error: use of undeclared identifier 'channel'
+  ares_getnameinfo_int(&channel, (struct sockaddr *)&addr, sizeof(addr),
+                        ^
+2 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,110 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+#include "llvm/MC/MCInst.h"
+#include "llvm/MC/MCInstPrinter.h"
+#include "llvm/MC/MCStreamer.h"
+#include "llvm/MC/MCSubtargetInfo.h"
+#include "llvm/Support/SourceMgr.h"
+
+extern "C" {
+void AArch64AppleInstPrinter_printInst(struct MCInst * MI, size_t Address, char * Annot, struct SStream * O);
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const uint8_t instruction_size = stream.ConsumeIntegral<uint8_t>();
+  const uint8_t instruction_bytes[instruction_size];
+  stream.ConsumeBytes<uint8_t>(instruction_bytes, instruction_size);
+  const uint8_t address = stream.ConsumeIntegral<uint8_t>();
+  const std::string annotation = stream.ConsumeRemainingBytesAsString();
+  const char* annotation_c_str = annotation.c_str();
+  struct MCInst instruction;
+  instruction.setOpcode(0);
+  instruction.addOperand(MCOperand::createImm(0));
+  struct MCInstPrinter printer(nullptr, nullptr);
+  struct MCStreamer streamer(nullptr, nullptr);
+  struct MCSubtargetInfo subtarget_info;
+  struct SStream stream_buffer;
+  AArch64AppleInstPrinter_printInst(&instruction, address, (char*)annotation_c_str, &stream_buffer);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:16:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:21:17: error: default initialization of an object of const type 'const uint8_t[instruction_size]' (aka 'const unsigned char[instruction_size]')
+  const uint8_t instruction_bytes[instruction_size];
+                ^
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:22:10: error: no matching member function for call to 'ConsumeBytes'
+  stream.ConsumeBytes<uint8_t>(instruction_bytes, instruction_size);
+  ~~~~~~~^~~~~~~~~~~~~~~~~~~~~
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:352:36: note: candidate function template not viable: no known conversion from 'const uint8_t[instruction_size]' (aka 'const unsigned char[instruction_size]') to 'size_t' (aka 'unsigned long') for 1st argument
+std::vector<T> FuzzedDataProvider::ConsumeBytes(size_t size, size_t num_bytes) {
+                                   ^
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:108:36: note: candidate function template not viable: requires single argument 'num_bytes', but 2 arguments were provided
+std::vector<T> FuzzedDataProvider::ConsumeBytes(size_t num_bytes) {
+                                   ^
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:26:17: error: variable has incomplete type 'struct MCInst'
+  struct MCInst instruction;
+                ^
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:15:47: note: forward declaration of 'MCInst'
+void AArch64AppleInstPrinter_printInst(struct MCInst * MI, size_t Address, char * Annot, struct SStream * O);
+                                              ^
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:28:26: error: use of undeclared identifier 'MCOperand'; did you mean 'llvm::MCOperand'?
+  instruction.addOperand(MCOperand::createImm(0));
+                         ^~~~~~~~~
+                         llvm::MCOperand
+/usr/local/include/llvm/MC/MCInstPrinter.h:19:7: note: 'llvm::MCOperand' declared here
+class MCOperand;
+      ^
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:29:24: error: variable has incomplete type 'struct MCInstPrinter'
+  struct MCInstPrinter printer(nullptr, nullptr);
+                       ^
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:29:10: note: forward declaration of 'MCInstPrinter'
+  struct MCInstPrinter printer(nullptr, nullptr);
+         ^
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:30:21: error: variable has incomplete type 'struct MCStreamer'
+  struct MCStreamer streamer(nullptr, nullptr);
+                    ^
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:30:10: note: forward declaration of 'MCStreamer'
+  struct MCStreamer streamer(nullptr, nullptr);
+         ^
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:31:26: error: variable has incomplete type 'struct MCSubtargetInfo'
+  struct MCSubtargetInfo subtarget_info;
+                         ^
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:31:10: note: forward declaration of 'MCSubtargetInfo'
+  struct MCSubtargetInfo subtarget_info;
+         ^
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:32:18: error: variable has incomplete type 'struct SStream'
+  struct SStream stream_buffer;
+                 ^
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:15:97: note: forward declaration of 'SStream'
+void AArch64AppleInstPrinter_printInst(struct MCInst * MI, size_t Address, char * Annot, struct SStream * O);
+                                                                                                ^
+8 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

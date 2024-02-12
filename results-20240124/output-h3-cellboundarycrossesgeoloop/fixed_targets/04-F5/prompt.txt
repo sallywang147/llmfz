@@ -1,0 +1,79 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <algorithm>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+extern "C" {
+#include "cell_boundary.h"
+#include "geo_loop.h"
+#include "geo_types.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  struct GeoLoop geoloop;
+  geoloop.num_vertices = stream.ConsumeIntegral<uint16_t>();
+  geoloop.vertices = static_cast<struct GeoVertex*>(
+      malloc(sizeof(struct GeoVertex) * geoloop.num_vertices));
+  for (uint16_t i = 0; i < geoloop.num_vertices; ++i) {
+    geoloop.vertices[i].x = stream.ConsumeIntegral<float>();
+    geoloop.vertices[i].y = stream.ConsumeIntegral<float>();
+  }
+
+  struct BBox loop_bbox;
+  loop_bbox.min_x = stream.ConsumeIntegral<float>();
+  loop_bbox.min_y = stream.ConsumeIntegral<float>();
+  loop_bbox.max_x = stream.ConsumeIntegral<float>();
+  loop_bbox.max_y = stream.ConsumeIntegral<float>();
+
+  struct CellBoundary boundary;
+  boundary.start_x = stream.ConsumeIntegral<float>();
+  boundary.start_y = stream.ConsumeIntegral<float>();
+  boundary.end_x = stream.ConsumeIntegral<float>();
+  boundary.end_y = stream.ConsumeIntegral<float>();
+
+  struct BBox boundary_bbox;
+  boundary_bbox.min_x = stream.ConsumeIntegral<float>();
+  boundary_bbox.min_y = stream.ConsumeIntegral<float>();
+  boundary_bbox.max_x = stream.ConsumeIntegral<float>();
+  boundary_bbox.max_y = stream.ConsumeIntegral<float>();
+
+  cellBoundaryCrossesGeoLoop(&geoloop, &loop_bbox, &boundary, &boundary_bbox);
+
+  free(geoloop.vertices);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:16:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+/src/h3//src/apps/fuzzers/fuzzerResolutions.cpp:10:10: fatal error: 'cell_boundary.h' file not found
+#include "cell_boundary.h"
+         ^~~~~~~~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

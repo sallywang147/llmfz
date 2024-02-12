@@ -1,0 +1,59 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include "fuzz.h"
+#include "session.h"
+#include "fuzz-wrapfd.h"
+#include "debug.h"
+#include "dss.h"
+#include "ed25519.h"
+#include "rsa.h"
+
+static void setup_fuzzer(void) {
+	fuzz_common_setup();
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+	static int once = 0;
+	if (!once) {
+		setup_fuzzer();
+		once = 1;
+	}
+
+	if (fuzz_set_input(Data, Size) == DROPBEAR_FAILURE) {
+		return 0;
+	}
+
+	m_malloc_set_epoch(1);
+
+	if (setjmp(fuzz.jmp) == 0) {
+		struct dropbear_DSS_Key *key = gen_rsa_priv_key(1024);
+		if (key) {
+			rsa_key_free(key);
+		}
+		m_malloc_free_epoch(1, 0);
+	} else {
+		m_malloc_free_epoch(1, 1);
+		TRACE(("dropbear_exit longjmped"))
+		/* dropbear_exit jumped here */
+	}
+
+	return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,91 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <algorithm>
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <string>
+#include <vector>
+
+extern "C" {
+#include "am.h"  // Include the header file for the 'cmd_am' function.
+#include "cmd-status.h"
+#include "cmd-add.h"
+#include "cmd-commit.h"
+#include "cmd-init-db.h"
+#include "cmd-branch.h"
+#include "cmd-diff.h"
+#include "cmd-diff-files.h"
+#include "cmd-diff-tree.h"
+#include "cmd-diff-index.h"
+#include "cmd-ls-files.h"
+#include "cmd-config.h"
+#include "cmd-rerere.h"
+#include "cmd-ls-tree.h"
+#include "cmd-mv.h"
+#include "load-builtin-commands.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  size_t num_args = stream.ConsumeIntegralInRange<size_t>(0, 10);
+  std::vector<std::string> args(num_args);
+  for (size_t i = 0; i < num_args; i++) {
+    args[i] = stream.ConsumeRemainingBytesAsString();
+  }
+
+  std::vector<char*> c_args;
+  c_args.reserve(num_args + 1);
+  for (const std::string& arg : args) {
+    c_args.push_back(const_cast<char*>(arg.c_str()));
+  }
+  c_args.push_back(nullptr);
+
+  cmd_am(num_args, c_args.data(), nullptr);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+fuzz-cmd-diff.c:(.text.LLVMFuzzerTestOneInput[LLVMFuzzerTestOneInput]+0x5ac): undefined reference to `cmd_branch'
+/usr/bin/ld: fuzz-cmd-diff.c:(.text.LLVMFuzzerTestOneInput[LLVMFuzzerTestOneInput]+0x67d): undefined reference to `cmd_diff'
+fuzz-cmd-diff.c:(.text.LLVMFuzzerTestOneInput[LLVMFuzzerTestOneInput]+0x9e1): undefined reference to `cmd_diff_files'
+/usr/bin/ld: fuzz-cmd-diff.c:(.text.LLVMFuzzerTestOneInput[LLVMFuzzerTestOneInput]+0xae1): undefined reference to `cmd_diff_tree'
+/usr/bin/ld: fuzz-cmd-diff.c:(.text.LLVMFuzzerTestOneInput[LLVMFuzzerTestOneInput]+0xbfe): undefined reference to `cmd_diff_index'
+fuzz-cmd-base.c:(.text.generate_commit_in_branch[generate_commit_in_branch]+0x176): undefined reference to `cmd_add'
+/usr/bin/ld: fuzz-cmd-base.c:(.text.generate_commit_in_branch[generate_commit_in_branch]+0x208): undefined reference to `cmd_commit'
+fuzz-cmd-base.c:(.text.reset_git_folder[reset_git_folder]+0x116): undefined reference to `cmd_init_db'
+help.c:(.text.load_command_list[load_command_list]+0x53): undefined reference to `load_builtin_commands'
+fuzz-cmd-status.c:(.text.LLVMFuzzerTestOneInput[LLVMFuzzerTestOneInput]+0x275): undefined reference to `cmd_status'
+/usr/bin/ld: fuzz-command.c:(.text.LLVMFuzzerTestOneInput[LLVMFuzzerTestOneInput]+0x7ef): undefined reference to `cmd_ls_files'
+/usr/bin/ld: fuzz-command.c:(.text.LLVMFuzzerTestOneInput[LLVMFuzzerTestOneInput]+0x981): undefined reference to `cmd_config'
+/usr/bin/ld: fuzz-command.c:(.text.LLVMFuzzerTestOneInput[LLVMFuzzerTestOneInput]+0x9c5): undefined reference to `cmd_rerere'
+/usr/bin/ld: fuzz-command.c:(.text.LLVMFuzzerTestOneInput[LLVMFuzzerTestOneInput]+0xfcc): undefined reference to `cmd_ls_tree'
+/usr/bin/ld: fuzz-command.c:(.text.LLVMFuzzerTestOneInput[LLVMFuzzerTestOneInput]+0x108c): undefined reference to `cmd_mv'
+oss-fuzz/fuzz-date.c:1:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+oss-fuzz/fuzz-date.cpp:11:10: fatal error: 'am.h' file not found
+#include "am.h"  // Include the header file for the 'cmd_am' function.
+         ^~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

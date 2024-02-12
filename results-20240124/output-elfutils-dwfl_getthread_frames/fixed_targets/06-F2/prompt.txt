@@ -1,0 +1,117 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <assert.h>
+extern "C" {
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <dwfl.h>
+}
+#include <fuzzer/FuzzedDataProvider.h>
+#include <string>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  int tid = stream.ConsumeIntegral<int>();
+  std::string arg = stream.ConsumeRemainingBytesAsString();
+  dwfl_getthread_frames(nullptr, tid, nullptr, const_cast<char*>(arg.c_str()));
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/fuzz-libdwfl.c:2:8: error: expected identifier or '('
+extern "C" {
+       ^
+/src/fuzz-libdwfl.c:3:10: fatal error: 'cstddef' file not found
+#include <cstddef>
+         ^~~~~~~~~
+2 errors generated.
+
+Fix failure
+In file included from /src/fuzz-libdwfl.cpp:3:
+/usr/local/bin/../include/c++/v1/cstddef:54:1: error: templates must have C++ linkage
+template <class _Tp> struct __libcpp_is_integral                     { enum { value = 0 }; };
+^~~~~~~~~~~~~~~~~~~~
+/src/fuzz-libdwfl.cpp:2:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-libdwfl.cpp:3:
+/usr/local/bin/../include/c++/v1/cstddef:55:29: error: explicit specialization of undeclared template struct '__libcpp_is_integral'
+template <>          struct __libcpp_is_integral<bool>               { enum { value = 1 }; };
+                            ^                   ~~~~~~
+/usr/local/bin/../include/c++/v1/cstddef:56:29: error: explicit specialization of non-template struct '__libcpp_is_integral'
+template <>          struct __libcpp_is_integral<char>               { enum { value = 1 }; };
+                            ^                   ~~~~~~
+/usr/local/bin/../include/c++/v1/cstddef:56:29: error: redefinition of '__libcpp_is_integral'
+/usr/local/bin/../include/c++/v1/cstddef:55:29: note: previous definition is here
+template <>          struct __libcpp_is_integral<bool>               { enum { value = 1 }; };
+                            ^
+/usr/local/bin/../include/c++/v1/cstddef:57:29: error: explicit specialization of non-template struct '__libcpp_is_integral'
+template <>          struct __libcpp_is_integral<signed char>        { enum { value = 1 }; };
+                            ^                   ~~~~~~~~~~~~~
+/usr/local/bin/../include/c++/v1/cstddef:57:29: error: redefinition of '__libcpp_is_integral'
+/usr/local/bin/../include/c++/v1/cstddef:55:29: note: previous definition is here
+template <>          struct __libcpp_is_integral<bool>               { enum { value = 1 }; };
+                            ^
+/usr/local/bin/../include/c++/v1/cstddef:58:29: error: explicit specialization of non-template struct '__libcpp_is_integral'
+template <>          struct __libcpp_is_integral<unsigned char>      { enum { value = 1 }; };
+                            ^                   ~~~~~~~~~~~~~~~
+/usr/local/bin/../include/c++/v1/cstddef:58:29: error: redefinition of '__libcpp_is_integral'
+/usr/local/bin/../include/c++/v1/cstddef:55:29: note: previous definition is here
+template <>          struct __libcpp_is_integral<bool>               { enum { value = 1 }; };
+                            ^
+/usr/local/bin/../include/c++/v1/cstddef:60:29: error: explicit specialization of non-template struct '__libcpp_is_integral'
+template <>          struct __libcpp_is_integral<wchar_t>            { enum { value = 1 }; };
+                            ^                   ~~~~~~~~~
+/usr/local/bin/../include/c++/v1/cstddef:60:29: error: redefinition of '__libcpp_is_integral'
+/usr/local/bin/../include/c++/v1/cstddef:55:29: note: previous definition is here
+template <>          struct __libcpp_is_integral<bool>               { enum { value = 1 }; };
+                            ^
+/usr/local/bin/../include/c++/v1/cstddef:66:29: error: explicit specialization of non-template struct '__libcpp_is_integral'
+template <>          struct __libcpp_is_integral<char16_t>           { enum { value = 1 }; };
+                            ^                   ~~~~~~~~~~
+/usr/local/bin/../include/c++/v1/cstddef:66:29: error: redefinition of '__libcpp_is_integral'
+/usr/local/bin/../include/c++/v1/cstddef:55:29: note: previous definition is here
+template <>          struct __libcpp_is_integral<bool>               { enum { value = 1 }; };
+                            ^
+/usr/local/bin/../include/c++/v1/cstddef:67:29: error: explicit specialization of non-template struct '__libcpp_is_integral'
+template <>          struct __libcpp_is_integral<char32_t>           { enum { value = 1 }; };
+                            ^                   ~~~~~~~~~~
+/usr/local/bin/../include/c++/v1/cstddef:67:29: error: redefinition of '__libcpp_is_integral'
+/usr/local/bin/../include/c++/v1/cstddef:55:29: note: previous definition is here
+template <>          struct __libcpp_is_integral<bool>               { enum { value = 1 }; };
+                            ^
+/usr/local/bin/../include/c++/v1/cstddef:69:29: error: explicit specialization of non-template struct '__libcpp_is_integral'
+template <>          struct __libcpp_is_integral<short>              { enum { value = 1 }; };
+                            ^                   ~~~~~~~
+/usr/local/bin/../include/c++/v1/cstddef:69:29: error: redefinition of '__libcpp_is_integral'
+/usr/local/bin/../include/c++/v1/cstddef:55:29: note: previous definition is here
+template <>          struct __libcpp_is_integral<bool>               { enum { value = 1 }; };
+                            ^
+/usr/local/bin/../include/c++/v1/cstddef:70:29: error: explicit specialization of non-template struct '__libcpp_is_integral'
+template <>          struct __libcpp_is_integral<unsigned short>     { enum { value = 1 }; };
+                            ^                   ~~~~~~~~~~~~~~~~
+/usr/local/bin/../include/c++/v1/cstddef:70:29: error: redefinition of '__libcpp_is_integral'
+/usr/local/bin/../include/c++/v1/cstddef:55:29: note: previous definition is here
+template <>          struct __libcpp_is_integral<bool>               { enum { value = 1 }; };
+                            ^
+/usr/local/bin/../include/c++/v1/cstddef:71:29: error: explicit specialization of non-template struct '__libcpp_is_integral'
+template <>          struct __libcpp_is_integral<int>                { enum { value = 1 }; };
+                            ^                   ~~~~~
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

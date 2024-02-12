@@ -1,0 +1,56 @@
+/workspace/out/libfuzzer-address-x86_64/chrono-timepoint-fuzzer -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/chrono-timepoint-fuzzer < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 1658475781
+INFO: Loaded 1 modules   (4177 inline 8-bit counters): 4177 [0x6fd928, 0x6fe979), 
+INFO: Loaded 1 PC tables (4177 PCs): 4177 [0x687400,0x697910), 
+INFO:        0 files found in /workspace/corpus/chrono-timepoint-fuzzer
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: A corpus is not provided, starting from an empty corpus
+#2	INITED cov: 21 ft: 22 corp: 1/1b exec/s: 0 rss: 32Mb
+#4	NEW    cov: 23 ft: 25 corp: 2/3b lim: 4096 exec/s: 0 rss: 32Mb L: 2/2 MS: 2 ChangeByte-CopyPart-
+	NEW_FUNC[1/1]: 0x5a4900 in void fmt::v10::detail::parse_format_string<false, char, void fmt::v10::detail::vformat_to<char>(fmt::v10::detail::buffer<char>&, fmt::v10::basic_string_view<char>, fmt::v10::detail::vformat_args<char>::type, fmt::v10::detail::locale_ref)::format_handler>(fmt::v10::basic_string_view<char>, void fmt::v10::detail::vformat_to<char>(fmt::v10::detail::buffer<char>&, fmt::v10::basic_string_view<char>, fmt::v10::detail::vformat_args<char>::type, fmt::v10::detail::locale_ref)::format_handler&&)::writer::operator()(char const*, char const*) /src/fmt/include/fmt/base.h:2585
+#5	NEW    cov: 32 ft: 35 corp: 3/49b lim: 4096 exec/s: 0 rss: 33Mb L: 46/46 MS: 1 InsertRepeatedBytes-
+#6	NEW    cov: 32 ft: 37 corp: 4/73b lim: 4096 exec/s: 0 rss: 33Mb L: 24/46 MS: 1 InsertRepeatedBytes-
+#37	REDUCE cov: 32 ft: 37 corp: 4/71b lim: 4096 exec/s: 0 rss: 33Mb L: 22/46 MS: 1 EraseBytes-
+libc++abi: terminating with uncaught exception of type fmt::v10::format_error: unmatched '}' in format string
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+==13==ERROR: AddressSanitizer: ABRT on unknown address 0x00000000000d (pc 0x7fb543e2a00b bp 0x7ffcd01c46f0 sp 0x7ffcd01c3f10 T0)
+SCARINESS: 10 (signal)
+    #0 0x7fb543e2a00b in raise (/lib/x86_64-linux-gnu/libc.so.6+0x4300b) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #1 0x7fb543e09858 in abort (/lib/x86_64-linux-gnu/libc.so.6+0x22858) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #2 0x601755 in abort_message (out/libfuzzer-address-x86_64/chrono-timepoint-fuzzer+0x601755)
+    #3 0x60aa6e in demangling_terminate_handler() cxa_default_handlers.cpp
+    #4 0x6011d2 in std::__terminate(void (*)()) (out/libfuzzer-address-x86_64/chrono-timepoint-fuzzer+0x6011d2)
+    #5 0x602f95 in __cxxabiv1::failed_throw(__cxxabiv1::__cxa_exception*) cxa_exception.cpp
+    #6 0x602f2f in __cxa_throw (out/libfuzzer-address-x86_64/chrono-timepoint-fuzzer+0x602f2f)
+    #7 0x56ee75 in fmt::v10::report_error(char const*) /src/fmt/include/fmt/format-inl.h:127:3
+    #8 0x5759de in void fmt::v10::detail::vformat_to<char>(fmt::v10::detail::buffer<char>&, fmt::v10::basic_string_view<char>, fmt::v10::detail::vformat_args<char>::type, fmt::v10::detail::locale_ref)::format_handler::on_error(char const*) /src/fmt/include/fmt/format.h:4302:42
+    #9 0x5759de in void fmt::v10::detail::parse_format_string<false, char, void fmt::v10::detail::vformat_to<char>(fmt::v10::detail::buffer<char>&, fmt::v10::basic_string_view<char>, fmt::v10::detail::vformat_args<char>::type, fmt::v10::detail::locale_ref)::format_handler>(fmt::v10::basic_string_view<char>, void fmt::v10::detail::vformat_to<char>(fmt::v10::detail::buffer<char>&, fmt::v10::basic_string_view<char>, fmt::v10::detail::vformat_args<char>::type, fmt::v10::detail::locale_ref)::format_handler&&) /src/fmt/include/fmt/base.h:2576:26
+    #10 0x570ced in void fmt::v10::detail::vformat_to<char>(fmt::v10::detail::buffer<char>&, fmt::v10::basic_string_view<char>, fmt::v10::detail::vformat_args<char>::type, fmt::v10::detail::locale_ref) /src/fmt/include/fmt/format.h:4304:3
+    #11 0x571254 in fmt::v10::vprint(_IO_FILE*, fmt::v10::basic_string_view<char>, fmt::v10::basic_format_args<fmt::v10::context>) /src/fmt/include/fmt/format-inl.h:1631:3
+    #12 0x56d4af in void fmt::v10::print<>(_IO_FILE*, fmt::v10::basic_format_string<char>) /src/fmt/include/fmt/base.h:2998:30
+    #13 0x56d4af in LLVMFuzzerTestOneInput /src/fmt/test/fuzzing/chrono-timepoint.cc:13:3
+    #14 0x43ec23 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #15 0x43e40a in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #16 0x43fad9 in fuzzer::Fuzzer::MutateAndTestOne() /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:757:19
+    #17 0x4407a5 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:895:5
+    #18 0x42fb0f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #19 0x459162 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #20 0x7fb543e0b082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #21 0x42054d in _start (out/libfuzzer-address-x86_64/chrono-timepoint-fuzzer+0x42054d)
+
+DEDUP_TOKEN: raise--abort--abort_message
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: ABRT (/lib/x86_64-linux-gnu/libc.so.6+0x4300b) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca) in raise
+==13==ABORTING
+MS: 1 ChangeBit-; base unit: b8d09b4d8580aacbd9efc4540a9b88d2feb9d7e5
+0x7d,0x6d,
+}m
+artifact_prefix='./'; Test unit written to ./crash-de26f943ab65001b6f49569b0b5ea1b9948a0ea8
+Base64: fW0=
+stat::number_of_executed_units: 68
+stat::average_exec_per_sec:     0
+stat::new_units_added:          4
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              33

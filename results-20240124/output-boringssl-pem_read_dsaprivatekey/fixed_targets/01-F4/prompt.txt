@@ -1,0 +1,74 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <openssl/pem.h>
+#include <openssl/dsa.h>
+
+extern "C" {
+#include <openssl/pem.h>
+#include <openssl/dsa.h>
+}
+
+int main() {
+  // Read a DSA private key from a PEM file
+  FILE *fp = fopen("dsa_private_key.pem", "r");
+  if (fp == NULL) {
+    perror("Error opening DSA private key file");
+    return 1;
+  }
+
+  DSA *dsa = PEM_read_DSAPrivateKey(fp, NULL, NULL, NULL);
+  if (dsa == NULL) {
+    perror("Error reading DSA private key");
+    fclose(fp);
+    return 1;
+  }
+
+  // Use the DSA private key to sign a message
+  unsigned char *message = (unsigned char *)"Hello, world!";
+  unsigned int message_len = strlen(message);
+  unsigned char *signature = (unsigned char *)malloc(DSA_size(dsa));
+  unsigned int signature_len;
+  if (DSA_sign(0, message, message_len, signature, &signature_len, dsa) != 1) {
+    perror("Error signing message");
+    DSA_free(dsa);
+    fclose(fp);
+    return 1;
+  }
+
+  // Verify the signature using the DSA public key
+  DSA_PUBKEY *dsa_pub = DSA_get_pub_key(dsa);
+  if (DSA_verify(0, message, message_len, signature, signature_len, dsa_pub) != 1) {
+    perror("Error verifying signature");
+    DSA_free(dsa);
+    DSA_PUBKEY_free(dsa_pub);
+    fclose(fp);
+    return 1;
+  }
+
+  // Free the DSA structures
+  DSA_free(dsa);
+  DSA_PUBKEY_free(dsa_pub);
+
+  // Close the PEM file
+  fclose(fp);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

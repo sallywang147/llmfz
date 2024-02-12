@@ -1,0 +1,328 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdint.h>
+#include <stdlib.h>
+
+#include <isc/buffer.h>
+#include <isc/mem.h>
+#include <isc/result.h>
+#include <isc/util.h>
+
+#include <dns/db.h>
+#include <dns/fixedname.h>
+#include <dns/journal.h>
+#include <dns/message.h>
+#include <dns/name.h>
+#include <dns/rdata.h>
+#include <dns/rdataclass.h>
+#include <dns/rdataset.h>
+#include <dns/rdatatype.h>
+#include <dns/resolver.h>
+#include <dns/result.h>
+#include <dns/tsig.h>
+#include <dns/view.h>
+#include <dns/zone.h>
+#include <dns/zt.h>
+
+#include "fuzz.h"
+
+static isc_mem_t *mctx = NULL;
+
+static isc_result_t
+create_message(dns_message_t **messagep, const uint8_t *data, size_t size,
+	       bool addasig, bool addtsig) {
+	isc_result_t result;
+	dns_message_t *message = NULL;
+	isc_buffer_t b;
+	static unsigned char buf[65535];
+
+	isc_buffer_init(&b, buf, sizeof(buf));
+
+	/* Message ID */
+	isc_buffer_putuint16(&b, 0);
+
+	/* QR, Opcode, other flags = 0, rcode = 0 */
+	isc_buffer_putuint16(&b, (*data & 0x1f) << 11);
+	/* Counts */
+	isc_buffer_putuint16(&b, 1);
+	isc_buffer_putuint16(&b, 0);
+	isc_buffer_putuint16(&b, 0);
+	isc_buffer_putuint16(&b, addasig ? 1 : 0);
+
+	/* Question ./IN/SOA */
+	isc_buffer_putuint8(&b, 0);
+	isc_buffer_putuint16(&b, 6);
+	isc_buffer_putuint16(&b, 1);
+
+	if (addasig) {
+		/* Signature */
+		if (addtsig) {
+			const unsigned char keyname[] = "\x08tsig-key";
+			isc_buffer_putmem(&b, keyname, sizeof(keyname));
+			isc_buffer_putuint16(&b, dns_rdatatype_tsig);
+			isc_buffer_putuint16(&b, dns_rdataclass_any);
+		} else {
+			isc_buffer_putuint8(&b, 0); /* '.' */
+			isc_buffer_putuint16(&b, dns_rdatatype_sig);
+			isc_buffer_putuint16(&b, dns_rdataclass_in);
+		}
+		isc_buffer_putuint32(&b, 0); /* ttl */
+		data++;
+		size--;
+		if (size > isc_buffer_availablelength(&b) - 2) {
+			size = isc_buffer_availablelength(&b) - 2;
+		}
+		isc_buffer_putuint16(&b, size);
+		isc_buffer_putmem(&b, data, size);
+	}
+
+	dns_message_create(mctx, DNS_MESSAGE_INTENTPARSE, &message);
+
+	result = dns_message_parse(message, &b, 0);
+	if (debug) {
+		fprintf(stderr, "dns_message_parse => %s\n",
+			isc_result_totext(result));
+	}
+	if (result != ISC_R_SUCCESS) {
+		dns_message_detach(&message);
+	} else {
+		if (debug) {
+			char text[200000];
+			isc_buffer_init(&b, text, sizeof(text));
+
+			result = dns_message_totext(
+				message, &dns_master_style_debug, 0, &b);
+			if (result == ISC_R_SUCCESS) {
+				fprintf(stderr, "%.*s", (int)b.used, text);
+			} else {
+				fprintf(stderr, "dns_message_totext => %s\n",
+					isc_result_totext(result));
+			}
+		}
+		*messagep = message;
+	}
+	return (result);
+}
+
+extern "C" {
+int
+LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+	isc_result_t result;
+	dns_message_t *message = NULL;
+	bool addasig = false;
+	bool addtsig = false;
+	bool freeze = false;
+	dns_zt_t *zt = NULL;
+	dns_view_t *view = NULL;
+	dns_db_t *db = NULL;
+	dns_zone_t *zone = NULL;
+	dns_fixedname_t fixed;
+	dns_name_t *name = dns_fixedname_initname(&fixed);
+
+	dns_zt_create(&zt);
+	dns_view_create(dns_rdataclass_in, "view", &view);
+	dns_db_create("db", dns_rdataclass_in, &db);
+	dns_zone_create(&zone, 0);
+	dns_name_fromstring(name, "example.com", 0, NULL);
+	dns_zone_setorigin(zone, name);
+	dns_zone_setclass(zone, view->rdclass);
+	dns_zone_settype(zone, dns_zone_master);
+	dns_zone_setdb(zone, db);
+	dns_zone_add(view, zone);
+	dns_zone_detach(&zone);
+	dns_db_detach(&db);
+	dns_view_freeze(view);
+
+	/*
+	 * The first octet affects setup.
+	 * It determines whether a signature is added and which type
+	 * (addasig, addtsig), and whether the zone should be frozen.
+	 *
+	 * The second octet defines if the message is a response and the
+	 * opcode.
+	 */
+	if (size > 65535 || size < 2) {
+		return (0);
+	}
+
+	addasig = (*data & 0x80) != 0;
+	addtsig = (*data & 0x40) != 0;
+	freeze = (*data & 0x20) != 0;
+
+	data++;
+	size--;
+
+	if (debug) {
+		fprintf(stderr,
+			"addasig=%u addtsig=%u freeze=%u\n",
+			addasig, addtsig, freeze);
+	}
+
+	result = create_message(&message, data, size, addasig, addtsig);
+	if (result != ISC_R_SUCCESS) {
+		return (0);
+	}
+
+	result = dns_zt_freezezones(zt, view, freeze);
+	if (debug) {
+		fprintf(stderr, "dns_zt_freezezones => %s\n",
+			isc_result_totext(result));
+	}
+
+	dns_message_detach(&message);
+	dns_zone_detach(&zone);
+	dns_db_detach(&db);
+	dns_view_detach(&view);
+	dns_zt_detach(&zt);
+
+	return (0);
+}
+}
+</code>
+
+The code has the following build issues:
+<error>
+isc_lex_gettoken.c:77:60: error: too few arguments to function call, expected 5, have 3
+        dns_message_create(mctx, DNS_MESSAGE_INTENTPARSE, &message);
+        ~~~~~~~~~~~~~~~~~~                                        ^
+../lib/dns/include/dns/message.h:362:1: note: 'dns_message_create' declared here
+dns_message_create(isc_mem_t *mctx, isc_mempool_t *namepool,
+^
+isc_lex_gettoken.c:105:8: error: expected identifier or '('
+extern "C" {
+       ^
+2 errors generated.
+
+Fix failure
+In file included from isc_lex_gettoken.cpp:4:
+In file included from ../lib/isc/include/isc/buffer.h:112:
+../lib/isc/include/isc/mem.h:398:41: error: expected ')'
+isc__mempool_create(isc_mem_t *restrict mctx, const size_t element_size,
+                                        ^
+../lib/isc/include/isc/mem.h:398:20: note: to match this '('
+isc__mempool_create(isc_mem_t *restrict mctx, const size_t element_size,
+                   ^
+../lib/isc/include/isc/mem.h:419:47: error: expected ')'
+isc__mempool_destroy(isc_mempool_t **restrict mpctxp _ISC_MEM_FLARG);
+                                              ^
+../lib/isc/include/isc/mem.h:419:21: note: to match this '('
+isc__mempool_destroy(isc_mempool_t **restrict mpctxp _ISC_MEM_FLARG);
+                    ^
+../lib/isc/include/isc/mem.h:429:45: error: expected ')'
+isc_mempool_setname(isc_mempool_t *restrict mpctx, const char *name);
+                                            ^
+../lib/isc/include/isc/mem.h:429:20: note: to match this '('
+isc_mempool_setname(isc_mempool_t *restrict mpctx, const char *name);
+                   ^
+../lib/isc/include/isc/mem.h:452:48: error: expected ')'
+isc_mempool_getfreemax(isc_mempool_t *restrict mpctx);
+                                               ^
+../lib/isc/include/isc/mem.h:452:23: note: to match this '('
+isc_mempool_getfreemax(isc_mempool_t *restrict mpctx);
+                      ^
+../lib/isc/include/isc/mem.h:458:48: error: expected ')'
+isc_mempool_setfreemax(isc_mempool_t *restrict mpctx, const unsigned int limit);
+                                               ^
+../lib/isc/include/isc/mem.h:458:23: note: to match this '('
+isc_mempool_setfreemax(isc_mempool_t *restrict mpctx, const unsigned int limit);
+                      ^
+../lib/isc/include/isc/mem.h:464:50: error: expected ')'
+isc_mempool_getfreecount(isc_mempool_t *restrict mpctx);
+                                                 ^
+../lib/isc/include/isc/mem.h:464:25: note: to match this '('
+isc_mempool_getfreecount(isc_mempool_t *restrict mpctx);
+                        ^
+../lib/isc/include/isc/mem.h:470:50: error: expected ')'
+isc_mempool_getallocated(isc_mempool_t *restrict mpctx);
+                                                 ^
+../lib/isc/include/isc/mem.h:470:25: note: to match this '('
+isc_mempool_getallocated(isc_mempool_t *restrict mpctx);
+                        ^
+../lib/isc/include/isc/mem.h:476:50: error: expected ')'
+isc_mempool_getfillcount(isc_mempool_t *restrict mpctx);
+                                                 ^
+../lib/isc/include/isc/mem.h:476:25: note: to match this '('
+isc_mempool_getfillcount(isc_mempool_t *restrict mpctx);
+                        ^
+../lib/isc/include/isc/mem.h:483:50: error: expected ')'
+isc_mempool_setfillcount(isc_mempool_t *restrict mpctx,
+                                                 ^
+../lib/isc/include/isc/mem.h:483:25: note: to match this '('
+isc_mempool_setfillcount(isc_mempool_t *restrict mpctx,
+                        ^
+In file included from isc_lex_gettoken.cpp:4:
+../lib/isc/include/isc/buffer.h:197:68: error: expected ')'
+isc_buffer_allocate(isc_mem_t         *mctx, isc_buffer_t **restrict dynbuffer,
+                                                                     ^
+../lib/isc/include/isc/buffer.h:197:20: note: to match this '('
+isc_buffer_allocate(isc_mem_t         *mctx, isc_buffer_t **restrict dynbuffer,
+                   ^
+../lib/isc/include/isc/buffer.h:213:43: error: expected ')'
+isc_buffer_setmctx(isc_buffer_t *restrict b, isc_mem_t *mctx);
+                                          ^
+../lib/isc/include/isc/buffer.h:213:19: note: to match this '('
+isc_buffer_setmctx(isc_buffer_t *restrict b, isc_mem_t *mctx);
+                  ^
+../lib/isc/include/isc/buffer.h:215:45: error: expected ')'
+isc_buffer_clearmctx(isc_buffer_t *restrict b);
+                                            ^
+../lib/isc/include/isc/buffer.h:215:21: note: to match this '('
+isc_buffer_clearmctx(isc_buffer_t *restrict b);
+                    ^
+../lib/isc/include/isc/buffer.h:222:43: error: expected ')'
+isc_buffer_reserve(isc_buffer_t *restrict dynbuffer, const unsigned int size);
+                                          ^
+../lib/isc/include/isc/buffer.h:222:19: note: to match this '('
+isc_buffer_reserve(isc_buffer_t *restrict dynbuffer, const unsigned int size);
+                  ^
+../lib/isc/include/isc/buffer.h:236:41: error: expected ')'
+isc_buffer_free(isc_buffer_t **restrict dynbuffer);
+                                        ^
+../lib/isc/include/isc/buffer.h:236:16: note: to match this '('
+isc_buffer_free(isc_buffer_t **restrict dynbuffer);
+               ^
+../lib/isc/include/isc/buffer.h:252:44: error: expected ')'
+isc_buffer_initnull(isc_buffer_t *restrict b);
+                                           ^
+../lib/isc/include/isc/buffer.h:252:20: note: to match this '('
+isc_buffer_initnull(isc_buffer_t *restrict b);
+                   ^
+../lib/isc/include/isc/buffer.h:255:42: error: expected ')'
+isc_buffer_reinit(isc_buffer_t *restrict b, void *base,
+                                         ^
+../lib/isc/include/isc/buffer.h:255:18: note: to match this '('
+isc_buffer_reinit(isc_buffer_t *restrict b, void *base,
+                 ^
+../lib/isc/include/isc/buffer.h:270:46: error: expected ')'
+isc_buffer_trycompact(isc_buffer_t *restrict b);
+                                             ^
+../lib/isc/include/isc/buffer.h:270:22: note: to match this '('
+isc_buffer_trycompact(isc_buffer_t *restrict b);
+                     ^
+../lib/isc/include/isc/buffer.h:272:43: error: expected ')'
+isc_buffer_compact(isc_buffer_t *restrict b);
+                                          ^
+../lib/isc/include/isc/buffer.h:272:19: note: to match this '('
+isc_buffer_compact(isc_buffer_t *restrict b);
+                  ^
+../lib/isc/include/isc/buffer.h:292:51: error: expected ')'
+isc_buffer_peekuint8(const isc_buffer_t *restrict b, uint8_t *valp);
+                                                  ^
+../lib/isc/include/isc/buffer.h:292:21: note: to match this '('
+isc_buffer_peekuint8(const isc_buffer_t *restrict b, uint8_t *valp);
+                    ^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

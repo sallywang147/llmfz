@@ -1,0 +1,1 @@
+error: undefined reference to 'RuleBasedNumberFormat::format(long long, UnicodeString const*, UnicodeString*, FieldPosition const*, int*) const'

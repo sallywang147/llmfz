@@ -1,0 +1,1 @@
+error: undefined reference to 'highwayhash::HighwayHashCat<4u>::operator()(highwayhash::HHKey const*, unsigned long long, highwayhash::StringView const*, unsigned long long, highwayhash::HHResult64*)'

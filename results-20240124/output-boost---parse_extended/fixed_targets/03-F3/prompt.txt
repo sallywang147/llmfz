@@ -1,0 +1,58 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <boost/regex.hpp>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  FuzzedDataProvider fuzzed_data(Data, Size);
+  // First value is length of the regex string
+  size_t regex_length = fuzzed_data.ConsumeIntegral<uint8_t>();
+  // Second value is regexp string whose length is `regex_length`
+  std::string regex_string = fuzzed_data.ConsumeBytesAsString(regex_length);
+  try {
+    boost::regex_traits<char, boost::c_regex_traits<char> > traits;
+    traits.set_flags(boost::regex_constants::basic);
+    boost::re_detail_500::basic_regex_parser<char, boost::c_regex_traits<char> > parser(traits);
+    parser.parse_extended(regex_string.c_str(), regex_string.c_str() + regex_length);
+  }
+  catch (const std::runtime_error &) {
+  }
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+../boost_ptree_jsonread_fuzzer.cc:13:12: error: no member named 'set_flags' in 'boost::regex_traits<char, boost::c_regex_traits<char>>'
+    traits.set_flags(boost::regex_constants::basic);
+    ~~~~~~ ^
+../boost_ptree_jsonread_fuzzer.cc:14:82: error: no matching constructor for initialization of 'boost::re_detail_500::basic_regex_parser<char, boost::c_regex_traits<char>>'
+    boost::re_detail_500::basic_regex_parser<char, boost::c_regex_traits<char> > parser(traits);
+                                                                                 ^      ~~~~~~
+./boost/regex/v5/basic_regex_parser.hpp:52:4: note: candidate constructor not viable: no known conversion from 'boost::regex_traits<char, boost::c_regex_traits<char>>' to 'regex_data<char, boost::c_regex_traits<char>> *' for 1st argument
+   basic_regex_parser(regex_data<charT, traits>* data);
+   ^
+./boost/regex/v5/basic_regex_parser.hpp:112:4: note: candidate constructor not viable: no known conversion from 'boost::regex_traits<char, boost::c_regex_traits<char>>' to 'const boost::re_detail_500::basic_regex_parser<char, boost::c_regex_traits<char>>' for 1st argument
+   basic_regex_parser(const basic_regex_parser&);
+   ^
+../boost_ptree_jsonread_fuzzer.cc:15:27: error: too many arguments to function call, expected 0, have 2
+    parser.parse_extended(regex_string.c_str(), regex_string.c_str() + regex_length);
+    ~~~~~~~~~~~~~~~~~~~~~ ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./boost/regex/v5/basic_regex_parser.hpp:63:9: note: 'parse_extended' declared here
+   bool parse_extended();
+        ^
+3 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,86 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <stdio.h>
+#include <unistd.h>
+
+#include <gpac/constants.h>
+#include <gpac/filters.h>
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  char filename[256];
+  GF_Err e;
+  sprintf(filename, "/tmp/libfuzzer.%d", getpid());
+
+  FILE *fp = fopen(filename, "wb");
+  if (!fp)
+    return 0;
+  fwrite(data, size, 1, fp);
+  fclose(fp);
+
+  GF_FilterSession *fs = gf_fs_new_defaults(0);
+  GF_Filter *src = gf_fs_load_source(fs, filename, NULL, NULL, &e);
+  GF_Filter *dmx = gf_fs_load_filter(fs, "dashdmx", &e);
+  gf_fs_run(fs);
+
+  GF_DASHDmxCtx *ctx = (GF_DASHDmxCtx *)dmx->priv;
+  dashdmx_switch_segment(ctx, ctx->group);
+
+  gf_fs_del(fs);
+
+  unlink(filename);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/testsuite/oss-fuzzers/fuzz_parse.c:23:3: error: use of undeclared identifier 'GF_DASHDmxCtx'
+  GF_DASHDmxCtx *ctx = (GF_DASHDmxCtx *)dmx->priv;
+  ^
+/src/testsuite/oss-fuzzers/fuzz_parse.c:23:18: error: use of undeclared identifier 'ctx'
+  GF_DASHDmxCtx *ctx = (GF_DASHDmxCtx *)dmx->priv;
+                 ^
+/src/testsuite/oss-fuzzers/fuzz_parse.c:23:40: error: expected expression
+  GF_DASHDmxCtx *ctx = (GF_DASHDmxCtx *)dmx->priv;
+                                       ^
+/src/testsuite/oss-fuzzers/fuzz_parse.c:23:25: error: use of undeclared identifier 'GF_DASHDmxCtx'
+  GF_DASHDmxCtx *ctx = (GF_DASHDmxCtx *)dmx->priv;
+                        ^
+/src/testsuite/oss-fuzzers/fuzz_parse.c:24:26: error: use of undeclared identifier 'ctx'
+  dashdmx_switch_segment(ctx, ctx->group);
+                         ^
+/src/testsuite/oss-fuzzers/fuzz_parse.c:24:31: error: use of undeclared identifier 'ctx'
+  dashdmx_switch_segment(ctx, ctx->group);
+                              ^
+6 errors generated.
+
+Fix failure
+/src/testsuite/oss-fuzzers/fuzz_parse.cpp:18:26: error: no matching function for call to 'gf_fs_new_defaults'
+  GF_FilterSession *fs = gf_fs_new_defaults(0);
+                         ^~~~~~~~~~~~~~~~~~
+./include/gpac/filters.h:251:19: note: candidate function not viable: no known conversion from 'int' to 'GF_FilterSessionFlags' for 1st argument
+GF_FilterSession *gf_fs_new_defaults(GF_FilterSessionFlags flags);
+                  ^
+/src/testsuite/oss-fuzzers/fuzz_parse.cpp:23:3: error: unknown type name 'GF_DASHDmxCtx'
+  GF_DASHDmxCtx *ctx = (GF_DASHDmxCtx *)dmx->priv;
+  ^
+/src/testsuite/oss-fuzzers/fuzz_parse.cpp:23:25: error: use of undeclared identifier 'GF_DASHDmxCtx'
+  GF_DASHDmxCtx *ctx = (GF_DASHDmxCtx *)dmx->priv;
+                        ^
+/src/testsuite/oss-fuzzers/fuzz_parse.cpp:23:40: error: expected expression
+  GF_DASHDmxCtx *ctx = (GF_DASHDmxCtx *)dmx->priv;
+                                       ^
+4 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

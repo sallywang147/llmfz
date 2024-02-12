@@ -1,0 +1,67 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "apputils.h"
+#include "ns_turn_utils.h"
+#include "stun_buffer.h"
+
+extern int LLVMFuzzerTestOneInput(const uint8_t *Data,
+                                  size_t Size) { // rfc5769check
+
+  if (Size < 10 || Size > 5120) {
+    return 1;
+  }
+
+  struct _stun_buffer *buf = stun_buffer_new();
+  if (!buf) {
+    return 1;
+  }
+
+  struct stun_tid *tid = (struct stun_tid *) malloc(sizeof(struct stun_tid));
+  if (!tid) {
+    stun_buffer_free(buf);
+    return 1;
+  }
+
+  union ioa_addr reflexive_addr;
+
+  stun_set_binding_response(buf, tid, &reflexive_addr, 0, NULL);
+
+  stun_buffer_free(buf);
+  free(tid);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/coturn/fuzzing/FuzzStun.c:21:53: error: invalid application of 'sizeof' to an incomplete type 'struct stun_tid'
+  struct stun_tid *tid = (struct stun_tid *) malloc(sizeof(struct stun_tid));
+                                                    ^     ~~~~~~~~~~~~~~~~~
+/src/coturn/fuzzing/FuzzStun.c:21:10: note: forward declaration of 'struct stun_tid'
+  struct stun_tid *tid = (struct stun_tid *) malloc(sizeof(struct stun_tid));
+         ^
+/src/coturn/fuzzing/FuzzStun.c:27:18: error: variable has incomplete type 'union ioa_addr'
+  union ioa_addr reflexive_addr;
+                 ^
+/src/coturn/fuzzing/FuzzStun.c:27:9: note: forward declaration of 'union ioa_addr'
+  union ioa_addr reflexive_addr;
+        ^
+2 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

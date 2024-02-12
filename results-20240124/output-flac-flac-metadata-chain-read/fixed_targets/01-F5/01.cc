@@ -1,0 +1,1 @@
+undefined reference to `FLAC__metadata_object_from_file'

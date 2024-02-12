@@ -1,0 +1,1 @@
+error: undefined reference to 'hb_ot_color_palette_get_name_id'

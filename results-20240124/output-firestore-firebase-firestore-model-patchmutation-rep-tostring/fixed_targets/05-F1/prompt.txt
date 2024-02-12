@@ -1,0 +1,111 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <cstddef>
+#include <cstdint>
+#include <string>
+
+#include "Firestore/core/src/model/patch_mutation.h"
+
+using firebase::firestore::model::FieldPath;
+using firebase::firestore::model::PatchMutation;
+using firebase::firestore::model::Value;
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  const char* str_ptr = reinterpret_cast<const char*>(data);
+  std::string str{str_ptr, size};
+  PatchMutation::Rep rep;
+
+  // Test PatchMutation::Rep::ToString(std::string, PatchMutation::Rep)
+  try {
+    std::string output;
+    PatchMutation::Rep::ToString(&output, &rep);
+  } catch (...) {
+    // Ignore caught errors and assertions.
+  }
+
+  // Test PatchMutation::Rep::FromString(std::string)
+  try {
+    PatchMutation::Rep::FromString(str);
+  } catch (...) {
+    // Ignore caught errors and assertions.
+  }
+
+  // Test PatchMutation::Rep::FromFields(FieldPath, Value)
+  try {
+    PatchMutation::Rep::FromFields(FieldPath::FromString(str), Value::Null());
+  } catch (...) {
+    // Ignore caught errors and assertions.
+  }
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:9:35: error: no member named 'Value' in namespace 'firebase::firestore::model'
+using firebase::firestore::model::Value;
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+/src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:14:18: error: 'Rep' is a private member of 'firebase::firestore::model::PatchMutation'
+  PatchMutation::Rep rep;
+                 ^
+/src/firebase-ios-sdk/Firestore/core/src/model/patch_mutation.h:77:9: note: declared private here
+  class Rep : public Mutation::Rep {
+        ^
+/src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:14:22: error: no matching constructor for initialization of 'PatchMutation::Rep'
+  PatchMutation::Rep rep;
+                     ^
+/src/firebase-ios-sdk/Firestore/core/src/model/patch_mutation.h:77:9: note: candidate constructor (the implicit copy constructor) not viable: requires 1 argument, but 0 were provided
+  class Rep : public Mutation::Rep {
+        ^
+/src/firebase-ios-sdk/Firestore/core/src/model/patch_mutation.h:77:9: note: candidate constructor (the implicit move constructor) not viable: requires 1 argument, but 0 were provided
+/src/firebase-ios-sdk/Firestore/core/src/model/patch_mutation.h:79:5: note: candidate constructor not viable: requires 5 arguments, but 0 were provided
+    Rep(DocumentKey&& key,
+    ^
+/src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:19:20: error: 'Rep' is a private member of 'firebase::firestore::model::PatchMutation'
+    PatchMutation::Rep::ToString(&output, &rep);
+                   ^
+/src/firebase-ios-sdk/Firestore/core/src/model/patch_mutation.h:77:9: note: declared private here
+  class Rep : public Mutation::Rep {
+        ^
+/src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:19:25: error: call to non-static member function without an object argument
+    PatchMutation::Rep::ToString(&output, &rep);
+    ~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+/src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:26:20: error: 'Rep' is a private member of 'firebase::firestore::model::PatchMutation'
+    PatchMutation::Rep::FromString(str);
+                   ^
+/src/firebase-ios-sdk/Firestore/core/src/model/patch_mutation.h:77:9: note: declared private here
+  class Rep : public Mutation::Rep {
+        ^
+/src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:26:25: error: no type named 'FromString' in 'firebase::firestore::model::PatchMutation::Rep'
+    PatchMutation::Rep::FromString(str);
+    ~~~~~~~~~~~~~~~~~~~~^
+/src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:33:20: error: 'Rep' is a private member of 'firebase::firestore::model::PatchMutation'
+    PatchMutation::Rep::FromFields(FieldPath::FromString(str), Value::Null());
+                   ^
+/src/firebase-ios-sdk/Firestore/core/src/model/patch_mutation.h:77:9: note: declared private here
+  class Rep : public Mutation::Rep {
+        ^
+/src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:33:64: error: use of undeclared identifier 'Value'
+    PatchMutation::Rep::FromFields(FieldPath::FromString(str), Value::Null());
+                                                               ^
+/src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:33:47: error: no member named 'FromString' in 'firebase::firestore::model::FieldPath'
+    PatchMutation::Rep::FromFields(FieldPath::FromString(str), Value::Null());
+                                   ~~~~~~~~~~~^
+/src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:33:25: error: no member named 'FromFields' in 'firebase::firestore::model::PatchMutation::Rep'
+    PatchMutation::Rep::FromFields(FieldPath::FromString(str), Value::Null());
+    ~~~~~~~~~~~~~~~~~~~~^
+11 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

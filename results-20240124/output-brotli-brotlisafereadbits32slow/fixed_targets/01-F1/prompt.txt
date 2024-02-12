@@ -1,0 +1,57 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <stddef.h>
+#include <stdint.h>
+#include <stdlib.h>
+
+#include <brotli/decode.h>
+
+// Entry point for LibFuzzer.
+int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  BrotliBitReader* br = BrotliCreateBitReader(data, size);
+  if (!br) {
+    // OOM is out-of-scope here.
+    return 0;
+  }
+
+  size_t bit_pos = 0;
+  size_t bits_read = 0;
+  while (BrotliSafeReadBits32Slow(br, 1, &bits_read) == 1)
+    bit_pos++;
+
+  BrotliDestroyBitReader(br);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+c/fuzz/decode_fuzzer.c:9:3: error: use of undeclared identifier 'BrotliBitReader'
+  BrotliBitReader* br = BrotliCreateBitReader(data, size);
+  ^
+c/fuzz/decode_fuzzer.c:9:20: error: use of undeclared identifier 'br'
+  BrotliBitReader* br = BrotliCreateBitReader(data, size);
+                   ^
+c/fuzz/decode_fuzzer.c:10:8: error: use of undeclared identifier 'br'
+  if (!br) {
+       ^
+c/fuzz/decode_fuzzer.c:17:35: error: use of undeclared identifier 'br'
+  while (BrotliSafeReadBits32Slow(br, 1, &bits_read) == 1)
+                                  ^
+c/fuzz/decode_fuzzer.c:20:26: error: use of undeclared identifier 'br'
+  BrotliDestroyBitReader(br);
+                         ^
+5 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,31 @@
+/workspace/out/libfuzzer-address-x86_64/firestore_fieldpath_fuzzer -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/firestore_fieldpath_fuzzer < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 3752604760
+INFO: Loaded 1 modules   (29 inline 8-bit counters): 29 [0x615060, 0x61507d), 
+INFO: Loaded 1 PC tables (29 PCs): 29 [0x5c8b20,0x5c8cf0), 
+INFO:        0 files found in /workspace/corpus/firestore_fieldpath_fuzzer
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: A corpus is not provided, starting from an empty corpus
+#2	INITED cov: 7 ft: 7 corp: 1/1b exec/s: 0 rss: 35Mb
+#24	NEW    cov: 9 ft: 9 corp: 2/110b lim: 4096 exec/s: 0 rss: 35Mb L: 109/109 MS: 2 CrossOver-InsertRepeatedBytes-
+#49	REDUCE cov: 9 ft: 9 corp: 2/104b lim: 4096 exec/s: 0 rss: 35Mb L: 103/103 MS: 5 ShuffleBytes-CopyPart-ChangeByte-ChangeBit-EraseBytes-
+#65	REDUCE cov: 9 ft: 9 corp: 2/60b lim: 4096 exec/s: 0 rss: 35Mb L: 59/59 MS: 1 EraseBytes-
+#69	REDUCE cov: 9 ft: 9 corp: 2/37b lim: 4096 exec/s: 0 rss: 35Mb L: 36/36 MS: 4 CopyPart-ChangeBinInt-CrossOver-EraseBytes-
+#162	REDUCE cov: 9 ft: 9 corp: 2/28b lim: 4096 exec/s: 0 rss: 35Mb L: 27/27 MS: 3 ChangeBinInt-ShuffleBytes-EraseBytes-
+#265	REDUCE cov: 9 ft: 9 corp: 2/27b lim: 4096 exec/s: 0 rss: 35Mb L: 26/26 MS: 3 ShuffleBytes-ChangeBinInt-EraseBytes-
+#267	REDUCE cov: 9 ft: 9 corp: 2/25b lim: 4096 exec/s: 0 rss: 35Mb L: 24/24 MS: 2 EraseBytes-CMP- DE: "\000\000"-
+#275	REDUCE cov: 9 ft: 9 corp: 2/24b lim: 4096 exec/s: 0 rss: 35Mb L: 23/23 MS: 3 PersAutoDict-EraseBytes-CrossOver- DE: "\000\000"-
+#2097152	pulse  cov: 9 ft: 9 corp: 2/24b lim: 4096 exec/s: 699050 rss: 56Mb
+#4194304	pulse  cov: 9 ft: 9 corp: 2/24b lim: 4096 exec/s: 699050 rss: 56Mb
+#8388608	pulse  cov: 9 ft: 9 corp: 2/24b lim: 4096 exec/s: 645277 rss: 56Mb
+#16777216	pulse  cov: 9 ft: 9 corp: 2/24b lim: 4096 exec/s: 621378 rss: 56Mb
+#18848325	DONE   cov: 9 ft: 9 corp: 2/24b lim: 4096 exec/s: 608010 rss: 56Mb
+###### Recommended dictionary. ######
+"\000\000" # Uses: 1679488
+###### End of recommended dictionary. ######
+Done 18848325 runs in 31 second(s)
+stat::number_of_executed_units: 18848325
+stat::average_exec_per_sec:     608010
+stat::new_units_added:          8
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              56

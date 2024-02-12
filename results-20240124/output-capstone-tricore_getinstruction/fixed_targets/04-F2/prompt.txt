@@ -1,0 +1,55 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <algorithm>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+#include "TriCore.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const size_t handle = stream.ConsumeIntegral<size_t>();
+  const std::string bytes_string = stream.ConsumeRemainingBytesAsString();
+  char* bytes = const_cast<char*>(bytes_string.c_str());
+  const size_t byte_len = stream.ConsumeIntegral<size_t>();
+  struct MCInst* mi = new struct MCInst;
+  short* size = new short;
+  const size_t address = stream.ConsumeIntegral<size_t>();
+  const std::string info_string = stream.ConsumeRemainingBytesAsString();
+  char* info = const_cast<char*>(info_string.c_str());
+  TriCore_getInstruction(handle, bytes, byte_len, mi, size, address, info);
+  delete mi;
+  delete size;
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/capstonev5/suite/fuzz/fuzz_disasm.c:1:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:9:10: fatal error: 'TriCore.h' file not found
+#include "TriCore.h"
+         ^~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

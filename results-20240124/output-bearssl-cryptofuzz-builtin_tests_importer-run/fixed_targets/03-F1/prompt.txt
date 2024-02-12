@@ -1,0 +1,39 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+#include "cryptofuzz/Builtin_tests_importer.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  static bool initialized = false;
+  if (!initialized) {
+    cryptofuzz::Builtin_tests_importer::Initialize();
+    initialized = true;
+  }
+
+  std::vector<uint8_t> input_buffer(data, data + size);
+  cryptofuzz::Builtin_tests_importer::Run((union.anon*)input_buffer.data());
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

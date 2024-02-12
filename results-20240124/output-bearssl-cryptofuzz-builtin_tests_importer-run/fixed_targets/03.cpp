@@ -1,0 +1,1 @@
+error: undefined reference to 'cryptofuzz::Builtin_tests_importer::Run(union anon*)'

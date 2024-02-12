@@ -1,0 +1,121 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ sed -i 's/CFLAGS += -g -fsanitize=address,fuzzer,undefined/#CFLAGS += -g -fsanitize=address,fuzzer,undefined/' ./Makefile
++ export 'LDFLAGS=-fsanitize=fuzzer -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link'
++ LDFLAGS='-fsanitize=fuzzer -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link'
++ chmod +x ./fuzztest/build.sh
++ ./fuzztest/build.sh
+rm -rf out
+rm -rf libcivetweb.a
+rm -rf libcivetweb.so
+rm -rf libcivetweb.so.1
+rm -rf libcivetweb.so.1.17.0
+rm -rf civetweb
+rm -f civetweb_test
+rm: cannot remove 'civetweb_fuzz?': No such file or directory
+clang -c -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Wall -Wextra -Wshadow -Wformat-security -Winit-self -Wmissing-prototypes -DLINUX -Iinclude  -DUSE_STACK_SIZE=102400 -DTEST_FUZZ1 -DOPENSSL_API_1_1 -fPIC src/civetweb.c -o out/src/civetweb.o
+clang -c -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Wall -Wextra -Wshadow -Wformat-security -Winit-self -Wmissing-prototypes -DLINUX -Iinclude  -DUSE_STACK_SIZE=102400 -DTEST_FUZZ1 -DOPENSSL_API_1_1 fuzztest/fuzzmain.c -o out/fuzztest/fuzzmain.o
+fuzztest/fuzzmain.c:484:12: error: conflicting types for 'mg_send_file_body'
+extern int mg_send_file_body(struct mg_connection * conn, char * path);
+           ^
+include/civetweb.h:921:18: note: previous declaration is here
+CIVETWEB_API int mg_send_file_body(struct mg_connection *conn,
+                 ^
+fuzztest/fuzzmain.c:515:5: error: conflicting types for 'mg_send_file_body'
+int mg_send_file_body(struct mg_connection * conn, char * path)
+    ^
+include/civetweb.h:921:18: note: previous declaration is here
+CIVETWEB_API int mg_send_file_body(struct mg_connection *conn,
+                 ^
+fuzztest/fuzzmain.c:520:12: warning: implicit declaration of function 'mg_open_file' is invalid in C99 [-Wimplicit-function-declaration]
+        if ((fd = mg_open_file(path, MG_F_OPEN_READ)) == -1) {
+                  ^
+fuzztest/fuzzmain.c:520:31: error: use of undeclared identifier 'MG_F_OPEN_READ'
+        if ((fd = mg_open_file(path, MG_F_OPEN_READ)) == -1) {
+                                     ^
+fuzztest/fuzzmain.c:525:22: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'struct mg_connection *' [-Wint-conversion]
+        while ((n = mg_read(fd, buf, sizeof(buf))) > 0) {
+                            ^~
+include/civetweb.h:1046:48: note: passing argument to parameter here
+CIVETWEB_API int mg_read(struct mg_connection *, void *buf, size_t len);
+                                               ^
+2 warnings and 3 errors generated.
+make: *** [Makefile:437: out/fuzztest/fuzzmain.o] Error 1
+mv: cannot stat 'civetweb': No such file or directory
+clang -c -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Wall -Wextra -Wshadow -Wformat-security -Winit-self -Wmissing-prototypes -DLINUX -Iinclude  -DUSE_STACK_SIZE=102400 -DTEST_FUZZ2 -DOPENSSL_API_1_1 -fPIC src/civetweb.c -o out/src/civetweb.o
+clang -c -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Wall -Wextra -Wshadow -Wformat-security -Winit-self -Wmissing-prototypes -DLINUX -Iinclude  -DUSE_STACK_SIZE=102400 -DTEST_FUZZ2 -DOPENSSL_API_1_1 fuzztest/fuzzmain.c -o out/fuzztest/fuzzmain.o
+fuzztest/fuzzmain.c:484:12: error: conflicting types for 'mg_send_file_body'
+extern int mg_send_file_body(struct mg_connection * conn, char * path);
+           ^
+include/civetweb.h:921:18: note: previous declaration is here
+CIVETWEB_API int mg_send_file_body(struct mg_connection *conn,
+                 ^
+fuzztest/fuzzmain.c:515:5: error: conflicting types for 'mg_send_file_body'
+int mg_send_file_body(struct mg_connection * conn, char * path)
+    ^
+include/civetweb.h:921:18: note: previous declaration is here
+CIVETWEB_API int mg_send_file_body(struct mg_connection *conn,
+                 ^
+fuzztest/fuzzmain.c:520:12: warning: implicit declaration of function 'mg_open_file' is invalid in C99 [-Wimplicit-function-declaration]
+        if ((fd = mg_open_file(path, MG_F_OPEN_READ)) == -1) {
+                  ^
+fuzztest/fuzzmain.c:520:31: error: use of undeclared identifier 'MG_F_OPEN_READ'
+        if ((fd = mg_open_file(path, MG_F_OPEN_READ)) == -1) {
+                                     ^
+fuzztest/fuzzmain.c:525:22: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'struct mg_connection *' [-Wint-conversion]
+        while ((n = mg_read(fd, buf, sizeof(buf))) > 0) {
+                            ^~
+include/civetweb.h:1046:48: note: passing argument to parameter here
+CIVETWEB_API int mg_read(struct mg_connection *, void *buf, size_t len);
+                                               ^
+2 warnings and 3 errors generated.
+make: *** [Makefile:437: out/fuzztest/fuzzmain.o] Error 1
+mv: cannot stat 'civetweb': No such file or directory
+clang -c -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Wall -Wextra -Wshadow -Wformat-security -Winit-self -Wmissing-prototypes -DLINUX -Iinclude  -DUSE_STACK_SIZE=102400 -DTEST_FUZZ3 -DOPENSSL_API_1_1 -fPIC src/civetweb.c -o out/src/civetweb.o
+clang -c -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Wall -Wextra -Wshadow -Wformat-security -Winit-self -Wmissing-prototypes -DLINUX -Iinclude  -DUSE_STACK_SIZE=102400 -DTEST_FUZZ3 -DOPENSSL_API_1_1 fuzztest/fuzzmain.c -o out/fuzztest/fuzzmain.o
+fuzztest/fuzzmain.c:484:12: error: conflicting types for 'mg_send_file_body'
+extern int mg_send_file_body(struct mg_connection * conn, char * path);
+           ^
+include/civetweb.h:921:18: note: previous declaration is here
+CIVETWEB_API int mg_send_file_body(struct mg_connection *conn,
+                 ^
+fuzztest/fuzzmain.c:515:5: error: conflicting types for 'mg_send_file_body'
+int mg_send_file_body(struct mg_connection * conn, char * path)
+    ^
+include/civetweb.h:921:18: note: previous declaration is here
+CIVETWEB_API int mg_send_file_body(struct mg_connection *conn,
+                 ^
+fuzztest/fuzzmain.c:520:12: warning: implicit declaration of function 'mg_open_file' is invalid in C99 [-Wimplicit-function-declaration]
+        if ((fd = mg_open_file(path, MG_F_OPEN_READ)) == -1) {
+                  ^
+fuzztest/fuzzmain.c:520:31: error: use of undeclared identifier 'MG_F_OPEN_READ'
+        if ((fd = mg_open_file(path, MG_F_OPEN_READ)) == -1) {
+                                     ^
+fuzztest/fuzzmain.c:525:22: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'struct mg_connection *' [-Wint-conversion]
+        while ((n = mg_read(fd, buf, sizeof(buf))) > 0) {
+                            ^~
+include/civetweb.h:1046:48: note: passing argument to parameter here
+CIVETWEB_API int mg_read(struct mg_connection *, void *buf, size_t len);
+                                               ^
+2 warnings and 3 errors generated.
+make: *** [Makefile:437: out/fuzztest/fuzzmain.o] Error 1
+mv: cannot stat 'civetweb': No such file or directory
+
+=====================
+== Build completed ==
+=====================
+
+ls: cannot access 'civetweb*': No such file or directory
+md5sum: 'civetweb_fuzz*': No such file or directory
+
+=====================
+
++ mv 'civetweb_fuzz*' /workspace/out/libfuzzer-address-x86_64/
+mv: cannot stat 'civetweb_fuzz*': No such file or directory

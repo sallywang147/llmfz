@@ -1,0 +1,36 @@
+Using seed corpus: FuzzStun_seed_corpus.zip
+/workspace/out/libfuzzer-address-x86_64/FuzzStun -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/FuzzStun < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 2804461005
+INFO: Loaded 1 modules   (1816 inline 8-bit counters): 1816 [0x60c610, 0x60cd28), 
+INFO: Loaded 1 PC tables (1816 PCs): 1816 [0x5c0ba0,0x5c7d20), 
+INFO:        4 files found in /workspace/corpus/FuzzStun
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: seed corpus: files: 4 min: 80b max: 116b total: 396b rss: 35Mb
+#6	INITED cov: 15 ft: 16 corp: 1/80b exec/s: 0 rss: 36Mb
+#11	REDUCE cov: 15 ft: 16 corp: 1/76b lim: 4096 exec/s: 0 rss: 36Mb L: 76/76 MS: 5 ChangeBinInt-CopyPart-ShuffleBytes-ChangeBinInt-EraseBytes-
+#13	REDUCE cov: 15 ft: 16 corp: 1/74b lim: 4096 exec/s: 0 rss: 36Mb L: 74/74 MS: 2 CopyPart-EraseBytes-
+#19	REDUCE cov: 15 ft: 16 corp: 1/40b lim: 4096 exec/s: 0 rss: 36Mb L: 40/40 MS: 1 EraseBytes-
+#23	REDUCE cov: 15 ft: 16 corp: 1/27b lim: 4096 exec/s: 0 rss: 36Mb L: 27/27 MS: 4 InsertByte-ChangeBinInt-ChangeBit-EraseBytes-
+#24	REDUCE cov: 15 ft: 16 corp: 1/24b lim: 4096 exec/s: 0 rss: 36Mb L: 24/24 MS: 1 EraseBytes-
+#100	REDUCE cov: 15 ft: 16 corp: 1/17b lim: 4096 exec/s: 0 rss: 36Mb L: 17/17 MS: 1 EraseBytes-
+#119	REDUCE cov: 15 ft: 16 corp: 1/16b lim: 4096 exec/s: 0 rss: 36Mb L: 16/16 MS: 4 ChangeBinInt-ShuffleBytes-ChangeByte-EraseBytes-
+#154	REDUCE cov: 15 ft: 16 corp: 1/14b lim: 4096 exec/s: 0 rss: 36Mb L: 14/14 MS: 5 InsertByte-CrossOver-ChangeBinInt-ChangeByte-EraseBytes-
+#163	REDUCE cov: 15 ft: 16 corp: 1/11b lim: 4096 exec/s: 0 rss: 36Mb L: 11/11 MS: 4 ChangeByte-ShuffleBytes-InsertByte-EraseBytes-
+#169	REDUCE cov: 15 ft: 16 corp: 1/10b lim: 4096 exec/s: 0 rss: 36Mb L: 10/10 MS: 1 EraseBytes-
+#181	REDUCE cov: 16 ft: 17 corp: 2/19b lim: 4096 exec/s: 0 rss: 36Mb L: 9/10 MS: 2 ChangeBit-EraseBytes-
+#277	REDUCE cov: 16 ft: 17 corp: 2/18b lim: 4096 exec/s: 0 rss: 37Mb L: 8/10 MS: 1 EraseBytes-
+#343	REDUCE cov: 16 ft: 17 corp: 2/14b lim: 4096 exec/s: 0 rss: 37Mb L: 4/10 MS: 1 EraseBytes-
+#349	REDUCE cov: 16 ft: 17 corp: 2/12b lim: 4096 exec/s: 0 rss: 37Mb L: 2/10 MS: 1 EraseBytes-
+#395	REDUCE cov: 16 ft: 17 corp: 2/11b lim: 4096 exec/s: 0 rss: 37Mb L: 1/10 MS: 1 EraseBytes-
+#524288	pulse  cov: 16 ft: 17 corp: 2/11b lim: 4096 exec/s: 262144 rss: 55Mb
+#1048576	pulse  cov: 16 ft: 17 corp: 2/11b lim: 4096 exec/s: 209715 rss: 55Mb
+#2097152	pulse  cov: 16 ft: 17 corp: 2/11b lim: 4096 exec/s: 209715 rss: 55Mb
+#4194304	pulse  cov: 16 ft: 17 corp: 2/11b lim: 4096 exec/s: 199728 rss: 55Mb
+#6074270	DONE   cov: 16 ft: 17 corp: 2/11b lim: 4096 exec/s: 195944 rss: 55Mb
+Done 6074270 runs in 31 second(s)
+stat::number_of_executed_units: 6074270
+stat::average_exec_per_sec:     195944
+stat::new_units_added:          15
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              55

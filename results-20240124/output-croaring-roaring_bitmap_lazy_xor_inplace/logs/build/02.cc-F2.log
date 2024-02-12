@@ -1,0 +1,160 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ mkdir build-dir
++ cd build-dir
++ cmake -DENABLE_ROARING_TESTS=OFF ..
+-- The CXX compiler identification is Clang 15.0.0
+-- The C compiler identification is Clang 15.0.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/local/bin/clang++-jcc - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/local/bin/clang-jcc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- No build type selected, default to Release
+-- Tests are disabled, you can enabled them by setting ENABLE_ROARING_TESTS to ON
+-- BENCHMARK_DATA_DIR: /src/croaring/benchmarks/realdata/
+-- TEST_DATA_DIR: /src/croaring/tests/testdata/
+-- Building a static library.
+-- ROARING_LIB_TYPE: STATIC
+-- Library output directory (does not apply to Visual Studio): /src/croaring/build-dir
+-- You may enable microbenchmarks by setting ENABLE_ROARING_MICROBENCHMARKS to ON 
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /src/croaring/build-dir
+++ nproc
++ make -j32
+[  4%] Building C object src/CMakeFiles/roaring.dir/isadetection.c.o
+[  8%] Building C object src/CMakeFiles/roaring.dir/array_util.c.o
+[ 13%] Building C object src/CMakeFiles/roaring.dir/bitset_util.c.o
+[ 17%] Building C object src/CMakeFiles/roaring.dir/art/art.c.o
+[ 21%] Building C object src/CMakeFiles/roaring.dir/bitset.c.o
+[ 26%] Building C object src/CMakeFiles/roaring.dir/containers/array.c.o
+[ 30%] Building C object src/CMakeFiles/roaring.dir/containers/bitset.c.o
+[ 34%] Building C object src/CMakeFiles/roaring.dir/containers/containers.c.o
+[ 39%] Building C object src/CMakeFiles/roaring.dir/containers/convert.c.o
+[ 43%] Building C object src/CMakeFiles/roaring.dir/containers/mixed_intersection.c.o
+[ 47%] Building C object src/CMakeFiles/roaring.dir/containers/mixed_union.c.o
+[ 52%] Building C object src/CMakeFiles/roaring.dir/containers/mixed_equal.c.o
+[ 56%] Building C object src/CMakeFiles/roaring.dir/containers/mixed_subset.c.o
+[ 60%] Building C object src/CMakeFiles/roaring.dir/containers/mixed_negation.c.o
+[ 65%] Building C object src/CMakeFiles/roaring.dir/containers/mixed_xor.c.o
+[ 73%] Building C object src/CMakeFiles/roaring.dir/containers/run.c.o
+[ 73%] Building C object src/CMakeFiles/roaring.dir/containers/mixed_andnot.c.o
+[ 78%] Building C object src/CMakeFiles/roaring.dir/memory.c.o
+[ 82%] Building C object src/CMakeFiles/roaring.dir/roaring.c.o
+[ 86%] Building C object src/CMakeFiles/roaring.dir/roaring64.c.o
+[ 91%] Building C object src/CMakeFiles/roaring.dir/roaring_array.c.o
+[ 95%] Building C object src/CMakeFiles/roaring.dir/roaring_priority_queue.c.o
+[100%] Linking C static library libroaring.a
+[100%] Built target roaring
++ /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -I/src/croaring/include -c /src/croaring_fuzzer.c -o fuzzer.o
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -fsanitize=fuzzer fuzzer.o -o /workspace/out/libfuzzer-address-x86_64/croaring_fuzzer /src/croaring/build-dir/src/libroaring.a
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -I/src/croaring/include -I/src/croaring -c /src/croaring_fuzzer_cc.cc -o fuzzer_cc.o
+/src/croaring_fuzzer_cc.cc:85:21: error: cannot initialize a variable of type 'roaring::api::roaring_bitmap_t *' (aka 'roaring::api::roaring_bitmap_s *') with an rvalue of type 'bool'
+  roaring_bitmap_t *c = roaring_bitmap_intersect(a, b);
+                    ^   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/croaring_fuzzer_cc.cc:86:25: error: use of undeclared identifier 'roaring_bitmap_difference'; did you mean 'roaring_bitmap_intersect'?
+  roaring_bitmap_t *d = roaring_bitmap_difference(a, b);
+                        ^~~~~~~~~~~~~~~~~~~~~~~~~
+                        roaring_bitmap_intersect
+/src/croaring/include/roaring/roaring.h:146:6: note: 'roaring_bitmap_intersect' declared here
+bool roaring_bitmap_intersect(const roaring_bitmap_t *r1,
+     ^
+/src/croaring_fuzzer_cc.cc:86:21: error: cannot initialize a variable of type 'roaring::api::roaring_bitmap_t *' (aka 'roaring::api::roaring_bitmap_s *') with an rvalue of type 'bool'
+  roaring_bitmap_t *d = roaring_bitmap_difference(a, b);
+                    ^   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/croaring_fuzzer_cc.cc:89:3: error: no matching function for call to 'roaring_bitmap_lazy_or_inplace'
+  roaring_bitmap_lazy_or_inplace(a, e);
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/croaring/include/roaring/roaring.h:750:6: note: candidate function not viable: requires 3 arguments, but 2 were provided
+void roaring_bitmap_lazy_or_inplace(roaring_bitmap_t *r1,
+     ^
+/src/croaring_fuzzer_cc.cc:90:3: error: use of undeclared identifier 'roaring_bitmap_lazy_and_inplace'; did you mean 'roaring_bitmap_lazy_xor_inplace'?
+  roaring_bitmap_lazy_and_inplace(a, b);
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  roaring_bitmap_lazy_xor_inplace
+/src/croaring/include/roaring/roaring.h:781:6: note: 'roaring_bitmap_lazy_xor_inplace' declared here
+void roaring_bitmap_lazy_xor_inplace(roaring_bitmap_t *r1,
+     ^
+/src/croaring_fuzzer_cc.cc:91:3: error: use of undeclared identifier 'roaring_bitmap_lazy_difference_inplace'; did you mean 'roaring_bitmap_lazy_xor_inplace'?
+  roaring_bitmap_lazy_difference_inplace(a, c);
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  roaring_bitmap_lazy_xor_inplace
+/src/croaring/include/roaring/roaring.h:781:6: note: 'roaring_bitmap_lazy_xor_inplace' declared here
+void roaring_bitmap_lazy_xor_inplace(roaring_bitmap_t *r1,
+     ^
+/src/croaring_fuzzer_cc.cc:110:29: error: use of undeclared identifier 'roaring_bitmap_move'
+  roaring_bitmap_t *moved = roaring_bitmap_move(b); // Fix: use roaring_bitmap_move instead of roaring_bitmap_difference
+                            ^
+/src/croaring_fuzzer_cc.cc:120:9: error: use of undeclared identifier 'roaring_bitmap_read_safe'; did you mean 'roaring_bitmap_remove'?
+        roaring_bitmap_read_safe(read_buffer.data(), read_buffer.size()); // Fix: use roaring_bitmap_read_safe instead of roaring_bitmap_remove
+        ^~~~~~~~~~~~~~~~~~~~~~~~
+        roaring_bitmap_remove
+/src/croaring/include/roaring/roaring.h:346:6: note: 'roaring_bitmap_remove' declared here
+void roaring_bitmap_remove(roaring_bitmap_t *r, uint32_t x);
+     ^
+/src/croaring_fuzzer_cc.cc:120:34: error: cannot initialize a parameter of type 'roaring::api::roaring_bitmap_t *' (aka 'roaring::api::roaring_bitmap_s *') with an rvalue of type 'std::vector<char>::value_type *' (aka 'char *')
+        roaring_bitmap_read_safe(read_buffer.data(), read_buffer.size()); // Fix: use roaring_bitmap_read_safe instead of roaring_bitmap_remove
+                                 ^~~~~~~~~~~~~~~~~~
+/src/croaring/include/roaring/roaring.h:346:46: note: passing argument to parameter 'r' here
+void roaring_bitmap_remove(roaring_bitmap_t *r, uint32_t x);
+                                             ^
+/src/croaring_fuzzer_cc.cc:129:31: error: use of undeclared identifier 'roaring_bitmap_write'
+  std::size_t size_in_bytes = roaring_bitmap_write(b, buffer.data()); // Fix: use roaring_bitmap_write instead of roaring_bitmap_printf
+                              ^
+/src/croaring_fuzzer_cc.cc:130:3: error: use of undeclared identifier 'assert'
+  assert(expected_size_in_bytes == size_in_bytes);
+  ^
+/src/croaring_fuzzer_cc.cc:131:29: error: use of undeclared identifier 'roaring_bitmap_read_safe'; did you mean 'roaring_bitmap_remove'?
+  roaring_bitmap_t *bread = roaring_bitmap_read_safe(buffer.data(), size_in_bytes); // Fix: use roaring_bitmap_read_safe instead of roaring_bitmap_remove
+                            ^~~~~~~~~~~~~~~~~~~~~~~~
+                            roaring_bitmap_remove
+/src/croaring/include/roaring/roaring.h:346:6: note: 'roaring_bitmap_remove' declared here
+void roaring_bitmap_remove(roaring_bitmap_t *r, uint32_t x);
+     ^
+/src/croaring_fuzzer_cc.cc:131:54: error: cannot initialize a parameter of type 'roaring::api::roaring_bitmap_t *' (aka 'roaring::api::roaring_bitmap_s *') with an rvalue of type 'std::vector<char>::value_type *' (aka 'char *')
+  roaring_bitmap_t *bread = roaring_bitmap_read_safe(buffer.data(), size_in_bytes); // Fix: use roaring_bitmap_read_safe instead of roaring_bitmap_remove
+                                                     ^~~~~~~~~~~~~
+/src/croaring/include/roaring/roaring.h:346:46: note: passing argument to parameter 'r' here
+void roaring_bitmap_remove(roaring_bitmap_t *r, uint32_t x);
+                                             ^
+/src/croaring_fuzzer_cc.cc:132:3: error: use of undeclared identifier 'assert'
+  assert(roaring_bitmap_equals(bread, b));
+  ^
+/src/croaring_fuzzer_cc.cc:134:3: error: use of undeclared identifier 'roaring_bitmap_to_string'; did you mean 'roaring_bitmap_printf'?
+  roaring_bitmap_to_string(f);
+  ^~~~~~~~~~~~~~~~~~~~~~~~
+  roaring_bitmap_printf
+/src/croaring/include/roaring/roaring.h:123:6: note: 'roaring_bitmap_printf' declared here
+void roaring_bitmap_printf(const roaring_bitmap_t *r);
+     ^
+/src/croaring_fuzzer_cc.cc:138:8: error: unknown type name 'roaring_bitmap_iterator_t'; did you mean 'roaring_uint32_iterator_t'?
+  for (roaring_bitmap_iterator_t i = roaring_bitmap_begin(a); i != roaring_bitmap_end(a); i++) { // Fix: use roaring_bitmap_iterator_t instead of roaring_uint32_iterator_t
+       ^~~~~~~~~~~~~~~~~~~~~~~~~
+       roaring_uint32_iterator_t
+/src/croaring/include/roaring/roaring.h:904:3: note: 'roaring_uint32_iterator_t' declared here
+} roaring_uint32_iterator_t;
+  ^
+/src/croaring_fuzzer_cc.cc:138:38: error: use of undeclared identifier 'roaring_bitmap_begin'
+  for (roaring_bitmap_iterator_t i = roaring_bitmap_begin(a); i != roaring_bitmap_end(a); i++) { // Fix: use roaring_bitmap_iterator_t instead of roaring_uint32_iterator_t
+                                     ^
+/src/croaring_fuzzer_cc.cc:138:68: error: use of undeclared identifier 'roaring_bitmap_end'
+  for (roaring_bitmap_iterator_t i = roaring_bitmap_begin(a); i != roaring_bitmap_end(a); i++) { // Fix: use roaring_bitmap_iterator_t instead of roaring_uint32_iterator_t
+                                                                   ^
+/src/croaring_fuzzer_cc.cc:138:92: error: cannot increment value of type 'roaring::api::roaring_uint32_iterator_t' (aka 'roaring::api::roaring_uint32_iterator_s')
+  for (roaring_bitmap_iterator_t i = roaring_bitmap_begin(a); i != roaring_bitmap_end(a); i++) { // Fix: use roaring_bitmap_iterator_t instead of roaring_uint32_iterator_t
+                                                                                          ~^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.

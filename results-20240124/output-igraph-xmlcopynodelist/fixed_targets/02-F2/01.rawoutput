@@ -1,0 +1,29 @@
+```c++
+#include <libxml/parser.h>
+#include <libxml/xpath.h>
+#include <fuzzer/FuzzedDataProvider.h>
+
+extern "C" {
+#include <libxml/parser.h>
+#include <libxml/xpath.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  xmlDocPtr doc = xmlReadMemory(reinterpret_cast<const char*>(data), size, nullptr, nullptr, 0);
+  if (doc == nullptr) {
+    return 0;
+  }
+
+  xmlNodePtr node = xmlDocGetRootElement(doc);
+  if (node == nullptr) {
+    xmlFreeDoc(doc);
+    return 0;
+  }
+
+  xmlCopyNodeList(node);
+
+  xmlFreeDoc(doc);
+  return 0;
+}
+```

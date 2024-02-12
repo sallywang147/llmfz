@@ -1,0 +1,48 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <fuzzer/FuzzedDataProvider.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  FuzzedDataProvider data(Data, Size);
+  int keytype = data.ConsumeIntegralInRange<int>(0, 4);
+  int bits = data.ConsumeIntegralInRange<int>(0, 4096);
+  char filename[256];
+  data.ConsumeBytesInArray(filename, 256);
+  int skip_exist = data.ConsumeBool();
+  signkey_generate(keytype, bits, filename, skip_exist);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:16:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+src/../fuzz/fuzzer-verify.cpp:12:8: error: no member named 'ConsumeBytesInArray' in 'FuzzedDataProvider'
+  data.ConsumeBytesInArray(filename, 256);
+  ~~~~ ^
+src/../fuzz/fuzzer-verify.cpp:14:3: error: use of undeclared identifier 'signkey_generate'
+  signkey_generate(keytype, bits, filename, skip_exist);
+  ^
+2 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

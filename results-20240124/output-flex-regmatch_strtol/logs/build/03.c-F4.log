@@ -1,0 +1,685 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ export ASAN_OPTIONS=detect_leaks=0
++ ASAN_OPTIONS=detect_leaks=0
++ ./autogen.sh
+libtoolize: putting auxiliary files in AC_CONFIG_AUX_DIR, 'build-aux'.
+libtoolize: linking file 'build-aux/config.guess'
+libtoolize: linking file 'build-aux/config.sub'
+libtoolize: linking file 'build-aux/install-sh'
+libtoolize: linking file 'build-aux/ltmain.sh'
+libtoolize: putting macros in AC_CONFIG_MACRO_DIRS, 'm4'.
+libtoolize: linking file 'm4/libtool.m4'
+libtoolize: linking file 'm4/ltoptions.m4'
+libtoolize: linking file 'm4/ltsugar.m4'
+libtoolize: linking file 'm4/ltversion.m4'
+libtoolize: linking file 'm4/lt~obsolete.m4'
+autopoint: using AM_GNU_GETTEXT_REQUIRE_VERSION instead of AM_GNU_GETTEXT_VERSION
+Copying file ABOUT-NLS
+Copying file build-aux/config.rpath
+Copying file m4/codeset.m4
+Copying file m4/extern-inline.m4
+Copying file m4/fcntl-o.m4
+Copying file m4/gettext.m4
+Copying file m4/glibc2.m4
+Copying file m4/glibc21.m4
+Copying file m4/iconv.m4
+Copying file m4/intdiv0.m4
+Copying file m4/intl.m4
+Copying file m4/intldir.m4
+Copying file m4/intlmacosx.m4
+Copying file m4/intmax.m4
+Copying file m4/inttypes-pri.m4
+Copying file m4/inttypes_h.m4
+Copying file m4/lcmessage.m4
+Copying file m4/lib-ld.m4
+Copying file m4/lib-link.m4
+Copying file m4/lib-prefix.m4
+Copying file m4/lock.m4
+Copying file m4/longlong.m4
+Copying file m4/nls.m4
+Copying file m4/po.m4
+Copying file m4/printf-posix.m4
+Copying file m4/progtest.m4
+Copying file m4/size_max.m4
+Copying file m4/stdint_h.m4
+Copying file m4/threadlib.m4
+Copying file m4/uintmax_t.m4
+Copying file m4/visibility.m4
+Copying file m4/wchar_t.m4
+Copying file m4/wint_t.m4
+Copying file m4/xsize.m4
+Copying file po/Makefile.in.in
+Copying file po/Makevars.template
+Copying file po/Rules-quot
+Copying file po/boldquot.sed
+Copying file po/en@boldquot.header
+Copying file po/en@quot.header
+Copying file po/insert-header.sin
+Copying file po/quot.sed
+Copying file po/remove-potcdate.sin
+libtoolize: putting auxiliary files in AC_CONFIG_AUX_DIR, 'build-aux'.
+libtoolize: copying file 'build-aux/ltmain.sh'
+libtoolize: putting macros in AC_CONFIG_MACRO_DIRS, 'm4'.
+libtoolize: copying file 'm4/libtool.m4'
+libtoolize: copying file 'm4/ltoptions.m4'
+libtoolize: copying file 'm4/ltsugar.m4'
+libtoolize: copying file 'm4/ltversion.m4'
+libtoolize: copying file 'm4/lt~obsolete.m4'
+configure.ac:37: installing 'build-aux/compile'
+configure.ac:42: installing 'build-aux/missing'
+doc/Makefile.am:9: installing 'build-aux/mdate-sh'
+doc/Makefile.am:9: installing 'build-aux/texinfo.tex'
+src/Makefile.am: installing 'build-aux/depcomp'
+configure.ac: installing 'build-aux/ylwrap'
+parallel-tests: installing 'build-aux/test-driver'
++ ./configure
+checking for gcc... /usr/local/bin/clang-jcc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether /usr/local/bin/clang-jcc accepts -g... yes
+checking for /usr/local/bin/clang-jcc option to accept ISO C89... none needed
+checking whether /usr/local/bin/clang-jcc understands -c and -o together... yes
+checking how to run the C preprocessor... /usr/local/bin/clang-jcc -E
+checking for grep that handles long lines and -e... /usr/bin/grep
+checking for egrep... /usr/bin/grep -E
+checking for ANSI C header files... yes
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for memory.h... yes
+checking for strings.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for unistd.h... yes
+checking minix/config.h usability... no
+checking minix/config.h presence... no
+checking for minix/config.h... no
+checking whether it is safe to define __EXTENSIONS__... yes
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... x86_64-pc-linux-gnu
+checking how to print strings... printf
+checking for a sed that does not truncate output... /usr/bin/sed
+checking for fgrep... /usr/bin/grep -F
+checking for ld used by /usr/local/bin/clang-jcc... /usr/bin/ld
+checking if the linker (/usr/bin/ld) is GNU ld... yes
+checking for BSD- or MS-compatible name lister (nm)... /usr/bin/nm -B
+checking the name lister (/usr/bin/nm -B) interface... BSD nm
+checking whether ln -s works... yes
+checking the maximum length of command line arguments... 1572864
+checking how to convert x86_64-pc-linux-gnu file names to x86_64-pc-linux-gnu format... func_convert_file_noop
+checking how to convert x86_64-pc-linux-gnu file names to toolchain format... func_convert_file_noop
+checking for /usr/bin/ld option to reload object files... -r
+checking for objdump... objdump
+checking how to recognize dependent libraries... pass_all
+checking for dlltool... no
+checking how to associate runtime and link libraries... printf %s\n
+checking for ar... ar
+checking for archiver @FILE support... @
+checking for strip... strip
+checking for ranlib... ranlib
+checking for gawk... no
+checking for mawk... mawk
+checking command to parse /usr/bin/nm -B output from /usr/local/bin/clang-jcc object... ok
+checking for sysroot... no
+checking for a working dd... /usr/bin/dd
+checking how to truncate binary pipes... /usr/bin/dd bs=4096 count=1
+checking for mt... no
+checking if : is a manifest tool... no
+checking for dlfcn.h... yes
+checking for objdir... .libs
+checking if /usr/local/bin/clang-jcc supports -fno-rtti -fno-exceptions... yes
+checking for /usr/local/bin/clang-jcc option to produce PIC... -fPIC -DPIC
+checking if /usr/local/bin/clang-jcc PIC flag -fPIC -DPIC works... yes
+checking if /usr/local/bin/clang-jcc static flag -static works... no
+checking if /usr/local/bin/clang-jcc supports -c -o file.o... yes
+checking if /usr/local/bin/clang-jcc supports -c -o file.o... (cached) yes
+checking whether the /usr/local/bin/clang-jcc linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking whether -lc should be explicitly linked in... no
+checking dynamic linker characteristics... GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... yes
+checking whether to build static libraries... yes
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for a thread-safe mkdir -p... /usr/bin/mkdir -p
+checking whether make sets $(MAKE)... yes
+checking whether make supports the include directive... yes (GNU style)
+checking whether make supports nested variables... yes
+checking dependency style of /usr/local/bin/clang-jcc... gcc3
+checking whether NLS is requested... yes
+checking for msgfmt... /usr/bin/msgfmt
+checking for gmsgfmt... /usr/bin/msgfmt
+checking for xgettext... /usr/bin/xgettext
+checking for msgmerge... /usr/bin/msgmerge
+checking for ld used by /usr/local/bin/clang-jcc... /usr/bin/ld -m elf_x86_64
+checking if the linker (/usr/bin/ld -m elf_x86_64) is GNU ld... yes
+checking for shared library run path origin... done
+checking for CFPreferencesCopyAppValue... no
+checking for CFLocaleCopyCurrent... no
+checking for GNU gettext in libc... yes
+checking whether to use NLS... yes
+checking where the gettext function comes from... libc
+checking for bison... bison -y
+checking whether bison -y is GNU Bison... yes
+checking for flex... flex
+checking lex output file root... lex.yy
+checking lex library... -lfl
+checking whether yytext is a pointer... yes
+checking for gcc... (cached) /usr/local/bin/clang-jcc
+checking whether we are using the GNU C compiler... (cached) yes
+checking whether /usr/local/bin/clang-jcc accepts -g... (cached) yes
+checking for /usr/local/bin/clang-jcc option to accept ISO C89... (cached) none needed
+checking whether /usr/local/bin/clang-jcc understands -c and -o together... (cached) yes
+checking for gcc... gcc
+checking whether we are using the GNU C compiler... (cached) yes
+checking whether gcc accepts -g... yes
+checking for gcc option to accept ISO C89... (cached) none needed
+checking whether gcc understands -c and -o together... (cached) yes
+checking how to run the C preprocessor... gcc -E
+checking whether we are using the GNU C++ compiler... yes
+checking whether /usr/local/bin/clang++-jcc accepts -g... yes
+checking how to run the C++ preprocessor... /usr/local/bin/clang++-jcc -E
+checking for ld used by /usr/local/bin/clang++-jcc... /usr/bin/ld -m elf_x86_64
+checking if the linker (/usr/bin/ld -m elf_x86_64) is GNU ld... yes
+checking whether the /usr/local/bin/clang++-jcc linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking for /usr/local/bin/clang++-jcc option to produce PIC... -fPIC -DPIC
+checking if /usr/local/bin/clang++-jcc PIC flag -fPIC -DPIC works... yes
+checking if /usr/local/bin/clang++-jcc static flag -static works... no
+checking if /usr/local/bin/clang++-jcc supports -c -o file.o... yes
+checking if /usr/local/bin/clang++-jcc supports -c -o file.o... (cached) yes
+checking whether the /usr/local/bin/clang++-jcc linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking dynamic linker characteristics... (cached) GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking dependency style of /usr/local/bin/clang++-jcc... gcc3
+checking whether ln -s works... yes
+checking for gawk... (cached) mawk
+checking for help2man... /usr/bin/help2man
+checking for gtexi2dvi... no
+checking for texi2dvi... /usr/bin/texi2dvi
+checking for m4 that supports -P... /usr/bin/m4
+checking for indent... no
+checking regex.h usability... yes
+checking regex.h presence... yes
+checking for regex.h... yes
+checking for strings.h... (cached) yes
+checking sys/wait.h usability... yes
+checking sys/wait.h presence... yes
+checking for sys/wait.h... yes
+checking for unistd.h... (cached) yes
+checking for inttypes.h... (cached) yes
+checking libintl.h usability... yes
+checking libintl.h presence... yes
+checking for libintl.h... yes
+checking limits.h usability... yes
+checking limits.h presence... yes
+checking for limits.h... yes
+checking locale.h usability... yes
+checking locale.h presence... yes
+checking for locale.h... yes
+checking malloc.h usability... yes
+checking malloc.h presence... yes
+checking for malloc.h... yes
+checking netinet/in.h usability... yes
+checking netinet/in.h presence... yes
+checking for netinet/in.h... yes
+checking for pthread_mutex_lock in -lpthread... yes
+checking pthread.h usability... yes
+checking pthread.h presence... yes
+checking for pthread.h... yes
+checking for log10 in -lm... yes
+checking for stdbool.h that conforms to C99... yes
+checking for _Bool... yes
+checking for an ANSI C-conforming const... yes
+checking for size_t... yes
+checking for working alloca.h... yes
+checking for alloca... yes
+checking for pid_t... yes
+checking vfork.h usability... no
+checking vfork.h presence... no
+checking for vfork.h... no
+checking for fork... yes
+checking for vfork... yes
+checking for working fork... yes
+checking for working vfork... (cached) yes
+checking for stdlib.h... (cached) yes
+checking for GNU libc compatible malloc... yes
+checking for stdlib.h... (cached) yes
+checking for GNU libc compatible realloc... yes
+checking for dup2... yes
+checking for memset... yes
+checking for regcomp... yes
+checking for strcasecmp... yes
+checking for strchr... yes
+checking for strdup... yes
+checking for strtol... yes
+checking for pow... yes
+checking for setlocale... yes
+checking for reallocarr... no
+checking for reallocarray... yes
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating doc/Makefile
+config.status: creating examples/Makefile
+config.status: creating examples/fastwc/Makefile
+config.status: creating examples/manual/Makefile
+config.status: creating po/Makefile.in
+config.status: creating src/libfl.pc
+config.status: creating src/Makefile
+config.status: creating tools/Makefile
+config.status: creating tests/Makefile
+config.status: creating src/config.h
+config.status: executing libtool commands
+config.status: executing depfiles commands
+config.status: executing po-directories commands
+config.status: creating po/POTFILES
+config.status: creating po/Makefile
++ make V=1
+Making all in src
+make[1]: Entering directory '/src/flex/src'
+/bin/bash ./mkskel.sh cpp . /usr/bin/m4 2.6.4 > cpp-flex.h.tmp
+/bin/bash ./chkskel.sh cpp-flex.h.tmp
+mv -f cpp-flex.h.tmp cpp-flex.h
+/bin/bash ./mkskel.sh c99 . /usr/bin/m4 2.6.4 > c99-flex.h.tmp
+/bin/bash ./chkskel.sh c99-flex.h.tmp
+mv -f c99-flex.h.tmp c99-flex.h
+/bin/bash ./mkskel.sh go . /usr/bin/m4 2.6.4 > go-flex.h.tmp
+/bin/bash ./chkskel.sh go-flex.h.tmp
+mv -f go-flex.h.tmp go-flex.h
+make  all-am
+make[2]: Entering directory '/src/flex/src'
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"    -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT flex-buf.o -MD -MP -MF .deps/flex-buf.Tpo -c -o flex-buf.o `test -f 'buf.c' || echo './'`buf.c
+mv -f .deps/flex-buf.Tpo .deps/flex-buf.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"    -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT flex-ccl.o -MD -MP -MF .deps/flex-ccl.Tpo -c -o flex-ccl.o `test -f 'ccl.c' || echo './'`ccl.c
+mv -f .deps/flex-ccl.Tpo .deps/flex-ccl.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"    -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT flex-dfa.o -MD -MP -MF .deps/flex-dfa.Tpo -c -o flex-dfa.o `test -f 'dfa.c' || echo './'`dfa.c
+mv -f .deps/flex-dfa.Tpo .deps/flex-dfa.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"    -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT flex-ecs.o -MD -MP -MF .deps/flex-ecs.Tpo -c -o flex-ecs.o `test -f 'ecs.c' || echo './'`ecs.c
+mv -f .deps/flex-ecs.Tpo .deps/flex-ecs.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"    -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT flex-filter.o -MD -MP -MF .deps/flex-filter.Tpo -c -o flex-filter.o `test -f 'filter.c' || echo './'`filter.c
+mv -f .deps/flex-filter.Tpo .deps/flex-filter.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"    -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT flex-gen.o -MD -MP -MF .deps/flex-gen.Tpo -c -o flex-gen.o `test -f 'gen.c' || echo './'`gen.c
+mv -f .deps/flex-gen.Tpo .deps/flex-gen.Po
+/bin/bash ../build-aux/ylwrap parse.y y.tab.c parse.c y.tab.h `echo parse.c | sed -e s/cc$/hh/ -e s/cpp$/hpp/ -e s/cxx$/hxx/ -e s/c++$/h++/ -e s/c$/h/` y.output parse.output -- bison -y -d 
+updating parse.h
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"    -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT flex-main.o -MD -MP -MF .deps/flex-main.Tpo -c -o flex-main.o `test -f 'main.c' || echo './'`main.c
+mv -f .deps/flex-main.Tpo .deps/flex-main.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"    -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT flex-misc.o -MD -MP -MF .deps/flex-misc.Tpo -c -o flex-misc.o `test -f 'misc.c' || echo './'`misc.c
+mv -f .deps/flex-misc.Tpo .deps/flex-misc.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"    -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT flex-nfa.o -MD -MP -MF .deps/flex-nfa.Tpo -c -o flex-nfa.o `test -f 'nfa.c' || echo './'`nfa.c
+mv -f .deps/flex-nfa.Tpo .deps/flex-nfa.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"    -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT flex-options.o -MD -MP -MF .deps/flex-options.Tpo -c -o flex-options.o `test -f 'options.c' || echo './'`options.c
+mv -f .deps/flex-options.Tpo .deps/flex-options.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"    -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT flex-parse.o -MD -MP -MF .deps/flex-parse.Tpo -c -o flex-parse.o `test -f 'parse.c' || echo './'`parse.c
+mv -f .deps/flex-parse.Tpo .deps/flex-parse.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"    -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT flex-regex.o -MD -MP -MF .deps/flex-regex.Tpo -c -o flex-regex.o `test -f 'regex.c' || echo './'`regex.c
+mv -f .deps/flex-regex.Tpo .deps/flex-regex.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"    -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT flex-scanflags.o -MD -MP -MF .deps/flex-scanflags.Tpo -c -o flex-scanflags.o `test -f 'scanflags.c' || echo './'`scanflags.c
+mv -f .deps/flex-scanflags.Tpo .deps/flex-scanflags.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"    -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT flex-scanopt.o -MD -MP -MF .deps/flex-scanopt.Tpo -c -o flex-scanopt.o `test -f 'scanopt.c' || echo './'`scanopt.c
+mv -f .deps/flex-scanopt.Tpo .deps/flex-scanopt.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"    -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT flex-skeletons.o -MD -MP -MF .deps/flex-skeletons.Tpo -c -o flex-skeletons.o `test -f 'skeletons.c' || echo './'`skeletons.c
+mv -f .deps/flex-skeletons.Tpo .deps/flex-skeletons.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"    -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT flex-sym.o -MD -MP -MF .deps/flex-sym.Tpo -c -o flex-sym.o `test -f 'sym.c' || echo './'`sym.c
+mv -f .deps/flex-sym.Tpo .deps/flex-sym.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"    -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT flex-tables.o -MD -MP -MF .deps/flex-tables.Tpo -c -o flex-tables.o `test -f 'tables.c' || echo './'`tables.c
+mv -f .deps/flex-tables.Tpo .deps/flex-tables.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"    -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT flex-tables_shared.o -MD -MP -MF .deps/flex-tables_shared.Tpo -c -o flex-tables_shared.o `test -f 'tables_shared.c' || echo './'`tables_shared.c
+mv -f .deps/flex-tables_shared.Tpo .deps/flex-tables_shared.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"    -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT flex-tblcmp.o -MD -MP -MF .deps/flex-tblcmp.Tpo -c -o flex-tblcmp.o `test -f 'tblcmp.c' || echo './'`tblcmp.c
+mv -f .deps/flex-tblcmp.Tpo .deps/flex-tblcmp.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"    -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT flex-yylex.o -MD -MP -MF .deps/flex-yylex.Tpo -c -o flex-yylex.o `test -f 'yylex.c' || echo './'`yylex.c
+mv -f .deps/flex-yylex.Tpo .deps/flex-yylex.Po
+/bin/bash ../build-aux/ylwrap scan.l lex.yy.c scan.c -- flex  
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT stage1flex-scan.o -MD -MP -MF .deps/stage1flex-scan.Tpo -c -o stage1flex-scan.o `test -f 'scan.c' || echo './'`scan.c
+mv -f .deps/stage1flex-scan.Tpo .deps/stage1flex-scan.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT stage1flex-buf.o -MD -MP -MF .deps/stage1flex-buf.Tpo -c -o stage1flex-buf.o `test -f 'buf.c' || echo './'`buf.c
+mv -f .deps/stage1flex-buf.Tpo .deps/stage1flex-buf.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT stage1flex-ccl.o -MD -MP -MF .deps/stage1flex-ccl.Tpo -c -o stage1flex-ccl.o `test -f 'ccl.c' || echo './'`ccl.c
+mv -f .deps/stage1flex-ccl.Tpo .deps/stage1flex-ccl.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT stage1flex-dfa.o -MD -MP -MF .deps/stage1flex-dfa.Tpo -c -o stage1flex-dfa.o `test -f 'dfa.c' || echo './'`dfa.c
+mv -f .deps/stage1flex-dfa.Tpo .deps/stage1flex-dfa.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT stage1flex-ecs.o -MD -MP -MF .deps/stage1flex-ecs.Tpo -c -o stage1flex-ecs.o `test -f 'ecs.c' || echo './'`ecs.c
+mv -f .deps/stage1flex-ecs.Tpo .deps/stage1flex-ecs.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT stage1flex-filter.o -MD -MP -MF .deps/stage1flex-filter.Tpo -c -o stage1flex-filter.o `test -f 'filter.c' || echo './'`filter.c
+mv -f .deps/stage1flex-filter.Tpo .deps/stage1flex-filter.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT stage1flex-gen.o -MD -MP -MF .deps/stage1flex-gen.Tpo -c -o stage1flex-gen.o `test -f 'gen.c' || echo './'`gen.c
+mv -f .deps/stage1flex-gen.Tpo .deps/stage1flex-gen.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT stage1flex-main.o -MD -MP -MF .deps/stage1flex-main.Tpo -c -o stage1flex-main.o `test -f 'main.c' || echo './'`main.c
+mv -f .deps/stage1flex-main.Tpo .deps/stage1flex-main.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT stage1flex-misc.o -MD -MP -MF .deps/stage1flex-misc.Tpo -c -o stage1flex-misc.o `test -f 'misc.c' || echo './'`misc.c
+mv -f .deps/stage1flex-misc.Tpo .deps/stage1flex-misc.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT stage1flex-nfa.o -MD -MP -MF .deps/stage1flex-nfa.Tpo -c -o stage1flex-nfa.o `test -f 'nfa.c' || echo './'`nfa.c
+mv -f .deps/stage1flex-nfa.Tpo .deps/stage1flex-nfa.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT stage1flex-options.o -MD -MP -MF .deps/stage1flex-options.Tpo -c -o stage1flex-options.o `test -f 'options.c' || echo './'`options.c
+mv -f .deps/stage1flex-options.Tpo .deps/stage1flex-options.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT stage1flex-parse.o -MD -MP -MF .deps/stage1flex-parse.Tpo -c -o stage1flex-parse.o `test -f 'parse.c' || echo './'`parse.c
+mv -f .deps/stage1flex-parse.Tpo .deps/stage1flex-parse.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT stage1flex-regex.o -MD -MP -MF .deps/stage1flex-regex.Tpo -c -o stage1flex-regex.o `test -f 'regex.c' || echo './'`regex.c
+mv -f .deps/stage1flex-regex.Tpo .deps/stage1flex-regex.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT stage1flex-scanflags.o -MD -MP -MF .deps/stage1flex-scanflags.Tpo -c -o stage1flex-scanflags.o `test -f 'scanflags.c' || echo './'`scanflags.c
+mv -f .deps/stage1flex-scanflags.Tpo .deps/stage1flex-scanflags.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT stage1flex-scanopt.o -MD -MP -MF .deps/stage1flex-scanopt.Tpo -c -o stage1flex-scanopt.o `test -f 'scanopt.c' || echo './'`scanopt.c
+mv -f .deps/stage1flex-scanopt.Tpo .deps/stage1flex-scanopt.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT stage1flex-skeletons.o -MD -MP -MF .deps/stage1flex-skeletons.Tpo -c -o stage1flex-skeletons.o `test -f 'skeletons.c' || echo './'`skeletons.c
+mv -f .deps/stage1flex-skeletons.Tpo .deps/stage1flex-skeletons.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT stage1flex-sym.o -MD -MP -MF .deps/stage1flex-sym.Tpo -c -o stage1flex-sym.o `test -f 'sym.c' || echo './'`sym.c
+mv -f .deps/stage1flex-sym.Tpo .deps/stage1flex-sym.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT stage1flex-tables.o -MD -MP -MF .deps/stage1flex-tables.Tpo -c -o stage1flex-tables.o `test -f 'tables.c' || echo './'`tables.c
+mv -f .deps/stage1flex-tables.Tpo .deps/stage1flex-tables.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT stage1flex-tables_shared.o -MD -MP -MF .deps/stage1flex-tables_shared.Tpo -c -o stage1flex-tables_shared.o `test -f 'tables_shared.c' || echo './'`tables_shared.c
+mv -f .deps/stage1flex-tables_shared.Tpo .deps/stage1flex-tables_shared.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT stage1flex-tblcmp.o -MD -MP -MF .deps/stage1flex-tblcmp.Tpo -c -o stage1flex-tblcmp.o `test -f 'tblcmp.c' || echo './'`tblcmp.c
+mv -f .deps/stage1flex-tblcmp.Tpo .deps/stage1flex-tblcmp.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT stage1flex-yylex.o -MD -MP -MF .deps/stage1flex-yylex.Tpo -c -o stage1flex-yylex.o `test -f 'yylex.c' || echo './'`yylex.c
+mv -f .deps/stage1flex-yylex.Tpo .deps/stage1flex-yylex.Po
+/bin/bash ../libtool  --tag=CC   --mode=link /usr/local/bin/clang-jcc  -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link   -o stage1flex stage1flex-scan.o stage1flex-buf.o stage1flex-ccl.o stage1flex-dfa.o stage1flex-ecs.o stage1flex-filter.o stage1flex-gen.o stage1flex-main.o stage1flex-misc.o stage1flex-nfa.o stage1flex-options.o stage1flex-parse.o stage1flex-regex.o stage1flex-scanflags.o stage1flex-scanopt.o stage1flex-skeletons.o stage1flex-sym.o stage1flex-tables.o stage1flex-tables_shared.o stage1flex-tblcmp.o stage1flex-yylex.o    -lm 
+libtool: link: /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o stage1flex stage1flex-scan.o stage1flex-buf.o stage1flex-ccl.o stage1flex-dfa.o stage1flex-ecs.o stage1flex-filter.o stage1flex-gen.o stage1flex-main.o stage1flex-misc.o stage1flex-nfa.o stage1flex-options.o stage1flex-parse.o stage1flex-regex.o stage1flex-scanflags.o stage1flex-scanopt.o stage1flex-skeletons.o stage1flex-sym.o stage1flex-tables.o stage1flex-tables_shared.o stage1flex-tblcmp.o stage1flex-yylex.o  -lm
+./stage1flex   -o stage1scan.c ./scan.l
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"    -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT flex-stage1scan.o -MD -MP -MF .deps/flex-stage1scan.Tpo -c -o flex-stage1scan.o `test -f 'stage1scan.c' || echo './'`stage1scan.c
+mv -f .deps/flex-stage1scan.Tpo .deps/flex-stage1scan.Po
+/bin/bash ../libtool  --tag=CC   --mode=link /usr/local/bin/clang-jcc   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link   -o flex flex-buf.o flex-ccl.o flex-dfa.o flex-ecs.o flex-filter.o flex-gen.o flex-main.o flex-misc.o flex-nfa.o flex-options.o flex-parse.o flex-regex.o flex-scanflags.o flex-scanopt.o flex-skeletons.o flex-sym.o flex-tables.o flex-tables_shared.o flex-tblcmp.o flex-yylex.o flex-stage1scan.o   -lm 
+libtool: link: /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -o flex flex-buf.o flex-ccl.o flex-dfa.o flex-ecs.o flex-filter.o flex-gen.o flex-main.o flex-misc.o flex-nfa.o flex-options.o flex-parse.o flex-regex.o flex-scanflags.o flex-scanopt.o flex-skeletons.o flex-sym.o flex-tables.o flex-tables_shared.o flex-tblcmp.o flex-yylex.o flex-stage1scan.o  -lm
+depbase=`echo libmain.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT libmain.lo -MD -MP -MF $depbase.Tpo -c -o libmain.lo libmain.c &&\
+mv -f $depbase.Tpo $depbase.Plo
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -DLOCALEDIR=\"/usr/local/share/locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT libmain.lo -MD -MP -MF .deps/libmain.Tpo -c libmain.c  -fPIC -DPIC -o .libs/libmain.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -DLOCALEDIR=\"/usr/local/share/locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT libmain.lo -MD -MP -MF .deps/libmain.Tpo -c libmain.c -o libmain.o >/dev/null 2>&1
+depbase=`echo libyywrap.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -DLOCALEDIR=\"/usr/local/share/locale\"   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT libyywrap.lo -MD -MP -MF $depbase.Tpo -c -o libyywrap.lo libyywrap.c &&\
+mv -f $depbase.Tpo $depbase.Plo
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -DLOCALEDIR=\"/usr/local/share/locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT libyywrap.lo -MD -MP -MF .deps/libyywrap.Tpo -c libyywrap.c  -fPIC -DPIC -o .libs/libyywrap.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -DLOCALEDIR=\"/usr/local/share/locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -MT libyywrap.lo -MD -MP -MF .deps/libyywrap.Tpo -c libyywrap.c -o libyywrap.o >/dev/null 2>&1
+/bin/bash ../libtool  --tag=CC   --mode=link /usr/local/bin/clang-jcc  -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -version-info 2:0:0  -o libfl.la -rpath /usr/local/lib libmain.lo libyywrap.lo  -lm 
+libtool: link: /usr/local/bin/clang-jcc -shared  -fPIC -DPIC  .libs/libmain.o .libs/libyywrap.o   -lm  -O1 -gline-tables-only -fsanitize=address -fsanitize=fuzzer-no-link   -Wl,-soname -Wl,libfl.so.2 -o .libs/libfl.so.2.0.0
+libtool: link: (cd ".libs" && rm -f "libfl.so.2" && ln -s "libfl.so.2.0.0" "libfl.so.2")
+libtool: link: (cd ".libs" && rm -f "libfl.so" && ln -s "libfl.so.2.0.0" "libfl.so")
+libtool: link: ar cr .libs/libfl.a  libmain.o libyywrap.o
+libtool: link: ranlib .libs/libfl.a
+libtool: link: ( cd ".libs" && rm -f "libfl.la" && ln -s "../libfl.la" "libfl.la" )
+make[2]: Leaving directory '/src/flex/src'
+make[1]: Leaving directory '/src/flex/src'
+Making all in doc
+make[1]: Entering directory '/src/flex/doc'
+Updating ./version.texi
+restore=: && backupdir=".am$$" && \
+am__cwd=`pwd` && CDPATH="${ZSH_VERSION+.}:" && cd . && \
+rm -rf $backupdir && mkdir $backupdir && \
+if (/bin/bash /src/flex/build-aux/missing makeinfo --version) >/dev/null 2>&1; then \
+  for f in flex.info flex.info-[0-9] flex.info-[0-9][0-9] flex.i[0-9] flex.i[0-9][0-9]; do \
+    if test -f $f; then mv $f $backupdir; restore=mv; else :; fi; \
+  done; \
+else :; fi && \
+cd "$am__cwd"; \
+if /bin/bash /src/flex/build-aux/missing makeinfo -I ./../examples/manual/  -I . \
+ -o flex.info flex.texi; \
+then \
+  rc=0; \
+  CDPATH="${ZSH_VERSION+.}:" && cd .; \
+else \
+  rc=$?; \
+  CDPATH="${ZSH_VERSION+.}:" && cd . && \
+  $restore $backupdir/* `echo "./flex.info" | sed 's|[^/]*$||'`; \
+fi; \
+rm -rf $backupdir; exit $rc
+/usr/bin/help2man --name='the fast lexical analyser generator' --section=1 \
+--source='The Flex Project' --manual='Programming' \
+--output=flex.1 ../src/flex \
+|| rm -f flex.1
+make[1]: Leaving directory '/src/flex/doc'
+Making all in examples
+make[1]: Entering directory '/src/flex/examples'
+Making all in manual
+make[2]: Entering directory '/src/flex/examples/manual'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/src/flex/examples/manual'
+Making all in fastwc
+make[2]: Entering directory '/src/flex/examples/fastwc'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/src/flex/examples/fastwc'
+make[2]: Entering directory '/src/flex/examples'
+make[2]: Nothing to be done for 'all-am'.
+make[2]: Leaving directory '/src/flex/examples'
+make[1]: Leaving directory '/src/flex/examples'
+Making all in po
+make[1]: Entering directory '/src/flex/po'
+make flex.pot-update
+make[2]: Entering directory '/src/flex/po'
+sed -e '/^#/d' remove-potcdate.sin > t-remove-potcdate.sed
+mv t-remove-potcdate.sed remove-potcdate.sed
+package_gnu=""no""; \
+test -n "$package_gnu" || { \
+  if { if (LC_ALL=C find --version) 2>/dev/null | grep GNU >/dev/null; then \
+	 LC_ALL=C find -L .. -maxdepth 1 -type f \
+		       -size -10000000c -exec grep 'GNU flex' \
+		       /dev/null '{}' ';' 2>/dev/null; \
+       else \
+	 LC_ALL=C grep 'GNU flex' ../* 2>/dev/null; \
+       fi; \
+     } | grep -v 'libtool:' >/dev/null; then \
+     package_gnu=yes; \
+   else \
+     package_gnu=no; \
+   fi; \
+}; \
+if test "$package_gnu" = "yes"; then \
+  package_prefix='GNU '; \
+else \
+  package_prefix=''; \
+fi; \
+if test -n 'flex-devel@lists.sourceforge.net' || test 'flex-help@lists.sourceforge.net' = '@'PACKAGE_BUGREPORT'@'; then \
+  msgid_bugs_address='flex-devel@lists.sourceforge.net'; \
+else \
+  msgid_bugs_address='flex-help@lists.sourceforge.net'; \
+fi; \
+case `/usr/bin/xgettext --version | sed 1q | sed -e 's,^[^0-9]*,,'` in \
+  '' | 0.[0-9] | 0.[0-9].* | 0.1[0-5] | 0.1[0-5].* | 0.16 | 0.16.[0-1]*) \
+    /usr/bin/xgettext --default-domain=flex --directory=.. \
+      --add-comments=TRANSLATORS: --language=C --keyword=_ --keyword=N_  \
+      --files-from=./POTFILES.in \
+      --copyright-holder='' \
+      --msgid-bugs-address="$msgid_bugs_address" \
+    ;; \
+  *) \
+    /usr/bin/xgettext --default-domain=flex --directory=.. \
+      --add-comments=TRANSLATORS: --language=C --keyword=_ --keyword=N_  \
+      --files-from=./POTFILES.in \
+      --copyright-holder='' \
+      --package-name="${package_prefix}flex" \
+      --package-version='2.6.4' \
+      --msgid-bugs-address="$msgid_bugs_address" \
+    ;; \
+esac
+test ! -f flex.po || { \
+  if test -f ./flex.pot-header; then \
+    sed -e '1,/^#$/d' < flex.po > flex.1po && \
+    cat ./flex.pot-header flex.1po > flex.po; \
+    rm -f flex.1po; \
+  fi; \
+  if test -f ./flex.pot; then \
+    sed -f remove-potcdate.sed < ./flex.pot > flex.1po && \
+    sed -f remove-potcdate.sed < flex.po > flex.2po && \
+    if cmp flex.1po flex.2po >/dev/null 2>&1; then \
+      rm -f flex.1po flex.2po flex.po; \
+    else \
+      rm -f flex.1po flex.2po ./flex.pot && \
+      mv flex.po ./flex.pot; \
+    fi; \
+  else \
+    mv flex.po ./flex.pot; \
+  fi; \
+}
+make[2]: Leaving directory '/src/flex/po'
+test ! -f ./flex.pot || \
+  test -z "bg.gmo ca.gmo da.gmo de.gmo en@boldquot.gmo en@quot.gmo eo.gmo es.gmo fi.gmo fr.gmo ga.gmo hr.gmo ko.gmo nl.gmo pl.gmo pt.gmo pt_BR.gmo ro.gmo ru.gmo sr.gmo sv.gmo tr.gmo uk.gmo vi.gmo zh_CN.gmo zh_TW.gmo" || make bg.gmo ca.gmo da.gmo de.gmo en@boldquot.gmo en@quot.gmo eo.gmo es.gmo fi.gmo fr.gmo ga.gmo hr.gmo ko.gmo nl.gmo pl.gmo pt.gmo pt_BR.gmo ro.gmo ru.gmo sr.gmo sv.gmo tr.gmo uk.gmo vi.gmo zh_CN.gmo zh_TW.gmo
+make[2]: Entering directory '/src/flex/po'
+/usr/bin/msgmerge --update  --lang=bg bg.po flex.pot
+.............................................. done.
+rm -f bg.gmo && /usr/bin/msgfmt -c --statistics --verbose -o bg.gmo bg.po
+bg.po: 159 translated messages, 2 fuzzy translations, 1 untranslated message.
+/usr/bin/msgmerge --update  --lang=ca ca.po flex.pot
+................................................ done.
+rm -f ca.gmo && /usr/bin/msgfmt -c --statistics --verbose -o ca.gmo ca.po
+ca.po: 155 translated messages, 3 fuzzy translations, 4 untranslated messages.
+/usr/bin/msgmerge --update  --lang=da da.po flex.pot
+.............................................. done.
+rm -f da.gmo && /usr/bin/msgfmt -c --statistics --verbose -o da.gmo da.po
+da.po: 155 translated messages, 3 fuzzy translations, 4 untranslated messages.
+/usr/bin/msgmerge --update  --lang=de de.po flex.pot
+............................................... done.
+rm -f de.gmo && /usr/bin/msgfmt -c --statistics --verbose -o de.gmo de.po
+de.po: 159 translated messages, 2 fuzzy translations, 1 untranslated message.
+make[3]: Entering directory '/src/flex/po'
+make en@boldquot.po-update
+make[4]: Entering directory '/src/flex/po'
+sed -e '/^#/d' -e 's/HEADER/en@boldquot.header/g' ./insert-header.sin > en@boldquot.insert-header
+en@boldquot:
+en@boldquot:
+msgmerge  --lang=en@boldquot en@boldquot.po flex.pot -o en@boldquot.new.po
+............................................... done.
+make[4]: Leaving directory '/src/flex/po'
+make[3]: Leaving directory '/src/flex/po'
+rm -f en@boldquot.gmo && /usr/bin/msgfmt -c --statistics --verbose -o en@boldquot.gmo en@boldquot.po
+en@boldquot.po: 162 translated messages.
+make[3]: Entering directory '/src/flex/po'
+make en@quot.po-update
+make[4]: Entering directory '/src/flex/po'
+sed -e '/^#/d' -e 's/HEADER/en@quot.header/g' ./insert-header.sin > en@quot.insert-header
+en@quot:
+en@quot:
+msgmerge  --lang=en@quot en@quot.po flex.pot -o en@quot.new.po
+............................................... done.
+make[4]: Leaving directory '/src/flex/po'
+make[3]: Leaving directory '/src/flex/po'
+rm -f en@quot.gmo && /usr/bin/msgfmt -c --statistics --verbose -o en@quot.gmo en@quot.po
+en@quot.po: 162 translated messages.
+/usr/bin/msgmerge --update  --lang=eo eo.po flex.pot
+.................................................. done.
+rm -f eo.gmo && /usr/bin/msgfmt -c --statistics --verbose -o eo.gmo eo.po
+eo.po: 159 translated messages, 2 fuzzy translations, 1 untranslated message.
+/usr/bin/msgmerge --update  --lang=es es.po flex.pot
+................................................ done.
+rm -f es.gmo && /usr/bin/msgfmt -c --statistics --verbose -o es.gmo es.po
+es.po: 159 translated messages, 2 fuzzy translations, 1 untranslated message.
+/usr/bin/msgmerge --update  --lang=fi fi.po flex.pot
+............................................... done.
+rm -f fi.gmo && /usr/bin/msgfmt -c --statistics --verbose -o fi.gmo fi.po
+fi.po: 155 translated messages, 3 fuzzy translations, 4 untranslated messages.
+/usr/bin/msgmerge --update  --lang=fr fr.po flex.pot
+.............................................. done.
+rm -f fr.gmo && /usr/bin/msgfmt -c --statistics --verbose -o fr.gmo fr.po
+fr.po: 159 translated messages, 2 fuzzy translations, 1 untranslated message.
+/usr/bin/msgmerge --update  --lang=ga ga.po flex.pot
+............................................. done.
+rm -f ga.gmo && /usr/bin/msgfmt -c --statistics --verbose -o ga.gmo ga.po
+ga.po: 155 translated messages, 3 fuzzy translations, 4 untranslated messages.
+/usr/bin/msgmerge --update  --lang=hr hr.po flex.pot
+.............................................. done.
+rm -f hr.gmo && /usr/bin/msgfmt -c --statistics --verbose -o hr.gmo hr.po
+hr.po: 35 translated messages, 1 fuzzy translation, 126 untranslated messages.
+/usr/bin/msgmerge --update  --lang=ko ko.po flex.pot
+.............................................. done.
+rm -f ko.gmo && /usr/bin/msgfmt -c --statistics --verbose -o ko.gmo ko.po
+ko.po: 109 translated messages, 20 fuzzy translations, 33 untranslated messages.
+/usr/bin/msgmerge --update  --lang=nl nl.po flex.pot
+............................................... done.
+rm -f nl.gmo && /usr/bin/msgfmt -c --statistics --verbose -o nl.gmo nl.po
+nl.po: 159 translated messages, 2 fuzzy translations, 1 untranslated message.
+/usr/bin/msgmerge --update  --lang=pl pl.po flex.pot
+............................................... done.
+rm -f pl.gmo && /usr/bin/msgfmt -c --statistics --verbose -o pl.gmo pl.po
+pl.po: 159 translated messages, 2 fuzzy translations, 1 untranslated message.
+/usr/bin/msgmerge --update  --lang=pt pt.po flex.pot
+................................................ done.
+rm -f pt.gmo && /usr/bin/msgfmt -c --statistics --verbose -o pt.gmo pt.po
+pt.po: 155 translated messages, 3 fuzzy translations, 4 untranslated messages.
+/usr/bin/msgmerge --update  --lang=pt_BR pt_BR.po flex.pot
+............................................... done.
+rm -f pt_BR.gmo && /usr/bin/msgfmt -c --statistics --verbose -o pt_BR.gmo pt_BR.po
+pt_BR.po: 155 translated messages, 3 fuzzy translations, 4 untranslated messages.
+/usr/bin/msgmerge --update  --lang=ro ro.po flex.pot
+............................................. done.
+rm -f ro.gmo && /usr/bin/msgfmt -c --statistics --verbose -o ro.gmo ro.po
+ro.po: 159 translated messages, 2 fuzzy translations, 1 untranslated message.
+/usr/bin/msgmerge --update  --lang=ru ru.po flex.pot
+.............................................. done.
+rm -f ru.gmo && /usr/bin/msgfmt -c --statistics --verbose -o ru.gmo ru.po
+ru.po: 159 translated messages, 2 fuzzy translations, 1 untranslated message.
+/usr/bin/msgmerge --update  --lang=sr sr.po flex.pot
+............................................... done.
+rm -f sr.gmo && /usr/bin/msgfmt -c --statistics --verbose -o sr.gmo sr.po
+sr.po: 159 translated messages, 2 fuzzy translations, 1 untranslated message.
+/usr/bin/msgmerge --update  --lang=sv sv.po flex.pot
+.............................................. done.
+rm -f sv.gmo && /usr/bin/msgfmt -c --statistics --verbose -o sv.gmo sv.po
+sv.po: 159 translated messages, 2 fuzzy translations, 1 untranslated message.
+/usr/bin/msgmerge --update  --lang=tr tr.po flex.pot
+............................................... done.
+rm -f tr.gmo && /usr/bin/msgfmt -c --statistics --verbose -o tr.gmo tr.po
+tr.po: 147 translated messages, 8 fuzzy translations, 7 untranslated messages.
+/usr/bin/msgmerge --update  --lang=uk uk.po flex.pot
+............................................... done.
+rm -f uk.gmo && /usr/bin/msgfmt -c --statistics --verbose -o uk.gmo uk.po
+uk.po: 159 translated messages, 2 fuzzy translations, 1 untranslated message.
+/usr/bin/msgmerge --update  --lang=vi vi.po flex.pot
+............................................. done.
+rm -f vi.gmo && /usr/bin/msgfmt -c --statistics --verbose -o vi.gmo vi.po
+vi.po: 155 translated messages, 3 fuzzy translations, 4 untranslated messages.
+/usr/bin/msgmerge --update  --lang=zh_CN zh_CN.po flex.pot
+............................................... done.
+rm -f zh_CN.gmo && /usr/bin/msgfmt -c --statistics --verbose -o zh_CN.gmo zh_CN.po
+zh_CN.po: 155 translated messages, 3 fuzzy translations, 4 untranslated messages.
+/usr/bin/msgmerge --update  --lang=zh_TW zh_TW.po flex.pot
+.............................................. done.
+rm -f zh_TW.gmo && /usr/bin/msgfmt -c --statistics --verbose -o zh_TW.gmo zh_TW.po
+zh_TW.po: 155 translated messages, 3 fuzzy translations, 4 untranslated messages.
+make[2]: Leaving directory '/src/flex/po'
+touch stamp-po
+make[1]: Leaving directory '/src/flex/po'
+Making all in tests
+make[1]: Entering directory '/src/flex/tests'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/src/flex/tests'
+Making all in tools
+make[1]: Entering directory '/src/flex/tools'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/src/flex/tools'
+make[1]: Entering directory '/src/flex'
+make[1]: Nothing to be done for 'all-am'.
+make[1]: Leaving directory '/src/flex'
++ git apply /src/flex-patch.diff
++ cd src
++ /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -c main.c -DM4=2 -o main.o
++ cd ../
++ mv ./src/stage1flex-buf.o ./src/stage1flex-ccl.o ./src/stage1flex-dfa.o ./src/stage1flex-ecs.o ./src/stage1flex-filter.o ./src/stage1flex-gen.o ./src/stage1flex-main.o ./src/stage1flex-misc.o ./src/stage1flex-nfa.o ./src/stage1flex-options.o ./src/stage1flex-parse.o ./src/stage1flex-regex.o ./src/stage1flex-scan.o ./src/stage1flex-scanflags.o ./src/stage1flex-scanopt.o ./src/stage1flex-skeletons.o ./src/stage1flex-sym.o ./src/stage1flex-tables.o ./src/stage1flex-tables_shared.o ./src/stage1flex-tblcmp.o ./src/stage1flex-yylex.o /tmp/
++ mv ./src/libmain.o /tmp/
++ mv ./src/flex-main.o /tmp/
++ mv ./src/libyywrap.o /tmp/
++ /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -c /src/fuzz-scanopt.c -I/src/flex/src
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -fsanitize=fuzzer ./fuzz-scanopt.o ./src/flex-buf.o ./src/flex-ccl.o ./src/flex-dfa.o ./src/flex-ecs.o ./src/flex-filter.o ./src/flex-gen.o ./src/flex-misc.o ./src/flex-nfa.o ./src/flex-options.o ./src/flex-parse.o ./src/flex-regex.o ./src/flex-scanflags.o ./src/flex-scanopt.o ./src/flex-skeletons.o ./src/flex-stage1scan.o ./src/flex-sym.o ./src/flex-tables.o ./src/flex-tables_shared.o ./src/flex-tblcmp.o ./src/flex-yylex.o ./src/main.o -o /workspace/out/libfuzzer-address-x86_64/fuzz-scanopt
++ /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -c /src/fuzz-main.c -I/src/flex/src
+/src/fuzz-main.c:1:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+/src/fuzz-main.cpp:24:16: error: use of undeclared identifier 'regmatch_strtol'
+  int result = regmatch_strtol(&m, src.c_str(), &endptr, base);
+               ^
+1 error generated.

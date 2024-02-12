@@ -1,0 +1,1 @@
+void _scan_entity(char* str);

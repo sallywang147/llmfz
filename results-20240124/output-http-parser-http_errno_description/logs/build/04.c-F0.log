@@ -1,0 +1,32 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ cd http-parser
++ make http_parser.o
+/usr/local/bin/clang-jcc  -I. -DHTTP_PARSER_STRICT=0  -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Wall -Wextra -Werror -O3  -c http_parser.c
++ /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -I. -DHTTP_PARSER_STRICT=0 -Wall -Wextra -Werror -c fuzzers/fuzz_parser.c -o fuzz_parser.o
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -fsanitize=fuzzer -Wall -Wextra -Werror http_parser.o fuzz_parser.o -o /workspace/out/libfuzzer-address-x86_64/fuzz_parser
++ /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -I. -DHTTP_PARSER_STRICT=0 -Wall -Wextra -Werror -c fuzzers/fuzz_url.c -o fuzz_url.o
+In file included from fuzzers/fuzz_url.c:1:
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:16:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+fuzzers/fuzz_url.cpp:14:30: error: no matching function for call to 'http_errno_description'
+  char * error_description = http_errno_description(error_code);
+                             ^~~~~~~~~~~~~~~~~~~~~~
+./http_parser.h:427:13: note: candidate function not viable: no known conversion from 'int' to 'enum http_errno' for 1st argument
+const char *http_errno_description(enum http_errno err);
+            ^
+fuzzers/fuzz_url.cpp:14:10: error: cannot initialize a variable of type 'char *' with an rvalue of type 'const char *'
+  char * error_description = http_errno_description(error_code);
+         ^                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+2 errors generated.

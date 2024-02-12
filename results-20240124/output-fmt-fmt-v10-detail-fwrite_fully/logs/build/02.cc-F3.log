@@ -1,0 +1,149 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ mkdir build
++ cd build
++ cmake .. -GNinja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_STANDARD=14 -DFMT_DOC=Off -DFMT_TEST=Off -DFMT_SAFE_DURATION_CAST=On -DFMT_FUZZ=On -DFMT_FUZZ_LINKMAIN=Off -DFMT_FUZZ_LDFLAGS=-fsanitize=fuzzer
+-- CMake version: 3.24.2
+-- The CXX compiler identification is Clang 15.0.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/local/bin/clang++-jcc - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Version: 10.2.2
+-- Build type: Debug
+-- Performing Test HAS_NULLPTR_WARNING
+-- Performing Test HAS_NULLPTR_WARNING - Success
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /src/fmt/build
++ cmake --build .
+[1/15] Building CXX object test/fuzzing/CMakeFiles/float-fuzzer.dir/float.cc.o
+[2/15] Building CXX object CMakeFiles/fmt.dir/src/os.cc.o
+[3/15] Building CXX object test/fuzzing/CMakeFiles/chrono-timepoint-fuzzer.dir/chrono-timepoint.cc.o
+FAILED: test/fuzzing/CMakeFiles/chrono-timepoint-fuzzer.dir/chrono-timepoint.cc.o 
+/usr/local/bin/clang++-jcc -DFMT_FUZZ -DFMT_SAFE_DURATION_CAST -I/src/fmt/include -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fvisibility=hidden -fvisibility-inlines-hidden -MD -MT test/fuzzing/CMakeFiles/chrono-timepoint-fuzzer.dir/chrono-timepoint.cc.o -MF test/fuzzing/CMakeFiles/chrono-timepoint-fuzzer.dir/chrono-timepoint.cc.o.d -o test/fuzzing/CMakeFiles/chrono-timepoint-fuzzer.dir/chrono-timepoint.cc.o -c /src/fmt/test/fuzzing/chrono-timepoint.cc
+In file included from /src/fmt/test/fuzzing/chrono-timepoint.cc:12:
+In file included from /src/fmt/include/fmt/core.h:5:
+/src/fmt/include/fmt/format.h:265:1: error: templates must have C++ linkage
+template <typename Char, typename Traits, typename Allocator>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fmt/test/fuzzing/chrono-timepoint.cc:11:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fmt/test/fuzzing/chrono-timepoint.cc:12:
+In file included from /src/fmt/include/fmt/core.h:5:
+/src/fmt/include/fmt/format.h:279:1: error: templates must have C++ linkage
+template <typename Char> using std_string_view = std::basic_string_view<Char>;
+^~~~~~~~~~~~~~~~~~~~~~~~
+/src/fmt/test/fuzzing/chrono-timepoint.cc:11:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fmt/test/fuzzing/chrono-timepoint.cc:12:
+In file included from /src/fmt/include/fmt/core.h:5:
+/src/fmt/include/fmt/format.h:285:1: error: templates must have C++ linkage
+template <typename To, typename From, FMT_ENABLE_IF(sizeof(To) == sizeof(From))>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fmt/test/fuzzing/chrono-timepoint.cc:11:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fmt/test/fuzzing/chrono-timepoint.cc:12:
+In file included from /src/fmt/include/fmt/core.h:5:
+/src/fmt/include/fmt/format.h:322:3: error: templates must have C++ linkage
+  template <typename T, FMT_ENABLE_IF(std::is_integral<T>::value)>
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fmt/test/fuzzing/chrono-timepoint.cc:11:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fmt/test/fuzzing/chrono-timepoint.cc:12:
+In file included from /src/fmt/include/fmt/core.h:5:
+/src/fmt/include/fmt/format.h:432:1: error: templates must have C++ linkage
+template <typename T> constexpr auto max_value() -> T {
+^~~~~~~~~~~~~~~~~~~~~
+/src/fmt/test/fuzzing/chrono-timepoint.cc:11:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fmt/test/fuzzing/chrono-timepoint.cc:12:
+In file included from /src/fmt/include/fmt/core.h:5:
+/src/fmt/include/fmt/format.h:435:1: error: templates must have C++ linkage
+template <typename T> constexpr auto num_bits() -> int {
+^~~~~~~~~~~~~~~~~~~~~
+/src/fmt/test/fuzzing/chrono-timepoint.cc:11:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fmt/test/fuzzing/chrono-timepoint.cc:12:
+In file included from /src/fmt/include/fmt/core.h:5:
+/src/fmt/include/fmt/format.h:439:1: error: templates must have C++ linkage
+template <> constexpr auto num_bits<int128_opt>() -> int { return 128; }
+^~~~~~~~~~~
+/src/fmt/test/fuzzing/chrono-timepoint.cc:11:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fmt/test/fuzzing/chrono-timepoint.cc:12:
+In file included from /src/fmt/include/fmt/core.h:5:
+/src/fmt/include/fmt/format.h:440:1: error: templates must have C++ linkage
+template <> constexpr auto num_bits<uint128_opt>() -> int { return 128; }
+^~~~~~~~~~~
+/src/fmt/test/fuzzing/chrono-timepoint.cc:11:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fmt/test/fuzzing/chrono-timepoint.cc:12:
+In file included from /src/fmt/include/fmt/core.h:5:
+/src/fmt/include/fmt/format.h:441:1: error: extraneous 'template<>' in declaration of variable 'num_bits'
+template <> constexpr auto num_bits<uint128_fallback>() -> int { return 128; }
+^~~~~~~~~~~
+/src/fmt/include/fmt/format.h:441:28: error: redefinition of 'num_bits' as different kind of symbol
+template <> constexpr auto num_bits<uint128_fallback>() -> int { return 128; }
+                           ^
+/src/fmt/include/fmt/format.h:439:28: note: previous definition is here
+template <> constexpr auto num_bits<int128_opt>() -> int { return 128; }
+                           ^
+/src/fmt/include/fmt/format.h:441:28: error: declaration of variable 'num_bits' with deduced type 'const auto' requires an initializer
+template <> constexpr auto num_bits<uint128_fallback>() -> int { return 128; }
+                           ^
+/src/fmt/include/fmt/format.h:441:36: error: expected ';' at end of declaration
+template <> constexpr auto num_bits<uint128_fallback>() -> int { return 128; }
+                                   ^
+                                   ;
+/src/fmt/include/fmt/format.h:441:36: error: expected unqualified-id
+/src/fmt/include/fmt/format.h:445:1: error: templates must have C++ linkage
+template <typename To, typename From, FMT_ENABLE_IF(sizeof(To) > sizeof(From))>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fmt/test/fuzzing/chrono-timepoint.cc:11:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fmt/test/fuzzing/chrono-timepoint.cc:12:
+In file included from /src/fmt/include/fmt/core.h:5:
+/src/fmt/include/fmt/format.h:454:44: error: expected '(' for function-style cast or type construction
+      result = (result << num_bits<unsigned>()) | data.value[i];
+                                   ~~~~~~~~^
+/src/fmt/include/fmt/format.h:454:46: error: expected expression
+      result = (result << num_bits<unsigned>()) | data.value[i];
+                                             ^
+/src/fmt/include/fmt/format.h:457:44: error: expected '(' for function-style cast or type construction
+      result = (result << num_bits<unsigned>()) | data.value[i];
+                                   ~~~~~~~~^
+/src/fmt/include/fmt/format.h:457:46: error: expected expression
+      result = (result << num_bits<unsigned>()) | data.value[i];
+                                             ^
+/src/fmt/include/fmt/format.h:462:1: error: templates must have C++ linkage
+template <typename UInt>
+^~~~~~~~~~~~~~~~~~~~~~~~
+/src/fmt/test/fuzzing/chrono-timepoint.cc:11:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+[4/15] Building CXX object test/fuzzing/CMakeFiles/named-arg-fuzzer.dir/named-arg.cc.o
+[5/15] Building CXX object test/fuzzing/CMakeFiles/one-arg-fuzzer.dir/one-arg.cc.o
+[6/15] Building CXX object test/fuzzing/CMakeFiles/two-args-fuzzer.dir/two-args.cc.o
+[7/15] Building CXX object CMakeFiles/fmt.dir/src/format.cc.o
+[8/15] Building CXX object test/fuzzing/CMakeFiles/chrono-duration-fuzzer.dir/chrono-duration.cc.o
+ninja: build stopped: subcommand failed.

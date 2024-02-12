@@ -1,0 +1,450 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ sed -i 's/CFLAGS += -g -fsanitize=address,fuzzer,undefined/#CFLAGS += -g -fsanitize=address,fuzzer,undefined/' ./Makefile
++ export 'LDFLAGS=-fsanitize=fuzzer -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link'
++ LDFLAGS='-fsanitize=fuzzer -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link'
++ chmod +x ./fuzztest/build.sh
++ ./fuzztest/build.sh
+rm -rf out
+rm -rf libcivetweb.a
+rm -rf libcivetweb.so
+rm -rf libcivetweb.so.1
+rm -rf libcivetweb.so.1.17.0
+rm -rf civetweb
+rm -f civetweb_test
+rm: cannot remove 'civetweb_fuzz?': No such file or directory
+clang -c -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Wall -Wextra -Wshadow -Wformat-security -Winit-self -Wmissing-prototypes -DLINUX -Iinclude  -DUSE_STACK_SIZE=102400 -DTEST_FUZZ1 -DOPENSSL_API_1_1 -fPIC src/civetweb.c -o out/src/civetweb.o
+clang -c -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Wall -Wextra -Wshadow -Wformat-security -Winit-self -Wmissing-prototypes -DLINUX -Iinclude  -DUSE_STACK_SIZE=102400 -DTEST_FUZZ1 -DOPENSSL_API_1_1 fuzztest/fuzzmain.c -o out/fuzztest/fuzzmain.o
+fuzztest/fuzzmain.c:55:2: warning: implicitly declaring library function 'printf' with type 'int (const char *, ...)' [-Wimplicit-function-declaration]
+        printf("CivetWeb server exit\n");
+        ^
+fuzztest/fuzzmain.c:55:2: note: include the header <stdio.h> or explicitly provide a declaration for 'printf'
+fuzztest/fuzzmain.c:56:2: warning: implicit declaration of function 'mg_stop' is invalid in C99 [-Wimplicit-function-declaration]
+        mg_stop(ctx);
+        ^
+fuzztest/fuzzmain.c:65:22: error: variable has incomplete type 'struct mg_callbacks'
+        struct mg_callbacks callbacks;
+                            ^
+fuzztest/fuzzmain.c:65:9: note: forward declaration of 'struct mg_callbacks'
+        struct mg_callbacks callbacks;
+               ^
+fuzztest/fuzzmain.c:66:29: error: array has incomplete element type 'struct mg_server_port'
+        struct mg_server_port ports[8];
+                                   ^
+fuzztest/fuzzmain.c:66:9: note: forward declaration of 'struct mg_server_port'
+        struct mg_server_port ports[8];
+               ^
+fuzztest/fuzzmain.c:70:8: warning: implicit declaration of function 'mg_start' is invalid in C99 [-Wimplicit-function-declaration]
+        ctx = mg_start(&callbacks, 0, OPTIONS);
+              ^
+fuzztest/fuzzmain.c:73:3: warning: implicit declaration of function 'fprintf' is invalid in C99 [-Wimplicit-function-declaration]
+                fprintf(stderr, "\nCivetWeb test server failed to start\n");
+                ^
+fuzztest/fuzzmain.c:73:3: warning: declaration of built-in function 'fprintf' requires inclusion of the header <stdio.h> [-Wbuiltin-requires-header]
+fuzztest/fuzzmain.c:73:11: error: use of undeclared identifier 'stderr'
+                fprintf(stderr, "\nCivetWeb test server failed to start\n");
+                        ^
+fuzztest/fuzzmain.c:74:3: error: use of undeclared identifier 'stderr'
+                TESTabort();
+                ^
+fuzztest/fuzzmain.c:30:11: note: expanded from macro 'TESTabort'
+                fprintf(stderr, "!!! Precondition in test environment not met !!!\n"); \
+                        ^
+fuzztest/fuzzmain.c:74:3: error: use of undeclared identifier 'stderr'
+fuzztest/fuzzmain.c:31:11: note: expanded from macro 'TESTabort'
+                fprintf(stderr, "!!! aborting fuzz test in line %u !!!", __LINE__);    \
+                        ^
+fuzztest/fuzzmain.c:77:12: warning: implicit declaration of function 'mg_get_server_ports' is invalid in C99 [-Wimplicit-function-declaration]
+        int ret = mg_get_server_ports(ctx, 8, ports);
+                  ^
+fuzztest/fuzzmain.c:79:3: warning: implicit declaration of function 'fprintf' is invalid in C99 [-Wimplicit-function-declaration]
+                fprintf(stderr,
+                ^
+fuzztest/fuzzmain.c:79:11: error: use of undeclared identifier 'stderr'
+                fprintf(stderr,
+                        ^
+fuzztest/fuzzmain.c:81:3: error: use of undeclared identifier 'stderr'
+                TESTabort();
+                ^
+fuzztest/fuzzmain.c:30:11: note: expanded from macro 'TESTabort'
+                fprintf(stderr, "!!! Precondition in test environment not met !!!\n"); \
+                        ^
+fuzztest/fuzzmain.c:81:3: error: use of undeclared identifier 'stderr'
+fuzztest/fuzzmain.c:31:11: note: expanded from macro 'TESTabort'
+                fprintf(stderr, "!!! aborting fuzz test in line %u !!!", __LINE__);    \
+                        ^
+fuzztest/fuzzmain.c:84:3: warning: implicit declaration of function 'fprintf' is invalid in C99 [-Wimplicit-function-declaration]
+                fprintf(stderr,
+                ^
+fuzztest/fuzzmain.c:84:11: error: use of undeclared identifier 'stderr'
+                fprintf(stderr,
+                        ^
+fuzztest/fuzzmain.c:87:3: error: use of undeclared identifier 'stderr'
+                TESTabort();
+                ^
+fuzztest/fuzzmain.c:30:11: note: expanded from macro 'TESTabort'
+                fprintf(stderr, "!!! Precondition in test environment not met !!!\n"); \
+                        ^
+fuzztest/fuzzmain.c:87:3: error: use of undeclared identifier 'stderr'
+fuzztest/fuzzmain.c:31:11: note: expanded from macro 'TESTabort'
+                fprintf(stderr, "!!! aborting fuzz test in line %u !!!", __LINE__);    \
+                        ^
+fuzztest/fuzzmain.c:117:11: warning: implicit declaration of function 'mg_connect_client' is invalid in C99 [-Wimplicit-function-declaration]
+        client = mg_connect_client(
+                 ^
+fuzztest/fuzzmain.c:117:9: warning: incompatible integer to pointer conversion assigning to 'struct mg_connection *' from 'int' [-Wint-conversion]
+        client = mg_connect_client(
+               ^ ~~~~~~~~~~~~~~~~~~
+fuzztest/fuzzmain.c:121:3: warning: implicit declaration of function 'fprintf' is invalid in C99 [-Wimplicit-function-declaration]
+                fprintf(stderr,
+                ^
+fuzztest/fuzzmain.c:121:11: error: use of undeclared identifier 'stderr'
+                fprintf(stderr,
+                        ^
+fuzztest/fuzzmain.c:128:4: warning: implicit declaration of function 'mg_close_connection' is invalid in C99 [-Wimplicit-function-declaration]
+                        mg_close_connection(client);
+                        ^
+fuzztest/fuzzmain.c:136:10: warning: incompatible integer to pointer conversion assigning to 'struct mg_connection *' from 'int' [-Wint-conversion]
+                client = mg_connect_client(
+                       ^ ~~~~~~~~~~~~~~~~~~
+fuzztest/fuzzmain.c:139:12: error: use of undeclared identifier 'stderr'
+                        fprintf(stderr, "Retry: error\n");
+                                ^
+fuzztest/fuzzmain.c:142:11: error: use of undeclared identifier 'stderr'
+                fprintf(stderr, "Retry: success\n");
+                        ^
+fuzztest/fuzzmain.c:145:2: warning: implicit declaration of function 'mg_printf' is invalid in C99 [-Wimplicit-function-declaration]
+        mg_printf(client, "GET %s HTTP/1.0\r\n\r\n", uri);
+        ^
+fuzztest/fuzzmain.c:147:6: warning: implicit declaration of function 'mg_get_response' is invalid in C99 [-Wimplicit-function-declaration]
+        r = mg_get_response(client, client_err_buf, sizeof(client_err_buf), 10000);
+            ^
+fuzztest/fuzzmain.c:150:3: warning: implicit declaration of function 'mg_close_connection' is invalid in C99 [-Wimplicit-function-declaration]
+                mg_close_connection(client);
+                ^
+fuzztest/fuzzmain.c:154:14: warning: implicit declaration of function 'mg_get_response_info' is invalid in C99 [-Wimplicit-function-declaration]
+        client_ri = mg_get_response_info(client);
+                    ^
+fuzztest/fuzzmain.c:154:12: warning: incompatible integer to pointer conversion assigning to 'const struct mg_response_info *' from 'int' [-Wint-conversion]
+        client_ri = mg_get_response_info(client);
+                  ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fuzztest/fuzzmain.c:156:3: warning: implicit declaration of function 'mg_close_connection' is invalid in C99 [-Wimplicit-function-declaration]
+                mg_close_connection(client);
+                ^
+fuzztest/fuzzmain.c:161:30: error: incomplete definition of type 'struct mg_response_info'
+        while (data_read < client_ri->content_length) {
+                           ~~~~~~~~~^
+fuzztest/fuzzmain.c:113:15: note: forward declaration of 'struct mg_response_info'
+        const struct mg_response_info *client_ri;
+                     ^
+fuzztest/fuzzmain.c:164:7: warning: implicit declaration of function 'mg_read' is invalid in C99 [-Wimplicit-function-declaration]
+                r = mg_read(client,
+                    ^
+fuzztest/fuzzmain.c:183:6: warning: implicit declaration of function 'mg_read' is invalid in C99 [-Wimplicit-function-declaration]
+        r = mg_read(client, client_data_buf, sizeof(client_data_buf));
+            ^
+fuzztest/fuzzmain.c:185:3: warning: implicit declaration of function 'mg_close_connection' is invalid in C99 [-Wimplicit-function-declaration]
+                mg_close_connection(client);
+                ^
+fuzztest/fuzzmain.c:189:2: warning: implicit declaration of function 'mg_close_connection' is invalid in C99 [-Wimplicit-function-declaration]
+        mg_close_connection(client);
+        ^
+fuzztest/fuzzmain.c:515:23: error: variable has incomplete type 'struct mg_connection'
+        struct mg_connection conn;
+                             ^
+fuzztest/fuzzmain.c:515:9: note: forward declaration of 'struct mg_connection'
+        struct mg_connection conn;
+               ^
+fuzztest/fuzzmain.c:532:2: warning: implicit declaration of function 'mg_send_mime_file' is invalid in C99 [-Wimplicit-function-declaration]
+        mg_send_mime_file(&conn, path, mime_type);
+        ^
+fuzztest/fuzzmain.c:513:1: warning: no previous prototype for function 'LLVMFuzzerTestOneInput_process_new_connection' [-Wmissing-prototypes]
+LLVMFuzzerTestOneInput_process_new_connection(const uint8_t *data, size_t size)
+^
+fuzztest/fuzzmain.c:512:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+int
+^
+static 
+25 warnings and 16 errors generated.
+make: *** [Makefile:437: out/fuzztest/fuzzmain.o] Error 1
+mv: cannot stat 'civetweb': No such file or directory
+clang -c -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Wall -Wextra -Wshadow -Wformat-security -Winit-self -Wmissing-prototypes -DLINUX -Iinclude  -DUSE_STACK_SIZE=102400 -DTEST_FUZZ2 -DOPENSSL_API_1_1 -fPIC src/civetweb.c -o out/src/civetweb.o
+clang -c -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Wall -Wextra -Wshadow -Wformat-security -Winit-self -Wmissing-prototypes -DLINUX -Iinclude  -DUSE_STACK_SIZE=102400 -DTEST_FUZZ2 -DOPENSSL_API_1_1 fuzztest/fuzzmain.c -o out/fuzztest/fuzzmain.o
+fuzztest/fuzzmain.c:55:2: warning: implicitly declaring library function 'printf' with type 'int (const char *, ...)' [-Wimplicit-function-declaration]
+        printf("CivetWeb server exit\n");
+        ^
+fuzztest/fuzzmain.c:55:2: note: include the header <stdio.h> or explicitly provide a declaration for 'printf'
+fuzztest/fuzzmain.c:56:2: warning: implicit declaration of function 'mg_stop' is invalid in C99 [-Wimplicit-function-declaration]
+        mg_stop(ctx);
+        ^
+fuzztest/fuzzmain.c:65:22: error: variable has incomplete type 'struct mg_callbacks'
+        struct mg_callbacks callbacks;
+                            ^
+fuzztest/fuzzmain.c:65:9: note: forward declaration of 'struct mg_callbacks'
+        struct mg_callbacks callbacks;
+               ^
+fuzztest/fuzzmain.c:66:29: error: array has incomplete element type 'struct mg_server_port'
+        struct mg_server_port ports[8];
+                                   ^
+fuzztest/fuzzmain.c:66:9: note: forward declaration of 'struct mg_server_port'
+        struct mg_server_port ports[8];
+               ^
+fuzztest/fuzzmain.c:70:8: warning: implicit declaration of function 'mg_start' is invalid in C99 [-Wimplicit-function-declaration]
+        ctx = mg_start(&callbacks, 0, OPTIONS);
+              ^
+fuzztest/fuzzmain.c:73:3: warning: implicit declaration of function 'fprintf' is invalid in C99 [-Wimplicit-function-declaration]
+                fprintf(stderr, "\nCivetWeb test server failed to start\n");
+                ^
+fuzztest/fuzzmain.c:73:3: warning: declaration of built-in function 'fprintf' requires inclusion of the header <stdio.h> [-Wbuiltin-requires-header]
+fuzztest/fuzzmain.c:73:11: error: use of undeclared identifier 'stderr'
+                fprintf(stderr, "\nCivetWeb test server failed to start\n");
+                        ^
+fuzztest/fuzzmain.c:74:3: error: use of undeclared identifier 'stderr'
+                TESTabort();
+                ^
+fuzztest/fuzzmain.c:30:11: note: expanded from macro 'TESTabort'
+                fprintf(stderr, "!!! Precondition in test environment not met !!!\n"); \
+                        ^
+fuzztest/fuzzmain.c:74:3: error: use of undeclared identifier 'stderr'
+fuzztest/fuzzmain.c:31:11: note: expanded from macro 'TESTabort'
+                fprintf(stderr, "!!! aborting fuzz test in line %u !!!", __LINE__);    \
+                        ^
+fuzztest/fuzzmain.c:77:12: warning: implicit declaration of function 'mg_get_server_ports' is invalid in C99 [-Wimplicit-function-declaration]
+        int ret = mg_get_server_ports(ctx, 8, ports);
+                  ^
+fuzztest/fuzzmain.c:79:3: warning: implicit declaration of function 'fprintf' is invalid in C99 [-Wimplicit-function-declaration]
+                fprintf(stderr,
+                ^
+fuzztest/fuzzmain.c:79:11: error: use of undeclared identifier 'stderr'
+                fprintf(stderr,
+                        ^
+fuzztest/fuzzmain.c:81:3: error: use of undeclared identifier 'stderr'
+                TESTabort();
+                ^
+fuzztest/fuzzmain.c:30:11: note: expanded from macro 'TESTabort'
+                fprintf(stderr, "!!! Precondition in test environment not met !!!\n"); \
+                        ^
+fuzztest/fuzzmain.c:81:3: error: use of undeclared identifier 'stderr'
+fuzztest/fuzzmain.c:31:11: note: expanded from macro 'TESTabort'
+                fprintf(stderr, "!!! aborting fuzz test in line %u !!!", __LINE__);    \
+                        ^
+fuzztest/fuzzmain.c:84:3: warning: implicit declaration of function 'fprintf' is invalid in C99 [-Wimplicit-function-declaration]
+                fprintf(stderr,
+                ^
+fuzztest/fuzzmain.c:84:11: error: use of undeclared identifier 'stderr'
+                fprintf(stderr,
+                        ^
+fuzztest/fuzzmain.c:87:3: error: use of undeclared identifier 'stderr'
+                TESTabort();
+                ^
+fuzztest/fuzzmain.c:30:11: note: expanded from macro 'TESTabort'
+                fprintf(stderr, "!!! Precondition in test environment not met !!!\n"); \
+                        ^
+fuzztest/fuzzmain.c:87:3: error: use of undeclared identifier 'stderr'
+fuzztest/fuzzmain.c:31:11: note: expanded from macro 'TESTabort'
+                fprintf(stderr, "!!! aborting fuzz test in line %u !!!", __LINE__);    \
+                        ^
+fuzztest/fuzzmain.c:230:3: warning: implicit declaration of function 'fprintf' is invalid in C99 [-Wimplicit-function-declaration]
+                fprintf(stderr, "Error: Cannot create socket [%s]\n", strerror(r));
+                ^
+fuzztest/fuzzmain.c:230:11: error: use of undeclared identifier 'stderr'
+                fprintf(stderr, "Error: Cannot create socket [%s]\n", strerror(r));
+                        ^
+fuzztest/fuzzmain.c:241:3: warning: implicit declaration of function 'fprintf' is invalid in C99 [-Wimplicit-function-declaration]
+                fprintf(stderr, "Error: Cannot connect [%s]\n", strerror(r));
+                ^
+fuzztest/fuzzmain.c:241:11: error: use of undeclared identifier 'stderr'
+                fprintf(stderr, "Error: Cannot connect [%s]\n", strerror(r));
+                        ^
+fuzztest/fuzzmain.c:249:3: warning: implicit declaration of function 'fprintf' is invalid in C99 [-Wimplicit-function-declaration]
+                fprintf(stderr, "Warning: %i bytes sent (TODO: Repeat)\n", r);
+                ^
+fuzztest/fuzzmain.c:249:11: error: use of undeclared identifier 'stderr'
+                fprintf(stderr, "Warning: %i bytes sent (TODO: Repeat)\n", r);
+                        ^
+fuzztest/fuzzmain.c:515:23: error: variable has incomplete type 'struct mg_connection'
+        struct mg_connection conn;
+                             ^
+fuzztest/fuzzmain.c:515:9: note: forward declaration of 'struct mg_connection'
+        struct mg_connection conn;
+               ^
+fuzztest/fuzzmain.c:532:2: warning: implicit declaration of function 'mg_send_mime_file' is invalid in C99 [-Wimplicit-function-declaration]
+        mg_send_mime_file(&conn, path, mime_type);
+        ^
+fuzztest/fuzzmain.c:513:1: warning: no previous prototype for function 'LLVMFuzzerTestOneInput_process_new_connection' [-Wmissing-prototypes]
+LLVMFuzzerTestOneInput_process_new_connection(const uint8_t *data, size_t size)
+^
+fuzztest/fuzzmain.c:512:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+int
+^
+static 
+13 warnings and 15 errors generated.
+make: *** [Makefile:437: out/fuzztest/fuzzmain.o] Error 1
+mv: cannot stat 'civetweb': No such file or directory
+clang -c -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Wall -Wextra -Wshadow -Wformat-security -Winit-self -Wmissing-prototypes -DLINUX -Iinclude  -DUSE_STACK_SIZE=102400 -DTEST_FUZZ3 -DOPENSSL_API_1_1 -fPIC src/civetweb.c -o out/src/civetweb.o
+clang -c -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Wall -Wextra -Wshadow -Wformat-security -Winit-self -Wmissing-prototypes -DLINUX -Iinclude  -DUSE_STACK_SIZE=102400 -DTEST_FUZZ3 -DOPENSSL_API_1_1 fuzztest/fuzzmain.c -o out/fuzztest/fuzzmain.o
+fuzztest/fuzzmain.c:292:2: warning: implicitly declaring library function 'printf' with type 'int (const char *, ...)' [-Wimplicit-function-declaration]
+        printf("MOCK server exit\n");
+        ^
+fuzztest/fuzzmain.c:292:2: note: include the header <stdio.h> or explicitly provide a declaration for 'printf'
+fuzztest/fuzzmain.c:327:4: warning: implicit declaration of function 'fprintf' is invalid in C99 [-Wimplicit-function-declaration]
+                        fprintf(stderr, "Error: Accept failed [%s]\n", strerror(er));
+                        ^
+fuzztest/fuzzmain.c:327:4: warning: declaration of built-in function 'fprintf' requires inclusion of the header <stdio.h> [-Wbuiltin-requires-header]
+fuzztest/fuzzmain.c:327:12: error: use of undeclared identifier 'stderr'
+                        fprintf(stderr, "Error: Accept failed [%s]\n", strerror(er));
+                                ^
+fuzztest/fuzzmain.c:345:5: warning: implicit declaration of function 'fprintf' is invalid in C99 [-Wimplicit-function-declaration]
+                                fprintf(stderr, "Error: Recv failed [%s]\n", strerror(er));
+                                ^
+fuzztest/fuzzmain.c:345:13: error: use of undeclared identifier 'stderr'
+                                fprintf(stderr, "Error: Recv failed [%s]\n", strerror(er));
+                                        ^
+fuzztest/fuzzmain.c:371:3: warning: implicit declaration of function 'fprintf' is invalid in C99 [-Wimplicit-function-declaration]
+                fprintf(stderr, "Error: Cannot create socket [%s]\n", strerror(r));
+                ^
+fuzztest/fuzzmain.c:371:11: error: use of undeclared identifier 'stderr'
+                fprintf(stderr, "Error: Cannot create socket [%s]\n", strerror(r));
+                        ^
+fuzztest/fuzzmain.c:372:3: error: use of undeclared identifier 'stderr'
+                TESTabort();
+                ^
+fuzztest/fuzzmain.c:30:11: note: expanded from macro 'TESTabort'
+                fprintf(stderr, "!!! Precondition in test environment not met !!!\n"); \
+                        ^
+fuzztest/fuzzmain.c:372:3: error: use of undeclared identifier 'stderr'
+fuzztest/fuzzmain.c:31:11: note: expanded from macro 'TESTabort'
+                fprintf(stderr, "!!! aborting fuzz test in line %u !!!", __LINE__);    \
+                        ^
+fuzztest/fuzzmain.c:387:3: warning: implicit declaration of function 'fprintf' is invalid in C99 [-Wimplicit-function-declaration]
+                fprintf(stderr, "Warning: Cannot bind [%s]\n", strerror(r));
+                ^
+fuzztest/fuzzmain.c:387:11: error: use of undeclared identifier 'stderr'
+                fprintf(stderr, "Warning: Cannot bind [%s]\n", strerror(r));
+                        ^
+fuzztest/fuzzmain.c:391:3: warning: implicit declaration of function 'fprintf' is invalid in C99 [-Wimplicit-function-declaration]
+                fprintf(stderr, "Error: Cannot bind to any port\n");
+                ^
+fuzztest/fuzzmain.c:391:11: error: use of undeclared identifier 'stderr'
+                fprintf(stderr, "Error: Cannot bind to any port\n");
+                        ^
+fuzztest/fuzzmain.c:393:3: error: use of undeclared identifier 'stderr'
+                TESTabort();
+                ^
+fuzztest/fuzzmain.c:30:11: note: expanded from macro 'TESTabort'
+                fprintf(stderr, "!!! Precondition in test environment not met !!!\n"); \
+                        ^
+fuzztest/fuzzmain.c:393:3: error: use of undeclared identifier 'stderr'
+fuzztest/fuzzmain.c:31:11: note: expanded from macro 'TESTabort'
+                fprintf(stderr, "!!! aborting fuzz test in line %u !!!", __LINE__);    \
+                        ^
+fuzztest/fuzzmain.c:401:3: warning: implicit declaration of function 'fprintf' is invalid in C99 [-Wimplicit-function-declaration]
+                fprintf(stderr, "Error: Cannot listen [%s]\n", strerror(r));
+                ^
+fuzztest/fuzzmain.c:401:11: error: use of undeclared identifier 'stderr'
+                fprintf(stderr, "Error: Cannot listen [%s]\n", strerror(r));
+                        ^
+fuzztest/fuzzmain.c:403:3: error: use of undeclared identifier 'stderr'
+                TESTabort();
+                ^
+fuzztest/fuzzmain.c:30:11: note: expanded from macro 'TESTabort'
+                fprintf(stderr, "!!! Precondition in test environment not met !!!\n"); \
+                        ^
+fuzztest/fuzzmain.c:403:3: error: use of undeclared identifier 'stderr'
+fuzztest/fuzzmain.c:31:11: note: expanded from macro 'TESTabort'
+                fprintf(stderr, "!!! aborting fuzz test in line %u !!!", __LINE__);    \
+                        ^
+fuzztest/fuzzmain.c:413:3: warning: implicit declaration of function 'fprintf' is invalid in C99 [-Wimplicit-function-declaration]
+                fprintf(stderr, "Error: Out of memory\n");
+                ^
+fuzztest/fuzzmain.c:413:11: error: use of undeclared identifier 'stderr'
+                fprintf(stderr, "Error: Out of memory\n");
+                        ^
+fuzztest/fuzzmain.c:415:3: error: use of undeclared identifier 'stderr'
+                TESTabort();
+                ^
+fuzztest/fuzzmain.c:30:11: note: expanded from macro 'TESTabort'
+                fprintf(stderr, "!!! Precondition in test environment not met !!!\n"); \
+                        ^
+fuzztest/fuzzmain.c:415:3: error: use of undeclared identifier 'stderr'
+fuzztest/fuzzmain.c:31:11: note: expanded from macro 'TESTabort'
+                fprintf(stderr, "!!! aborting fuzz test in line %u !!!", __LINE__);    \
+                        ^
+fuzztest/fuzzmain.c:428:3: warning: implicit declaration of function 'fprintf' is invalid in C99 [-Wimplicit-function-declaration]
+                fprintf(stderr, "Error: Cannot create thread [%s]\n", strerror(r));
+                ^
+fuzztest/fuzzmain.c:428:11: error: use of undeclared identifier 'stderr'
+                fprintf(stderr, "Error: Cannot create thread [%s]\n", strerror(r));
+                        ^
+fuzztest/fuzzmain.c:430:3: error: use of undeclared identifier 'stderr'
+                TESTabort();
+                ^
+fuzztest/fuzzmain.c:30:11: note: expanded from macro 'TESTabort'
+                fprintf(stderr, "!!! Precondition in test environment not met !!!\n"); \
+                        ^
+fuzztest/fuzzmain.c:430:3: error: use of undeclared identifier 'stderr'
+fuzztest/fuzzmain.c:31:11: note: expanded from macro 'TESTabort'
+                fprintf(stderr, "!!! aborting fuzz test in line %u !!!", __LINE__);    \
+                        ^
+fuzztest/fuzzmain.c:455:31: warning: implicit declaration of function 'mg_connect_client' is invalid in C99 [-Wimplicit-function-declaration]
+        struct mg_connection *conn = mg_connect_client(
+                                     ^
+fuzztest/fuzzmain.c:455:24: warning: incompatible integer to pointer conversion initializing 'struct mg_connection *' with an expression of type 'int' [-Wint-conversion]
+        struct mg_connection *conn = mg_connect_client(
+                              ^      ~~~~~~~~~~~~~~~~~~
+fuzztest/fuzzmain.c:462:2: warning: implicit declaration of function 'mg_printf' is invalid in C99 [-Wimplicit-function-declaration]
+        mg_printf(conn, "GET / HTTP/1.0\r\n\r\n");
+        ^
+fuzztest/fuzzmain.c:464:10: warning: implicit declaration of function 'mg_get_response' is invalid in C99 [-Wimplicit-function-declaration]
+        int r = mg_get_response(conn, errbuf, sizeof(errbuf), 1000);
+                ^
+fuzztest/fuzzmain.c:465:38: warning: implicit declaration of function 'mg_get_response_info' is invalid in C99 [-Wimplicit-function-declaration]
+        const struct mg_response_info *ri = mg_get_response_info(conn);
+                                            ^
+fuzztest/fuzzmain.c:465:33: warning: incompatible integer to pointer conversion initializing 'const struct mg_response_info *' with an expression of type 'int' [-Wint-conversion]
+        const struct mg_response_info *ri = mg_get_response_info(conn);
+                                       ^    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+fuzztest/fuzzmain.c:470:2: warning: implicit declaration of function 'mg_close_connection' is invalid in C99 [-Wimplicit-function-declaration]
+        mg_close_connection(conn);
+        ^
+fuzztest/fuzzmain.c:515:23: error: variable has incomplete type 'struct mg_connection'
+        struct mg_connection conn;
+                             ^
+fuzztest/fuzzmain.c:515:9: note: forward declaration of 'struct mg_connection'
+        struct mg_connection conn;
+               ^
+fuzztest/fuzzmain.c:520:3: warning: implicit declaration of function 'civetweb_init' is invalid in C99 [-Wimplicit-function-declaration]
+                civetweb_init();
+                ^
+fuzztest/fuzzmain.c:532:2: warning: implicit declaration of function 'mg_send_mime_file' is invalid in C99 [-Wimplicit-function-declaration]
+        mg_send_mime_file(&conn, path, mime_type);
+        ^
+fuzztest/fuzzmain.c:513:1: warning: no previous prototype for function 'LLVMFuzzerTestOneInput_process_new_connection' [-Wmissing-prototypes]
+LLVMFuzzerTestOneInput_process_new_connection(const uint8_t *data, size_t size)
+^
+fuzztest/fuzzmain.c:512:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+int
+^
+static 
+20 warnings and 19 errors generated.
+make: *** [Makefile:437: out/fuzztest/fuzzmain.o] Error 1
+mv: cannot stat 'civetweb': No such file or directory
+
+=====================
+== Build completed ==
+=====================
+
+ls: cannot access 'civetweb*': No such file or directory
+md5sum: 'civetweb_fuzz*': No such file or directory
+
+=====================
+
++ mv 'civetweb_fuzz*' /workspace/out/libfuzzer-address-x86_64/
+mv: cannot stat 'civetweb_fuzz*': No such file or directory

@@ -1,0 +1,214 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ tools/oss-fuzz.sh
++ export LC_CTYPE=C.UTF-8
++ LC_CTYPE=C.UTF-8
++ export CC=/usr/local/bin/clang-jcc
++ CC=/usr/local/bin/clang-jcc
++ export CXX=/usr/local/bin/clang++-jcc
++ CXX=/usr/local/bin/clang++-jcc
+++ /usr/local/bin/clang-jcc --version
+++ sed -nr 's/.*version ([^ ]+?) .*/\1/p'
+++ sed -r 's/-$//'
++ clang_version=15.0.0
++ SANITIZER=address
++ flags='-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-coverage=trace-pc-guard,trace-cmp'
++ clang_lib=/usr/lib64/clang/15.0.0/lib/linux
++ '[' -d /usr/lib64/clang/15.0.0/lib/linux ']'
++ clang_lib=/usr/lib/clang/15.0.0/lib/linux
++ export 'CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link'
++ CFLAGS='-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link'
++ export 'CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++'
++ CXXFLAGS='-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++'
++ export LDFLAGS=-L/usr/lib/clang/15.0.0/lib/linux
++ LDFLAGS=-L/usr/lib/clang/15.0.0/lib/linux
++ export WORK=/work
++ WORK=/work
++ export OUT=/workspace/out/libfuzzer-address-x86_64
++ OUT=/workspace/out/libfuzzer-address-x86_64
++ mkdir -p /workspace/out/libfuzzer-address-x86_64
++ build=/work/build
++ rm -rf /work/build
++ mkdir -p /work/build
++ fuzzflag=oss-fuzz=true
++ '[' -z libfuzzer ']'
++ meson /work/build -Doss-fuzz=true -Db_lundef=false -Dlibzstd=disabled -Dman=false
+'/work/build/casync-https' -> 'casync-http'
+'/work/build/casync-ftp' -> 'casync-http'
+'/work/build/casync-sftp' -> 'casync-http'
+The Meson build system
+Version: 1.3.1
+Source dir: /src/casync
+Build dir: /work/build
+Build type: native build
+Project name: casync
+Project version: 2
+C compiler for the host machine: /usr/local/bin/clang-jcc (clang 15.0.0 "clang version 15.0.0 (https://github.com/llvm/llvm-project.git bf7f8d6fa6f460bf0a16ffec319cd71592216bf4)")
+C linker for the host machine: /usr/local/bin/clang-jcc ld.bfd 2.34
+Host machine cpu family: x86_64
+Host machine cpu: x86_64
+Compiler for C supports arguments -Wextra: YES 
+meson.build:62: WARNING: Consider using the built-in warning_level option instead of using "-Wextra".
+Compiler for C supports arguments -Werror=undef: YES 
+Compiler for C supports arguments -Werror=format=2: YES 
+Compiler for C supports arguments -Wformat-security: YES 
+Compiler for C supports arguments -Wformat-nonliteral: YES 
+Compiler for C supports arguments -Wlogical-op: YES 
+Compiler for C supports arguments -Wmissing-include-dirs: YES 
+Compiler for C supports arguments -Werror=old-style-definition: YES 
+Compiler for C supports arguments -Werror=pointer-arith: YES 
+Compiler for C supports arguments -Winit-self: YES 
+Compiler for C supports arguments -Wfloat-equal: YES 
+Compiler for C supports arguments -Wsuggest-attribute=noreturn: YES 
+Compiler for C supports arguments -Werror=missing-prototypes: YES 
+Compiler for C supports arguments -Werror=implicit-function-declaration: YES 
+Compiler for C supports arguments -Werror=missing-declarations: YES 
+Compiler for C supports arguments -Werror=return-type: YES 
+Compiler for C supports arguments -Werror=incompatible-pointer-types: YES 
+Compiler for C supports arguments -Werror=shadow: YES 
+Compiler for C supports arguments -Werror=int-conversion: YES 
+Compiler for C supports arguments -Wstrict-prototypes: YES 
+Compiler for C supports arguments -Wredundant-decls: YES 
+Compiler for C supports arguments -Wmissing-noreturn: YES 
+Compiler for C supports arguments -Wendif-labels: YES 
+Compiler for C supports arguments -Wstrict-aliasing=2: YES 
+Compiler for C supports arguments -Wwrite-strings: YES 
+Compiler for C supports arguments -Wno-unused-parameter: YES 
+Compiler for C supports arguments -Wno-missing-field-initializers: YES 
+Compiler for C supports arguments -Wno-unused-result: YES 
+Compiler for C supports arguments -Werror=overflow: YES 
+Compiler for C supports arguments -Werror=sign-compare: YES 
+Compiler for C supports arguments -Wdate-time: YES 
+Compiler for C supports arguments -Wnested-externs: YES 
+Compiler for C supports arguments -fno-common: YES 
+Compiler for C supports arguments -fdiagnostics-show-option: YES 
+Compiler for C supports arguments -fno-strict-aliasing: YES 
+Compiler for C supports arguments -fvisibility=hidden: YES 
+Compiler for C supports arguments -fstack-protector: YES 
+Compiler for C supports arguments -fstack-protector-strong: YES 
+Compiler for C supports arguments -fPIE: YES 
+Compiler for C supports arguments --param=ssp-buffer-size=4: YES 
+C++ compiler for the host machine: /usr/local/bin/clang++-jcc (clang 15.0.0 "clang version 15.0.0 (https://github.com/llvm/llvm-project.git bf7f8d6fa6f460bf0a16ffec319cd71592216bf4)")
+C++ linker for the host machine: /usr/local/bin/clang++-jcc ld.bfd 2.34
+Checking for size of "pid_t" : 4 
+Checking for size of "uid_t" : 4 
+Checking for size of "gid_t" : 4 
+Checking for function "renameat2" : YES 
+Checking for function "copy_file_range" : YES 
+Checking for function "getrandom" : YES 
+Found pkg-config: YES (/usr/bin/pkg-config) 0.29.1
+Run-time dependency liblzma found: YES 5.2.4
+Run-time dependency zlib found: YES 1.2.11
+Dependency libzstd skipped: feature libzstd disabled
+Run-time dependency libcurl found: YES 7.68.0
+Run-time dependency openssl found: YES 1.1.1f
+Library acl found: YES
+Run-time dependency fuse found: YES 2.9.9
+Run-time dependency libselinux found: YES 3.0
+Run-time dependency libudev found: YES 245
+Run-time dependency udev found: YES 245
+Run-time dependency threads found: YES
+Library m found: YES
+Library FuzzingEngine found: YES
+Configuring config.h using configuration
+Found CMake: /usr/local/bin/cmake (3.24.2)
+Run-time dependency bash-completion found: NO (tried pkgconfig and cmake)
+Program test-files/test-files.sh found: YES (/src/casync/test-files/test-files.sh)
+Configuring test-script.sh using configuration
+Program test-script.sh found: YES (/work/build/test-script.sh)
+Configuring test-script-sha256.sh using configuration
+Program test-script-sha256.sh found: YES (/work/build/test-script-sha256.sh)
+Configuring test-script-gzip.sh using configuration
+Program test-script-gzip.sh found: YES (/work/build/test-script-gzip.sh)
+Configuring test-script-xz.sh using configuration
+Program test-script-xz.sh found: YES (/work/build/test-script-xz.sh)
+Configuring test-nbd.sh using configuration
+Program test-nbd.sh found: YES (/work/build/test-nbd.sh)
+Configuring test-fuse.sh using configuration
+Program test-fuse.sh found: YES (/work/build/test-fuse.sh)
+Configuring test-cache.sh using configuration
+Program test-cache.sh found: YES (/work/build/test-cache.sh)
+Configuring 75-casync.rules using configuration
+Program test/meson-check-help.sh found: YES (/src/casync/test/meson-check-help.sh)
+Program git found: YES (/usr/bin/git)
+WARNING: You should add the boolean check kwarg to the run_command call.
+         It currently defaults to false,
+         but it will default to true in future releases of meson.
+         See also: https://github.com/mesonbuild/meson/issues/9300
+Build targets in project: 26
+NOTICE: Future-deprecated features used:
+ * 0.56.0: {'dependency.get_pkgconfig_variable', 'meson.build_root', 'meson.source_root'}
+ * 1.1.0: {'"boolean option" keyword argument "value" of type str'}
+
+casync 2
+
+  User defined options
+    b_lundef: false
+    libzstd : disabled
+    man     : false
+    oss-fuzz: true
+
+Found ninja-1.11.1.git.kitware.jobserver-1 at /usr/local/bin/ninja
+Running postconf script '/usr/bin/sh -c ln -svf casync-http $MESON_BUILD_ROOT/casync-https'
+Running postconf script '/usr/bin/sh -c ln -svf casync-http $MESON_BUILD_ROOT/casync-ftp'
+Running postconf script '/usr/bin/sh -c ln -svf casync-http $MESON_BUILD_ROOT/casync-sftp'
+WARNING: Running the setup command as `meson [options]` instead of `meson setup [options]` is ambiguous and deprecated.
++ ninja -C /work/build fuzzers
+ninja: Entering directory `/work/build'
+[1/45] Compiling C object src/libshared.a.p/caprotocol-util.c.o
+[2/45] Compiling C object src/libshared.a.p/cacompression.c.o
+[3/45] Compiling C object src/libshared.a.p/camakebst.c.o
+[4/45] Compiling C object src/libshared.a.p/cafileroot.c.o
+[5/45] Compiling C object src/libshared.a.p/dirent-util.c.o
+[6/45] Compiling C object src/libshared.a.p/hash-funcs.c.o
+[7/45] Compiling C object src/libshared.a.p/fssize.c.o
+[8/45] Compiling C object src/libshared.a.p/mempool.c.o
+[9/45] Compiling C object src/libshared.a.p/cachunkid.c.o
+[10/45] Compiling C object src/libshared.a.p/notify.c.o
+[11/45] Compiling C object src/libshared.a.p/cadigest.c.o
+[12/45] Compiling C object src/libshared.a.p/chattr.c.o
+[13/45] Compiling C object src/libshared.a.p/quota-projid.c.o
+[14/45] Compiling C object src/libshared.a.p/compressor.c.o
+[15/45] Compiling C object src/libshared.a.p/caformat-util.c.o
+[16/45] Compiling C object src/libshared.a.p/gc.c.o
+[17/45] Compiling C object src/libshared.a.p/cautil.c.o
+[18/45] Compiling C object src/libshared.a.p/cachunker.c.o
+[19/45] Compiling C object src/libshared.a.p/parse-util.c.o
+[20/45] Compiling C object src/libshared.a.p/reflink.c.o
+[21/45] Compiling C object fuzz-compress.p/test_fuzz_fuzz-compress.c.o
+[22/45] Compiling C object src/libshared.a.p/time-util.c.o
+[23/45] Compiling C object src/libshared.a.p/log.c.o
+[24/45] Compiling C object src/libshared.a.p/castore.c.o
+[25/45] Compiling C object src/libshared.a.p/siphash24.c.o
+[26/45] Compiling C object src/libshared.a.p/cacache.c.o
+[27/45] Compiling C object src/libshared.a.p/caorigin.c.o
+[28/45] Compiling C object src/libshared.a.p/rm-rf.c.o
+[29/45] Compiling C object src/libshared.a.p/canametable.c.o
+[30/45] Compiling C object src/libshared.a.p/realloc-buffer.c.o
+[31/45] Compiling C object src/libshared.a.p/camatch.c.o
+[32/45] Compiling C object src/libshared.a.p/canbd.c.o
+[33/45] Compiling C object src/libshared.a.p/cachunk.c.o
+[34/45] Compiling C object src/libshared.a.p/calocation.c.o
+[35/45] Compiling C object src/libshared.a.p/caindex.c.o
+[36/45] Compiling C object src/libshared.a.p/caseed.c.o
+[37/45] Compiling C object src/libshared.a.p/util.c.o
+[38/45] Compiling C object src/libshared.a.p/hashmap.c.o
+[39/45] Compiling C object src/libshared.a.p/caremote.c.o
+[40/45] Compiling C object src/libshared.a.p/casync.c.o
+[41/45] Compiling C object src/libshared.a.p/caencoder.c.o
+[42/45] Compiling C object src/libshared.a.p/cadecoder.c.o
+[43/45] Linking static target src/libshared.a
+[44/45] Linking target fuzz-compress
+[44/45] Running external command fuzzers (wrapped by meson to set env)
+++ dirname tools/oss-fuzz.sh
++ for d in "$(dirname "$0")/../test/fuzz/fuzz-"*/
++ '[' -d 'tools/../test/fuzz/fuzz-*/' ']'
++ continue
++ find /work/build -maxdepth 1 -type f -executable -name 'fuzz-*' -exec mv '{}' /workspace/out/libfuzzer-address-x86_64 ';'

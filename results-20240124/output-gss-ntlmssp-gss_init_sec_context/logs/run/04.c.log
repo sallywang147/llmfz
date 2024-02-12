@@ -1,0 +1,57 @@
+/workspace/out/libfuzzer-address-x86_64/fuzz-accept-sec-context -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/fuzz-accept-sec-context -dict=fuzz-accept-sec-context.dict < /dev/null
+Dictionary: 7 entries
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 1577455552
+INFO: Loaded 1 modules   (3108 inline 8-bit counters): 3108 [0x646fc0, 0x647be4), 
+INFO: Loaded 1 PC tables (3108 PCs): 3108 [0x5f1798,0x5fd9d8), 
+INFO:        0 files found in /workspace/corpus/fuzz-accept-sec-context
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: A corpus is not provided, starting from an empty corpus
+#2	INITED cov: 20 ft: 21 corp: 1/1b exec/s: 0 rss: 35Mb
+#5	NEW    cov: 21 ft: 22 corp: 2/26b lim: 4096 exec/s: 0 rss: 36Mb L: 25/25 MS: 3 ChangeByte-ChangeBit-ManualDict- DE: "foo\\@bar.example.com@BAR"-
+#8	REDUCE cov: 21 ft: 22 corp: 2/22b lim: 4096 exec/s: 0 rss: 36Mb L: 21/21 MS: 3 ChangeByte-ChangeBinInt-EraseBytes-
+	NEW_FUNC[1/3]: 0x56eae0 in gss_init_sec_context /src/gss-ntlmssp/src/gss_spi.c:21
+	NEW_FUNC[2/3]: 0x57d470 in gssntlm_init_sec_context /src/gss-ntlmssp/src/gss_sec_ctx.c:25
+#48	REDUCE cov: 35 ft: 47 corp: 3/84b lim: 4096 exec/s: 0 rss: 36Mb L: 62/62 MS: 5 ChangeBit-CrossOver-ChangeBit-InsertRepeatedBytes-EraseBytes-
+#52	REDUCE cov: 35 ft: 47 corp: 3/70b lim: 4096 exec/s: 0 rss: 36Mb L: 48/48 MS: 4 ManualDict-CMP-ManualDict-EraseBytes- DE: "BAR@dom\\foo@bar.example.com"-"\000\000"-"BAR\\foo@bar.example.com"-
+#108	REDUCE cov: 35 ft: 47 corp: 3/62b lim: 4096 exec/s: 0 rss: 36Mb L: 13/48 MS: 1 EraseBytes-
+#150	REDUCE cov: 36 ft: 48 corp: 4/101b lim: 4096 exec/s: 0 rss: 36Mb L: 39/48 MS: 2 EraseBytes-PersAutoDict- DE: "\000\000"-
+#166	REDUCE cov: 36 ft: 48 corp: 4/84b lim: 4096 exec/s: 0 rss: 36Mb L: 22/48 MS: 1 EraseBytes-
+#267	REDUCE cov: 36 ft: 48 corp: 4/81b lim: 4096 exec/s: 0 rss: 36Mb L: 10/48 MS: 1 EraseBytes-
+#315	REDUCE cov: 36 ft: 48 corp: 4/75b lim: 4096 exec/s: 0 rss: 36Mb L: 16/48 MS: 3 PersAutoDict-InsertByte-EraseBytes- DE: "\000\000"-
+#376	REDUCE cov: 36 ft: 48 corp: 4/73b lim: 4096 exec/s: 0 rss: 36Mb L: 14/48 MS: 1 EraseBytes-
+#399	REDUCE cov: 36 ft: 48 corp: 4/71b lim: 4096 exec/s: 0 rss: 36Mb L: 12/48 MS: 3 ChangeByte-ShuffleBytes-EraseBytes-
+#431	REDUCE cov: 36 ft: 48 corp: 4/66b lim: 4096 exec/s: 0 rss: 36Mb L: 7/48 MS: 2 CopyPart-EraseBytes-
+#452	REDUCE cov: 36 ft: 48 corp: 4/65b lim: 4096 exec/s: 0 rss: 36Mb L: 6/48 MS: 1 EraseBytes-
+#469	REDUCE cov: 36 ft: 48 corp: 4/62b lim: 4096 exec/s: 0 rss: 36Mb L: 7/48 MS: 2 ChangeBinInt-EraseBytes-
+#471	REDUCE cov: 36 ft: 48 corp: 4/59b lim: 4096 exec/s: 0 rss: 36Mb L: 3/48 MS: 2 ChangeByte-EraseBytes-
+#552	REDUCE cov: 36 ft: 48 corp: 4/58b lim: 4096 exec/s: 0 rss: 36Mb L: 2/48 MS: 1 EraseBytes-
+#560	REDUCE cov: 36 ft: 48 corp: 4/55b lim: 4096 exec/s: 0 rss: 36Mb L: 4/48 MS: 3 CopyPart-InsertByte-EraseBytes-
+#607	REDUCE cov: 36 ft: 48 corp: 4/53b lim: 4096 exec/s: 0 rss: 36Mb L: 2/48 MS: 2 CrossOver-EraseBytes-
+#13162	REDUCE cov: 36 ft: 48 corp: 4/51b lim: 4096 exec/s: 0 rss: 38Mb L: 46/46 MS: 5 InsertByte-ChangeBinInt-EraseBytes-InsertRepeatedBytes-ChangeBit-
+#13870	REDUCE cov: 36 ft: 48 corp: 4/45b lim: 4096 exec/s: 0 rss: 38Mb L: 40/40 MS: 3 EraseBytes-ChangeBinInt-ManualDict- DE: "BAR\\foo"-
+#14405	REDUCE cov: 36 ft: 48 corp: 4/42b lim: 4096 exec/s: 0 rss: 38Mb L: 37/37 MS: 5 CrossOver-ShuffleBytes-CrossOver-CMP-EraseBytes- DE: "\001\000\000\000\000\000\000\002"-
+#14519	REDUCE cov: 36 ft: 48 corp: 4/39b lim: 4096 exec/s: 0 rss: 38Mb L: 34/34 MS: 4 ManualDict-ShuffleBytes-ShuffleBytes-EraseBytes- DE: "\\foo@bar.example.com"-
+#14611	REDUCE cov: 36 ft: 48 corp: 4/35b lim: 4096 exec/s: 0 rss: 38Mb L: 30/30 MS: 2 ChangeByte-EraseBytes-
+#14623	REDUCE cov: 36 ft: 48 corp: 4/21b lim: 4096 exec/s: 0 rss: 38Mb L: 16/16 MS: 2 ChangeBinInt-EraseBytes-
+#14694	REDUCE cov: 36 ft: 48 corp: 4/18b lim: 4096 exec/s: 0 rss: 38Mb L: 13/13 MS: 1 EraseBytes-
+#14730	REDUCE cov: 36 ft: 48 corp: 4/17b lim: 4096 exec/s: 0 rss: 38Mb L: 12/12 MS: 1 EraseBytes-
+#14962	REDUCE cov: 36 ft: 48 corp: 4/12b lim: 4096 exec/s: 0 rss: 38Mb L: 7/7 MS: 2 PersAutoDict-EraseBytes- DE: "\000\000"-
+#14990	REDUCE cov: 36 ft: 48 corp: 4/9b lim: 4096 exec/s: 0 rss: 38Mb L: 4/4 MS: 3 ChangeBit-ChangeBit-EraseBytes-
+#15886	REDUCE cov: 36 ft: 48 corp: 4/8b lim: 4096 exec/s: 0 rss: 38Mb L: 3/3 MS: 1 EraseBytes-
+#524288	pulse  cov: 36 ft: 48 corp: 4/8b lim: 4096 exec/s: 262144 rss: 61Mb
+#1048576	pulse  cov: 36 ft: 48 corp: 4/8b lim: 4096 exec/s: 349525 rss: 61Mb
+#2097152	pulse  cov: 36 ft: 48 corp: 4/8b lim: 4096 exec/s: 349525 rss: 62Mb
+#4194304	pulse  cov: 36 ft: 48 corp: 4/8b lim: 4096 exec/s: 381300 rss: 62Mb
+#8388608	pulse  cov: 36 ft: 48 corp: 4/8b lim: 4096 exec/s: 381300 rss: 62Mb
+#11643681	DONE   cov: 36 ft: 48 corp: 4/8b lim: 4096 exec/s: 375602 rss: 62Mb
+###### Recommended dictionary. ######
+"\000\000" # Uses: 151671
+"\001\000\000\000\000\000\000\002" # Uses: 107150
+###### End of recommended dictionary. ######
+Done 11643681 runs in 31 second(s)
+stat::number_of_executed_units: 11643681
+stat::average_exec_per_sec:     375602
+stat::new_units_added:          29
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              62

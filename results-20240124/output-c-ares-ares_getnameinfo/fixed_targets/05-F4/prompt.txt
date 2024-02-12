@@ -1,0 +1,75 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+#include <ares.h>
+
+extern "C" {
+#include "ares_setup.h"
+}
+
+// Entrypoint for Clang's libfuzzer
+int LLVMFuzzerTestOneInput(const unsigned char *data,
+                           unsigned long size) {
+  // Feed the data into each of the ares_parse_*_reply functions.
+  struct ares_channel channel;
+  int status = ares_init(&channel);
+  if (status != ARES_SUCCESS) {
+    return 0;
+  }
+  ares_getnameinfo(&channel, NULL, 0, 0, NULL, NULL);
+  ares_destroy(&channel);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/c-ares/test/ares-test-fuzz-name.c:4:8: error: expected identifier or '('
+extern "C" {
+       ^
+/src/c-ares/test/ares-test-fuzz-name.c:12:23: error: variable has incomplete type 'struct ares_channel'
+  struct ares_channel channel;
+                      ^
+/src/c-ares/test/ares-test-fuzz-name.c:12:10: note: forward declaration of 'struct ares_channel'
+  struct ares_channel channel;
+         ^
+2 errors generated.
+
+Fix failure
+In file included from /src/c-ares/test/ares-test-fuzz-name.cpp:5:
+In file included from src/lib/ares_setup.h:243:
+src/lib/setup_once.h:117:8: error: redefinition of 'timeval'
+struct timeval {
+       ^
+/usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h:8:8: note: previous definition is here
+struct timeval
+       ^
+In file included from /src/c-ares/test/ares-test-fuzz-name.cpp:5:
+In file included from src/lib/ares_setup.h:243:
+src/lib/setup_once.h:179:1: error: unknown type name 'Error'
+Error Missing_definition_of_macro_sread
+^
+src/lib/setup_once.h:179:40: error: expected ';' after top level declarator
+Error Missing_definition_of_macro_sread
+                                       ^
+                                       ;
+/src/c-ares/test/ares-test-fuzz-name.cpp:12:10: error: typedef 'ares_channel' cannot be referenced with a struct specifier
+  struct ares_channel channel;
+         ^
+include/ares.h:347:34: note: declared here
+typedef struct ares_channeldata *ares_channel;
+                                 ^
+4 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

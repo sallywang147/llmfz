@@ -1,0 +1,57 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <gdbm-ndbm.h>
+#include <gdbm.h>
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main() {
+  GDBM_FILE file;
+  datum key, value;
+
+  file = gdbm_open("test.gdbm", 0, GDBM_WRCREAT, 0644, 0);
+  if (file == NULL) {
+    cerr << "Error opening database" << endl;
+    return 1;
+  }
+
+  key.dptr = (char *)"key1";
+  key.dsize = strlen(key.dptr);
+  value.dptr = (char *)"value1";
+  value.dsize = strlen(value.dptr);
+  if (gdbm_store(file, key, value, GDBM_INSERT) != 0) {
+    cerr << "Error storing data" << endl;
+    return 1;
+  }
+
+  key.dptr = (char *)"key2";
+  key.dsize = strlen(key.dptr);
+  if (gdbm_exists(file, key)) {
+    cout << "Key exists" << endl;
+  } else {
+    cout << "Key does not exist" << endl;
+  }
+
+  gdbm_close(file);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+The target function `int _gdbm_load_file(struct dump_file * file, struct gdbm_file_info * dbf, struct gdbm_file_info ** ofp, int replace, int meta_mask)` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `int _gdbm_load_file(struct dump_file * file, struct gdbm_file_info * dbf, struct gdbm_file_info ** ofp, int replace, int meta_mask)` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,740 @@
+<system>
+You are a security testing engineer who wants to write a C++ program to execute all lines in a given function by defining and initializing its parameters in a suitable way before fuzzing the function through <code>LLVMFuzzerTestOneInput</code>.
+
+Carefully study the function signature and its parameters, then follow the example problems and solutions to answer the final problem. YOU MUST call the function to fuzz in the solution.
+
+Try as many variations of these inputs as possible. Do not use a random number generator such as <code>rand()</code>.
+
+Use <code>FuzzedDataProvider</code> to generate these inputs. You MUST declare it in <code>LLVMFuzzerTestOneInput</code>, like this:
+<code>
+FuzzedDataProvider stream(data, size);
+</code>
+
+Include <code>#include <fuzzer/FuzzedDataProvider.h></code> in the solution.
+
+This code shows example of using it:
+<code>
+// Extract integral values
+int int_arg = stream.ConsumeIntegral<int>();
+int int_arg_in_range = stream.ConsumeIntegralInRange(-100, 100);
+bool bool_arg = stream.ConsumeBool();
+
+// Extract floating point values
+float probability = stream.ConsumeProbability();
+double double_arg = stream.ConsumeFloatingPoint<double>();
+double double_arg_in_range = stream.ConsumeFloatingPointInRange(-1.0, 1.0);
+
+// Extract value from predefined set, such as enum or array
+EnumType enum = stream.ConsumeEnum<EnumType>();
+int valid_values = stream.PickValueInArray({FLAG_1, FLAG_2, FLAG_3});
+
+// Extract an array of bytes as a vector. You MUST call <code>.data()</code> to use result as pointer.
+std::vector<uint8_t> bytes = stream.ConsumeBytes<uint8_t>(stream.ConsumeIntegralInRange(0, max_size));
+void *data_ptr = bytes.data();
+std::vector<uint8_t> bytes2 = stream.ConsumeBytes<uint8_t>(requested_size);
+void *data2_ptr = bytes2.data();
+
+// Extract a string. You MUST use <code>.c_str()</code> to use result as pointer
+std::string str = stream.ConsumeBytesAsString(stream.ConsumeIntegralInRange(0, max_size));
+char *ptr = str.c_str();
+std::string str2 = stream.ConsumeBytesAsString(requested_size);
+char *ptr2 = str2.c_str();
+std::string str3 = stream.ConsumeRandomLengthString();
+char *ptr3 = str3.c_str();
+
+// Extract to user defined object
+struct_type_t obj;
+size_t consumed = stream.ConsumeData(&obj, sizeof(obj));
+</code>
+
+There MUST be AT MOST ONE call to <code>ConsumeRemainingBytes</code> to consume remaining input!
+<code>
+FuzzedDataProvider stream(data, size);
+
+std::vector<uint8_t> bytes3 = stream.ConsumeRemainingBytes();
+void *data3_ptr = bytes3.data();
+</code>
+
+All variables used MUST be declared and initialized. Carefully make sure that the variable and argument types in your code match and compiles successfully. Add type casts to make types match.
+
+Do not create new variables with the same names as existing variables.
+WRONG:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  void* data = Foo();
+}
+</code>
+
+EXTREMELY IMPORTANT: If you write code using <code>goto</code>, you MUST MUST also declare all variables BEFORE the <code>goto</code>. Never introduce new variables after the <code>goto</code>.
+WRONG:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int a = bar();
+  if (!some_function()) goto EXIT;
+  Foo b = target_function(data, size);
+  int c = another_func();
+EXIT:
+  return 0;
+}
+</code>
+
+CORRECT:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int a = bar();
+  Foo b;
+  int c;
+
+  if (!some_function()) goto EXIT;
+  b = target_function(data, size);
+  c = another_func()
+EXIT:
+  return 0;
+}
+</code>
+
+If an example provided for the same library includes a unique header file, then it must be included in the solution as well.
+</system>
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+BGD_DECLARE(void) gdImageString (gdImagePtr im, gdFontPtr f, int x, int y, unsigned char *s, int color)
+</function header>
+</task>
+
+<solution>
+
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+#include "gd.h"
+#include "gdfontg.h"
+#include "gdfontl.h"
+#include "gdfontmb.h"
+#include "gdfonts.h"
+#include "gdfontt.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const uint8_t slate_width = stream.ConsumeIntegral<uint8_t>();
+  const uint8_t slate_height = stream.ConsumeIntegral<uint8_t>();
+  gdImagePtr slate_image = gdImageCreateTrueColor(slate_width, slate_height);
+  if (slate_image == nullptr) {
+    return 0;
+  }
+
+  const int x_position = stream.ConsumeIntegral<int>();
+  const int y_position = stream.ConsumeIntegral<int>();
+  const int text_color = stream.ConsumeIntegral<int>();
+  const gdFontPtr font_ptr = stream.PickValueInArray(
+      {gdFontGetGiant(), gdFontGetLarge(), gdFontGetMediumBold(),
+       gdFontGetSmall(), gdFontGetTiny()});
+  const std::string text = stream.ConsumeRemainingBytesAsString();
+
+  gdImageString(slate_image, font_ptr, x_position, y_position,
+                reinterpret_cast<uint8_t*>(const_cast<char*>(text.c_str())),
+                text_color);
+  gdImageDestroy(slate_image);
+  return 0;
+}
+</solution>
+
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+MPG123_EXPORT int mpg123_decode(mpg123_handle *mh, const unsigned char *inmemory, size_t inmemsize, unsigned char *outmemory, size_t outmemsize, size_t *done )
+</function header>
+</task>
+
+<solution>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+#include "mpg123.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  static bool initialized = false;
+  if (!initialized) {
+    mpg123_init();
+    initialized = true;
+  }
+  int ret;
+  mpg123_handle* handle = mpg123_new(nullptr, &ret);
+  if (handle == nullptr) {
+    return 0;
+  }
+
+  ret = mpg123_param(handle, MPG123_ADD_FLAGS, MPG123_QUIET, 0.);
+  if(ret == MPG123_OK)
+    ret = mpg123_open_feed(handle);
+  if (ret != MPG123_OK) {
+    mpg123_delete(handle);
+    return 0;
+  }
+
+  std::vector<uint8_t> output_buffer(mpg123_outblock(handle));
+
+  size_t output_written = 0;
+  // Initially, start by feeding the decoder more data.
+  int decode_ret = MPG123_NEED_MORE;
+  FuzzedDataProvider provider(data, size);
+  while ((decode_ret != MPG123_ERR)) {
+    if (decode_ret == MPG123_NEED_MORE) {
+      if (provider.remaining_bytes() == 0
+          || mpg123_tellframe(handle) > 10000
+          || mpg123_tell_stream(handle) > 1<<20) {
+        break;
+      }
+      const size_t next_size = provider.ConsumeIntegralInRange<size_t>(
+          0,
+          provider.remaining_bytes());
+      auto next_input = provider.ConsumeBytes<unsigned char>(next_size);
+      decode_ret = mpg123_decode(handle, next_input.data(), next_input.size(),
+                                 output_buffer.data(), output_buffer.size(),
+                                 &output_written);
+    } else if (decode_ret != MPG123_ERR && decode_ret != MPG123_NEED_MORE) {
+      decode_ret = mpg123_decode(handle, nullptr, 0, output_buffer.data(),
+                                 output_buffer.size(), &output_written);
+    } else {
+      // Unhandled mpg123_decode return value.
+      abort();
+    }
+  }
+
+  mpg123_delete(handle);
+
+  return 0;
+}
+</solution>
+
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+void FLAC::Metadata::CueSheet::Track::~Track(FLAC::Metadata::CueSheet::Track * this)
+</function header>
+</task>
+
+<solution>
+
+#include <cstdlib>
+#include <cstdio>
+#include <cstring> /* for memcpy */
+#include <unistd.h>
+#include "FLAC++/metadata.h"
+#include "common.h"
+
+#define CONFIG_LENGTH 2
+
+#define min(x,y) (x<y?x:y)
+
+static void run_tests_with_level_0_interface(char filename[]);
+static void run_tests_with_level_1_interface(char filename[], bool readonly, bool preservestats, const uint8_t *data, size_t size);
+static void run_tests_with_level_2_interface(char filename[], bool ogg, bool use_padding, const uint8_t *data, size_t size);
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
+{
+	uint8_t command_length;
+	char filename[] = "/tmp/tmpXXXXXX.flac";
+	FLAC__bool init_bools[4];
+
+	/* Use first byte for configuration, leave at least one byte of input */
+	if(size < 1 + CONFIG_LENGTH){
+		return 0;
+	}
+
+	/* First 4 bits for configuration bools, next 4 for length of command section */
+	for(int i = 0; i < 4; i++)
+		init_bools[i] = data[i/8] & (1 << (i % 8));
+
+	command_length = data[0] >> 4;
+
+	if(0)//data[1] < 128) /* Use MSB as on/off */
+		alloc_check_threshold = data[1];
+	else
+		alloc_check_threshold = INT32_MAX;
+	alloc_check_counter = 0;
+
+
+	/* Leave at least one byte as input */
+	if(command_length >= size - 1 - CONFIG_LENGTH)
+		command_length = size - 1 - CONFIG_LENGTH;
+
+	/* Dump input to file */
+	{
+		int file_to_fuzz = mkstemps(filename, 5);
+
+		if (file_to_fuzz < 0)
+			abort();
+		write(file_to_fuzz,data+CONFIG_LENGTH+command_length,size-CONFIG_LENGTH-command_length);
+		close(file_to_fuzz);
+	}
+
+	run_tests_with_level_0_interface(filename);
+	run_tests_with_level_1_interface(filename, init_bools[1], init_bools[2], data+CONFIG_LENGTH, command_length/2);
+
+	/* Dump input to file, to start fresh for level 2 */
+	if(!init_bools[1]){
+		FILE * file_to_fuzz = fopen(filename,"w");
+		fwrite(data+CONFIG_LENGTH+command_length,1,size-CONFIG_LENGTH-command_length,file_to_fuzz);
+		fclose(file_to_fuzz);
+	}
+
+	run_tests_with_level_2_interface(filename, init_bools[0], init_bools[3], data+command_length/2+CONFIG_LENGTH, command_length/2);
+
+	remove(filename);
+
+	return 0;
+}
+
+static void run_tests_with_level_0_interface(char filename[]) {
+	FLAC::Metadata::StreamInfo streaminfo;
+	FLAC::Metadata::VorbisComment vorbis_comment;
+	FLAC::Metadata::CueSheet cue_sheet;
+	FLAC::Metadata::Picture picture;
+
+	FLAC::Metadata::get_streaminfo(filename,streaminfo);
+	FLAC::Metadata::get_tags(filename,vorbis_comment);
+	FLAC::Metadata::get_cuesheet(filename,cue_sheet);
+	FLAC::Metadata::get_picture(filename,picture, (FLAC__StreamMetadata_Picture_Type)(1), NULL, NULL, -1, -1, -1, -1);
+}
+
+static void run_tests_with_level_1_interface(char filename[], bool readonly, bool preservestats, const uint8_t *data, size_t size) {
+	FLAC::Metadata::SimpleIterator iterator;
+	FLAC::Metadata::Prototype *metadata_block = nullptr;
+	uint8_t id[4] = {0};
+
+	if(!iterator.is_valid())
+		return;
+
+	if(!iterator.init(filename,readonly,preservestats))
+		return;
+
+	for(size_t i = 0; i < size && iterator.status() == FLAC__METADATA_SIMPLE_ITERATOR_STATUS_OK; i++) {
+		switch(data[i] & 7) {
+			case 0:
+				iterator.get_block_type();
+				iterator.get_block_offset();
+				iterator.get_block_length();
+				iterator.get_application_id(id);
+				break;
+			case 1:
+				iterator.next();
+				break;
+			case 2:
+				iterator.prev();
+				break;
+			case 3:
+				iterator.delete_block(data[i] & 8);
+				break;
+			case 4:
+				if(metadata_block != 0) {
+					delete metadata_block;
+					metadata_block = nullptr;
+				}
+				metadata_block = iterator.get_block();
+				break;
+			case 5:
+				if(metadata_block != 0)
+					iterator.set_block(metadata_block,data[i] & 8);
+				break;
+			case 6:
+				if(metadata_block != 0)
+					iterator.insert_block_after(metadata_block, data[i] & 8);
+				break;
+			case 7:
+				iterator.status();
+				iterator.is_last();
+				iterator.is_writable();
+				break;
+		}
+	}
+	if(metadata_block != 0) {
+		delete metadata_block;
+		metadata_block = nullptr;
+	}
+
+
+}
+
+
+static void run_tests_with_level_2_interface(char filename[], bool ogg, bool use_padding, const uint8_t *data, size_t size) {
+	FLAC::Metadata::Chain chain;
+	FLAC::Metadata::Iterator iterator;
+	FLAC::Metadata::Prototype *metadata_block_get = nullptr;
+	FLAC::Metadata::Prototype *metadata_block_transfer = nullptr;
+	FLAC::Metadata::Prototype *metadata_block_put = nullptr;
+
+	if(!chain.is_valid())
+		return;
+
+	if(!chain.read(filename, ogg))
+		return;
+
+	iterator.init(chain);
+
+	for(size_t i = 0; i < size; i++) {
+		switch(data[i] & 15) {
+			case 0:
+				iterator.get_block_type();
+				break;
+			case 1:
+				iterator.next();
+				break;
+			case 2:
+				iterator.prev();
+				break;
+			case 3:
+				iterator.delete_block(data[i] & 16);
+				break;
+			case 4:
+				metadata_block_get = iterator.get_block();
+				if(metadata_block_get != 0 && metadata_block_get->is_valid()) {
+					if(metadata_block_transfer != 0 && metadata_block_transfer->is_valid()) {
+						if(metadata_block_transfer != metadata_block_get) {
+							delete metadata_block_transfer;
+							metadata_block_transfer = nullptr;
+							metadata_block_transfer = FLAC::Metadata::clone(metadata_block_get);
+						}
+					}
+					else {
+						metadata_block_transfer = FLAC::Metadata::clone(metadata_block_get);
+					}
+				}
+				delete metadata_block_get;
+				break;
+			case 5:
+				if(metadata_block_transfer != 0 && metadata_block_transfer->is_valid()) {
+					metadata_block_put = FLAC::Metadata::clone(metadata_block_transfer);
+					if(metadata_block_put != 0 && metadata_block_put->is_valid()) {
+						if(!iterator.insert_block_before(metadata_block_put))
+							delete metadata_block_put;
+					}
+					else
+						if(metadata_block_put != 0)
+							delete metadata_block_put;
+				}
+				break;
+			case 6:
+				if(metadata_block_transfer != 0 && metadata_block_transfer->is_valid()) {
+					metadata_block_put = FLAC::Metadata::clone(metadata_block_transfer);
+					if(metadata_block_put != 0 && metadata_block_put->is_valid()) {
+						if(!iterator.insert_block_after(metadata_block_put))
+							delete metadata_block_put;
+					}
+					else
+						if(metadata_block_put != 0)
+							delete metadata_block_put;
+				}
+				break;
+			case 7:
+				if(metadata_block_transfer != 0 && metadata_block_transfer->is_valid()) {
+					metadata_block_put = FLAC::Metadata::clone(metadata_block_transfer);
+					if(metadata_block_put != 0 && metadata_block_put->is_valid()) {
+						if(!iterator.set_block(metadata_block_put))
+							delete metadata_block_put;
+					}
+					else
+						if(metadata_block_put != 0)
+							delete metadata_block_put;
+				}
+				break;
+			case 8: /* Examine block */
+				if(metadata_block_transfer != 0 && metadata_block_transfer->is_valid()) {
+					switch(metadata_block_transfer->get_type()) {
+						case FLAC__METADATA_TYPE_VORBIS_COMMENT:
+						{
+							uint32_t num_comments;
+							::FLAC__StreamMetadata_VorbisComment_Entry entry;
+							FLAC::Metadata::VorbisComment::Entry entry_cpp;
+							FLAC::Metadata::VorbisComment * vorbiscomment = dynamic_cast<FLAC::Metadata::VorbisComment *>(metadata_block_transfer);
+							const ::FLAC__StreamMetadata * metadata_c = *metadata_block_transfer;
+							if(vorbiscomment == 0)
+								abort();
+							vorbiscomment->get_vendor_string();
+							num_comments = vorbiscomment->get_num_comments();
+							if(num_comments > 0) {
+								entry = metadata_c->data.vorbis_comment.comments[min(data[i]>>4,num_comments-1)];
+								if(entry.entry == 0)
+									abort();
+								if(vorbiscomment->get_comment(min(data[i]>>4,num_comments-1)).is_valid()) {
+									entry_cpp = vorbiscomment->get_comment(min(data[i]>>4,num_comments-1));
+									if(entry_cpp.is_valid() && entry_cpp.get_field() == 0)
+										abort();
+									vorbiscomment->find_entry_from(0,"TEST");
+								}
+							}
+
+						}
+						break;
+						case FLAC__METADATA_TYPE_CUESHEET:
+						{
+							uint32_t num_tracks, num_indices;
+							FLAC::Metadata::CueSheet * cuesheet = dynamic_cast<FLAC::Metadata::CueSheet *>(metadata_block_transfer);
+							if(cuesheet == 0 || !cuesheet->is_legal())
+								break;
+							cuesheet->is_legal(true); /* check CDDA subset */
+							cuesheet->calculate_cddb_id();
+							cuesheet->get_media_catalog_number();
+							cuesheet->get_lead_in();
+							cuesheet->get_is_cd();
+							num_tracks = cuesheet->get_num_tracks();
+							if(num_tracks > 0) {
+								FLAC::Metadata::CueSheet::Track track = cuesheet->get_track(min(data[i]>>4,num_tracks-1));
+								track.get_offset();
+								track.get_number();
+								track.get_isrc();
+								track.get_pre_emphasis();
+								num_indices = track.get_num_indices();
+								if(num_indices > 0) {
+									FLAC__StreamMetadata_CueSheet_Index index = track.get_index(min(data[i]>>4,num_indices-1));
+									(void)index;
+								}
+							}
+						}
+						break;
+						case FLAC__METADATA_TYPE_PICTURE:
+						{
+							char * violation = nullptr;
+							FLAC::Metadata::Picture * picture = dynamic_cast<FLAC::Metadata::Picture *>(metadata_block_transfer);
+							if(picture == 0 || !picture->is_legal((const char **)&violation))
+								break;
+							picture->get_data();
+						}
+						break;
+						default:
+						break;
+					}
+
+				}
+				break;
+			case 9: /* Replace or add in block */
+				if(metadata_block_transfer != 0 && metadata_block_transfer->is_valid()) {
+					switch(metadata_block_transfer->get_type()) {
+						case FLAC__METADATA_TYPE_SEEKTABLE:
+						{
+							uint32_t num_seekpoints;
+							FLAC__StreamMetadata_SeekPoint seekpoint;
+							FLAC::Metadata::SeekTable * seektable = dynamic_cast<FLAC::Metadata::SeekTable *>(metadata_block_transfer);
+							if(seektable == 0)
+								break;
+							if(seektable->is_valid() && seektable->is_legal()) {
+								num_seekpoints = seektable->get_num_points();
+								if(num_seekpoints > 0) {
+									seekpoint = seektable->get_point(min(data[i]>>5,num_seekpoints-1));
+									seektable->set_point(0,seekpoint);
+									seektable->insert_point(min(data[i]>>5,num_seekpoints-1),seekpoint);
+								}
+								seektable->template_append_placeholders(4);
+								seektable->template_append_point(111111);
+								seektable->template_append_points((FLAC__uint64[]){222222, 333333, 444444}, 3);
+								seektable->template_append_spaced_points(data[i]>>5, 1234567);
+								seektable->template_append_spaced_points_by_samples(data[i]>>5, 2468000);
+								seektable->template_sort(data[i] & 16);
+							}
+						}
+						case FLAC__METADATA_TYPE_VORBIS_COMMENT:
+						{
+							uint32_t num_comments;
+							FLAC::Metadata::VorbisComment::Entry entry;
+							FLAC::Metadata::VorbisComment * vorbiscomment = dynamic_cast<FLAC::Metadata::VorbisComment *>(metadata_block_transfer);
+							if(vorbiscomment == 0)
+								break;
+							num_comments = vorbiscomment->get_num_comments();
+							if(num_comments > 0 && entry.is_valid()) {
+								if(vorbiscomment->get_comment(min(data[i]>>5,num_comments-1)).is_valid()) {
+									entry = vorbiscomment->get_comment(min(data[i]>>5,num_comments-1));
+									if(entry.is_valid()) {
+										vorbiscomment->replace_comment(entry,data[i] & 16);
+										vorbiscomment->set_comment(0,entry);
+										vorbiscomment->append_comment(entry);
+										vorbiscomment->insert_comment(0,entry);
+									}
+								}
+							}
+						}
+						break;
+						case FLAC__METADATA_TYPE_CUESHEET:
+						{
+							uint32_t num_tracks, num_indices;
+							FLAC::Metadata::CueSheet * cuesheet = dynamic_cast<FLAC::Metadata::CueSheet *>(metadata_block_transfer);
+							if(cuesheet == 0 || !cuesheet->is_legal())
+								break;
+							num_tracks = cuesheet->get_num_tracks();
+							if(num_tracks > 0) {
+								FLAC::Metadata::CueSheet::Track track = cuesheet->get_track(min(data[i]>>4,num_tracks-1));
+								num_indices = track.get_num_indices();
+								if(num_indices > 0) {
+									FLAC__StreamMetadata_CueSheet_Index index = track.get_index(min(data[i]>>4,num_indices-1));
+									track.set_index(0,index);
+									cuesheet->insert_index(0,0,index);
+									cuesheet->insert_blank_index(0,0);
+								}
+								cuesheet->insert_blank_track(0);
+								cuesheet->insert_track(0,track);
+								cuesheet->resize_indices(min(data[i]>>4,num_tracks-1),data[i]>>4);
+							}
+						}
+						break;
+						case FLAC__METADATA_TYPE_PICTURE:
+						{
+							FLAC::Metadata::Picture * picture = dynamic_cast<FLAC::Metadata::Picture *>(metadata_block_transfer);
+							const char testtext[] = "TEST";
+							if(picture == 0 || !picture->is_legal(NULL))
+								break;
+							picture->set_description((FLAC__byte *)&testtext);
+							picture->set_mime_type((const char *)&testtext);
+							picture->set_data((FLAC__byte *)&testtext,4);
+						}
+						break;
+						default:
+						break;
+					}
+
+				}
+				break;
+			case 10: /* Delete from block */
+				if(metadata_block_transfer != 0 && metadata_block_transfer->is_valid()) {
+					switch(metadata_block_transfer->get_type()) {
+						case FLAC__METADATA_TYPE_SEEKTABLE:
+						{
+							uint32_t num_seekpoints;
+							FLAC::Metadata::SeekTable * seektable = dynamic_cast<FLAC::Metadata::SeekTable *>(metadata_block_transfer);
+							if(seektable == 0)
+								break;
+							if(seektable->is_valid() && seektable->is_legal()) {
+								num_seekpoints = seektable->get_num_points();
+								if(num_seekpoints > 0)
+									seektable->delete_point(min(data[i]>>4,num_seekpoints-1));
+							}
+						}
+						case FLAC__METADATA_TYPE_VORBIS_COMMENT:
+						{
+							uint32_t num_comments;
+							FLAC::Metadata::VorbisComment * vorbiscomment = dynamic_cast<FLAC::Metadata::VorbisComment *>(metadata_block_transfer);
+							if(vorbiscomment == 0)
+								break;
+							num_comments = vorbiscomment->get_num_comments();
+							if(num_comments > 0)
+								vorbiscomment->delete_comment(min(data[i]>>4,num_comments-1));
+							vorbiscomment->remove_entry_matching("TEST");
+							vorbiscomment->remove_entries_matching("TEST");
+						}
+						break;
+						case FLAC__METADATA_TYPE_CUESHEET:
+						{
+							uint32_t num_tracks;
+							FLAC::Metadata::CueSheet * cuesheet = dynamic_cast<FLAC::Metadata::CueSheet *>(metadata_block_transfer);
+							if(cuesheet == 0 || !cuesheet->is_legal())
+								break;
+							num_tracks = cuesheet->get_num_tracks();
+							if(num_tracks > 0) {
+								FLAC::Metadata::CueSheet::Track track = cuesheet->get_track(min(data[i]>>4,num_tracks-1));
+								if(track.get_num_indices() > 0)
+									cuesheet->delete_index(min(data[i]>>4,num_tracks-1),0);
+								cuesheet->delete_track(0);
+							}
+						}
+						break;
+						default:
+						break;
+					}
+
+				}
+				break;
+			case 11: /* Resize block */
+				if(metadata_block_transfer != 0 && metadata_block_transfer->is_valid()) {
+					switch(metadata_block_transfer->get_type()) {
+						case FLAC__METADATA_TYPE_PADDING:
+						{
+							FLAC::Metadata::Padding * padding = dynamic_cast<FLAC::Metadata::Padding *>(metadata_block_transfer);
+							if(padding == 0)
+								break;
+							padding->set_length(data[i]>>4);
+						}
+						break;
+						case FLAC__METADATA_TYPE_SEEKTABLE:
+						{
+							FLAC::Metadata::SeekTable * seektable = dynamic_cast<FLAC::Metadata::SeekTable *>(metadata_block_transfer);
+							if(seektable == 0)
+								break;
+							seektable->resize_points(data[i]>>4);
+						}
+						break;
+						case FLAC__METADATA_TYPE_VORBIS_COMMENT:
+						{
+							FLAC::Metadata::VorbisComment * vorbiscomment = dynamic_cast<FLAC::Metadata::VorbisComment *>(metadata_block_transfer);
+							if(vorbiscomment == 0)
+								break;
+							vorbiscomment->resize_comments(data[i]>>4);
+						}
+						break;
+						case FLAC__METADATA_TYPE_CUESHEET:
+						{
+							uint32_t num_tracks;
+							FLAC::Metadata::CueSheet * cuesheet = dynamic_cast<FLAC::Metadata::CueSheet *>(metadata_block_transfer);
+							if(cuesheet == 0 || !cuesheet->is_legal())
+								break;
+							num_tracks = cuesheet->get_num_tracks();
+							if(num_tracks > 0) {
+								cuesheet->resize_indices(min(data[i]>>4,num_tracks-1),data[i]>>4);
+							}
+							cuesheet->resize_tracks(data[i]<<4);
+						}
+						break;
+						default:
+						break;
+					}
+
+				}
+				break;
+			case 12: /* Prototype functions */
+				if(metadata_block_transfer != 0 && metadata_block_transfer->is_valid()) {
+					const ::FLAC__StreamMetadata * metadata_compare = *metadata_block_transfer;
+					metadata_block_transfer->get_is_last();
+					metadata_block_transfer->get_length();
+					metadata_block_transfer->set_is_last(data[i] & 16);
+					FLAC__metadata_object_is_equal(metadata_compare, metadata_compare);
+				}
+				break;
+		}
+	}
+	if(metadata_block_transfer != 0) {
+		delete metadata_block_transfer;
+		metadata_block_transfer = nullptr;
+	}
+
+	chain.status();
+	chain.sort_padding();
+	chain.merge_padding();
+
+	chain.check_if_tempfile_needed(!use_padding);
+	chain.write(use_padding);
+
+}
+
+</solution>
+
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+bool FLAC::Metadata::get_cuesheet(char * filename, FLAC::Metadata::Picture ** cuesheet)
+</function header>
+</task>
+You MUST call <code>
+bool FLAC::Metadata::get_cuesheet(char * filename, FLAC::Metadata::Picture ** cuesheet)
+</code> in your solution!
+
+<solution>

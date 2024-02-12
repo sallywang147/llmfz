@@ -1,0 +1,36 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ cd /src/ada-url
++ mkdir build
++ AMALGAMATE_OUTPUT_PATH=./build/singleheader
++ python3 singleheader/amalgamate.py
+SCRIPTPATH=/src/ada-url/singleheader PROJECTPATH=/src/ada-url
+timestamp is 2024-01-22 09:15:53 -0500
+Creating ./build/singleheader/ada.h
+
+
+Creating ./build/singleheader/ada.cpp
+Done with all files generation.
+Files have been written to directory: ./build/singleheader/
+Done with all files generation.
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -std=c++17 -I build/singleheader -c fuzz/parse.cc -o parse.o
+fuzz/parse.cc:13:12: error: no matching member function for call to 'ConsumeBytes'
+  provider.ConsumeBytes<uint8_t>(input_buffer.data(), input_size);
+  ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:352:36: note: candidate function template not viable: no known conversion from 'std::vector<unsigned char>::value_type *' (aka 'unsigned char *') to 'size_t' (aka 'unsigned long') for 1st argument; dereference the argument with *
+std::vector<T> FuzzedDataProvider::ConsumeBytes(size_t size, size_t num_bytes) {
+                                   ^
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:108:36: note: candidate function template not viable: requires single argument 'num_bytes', but 2 arguments were provided
+std::vector<T> FuzzedDataProvider::ConsumeBytes(size_t num_bytes) {
+                                   ^
+fuzz/parse.cc:17:14: error: use of undeclared identifier 'ada_set_href'
+  bool ret = ada_set_href(reinterpret_cast<char*>(output_buffer.data()),
+             ^
+2 errors generated.

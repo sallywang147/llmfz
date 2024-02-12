@@ -1,0 +1,43 @@
+/workspace/out/libfuzzer-address-x86_64/alembic_dump_info_fuzzer -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/alembic_dump_info_fuzzer < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 2229279746
+INFO: Loaded 1 modules   (6135 inline 8-bit counters): 6135 [0x773150, 0x774947), 
+INFO: Loaded 1 PC tables (6135 PCs): 6135 [0x774948,0x78c8b8), 
+INFO:        0 files found in /workspace/corpus/alembic_dump_info_fuzzer
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+libc++abi: terminating with uncaught exception of type Alembic::Util::v12::Exception: Invalid parent
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+==13==ERROR: AddressSanitizer: ABRT on unknown address 0x00000000000d (pc 0x7f84d4b4600b bp 0x7ffc1195d050 sp 0x7ffc1195c7f0 T0)
+SCARINESS: 10 (signal)
+    #0 0x7f84d4b4600b in raise (/lib/x86_64-linux-gnu/libc.so.6+0x4300b) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #1 0x7f84d4b25858 in abort (/lib/x86_64-linux-gnu/libc.so.6+0x22858) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #2 0x620b25 in abort_message (out/libfuzzer-address-x86_64/alembic_dump_info_fuzzer+0x620b25)
+    #3 0x629dfe in demangling_terminate_handler() cxa_default_handlers.cpp
+    #4 0x6205a2 in std::__terminate(void (*)()) (out/libfuzzer-address-x86_64/alembic_dump_info_fuzzer+0x6205a2)
+    #5 0x622365 in __cxxabiv1::failed_throw(__cxxabiv1::__cxa_exception*) cxa_exception.cpp
+    #6 0x6222ff in __cxa_throw (out/libfuzzer-address-x86_64/alembic_dump_info_fuzzer+0x6222ff)
+    #7 0x56e745 in Alembic::AbcCoreOgawa::v12::SprImpl::SprImpl(std::__1::shared_ptr<Alembic::AbcCoreAbstract::v12::CompoundPropertyReader>, std::__1::shared_ptr<Alembic::Ogawa::v12::IGroup>, std::__1::shared_ptr<Alembic::AbcCoreOgawa::v12::PropertyHeaderAndFriends>) /src/alembic/lib/Alembic/AbcCoreOgawa/SprImpl.cpp:55:5
+    #8 0x56d362 in LLVMFuzzerTestOneInput /src/alembic_dump_info_fuzzer.cc:14:11
+    #9 0x43ec43 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #10 0x43fff4 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:804:3
+    #11 0x4404c9 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #12 0x42fb2f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #13 0x459182 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #14 0x7f84d4b27082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #15 0x42056d in _start (out/libfuzzer-address-x86_64/alembic_dump_info_fuzzer+0x42056d)
+
+DEDUP_TOKEN: raise--abort--abort_message
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: ABRT (/lib/x86_64-linux-gnu/libc.so.6+0x4300b) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca) in raise
+==13==ABORTING
+MS: 0 ; base unit: 0000000000000000000000000000000000000000
+
+
+artifact_prefix='./'; Test unit written to ./crash-da39a3ee5e6b4b0d3255bfef95601890afd80709
+Base64: 
+stat::number_of_executed_units: 1
+stat::average_exec_per_sec:     0
+stat::new_units_added:          0
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              33

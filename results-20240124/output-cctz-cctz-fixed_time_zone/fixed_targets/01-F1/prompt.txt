@@ -1,0 +1,75 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <fuzzer/FuzzedDataProvider.h>
+
+#include <iostream>
+#include <string>
+
+#include "cctz/civil_time.h"
+#include "cctz/time_zone.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider fuzzed_data(data, size);
+
+  std::chrono::duration<long long, std::ratio<1l, 1000000l> > offset;
+  offset = std::chrono::duration<long long, std::ratio<1l, 1000000l> >(
+      fuzzed_data.ConsumeIntegral<int32_t>());
+
+  cctz::time_zone::Impl *tz = cctz::fixed_time_zone(&offset);
+
+  std::chrono::system_clock::time_point tp;
+  std::string date_format = fuzzed_data.ConsumeRandomLengthString();
+  std::string parse_format = fuzzed_data.ConsumeRandomLengthString();
+  cctz::parse(parse_format, date_format, *tz, &tp);
+
+  const auto t1 = cctz::convert(cctz::civil_second(
+      fuzzed_data.ConsumeIntegral<uint32_t>(),
+      fuzzed_data.ConsumeIntegral<uint32_t>(),
+      fuzzed_data.ConsumeIntegral<uint32_t>(),
+      fuzzed_data.ConsumeIntegral<uint32_t>(),
+      fuzzed_data.ConsumeIntegral<uint32_t>(),
+      fuzzed_data.ConsumeIntegral<uint32_t>()), *tz);
+  std::string format = fuzzed_data.ConsumeRandomLengthString();
+  cctz::format(format, t1, *tz);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+./fuzz_cctz.cc:16:53: error: reference to type 'const cctz::seconds' (aka 'const duration<long>') could not bind to an rvalue of type 'std::chrono::duration<long long, std::ratio<1L, 1000000L>> *'
+  cctz::time_zone::Impl *tz = cctz::fixed_time_zone(&offset);
+                                                    ^~~~~~~
+../include/cctz/time_zone.h:235:42: note: passing argument to parameter 'offset' here
+time_zone fixed_time_zone(const seconds& offset);
+                                         ^
+./fuzz_cctz.cc:21:3: error: no matching function for call to 'parse'
+  cctz::parse(parse_format, date_format, *tz, &tp);
+  ^~~~~~~~~~~
+../include/cctz/time_zone.h:368:13: note: candidate function template not viable: cannot convert argument of incomplete type 'cctz::time_zone::Impl' to 'const cctz::time_zone' for 3rd argument
+inline bool parse(const std::string& fmt, const std::string& input,
+            ^
+./fuzz_cctz.cc:23:19: error: no matching function for call to 'convert'
+  const auto t1 = cctz::convert(cctz::civil_second(
+                  ^~~~~~~~~~~~~
+../include/cctz/time_zone.h:255:28: note: candidate function not viable: cannot convert argument of incomplete type 'cctz::time_zone::Impl' to 'const cctz::time_zone' for 2nd argument
+inline time_point<seconds> convert(const civil_second& cs,
+                           ^
+../include/cctz/time_zone.h:246:21: note: candidate template ignored: could not match 'time_point' against 'civil_time'
+inline civil_second convert(const time_point<D>& tp, const time_zone& tz) {
+                    ^
+3 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

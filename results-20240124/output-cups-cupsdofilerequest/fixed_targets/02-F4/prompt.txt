@@ -1,0 +1,100 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cups/cups.h>
+
+int main(int argc, char *argv[]) {
+  if (argc < 2) {
+    fprintf(stderr, "Usage: %s <file>\n", argv[0]);
+    return 1;
+  }
+
+  cups_file_t *fp = cupsFileOpen(argv[1], "r");
+  if (!fp) {
+    fprintf(stderr, "Error opening file %s\n", argv[1]);
+    return 1;
+  }
+
+  cups_file_request_t *request = cupsFileRequestCreate(fp);
+  if (!request) {
+    fprintf(stderr, "Error creating file request\n");
+    return 1;
+  }
+
+  cups_file_request_set_content_type(request, "application/octet-stream");
+
+  cups_file_request_set_filename(request, argv[1]);
+
+  cupsDoFileRequest(cupsGetDefault(), request, "/ipp/print");
+
+  cupsFileRequestDestroy(request);
+
+  cupsFileClose(fp);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+FuzzIPP.c:5:13: error: use of undeclared identifier 'stderr'
+    fprintf(stderr, "Usage: %s <file>\n", argv[0]);
+            ^
+FuzzIPP.c:11:13: error: use of undeclared identifier 'stderr'
+    fprintf(stderr, "Error opening file %s\n", argv[1]);
+            ^
+FuzzIPP.c:15:3: error: use of undeclared identifier 'cups_file_request_t'
+  cups_file_request_t *request = cupsFileRequestCreate(fp);
+  ^
+FuzzIPP.c:15:24: error: use of undeclared identifier 'request'
+  cups_file_request_t *request = cupsFileRequestCreate(fp);
+                       ^
+FuzzIPP.c:16:8: error: use of undeclared identifier 'request'
+  if (!request) {
+       ^
+FuzzIPP.c:17:13: error: use of undeclared identifier 'stderr'
+    fprintf(stderr, "Error creating file request\n");
+            ^
+FuzzIPP.c:21:38: error: use of undeclared identifier 'request'
+  cups_file_request_set_content_type(request, "application/octet-stream");
+                                     ^
+FuzzIPP.c:23:34: error: use of undeclared identifier 'request'
+  cups_file_request_set_filename(request, argv[1]);
+                                 ^
+FuzzIPP.c:25:39: error: use of undeclared identifier 'request'
+  cupsDoFileRequest(cupsGetDefault(), request, "/ipp/print");
+                                      ^
+FuzzIPP.c:27:26: error: use of undeclared identifier 'request'
+  cupsFileRequestDestroy(request);
+                         ^
+10 errors generated.
+
+Fix failure
+FuzzIPP.cpp:5:13: error: use of undeclared identifier 'stderr'
+    fprintf(stderr, "Usage: %s <file>\n", argv[0]);
+            ^
+FuzzIPP.cpp:11:13: error: use of undeclared identifier 'stderr'
+    fprintf(stderr, "Error opening file %s\n", argv[1]);
+            ^
+FuzzIPP.cpp:15:3: error: unknown type name 'cups_file_request_t'
+  cups_file_request_t *request = cupsFileRequestCreate(fp);
+  ^
+FuzzIPP.cpp:15:34: error: use of undeclared identifier 'cupsFileRequestCreate'
+  cups_file_request_t *request = cupsFileRequestCreate(fp);
+                                 ^
+FuzzIPP.cpp:17:13: error: use of undeclared identifier 'stderr'
+    fprintf(stderr, "Error creating file request\n");
+            ^
+5 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,204 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <algorithm>
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+#include <string>
+
+extern "C" {
+#include <fuzzer/FuzzedDataProvider.h>
+#include "libdwarf.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const char* thread_name = stream.ConsumeRandomLengthString().c_str();
+  Dwfl_Thread thread;
+  dwfl_thread_init(&thread, thread_name, nullptr);
+  dwfl_thread_getframes(&thread, nullptr, nullptr);
+  dwfl_thread_fini(&thread);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/fuzz-libdwfl.c:1:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+In file included from /src/fuzz-libdwfl.cpp:9:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:17:
+/usr/local/bin/../include/c++/v1/array:128:1: error: templates must have C++ linkage
+template <class _Tp, size_t _Size>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fuzz-libdwfl.cpp:8:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-libdwfl.cpp:9:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:17:
+/usr/local/bin/../include/c++/v1/array:231:1: error: templates must have C++ linkage
+template <class _Tp>
+^~~~~~~~~~~~~~~~~~~~
+/src/fuzz-libdwfl.cpp:8:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-libdwfl.cpp:9:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:17:
+/usr/local/bin/../include/c++/v1/array:367:1: error: templates must have C++ linkage
+template <class _Tp, size_t _Size>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fuzz-libdwfl.cpp:8:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-libdwfl.cpp:9:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:17:
+/usr/local/bin/../include/c++/v1/array:375:1: error: templates must have C++ linkage
+template <class _Tp, size_t _Size>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fuzz-libdwfl.cpp:8:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-libdwfl.cpp:9:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:17:
+/usr/local/bin/../include/c++/v1/array:383:1: error: templates must have C++ linkage
+template <class _Tp, size_t _Size>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fuzz-libdwfl.cpp:8:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-libdwfl.cpp:9:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:17:
+/usr/local/bin/../include/c++/v1/array:392:1: error: templates must have C++ linkage
+template <class _Tp, size_t _Size>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fuzz-libdwfl.cpp:8:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-libdwfl.cpp:9:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:17:
+/usr/local/bin/../include/c++/v1/array:400:1: error: templates must have C++ linkage
+template <class _Tp, size_t _Size>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fuzz-libdwfl.cpp:8:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-libdwfl.cpp:9:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:17:
+/usr/local/bin/../include/c++/v1/array:408:1: error: templates must have C++ linkage
+template <class _Tp, size_t _Size>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fuzz-libdwfl.cpp:8:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-libdwfl.cpp:9:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:17:
+/usr/local/bin/../include/c++/v1/array:416:1: error: templates must have C++ linkage
+template <class _Tp, size_t _Size>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fuzz-libdwfl.cpp:8:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-libdwfl.cpp:9:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:17:
+/usr/local/bin/../include/c++/v1/array:430:1: error: templates must have C++ linkage
+template <class _Tp, size_t _Size>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fuzz-libdwfl.cpp:8:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-libdwfl.cpp:9:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:17:
+/usr/local/bin/../include/c++/v1/array:434:1: error: templates must have C++ linkage
+template <size_t _Ip, class _Tp, size_t _Size>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fuzz-libdwfl.cpp:8:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-libdwfl.cpp:9:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:17:
+/usr/local/bin/../include/c++/v1/array:441:1: error: templates must have C++ linkage
+template <size_t _Ip, class _Tp, size_t _Size>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fuzz-libdwfl.cpp:8:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-libdwfl.cpp:9:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:17:
+/usr/local/bin/../include/c++/v1/array:450:1: error: templates must have C++ linkage
+template <size_t _Ip, class _Tp, size_t _Size>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fuzz-libdwfl.cpp:8:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-libdwfl.cpp:9:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:17:
+/usr/local/bin/../include/c++/v1/array:459:1: error: templates must have C++ linkage
+template <size_t _Ip, class _Tp, size_t _Size>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fuzz-libdwfl.cpp:8:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-libdwfl.cpp:9:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:17:
+/usr/local/bin/../include/c++/v1/array:468:1: error: templates must have C++ linkage
+template <size_t _Ip, class _Tp, size_t _Size>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fuzz-libdwfl.cpp:8:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-libdwfl.cpp:9:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:27:
+In file included from /usr/local/bin/../include/c++/v1/vector:274:
+/usr/local/bin/../include/c++/v1/__bit_reference:27:1: error: templates must have C++ linkage
+template <class _Cp, bool _IsConst, typename _Cp::__storage_type = 0> class __bit_iterator;
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fuzz-libdwfl.cpp:8:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-libdwfl.cpp:9:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:27:
+In file included from /usr/local/bin/../include/c++/v1/vector:274:
+/usr/local/bin/../include/c++/v1/__bit_reference:28:1: error: templates must have C++ linkage
+template <class _Cp> class __bit_const_reference;
+^~~~~~~~~~~~~~~~~~~~
+/src/fuzz-libdwfl.cpp:8:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-libdwfl.cpp:9:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:27:
+In file included from /usr/local/bin/../include/c++/v1/vector:274:
+/usr/local/bin/../include/c++/v1/__bit_reference:30:1: error: templates must have C++ linkage
+template <class _Tp>
+^~~~~~~~~~~~~~~~~~~~
+/src/fuzz-libdwfl.cpp:8:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-libdwfl.cpp:9:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:27:
+In file included from /usr/local/bin/../include/c++/v1/vector:274:
+/usr/local/bin/../include/c++/v1/__bit_reference:36:29: error: no template named '__has_storage_type'; did you mean '__has_size_type'?
+template <class _Cp, bool = __has_storage_type<_Cp>::value>
+                            ^
+/usr/local/bin/../include/c++/v1/__memory/allocator_traits.h:95:34: note: '__has_size_type' declared here
+_LIBCPP_ALLOCATOR_TRAITS_HAS_XXX(__has_size_type, size_type);
+                                 ^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

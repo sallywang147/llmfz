@@ -1,0 +1,24 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <Alembic/AbcCoreFactory/v1/IFactory.h>
+#include <Alembic/AbcCoreOgawa/v1/Ogawa.h>
+#include <Alembic/AbcGeom/v1/All.h>
+#include <Alembic/AbcMaterial/v1/All.h>
+</code>
+
+The code has the following build issues:
+<error>
+The target function `void Alembic::AbcCoreFactory::v12::IFactory::getArchive(Alembic::Abc::v12::IArchive * , Alembic::AbcCoreFactory::v12::IFactory * , std::vector * )` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `void Alembic::AbcCoreFactory::v12::IFactory::getArchive(Alembic::Abc::v12::IArchive * , Alembic::AbcCoreFactory::v12::IFactory * , std::vector * )` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

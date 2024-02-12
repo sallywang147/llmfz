@@ -1,0 +1,37 @@
+/workspace/out/libfuzzer-address-x86_64/civetweb_fuzz3 -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/civetweb_fuzz3 < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 3140510441
+INFO: Loaded 1 modules   (4604 inline 8-bit counters): 4604 [0x661e00, 0x662ffc), 
+INFO: Loaded 1 PC tables (4604 PCs): 4604 [0x663000,0x674fc0), 
+INFO:        0 files found in /workspace/corpus/civetweb_fuzz3
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+==13==ERROR: AddressSanitizer: SEGV on unknown address 0x000000000000 (pc 0x00000058da76 bp 0x7ffec815b2d0 sp 0x7ffec815b180 T0)
+==13==The signal is caused by a READ memory access.
+==13==Hint: address points to the zero page.
+SCARINESS: 10 (null-deref)
+    #0 0x58da76 in mg_download /src/civetweb/src/civetweb.c:19167:7
+    #1 0x5c2416 in LLVMFuzzerTestOneInput /src/civetweb/fuzztest/fuzzmain.c:487:31
+    #2 0x43dfe3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #3 0x43f394 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:804:3
+    #4 0x43f869 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #5 0x42eecf in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #6 0x458522 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #7 0x7ff92c9ce082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #8 0x41f90d in _start (out/libfuzzer-address-x86_64/civetweb_fuzz3+0x41f90d)
+
+DEDUP_TOKEN: mg_download--LLVMFuzzerTestOneInput--fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long)
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: SEGV /src/civetweb/src/civetweb.c:19167:7 in mg_download
+==13==ABORTING
+MS: 0 ; base unit: 0000000000000000000000000000000000000000
+
+
+artifact_prefix='./'; Test unit written to ./crash-da39a3ee5e6b4b0d3255bfef95601890afd80709
+Base64: 
+stat::number_of_executed_units: 1
+stat::average_exec_per_sec:     0
+stat::new_units_added:          0
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              35

@@ -1,0 +1,54 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "fuzzer/FuzzedDataProvider.h"
+#include <vector>
+#include <roaring/roaring.h>
+
+extern "C" {
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider fdp(data, size);
+  size_t count = fdp.ConsumeIntegralInRange<size_t>(0, 100);
+  std::vector<roaring_bitmap_t*> bitmaps;
+  for (size_t i = 0; i < count; i++) {
+    size_t bitmap_size = fdp.ConsumeIntegralInRange<size_t>(0, 1000);
+    std::vector<uint32_t> bitmap_data = fdp.ConsumeFixedLengthData<uint32_t>(bitmap_size, /*value_size=*/sizeof(uint32_t));
+    bitmaps.push_back(roaring_bitmap_create());
+    for (uint32_t value : bitmap_data) {
+      roaring_bitmap_add(bitmaps.back(), value);
+    }
+  }
+  roaring_bitmap_t* result = roaring_bitmap_or_many(count, reinterpret_cast<const roaring_bitmap_t**>(bitmaps.data()));
+  roaring_bitmap_free(result);
+  for (roaring_bitmap_t* bitmap : bitmaps) {
+    roaring_bitmap_free(bitmap);
+  }
+  return 0;
+}
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/croaring_fuzzer_cc.cc:12:45: error: no member named 'ConsumeFixedLengthData' in 'FuzzedDataProvider'
+    std::vector<uint32_t> bitmap_data = fdp.ConsumeFixedLengthData<uint32_t>(bitmap_size, /*value_size=*/sizeof(uint32_t));
+                                        ~~~ ^
+/src/croaring_fuzzer_cc.cc:12:68: error: unexpected type name 'uint32_t': expected expression
+    std::vector<uint32_t> bitmap_data = fdp.ConsumeFixedLengthData<uint32_t>(bitmap_size, /*value_size=*/sizeof(uint32_t));
+                                                                   ^
+/src/croaring_fuzzer_cc.cc:18:60: error: reinterpret_cast from 'std::vector<roaring::api::roaring_bitmap_s *>::value_type *' (aka 'roaring::api::roaring_bitmap_s **') to 'const roaring::api::roaring_bitmap_t **' (aka 'const roaring::api::roaring_bitmap_s **') casts away qualifiers
+  roaring_bitmap_t* result = roaring_bitmap_or_many(count, reinterpret_cast<const roaring_bitmap_t**>(bitmaps.data()));
+                                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+3 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

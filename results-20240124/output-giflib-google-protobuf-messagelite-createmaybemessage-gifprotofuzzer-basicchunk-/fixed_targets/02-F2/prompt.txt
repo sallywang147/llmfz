@@ -1,0 +1,51 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdlib.h>
+#include <stdint.h>
+#include <string.h>
+#include <string>
+#include <sstream>
+#include <fstream>
+#include "dgif_fuzz_common.h"
+
+#include "libprotobuf-mutator/src/libfuzzer/libfuzzer_macro.h"
+#include "ProtoToGif.h"
+
+using namespace gifProtoFuzzer;
+
+extern "C" {
+#include "ProtoToGif.pb.h"
+}
+
+DEFINE_PROTO_FUZZER(const BasicChunk &basic_chunk)
+{
+	// Instantiate ProtoConverter object
+	ProtoConverter converter;
+	std::string gifRawData = converter.basicChunkToString(basic_chunk);
+	if (const char *dump_path = getenv("PROTO_FUZZER_DUMP_PATH"))
+	{
+		// With libFuzzer binary run this to generate a GIF from proto:
+		// PROTO_FUZZER_DUMP_PATH=x.gif ./fuzzer proto-input
+		std::ofstream of(dump_path);
+		of.write(gifRawData.data(), gifRawData.size());
+	}
+	fuzz_dgif_extended((const uint8_t *)gifRawData.data(), gifRawData.size());
+}
+</code>
+
+The code has the following build issues:
+<error>
+The target function `gifProtoFuzzer::BasicChunk * gifProtoFuzzer::BasicChunk* google::protobuf::MessageLite::CreateMaybeMessage<gifProtoFuzzer::BasicChunk>(google::protobuf::Arena * arena, gifProtoFuzzer::BasicChunk * from)` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `gifProtoFuzzer::BasicChunk * gifProtoFuzzer::BasicChunk* google::protobuf::MessageLite::CreateMaybeMessage<gifProtoFuzzer::BasicChunk>(google::protobuf::Arena * arena, gifProtoFuzzer::BasicChunk * from)` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

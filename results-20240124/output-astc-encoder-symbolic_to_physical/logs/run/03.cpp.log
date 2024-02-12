@@ -1,0 +1,43 @@
+/workspace/out/libfuzzer-address-x86_64/fuzz_astc_physical_to_symbolic -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/fuzz_astc_physical_to_symbolic < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 645233003
+INFO: Loaded 1 modules   (616 inline 8-bit counters): 616 [0x6423a0, 0x642608), 
+INFO: Loaded 1 PC tables (616 PCs): 616 [0x5f0490,0x5f2b10), 
+INFO:        0 files found in /workspace/corpus/fuzz_astc_physical_to_symbolic
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: A corpus is not provided, starting from an empty corpus
+#2	INITED cov: 3 ft: 3 corp: 1/1b exec/s: 0 rss: 69Mb
+fuzz_astc_physical_to_symbolic: ./astcenc_symbolic_physical.cpp:107: void symbolic_to_physical(const block_size_descriptor &, const symbolic_compressed_block &, uint8_t *): Assertion `scb.block_type != SYM_BTYPE_ERROR' failed.
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+==13==ERROR: AddressSanitizer: ABRT on unknown address 0x00000000000d (pc 0x7f1b8482500b bp 0x7f1b8499a588 sp 0x7ffe0a581cb0 T0)
+SCARINESS: 10 (signal)
+    #0 0x7f1b8482500b in raise (/lib/x86_64-linux-gnu/libc.so.6+0x4300b) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #1 0x7f1b84804858 in abort (/lib/x86_64-linux-gnu/libc.so.6+0x22858) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #2 0x7f1b84804728  (/lib/x86_64-linux-gnu/libc.so.6+0x22728) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #3 0x7f1b84815fd5 in __assert_fail (/lib/x86_64-linux-gnu/libc.so.6+0x33fd5) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #4 0x582e97 in symbolic_to_physical(block_size_descriptor const&, symbolic_compressed_block const&, unsigned char*) /src/astc-encoder/Source/./astcenc_symbolic_physical.cpp:107:2
+    #5 0x56ca9c in LLVMFuzzerTestOneInput /src/astc-encoder/Source/./Fuzzers/fuzz_astc_physical_to_symbolic.cpp:76:2
+    #6 0x43e073 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #7 0x43d85a in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #8 0x43ef29 in fuzzer::Fuzzer::MutateAndTestOne() /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:757:19
+    #9 0x43fbf5 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:895:5
+    #10 0x42ef5f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #11 0x4585b2 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #12 0x7f1b84806082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #13 0x41f99d in _start (out/libfuzzer-address-x86_64/fuzz_astc_physical_to_symbolic+0x41f99d)
+
+DEDUP_TOKEN: raise--abort--
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: ABRT (/lib/x86_64-linux-gnu/libc.so.6+0x4300b) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca) in raise
+==13==ABORTING
+MS: 5 ChangeByte-CrossOver-ChangeBinInt-CopyPart-InsertRepeatedBytes-; base unit: adc83b19e793491b1c6ea0fd8b46cd9f32e592fc
+0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0xec,0xa,
+\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\354\012
+artifact_prefix='./'; Test unit written to ./crash-70ab5ca0bcf9cc324e99977d4607a992b779a599
+Base64: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOwK
+stat::number_of_executed_units: 12
+stat::average_exec_per_sec:     0
+stat::new_units_added:          0
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              69

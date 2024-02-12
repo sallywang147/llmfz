@@ -1,0 +1,40 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ cd http-parser
++ make http_parser.o
+/usr/local/bin/clang-jcc  -I. -DHTTP_PARSER_STRICT=0  -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Wall -Wextra -Werror -O3  -c http_parser.c
++ /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -I. -DHTTP_PARSER_STRICT=0 -Wall -Wextra -Werror -c fuzzers/fuzz_parser.c -o fuzz_parser.o
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -fsanitize=fuzzer -Wall -Wextra -Werror http_parser.o fuzz_parser.o -o /workspace/out/libfuzzer-address-x86_64/fuzz_parser
++ /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -I. -DHTTP_PARSER_STRICT=0 -Wall -Wextra -Werror -c fuzzers/fuzz_url.c -o fuzz_url.o
+fuzzers/fuzz_url.c:8:3: error: use of undeclared identifier 'FuzzedDataProvider'
+  FuzzedDataProvider stream(data, size);
+  ^
+fuzzers/fuzz_url.c:9:41: error: expected expression
+  int err_code = stream.ConsumeIntegral<int>();
+                                        ^
+fuzzers/fuzz_url.c:9:18: error: use of undeclared identifier 'stream'
+  int err_code = stream.ConsumeIntegral<int>();
+                 ^
+3 errors generated.
+
+Fix failure
+fuzzers/fuzz_url.cpp:8:3: error: unknown type name 'FuzzedDataProvider'
+  FuzzedDataProvider stream(data, size);
+  ^
+fuzzers/fuzz_url.cpp:10:21: error: no matching function for call to 'http_errno_name'
+  char * err_name = http_errno_name(err_code);
+                    ^~~~~~~~~~~~~~~
+./http_parser.h:424:13: note: candidate function not viable: no known conversion from 'int' to 'enum http_errno' for 1st argument
+const char *http_errno_name(enum http_errno err);
+            ^
+fuzzers/fuzz_url.cpp:10:10: error: cannot initialize a variable of type 'char *' with an rvalue of type 'const char *'
+  char * err_name = http_errno_name(err_code);
+         ^          ~~~~~~~~~~~~~~~~~~~~~~~~~
+3 errors generated.

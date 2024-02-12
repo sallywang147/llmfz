@@ -1,0 +1,46 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+
+#include "hb-fuzzer.hh"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  anon f;
+  double a = stream.ConsumeFloatingPoint<double>();
+  double b = stream.ConsumeFloatingPoint<double>();
+  double epsilon = stream.ConsumeFloatingPoint<double>();
+  double min_y = stream.ConsumeFloatingPoint<double>();
+  double max_y = stream.ConsumeFloatingPoint<double>();
+  double ya = stream.ConsumeFloatingPoint<double>();
+  double yb = stream.ConsumeFloatingPoint<double>();
+  double y = stream.ConsumeFloatingPoint<double>();
+  double solve_itp_result = solve_itp<hb_shape_justify::$_3>(&f, a, b, epsilon, min_y, max_y, &ya, &yb, &y);
+  return 0;
+}
+
+extern "C" double solve_itp(anon * f, double a, double b, double epsilon, double min_y, double max_y, double * ya, double * yb, double * y) {
+  return 0.0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+The target function `double solve_itp<hb_shape_justify::$_3>(anon * f, double a, double b, double epsilon, double min_y, double max_y, double * ya, double * yb, double * y)` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `double solve_itp<hb_shape_justify::$_3>(anon * f, double a, double b, double epsilon, double min_y, double max_y, double * ya, double * yb, double * y)` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

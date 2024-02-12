@@ -1,0 +1,54 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+
+#include "ares.h"
+
+// Entrypoint for Clang's libfuzzer
+int LLVMFuzzerTestOneInput(const unsigned char *data,
+                           unsigned long size) {
+  // Feed the data into each of the ares_parse_*_reply functions.
+  extern "C" {
+    struct ares_channeldata channel;
+  }
+  struct ares_addrinfo_hints hints;
+  hints.ai_flags = ARES_AI_CANONNAME;
+  hints.ai_family = AF_UNSPEC;
+  hints.ai_socktype = SOCK_STREAM;
+  hints.ai_protocol = IPPROTO_TCP;
+  ares_getaddrinfo_int(&channel, NULL, NULL, &hints, NULL, NULL);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/c-ares/test/ares-test-fuzz-name.c:9:10: error: expected identifier or '('
+  extern "C" {
+         ^
+/src/c-ares/test/ares-test-fuzz-name.c:17:25: error: use of undeclared identifier 'channel'
+  ares_getaddrinfo_int(&channel, NULL, NULL, &hints, NULL, NULL);
+                        ^
+2 errors generated.
+
+Fix failure
+/src/c-ares/test/ares-test-fuzz-name.cpp:9:10: error: expected unqualified-id
+  extern "C" {
+         ^
+/src/c-ares/test/ares-test-fuzz-name.cpp:17:25: error: use of undeclared identifier 'channel'
+  ares_getaddrinfo_int(&channel, NULL, NULL, &hints, NULL, NULL);
+                        ^
+2 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,57 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <iostream>
+#include <string>
+
+#include "cctz/civil_time.h"
+#include "cctz/time_zone.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+	FuzzedDataProvider fuzzed_data(data, size);
+
+	cctz::time_zone::Impl * tz = cctz::fixed_time_zone(
+			std::chrono::hours(fuzzed_data.ConsumeIntegral<int>()));
+
+	std::string format = fuzzed_data.ConsumeRandomLengthString();
+	cctz::format(format, cctz::convert(cctz::civil_second(
+			fuzzed_data.ConsumeIntegral<uint32_t>(),
+			fuzzed_data.ConsumeIntegral<uint32_t>(),
+			fuzzed_data.ConsumeIntegral<uint32_t>(),
+			fuzzed_data.ConsumeIntegral<uint32_t>(),
+			fuzzed_data.ConsumeIntegral<uint32_t>(),
+			fuzzed_data.ConsumeIntegral<uint32_t>()), *tz));
+
+	return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+./fuzz_cctz.cc:12:26: error: no viable conversion from 'cctz::time_zone' to 'cctz::time_zone::Impl *'
+        cctz::time_zone::Impl * tz = cctz::fixed_time_zone(
+                                ^    ~~~~~~~~~~~~~~~~~~~~~~
+./fuzz_cctz.cc:16:23: error: no matching function for call to 'convert'
+        cctz::format(format, cctz::convert(cctz::civil_second(
+                             ^~~~~~~~~~~~~
+../include/cctz/time_zone.h:255:28: note: candidate function not viable: cannot convert argument of incomplete type 'cctz::time_zone::Impl' to 'const cctz::time_zone' for 2nd argument
+inline time_point<seconds> convert(const civil_second& cs,
+                           ^
+../include/cctz/time_zone.h:246:21: note: candidate template ignored: could not match 'time_point' against 'civil_time'
+inline civil_second convert(const time_point<D>& tp, const time_zone& tz) {
+                    ^
+2 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

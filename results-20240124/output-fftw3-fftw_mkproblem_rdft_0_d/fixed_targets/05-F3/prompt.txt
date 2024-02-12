@@ -1,0 +1,58 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fftw3.h>
+#include <string>
+
+extern "C" {
+#include <fftw3/fftw3.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  if (size < 1) {
+    return 0;
+  }
+  uint8_t ARRAY_SIZE = (*data) % 250 + 1;
+  data++;
+  size -= 1;
+  if ((ARRAY_SIZE * sizeof(double) * 2) > size) {
+    return 0;
+  }
+  fftw_complex signal[ARRAY_SIZE];
+  fftw_complex result[ARRAY_SIZE];
+
+  // Seed the signals with fuzz data
+  memcpy(signal, data, (ARRAY_SIZE * sizeof(double) * 2));
+
+  fftw_iodim vecsz;
+  vecsz.n = 1;
+  vecsz.is = ARRAY_SIZE;
+  fftw_plan problem = fftw_plan_dft_r2c_1d(ARRAY_SIZE, (double*)signal, (fftw_complex*)result, FFTW_ESTIMATE);
+
+  // Call the function that was not called
+  fftw_mkproblem_rdft_0_d(&vecsz, (double*)signal, (double*)result);
+
+  fftw_destroy_plan(problem);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/fftw3_fuzzer.cc:5:10: fatal error: 'fftw3/fftw3.h' file not found
+#include <fftw3/fftw3.h>
+         ^~~~~~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

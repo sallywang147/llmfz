@@ -1,0 +1,55 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <string.h>
+
+#include <krb5.h>
+#include <gssapi.h>
+#include "gss_ntlmssp.h"
+
+extern "C" {
+#include <ntlm.h>
+}
+
+extern int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size)
+{
+    OM_uint32 maj_stat, min_stat;
+
+    struct gssntlm_ctx ctx;
+    struct gssntlm_cred cred;
+    struct ntlm_buffer target_info = { 0 };
+
+    memset(&ctx, 0, sizeof(ctx));
+    memset(&cred, 0, sizeof(cred));
+
+    maj_stat = gssntlm_cli_auth(
+        &min_stat,
+        &ctx,
+        &cred,
+        &target_info,
+        0, /* in_flags */
+        NULL /* input_chan_bindings */
+    );
+
+    gssntlm_ctx_free(&ctx);
+    gssntlm_cred_free(&cred);
+
+    return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,1 @@
+error: undefined reference to 'LZ4HC_create'

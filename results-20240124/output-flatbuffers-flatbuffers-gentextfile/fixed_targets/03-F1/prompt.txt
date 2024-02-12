@@ -1,0 +1,132 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <stddef.h>
+#include <stdint.h>
+
+#include <string>
+
+#include "flatbuffers/idl.h"
+#include "test_init.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  // Reserve one byte for Parser flags and one byte for repetition counter.
+  if (size < 3) return 0;
+  const uint8_t flags = data[0];
+  // normalize to ascii alphabet
+  const int extra_rep_number =
+      std::max(5, (data[1] > '0' ? (data[1] - '0') : 0));
+  data += 2;
+  size -= 2;  // bypass
+
+  // Guarantee 0-termination.
+  const std::string original(reinterpret_cast<const char *>(data), size);
+  auto input = std::string(original.c_str());  // until '\0'
+  if (input.size() < 1 || input.size() > 3000) return 0;
+
+  // Break comments in json to avoid complexity with regex matcher.
+  // The string " 12345 /* text */" will be accepted if insert it to string
+  // expression: "table X { Y: " + " 12345 /* text */" + "; }.
+  // But strings like this will complicate regex matcher.
+  // We reject this by transform "/* text */ 12345" to "@* text */ 12345".
+  BreakSequence(input, "//", '@');  // "//" -> "@/"
+  BreakSequence(input, "/*", '@');  // "/*" -> "@*"
+  // { "$schema: "text" } is exceptional case.
+  // This key:value ignored by the parser. Numbers can not have $.
+  BreakSequence(input, "$schema", '@');  // "$schema" -> "@schema"
+  // Break all known scalar functions (todo: add them to regex?):
+  for (auto f : { "deg", "rad", "sin", "cos", "tan", "asin", "acos", "atan" }) {
+    BreakSequence(input, f, '_');  // ident -> ident
+  }
+
+  // Create parser
+  flatbuffers::IDLOptions opts;
+  opts.force_defaults = true;
+  opts.output_default_scalars_in_json = true;
+  opts.indent_step = -1;
+  opts.strict_json = true;
+
+  flatbuffers::Parser parser(opts);
+  auto schema =
+      "table X { Y: string; } root_type X;";
+  TEST_EQ_FUNC(parser.Parse(schema.c_str()), true);
+
+  // The fuzzer can adjust the number repetition if a side-effects have found.
+  // Each test should pass at least two times to ensure that the parser doesn't
+  // have any hidden-states or locale-depended effects.
+  for (auto cnt = 0; cnt < (extra_rep_number + 2); cnt++) {
+    // Each even run (0,2,4..) will test locale independed code.
+    auto use_locale = !!OneTimeTestInit::test_locale() && (0 == (cnt % 2));
+    // Set new locale.
+    if (use_locale) {
+      FLATBUFFERS_ASSERT(setlocale(LC_ALL, OneTimeTestInit::test_locale()));
+    }
+
+    // Parse original input as-is.
+    auto orig_scalar = "{\"Y\" : " + input + "}";
+    std::string orig_back;
+    auto orig_done = Parse(parser, orig_scalar, &orig_back);
+
+    if (orig_done) {
+      // Compare with print.
+      std::string ref_string;
+      FLATBUFFERS_ASSERT(!GenText(
+          parser, parser.builder_.GetBufferPointer(), &ref_string));
+      FLATBUFFERS_ASSERT(GenTextFile(&parser, &orig_back, &ref_string));
+    }
+
+    // Restore locale.
+    if (use_locale) { FLATBUFFERS_ASSERT(setlocale(LC_ALL, "C")); }
+  }
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/flatbuffers/tests/fuzzer/flatbuffers_64bit_fuzzer.cc:29:3: error: use of undeclared identifier 'BreakSequence'
+  BreakSequence(input, "//", '@');  // "//" -> "@/"
+  ^
+/src/flatbuffers/tests/fuzzer/flatbuffers_64bit_fuzzer.cc:30:3: error: use of undeclared identifier 'BreakSequence'
+  BreakSequence(input, "/*", '@');  // "/*" -> "@*"
+  ^
+/src/flatbuffers/tests/fuzzer/flatbuffers_64bit_fuzzer.cc:33:3: error: use of undeclared identifier 'BreakSequence'
+  BreakSequence(input, "$schema", '@');  // "$schema" -> "@schema"
+  ^
+/src/flatbuffers/tests/fuzzer/flatbuffers_64bit_fuzzer.cc:36:5: error: use of undeclared identifier 'BreakSequence'
+    BreakSequence(input, f, '_');  // ident -> ident
+    ^
+/src/flatbuffers/tests/fuzzer/flatbuffers_64bit_fuzzer.cc:49:35: error: member reference base type 'const char *' is not a structure or union
+  TEST_EQ_FUNC(parser.Parse(schema.c_str()), true);
+                            ~~~~~~^~~~~~
+/src/flatbuffers/tests/fuzzer/../../tests/test_assert.h:31:41: note: expanded from macro 'TEST_EQ_FUNC'
+  #define TEST_EQ_FUNC(exp, val) TestEq(exp, val, "'" #exp "' != '" #val "'", __FILE__, __LINE__, __PRETTY_FUNCTION__)
+                                        ^~~
+/src/flatbuffers/tests/fuzzer/flatbuffers_64bit_fuzzer.cc:65:22: error: use of undeclared identifier 'Parse'
+    auto orig_done = Parse(parser, orig_scalar, &orig_back);
+                     ^
+/src/flatbuffers/tests/fuzzer/flatbuffers_64bit_fuzzer.cc:72:26: error: no matching function for call to 'GenTextFile'
+      FLATBUFFERS_ASSERT(GenTextFile(&parser, &orig_back, &ref_string));
+                         ^~~~~~~~~~~
+<command line>:1:28: note: expanded from here
+#define FLATBUFFERS_ASSERT fuzzer_assert_impl
+                           ^
+/src/flatbuffers/tests/fuzzer/fuzzer_assert.h:12:35: note: expanded from macro 'fuzzer_assert_impl'
+#define fuzzer_assert_impl(x) (!!(x) ? static_cast<void>(0) : __builtin_trap())
+                                  ^
+/src/flatbuffers/tests/fuzzer/../../include/flatbuffers/idl.h:1240:20: note: candidate function not viable: no known conversion from 'flatbuffers::Parser *' to 'const flatbuffers::Parser' for 1st argument; remove &
+extern const char *GenTextFile(const Parser &parser, const std::string &path,
+                   ^
+7 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

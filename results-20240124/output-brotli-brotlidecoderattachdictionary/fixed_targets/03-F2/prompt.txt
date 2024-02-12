@@ -1,0 +1,82 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdlib.h>
+
+#include <brotli/decode.h>
+
+// Entry point for LibFuzzer.
+int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  if (size < 1)
+    return 0;
+  const uint8_t* next_in = data;
+  size_t avail_in = size;
+
+  const int kBufferSize = 1024;
+  uint8_t* buffer = (uint8_t*) malloc(kBufferSize);
+  if (!buffer) {
+    // OOM is out-of-scope here.
+    return 0;
+  }
+  size_t total_out = 0;
+
+  BrotliDecoderState* state = BrotliDecoderCreateInstance(0, 0, 0);
+  if (!state) {
+    // OOM is out-of-scope here.
+    free(buffer);
+    return 0;
+  }
+
+  BrotliDecoderResult result = BROTLI_DECODER_RESULT_NEEDS_MORE_INPUT;
+  while (result == BROTLI_DECODER_RESULT_NEEDS_MORE_INPUT) {
+    size_t avail_out = kBufferSize;
+    uint8_t* next_out = buffer;
+    result = BrotliDecoderDecompressStream(
+        state, &avail_in, &next_in, &avail_out, &next_out, &total_out);
+    if (total_out > 1 << 26)
+      break;
+  }
+
+  if (result == BROTLI_DECODER_RESULT_NEEDS_MORE_INPUT) {
+    BrotliDecoderAttachDictionary(state, 0, size, (char*)data);
+    result = BrotliDecoderDecompressStream(
+        state, &avail_in, &next_in, &avail_out, &next_out, &total_out);
+  }
+
+  BrotliDecoderDestroyInstance(state);
+  free(buffer);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+c/fuzz/decode_fuzzer.c:42:38: error: use of undeclared identifier 'avail_out'; did you mean 'avail_in'?
+        state, &avail_in, &next_in, &avail_out, &next_out, &total_out);
+                                     ^~~~~~~~~
+                                     avail_in
+c/fuzz/decode_fuzzer.c:12:10: note: 'avail_in' declared here
+  size_t avail_in = size;
+         ^
+c/fuzz/decode_fuzzer.c:42:50: error: use of undeclared identifier 'next_out'; did you mean 'next_in'?
+        state, &avail_in, &next_in, &avail_out, &next_out, &total_out);
+                                                 ^~~~~~~~
+                                                 next_in
+c/fuzz/decode_fuzzer.c:11:18: note: 'next_in' declared here
+  const uint8_t* next_in = data;
+                 ^
+2 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

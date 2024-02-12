@@ -1,0 +1,41 @@
+/workspace/out/libfuzzer-address-x86_64/fuzz_url -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/fuzz_url < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 722406885
+INFO: Loaded 1 modules   (905 inline 8-bit counters): 905 [0x603a70, 0x603df9), 
+INFO: Loaded 1 PC tables (905 PCs): 905 [0x5b9240,0x5bcad0), 
+INFO:        0 files found in /workspace/corpus/fuzz_url
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: A corpus is not provided, starting from an empty corpus
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+==13==ERROR: AddressSanitizer: SEGV on unknown address 0x0000005b63d0 (pc 0x0000004afe14 bp 0x000000000000 sp 0x7ffc5b04f620 T0)
+==13==The signal is caused by a WRITE memory access.
+SCARINESS: 30 (wild-addr-write)
+    #0 0x4afe14 in atomic_compare_exchange_strong<__sanitizer::atomic_uint8_t> /src/llvm-project/compiler-rt/lib/asan/../sanitizer_common/sanitizer_atomic_clang.h:81:10
+    #1 0x4afe14 in AtomicallySetQuarantineFlagIfAllocated /src/llvm-project/compiler-rt/lib/asan/asan_allocator.cpp:610:10
+    #2 0x4afe14 in __asan::Allocator::Deallocate(void*, unsigned long, unsigned long, __sanitizer::BufferedStackTrace*, __asan::AllocType) /src/llvm-project/compiler-rt/lib/asan/asan_allocator.cpp:685:10
+    #3 0x52ed15 in free /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:53:3
+    #4 0x579fda in LLVMFuzzerTestOneInput /src/http-parser/fuzzers/fuzz_url.c:12:3
+    #5 0x43ddc3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #6 0x43d5aa in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #7 0x43f364 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:809:5
+    #8 0x43f649 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #9 0x42ecaf in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #10 0x458302 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #11 0x7f786cf3b082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #12 0x41f6ed in _start (out/libfuzzer-address-x86_64/fuzz_url+0x41f6ed)
+
+DEDUP_TOKEN: atomic_compare_exchange_strong<__sanitizer::atomic_uint8_t>--AtomicallySetQuarantineFlagIfAllocated--__asan::Allocator::Deallocate(void*, unsigned long, unsigned long, __sanitizer::BufferedStackTrace*, __asan::AllocType)
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: SEGV /src/llvm-project/compiler-rt/lib/asan/../sanitizer_common/sanitizer_atomic_clang.h:81:10 in atomic_compare_exchange_strong<__sanitizer::atomic_uint8_t>
+==13==ABORTING
+MS: 0 ; base unit: 0000000000000000000000000000000000000000
+0xa,
+\012
+artifact_prefix='./'; Test unit written to ./crash-adc83b19e793491b1c6ea0fd8b46cd9f32e592fc
+Base64: Cg==
+stat::number_of_executed_units: 2
+stat::average_exec_per_sec:     0
+stat::new_units_added:          0
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              36

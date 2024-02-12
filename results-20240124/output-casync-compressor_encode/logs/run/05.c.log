@@ -1,0 +1,48 @@
+/workspace/out/libfuzzer-address-x86_64/fuzz-compress -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/fuzz-compress < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 3310952128
+INFO: Loaded 1 modules   (779 inline 8-bit counters): 779 [0x5fc6c8, 0x5fc9d3), 
+INFO: Loaded 1 PC tables (779 PCs): 779 [0x5fc9d8,0x5ffa88), 
+INFO:        0 files found in /workspace/corpus/fuzz-compress
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: A corpus is not provided, starting from an empty corpus
+#2	INITED cov: 2 ft: 2 corp: 1/1b exec/s: 0 rss: 35Mb
+	NEW_FUNC[1/5]: 0x4de8f0 in compressor_start_encode /work/build/../../src/casync/src/compressor.c:114
+	NEW_FUNC[2/5]: 0x4dead0 in compressor_finish /work/build/../../src/casync/src/compressor.c:171
+#16	NEW    cov: 13 ft: 14 corp: 2/41b lim: 4096 exec/s: 0 rss: 36Mb L: 40/40 MS: 4 CopyPart-EraseBytes-ShuffleBytes-InsertRepeatedBytes-
+	NEW_FUNC[1/3]: 0x4dec80 in compressor_input /work/build/../../src/casync/src/compressor.c:212
+	NEW_FUNC[2/3]: 0x4df4d0 in compressor_encode /work/build/../../src/casync/src/compressor.c:373
+#29	NEW    cov: 24 ft: 25 corp: 3/130b lim: 4096 exec/s: 0 rss: 44Mb L: 89/89 MS: 3 InsertByte-EraseBytes-InsertRepeatedBytes-
+#40	NEW    cov: 25 ft: 26 corp: 4/244b lim: 4096 exec/s: 0 rss: 44Mb L: 114/114 MS: 1 InsertRepeatedBytes-
+#51	NEW    cov: 26 ft: 27 corp: 5/415b lim: 4096 exec/s: 0 rss: 44Mb L: 171/171 MS: 1 CopyPart-
+#92	REDUCE cov: 26 ft: 27 corp: 5/410b lim: 4096 exec/s: 0 rss: 45Mb L: 35/171 MS: 1 EraseBytes-
+#103	REDUCE cov: 26 ft: 27 corp: 5/398b lim: 4096 exec/s: 0 rss: 45Mb L: 102/171 MS: 1 EraseBytes-
+#124	REDUCE cov: 26 ft: 27 corp: 5/391b lim: 4096 exec/s: 0 rss: 47Mb L: 82/171 MS: 1 EraseBytes-
+#128	REDUCE cov: 26 ft: 27 corp: 5/380b lim: 4096 exec/s: 0 rss: 47Mb L: 91/171 MS: 4 CrossOver-ChangeBit-ChangeByte-EraseBytes-
+#188	REDUCE cov: 26 ft: 27 corp: 5/338b lim: 4096 exec/s: 0 rss: 47Mb L: 129/129 MS: 5 InsertByte-ShuffleBytes-ChangeBinInt-ChangeByte-EraseBytes-
+#241	REDUCE cov: 26 ft: 27 corp: 5/335b lim: 4096 exec/s: 0 rss: 47Mb L: 32/129 MS: 3 CopyPart-ChangeBinInt-EraseBytes-
+#243	REDUCE cov: 26 ft: 27 corp: 5/291b lim: 4096 exec/s: 0 rss: 47Mb L: 47/129 MS: 2 ChangeBinInt-EraseBytes-
+#275	REDUCE cov: 26 ft: 27 corp: 5/289b lim: 4096 exec/s: 0 rss: 47Mb L: 45/129 MS: 2 CopyPart-EraseBytes-
+#302	REDUCE cov: 26 ft: 27 corp: 5/285b lim: 4096 exec/s: 0 rss: 47Mb L: 28/129 MS: 2 ShuffleBytes-EraseBytes-
+#315	REDUCE cov: 26 ft: 27 corp: 5/257b lim: 4096 exec/s: 0 rss: 47Mb L: 54/129 MS: 3 CrossOver-ChangeBit-EraseBytes-
+#375	REDUCE cov: 26 ft: 27 corp: 5/246b lim: 4096 exec/s: 0 rss: 47Mb L: 34/129 MS: 5 InsertByte-InsertByte-CrossOver-ShuffleBytes-EraseBytes-
+#401	REDUCE cov: 26 ft: 27 corp: 5/220b lim: 4096 exec/s: 0 rss: 47Mb L: 28/129 MS: 1 EraseBytes-
+#420	REDUCE cov: 26 ft: 27 corp: 5/211b lim: 4096 exec/s: 0 rss: 47Mb L: 25/129 MS: 4 ChangeBinInt-InsertByte-ChangeBit-EraseBytes-
+#711	REDUCE cov: 26 ft: 27 corp: 5/208b lim: 4096 exec/s: 711 rss: 47Mb L: 25/129 MS: 1 EraseBytes-
+#920	REDUCE cov: 30 ft: 31 corp: 6/236b lim: 4096 exec/s: 920 rss: 47Mb L: 28/129 MS: 4 CrossOver-CrossOver-EraseBytes-ChangeBit-
+#1132	REDUCE cov: 30 ft: 31 corp: 6/234b lim: 4096 exec/s: 566 rss: 48Mb L: 26/129 MS: 2 ChangeByte-EraseBytes-
+#1229	REDUCE cov: 30 ft: 31 corp: 6/233b lim: 4096 exec/s: 614 rss: 49Mb L: 27/129 MS: 2 ShuffleBytes-EraseBytes-
+#1495	REDUCE cov: 30 ft: 31 corp: 6/231b lim: 4096 exec/s: 747 rss: 50Mb L: 25/129 MS: 1 EraseBytes-
+#1541	REDUCE cov: 30 ft: 31 corp: 6/230b lim: 4096 exec/s: 770 rss: 50Mb L: 25/129 MS: 1 EraseBytes-
+#2048	pulse  cov: 30 ft: 31 corp: 6/230b lim: 4096 exec/s: 682 rss: 51Mb
+#4096	pulse  cov: 30 ft: 31 corp: 6/230b lim: 4096 exec/s: 585 rss: 51Mb
+#8192	pulse  cov: 30 ft: 31 corp: 6/230b lim: 4096 exec/s: 630 rss: 53Mb
+#8362	REDUCE cov: 31 ft: 32 corp: 7/255b lim: 4096 exec/s: 643 rss: 53Mb L: 25/129 MS: 1 ChangeBit-
+#16384	pulse  cov: 31 ft: 32 corp: 7/255b lim: 4096 exec/s: 682 rss: 53Mb
+#20607	DONE   cov: 31 ft: 32 corp: 7/255b lim: 4096 exec/s: 664 rss: 53Mb
+Done 20607 runs in 31 second(s)
+stat::number_of_executed_units: 20607
+stat::average_exec_per_sec:     664
+stat::new_units_added:          24
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              53

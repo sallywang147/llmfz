@@ -1,0 +1,38 @@
+Using seed corpus: FuzzIPP_seed_corpus.zip
+/workspace/out/libfuzzer-address-x86_64/FuzzIPP -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/FuzzIPP < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 4162529402
+INFO: Loaded 1 modules   (7492 inline 8-bit counters): 7492 [0x708ed8, 0x70ac1c), 
+INFO: Loaded 1 PC tables (7492 PCs): 7492 [0x70ac20,0x728060), 
+INFO:        3 files found in /workspace/corpus/FuzzIPP
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: seed corpus: files: 3 min: 63b max: 398b total: 657b rss: 32Mb
+#5	INITED cov: 314 ft: 324 corp: 2/259b exec/s: 0 rss: 34Mb
+#42	REDUCE cov: 314 ft: 324 corp: 2/247b lim: 4096 exec/s: 0 rss: 35Mb L: 184/184 MS: 2 ChangeBit-EraseBytes-
+#105	REDUCE cov: 314 ft: 324 corp: 2/200b lim: 4096 exec/s: 0 rss: 37Mb L: 137/137 MS: 3 ChangeASCIIInt-ChangeBinInt-EraseBytes-
+#132	REDUCE cov: 314 ft: 324 corp: 2/197b lim: 4096 exec/s: 0 rss: 38Mb L: 134/134 MS: 2 ChangeByte-EraseBytes-
+#141	REDUCE cov: 314 ft: 324 corp: 2/172b lim: 4096 exec/s: 0 rss: 38Mb L: 109/109 MS: 4 InsertByte-CMP-CopyPart-EraseBytes- DE: "\002\000\000\000"-
+#192	REDUCE cov: 314 ft: 324 corp: 2/143b lim: 4096 exec/s: 0 rss: 40Mb L: 80/80 MS: 1 EraseBytes-
+#218	REDUCE cov: 314 ft: 324 corp: 2/104b lim: 4096 exec/s: 0 rss: 41Mb L: 41/63 MS: 1 EraseBytes-
+#262	REDUCE cov: 314 ft: 324 corp: 2/96b lim: 4096 exec/s: 0 rss: 42Mb L: 33/63 MS: 4 ChangeBinInt-CrossOver-CrossOver-EraseBytes-
+#279	REDUCE cov: 314 ft: 324 corp: 2/90b lim: 4096 exec/s: 0 rss: 42Mb L: 27/63 MS: 2 InsertByte-EraseBytes-
+#301	REDUCE cov: 314 ft: 324 corp: 2/82b lim: 4096 exec/s: 0 rss: 43Mb L: 19/63 MS: 2 ChangeBit-EraseBytes-
+#324	REDUCE cov: 314 ft: 324 corp: 2/73b lim: 4096 exec/s: 0 rss: 44Mb L: 10/63 MS: 3 ShuffleBytes-ChangeBit-EraseBytes-
+#338	REDUCE cov: 315 ft: 325 corp: 3/78b lim: 4096 exec/s: 0 rss: 44Mb L: 5/63 MS: 4 ShuffleBytes-ChangeBinInt-ChangeASCIIInt-EraseBytes-
+#450	REDUCE cov: 315 ft: 325 corp: 3/76b lim: 4096 exec/s: 0 rss: 47Mb L: 3/63 MS: 2 ChangeByte-EraseBytes-
+#562	REDUCE cov: 315 ft: 325 corp: 3/75b lim: 4096 exec/s: 0 rss: 49Mb L: 2/63 MS: 2 ChangeBit-EraseBytes-
+#684	REDUCE cov: 315 ft: 325 corp: 3/74b lim: 4096 exec/s: 0 rss: 49Mb L: 1/63 MS: 2 ChangeBit-EraseBytes-
+#16384	pulse  cov: 315 ft: 325 corp: 3/74b lim: 4096 exec/s: 8192 rss: 50Mb
+#32768	pulse  cov: 315 ft: 325 corp: 3/74b lim: 4096 exec/s: 8192 rss: 50Mb
+#65536	pulse  cov: 315 ft: 325 corp: 3/74b lim: 4096 exec/s: 8192 rss: 50Mb
+#131072	pulse  cov: 315 ft: 325 corp: 3/74b lim: 4096 exec/s: 8192 rss: 50Mb
+#255444	DONE   cov: 315 ft: 325 corp: 3/74b lim: 4096 exec/s: 8240 rss: 50Mb
+###### Recommended dictionary. ######
+"\002\000\000\000" # Uses: 21207
+###### End of recommended dictionary. ######
+Done 255444 runs in 31 second(s)
+stat::number_of_executed_units: 255444
+stat::average_exec_per_sec:     8240
+stat::new_units_added:          14
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              50

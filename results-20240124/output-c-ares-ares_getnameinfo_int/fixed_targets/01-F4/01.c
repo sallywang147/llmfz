@@ -1,0 +1,1 @@
+error: undefined reference to 'ares_getnameinfo'

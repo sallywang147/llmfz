@@ -1,0 +1,43 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ cp /src/exprtk_test_expressions.dict /workspace/out/libfuzzer-address-x86_64/
++ CXXFLAGS='-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -O2 -fno-sanitize=integer-divide-by-zero,float-divide-by-zero'
++ /usr/local/bin/clang++-jcc -std=c++11 -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -O2 -fno-sanitize=integer-divide-by-zero,float-divide-by-zero -I. -I/src/exprtk /src/exprtk_fuzzer.cpp -o /workspace/out/libfuzzer-address-x86_64/exprtk_fuzzer -fsanitize=fuzzer
+/src/exprtk_fuzzer.cpp:12:40: error: default initialization of an object of const type 'const exprtk::details::operator_type'
+  exprtk::details::operator_type const op;
+                                       ^
+/src/exprtk_fuzzer.cpp:15:18: error: no matching member function for call to 'allocate_rrr'
+  node_allocator.allocate_rrr<exprtk::details::vec_binop_vecvec_node<float, exprtk::details::mul_op<float> >, exprtk::details::operator_type const, exprtk::details::expression_node<float>*, exprtk::details::expression_node<float>*>(nullptr, &op, &left, &right);
+  ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./exprtk.hpp:16746:66: note: candidate function template not viable: requires 3 arguments, but 4 were provided
+         inline expression_node<typename node_type::value_type>* allocate_rrr(T1& t1, T2& t2, T3& t3) const
+                                                                 ^
+/src/exprtk_fuzzer.cpp:23:59: error: use of class template 'std::allocator' requires template arguments
+expression_node<float>* node_allocator::allocate_rrr(std::allocator* alloc, T* op, Left* left, Right* right) const {
+                                                          ^
+/usr/local/bin/../include/c++/v1/__memory/allocator.h:80:28: note: template is declared here
+class _LIBCPP_TEMPLATE_VIS allocator
+                           ^
+/src/exprtk_fuzzer.cpp:30:6: error: functions that differ only in their return type cannot be overloaded
+void LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+~~~~ ^
+/src/exprtk_fuzzer.cpp:10:5: note: previous definition is here
+int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+~~~ ^
+/src/exprtk_fuzzer.cpp:32:40: error: default initialization of an object of const type 'const exprtk::details::operator_type'
+  exprtk::details::operator_type const op;
+                                       ^
+/src/exprtk_fuzzer.cpp:35:18: error: no matching member function for call to 'allocate_rrr'
+  node_allocator.allocate_rrr<exprtk::details::vec_binop_vecvec_node<float, exprtk::details::mul_op<float> >, exprtk::details::operator_type const, exprtk::details::expression_node<float>*, exprtk::details::expression_node<float>*>(nullptr, &op, &left, &right);
+  ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./exprtk.hpp:16746:66: note: candidate function template not viable: requires 3 arguments, but 4 were provided
+         inline expression_node<typename node_type::value_type>* allocate_rrr(T1& t1, T2& t2, T3& t3) const
+                                                                 ^
+6 errors generated.

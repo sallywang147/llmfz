@@ -1,0 +1,17 @@
+Using seed corpus: h2o-fuzzer-http3_seed_corpus.zip
+/workspace/out/libfuzzer-address-x86_64/h2o-fuzzer-http3 -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/h2o-fuzzer-http3 -close_fd_mask=3 -max_len=16384 -dict=http.dict < /dev/null
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+==18==ERROR: AddressSanitizer: SEGV on unknown address 0x000000000000 (pc 0x0000008e6d12 bp 0x7ffdf7d4bdc0 sp 0x7ffdf7d4bbe0 T0)
+==18==The signal is caused by a READ memory access.
+==18==Hint: address points to the zero page.
+SCARINESS: 10 (null-deref)
+    #0 0x8e6d12 in BrotliEncoderCompressStream /src/h2o/deps/brotli/c/enc/encode.c:1692:38
+    #1 0x53e9ab in main /src/h2o/fuzz/driver_h3.cc:10:3
+    #2 0x7fdd7c8b7082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #3 0x4800dd in _start (out/libfuzzer-address-x86_64/h2o-fuzzer-http3+0x4800dd)
+
+DEDUP_TOKEN: BrotliEncoderCompressStream--main--__libc_start_main
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: SEGV /src/h2o/deps/brotli/c/enc/encode.c:1692:38 in BrotliEncoderCompressStream
+==18==ABORTING

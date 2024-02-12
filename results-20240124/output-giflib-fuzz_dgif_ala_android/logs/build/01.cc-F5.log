@@ -1,0 +1,62 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ set -e
++ SOURCES=(dgif_lib.c egif_lib.c getarg.c gifalloc.c gif_err.c gif_font.c gif_hash.c openbsd-reallocarray.c qprintf.c quantize.c)
++ cd /src/giflib-code
++ rm -f '*.o'
++ for file in ${SOURCES[@]}
+++ basename dgif_lib.c .c
++ name=dgif_lib
++ /usr/local/bin/clang-jcc -c -I . -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link dgif_lib.c -o dgif_lib.o
++ for file in ${SOURCES[@]}
+++ basename egif_lib.c .c
++ name=egif_lib
++ /usr/local/bin/clang-jcc -c -I . -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link egif_lib.c -o egif_lib.o
++ for file in ${SOURCES[@]}
+++ basename getarg.c .c
++ name=getarg
++ /usr/local/bin/clang-jcc -c -I . -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link getarg.c -o getarg.o
++ for file in ${SOURCES[@]}
+++ basename gifalloc.c .c
++ name=gifalloc
++ /usr/local/bin/clang-jcc -c -I . -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link gifalloc.c -o gifalloc.o
++ for file in ${SOURCES[@]}
+++ basename gif_err.c .c
++ name=gif_err
++ /usr/local/bin/clang-jcc -c -I . -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link gif_err.c -o gif_err.o
++ for file in ${SOURCES[@]}
+++ basename gif_font.c .c
++ name=gif_font
++ /usr/local/bin/clang-jcc -c -I . -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link gif_font.c -o gif_font.o
++ for file in ${SOURCES[@]}
+++ basename gif_hash.c .c
++ name=gif_hash
++ /usr/local/bin/clang-jcc -c -I . -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link gif_hash.c -o gif_hash.o
++ for file in ${SOURCES[@]}
+++ basename openbsd-reallocarray.c .c
++ name=openbsd-reallocarray
++ /usr/local/bin/clang-jcc -c -I . -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link openbsd-reallocarray.c -o openbsd-reallocarray.o
++ for file in ${SOURCES[@]}
+++ basename qprintf.c .c
++ name=qprintf
++ /usr/local/bin/clang-jcc -c -I . -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link qprintf.c -o qprintf.o
++ for file in ${SOURCES[@]}
+++ basename quantize.c .c
++ name=quantize
++ /usr/local/bin/clang-jcc -c -I . -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link quantize.c -o quantize.o
++ ar rc libgif.a dgif_lib.o egif_lib.o getarg.o gif_err.o gif_font.o gif_hash.o gifalloc.o openbsd-reallocarray.o qprintf.o quantize.o
++ cd /src
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Wall -c -I giflib-code dgif_target.cc -o dgif_target.o
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -fsanitize=fuzzer -std=c++11 -I giflib-code dgif_fuzz_common.cc dgif_target.o -o /workspace/out/libfuzzer-address-x86_64/dgif_target giflib-code/libgif.a
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -Wall -c -I giflib-code egif_target.cc -o egif_target.o
+egif_target.cc:1:10: fatal error: 'third_party/protobuf/src/google/protobuf/port_def.inc' file not found
+#include "third_party/protobuf/src/google/protobuf/port_def.inc"
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.

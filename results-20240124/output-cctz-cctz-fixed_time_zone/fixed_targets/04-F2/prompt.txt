@@ -1,0 +1,69 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <iostream>
+#include <string>
+
+#include "cctz/time_zone.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+	FuzzedDataProvider fuzzed_data(data, size);
+
+	cctz::time_zone::Impl * tz = cctz::fixed_time_zone(
+		std::chrono::duration<long long, std::__1::ratio<1l, 1000000l> >(
+			fuzzed_data.ConsumeIntegral<uint32_t>()));
+
+	std::string format = fuzzed_data.ConsumeRandomLengthString();
+	cctz::format(format, cctz::convert(cctz::civil_second(
+			fuzzed_data.ConsumeIntegral<uint32_t>(),
+			fuzzed_data.ConsumeIntegral<uint32_t>(),
+			fuzzed_data.ConsumeIntegral<uint32_t>(),
+			fuzzed_data.ConsumeIntegral<uint32_t>(),
+			fuzzed_data.ConsumeIntegral<uint32_t>(),
+			fuzzed_data.ConsumeIntegral<uint32_t>()), *tz));
+	return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+./fuzz_cctz.cc:12:3: error: no viable conversion from 'duration<long long, ratio<[...], 1000000>>' to 'const duration<std::int_fast64_t, ratio<[...], 1>>'
+                std::chrono::duration<long long, std::__1::ratio<1l, 1000000l> >(
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/local/bin/../include/c++/v1/__chrono/duration.h:199:28: note: candidate constructor (the implicit copy constructor) not viable: no known conversion from 'std::chrono::duration<long long, std::__1::ratio<1L, 1000000L>>' to 'const std::chrono::duration<long> &' for 1st argument
+class _LIBCPP_TEMPLATE_VIS duration
+                           ^
+/usr/local/bin/../include/c++/v1/__chrono/duration.h:199:28: note: candidate constructor (the implicit move constructor) not viable: no known conversion from 'std::chrono::duration<long long, std::__1::ratio<1L, 1000000L>>' to 'std::chrono::duration<long> &&' for 1st argument
+/usr/local/bin/../include/c++/v1/__chrono/duration.h:263:9: note: candidate template ignored: requirement '__no_overflow<std::ratio<1, 1000000>, std::ratio<1, 1>>::value && (treat_as_floating_point<long>::value || (__no_overflow<ratio<1, 1000000>, ratio<1, 1>>::ratio<1, 1000000>::den == 1 && !treat_as_floating_point<long long>::value))' was not satisfied [with _Rep2 = long long, _Period2 = std::ratio<1, 1000000>]
+        duration(const duration<_Rep2, _Period2>& __d,
+        ^
+/usr/local/bin/../include/c++/v1/__chrono/duration.h:251:18: note: explicit constructor is not a candidate
+        explicit duration(const _Rep2& __r,
+                 ^
+../include/cctz/time_zone.h:235:42: note: passing argument to parameter 'offset' here
+time_zone fixed_time_zone(const seconds& offset);
+                                         ^
+./fuzz_cctz.cc:16:23: error: no matching function for call to 'convert'
+        cctz::format(format, cctz::convert(cctz::civil_second(
+                             ^~~~~~~~~~~~~
+../include/cctz/time_zone.h:255:28: note: candidate function not viable: cannot convert argument of incomplete type 'cctz::time_zone::Impl' to 'const cctz::time_zone' for 2nd argument
+inline time_point<seconds> convert(const civil_second& cs,
+                           ^
+../include/cctz/time_zone.h:246:21: note: candidate template ignored: could not match 'time_point' against 'civil_time'
+inline civil_second convert(const time_point<D>& tp, const time_zone& tz) {
+                    ^
+2 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

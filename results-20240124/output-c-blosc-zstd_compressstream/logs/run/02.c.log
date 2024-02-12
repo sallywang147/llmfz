@@ -1,0 +1,46 @@
+/workspace/out/libfuzzer-address-x86_64/compress_fuzzer -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/compress_fuzzer < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 2079622089
+INFO: Loaded 1 modules   (19124 inline 8-bit counters): 19124 [0x8ca1a8, 0x8cec5c), 
+INFO: Loaded 1 PC tables (19124 PCs): 19124 [0x829568,0x8740a8), 
+INFO:        0 files found in /workspace/corpus/compress_fuzzer
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: A corpus is not provided, starting from an empty corpus
+#2	INITED cov: 168 ft: 169 corp: 1/1b exec/s: 0 rss: 45Mb
+	NEW_FUNC[1/1]: 0x5739d0 in std::__1::vector<unsigned char, std::__1::allocator<unsigned char> >::shrink_to_fit() /usr/local/bin/../include/c++/v1/vector:1497
+#3	NEW    cov: 175 ft: 176 corp: 2/10b lim: 4096 exec/s: 0 rss: 46Mb L: 9/9 MS: 1 CMP- DE: "\377\377\377\377\377\377\377\377"-
+#9	REDUCE cov: 175 ft: 176 corp: 2/9b lim: 4096 exec/s: 0 rss: 46Mb L: 8/8 MS: 1 EraseBytes-
+#13	REDUCE cov: 182 ft: 183 corp: 3/17b lim: 4096 exec/s: 0 rss: 87Mb L: 8/8 MS: 4 CrossOver-CrossOver-ChangeBit-PersAutoDict- DE: "\377\377\377\377\377\377\377\377"-
+#30	REDUCE cov: 182 ft: 183 corp: 3/13b lim: 4096 exec/s: 30 rss: 87Mb L: 4/8 MS: 2 CopyPart-EraseBytes-
+#52	NEW    cov: 188 ft: 189 corp: 4/14b lim: 4096 exec/s: 52 rss: 87Mb L: 1/8 MS: 2 ChangeBit-ChangeBit-
+#74	NEW    cov: 190 ft: 191 corp: 5/22b lim: 4096 exec/s: 74 rss: 88Mb L: 8/8 MS: 2 ShuffleBytes-ChangeBinInt-
+#94	NEW    cov: 216 ft: 217 corp: 6/23b lim: 4096 exec/s: 47 rss: 131Mb L: 1/8 MS: 5 ShuffleBytes-ChangeBit-ShuffleBytes-ShuffleBytes-ChangeByte-
+#101	REDUCE cov: 218 ft: 219 corp: 7/28b lim: 4096 exec/s: 50 rss: 131Mb L: 5/8 MS: 2 ChangeBit-InsertByte-
+#125	NEW    cov: 221 ft: 222 corp: 8/35b lim: 4096 exec/s: 41 rss: 131Mb L: 7/8 MS: 4 CrossOver-EraseBytes-ChangeBinInt-ShuffleBytes-
+#128	pulse  cov: 221 ft: 243 corp: 8/35b lim: 4096 exec/s: 42 rss: 780Mb
+	NEW_FUNC[1/1]: 0x74e480 in ZSTD_ldm_adjustParameters /src/c-blosc/internal-complibs/zstd-1.5.5/compress/zstd_ldm.c:137
+#128	NEW    cov: 242 ft: 243 corp: 9/36b lim: 4096 exec/s: 42 rss: 780Mb L: 1/8 MS: 3 ChangeByte-CopyPart-ChangeByte-
+#145	REDUCE cov: 242 ft: 243 corp: 9/34b lim: 4096 exec/s: 48 rss: 780Mb L: 6/8 MS: 2 CrossOver-EraseBytes-
+#193	NEW    cov: 244 ft: 245 corp: 10/35b lim: 4096 exec/s: 48 rss: 780Mb L: 1/8 MS: 3 CopyPart-CMP-EraseBytes- DE: "\007\000"-
+#230	REDUCE cov: 244 ft: 245 corp: 10/32b lim: 4096 exec/s: 46 rss: 780Mb L: 5/7 MS: 2 CrossOver-EraseBytes-
+#256	pulse  cov: 244 ft: 245 corp: 10/32b lim: 4096 exec/s: 36 rss: 781Mb
+#351	REDUCE cov: 244 ft: 245 corp: 10/31b lim: 4096 exec/s: 31 rss: 783Mb L: 3/7 MS: 1 EraseBytes-
+#459	REDUCE cov: 244 ft: 245 corp: 10/29b lim: 4096 exec/s: 30 rss: 783Mb L: 3/7 MS: 3 ChangeBinInt-ChangeBit-EraseBytes-
+#473	REDUCE cov: 244 ft: 245 corp: 10/27b lim: 4096 exec/s: 31 rss: 783Mb L: 3/7 MS: 4 ChangeBinInt-ChangeBit-PersAutoDict-EraseBytes- DE: "\007\000"-
+#512	pulse  cov: 244 ft: 245 corp: 10/27b lim: 4096 exec/s: 32 rss: 783Mb
+#630	REDUCE cov: 244 ft: 245 corp: 10/26b lim: 4096 exec/s: 24 rss: 783Mb L: 2/7 MS: 2 ShuffleBytes-EraseBytes-
+#665	REDUCE cov: 244 ft: 245 corp: 10/25b lim: 4096 exec/s: 24 rss: 783Mb L: 6/6 MS: 5 InsertRepeatedBytes-ChangeByte-EraseBytes-ShuffleBytes-EraseBytes-
+#671	REDUCE cov: 244 ft: 245 corp: 10/24b lim: 4096 exec/s: 24 rss: 783Mb L: 5/6 MS: 1 EraseBytes-
+#737	REDUCE cov: 244 ft: 245 corp: 10/23b lim: 4096 exec/s: 26 rss: 783Mb L: 2/6 MS: 1 EraseBytes-
+#758	REDUCE cov: 244 ft: 245 corp: 10/22b lim: 4096 exec/s: 26 rss: 783Mb L: 1/6 MS: 1 EraseBytes-
+#818	DONE   cov: 244 ft: 245 corp: 10/22b lim: 4096 exec/s: 26 rss: 783Mb
+###### Recommended dictionary. ######
+"\377\377\377\377\377\377\377\377" # Uses: 40
+"\007\000" # Uses: 33
+###### End of recommended dictionary. ######
+Done 818 runs in 31 second(s)
+stat::number_of_executed_units: 818
+stat::average_exec_per_sec:     26
+stat::new_units_added:          21
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              783

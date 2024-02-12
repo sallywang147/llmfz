@@ -1,0 +1,1 @@
+error: undefined reference to 'brunsli::BrunsliDecoder::BrunsliDecoderInit(brunsli::BrunsliDecoder*, void*, void*, void*, int, void*, void*)'

@@ -1,0 +1,35 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "FLAC++/seektable.h"
+#include "FLAC++/cuesheet.h"
+#include "FLAC++/picture.h"
+#include "FLAC++/padding.h"
+
+extern "C" {
+#include "FLAC/metadata.h"
+}
+
+bool FLAC__metadata_chain__read(FLAC__Metadata_Chain *chain, char *handle, FLAC__IOCallbacks *callbacks, bool is_ogg) {
+  return FLAC::Metadata::Chain::read(chain, handle, callbacks, is_ogg);
+}
+</code>
+
+The code has the following build issues:
+<error>
+seek.cc:1:10: fatal error: 'FLAC++/seektable.h' file not found
+#include "FLAC++/seektable.h"
+         ^~~~~~~~~~~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,67 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+#include <vector>
+
+#include "h2o.h"
+#include "h2o/http2.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const size_t compressed_certificate_entry_size =
+      stream.ConsumeIntegralInRange<size_t>(0, 1024);
+  struct st_ptls_compressed_certificate_entry_t {
+    uint8_t data[compressed_certificate_entry_size];
+  } compressed_certificate_entry;
+  const size_t output_buffer_size =
+      stream.ConsumeIntegralInRange<size_t>(0, 1024);
+  struct st_h2o_iovec_t output_buffer;
+  output_buffer.base = stream.ConsumeBytes<char>(output_buffer_size).data();
+  output_buffer.len = output_buffer_size;
+  const size_t ocsp_status_size =
+      stream.ConsumeIntegralInRange<size_t>(0, 1024);
+  std::vector<char> ocsp_status(ocsp_status_size);
+  stream.ConsumeBytes<char>(ocsp_status_size).copy(&ocsp_status[0], ocsp_status_size);
+  build_compressed(&compressed_certificate_entry, &output_buffer,
+                   compressed_certificate_entry_size, ocsp_status.data(),
+                   ocsp_status_size);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/h2o/fuzz/driver_h3.cc:17:18: error: reference to local variable 'compressed_certificate_entry_size' declared in enclosing function 'LLVMFuzzerTestOneInput'
+    uint8_t data[compressed_certificate_entry_size];
+                 ^
+/src/h2o/fuzz/driver_h3.cc:14:16: note: 'compressed_certificate_entry_size' declared here
+  const size_t compressed_certificate_entry_size =
+               ^
+/src/h2o/fuzz/driver_h3.cc:17:13: error: fields must have a constant size: 'variable length array in structure' extension will never be supported
+    uint8_t data[compressed_certificate_entry_size];
+            ^
+/src/h2o/fuzz/driver_h3.cc:27:47: error: no member named 'copy' in 'std::vector<char>'
+  stream.ConsumeBytes<char>(ocsp_status_size).copy(&ocsp_status[0], ocsp_status_size);
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
+/src/h2o/fuzz/driver_h3.cc:28:3: error: use of undeclared identifier 'build_compressed'
+  build_compressed(&compressed_certificate_entry, &output_buffer,
+  ^
+4 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

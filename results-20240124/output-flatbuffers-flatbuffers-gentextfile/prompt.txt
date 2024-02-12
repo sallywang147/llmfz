@@ -1,0 +1,604 @@
+<system>
+You are a security testing engineer who wants to write a C++ program to execute all lines in a given function by defining and initializing its parameters in a suitable way before fuzzing the function through <code>LLVMFuzzerTestOneInput</code>.
+
+Carefully study the function signature and its parameters, then follow the example problems and solutions to answer the final problem. YOU MUST call the function to fuzz in the solution.
+
+Try as many variations of these inputs as possible. Do not use a random number generator such as <code>rand()</code>.
+
+Use <code>FuzzedDataProvider</code> to generate these inputs. You MUST declare it in <code>LLVMFuzzerTestOneInput</code>, like this:
+<code>
+FuzzedDataProvider stream(data, size);
+</code>
+
+Include <code>#include <fuzzer/FuzzedDataProvider.h></code> in the solution.
+
+This code shows example of using it:
+<code>
+// Extract integral values
+int int_arg = stream.ConsumeIntegral<int>();
+int int_arg_in_range = stream.ConsumeIntegralInRange(-100, 100);
+bool bool_arg = stream.ConsumeBool();
+
+// Extract floating point values
+float probability = stream.ConsumeProbability();
+double double_arg = stream.ConsumeFloatingPoint<double>();
+double double_arg_in_range = stream.ConsumeFloatingPointInRange(-1.0, 1.0);
+
+// Extract value from predefined set, such as enum or array
+EnumType enum = stream.ConsumeEnum<EnumType>();
+int valid_values = stream.PickValueInArray({FLAG_1, FLAG_2, FLAG_3});
+
+// Extract an array of bytes as a vector. You MUST call <code>.data()</code> to use result as pointer.
+std::vector<uint8_t> bytes = stream.ConsumeBytes<uint8_t>(stream.ConsumeIntegralInRange(0, max_size));
+void *data_ptr = bytes.data();
+std::vector<uint8_t> bytes2 = stream.ConsumeBytes<uint8_t>(requested_size);
+void *data2_ptr = bytes2.data();
+
+// Extract a string. You MUST use <code>.c_str()</code> to use result as pointer
+std::string str = stream.ConsumeBytesAsString(stream.ConsumeIntegralInRange(0, max_size));
+char *ptr = str.c_str();
+std::string str2 = stream.ConsumeBytesAsString(requested_size);
+char *ptr2 = str2.c_str();
+std::string str3 = stream.ConsumeRandomLengthString();
+char *ptr3 = str3.c_str();
+
+// Extract to user defined object
+struct_type_t obj;
+size_t consumed = stream.ConsumeData(&obj, sizeof(obj));
+</code>
+
+There MUST be AT MOST ONE call to <code>ConsumeRemainingBytes</code> to consume remaining input!
+<code>
+FuzzedDataProvider stream(data, size);
+
+std::vector<uint8_t> bytes3 = stream.ConsumeRemainingBytes();
+void *data3_ptr = bytes3.data();
+</code>
+
+All variables used MUST be declared and initialized. Carefully make sure that the variable and argument types in your code match and compiles successfully. Add type casts to make types match.
+
+Do not create new variables with the same names as existing variables.
+WRONG:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  void* data = Foo();
+}
+</code>
+
+EXTREMELY IMPORTANT: If you write code using <code>goto</code>, you MUST MUST also declare all variables BEFORE the <code>goto</code>. Never introduce new variables after the <code>goto</code>.
+WRONG:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int a = bar();
+  if (!some_function()) goto EXIT;
+  Foo b = target_function(data, size);
+  int c = another_func();
+EXIT:
+  return 0;
+}
+</code>
+
+CORRECT:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int a = bar();
+  Foo b;
+  int c;
+
+  if (!some_function()) goto EXIT;
+  b = target_function(data, size);
+  c = another_func()
+EXIT:
+  return 0;
+}
+</code>
+
+If an example provided for the same library includes a unique header file, then it must be included in the solution as well.
+</system>
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+BGD_DECLARE(void) gdImageString (gdImagePtr im, gdFontPtr f, int x, int y, unsigned char *s, int color)
+</function header>
+</task>
+
+<solution>
+
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+#include "gd.h"
+#include "gdfontg.h"
+#include "gdfontl.h"
+#include "gdfontmb.h"
+#include "gdfonts.h"
+#include "gdfontt.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const uint8_t slate_width = stream.ConsumeIntegral<uint8_t>();
+  const uint8_t slate_height = stream.ConsumeIntegral<uint8_t>();
+  gdImagePtr slate_image = gdImageCreateTrueColor(slate_width, slate_height);
+  if (slate_image == nullptr) {
+    return 0;
+  }
+
+  const int x_position = stream.ConsumeIntegral<int>();
+  const int y_position = stream.ConsumeIntegral<int>();
+  const int text_color = stream.ConsumeIntegral<int>();
+  const gdFontPtr font_ptr = stream.PickValueInArray(
+      {gdFontGetGiant(), gdFontGetLarge(), gdFontGetMediumBold(),
+       gdFontGetSmall(), gdFontGetTiny()});
+  const std::string text = stream.ConsumeRemainingBytesAsString();
+
+  gdImageString(slate_image, font_ptr, x_position, y_position,
+                reinterpret_cast<uint8_t*>(const_cast<char*>(text.c_str())),
+                text_color);
+  gdImageDestroy(slate_image);
+  return 0;
+}
+</solution>
+
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+MPG123_EXPORT int mpg123_decode(mpg123_handle *mh, const unsigned char *inmemory, size_t inmemsize, unsigned char *outmemory, size_t outmemsize, size_t *done )
+</function header>
+</task>
+
+<solution>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+#include "mpg123.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  static bool initialized = false;
+  if (!initialized) {
+    mpg123_init();
+    initialized = true;
+  }
+  int ret;
+  mpg123_handle* handle = mpg123_new(nullptr, &ret);
+  if (handle == nullptr) {
+    return 0;
+  }
+
+  ret = mpg123_param(handle, MPG123_ADD_FLAGS, MPG123_QUIET, 0.);
+  if(ret == MPG123_OK)
+    ret = mpg123_open_feed(handle);
+  if (ret != MPG123_OK) {
+    mpg123_delete(handle);
+    return 0;
+  }
+
+  std::vector<uint8_t> output_buffer(mpg123_outblock(handle));
+
+  size_t output_written = 0;
+  // Initially, start by feeding the decoder more data.
+  int decode_ret = MPG123_NEED_MORE;
+  FuzzedDataProvider provider(data, size);
+  while ((decode_ret != MPG123_ERR)) {
+    if (decode_ret == MPG123_NEED_MORE) {
+      if (provider.remaining_bytes() == 0
+          || mpg123_tellframe(handle) > 10000
+          || mpg123_tell_stream(handle) > 1<<20) {
+        break;
+      }
+      const size_t next_size = provider.ConsumeIntegralInRange<size_t>(
+          0,
+          provider.remaining_bytes());
+      auto next_input = provider.ConsumeBytes<unsigned char>(next_size);
+      decode_ret = mpg123_decode(handle, next_input.data(), next_input.size(),
+                                 output_buffer.data(), output_buffer.size(),
+                                 &output_written);
+    } else if (decode_ret != MPG123_ERR && decode_ret != MPG123_NEED_MORE) {
+      decode_ret = mpg123_decode(handle, nullptr, 0, output_buffer.data(),
+                                 output_buffer.size(), &output_written);
+    } else {
+      // Unhandled mpg123_decode return value.
+      abort();
+    }
+  }
+
+  mpg123_delete(handle);
+
+  return 0;
+}
+</solution>
+
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+void flatbuffers::Parser::Parser(flatbuffers::Parser * , struct flatbuffers::IDLOptions * )
+</function header>
+</task>
+
+<solution>
+
+#include <assert.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#include <algorithm>
+#include <clocale>
+#include <memory>
+#include <regex>
+#include <string>
+
+#include "flatbuffers/idl.h"
+#include "test_init.h"
+
+static constexpr size_t kMinInputLength = 1;
+static constexpr size_t kMaxInputLength = 3000;
+
+static constexpr uint8_t flags_scalar_type = 0x0F;  // type of scalar value
+static constexpr uint8_t flags_quotes_kind = 0x10;  // quote " or '
+// reserved for future: json {named} or [unnamed]
+// static constexpr uint8_t flags_json_bracer = 0x20;
+
+// Find all 'subj' sub-strings and replace first character of sub-string.
+// BreakSequence("testest","tes", 'X') -> "XesXest".
+// BreakSequence("xxx","xx", 'Y') -> "YYx".
+static void BreakSequence(std::string &s, const char *subj, char repl) {
+  size_t pos = 0;
+  while (pos = s.find(subj, pos), pos != std::string::npos) {
+    s.at(pos) = repl;
+    pos++;
+  }
+}
+
+// Remove all leading and trailing symbols matched with pattern set.
+// StripString("xy{xy}y", "xy") -> "{xy}"
+static std::string StripString(const std::string &s, const char *pattern,
+                               size_t *pos = nullptr) {
+  if (pos) *pos = 0;
+  // leading
+  auto first = s.find_first_not_of(pattern);
+  if (std::string::npos == first) return "";
+  if (pos) *pos = first;
+  // trailing
+  auto last = s.find_last_not_of(pattern);
+  assert(last < s.length());
+  assert(first <= last);
+  return s.substr(first, last - first + 1);
+}
+
+class RegexMatcher {
+ protected:
+  virtual bool MatchNumber(const std::string &input) const = 0;
+
+ public:
+  virtual ~RegexMatcher() = default;
+
+  struct MatchResult {
+    size_t pos{ 0 };
+    size_t len{ 0 };
+    bool res{ false };
+    bool quoted{ false };
+  };
+
+  MatchResult Match(const std::string &input) const {
+    MatchResult r;
+    // strip leading and trailing "spaces" accepted by flatbuffer
+    auto test = StripString(input, "\t\r\n ", &r.pos);
+    r.len = test.size();
+    // check quotes
+    if (test.size() >= 2) {
+      auto fch = test.front();
+      auto lch = test.back();
+      r.quoted = (fch == lch) && (fch == '\'' || fch == '\"');
+      if (r.quoted) {
+        // remove quotes for regex test
+        test = test.substr(1, test.size() - 2);
+      }
+    }
+    // Fast check:
+    if (test.empty()) return r;
+    // A string with a valid scalar shouldn't have non-ascii or non-printable
+    // symbols.
+    for (auto c : test) {
+      if ((c < ' ') || (c > '~')) return r;
+    }
+    // Check with regex
+    r.res = MatchNumber(test);
+    return r;
+  }
+
+  bool MatchRegexList(const std::string &input,
+                      const std::vector<std::regex> &re_list) const {
+    auto str = StripString(input, " ");
+    if (str.empty()) return false;
+    for (auto &re : re_list) {
+      std::smatch match;
+      if (std::regex_match(str, match, re)) return true;
+    }
+    return false;
+  }
+};
+
+class IntegerRegex : public RegexMatcher {
+ protected:
+  bool MatchNumber(const std::string &input) const override {
+    static const std::vector<std::regex> re_list = {
+      std::regex{ R"(^[-+]?[0-9]+$)", std::regex_constants::optimize },
+
+      std::regex{ R"(^[-+]?0[xX][0-9a-fA-F]+$)",
+                  std::regex_constants::optimize }
+    };
+    return MatchRegexList(input, re_list);
+  }
+
+ public:
+  IntegerRegex() = default;
+  virtual ~IntegerRegex() = default;
+};
+
+class UIntegerRegex : public RegexMatcher {
+ protected:
+  bool MatchNumber(const std::string &input) const override {
+    static const std::vector<std::regex> re_list = {
+      std::regex{ R"(^[+]?[0-9]+$)", std::regex_constants::optimize },
+      std::regex{ R"(^[+]?0[xX][0-9a-fA-F]+$)",
+                  std::regex_constants::optimize },
+      // accept -0 number
+      std::regex{ R"(^[-](?:0[xX])?0+$)", std::regex_constants::optimize }
+    };
+    return MatchRegexList(input, re_list);
+  }
+
+ public:
+  UIntegerRegex() = default;
+  virtual ~UIntegerRegex() = default;
+};
+
+class BooleanRegex : public IntegerRegex {
+ protected:
+  bool MatchNumber(const std::string &input) const override {
+    if (input == "true" || input == "false") return true;
+    return IntegerRegex::MatchNumber(input);
+  }
+
+ public:
+  BooleanRegex() = default;
+  virtual ~BooleanRegex() = default;
+};
+
+class FloatRegex : public RegexMatcher {
+ protected:
+  bool MatchNumber(const std::string &input) const override {
+    static const std::vector<std::regex> re_list = {
+      // hex-float
+      std::regex{
+          R"(^[-+]?0[xX](?:(?:[.][0-9a-fA-F]+)|(?:[0-9a-fA-F]+[.][0-9a-fA-F]*)|(?:[0-9a-fA-F]+))[pP][-+]?[0-9]+$)",
+          std::regex_constants::optimize },
+      // dec-float
+      std::regex{
+          R"(^[-+]?(?:(?:[.][0-9]+)|(?:[0-9]+[.][0-9]*)|(?:[0-9]+))(?:[eE][-+]?[0-9]+)?$)",
+          std::regex_constants::optimize },
+
+      std::regex{ R"(^[-+]?(?:nan|inf|infinity)$)",
+                  std::regex_constants::optimize | std::regex_constants::icase }
+    };
+    return MatchRegexList(input, re_list);
+  }
+
+ public:
+  FloatRegex() = default;
+  virtual ~FloatRegex() = default;
+};
+
+class ScalarReferenceResult {
+ private:
+  ScalarReferenceResult(const char *_type, RegexMatcher::MatchResult _matched)
+      : type(_type), matched(_matched) {}
+
+ public:
+  // Decode scalar type and check if the input string satisfies the scalar type.
+  static ScalarReferenceResult Check(uint8_t code, const std::string &input) {
+    switch (code) {
+      case 0x0: return { "double", FloatRegex().Match(input) };
+      case 0x1: return { "float", FloatRegex().Match(input) };
+      case 0x2: return { "int8", IntegerRegex().Match(input) };
+      case 0x3: return { "int16", IntegerRegex().Match(input) };
+      case 0x4: return { "int32", IntegerRegex().Match(input) };
+      case 0x5: return { "int64", IntegerRegex().Match(input) };
+      case 0x6: return { "uint8", UIntegerRegex().Match(input) };
+      case 0x7: return { "uint16", UIntegerRegex().Match(input) };
+      case 0x8: return { "uint32", UIntegerRegex().Match(input) };
+      case 0x9: return { "uint64", UIntegerRegex().Match(input) };
+      case 0xA: return { "bool", BooleanRegex().Match(input) };
+      default: return { "float", FloatRegex().Match(input) };
+    };
+  }
+
+  const char *type;
+  const RegexMatcher::MatchResult matched;
+};
+
+bool Parse(flatbuffers::Parser &parser, const std::string &json,
+           std::string *_text) {
+  auto done = parser.ParseJson(json.c_str());
+  if (done) {
+    TEST_NULL(GenText(parser, parser.builder_.GetBufferPointer(), _text));
+  } else {
+    *_text = parser.error_;
+  }
+  return done;
+}
+
+// Utility for test run.
+OneTimeTestInit OneTimeTestInit::one_time_init_;
+
+// llvm std::regex have problem with stack overflow, limit maximum length.
+// ./scalar_fuzzer -max_len=3000
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  // Reserve one byte for Parser flags and one byte for repetition counter.
+  if (size < 3) return 0;
+  const uint8_t flags = data[0];
+  // normalize to ascii alphabet
+  const int extra_rep_number =
+      std::max(5, (data[1] > '0' ? (data[1] - '0') : 0));
+  data += 2;
+  size -= 2;  // bypass
+
+  // Guarantee 0-termination.
+  const std::string original(reinterpret_cast<const char *>(data), size);
+  auto input = std::string(original.c_str());  // until '\0'
+  if (input.size() < kMinInputLength || input.size() > kMaxInputLength)
+    return 0;
+
+  // Break comments in json to avoid complexity with regex matcher.
+  // The string " 12345 /* text */" will be accepted if insert it to string
+  // expression: "table X { Y: " + " 12345 /* text */" + "; }.
+  // But strings like this will complicate regex matcher.
+  // We reject this by transform "/* text */ 12345" to "@* text */ 12345".
+  BreakSequence(input, "//", '@');  // "//" -> "@/"
+  BreakSequence(input, "/*", '@');  // "/*" -> "@*"
+  // { "$schema: "text" } is exceptional case.
+  // This key:value ignored by the parser. Numbers can not have $.
+  BreakSequence(input, "$schema", '@');  // "$schema" -> "@schema"
+  // Break all known scalar functions (todo: add them to regex?):
+  for (auto f : { "deg", "rad", "sin", "cos", "tan", "asin", "acos", "atan" }) {
+    BreakSequence(input, f, '_');  // ident -> ident
+  }
+
+  // Extract type of scalar from 'flags' and check if the input string satisfies
+  // the scalar type.
+  const auto ref_res =
+      ScalarReferenceResult::Check(flags & flags_scalar_type, input);
+  auto &recheck = ref_res.matched;
+
+  // Create parser
+  flatbuffers::IDLOptions opts;
+  opts.force_defaults = true;
+  opts.output_default_scalars_in_json = true;
+  opts.indent_step = -1;
+  opts.strict_json = true;
+
+  flatbuffers::Parser parser(opts);
+  auto schema =
+      "table X { Y: " + std::string(ref_res.type) + "; } root_type X;";
+  TEST_EQ_FUNC(parser.Parse(schema.c_str()), true);
+
+  // The fuzzer can adjust the number repetition if a side-effects have found.
+  // Each test should pass at least two times to ensure that the parser doesn't
+  // have any hidden-states or locale-depended effects.
+  for (auto cnt = 0; cnt < (extra_rep_number + 2); cnt++) {
+    // Each even run (0,2,4..) will test locale independed code.
+    auto use_locale = !!OneTimeTestInit::test_locale() && (0 == (cnt % 2));
+    // Set new locale.
+    if (use_locale) {
+      FLATBUFFERS_ASSERT(setlocale(LC_ALL, OneTimeTestInit::test_locale()));
+    }
+
+    // Parse original input as-is.
+    auto orig_scalar = "{\"Y\" : " + input + "}";
+    std::string orig_back;
+    auto orig_done = Parse(parser, orig_scalar, &orig_back);
+
+    if (recheck.res != orig_done) {
+      // look for "does not fit" or "doesn't fit" or "out of range"
+      auto not_fit =
+          (true == recheck.res)
+              ? ((orig_back.find("does not fit") != std::string::npos) ||
+                 (orig_back.find("out of range") != std::string::npos))
+              : false;
+
+      if (false == not_fit) {
+        TEST_OUTPUT_LINE("Stage 1 failed: Parser(%d) != Regex(%d)", orig_done,
+                         recheck.res);
+        TEST_EQ_STR(orig_back.c_str(),
+                    input.substr(recheck.pos, recheck.len).c_str());
+        TEST_EQ_FUNC(orig_done, recheck.res);
+      }
+    }
+
+    // Try to make quoted string and test it.
+    std::string qouted_input;
+    if (true == recheck.quoted) {
+      // we can't simply remove quotes, they may be nested "'12'".
+      // Original string "\'12\'" converted to "'12'".
+      // The string can be an invalid string by JSON rules, but after quotes
+      // removed can transform to valid.
+      assert(recheck.len >= 2);
+    } else {
+      const auto quote = (flags & flags_quotes_kind) ? '\"' : '\'';
+      qouted_input = input;  // copy
+      qouted_input.insert(recheck.pos + recheck.len, 1, quote);
+      qouted_input.insert(recheck.pos, 1, quote);
+    }
+
+    // Test quoted version of the string
+    if (!qouted_input.empty()) {
+      auto fix_scalar = "{\"Y\" : " + qouted_input + "}";
+      std::string fix_back;
+      auto fix_done = Parse(parser, fix_scalar, &fix_back);
+
+      if (orig_done != fix_done) {
+        TEST_OUTPUT_LINE("Stage 2 failed: Parser(%d) != Regex(%d)", fix_done,
+                         orig_done);
+        TEST_EQ_STR(fix_back.c_str(), orig_back.c_str());
+      }
+      if (orig_done) { TEST_EQ_STR(fix_back.c_str(), orig_back.c_str()); }
+      TEST_EQ_FUNC(fix_done, orig_done);
+    }
+
+    // Create new parser and test default value
+    if (true == orig_done) {
+      flatbuffers::Parser def_parser(opts);  // re-use options
+      auto def_schema = "table X { Y: " + std::string(ref_res.type) + " = " +
+                        input + "; } root_type X;" +
+                        "{}";  // <- with empty json {}!
+
+      auto def_done = def_parser.Parse(def_schema.c_str());
+      if (false == def_done) {
+        TEST_OUTPUT_LINE("Stage 3.1 failed with _error = %s",
+                         def_parser.error_.c_str());
+        FLATBUFFERS_ASSERT(false);
+      }
+      // Compare with print.
+      std::string ref_string, def_string;
+      FLATBUFFERS_ASSERT(!GenText(
+          parser, parser.builder_.GetBufferPointer(), &ref_string));
+      FLATBUFFERS_ASSERT(!GenText(
+          def_parser, def_parser.builder_.GetBufferPointer(), &def_string));
+      if (ref_string != def_string) {
+        TEST_OUTPUT_LINE("Stage 3.2 failed: '%s' != '%s'", def_string.c_str(),
+                         ref_string.c_str());
+        FLATBUFFERS_ASSERT(false);
+      }
+    }
+
+    // Restore locale.
+    if (use_locale) { FLATBUFFERS_ASSERT(setlocale(LC_ALL, "C")); }
+  }
+  return 0;
+}
+
+</solution>
+
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+char * flatbuffers::GenTextFile(flatbuffers::Parser * , std::string * , std::string * )
+</function header>
+</task>
+You MUST call <code>
+char * flatbuffers::GenTextFile(flatbuffers::Parser * , std::string * , std::string * )
+</code> in your solution!
+
+<solution>

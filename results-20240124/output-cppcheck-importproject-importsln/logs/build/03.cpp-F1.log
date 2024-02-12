@@ -1,0 +1,17 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ cd /src/cppcheck/oss-fuzz
++ make oss-fuzz-client
+/usr/local/bin/clang++-jcc -std=c++11 -g -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -o oss-fuzz-client -I ../lib -I ../externals/picojson -I ../externals/simplecpp -I ../externals/tinyxml2 -I ../externals main.cpp type2.cpp ../externals/simplecpp/simplecpp.cpp ../externals/tinyxml2/tinyxml2.cpp ../lib/*.cpp -fsanitize=fuzzer
+/usr/bin/ld: /usr/bin/ld: DWARF error: invalid or unhandled FORM value: 0x25
+/tmp/main-0b8006.o: in function `LLVMFuzzerTestOneInput':
+main.cpp:(.text.LLVMFuzzerTestOneInput[LLVMFuzzerTestOneInput]+0x34c): undefined reference to `ImportProject::importSln(ImportProject*, std::__1::basic_istream<char, std::__1::char_traits<char> >*, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >*, std::__1::vector<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >, std::__1::allocator<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > > >*)'
+clang-15: error: linker command failed with exit code 1 (use -v to see invocation)
+make: *** [Makefile:15: oss-fuzz-client] Error 1

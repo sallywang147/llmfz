@@ -1,0 +1,69 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <cstddef>
+#include <cstdint>
+#include <string>
+
+#include "Firestore/core/src/model/patch_mutation.h"
+
+using firebase::firestore::model::PatchMutation;
+using firebase::firestore::model::PatchMutation::Rep;
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  const char* str_ptr = reinterpret_cast<const char*>(data);
+  std::string str{str_ptr, size};
+  Rep rep;
+  rep.field_path_ = ResourcePath::FromString(str);
+
+  std::string out;
+  rep.ToString(&out, &rep);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:8:50: error: using declaration cannot refer to class member
+using firebase::firestore::model::PatchMutation::Rep;
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+/src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:8:7: note: use an alias declaration instead
+using firebase::firestore::model::PatchMutation::Rep;
+      ^
+      Rep = 
+/src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:8:50: error: 'Rep' is a private member of 'firebase::firestore::model::PatchMutation'
+using firebase::firestore::model::PatchMutation::Rep;
+                                                 ^
+/src/firebase-ios-sdk/Firestore/core/src/model/patch_mutation.h:77:9: note: declared private here
+  class Rep : public Mutation::Rep {
+        ^
+/src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:13:3: error: unknown type name 'Rep'
+  Rep rep;
+  ^
+/src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:14:21: error: use of undeclared identifier 'ResourcePath'; did you mean 'firebase::firestore::model::ResourcePath'?
+  rep.field_path_ = ResourcePath::FromString(str);
+                    ^~~~~~~~~~~~
+                    firebase::firestore::model::ResourcePath
+/src/firebase-ios-sdk/Firestore/core/src/model/document_key.h:38:7: note: 'firebase::firestore::model::ResourcePath' declared here
+class ResourcePath;
+      ^
+/src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:14:21: error: incomplete type 'firebase::firestore::model::ResourcePath' named in nested name specifier
+  rep.field_path_ = ResourcePath::FromString(str);
+                    ^~~~~~~~~~~~~~
+/src/firebase-ios-sdk/Firestore/core/src/model/document_key.h:38:7: note: forward declaration of 'firebase::firestore::model::ResourcePath'
+class ResourcePath;
+      ^
+5 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

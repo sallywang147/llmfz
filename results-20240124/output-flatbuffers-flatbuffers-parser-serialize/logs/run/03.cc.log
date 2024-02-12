@@ -1,0 +1,278 @@
+/workspace/out/libfuzzer-address-x86_64/64bit_fuzzer -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/64bit_fuzzer < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 841964955
+INFO: Loaded 1 modules   (26305 inline 8-bit counters): 26305 [0x6b75d0, 0x6bdc91), 
+INFO: Loaded 1 PC tables (26305 PCs): 26305 [0x6bdc98,0x7248a8), 
+INFO:        0 files found in /workspace/corpus/64bit_fuzzer
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: A corpus is not provided, starting from an empty corpus
+#2	INITED cov: 2 ft: 2 corp: 1/1b exec/s: 0 rss: 33Mb
+	NEW_FUNC[1/102]: 0x44eb50 in Parse(flatbuffers::Parser&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >*) /src/flatbuffers/tests/fuzzer/flatbuffers_64bit_fuzzer.cc:202
+	NEW_FUNC[2/102]: 0x44ed00 in void TestEq<bool, bool>(bool, bool, char const*, char const*, int, char const*) /src/flatbuffers/tests/fuzzer/../../tests/test_assert.h:93
+#4	NEW    cov: 903 ft: 904 corp: 2/4b lim: 4096 exec/s: 0 rss: 37Mb L: 3/3 MS: 2 CrossOver-InsertByte-
+#7	NEW    cov: 954 ft: 988 corp: 3/7b lim: 4096 exec/s: 0 rss: 37Mb L: 3/3 MS: 3 InsertByte-ChangeBinInt-InsertByte-
+	NEW_FUNC[1/1]: 0x52f400 in std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::find_first_of(char const*, unsigned long) const /usr/local/bin/../include/c++/v1/string:3593
+#8	NEW    cov: 974 ft: 1011 corp: 4/10b lim: 4096 exec/s: 0 rss: 37Mb L: 3/3 MS: 1 ShuffleBytes-
+#11	NEW    cov: 976 ft: 1013 corp: 5/15b lim: 4096 exec/s: 0 rss: 37Mb L: 5/5 MS: 3 ShuffleBytes-ChangeBit-CMP- DE: "\000\000\000\030"-
+#14	NEW    cov: 984 ft: 1024 corp: 6/21b lim: 4096 exec/s: 0 rss: 37Mb L: 6/6 MS: 3 ChangeBit-CopyPart-CrossOver-
+#17	NEW    cov: 984 ft: 1026 corp: 7/25b lim: 4096 exec/s: 0 rss: 37Mb L: 4/6 MS: 3 ChangeBinInt-ShuffleBytes-EraseBytes-
+#18	NEW    cov: 987 ft: 1030 corp: 8/29b lim: 4096 exec/s: 0 rss: 37Mb L: 4/6 MS: 1 EraseBytes-
+#20	NEW    cov: 992 ft: 1163 corp: 9/33b lim: 4096 exec/s: 0 rss: 38Mb L: 4/6 MS: 2 EraseBytes-CopyPart-
+#21	NEW    cov: 993 ft: 1167 corp: 10/39b lim: 4096 exec/s: 0 rss: 38Mb L: 6/6 MS: 1 CopyPart-
+#25	NEW    cov: 995 ft: 1218 corp: 11/47b lim: 4096 exec/s: 0 rss: 38Mb L: 8/8 MS: 4 CopyPart-InsertByte-ShuffleBytes-ChangeBinInt-
+#26	NEW    cov: 1027 ft: 1346 corp: 12/103b lim: 4096 exec/s: 0 rss: 38Mb L: 56/56 MS: 1 InsertRepeatedBytes-
+#29	NEW    cov: 1027 ft: 1365 corp: 13/172b lim: 4096 exec/s: 0 rss: 38Mb L: 69/69 MS: 3 CMP-EraseBytes-InsertRepeatedBytes- DE: "float"-
+#40	NEW    cov: 1027 ft: 1530 corp: 14/175b lim: 4096 exec/s: 0 rss: 38Mb L: 3/69 MS: 1 ChangeByte-
+#42	NEW    cov: 1028 ft: 1531 corp: 15/232b lim: 4096 exec/s: 0 rss: 39Mb L: 57/69 MS: 2 InsertByte-ChangeBinInt-
+#44	NEW    cov: 1031 ft: 1535 corp: 16/240b lim: 4096 exec/s: 0 rss: 39Mb L: 8/69 MS: 2 CMP-ChangeBit- DE: "\027\000\000\000"-
+	NEW_FUNC[1/1]: 0x56b020 in flatbuffers::CheckedError flatbuffers::(anonymous namespace)::atot<float>(char const*, flatbuffers::Parser&, float*) /src/flatbuffers/src/idl_parser.cpp:114
+#45	NEW    cov: 1063 ft: 1571 corp: 17/243b lim: 4096 exec/s: 0 rss: 39Mb L: 3/69 MS: 1 ChangeBit-
+#46	NEW    cov: 1063 ft: 1669 corp: 18/251b lim: 4096 exec/s: 0 rss: 39Mb L: 8/69 MS: 1 ChangeByte-
+	NEW_FUNC[1/1]: 0x5371b0 in flatbuffers::CheckedError flatbuffers::(anonymous namespace)::atot<unsigned int>(char const*, flatbuffers::Parser&, unsigned int*) /src/flatbuffers/src/idl_parser.cpp:114
+#48	NEW    cov: 1095 ft: 1710 corp: 19/254b lim: 4096 exec/s: 0 rss: 39Mb L: 3/69 MS: 2 InsertByte-CrossOver-
+#53	NEW    cov: 1097 ft: 1717 corp: 20/313b lim: 4096 exec/s: 0 rss: 40Mb L: 59/69 MS: 5 ChangeBinInt-ChangeByte-ChangeBit-CMP-CrossOver- DE: "fle"-
+	NEW_FUNC[1/43]: 0x45f1f0 in std::__1::basic_regex<char, std::__1::regex_traits<char> >::basic_regex(char const*, std::__1::regex_constants::syntax_option_type) /usr/local/bin/../include/c++/v1/regex:2648
+	NEW_FUNC[2/43]: 0x45f340 in std::__1::basic_regex<char, std::__1::regex_traits<char> >::~basic_regex() /usr/local/bin/../include/c++/v1/regex:2590
+#55	NEW    cov: 1392 ft: 2047 corp: 21/317b lim: 4096 exec/s: 0 rss: 40Mb L: 4/69 MS: 1 InsertByte-
+#62	NEW    cov: 1394 ft: 2085 corp: 22/324b lim: 4096 exec/s: 0 rss: 41Mb L: 7/69 MS: 2 ChangeBinInt-CrossOver-
+#63	NEW    cov: 1396 ft: 2094 corp: 23/328b lim: 4096 exec/s: 0 rss: 41Mb L: 4/69 MS: 1 ChangeByte-
+	NEW_FUNC[1/1]: 0x560ec0 in flatbuffers::CheckedError flatbuffers::(anonymous namespace)::atot<signed char>(char const*, flatbuffers::Parser&, signed char*) /src/flatbuffers/src/idl_parser.cpp:114
+#64	NEW    cov: 1419 ft: 2117 corp: 24/331b lim: 4096 exec/s: 0 rss: 41Mb L: 3/69 MS: 1 ChangeBit-
+#66	NEW    cov: 1437 ft: 2174 corp: 25/342b lim: 4096 exec/s: 0 rss: 41Mb L: 11/69 MS: 2 CrossOver-PersAutoDict- DE: "float"-
+#69	NEW    cov: 1437 ft: 2177 corp: 26/375b lim: 4096 exec/s: 0 rss: 41Mb L: 33/69 MS: 3 CMP-ChangeBit-EraseBytes- DE: "\000\000\000\000\000\000\000\002"-
+#70	NEW    cov: 1443 ft: 2201 corp: 27/383b lim: 4096 exec/s: 70 rss: 41Mb L: 8/69 MS: 1 PersAutoDict- DE: "fle"-
+#78	NEW    cov: 1445 ft: 2204 corp: 28/387b lim: 4096 exec/s: 78 rss: 42Mb L: 4/69 MS: 3 ChangeByte-InsertByte-CMP- DE: "\377\377\377\377"-
+	NEW_FUNC[1/12]: 0x45ee70 in FloatRegex::MatchNumber(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&) const /src/flatbuffers/tests/fuzzer/flatbuffers_64bit_fuzzer.cc:151
+	NEW_FUNC[2/12]: 0x460d60 in char const* std::__1::basic_regex<char, std::__1::regex_traits<char> >::__parse_ecma_exp<char const*>(char const*, char const*) /usr/local/bin/../include/c++/v1/regex:4236
+#80	NEW    cov: 1534 ft: 2544 corp: 29/393b lim: 4096 exec/s: 80 rss: 42Mb L: 6/69 MS: 1 InsertByte-
+#83	NEW    cov: 1534 ft: 2546 corp: 30/470b lim: 4096 exec/s: 83 rss: 43Mb L: 77/77 MS: 3 CrossOver-ChangeBinInt-CMP- DE: "vector64"-
+	NEW_FUNC[1/1]: 0x5759f0 in flatbuffers::Parser::ParseEnumFromString(flatbuffers::Type const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >*) /src/flatbuffers/src/idl_parser.cpp:1942
+#84	NEW    cov: 1550 ft: 2565 corp: 31/478b lim: 4096 exec/s: 84 rss: 43Mb L: 8/77 MS: 1 PersAutoDict- DE: "float"-
+#86	NEW    cov: 1550 ft: 2676 corp: 32/481b lim: 4096 exec/s: 86 rss: 43Mb L: 3/77 MS: 2 InsertByte-InsertByte-
+	NEW_FUNC[1/1]: 0x494350 in UIntegerRegex::MatchNumber(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&) const /src/flatbuffers/tests/fuzzer/flatbuffers_64bit_fuzzer.cc:121
+#94	NEW    cov: 1557 ft: 2730 corp: 33/487b lim: 4096 exec/s: 94 rss: 44Mb L: 6/77 MS: 2 CMP-PersAutoDict- DE: "\377\003"-"float"-
+#98	NEW    cov: 1557 ft: 2738 corp: 34/501b lim: 4096 exec/s: 98 rss: 44Mb L: 14/77 MS: 4 CMP-EraseBytes-ChangeBit-InsertByte- DE: "\003\000\000\000\000\000\000\000"-
+#100	NEW    cov: 1557 ft: 2743 corp: 35/506b lim: 4096 exec/s: 100 rss: 44Mb L: 5/77 MS: 2 CopyPart-InsertByte-
+#106	NEW    cov: 1559 ft: 2746 corp: 36/510b lim: 4096 exec/s: 106 rss: 44Mb L: 4/77 MS: 1 InsertByte-
+#107	NEW    cov: 1559 ft: 2779 corp: 37/514b lim: 4096 exec/s: 107 rss: 45Mb L: 4/77 MS: 1 InsertByte-
+#112	NEW    cov: 1559 ft: 2781 corp: 38/560b lim: 4096 exec/s: 112 rss: 45Mb L: 46/77 MS: 5 CrossOver-InsertRepeatedBytes-InsertByte-EraseBytes-ChangeByte-
+#113	NEW    cov: 1560 ft: 2784 corp: 39/566b lim: 4096 exec/s: 113 rss: 45Mb L: 6/77 MS: 1 ChangeBit-
+#116	NEW    cov: 1560 ft: 2796 corp: 40/698b lim: 4096 exec/s: 116 rss: 45Mb L: 132/132 MS: 3 CMP-ChangeBinInt-InsertRepeatedBytes- DE: "\001\000\000\030"-
+#117	NEW    cov: 1560 ft: 2797 corp: 41/705b lim: 4096 exec/s: 117 rss: 45Mb L: 7/132 MS: 1 PersAutoDict- DE: "fle"-
+#121	NEW    cov: 1566 ft: 2803 corp: 42/708b lim: 4096 exec/s: 121 rss: 45Mb L: 3/132 MS: 4 ChangeByte-CopyPart-InsertByte-EraseBytes-
+#122	NEW    cov: 1566 ft: 2809 corp: 43/711b lim: 4096 exec/s: 122 rss: 45Mb L: 3/132 MS: 1 ChangeBinInt-
+#123	NEW    cov: 1566 ft: 2844 corp: 44/716b lim: 4096 exec/s: 123 rss: 45Mb L: 5/132 MS: 1 ChangeBinInt-
+#124	NEW    cov: 1567 ft: 2845 corp: 45/719b lim: 4096 exec/s: 124 rss: 45Mb L: 3/132 MS: 1 ChangeByte-
+#126	NEW    cov: 1567 ft: 2846 corp: 46/722b lim: 4096 exec/s: 126 rss: 45Mb L: 3/132 MS: 2 EraseBytes-InsertByte-
+#127	NEW    cov: 1569 ft: 2891 corp: 47/728b lim: 4096 exec/s: 127 rss: 46Mb L: 6/132 MS: 1 CopyPart-
+#128	NEW    cov: 1569 ft: 2896 corp: 48/784b lim: 4096 exec/s: 128 rss: 46Mb L: 56/132 MS: 1 PersAutoDict- DE: "\377\003"-
+#149	NEW    cov: 1570 ft: 2897 corp: 49/788b lim: 4096 exec/s: 149 rss: 46Mb L: 4/132 MS: 1 InsertByte-
+#154	NEW    cov: 1570 ft: 2898 corp: 50/859b lim: 4096 exec/s: 154 rss: 46Mb L: 71/132 MS: 5 ChangeBit-CrossOver-CopyPart-CopyPart-CrossOver-
+#164	NEW    cov: 1570 ft: 2909 corp: 51/863b lim: 4096 exec/s: 164 rss: 48Mb L: 4/132 MS: 5 PersAutoDict-CopyPart-EraseBytes-InsertByte-InsertByte- DE: "\001\000\000\030"-
+#165	NEW    cov: 1570 ft: 2911 corp: 52/871b lim: 4096 exec/s: 165 rss: 48Mb L: 8/132 MS: 1 ShuffleBytes-
+#166	NEW    cov: 1571 ft: 2915 corp: 53/895b lim: 4096 exec/s: 166 rss: 48Mb L: 24/132 MS: 1 InsertRepeatedBytes-
+#169	NEW    cov: 1572 ft: 2930 corp: 54/899b lim: 4096 exec/s: 169 rss: 48Mb L: 4/132 MS: 3 ChangeBit-ChangeBit-InsertByte-
+#171	NEW    cov: 1573 ft: 3018 corp: 55/903b lim: 4096 exec/s: 171 rss: 48Mb L: 4/132 MS: 2 ChangeBit-ChangeBinInt-
+#176	NEW    cov: 1573 ft: 3021 corp: 56/909b lim: 4096 exec/s: 176 rss: 48Mb L: 6/132 MS: 5 EraseBytes-CopyPart-CrossOver-PersAutoDict-EraseBytes- DE: "\377\003"-
+#183	NEW    cov: 1581 ft: 3033 corp: 57/1027b lim: 4096 exec/s: 183 rss: 48Mb L: 118/132 MS: 2 CrossOver-InsertRepeatedBytes-
+#186	NEW    cov: 1599 ft: 3055 corp: 58/1032b lim: 4096 exec/s: 186 rss: 49Mb L: 5/132 MS: 3 CopyPart-ChangeBit-PersAutoDict- DE: "\377\003"-
+#191	NEW    cov: 1602 ft: 3058 corp: 59/1038b lim: 4096 exec/s: 191 rss: 49Mb L: 6/132 MS: 5 ChangeBinInt-CrossOver-EraseBytes-ChangeBit-ChangeByte-
+#192	NEW    cov: 1602 ft: 3126 corp: 60/1041b lim: 4096 exec/s: 192 rss: 49Mb L: 3/132 MS: 1 EraseBytes-
+#218	NEW    cov: 1602 ft: 3127 corp: 61/1063b lim: 4096 exec/s: 218 rss: 50Mb L: 22/132 MS: 1 CrossOver-
+#234	NEW    cov: 1602 ft: 3129 corp: 62/1083b lim: 4096 exec/s: 234 rss: 50Mb L: 20/132 MS: 1 CMP- DE: "cpp_ptr_type"-
+#239	NEW    cov: 1602 ft: 3130 corp: 63/1209b lim: 4096 exec/s: 239 rss: 51Mb L: 126/132 MS: 5 PersAutoDict-InsertByte-ShuffleBytes-InsertRepeatedBytes-CopyPart- DE: "vector64"-
+#242	NEW    cov: 1602 ft: 3132 corp: 64/1309b lim: 4096 exec/s: 242 rss: 51Mb L: 100/132 MS: 3 EraseBytes-ChangeByte-InsertRepeatedBytes-
+#243	REDUCE cov: 1602 ft: 3132 corp: 64/1308b lim: 4096 exec/s: 243 rss: 51Mb L: 3/132 MS: 1 EraseBytes-
+#245	NEW    cov: 1602 ft: 3134 corp: 65/1368b lim: 4096 exec/s: 245 rss: 51Mb L: 60/132 MS: 2 CopyPart-InsertRepeatedBytes-
+#250	NEW    cov: 1602 ft: 3135 corp: 66/1390b lim: 4096 exec/s: 250 rss: 52Mb L: 22/132 MS: 5 ChangeBit-CrossOver-CopyPart-CopyPart-CMP- DE: "(\000\000\000"-
+	NEW_FUNC[1/2]: 0x569470 in flatbuffers::CheckedError flatbuffers::(anonymous namespace)::atot<unsigned long>(char const*, flatbuffers::Parser&, unsigned long*) /src/flatbuffers/src/idl_parser.cpp:114
+	NEW_FUNC[2/2]: 0x5d6650 in bool flatbuffers::StringToIntegerImpl<unsigned long>(unsigned long*, char const*, int, bool) /src/flatbuffers/tests/fuzzer/../../include/flatbuffers/util.h:285
+#252	NEW    cov: 1625 ft: 3159 corp: 67/1398b lim: 4096 exec/s: 252 rss: 52Mb L: 8/132 MS: 2 InsertByte-PersAutoDict- DE: "(\000\000\000"-
+#255	NEW    cov: 1625 ft: 3186 corp: 68/1403b lim: 4096 exec/s: 255 rss: 52Mb L: 5/132 MS: 3 CrossOver-EraseBytes-ChangeByte-
+#257	NEW    cov: 1625 ft: 3187 corp: 69/1407b lim: 4096 exec/s: 257 rss: 52Mb L: 4/132 MS: 2 InsertByte-CopyPart-
+#258	NEW    cov: 1625 ft: 3199 corp: 70/1413b lim: 4096 exec/s: 258 rss: 52Mb L: 6/132 MS: 1 EraseBytes-
+	NEW_FUNC[1/1]: 0x509bf0 in flatbuffers::Parser::Error(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&) /src/flatbuffers/src/idl_parser.cpp:394
+#261	NEW    cov: 1629 ft: 3209 corp: 71/1420b lim: 4096 exec/s: 261 rss: 52Mb L: 7/132 MS: 3 ChangeBit-ChangeByte-ShuffleBytes-
+#264	NEW    cov: 1629 ft: 3211 corp: 72/1562b lim: 4096 exec/s: 264 rss: 53Mb L: 142/142 MS: 3 InsertRepeatedBytes-ChangeBinInt-InsertRepeatedBytes-
+#281	NEW    cov: 1629 ft: 3249 corp: 73/1566b lim: 4096 exec/s: 281 rss: 53Mb L: 4/142 MS: 2 ChangeBit-EraseBytes-
+	NEW_FUNC[1/2]: 0x567a60 in flatbuffers::CheckedError flatbuffers::(anonymous namespace)::atot<long>(char const*, flatbuffers::Parser&, long*) /src/flatbuffers/src/idl_parser.cpp:114
+	NEW_FUNC[2/2]: 0x5d9cf0 in bool flatbuffers::StringToIntegerImpl<long>(long*, char const*, int, bool) /src/flatbuffers/tests/fuzzer/../../include/flatbuffers/util.h:285
+#282	NEW    cov: 1655 ft: 3275 corp: 74/1570b lim: 4096 exec/s: 282 rss: 53Mb L: 4/142 MS: 1 ChangeByte-
+#285	NEW    cov: 1655 ft: 3276 corp: 75/1638b lim: 4096 exec/s: 285 rss: 53Mb L: 68/142 MS: 3 CMP-InsertRepeatedBytes-EraseBytes- DE: "cpp_ptr_type"-
+#302	NEW    cov: 1655 ft: 3277 corp: 76/1645b lim: 4096 exec/s: 302 rss: 54Mb L: 7/142 MS: 2 ChangeBit-CrossOver-
+#303	NEW    cov: 1655 ft: 3278 corp: 77/1650b lim: 4096 exec/s: 303 rss: 54Mb L: 5/142 MS: 1 ChangeBit-
+#306	NEW    cov: 1655 ft: 3279 corp: 78/1656b lim: 4096 exec/s: 306 rss: 54Mb L: 6/142 MS: 3 CrossOver-ChangeBinInt-EraseBytes-
+#317	NEW    cov: 1656 ft: 3284 corp: 79/1660b lim: 4096 exec/s: 317 rss: 54Mb L: 4/142 MS: 1 InsertByte-
+#319	NEW    cov: 1656 ft: 3285 corp: 80/1736b lim: 4096 exec/s: 319 rss: 54Mb L: 76/142 MS: 2 PersAutoDict-EraseBytes- DE: "vector64"-
+#326	NEW    cov: 1656 ft: 3288 corp: 81/1879b lim: 4096 exec/s: 326 rss: 55Mb L: 143/143 MS: 2 InsertByte-PersAutoDict- DE: "\001\000\000\030"-
+#327	NEW    cov: 1659 ft: 3293 corp: 82/1884b lim: 4096 exec/s: 327 rss: 55Mb L: 5/143 MS: 1 CopyPart-
+#328	NEW    cov: 1659 ft: 3297 corp: 83/1889b lim: 4096 exec/s: 328 rss: 55Mb L: 5/143 MS: 1 ChangeBinInt-
+#329	NEW    cov: 1659 ft: 3420 corp: 84/1894b lim: 4096 exec/s: 329 rss: 55Mb L: 5/143 MS: 1 ChangeByte-
+#339	NEW    cov: 1659 ft: 3422 corp: 85/1915b lim: 4096 exec/s: 339 rss: 55Mb L: 21/143 MS: 5 ChangeBinInt-ChangeBinInt-ChangeBit-ChangeBit-InsertRepeatedBytes-
+	NEW_FUNC[1/2]: 0x529ab0 in std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > std::__1::operator+<char, std::__1::char_traits<char>, std::__1::allocator<char> >(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >&&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&) /usr/local/bin/../include/c++/v1/string:4217
+	NEW_FUNC[2/2]: 0x57ae60 in flatbuffers::TypeName(flatbuffers::BaseType) /src/flatbuffers/tests/fuzzer/../../include/flatbuffers/idl.h:163
+#351	NEW    cov: 1680 ft: 3445 corp: 86/1919b lim: 4096 exec/s: 351 rss: 56Mb L: 4/143 MS: 2 ChangeBinInt-InsertByte-
+	NEW_FUNC[1/1]: 0x565680 in flatbuffers::CheckedError flatbuffers::(anonymous namespace)::atot<int>(char const*, flatbuffers::Parser&, int*) /src/flatbuffers/src/idl_parser.cpp:114
+#357	NEW    cov: 1700 ft: 3468 corp: 87/1922b lim: 4096 exec/s: 357 rss: 56Mb L: 3/143 MS: 1 ShuffleBytes-
+#366	NEW    cov: 1700 ft: 3469 corp: 88/1938b lim: 4096 exec/s: 366 rss: 56Mb L: 16/143 MS: 4 PersAutoDict-ChangeBinInt-CMP-ChangeBinInt- DE: "float"-"\011\000\000\000\000\000\000\000"-
+#375	REDUCE cov: 1700 ft: 3469 corp: 88/1937b lim: 4096 exec/s: 375 rss: 56Mb L: 4/143 MS: 4 ChangeBit-ChangeBinInt-ChangeByte-EraseBytes-
+#379	REDUCE cov: 1700 ft: 3469 corp: 88/1891b lim: 4096 exec/s: 379 rss: 57Mb L: 54/143 MS: 4 InsertByte-ChangeBinInt-CMP-EraseBytes- DE: "id"-
+#381	NEW    cov: 1700 ft: 3471 corp: 89/1895b lim: 4096 exec/s: 381 rss: 57Mb L: 4/143 MS: 2 ChangeBit-ChangeBit-
+#384	NEW    cov: 1700 ft: 3473 corp: 90/1915b lim: 4096 exec/s: 384 rss: 57Mb L: 20/143 MS: 3 ChangeByte-ChangeBinInt-InsertRepeatedBytes-
+#387	NEW    cov: 1700 ft: 3475 corp: 91/1927b lim: 4096 exec/s: 387 rss: 57Mb L: 12/143 MS: 3 EraseBytes-CopyPart-CrossOver-
+#399	NEW    cov: 1700 ft: 3493 corp: 92/1930b lim: 4096 exec/s: 399 rss: 57Mb L: 3/143 MS: 2 CopyPart-CopyPart-
+#420	NEW    cov: 1702 ft: 3500 corp: 93/1934b lim: 4096 exec/s: 420 rss: 57Mb L: 4/143 MS: 1 CrossOver-
+#431	NEW    cov: 1702 ft: 3501 corp: 94/1938b lim: 4096 exec/s: 431 rss: 57Mb L: 4/143 MS: 1 ShuffleBytes-
+#442	NEW    cov: 1702 ft: 3502 corp: 95/1945b lim: 4096 exec/s: 442 rss: 58Mb L: 7/143 MS: 1 PersAutoDict- DE: "fle"-
+#445	NEW    cov: 1702 ft: 3504 corp: 96/1953b lim: 4096 exec/s: 445 rss: 58Mb L: 8/143 MS: 3 ChangeBit-CrossOver-ShuffleBytes-
+#446	NEW    cov: 1702 ft: 3506 corp: 97/1967b lim: 4096 exec/s: 446 rss: 58Mb L: 14/143 MS: 1 CopyPart-
+#447	REDUCE cov: 1702 ft: 3506 corp: 97/1963b lim: 4096 exec/s: 447 rss: 58Mb L: 4/143 MS: 1 EraseBytes-
+#458	NEW    cov: 1702 ft: 3508 corp: 98/2033b lim: 4096 exec/s: 458 rss: 58Mb L: 70/143 MS: 1 PersAutoDict- DE: "\377\003"-
+#460	NEW    cov: 1702 ft: 3509 corp: 99/2036b lim: 4096 exec/s: 460 rss: 58Mb L: 3/143 MS: 2 EraseBytes-InsertByte-
+	NEW_FUNC[1/3]: 0x466250 in std::__1::__r_anchor_multiline<char>::__exec(std::__1::__state<char>&) const /usr/local/bin/../include/c++/v1/regex:2111
+	NEW_FUNC[2/3]: 0x484dd0 in std::__1::__repeat_one_loop<char>::__exec(std::__1::__state<char>&) const /usr/local/bin/../include/c++/v1/regex:1573
+#462	NEW    cov: 1717 ft: 3578 corp: 100/2045b lim: 4096 exec/s: 462 rss: 58Mb L: 9/143 MS: 2 CMP-CrossOver- DE: "\001\000\000\000"-
+#470	NEW    cov: 1718 ft: 3579 corp: 101/2054b lim: 4096 exec/s: 470 rss: 58Mb L: 9/143 MS: 3 CMP-ChangeBinInt-CopyPart- DE: "\001\001"-
+#482	NEW    cov: 1718 ft: 3580 corp: 102/2067b lim: 4096 exec/s: 482 rss: 58Mb L: 13/143 MS: 2 ShuffleBytes-PersAutoDict- DE: "\001\000\000\000"-
+#483	NEW    cov: 1721 ft: 3601 corp: 103/2198b lim: 4096 exec/s: 483 rss: 58Mb L: 131/143 MS: 1 InsertRepeatedBytes-
+#492	NEW    cov: 1721 ft: 3602 corp: 104/2204b lim: 4096 exec/s: 492 rss: 58Mb L: 6/143 MS: 4 ShuffleBytes-CopyPart-ShuffleBytes-InsertByte-
+#495	NEW    cov: 1721 ft: 3672 corp: 105/2231b lim: 4096 exec/s: 495 rss: 58Mb L: 27/143 MS: 3 CMP-InsertRepeatedBytes-CrossOver- DE: "\000\000\000\012"-
+#496	NEW    cov: 1721 ft: 3674 corp: 106/2237b lim: 4096 exec/s: 496 rss: 58Mb L: 6/143 MS: 1 ChangeBinInt-
+#498	NEW    cov: 1722 ft: 3675 corp: 107/2249b lim: 4096 exec/s: 498 rss: 58Mb L: 12/143 MS: 2 ShuffleBytes-CopyPart-
+#499	NEW    cov: 1722 ft: 3676 corp: 108/2258b lim: 4096 exec/s: 499 rss: 58Mb L: 9/143 MS: 1 ChangeBinInt-
+#507	NEW    cov: 1726 ft: 3680 corp: 109/2269b lim: 4096 exec/s: 507 rss: 58Mb L: 11/143 MS: 3 EraseBytes-InsertRepeatedBytes-ChangeBit-
+#508	NEW    cov: 1726 ft: 3681 corp: 110/2279b lim: 4096 exec/s: 508 rss: 58Mb L: 10/143 MS: 1 PersAutoDict- DE: "\001\000\000\000"-
+#514	REDUCE cov: 1726 ft: 3681 corp: 110/2278b lim: 4096 exec/s: 514 rss: 58Mb L: 131/143 MS: 1 EraseBytes-
+#531	NEW    cov: 1726 ft: 3695 corp: 111/2286b lim: 4096 exec/s: 531 rss: 58Mb L: 8/143 MS: 2 ChangeBinInt-ChangeBinInt-
+#534	NEW    cov: 1726 ft: 3696 corp: 112/2302b lim: 4096 exec/s: 534 rss: 58Mb L: 16/143 MS: 3 CMP-CMP-CrossOver- DE: "id"-"\000\000\000\032"-
+#541	NEW    cov: 1726 ft: 3697 corp: 113/2310b lim: 4096 exec/s: 541 rss: 58Mb L: 8/143 MS: 2 InsertByte-PersAutoDict- DE: "id"-
+#547	NEW    cov: 1726 ft: 3698 corp: 114/2345b lim: 4096 exec/s: 547 rss: 58Mb L: 35/143 MS: 1 CMP- DE: "\000\000\000\000\000\000\000\000"-
+#548	NEW    cov: 1733 ft: 3709 corp: 115/2352b lim: 4096 exec/s: 548 rss: 58Mb L: 7/143 MS: 1 InsertByte-
+#553	NEW    cov: 1733 ft: 3711 corp: 116/2415b lim: 4096 exec/s: 553 rss: 58Mb L: 63/143 MS: 5 InsertByte-CopyPart-ChangeBinInt-CMP-InsertRepeatedBytes- DE: "key"-
+#574	NEW    cov: 1735 ft: 3714 corp: 117/2461b lim: 4096 exec/s: 574 rss: 59Mb L: 46/143 MS: 1 InsertRepeatedBytes-
+#586	NEW    cov: 1735 ft: 3715 corp: 118/2469b lim: 4096 exec/s: 586 rss: 59Mb L: 8/143 MS: 2 CrossOver-InsertByte-
+#592	NEW    cov: 1736 ft: 3717 corp: 119/2476b lim: 4096 exec/s: 592 rss: 59Mb L: 7/143 MS: 1 ChangeBinInt-
+#593	NEW    cov: 1736 ft: 3719 corp: 120/2570b lim: 4096 exec/s: 593 rss: 59Mb L: 94/143 MS: 1 InsertRepeatedBytes-
+#594	NEW    cov: 1736 ft: 3720 corp: 121/2582b lim: 4096 exec/s: 594 rss: 59Mb L: 12/143 MS: 1 CMP- DE: "native_t"-
+#600	NEW    cov: 1743 ft: 3727 corp: 122/2589b lim: 4096 exec/s: 600 rss: 59Mb L: 7/143 MS: 1 ChangeBinInt-
+#601	NEW    cov: 1743 ft: 3776 corp: 123/2593b lim: 4096 exec/s: 601 rss: 59Mb L: 4/143 MS: 1 InsertByte-
+#602	NEW    cov: 1743 ft: 3783 corp: 124/2607b lim: 4096 exec/s: 602 rss: 59Mb L: 14/143 MS: 1 PersAutoDict- DE: "vector64"-
+#611	REDUCE cov: 1743 ft: 3783 corp: 124/2598b lim: 4096 exec/s: 611 rss: 59Mb L: 13/143 MS: 4 ChangeBit-ChangeByte-PersAutoDict-EraseBytes- DE: "\000\000\000\032"-
+#634	NEW    cov: 1744 ft: 3784 corp: 125/2605b lim: 4096 exec/s: 634 rss: 59Mb L: 7/143 MS: 3 EraseBytes-ChangeBinInt-PersAutoDict- DE: "float"-
+#641	REDUCE cov: 1744 ft: 3785 corp: 126/2609b lim: 4096 exec/s: 641 rss: 59Mb L: 4/143 MS: 2 InsertByte-ChangeBinInt-
+#643	REDUCE cov: 1744 ft: 3785 corp: 126/2598b lim: 4096 exec/s: 643 rss: 59Mb L: 59/143 MS: 2 ShuffleBytes-EraseBytes-
+#644	NEW    cov: 1744 ft: 3786 corp: 127/2607b lim: 4096 exec/s: 644 rss: 59Mb L: 9/143 MS: 1 ChangeByte-
+#650	REDUCE cov: 1744 ft: 3786 corp: 127/2605b lim: 4096 exec/s: 650 rss: 59Mb L: 3/143 MS: 1 EraseBytes-
+#677	NEW    cov: 1744 ft: 3788 corp: 128/2707b lim: 4096 exec/s: 677 rss: 59Mb L: 102/143 MS: 2 EraseBytes-InsertRepeatedBytes-
+#688	NEW    cov: 1744 ft: 3789 corp: 129/2723b lim: 4096 exec/s: 688 rss: 59Mb L: 16/143 MS: 1 CrossOver-
+#701	NEW    cov: 1744 ft: 3790 corp: 130/2758b lim: 4096 exec/s: 701 rss: 59Mb L: 35/143 MS: 3 ChangeBinInt-ShuffleBytes-InsertRepeatedBytes-
+#707	NEW    cov: 1744 ft: 3791 corp: 131/2818b lim: 4096 exec/s: 707 rss: 59Mb L: 60/143 MS: 1 CrossOver-
+#728	NEW    cov: 1744 ft: 3810 corp: 132/2821b lim: 4096 exec/s: 728 rss: 59Mb L: 3/143 MS: 1 CopyPart-
+#744	NEW    cov: 1744 ft: 3812 corp: 133/2849b lim: 4096 exec/s: 744 rss: 59Mb L: 28/143 MS: 1 InsertByte-
+#747	NEW    cov: 1744 ft: 3814 corp: 134/2863b lim: 4096 exec/s: 747 rss: 59Mb L: 14/143 MS: 3 ShuffleBytes-EraseBytes-CMP- DE: "vector64"-
+#759	NEW    cov: 1744 ft: 3816 corp: 135/2869b lim: 4096 exec/s: 759 rss: 59Mb L: 6/143 MS: 2 ChangeByte-InsertByte-
+#768	NEW    cov: 1744 ft: 3831 corp: 136/2877b lim: 4096 exec/s: 768 rss: 59Mb L: 8/143 MS: 4 InsertByte-ShuffleBytes-ChangeBit-ShuffleBytes-
+#770	REDUCE cov: 1744 ft: 3831 corp: 136/2874b lim: 4096 exec/s: 770 rss: 59Mb L: 3/143 MS: 2 ChangeBinInt-EraseBytes-
+	NEW_FUNC[1/1]: 0x563340 in flatbuffers::CheckedError flatbuffers::(anonymous namespace)::atot<short>(char const*, flatbuffers::Parser&, short*) /src/flatbuffers/src/idl_parser.cpp:114
+#779	REDUCE cov: 1764 ft: 3851 corp: 137/2877b lim: 4096 exec/s: 779 rss: 59Mb L: 3/143 MS: 4 EraseBytes-CopyPart-CrossOver-InsertByte-
+#796	REDUCE cov: 1764 ft: 3851 corp: 137/2869b lim: 4096 exec/s: 796 rss: 59Mb L: 68/143 MS: 2 ChangeByte-EraseBytes-
+#797	REDUCE cov: 1764 ft: 3851 corp: 137/2845b lim: 4096 exec/s: 797 rss: 59Mb L: 70/143 MS: 1 EraseBytes-
+#819	REDUCE cov: 1764 ft: 3851 corp: 137/2843b lim: 4096 exec/s: 819 rss: 60Mb L: 8/143 MS: 2 ChangeBit-EraseBytes-
+#825	NEW    cov: 1764 ft: 3853 corp: 138/2846b lim: 4096 exec/s: 825 rss: 60Mb L: 3/143 MS: 1 EraseBytes-
+#833	NEW    cov: 1764 ft: 3854 corp: 139/2853b lim: 4096 exec/s: 833 rss: 60Mb L: 7/143 MS: 3 ChangeBinInt-ChangeByte-EraseBytes-
+#849	NEW    cov: 1764 ft: 3874 corp: 140/2858b lim: 4096 exec/s: 849 rss: 60Mb L: 5/143 MS: 1 ChangeBit-
+#861	REDUCE cov: 1764 ft: 3874 corp: 140/2834b lim: 4096 exec/s: 861 rss: 60Mb L: 35/143 MS: 2 ShuffleBytes-EraseBytes-
+#872	NEW    cov: 1764 ft: 3877 corp: 141/2846b lim: 4096 exec/s: 872 rss: 60Mb L: 12/143 MS: 1 ChangeBit-
+#878	REDUCE cov: 1764 ft: 3879 corp: 142/2856b lim: 4096 exec/s: 878 rss: 60Mb L: 10/143 MS: 1 PersAutoDict- DE: "id"-
+#888	NEW    cov: 1764 ft: 3880 corp: 143/2860b lim: 4096 exec/s: 888 rss: 60Mb L: 4/143 MS: 5 ChangeBinInt-CopyPart-EraseBytes-ShuffleBytes-PersAutoDict- DE: "\377\003"-
+#903	NEW    cov: 1764 ft: 3894 corp: 144/2886b lim: 4096 exec/s: 903 rss: 60Mb L: 26/143 MS: 5 ChangeByte-ShuffleBytes-ChangeBit-CMP-CopyPart- DE: "key"-
+#905	NEW    cov: 1764 ft: 3895 corp: 145/2899b lim: 4096 exec/s: 905 rss: 60Mb L: 13/143 MS: 2 InsertByte-ChangeBinInt-
+#922	NEW    cov: 1765 ft: 3896 corp: 146/2903b lim: 4096 exec/s: 922 rss: 60Mb L: 4/143 MS: 2 ShuffleBytes-ChangeByte-
+#924	NEW    cov: 1779 ft: 3919 corp: 147/2984b lim: 4096 exec/s: 924 rss: 60Mb L: 81/143 MS: 2 CMP-InsertRepeatedBytes- DE: "\011\000\000\000"-
+#935	NEW    cov: 1779 ft: 3921 corp: 148/2991b lim: 4096 exec/s: 935 rss: 60Mb L: 7/143 MS: 1 EraseBytes-
+#947	NEW    cov: 1779 ft: 3922 corp: 149/2994b lim: 4096 exec/s: 947 rss: 60Mb L: 3/143 MS: 2 PersAutoDict-ShuffleBytes- DE: "key"-
+#949	NEW    cov: 1779 ft: 3923 corp: 150/2998b lim: 4096 exec/s: 949 rss: 60Mb L: 4/143 MS: 2 InsertByte-ShuffleBytes-
+#955	NEW    cov: 1779 ft: 3925 corp: 151/3003b lim: 4096 exec/s: 477 rss: 60Mb L: 5/143 MS: 1 ChangeBinInt-
+#979	NEW    cov: 1779 ft: 3928 corp: 152/3018b lim: 4096 exec/s: 489 rss: 61Mb L: 15/143 MS: 4 ChangeBit-EraseBytes-CopyPart-CopyPart-
+#987	NEW    cov: 1779 ft: 3935 corp: 153/3021b lim: 4096 exec/s: 493 rss: 61Mb L: 3/143 MS: 3 CrossOver-EraseBytes-InsertByte-
+#988	NEW    cov: 1779 ft: 3944 corp: 154/3069b lim: 4096 exec/s: 494 rss: 61Mb L: 48/143 MS: 1 InsertRepeatedBytes-
+#992	NEW    cov: 1780 ft: 3945 corp: 155/3149b lim: 4096 exec/s: 496 rss: 61Mb L: 80/143 MS: 4 CrossOver-EraseBytes-InsertRepeatedBytes-CrossOver-
+#993	NEW    cov: 1780 ft: 3948 corp: 156/3179b lim: 4096 exec/s: 496 rss: 61Mb L: 30/143 MS: 1 InsertRepeatedBytes-
+#994	NEW    cov: 1780 ft: 3951 corp: 157/3182b lim: 4096 exec/s: 497 rss: 61Mb L: 3/143 MS: 1 EraseBytes-
+#996	NEW    cov: 1780 ft: 3953 corp: 158/3185b lim: 4096 exec/s: 498 rss: 61Mb L: 3/143 MS: 2 CrossOver-ChangeByte-
+#1003	NEW    cov: 1780 ft: 3994 corp: 159/3189b lim: 4096 exec/s: 501 rss: 61Mb L: 4/143 MS: 2 CopyPart-CrossOver-
+#1006	NEW    cov: 1780 ft: 4002 corp: 160/3202b lim: 4096 exec/s: 503 rss: 61Mb L: 13/143 MS: 3 CopyPart-ChangeBinInt-PersAutoDict- DE: "vector64"-
+#1023	NEW    cov: 1787 ft: 4018 corp: 161/3244b lim: 4096 exec/s: 511 rss: 61Mb L: 42/143 MS: 2 CrossOver-EraseBytes-
+#1024	pulse  cov: 1787 ft: 4018 corp: 161/3244b lim: 4096 exec/s: 512 rss: 61Mb
+#1038	NEW    cov: 1787 ft: 4021 corp: 162/3315b lim: 4096 exec/s: 519 rss: 61Mb L: 71/143 MS: 5 ShuffleBytes-ChangeBit-ShuffleBytes-InsertRepeatedBytes-CrossOver-
+#1061	NEW    cov: 1787 ft: 4022 corp: 163/3495b lim: 4096 exec/s: 530 rss: 61Mb L: 180/180 MS: 3 ChangeBinInt-InsertRepeatedBytes-ChangeByte-
+#1065	NEW    cov: 1787 ft: 4042 corp: 164/3505b lim: 4096 exec/s: 532 rss: 61Mb L: 10/180 MS: 4 InsertByte-ChangeBit-ChangeBinInt-EraseBytes-
+#1073	NEW    cov: 1787 ft: 4044 corp: 165/3509b lim: 4096 exec/s: 536 rss: 61Mb L: 4/180 MS: 3 ChangeBinInt-ChangeByte-ShuffleBytes-
+#1076	NEW    cov: 1787 ft: 4045 corp: 166/3631b lim: 4096 exec/s: 538 rss: 61Mb L: 122/180 MS: 3 CMP-ChangeBit-InsertRepeatedBytes- DE: "\001\000\000\000\000\000\000\000"-
+#1088	NEW    cov: 1787 ft: 4047 corp: 167/3648b lim: 4096 exec/s: 544 rss: 61Mb L: 17/180 MS: 2 CMP-ChangeBinInt- DE: "\377\377\377\377\377\377\377\006"-
+#1095	REDUCE cov: 1787 ft: 4047 corp: 167/3646b lim: 4096 exec/s: 547 rss: 61Mb L: 6/180 MS: 2 EraseBytes-ChangeBit-
+#1105	NEW    cov: 1787 ft: 4048 corp: 168/3660b lim: 4096 exec/s: 552 rss: 61Mb L: 14/180 MS: 5 ChangeBit-ChangeBit-ChangeBinInt-ChangeByte-ChangeBit-
+#1114	NEW    cov: 1787 ft: 4062 corp: 169/3664b lim: 4096 exec/s: 557 rss: 61Mb L: 4/180 MS: 4 ShuffleBytes-EraseBytes-CrossOver-EraseBytes-
+#1117	NEW    cov: 1787 ft: 4082 corp: 170/3689b lim: 4096 exec/s: 558 rss: 61Mb L: 25/180 MS: 3 CopyPart-EraseBytes-CrossOver-
+#1125	NEW    cov: 1787 ft: 4084 corp: 171/3740b lim: 4096 exec/s: 562 rss: 62Mb L: 51/180 MS: 3 InsertByte-ChangeBit-CMP- DE: "offset64"-
+#1127	NEW    cov: 1789 ft: 4090 corp: 172/3794b lim: 4096 exec/s: 563 rss: 62Mb L: 54/180 MS: 2 InsertRepeatedBytes-CMP- DE: "offset64"-
+#1128	NEW    cov: 1790 ft: 4092 corp: 173/3804b lim: 4096 exec/s: 564 rss: 62Mb L: 10/180 MS: 1 CMP- DE: "hash"-
+#1136	NEW    cov: 1803 ft: 4105 corp: 174/3809b lim: 4096 exec/s: 568 rss: 62Mb L: 5/180 MS: 3 CopyPart-ChangeByte-InsertByte-
+#1150	NEW    cov: 1803 ft: 4106 corp: 175/3817b lim: 4096 exec/s: 575 rss: 62Mb L: 8/180 MS: 4 CMP-ChangeBit-ChangeBinInt-ShuffleBytes- DE: "\376\377\377\222"-
+#1159	NEW    cov: 1803 ft: 4107 corp: 176/3837b lim: 4096 exec/s: 579 rss: 62Mb L: 20/180 MS: 4 CMP-ChangeByte-CopyPart-InsertRepeatedBytes- DE: "\000\000\000\000"-
+#1166	REDUCE cov: 1803 ft: 4107 corp: 176/3820b lim: 4096 exec/s: 583 rss: 62Mb L: 101/180 MS: 2 InsertRepeatedBytes-EraseBytes-
+#1184	NEW    cov: 1803 ft: 4109 corp: 177/3901b lim: 4096 exec/s: 592 rss: 62Mb L: 81/180 MS: 3 ChangeByte-ChangeBit-InsertRepeatedBytes-
+#1193	REDUCE cov: 1803 ft: 4109 corp: 177/3900b lim: 4096 exec/s: 596 rss: 62Mb L: 11/180 MS: 4 CopyPart-ChangeByte-ChangeBinInt-EraseBytes-
+#1211	NEW    cov: 1803 ft: 4114 corp: 178/3904b lim: 4096 exec/s: 605 rss: 62Mb L: 4/180 MS: 3 ChangeByte-ChangeByte-EraseBytes-
+#1222	REDUCE cov: 1803 ft: 4114 corp: 178/3902b lim: 4096 exec/s: 611 rss: 63Mb L: 15/180 MS: 1 EraseBytes-
+#1237	NEW    cov: 1803 ft: 4115 corp: 179/3914b lim: 4096 exec/s: 618 rss: 63Mb L: 12/180 MS: 5 ChangeByte-ChangeByte-ShuffleBytes-EraseBytes-InsertRepeatedBytes-
+#1257	NEW    cov: 1805 ft: 4134 corp: 180/3931b lim: 4096 exec/s: 628 rss: 63Mb L: 17/180 MS: 5 CrossOver-CrossOver-ShuffleBytes-InsertByte-PersAutoDict- DE: "\011\000\000\000\000\000\000\000"-
+#1258	NEW    cov: 1805 ft: 4162 corp: 181/3934b lim: 4096 exec/s: 629 rss: 63Mb L: 3/180 MS: 1 ShuffleBytes-
+#1279	NEW    cov: 1805 ft: 4164 corp: 182/3940b lim: 4096 exec/s: 639 rss: 63Mb L: 6/180 MS: 1 PersAutoDict- DE: "fle"-
+#1287	NEW    cov: 1805 ft: 4165 corp: 183/4058b lim: 4096 exec/s: 643 rss: 63Mb L: 118/180 MS: 3 InsertRepeatedBytes-ShuffleBytes-CrossOver-
+#1303	NEW    cov: 1805 ft: 4166 corp: 184/4063b lim: 4096 exec/s: 651 rss: 63Mb L: 5/180 MS: 1 InsertByte-
+#1305	NEW    cov: 1805 ft: 4168 corp: 185/4070b lim: 4096 exec/s: 652 rss: 63Mb L: 7/180 MS: 2 ChangeByte-ShuffleBytes-
+#1323	NEW    cov: 1807 ft: 4170 corp: 186/4073b lim: 4096 exec/s: 661 rss: 63Mb L: 3/180 MS: 3 ChangeByte-EraseBytes-InsertByte-
+#1329	NEW    cov: 1808 ft: 4237 corp: 187/4078b lim: 4096 exec/s: 664 rss: 63Mb L: 5/180 MS: 1 ChangeBit-
+#1345	REDUCE cov: 1808 ft: 4237 corp: 187/3994b lim: 4096 exec/s: 672 rss: 63Mb L: 96/143 MS: 1 EraseBytes-
+#1356	NEW    cov: 1810 ft: 4239 corp: 188/4001b lim: 4096 exec/s: 678 rss: 63Mb L: 7/143 MS: 1 PersAutoDict- DE: "id"-
+#1374	REDUCE cov: 1810 ft: 4239 corp: 188/4000b lim: 4096 exec/s: 687 rss: 63Mb L: 5/143 MS: 3 CrossOver-ChangeBinInt-EraseBytes-
+#1379	NEW    cov: 1816 ft: 4246 corp: 189/4008b lim: 4096 exec/s: 689 rss: 63Mb L: 8/143 MS: 5 ChangeBinInt-ChangeBinInt-ShuffleBytes-ChangeByte-ChangeByte-
+#1389	NEW    cov: 1819 ft: 4251 corp: 190/4025b lim: 4096 exec/s: 694 rss: 63Mb L: 17/143 MS: 5 ShuffleBytes-CopyPart-CopyPart-InsertByte-PersAutoDict- DE: "\000\000\000\000\000\000\000\000"-
+#1392	NEW    cov: 1819 ft: 4258 corp: 191/4028b lim: 4096 exec/s: 696 rss: 63Mb L: 3/143 MS: 3 ShuffleBytes-EraseBytes-ChangeByte-
+#1400	NEW    cov: 1823 ft: 4346 corp: 192/4162b lim: 4096 exec/s: 700 rss: 63Mb L: 134/143 MS: 3 CopyPart-ShuffleBytes-InsertRepeatedBytes-
+#1433	NEW    cov: 1823 ft: 4349 corp: 193/4204b lim: 4096 exec/s: 716 rss: 63Mb L: 42/143 MS: 3 ChangeByte-CrossOver-ChangeBinInt-
+#1442	REDUCE cov: 1823 ft: 4351 corp: 194/4216b lim: 4096 exec/s: 721 rss: 63Mb L: 12/143 MS: 4 InsertByte-InsertByte-PersAutoDict-EraseBytes- DE: "\011\000\000\000"-
+#1449	NEW    cov: 1823 ft: 4371 corp: 195/4220b lim: 4096 exec/s: 724 rss: 64Mb L: 4/143 MS: 2 ChangeBit-CrossOver-
+#1500	REDUCE cov: 1823 ft: 4371 corp: 195/4214b lim: 4096 exec/s: 750 rss: 65Mb L: 8/143 MS: 1 EraseBytes-
+#1503	NEW    cov: 1824 ft: 4372 corp: 196/4380b lim: 4096 exec/s: 751 rss: 65Mb L: 166/166 MS: 3 InsertRepeatedBytes-InsertRepeatedBytes-InsertRepeatedBytes-
+#1504	NEW    cov: 1824 ft: 4373 corp: 197/4387b lim: 4096 exec/s: 752 rss: 65Mb L: 7/166 MS: 1 PersAutoDict- DE: "fle"-
+Stage 3.2 failed: '{"Y": 8}' != '{"Y": 56}'
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+==13==ERROR: AddressSanitizer: ILL on unknown address 0x0000004534e5 (pc 0x0000004534e5 bp 0x7ffdae9e5df0 sp 0x7ffdae9e5ae0 T0)
+SCARINESS: 10 (signal)
+    #0 0x4534e5 in LLVMFuzzerTestOneInput /src/flatbuffers/tests/fuzzer/flatbuffers_64bit_fuzzer.cc
+    #1 0x31eae3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #2 0x31e2ca in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #3 0x31f999 in fuzzer::Fuzzer::MutateAndTestOne() /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:757:19
+    #4 0x320665 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:895:5
+    #5 0x30ed7f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #6 0x339022 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #7 0x7fdd99303082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #8 0x2ff7bd in _start (out/libfuzzer-address-x86_64/64bit_fuzzer+0x2ff7bd)
+
+DEDUP_TOKEN: LLVMFuzzerTestOneInput--fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long)--fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*)
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: ILL /src/flatbuffers/tests/fuzzer/flatbuffers_64bit_fuzzer.cc in LLVMFuzzerTestOneInput
+==13==ABORTING
+MS: 5 ChangeByte-ChangeByte-ShuffleBytes-ChangeBit-CMP- DE: "8\000\000\000"-; base unit: 3aea6397d7622707ee7221daaeb605efca672ec0
+0x22,0x4,0x38,0x0,0x0,0x0,0x7f,
+\"\0048\000\000\000\177
+artifact_prefix='./'; Test unit written to ./crash-7a53a8a3bdc44738ded867be88dead8a7146de42
+Base64: IgQ4AAAAfw==
+stat::number_of_executed_units: 1534
+stat::average_exec_per_sec:     767
+stat::new_units_added:          216
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              66

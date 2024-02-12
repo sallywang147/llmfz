@@ -1,0 +1,118 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ mkdir build
++ cd build
++ cmake .. -DBOEHM_GC_INCLUDE_DIR=/usr/include -DBOEHM_GC_LIBRARIES=/usr/lib/x86_64-linux-gnu/libgc.a
+-- The C compiler identification is Clang 15.0.0
+-- The CXX compiler identification is Clang 15.0.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/local/bin/clang-jcc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/local/bin/clang++-jcc - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE  
+-- Found PkgConfig: /usr/bin/pkg-config (found version "0.29.1") 
+-- Found GC library: /usr/lib/x86_64-linux-gnu/libgc.a
+CMake Warning (dev) at /usr/local/share/cmake-3.24/Modules/FindPackageHandleStandardArgs.cmake:438 (message):
+  The package name passed to `find_package_handle_standard_args` (Boehm_GC)
+  does not match the name of the calling package (BoehmGC).  This can lead to
+  problems in calling code that expects `find_package` result variables
+  (e.g., `_FOUND`) to follow a certain pattern.
+Call Stack (most recent call first):
+  cmake/FindBoehmGC.cmake:105 (FIND_PACKAGE_HANDLE_STANDARD_ARGS)
+  CMakeLists.txt:73 (find_package)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Found Boehm_GC: /usr/lib/x86_64-linux-gnu/libgc.a  
+-- Could NOT find Boost (missing: Boost_INCLUDE_DIR) (Required is at least version "1.56")
+-- Could not find ccache
+-- Could NOT find RRB (missing: RRB_LIBRARIES RRB_INCLUDE_DIR) 
+-- Disabling benchmarks
+-- Found PythonInterp: /usr/local/bin/python3.8 (found version "3.8.3") 
+-- Found PythonLibs: /usr/local/lib/libpython3.8.so (found version "3.8.3") 
+-- Checking for module 'guile-2.2'
+--   No package 'guile-2.2' found
+-- Disabling Guile modules
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /src/immer/build
+++ nproc
++ make -j32 fuzzers
+[  0%] Building CXX object extra/fuzzer/CMakeFiles/extra-fuzzer-vector.dir/vector.cpp.o
+[  6%] Building CXX object extra/fuzzer/CMakeFiles/extra-fuzzer-array-gc.dir/array-gc.cpp.o
+[ 12%] Building CXX object extra/fuzzer/CMakeFiles/extra-fuzzer-array.dir/array.cpp.o
+[ 12%] Building CXX object extra/fuzzer/CMakeFiles/extra-fuzzer-flex-vector-bo.dir/flex-vector-bo.cpp.o
+[ 12%] Building CXX object extra/fuzzer/CMakeFiles/extra-fuzzer-flex-vector-gc.dir/flex-vector-gc.cpp.o
+[ 12%] Building CXX object extra/fuzzer/CMakeFiles/extra-fuzzer-flex-vector-st.dir/flex-vector-st.cpp.o
+[ 18%] Building CXX object extra/fuzzer/CMakeFiles/extra-fuzzer-map-gc.dir/map-gc.cpp.o
+[ 18%] Building CXX object extra/fuzzer/CMakeFiles/extra-fuzzer-flex-vector.dir/flex-vector.cpp.o
+[ 18%] Building CXX object extra/fuzzer/CMakeFiles/extra-fuzzer-map-st-str-conflict.dir/map-st-str-conflict.cpp.o
+[ 18%] Building CXX object extra/fuzzer/CMakeFiles/extra-fuzzer-map-st-str.dir/map-st-str.cpp.o
+[ 18%] Building CXX object extra/fuzzer/CMakeFiles/extra-fuzzer-map-st.dir/map-st.cpp.o
+[ 31%] Building CXX object extra/fuzzer/CMakeFiles/extra-fuzzer-set-st-str.dir/set-st-str.cpp.o
+[ 31%] Building CXX object extra/fuzzer/CMakeFiles/extra-fuzzer-set-gc.dir/set-gc.cpp.o
+[ 31%] Building CXX object extra/fuzzer/CMakeFiles/extra-fuzzer-map.dir/map.cpp.o
+[ 31%] Building CXX object extra/fuzzer/CMakeFiles/extra-fuzzer-set-st-str-conflict.dir/set-st-str-conflict.cpp.o
+[ 37%] Building CXX object extra/fuzzer/CMakeFiles/extra-fuzzer-set-st.dir/set-st.cpp.o
+[ 43%] Building CXX object extra/fuzzer/CMakeFiles/extra-fuzzer-set.dir/set.cpp.o
+[ 50%] Building CXX object extra/fuzzer/CMakeFiles/extra-fuzzer-vector-gc.dir/vector-gc.cpp.o
+[ 56%] Building CXX object extra/fuzzer/CMakeFiles/extra-fuzzer-vector-st.dir/vector-st.cpp.o
+[ 56%] Linking CXX executable array-gc
+[ 56%] Linking CXX executable array
+[ 56%] Built target extra-fuzzer-array-gc
+[ 56%] Linking CXX executable set-gc
+[ 56%] Built target extra-fuzzer-array
+[ 56%] Built target extra-fuzzer-set-gc
+[ 56%] Linking CXX executable set
+[ 56%] Linking CXX executable map-gc
+[ 56%] Built target extra-fuzzer-set
+[ 56%] Built target extra-fuzzer-map-gc
+[ 56%] Linking CXX executable set-st
+[ 62%] Linking CXX executable map-st
+[ 62%] Built target extra-fuzzer-set-st
+[ 62%] Linking CXX executable map
+[ 62%] Built target extra-fuzzer-map-st
+[ 62%] Linking CXX executable vector-gc
+[ 68%] Linking CXX executable set-st-str
+[ 68%] Built target extra-fuzzer-map
+[ 68%] Built target extra-fuzzer-vector-gc
+[ 68%] Linking CXX executable vector-st
+[ 68%] Built target extra-fuzzer-set-st-str
+[ 75%] Linking CXX executable set-st-str-conflict
+[ 75%] Built target extra-fuzzer-vector-st
+[ 75%] Built target extra-fuzzer-set-st-str-conflict
+[ 81%] Linking CXX executable map-st-str
+[ 81%] Linking CXX executable map-st-str-conflict
+[ 81%] Built target extra-fuzzer-map-st-str
+[ 81%] Built target extra-fuzzer-map-st-str-conflict
+/src/immer/extra/fuzzer/vector.cpp:9:10: fatal error: 'immer/detail/rbts/rbts_tree.hpp' file not found
+#include <immer/detail/rbts/rbts_tree.hpp>
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.
+make[3]: *** [extra/fuzzer/CMakeFiles/extra-fuzzer-vector.dir/build.make:76: extra/fuzzer/CMakeFiles/extra-fuzzer-vector.dir/vector.cpp.o] Error 1
+make[2]: *** [CMakeFiles/Makefile2:4452: extra/fuzzer/CMakeFiles/extra-fuzzer-vector.dir/all] Error 2
+make[2]: *** Waiting for unfinished jobs....
+[ 87%] Linking CXX executable flex-vector-gc
+[ 87%] Built target extra-fuzzer-flex-vector-gc
+[ 93%] Linking CXX executable flex-vector
+[ 93%] Linking CXX executable flex-vector-st
+[ 93%] Built target extra-fuzzer-flex-vector
+[ 93%] Built target extra-fuzzer-flex-vector-st
+[100%] Linking CXX executable flex-vector-bo
+[100%] Built target extra-fuzzer-flex-vector-bo
+make[1]: *** [CMakeFiles/Makefile2:3965: extra/fuzzer/CMakeFiles/fuzzers.dir/rule] Error 2
+make: *** [Makefile:1921: fuzzers] Error 2

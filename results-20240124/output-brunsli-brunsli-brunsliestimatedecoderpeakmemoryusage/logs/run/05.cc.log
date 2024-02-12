@@ -1,0 +1,33 @@
+/workspace/out/libfuzzer-address-x86_64/fuzz_decode_streaming -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/fuzz_decode_streaming < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 4073306823
+INFO: Loaded 1 modules   (7133 inline 8-bit counters): 7133 [0x7c3e08, 0x7c59e5), 
+INFO: Loaded 1 PC tables (7133 PCs): 7133 [0x7c59e8,0x7e17b8), 
+INFO:        0 files found in /workspace/corpus/fuzz_decode_streaming
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: A corpus is not provided, starting from an empty corpus
+#2	INITED cov: 6 ft: 7 corp: 1/1b exec/s: 0 rss: 32Mb
+#6	NEW    cov: 6 ft: 9 corp: 2/3b lim: 4096 exec/s: 0 rss: 32Mb L: 2/2 MS: 4 ShuffleBytes-ShuffleBytes-CrossOver-CrossOver-
+#8	NEW    cov: 6 ft: 11 corp: 3/6b lim: 4096 exec/s: 0 rss: 33Mb L: 3/3 MS: 2 ShuffleBytes-InsertByte-
+#15	NEW    cov: 7 ft: 13 corp: 4/23b lim: 4096 exec/s: 0 rss: 33Mb L: 17/17 MS: 2 ChangeByte-InsertRepeatedBytes-
+#26	REDUCE cov: 7 ft: 13 corp: 4/20b lim: 4096 exec/s: 0 rss: 33Mb L: 14/14 MS: 1 EraseBytes-
+#193	REDUCE cov: 7 ft: 13 corp: 4/19b lim: 4096 exec/s: 0 rss: 33Mb L: 13/13 MS: 2 CopyPart-EraseBytes-
+#260	REDUCE cov: 7 ft: 13 corp: 4/17b lim: 4096 exec/s: 0 rss: 33Mb L: 11/11 MS: 2 ChangeBit-EraseBytes-
+#301	REDUCE cov: 7 ft: 13 corp: 4/13b lim: 4096 exec/s: 0 rss: 33Mb L: 7/7 MS: 1 EraseBytes-
+#338	REDUCE cov: 7 ft: 13 corp: 4/12b lim: 4096 exec/s: 0 rss: 33Mb L: 6/6 MS: 2 CMP-EraseBytes- DE: "\377\377\377\377"-
+#487	REDUCE cov: 7 ft: 13 corp: 4/11b lim: 4096 exec/s: 0 rss: 33Mb L: 5/5 MS: 4 ChangeBit-CopyPart-CrossOver-EraseBytes-
+#533	REDUCE cov: 7 ft: 13 corp: 4/10b lim: 4096 exec/s: 0 rss: 33Mb L: 4/4 MS: 1 EraseBytes-
+#2097152	pulse  cov: 7 ft: 13 corp: 4/10b lim: 4096 exec/s: 699050 rss: 58Mb
+#4194304	pulse  cov: 7 ft: 13 corp: 4/10b lim: 4096 exec/s: 699050 rss: 58Mb
+#8388608	pulse  cov: 7 ft: 13 corp: 4/10b lim: 4096 exec/s: 645277 rss: 59Mb
+#16777216	pulse  cov: 7 ft: 13 corp: 4/10b lim: 4096 exec/s: 645277 rss: 59Mb
+#19356083	DONE   cov: 7 ft: 13 corp: 4/10b lim: 4096 exec/s: 624389 rss: 59Mb
+###### Recommended dictionary. ######
+"\377\377\377\377" # Uses: 1511832
+###### End of recommended dictionary. ######
+Done 19356083 runs in 31 second(s)
+stat::number_of_executed_units: 19356083
+stat::average_exec_per_sec:     624389
+stat::new_units_added:          10
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              59

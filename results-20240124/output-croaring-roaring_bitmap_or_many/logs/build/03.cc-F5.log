@@ -1,0 +1,78 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ mkdir build-dir
++ cd build-dir
++ cmake -DENABLE_ROARING_TESTS=OFF ..
+-- The CXX compiler identification is Clang 15.0.0
+-- The C compiler identification is Clang 15.0.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/local/bin/clang++-jcc - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/local/bin/clang-jcc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- No build type selected, default to Release
+-- Tests are disabled, you can enabled them by setting ENABLE_ROARING_TESTS to ON
+-- BENCHMARK_DATA_DIR: /src/croaring/benchmarks/realdata/
+-- TEST_DATA_DIR: /src/croaring/tests/testdata/
+-- Building a static library.
+-- ROARING_LIB_TYPE: STATIC
+-- Library output directory (does not apply to Visual Studio): /src/croaring/build-dir
+-- You may enable microbenchmarks by setting ENABLE_ROARING_MICROBENCHMARKS to ON 
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /src/croaring/build-dir
+++ nproc
++ make -j32
+[  4%] Building C object src/CMakeFiles/roaring.dir/isadetection.c.o
+[  8%] Building C object src/CMakeFiles/roaring.dir/array_util.c.o
+[ 13%] Building C object src/CMakeFiles/roaring.dir/bitset_util.c.o
+[ 17%] Building C object src/CMakeFiles/roaring.dir/art/art.c.o
+[ 21%] Building C object src/CMakeFiles/roaring.dir/bitset.c.o
+[ 26%] Building C object src/CMakeFiles/roaring.dir/containers/array.c.o
+[ 30%] Building C object src/CMakeFiles/roaring.dir/containers/bitset.c.o
+[ 34%] Building C object src/CMakeFiles/roaring.dir/containers/containers.c.o
+[ 39%] Building C object src/CMakeFiles/roaring.dir/containers/convert.c.o
+[ 43%] Building C object src/CMakeFiles/roaring.dir/containers/mixed_intersection.c.o
+[ 47%] Building C object src/CMakeFiles/roaring.dir/containers/mixed_union.c.o
+[ 52%] Building C object src/CMakeFiles/roaring.dir/containers/mixed_equal.c.o
+[ 56%] Building C object src/CMakeFiles/roaring.dir/containers/mixed_subset.c.o
+[ 65%] Building C object src/CMakeFiles/roaring.dir/containers/mixed_xor.c.o
+[ 65%] Building C object src/CMakeFiles/roaring.dir/containers/mixed_negation.c.o
+[ 69%] Building C object src/CMakeFiles/roaring.dir/containers/mixed_andnot.c.o
+[ 73%] Building C object src/CMakeFiles/roaring.dir/containers/run.c.o
+[ 78%] Building C object src/CMakeFiles/roaring.dir/roaring.c.o
+[ 82%] Building C object src/CMakeFiles/roaring.dir/memory.c.o
+[ 86%] Building C object src/CMakeFiles/roaring.dir/roaring64.c.o
+[ 91%] Building C object src/CMakeFiles/roaring.dir/roaring_priority_queue.c.o
+[ 95%] Building C object src/CMakeFiles/roaring.dir/roaring_array.c.o
+[100%] Linking C static library libroaring.a
+[100%] Built target roaring
++ /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -I/src/croaring/include -c /src/croaring_fuzzer.c -o fuzzer.o
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -fsanitize=fuzzer fuzzer.o -o /workspace/out/libfuzzer-address-x86_64/croaring_fuzzer /src/croaring/build-dir/src/libroaring.a
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -I/src/croaring/include -I/src/croaring -c /src/croaring_fuzzer_cc.cc -o fuzzer_cc.o
+/src/croaring_fuzzer_cc.cc:18:60: error: reinterpret_cast from 'std::vector<roaring::api::roaring_bitmap_s *>::value_type *' (aka 'roaring::api::roaring_bitmap_s **') to 'const roaring::api::roaring_bitmap_t **' (aka 'const roaring::api::roaring_bitmap_s **') casts away qualifiers
+  roaring_bitmap_t* result = roaring_bitmap_or_many(count, reinterpret_cast<const roaring_bitmap_t**>(bitmaps.data()));
+                                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /src/croaring_fuzzer_cc.cc:1:
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:353:3: error: static_assert failed due to requirement 'sizeof(unsigned int) == sizeof(unsigned char)' "Incompatible data type."
+  static_assert(sizeof(T) == sizeof(uint8_t), "Incompatible data type.");
+  ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:110:10: note: in instantiation of function template specialization 'FuzzedDataProvider::ConsumeBytes<unsigned int>' requested here
+  return ConsumeBytes<T>(num_bytes, num_bytes);
+         ^
+/src/croaring_fuzzer_cc.cc:12:45: note: in instantiation of function template specialization 'FuzzedDataProvider::ConsumeBytes<unsigned int>' requested here
+    std::vector<uint32_t> bitmap_data = fdp.ConsumeBytes<uint32_t>(bitmap_size);
+                                            ^
+2 errors generated.

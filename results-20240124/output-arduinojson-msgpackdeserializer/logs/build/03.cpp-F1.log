@@ -1,0 +1,35 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ cd extras/fuzzing
++ make
+/usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -I../../src -DARDUINOJSON_DEBUG=1 -std=c++11 json_fuzzer.cpp -o/workspace/out/libfuzzer-address-x86_64/json_fuzzer -fsanitize=fuzzer
+zip -j /workspace/out/libfuzzer-address-x86_64/json_fuzzer_seed_corpus.zip json_seed_corpus/EmptyObject.json json_seed_corpus/Strings.json json_seed_corpus/Comments.json json_seed_corpus/OpenWeatherMap.json json_seed_corpus/EmptyArray.json json_seed_corpus/ExcessiveNesting.json json_seed_corpus/IntegerOverflow.json json_seed_corpus/WeatherUnderground.json json_seed_corpus/Numbers.json
+  adding: EmptyObject.json (stored 0%)
+  adding: Strings.json (deflated 40%)
+  adding: Comments.json (deflated 65%)
+  adding: OpenWeatherMap.json (deflated 57%)
+  adding: EmptyArray.json (stored 0%)
+  adding: ExcessiveNesting.json (deflated 64%)
+  adding: IntegerOverflow.json (deflated 25%)
+  adding: WeatherUnderground.json (deflated 64%)
+  adding: Numbers.json (deflated 61%)
+/usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -I../../src -DARDUINOJSON_DEBUG=1 -std=c++11 msgpack_fuzzer.cpp -o/workspace/out/libfuzzer-address-x86_64/msgpack_fuzzer -fsanitize=fuzzer
+msgpack_fuzzer.cpp:6:129: error: no matching constructor for initialization of 'ArduinoJson::V702HB4::detail::MsgPackDeserializer<ArduinoJson::V702HB4::detail::BoundedReader<const unsigned char *, void>>'
+    ArduinoJson::V702HB4::detail::MsgPackDeserializer<ArduinoJson::V702HB4::detail::BoundedReader<unsigned char const*, void> > deserializer(reader);
+                                                                                                                                ^            ~~~~~~
+../../src/ArduinoJson/MsgPack/MsgPackDeserializer.hpp:17:7: note: candidate constructor (the implicit copy constructor) not viable: no known conversion from 'ArduinoJson::V702HB4::detail::BoundedReader<const unsigned char *, void>' to 'const ArduinoJson::detail::MsgPackDeserializer<ArduinoJson::detail::BoundedReader<const unsigned char *>>' for 1st argument
+class MsgPackDeserializer {
+      ^
+../../src/ArduinoJson/MsgPack/MsgPackDeserializer.hpp:17:7: note: candidate constructor (the implicit move constructor) not viable: no known conversion from 'ArduinoJson::V702HB4::detail::BoundedReader<const unsigned char *, void>' to 'ArduinoJson::detail::MsgPackDeserializer<ArduinoJson::detail::BoundedReader<const unsigned char *>>' for 1st argument
+../../src/ArduinoJson/MsgPack/MsgPackDeserializer.hpp:19:3: note: candidate constructor not viable: requires 2 arguments, but 1 was provided
+  MsgPackDeserializer(ResourceManager* resources, TReader reader)
+  ^
+1 error generated.
+make: *** [Makefile:14: /workspace/out/libfuzzer-address-x86_64/msgpack_fuzzer] Error 1

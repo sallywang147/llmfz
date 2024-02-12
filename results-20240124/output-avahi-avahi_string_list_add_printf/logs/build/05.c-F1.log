@@ -1,0 +1,1422 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ fuzz/oss-fuzz.sh
++ flags='-O1 -fno-omit-frame-pointer -g -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address,undefined -fsanitize=fuzzer-no-link'
++ export CC=/usr/local/bin/clang-jcc
++ CC=/usr/local/bin/clang-jcc
++ export 'CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link'
++ CFLAGS='-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link'
++ export CXX=/usr/local/bin/clang++-jcc
++ CXX=/usr/local/bin/clang++-jcc
++ export 'CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++'
++ CXXFLAGS='-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++'
+++ dirname -- fuzz/oss-fuzz.sh
++ cd fuzz/..
++ export OUT=/workspace/out/libfuzzer-address-x86_64
++ OUT=/workspace/out/libfuzzer-address-x86_64
++ mkdir -p /workspace/out/libfuzzer-address-x86_64
++ export LIB_FUZZING_ENGINE=-fsanitize=fuzzer
++ LIB_FUZZING_ENGINE=-fsanitize=fuzzer
++ sed -i s/check_inconsistencies=yes/check_inconsistencies=no/ common/acx_pthread.m4
++ ./autogen.sh --disable-stack-protector --disable-qt3 --disable-qt4 --disable-qt5 --disable-gtk --disable-gtk3 --disable-dbus --disable-gdbm --disable-libdaemon --disable-python --disable-manpages --disable-mono --disable-monodoc --disable-glib --disable-gobject --disable-libevent --disable-libsystemd
+Activated pre-commit hook.
+Copying file ABOUT-NLS
+Copying file config.rpath
+Not copying intl/ directory.
+Copying file po/Makefile.in.in
+Copying file po/Makevars.template
+Copying file po/Rules-quot
+Copying file po/boldquot.sed
+Copying file po/en@boldquot.header
+Copying file po/en@quot.header
+Copying file po/insert-header.sin
+Copying file po/quot.sed
+Copying file po/remove-potcdate.sin
+Creating po/ChangeLog
+Copying file common/gettext.m4
+Copying file common/iconv.m4
+Copying file common/lib-ld.m4
+Copying file common/lib-link.m4
+Copying file common/lib-prefix.m4
+Copying file common/nls.m4
+Copying file common/po.m4
+Copying file common/progtest.m4
+Updating EXTRA_DIST in common/Makefile.am (backup is in common/Makefile.am~)
+Creating common/ChangeLog
+Updating Makefile.am (backup is in Makefile.am~)
+Updating configure.ac (backup is in configure.ac~)
+Creating ChangeLog
+
+Please run 'aclocal -I common' to regenerate the aclocal.m4 file.
+You need aclocal from GNU automake 1.9 (or newer) to do this.
+Then run 'autoconf' to regenerate the configure file.
+
+You will also need config.guess and config.sub, which you can get from the CVS
+of the 'config' project at http://savannah.gnu.org/. The commands to fetch them
+are
+$ wget 'http://savannah.gnu.org/cgi-bin/viewcvs/*checkout*/config/config/config.guess'
+$ wget 'http://savannah.gnu.org/cgi-bin/viewcvs/*checkout*/config/config/config.sub'
+
+You might also want to copy the convenience header file gettext.h
+from the /usr/share/gettext directory into your package.
+It is a wrapper around <libintl.h> that implements the configure --disable-nls
+option.
+
+Press Return to acknowledge the previous three paragraphs.
+libtoolize: putting auxiliary files in '.'.
+libtoolize: copying file './ltmain.sh'
+libtoolize: putting macros in AC_CONFIG_MACRO_DIRS, 'common'.
+libtoolize: copying file 'common/libtool.m4'
+libtoolize: copying file 'common/ltoptions.m4'
+libtoolize: copying file 'common/ltsugar.m4'
+libtoolize: copying file 'common/ltversion.m4'
+libtoolize: copying file 'common/lt~obsolete.m4'
+configure.ac:145: warning: AC_LANG_CONFTEST: no AC_LANG_SOURCE call detected in body
+../../lib/autoconf/lang.m4:193: AC_LANG_CONFTEST is expanded from...
+../../lib/autoconf/general.m4:2601: _AC_COMPILE_IFELSE is expanded from...
+../../lib/autoconf/general.m4:2617: AC_COMPILE_IFELSE is expanded from...
+../../lib/m4sugar/m4sh.m4:639: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2042: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2063: AC_CACHE_CHECK is expanded from...
+configure.ac:145: the top level
+configure.ac:302: warning: AC_LANG_CONFTEST: no AC_LANG_SOURCE call detected in body
+../../lib/autoconf/lang.m4:193: AC_LANG_CONFTEST is expanded from...
+configure.ac:302: the top level
+configure.ac:145: warning: AC_LANG_CONFTEST: no AC_LANG_SOURCE call detected in body
+../../lib/autoconf/lang.m4:193: AC_LANG_CONFTEST is expanded from...
+../../lib/autoconf/general.m4:2601: _AC_COMPILE_IFELSE is expanded from...
+../../lib/autoconf/general.m4:2617: AC_COMPILE_IFELSE is expanded from...
+../../lib/m4sugar/m4sh.m4:639: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2042: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2063: AC_CACHE_CHECK is expanded from...
+configure.ac:145: the top level
+configure.ac:302: warning: AC_LANG_CONFTEST: no AC_LANG_SOURCE call detected in body
+../../lib/autoconf/lang.m4:193: AC_LANG_CONFTEST is expanded from...
+configure.ac:302: the top level
+configure.ac:93: warning: The macro `AC_TRY_LINK' is obsolete.
+configure.ac:93: You should run autoupdate.
+../../lib/autoconf/general.m4:2698: AC_TRY_LINK is expanded from...
+../../lib/m4sugar/m4sh.m4:639: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2042: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2063: AC_CACHE_CHECK is expanded from...
+common/gcc_stack_protect.m4:42: GCC_STACK_PROTECT_LIB is expanded from...
+configure.ac:93: the top level
+configure.ac:134: warning: The macro `AC_TRY_COMPILE' is obsolete.
+configure.ac:134: You should run autoupdate.
+../../lib/autoconf/general.m4:2625: AC_TRY_COMPILE is expanded from...
+../../lib/m4sugar/m4sh.m4:639: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2042: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2063: AC_CACHE_CHECK is expanded from...
+common/gcc_stack_protect.m4:54: GCC_STACK_PROTECT_CC is expanded from...
+configure.ac:134: the top level
+configure.ac:137: warning: The macro `AC_TRY_COMPILE' is obsolete.
+configure.ac:137: You should run autoupdate.
+../../lib/autoconf/general.m4:2625: AC_TRY_COMPILE is expanded from...
+../../lib/m4sugar/m4sh.m4:639: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2042: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2063: AC_CACHE_CHECK is expanded from...
+common/gcc_stack_protect.m4:71: GCC_STACK_PROTECT_CXX is expanded from...
+configure.ac:137: the top level
+configure.ac:143: warning: The macro `AC_PROG_LIBTOOL' is obsolete.
+configure.ac:143: You should run autoupdate.
+common/libtool.m4:99: AC_PROG_LIBTOOL is expanded from...
+configure.ac:143: the top level
+configure.ac:145: warning: AC_LANG_CONFTEST: no AC_LANG_SOURCE call detected in body
+../../lib/autoconf/lang.m4:193: AC_LANG_CONFTEST is expanded from...
+../../lib/autoconf/general.m4:2601: _AC_COMPILE_IFELSE is expanded from...
+../../lib/autoconf/general.m4:2617: AC_COMPILE_IFELSE is expanded from...
+../../lib/m4sugar/m4sh.m4:639: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2042: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2063: AC_CACHE_CHECK is expanded from...
+configure.ac:145: the top level
+configure.ac:155: warning: The macro `AC_LANG_SAVE' is obsolete.
+configure.ac:155: You should run autoupdate.
+../../lib/autoconf/lang.m4:125: AC_LANG_SAVE is expanded from...
+common/acx_pthread.m4:53: ACX_PTHREAD is expanded from...
+configure.ac:155: the top level
+configure.ac:155: warning: The macro `AC_LANG_C' is obsolete.
+configure.ac:155: You should run autoupdate.
+../../lib/autoconf/c.m4:72: AC_LANG_C is expanded from...
+common/acx_pthread.m4:53: ACX_PTHREAD is expanded from...
+configure.ac:155: the top level
+configure.ac:155: warning: The macro `AC_TRY_LINK' is obsolete.
+configure.ac:155: You should run autoupdate.
+../../lib/autoconf/general.m4:2698: AC_TRY_LINK is expanded from...
+common/acx_pthread.m4:53: ACX_PTHREAD is expanded from...
+configure.ac:155: the top level
+configure.ac:155: warning: The macro `AC_LANG_RESTORE' is obsolete.
+configure.ac:155: You should run autoupdate.
+../../lib/autoconf/lang.m4:134: AC_LANG_RESTORE is expanded from...
+common/acx_pthread.m4:53: ACX_PTHREAD is expanded from...
+configure.ac:155: the top level
+configure.ac:213: warning: The macro `AC_TRY_COMPILE' is obsolete.
+configure.ac:213: You should run autoupdate.
+../../lib/autoconf/general.m4:2625: AC_TRY_COMPILE is expanded from...
+../../lib/m4sugar/m4sh.m4:639: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2042: AC_CACHE_VAL is expanded from...
+configure.ac:213: the top level
+configure.ac:228: warning: The macro `AC_TRY_COMPILE' is obsolete.
+configure.ac:228: You should run autoupdate.
+../../lib/autoconf/general.m4:2625: AC_TRY_COMPILE is expanded from...
+configure.ac:228: the top level
+configure.ac:228: warning: The macro `AC_TRY_COMPILE' is obsolete.
+configure.ac:228: You should run autoupdate.
+../../lib/autoconf/general.m4:2625: AC_TRY_COMPILE is expanded from...
+../../lib/m4sugar/m4sh.m4:639: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2601: _AC_COMPILE_IFELSE is expanded from...
+../../lib/autoconf/general.m4:2617: AC_COMPILE_IFELSE is expanded from...
+../../lib/autoconf/general.m4:2625: AC_TRY_COMPILE is expanded from...
+configure.ac:228: the top level
+configure.ac:260: warning: cannot check for file existence when cross compiling
+../../lib/autoconf/general.m4:2788: AC_CHECK_FILE is expanded from...
+configure.ac:260: the top level
+configure.ac:261: warning: cannot check for file existence when cross compiling
+../../lib/autoconf/general.m4:2788: AC_CHECK_FILE is expanded from...
+configure.ac:261: the top level
+configure.ac:262: warning: cannot check for file existence when cross compiling
+../../lib/autoconf/general.m4:2788: AC_CHECK_FILE is expanded from...
+configure.ac:262: the top level
+configure.ac:263: warning: cannot check for file existence when cross compiling
+../../lib/autoconf/general.m4:2788: AC_CHECK_FILE is expanded from...
+configure.ac:263: the top level
+configure.ac:264: warning: cannot check for file existence when cross compiling
+../../lib/autoconf/general.m4:2788: AC_CHECK_FILE is expanded from...
+configure.ac:264: the top level
+configure.ac:265: warning: cannot check for file existence when cross compiling
+../../lib/autoconf/general.m4:2788: AC_CHECK_FILE is expanded from...
+configure.ac:265: the top level
+configure.ac:266: warning: cannot check for file existence when cross compiling
+../../lib/autoconf/general.m4:2788: AC_CHECK_FILE is expanded from...
+configure.ac:266: the top level
+configure.ac:267: warning: cannot check for file existence when cross compiling
+../../lib/autoconf/general.m4:2788: AC_CHECK_FILE is expanded from...
+configure.ac:267: the top level
+configure.ac:302: warning: AC_LANG_CONFTEST: no AC_LANG_SOURCE call detected in body
+../../lib/autoconf/lang.m4:193: AC_LANG_CONFTEST is expanded from...
+configure.ac:302: the top level
+configure.ac:321: warning: The macro `AC_TRY_COMPILE' is obsolete.
+configure.ac:321: You should run autoupdate.
+../../lib/autoconf/general.m4:2625: AC_TRY_COMPILE is expanded from...
+configure.ac:321: the top level
+configure.ac:380: warning: The macro `AC_TRY_COMPILE' is obsolete.
+configure.ac:380: You should run autoupdate.
+../../lib/autoconf/general.m4:2625: AC_TRY_COMPILE is expanded from...
+common/gcc_visibility.m4:6: CHECK_VISIBILITY_HIDDEN is expanded from...
+configure.ac:380: the top level
+configure.ac:889: warning: The macro `AC_FD_CC' is obsolete.
+configure.ac:889: You should run autoupdate.
+../../lib/autoconf/general.m4:383: AC_FD_CC is expanded from...
+../../lib/m4sugar/m4sh.m4:639: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2042: AC_CACHE_VAL is expanded from...
+common/python.m4:4: AM_CHECK_PYMOD is expanded from...
+configure.ac:889: the top level
+configure.ac:892: warning: The macro `AC_FD_CC' is obsolete.
+configure.ac:892: You should run autoupdate.
+../../lib/autoconf/general.m4:383: AC_FD_CC is expanded from...
+../../lib/m4sugar/m4sh.m4:639: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2042: AC_CACHE_VAL is expanded from...
+common/python.m4:4: AM_CHECK_PYMOD is expanded from...
+configure.ac:892: the top level
+configure.ac:894: warning: The macro `AC_FD_CC' is obsolete.
+configure.ac:894: You should run autoupdate.
+../../lib/autoconf/general.m4:383: AC_FD_CC is expanded from...
+../../lib/m4sugar/m4sh.m4:639: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2042: AC_CACHE_VAL is expanded from...
+common/python.m4:4: AM_CHECK_PYMOD is expanded from...
+configure.ac:894: the top level
+configure.ac:894: warning: The macro `AC_FD_CC' is obsolete.
+configure.ac:894: You should run autoupdate.
+../../lib/autoconf/general.m4:383: AC_FD_CC is expanded from...
+../../lib/m4sugar/m4sh.m4:639: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2042: AC_CACHE_VAL is expanded from...
+common/python.m4:4: AM_CHECK_PYMOD is expanded from...
+common/python.m4:4: AM_CHECK_PYMOD is expanded from...
+configure.ac:894: the top level
+configure.ac:145: warning: AC_LANG_CONFTEST: no AC_LANG_SOURCE call detected in body
+../../lib/autoconf/lang.m4:193: AC_LANG_CONFTEST is expanded from...
+../../lib/autoconf/general.m4:2601: _AC_COMPILE_IFELSE is expanded from...
+../../lib/autoconf/general.m4:2617: AC_COMPILE_IFELSE is expanded from...
+../../lib/m4sugar/m4sh.m4:639: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2042: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2063: AC_CACHE_CHECK is expanded from...
+configure.ac:145: the top level
+configure.ac:302: warning: AC_LANG_CONFTEST: no AC_LANG_SOURCE call detected in body
+../../lib/autoconf/lang.m4:193: AC_LANG_CONFTEST is expanded from...
+configure.ac:302: the top level
+configure.ac:145: warning: AC_LANG_CONFTEST: no AC_LANG_SOURCE call detected in body
+../../lib/autoconf/lang.m4:193: AC_LANG_CONFTEST is expanded from...
+../../lib/autoconf/general.m4:2601: _AC_COMPILE_IFELSE is expanded from...
+../../lib/autoconf/general.m4:2617: AC_COMPILE_IFELSE is expanded from...
+../../lib/m4sugar/m4sh.m4:639: AS_IF is expanded from...
+../../lib/autoconf/general.m4:2042: AC_CACHE_VAL is expanded from...
+../../lib/autoconf/general.m4:2063: AC_CACHE_CHECK is expanded from...
+configure.ac:145: the top level
+configure.ac:302: warning: AC_LANG_CONFTEST: no AC_LANG_SOURCE call detected in body
+../../lib/autoconf/lang.m4:193: AC_LANG_CONFTEST is expanded from...
+configure.ac:302: the top level
+configure.ac:58: installing './compile'
+configure.ac:46: installing './config.guess'
+configure.ac:46: installing './config.sub'
+configure.ac:26: installing './install-sh'
+configure.ac:26: installing './missing'
+avahi-autoipd/Makefile.am:34: warning: source file '../avahi-daemon/setproctitle.c' is in a subdirectory,
+avahi-autoipd/Makefile.am:34: but option 'subdir-objects' is disabled
+automake: warning: possible forward-incompatibility.
+automake: At least a source file is in a subdirectory, but the 'subdir-objects'
+automake: automake option hasn't been enabled.  For now, the corresponding output
+automake: object file(s) will be placed in the top-level directory.  However,
+automake: this behaviour will change in future Automake versions: they will
+automake: unconditionally cause object files to be placed in the same subdirectory
+automake: of the corresponding sources.
+automake: You are advised to start using 'subdir-objects' option throughout your
+automake: project, to avoid future incompatibilities.
+avahi-autoipd/Makefile.am:34: warning: source file '../avahi-common/malloc.c' is in a subdirectory,
+avahi-autoipd/Makefile.am:34: but option 'subdir-objects' is disabled
+avahi-autoipd/Makefile.am:34: warning: source file '../avahi-common/timeval.c' is in a subdirectory,
+avahi-autoipd/Makefile.am:34: but option 'subdir-objects' is disabled
+avahi-autoipd/Makefile.am: installing './depcomp'
+avahi-client/Makefile.am:43: warning: source file '../avahi-common/dbus.c' is in a subdirectory,
+avahi-client/Makefile.am:43: but option 'subdir-objects' is disabled
+avahi-client/Makefile.am:43: warning: source file '../avahi-common/dbus-watch-glue.c' is in a subdirectory,
+avahi-client/Makefile.am:43: but option 'subdir-objects' is disabled
+parallel-tests: installing './test-driver'
+avahi-daemon/Makefile.am:48: warning: source file '../avahi-client/check-nss.c' is in a subdirectory,
+avahi-daemon/Makefile.am:48: but option 'subdir-objects' is disabled
+avahi-daemon/Makefile.am:114: warning: source file '../avahi-common/dbus.c' is in a subdirectory,
+avahi-daemon/Makefile.am:114: but option 'subdir-objects' is disabled
+avahi-daemon/Makefile.am:114: warning: source file '../avahi-common/dbus-watch-glue.c' is in a subdirectory,
+avahi-daemon/Makefile.am:114: but option 'subdir-objects' is disabled
+avahi-python/avahi/Makefile.am:48: installing './py-compile'
+avahi-ui/Makefile.am:66: warning: source file '../avahi-utils/stdb.c' is in a subdirectory,
+avahi-ui/Makefile.am:66: but option 'subdir-objects' is disabled
+avahi-ui/Makefile.am:75: warning: source file '../avahi-utils/stdb.c' is in a subdirectory,
+avahi-ui/Makefile.am:75: but option 'subdir-objects' is disabled
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for a thread-safe mkdir -p... /usr/bin/mkdir -p
+checking for gawk... no
+checking for mawk... mawk
+checking whether make sets $(MAKE)... yes
+checking whether make supports nested variables... yes
+checking how to create a pax tar archive... gnutar
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... x86_64-pc-linux-gnu
+checking whether make supports nested variables... (cached) yes
+checking for stow... no
+checking for gcc... /usr/local/bin/clang-jcc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether /usr/local/bin/clang-jcc accepts -g... yes
+checking for /usr/local/bin/clang-jcc option to accept ISO C89... none needed
+checking whether /usr/local/bin/clang-jcc understands -c and -o together... yes
+checking whether make supports the include directive... yes (GNU style)
+checking dependency style of /usr/local/bin/clang-jcc... gcc3
+checking for /usr/local/bin/clang-jcc option to accept ISO C99... none needed
+checking whether we are using the GNU C++ compiler... yes
+checking whether /usr/local/bin/clang++-jcc accepts -g... yes
+checking dependency style of /usr/local/bin/clang++-jcc... gcc3
+checking how to run the C preprocessor... /usr/local/bin/clang-jcc -E
+checking for grep that handles long lines and -e... /usr/bin/grep
+checking for egrep... /usr/bin/grep -E
+checking for ANSI C header files... yes
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for memory.h... yes
+checking for strings.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for unistd.h... yes
+checking minix/config.h usability... no
+checking minix/config.h presence... no
+checking for minix/config.h... no
+checking whether it is safe to define __EXTENSIONS__... yes
+checking how to run the C preprocessor... /usr/local/bin/clang-jcc -E
+checking whether ln -s works... yes
+checking whether make sets $(MAKE)... (cached) yes
+checking whether /usr/local/bin/clang-jcc needs -traditional... no
+checking how to print strings... printf
+checking for a sed that does not truncate output... /usr/bin/sed
+checking for fgrep... /usr/bin/grep -F
+checking for ld used by /usr/local/bin/clang-jcc... /usr/bin/ld
+checking if the linker (/usr/bin/ld) is GNU ld... yes
+checking for BSD- or MS-compatible name lister (nm)... /usr/bin/nm -B
+checking the name lister (/usr/bin/nm -B) interface... BSD nm
+checking the maximum length of command line arguments... 1572864
+checking how to convert x86_64-pc-linux-gnu file names to x86_64-pc-linux-gnu format... func_convert_file_noop
+checking how to convert x86_64-pc-linux-gnu file names to toolchain format... func_convert_file_noop
+checking for /usr/bin/ld option to reload object files... -r
+checking for objdump... objdump
+checking how to recognize dependent libraries... pass_all
+checking for dlltool... no
+checking how to associate runtime and link libraries... printf %s\n
+checking for ar... ar
+checking for archiver @FILE support... @
+checking for strip... strip
+checking for ranlib... ranlib
+checking command to parse /usr/bin/nm -B output from /usr/local/bin/clang-jcc object... ok
+checking for sysroot... no
+checking for a working dd... /usr/bin/dd
+checking how to truncate binary pipes... /usr/bin/dd bs=4096 count=1
+checking for mt... no
+checking if : is a manifest tool... no
+checking for dlfcn.h... yes
+checking for objdir... .libs
+checking if /usr/local/bin/clang-jcc supports -fno-rtti -fno-exceptions... yes
+checking for /usr/local/bin/clang-jcc option to produce PIC... -fPIC -DPIC
+checking if /usr/local/bin/clang-jcc PIC flag -fPIC -DPIC works... yes
+checking if /usr/local/bin/clang-jcc static flag -static works... no
+checking if /usr/local/bin/clang-jcc supports -c -o file.o... yes
+checking if /usr/local/bin/clang-jcc supports -c -o file.o... (cached) yes
+checking whether the /usr/local/bin/clang-jcc linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking whether -lc should be explicitly linked in... no
+checking dynamic linker characteristics... GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... yes
+checking whether to build static libraries... yes
+checking how to run the C++ preprocessor... /usr/local/bin/clang++-jcc -E
+checking for ld used by /usr/local/bin/clang++-jcc... /usr/bin/ld -m elf_x86_64
+checking if the linker (/usr/bin/ld -m elf_x86_64) is GNU ld... yes
+checking whether the /usr/local/bin/clang++-jcc linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking for /usr/local/bin/clang++-jcc option to produce PIC... -fPIC -DPIC
+checking if /usr/local/bin/clang++-jcc PIC flag -fPIC -DPIC works... yes
+checking if /usr/local/bin/clang++-jcc static flag -static works... no
+checking if /usr/local/bin/clang++-jcc supports -c -o file.o... yes
+checking if /usr/local/bin/clang++-jcc supports -c -o file.o... (cached) yes
+checking whether the /usr/local/bin/clang++-jcc linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking dynamic linker characteristics... (cached) GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking whether the C++ compiler works... yes
+checking for the pthreads library -lpthreads... no
+checking whether pthreads work without any flags... yes
+checking for joinable pthread attribute... PTHREAD_CREATE_JOINABLE
+checking if more special flags are required for pthreads... no
+checking whether to check for GCC pthread/shared inconsistencies... no
+checking for linux/netlink.h... yes
+checking for net/route.h... no
+checking for sys/filio.h... no
+checking for sys/sysctl.h... yes
+checking for struct lifconf... no
+checking for struct ip_mreqn... yes
+checking for /etc/lfs-release... no
+checking for /etc/SuSE-release... no
+checking for /etc/gentoo-release... no
+checking for /etc/arch-release... no
+checking for /etc/debian_version... yes
+checking for /etc/redhat-release... no
+checking for /etc/mandriva-release... no
+checking for /etc/slackware-version... no
+checking checking whether rtnetlink.h can be included with -std=c99... yes
+checking whether /usr/local/bin/clang-jcc accepts -std=c99... yes
+checking whether /usr/local/bin/clang-jcc accepts -Wall... yes
+checking whether /usr/local/bin/clang-jcc accepts -W... yes
+checking whether /usr/local/bin/clang-jcc accepts -Wextra... yes
+checking whether /usr/local/bin/clang-jcc accepts -pedantic... yes
+checking whether /usr/local/bin/clang-jcc accepts -pipe... yes
+checking whether /usr/local/bin/clang-jcc accepts -Wformat... yes
+checking whether /usr/local/bin/clang-jcc accepts -Wold-style-definition... yes
+checking whether /usr/local/bin/clang-jcc accepts -Wdeclaration-after-statement... yes
+checking whether /usr/local/bin/clang-jcc accepts -Wfloat-equal... yes
+checking whether /usr/local/bin/clang-jcc accepts -Wmissing-declarations... yes
+checking whether /usr/local/bin/clang-jcc accepts -Wmissing-prototypes... yes
+checking whether /usr/local/bin/clang-jcc accepts -Wstrict-prototypes... yes
+checking whether /usr/local/bin/clang-jcc accepts -Wredundant-decls... yes
+checking whether /usr/local/bin/clang-jcc accepts -Wmissing-noreturn... yes
+checking whether /usr/local/bin/clang-jcc accepts -Wshadow... yes
+checking whether /usr/local/bin/clang-jcc accepts -Wendif-labels... yes
+checking whether /usr/local/bin/clang-jcc accepts -Wpointer-arith... yes
+checking whether /usr/local/bin/clang-jcc accepts -Wbad-function-cast... yes
+checking whether /usr/local/bin/clang-jcc accepts -Wcast-qual... yes
+checking whether /usr/local/bin/clang-jcc accepts -Wcast-align... yes
+checking whether /usr/local/bin/clang-jcc accepts -Wwrite-strings... yes
+checking whether /usr/local/bin/clang-jcc accepts -fdiagnostics-show-option... yes
+checking whether /usr/local/bin/clang-jcc accepts -Wno-cast-qual... yes
+checking whether /usr/local/bin/clang-jcc accepts -fno-strict-aliasing... yes
+checking for ANSI C header files... (cached) yes
+checking arpa/inet.h usability... yes
+checking arpa/inet.h presence... yes
+checking for arpa/inet.h... yes
+checking fcntl.h usability... yes
+checking fcntl.h presence... yes
+checking for fcntl.h... yes
+checking for inttypes.h... (cached) yes
+checking limits.h usability... yes
+checking limits.h presence... yes
+checking for limits.h... yes
+checking netinet/in.h usability... yes
+checking netinet/in.h presence... yes
+checking for netinet/in.h... yes
+checking for stdlib.h... (cached) yes
+checking for string.h... (cached) yes
+checking sys/ioctl.h usability... yes
+checking sys/ioctl.h presence... yes
+checking for sys/ioctl.h... yes
+checking sys/socket.h usability... yes
+checking sys/socket.h presence... yes
+checking for sys/socket.h... yes
+checking sys/time.h usability... yes
+checking sys/time.h presence... yes
+checking for sys/time.h... yes
+checking for unistd.h... (cached) yes
+checking netdb.h usability... yes
+checking netdb.h presence... yes
+checking for netdb.h... yes
+checking syslog.h usability... yes
+checking syslog.h presence... yes
+checking for syslog.h... yes
+checking for stdbool.h that conforms to C99... yes
+checking for _Bool... yes
+checking for an ANSI C-conforming const... yes
+checking for size_t... yes
+checking whether time.h and sys/time.h may both be included... yes
+checking for sys/wait.h that is POSIX.1 compatible... yes
+checking for library containing inet_ntop... none required
+checking for library containing recv... none required
+checking whether CMSG_SPACE is declared... yes
+checking for working memcmp... yes
+checking sys/select.h usability... yes
+checking sys/select.h presence... yes
+checking for sys/select.h... yes
+checking for sys/socket.h... (cached) yes
+checking types of arguments for select... int,fd_set *,struct timeval *
+checking for gethostname... yes
+checking for memchr... yes
+checking for memmove... yes
+checking for memset... yes
+checking for mkdir... yes
+checking for select... yes
+checking for socket... yes
+checking for strchr... yes
+checking for strcspn... yes
+checking for strdup... yes
+checking for strerror... yes
+checking for strrchr... yes
+checking for strspn... yes
+checking for strstr... yes
+checking for uname... yes
+checking for setresuid... yes
+checking for setreuid... yes
+checking for setresgid... yes
+checking for setregid... yes
+checking for strcasecmp... yes
+checking for gettimeofday... yes
+checking for putenv... yes
+checking for strncasecmp... yes
+checking for strlcpy... no
+checking for gethostbyname... yes
+checking for seteuid... yes
+checking for setegid... yes
+checking for setproctitle... no
+checking for getprogname... no
+checking for uid_t in sys/types.h... yes
+checking for unistd.h... (cached) yes
+checking for working chown... yes
+checking whether lstat correctly handles trailing slash... yes
+checking whether stat accepts an empty string... no
+checking for mode_t... yes
+checking for pid_t... yes
+checking whether environ is declared... yes
+checking for gcc -fvisibility=hidden support... yes
+checking sys/capability.h usability... no
+checking sys/capability.h presence... no
+checking for sys/capability.h... no
+checking sys/prctl.h usability... yes
+checking sys/prctl.h presence... yes
+checking for sys/prctl.h... yes
+checking for chroot... yes
+checking for dlopen in -ldl... yes
+checking for dlfcn.h... (cached) yes
+checking sys/inotify.h usability... yes
+checking sys/inotify.h presence... yes
+checking for sys/inotify.h... yes
+checking for kqueue... no
+checking whether NLS is requested... yes
+checking for msgfmt... /usr/bin/msgfmt
+checking for gmsgfmt... /usr/bin/msgfmt
+checking for xgettext... /usr/bin/xgettext
+checking for msgmerge... /usr/bin/msgmerge
+checking for ld used by /usr/local/bin/clang-jcc... /usr/bin/ld -m elf_x86_64
+checking if the linker (/usr/bin/ld -m elf_x86_64) is GNU ld... yes
+checking for shared library run path origin... done
+checking for CFPreferencesCopyAppValue... no
+checking for CFLocaleCopyCurrent... no
+checking for GNU gettext in libc... yes
+checking whether to use NLS... yes
+checking where the gettext function comes from... libc
+checking for pkg-config... yes
+checking for pkg-config... /usr/bin/pkg-config
+checking pkg-config is at least version 0.9.0... yes
+checking for gobject-introspection... no
+checking for XML_ParserCreate in -lexpat... yes
+checking expat.h usability... yes
+checking expat.h presence... yes
+checking for expat.h... yes
+checking for XML_ParserCreate in -lbsdxml... no
+checking for doxygen... no
+configure: WARNING: doxygen not found - will not generate any doxygen documentation
+checking for perl... /usr/bin/perl
+Package systemd was not found in the pkg-config search path.
+Perhaps you should add the directory containing `systemd.pc'
+to the PKG_CONFIG_PATH environment variable
+No package 'systemd' found
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating avahi-common/Makefile
+config.status: creating avahi-core/Makefile
+config.status: creating avahi-glib/Makefile
+config.status: creating avahi-gobject/Makefile
+config.status: creating avahi-qt/Makefile
+config.status: creating avahi-daemon/Makefile
+config.status: creating avahi-daemon/avahi-dbus.conf
+config.status: creating avahi-discover-standalone/Makefile
+config.status: creating avahi-client/Makefile
+config.status: creating initscript/Makefile
+config.status: creating initscript/gentoo/Makefile
+config.status: creating initscript/lfs/Makefile
+config.status: creating initscript/darwin/Makefile
+config.status: creating initscript/freebsd/Makefile
+config.status: creating initscript/slackware/Makefile
+config.status: creating avahi-dnsconfd/Makefile
+config.status: creating avahi-utils/Makefile
+config.status: creating avahi-python/Makefile
+config.status: creating avahi-python/avahi/Makefile
+config.status: creating avahi-python/avahi-discover/Makefile
+config.status: creating examples/Makefile
+config.status: creating common/Makefile
+config.status: creating man/Makefile
+config.status: creating tests/Makefile
+config.status: creating service-type-database/Makefile
+config.status: creating avahi-sharp/Makefile
+config.status: creating avahi-ui-sharp/Makefile
+config.status: creating avahi-compat-libdns_sd/Makefile
+config.status: creating avahi-compat-howl/Makefile
+config.status: creating avahi-compat-howl/samples/Makefile
+config.status: creating avahi-autoipd/Makefile
+config.status: creating avahi-ui/Makefile
+config.status: creating avahi-libevent/Makefile
+config.status: creating po/Makefile.in
+config.status: creating config.h
+config.status: executing depfiles commands
+config.status: executing libtool commands
+config.status: executing po-directories commands
+config.status: creating po/POTFILES
+config.status: creating po/Makefile
+
+ ---{ avahi 0.8 }---
+
+    prefix:                                    /usr/local
+    sysconfdir:                                ${prefix}/etc
+    localstatedir:                             ${prefix}/var
+    avahi socket:                              ${localstatedir}/run/avahi-daemon/socket
+    dbus-1 system.d dir:                       Disabled
+    dbus-1 version:                            Disabled
+    dbus-1 system socket:                      Disabled
+    C Compiler:                                /usr/local/bin/clang-jcc
+    CFLAGS:                                    -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing
+    Enable GLIB:                               no
+    Enable GLIB GObject:                       no
+    Enable GObject Introspection:              no
+    Enable GTK 2.0:                            no
+    Enable GTK 3.0:                            no
+    Enable D-Bus:                              no
+    With XML:                                  expat
+    Enable GDBM:                               no
+    Enable DBM:                                no
+    Enable libdaemon:                          no
+    Enable libsystemd:                         no
+    Enable Python:                             no
+    Enable pygobject:                          no
+    Enable python-dbus:                        no
+    Enable QT3:                                no
+    Enable QT4:                                no
+    Enable QT5:                                no
+    Enable Mono:                               no
+    Enable Monodoc:                            no
+    Distribution/OS:                           debian
+    User for avahi-daemon:                     avahi
+    Group for avahi-daemon:                    avahi
+    Privileged access group for Avahi clients: netdev
+    User for avahi-autoipd:                    avahi-autoipd
+    Group for avahi-autoipd:                   avahi-autoipd
+    Enable chroot():                           no
+    Enable Linux inotify:                      yes
+    Enable stack-smashing protection:          no
+    systemd unit directory:                    
+
+    Building libavahi-core              yes
+    Building avahi-daemon:              no   (You need libdaemon and expat/bsdxml!)
+    Building avahi-dnsconfd:            no   (You need libdaemon and expat/bsdxml!)
+    Building libavahi-client:           no   (You need avahi-daemon and D-Bus!)
+    Building avahi-utils:               no   (You need avahi-daemon and D-Bus!)
+    Building avahi-python:              no   (You need python, pygobject and python-dbus!)
+    Building libavahi-glib:             no
+    Building libavahi-gobject:          no
+    Building avahi-discover-standalone: no
+    Building libavahi-qt3:              no
+    Building libavahi-qt4:              no
+    Building libavahi-qt5:              no
+    Building avahi-sharp:               no
+    Building avahi-compat-libdns_sd:    no
+    Building avahi-compat-howl:         no
+    Building tests:                     no
+    Building avahi-core documentation:  no
+    Building avahi-autoipd:             no   (You need libdaemon!)
+    Building libavahi-ui:               no
+    Building libavahi-libevent:		no
+
+Making clean in common
+make[1]: Entering directory '/src/avahi/common'
+rm -rf .libs _libs
+rm -f *.lo
+make[1]: Leaving directory '/src/avahi/common'
+Making clean in avahi-common
+make[1]: Entering directory '/src/avahi/avahi-common'
+test -z "libavahi-common.la" || rm -f libavahi-common.la
+rm -f ./so_locations
+rm -rf .libs _libs
+rm -f *.o
+test -z "" || rm -f 
+test -z "" || rm -f 
+test -z "test-suite.log" || rm -f test-suite.log
+rm -f *.lo
+make[1]: Leaving directory '/src/avahi/avahi-common'
+Making clean in avahi-core
+make[1]: Entering directory '/src/avahi/avahi-core'
+test -z "libavahi-core.la" || rm -f libavahi-core.la
+rm -f ./so_locations
+rm -rf .libs _libs
+rm -f *.o
+test -z "" || rm -f 
+test -z "" || rm -f 
+test -z "test-suite.log" || rm -f test-suite.log
+rm -f *.lo
+make[1]: Leaving directory '/src/avahi/avahi-core'
+Making clean in avahi-qt
+make[1]: Entering directory '/src/avahi/avahi-qt'
+test -z "  " || rm -f   
+test -z "  " || rm -f   
+rm -rf .libs _libs
+rm -f *.o
+rm -f *.lo
+make[1]: Leaving directory '/src/avahi/avahi-qt'
+Making clean in avahi-client
+make[1]: Entering directory '/src/avahi/avahi-client'
+test -z "" || rm -f 
+rm -rf .libs _libs
+rm -f *.o
+rm -f *.lo
+make[1]: Leaving directory '/src/avahi/avahi-client'
+Making clean in avahi-glib
+make[1]: Entering directory '/src/avahi/avahi-glib'
+test -z "" || rm -f 
+rm -rf .libs _libs
+rm -f *.o
+test -z "" || rm -f 
+test -z "" || rm -f 
+test -z "test-suite.log" || rm -f test-suite.log
+rm -f *.lo
+make[1]: Leaving directory '/src/avahi/avahi-glib'
+Making clean in avahi-gobject
+make[1]: Entering directory '/src/avahi/avahi-gobject'
+test -z "" || rm -f 
+test -z "" || rm -f 
+rm -rf .libs _libs
+rm -f *.o
+rm -f *.lo
+make[1]: Leaving directory '/src/avahi/avahi-gobject'
+Making clean in avahi-discover-standalone
+make[1]: Entering directory '/src/avahi/avahi-discover-standalone'
+rm -rf .libs _libs
+rm -f *.o
+rm -f *.lo
+make[1]: Leaving directory '/src/avahi/avahi-discover-standalone'
+Making clean in avahi-daemon
+make[1]: Entering directory '/src/avahi/avahi-daemon'
+test -z "" || rm -f 
+rm -rf .libs _libs
+rm -f *.o
+rm -f *.lo
+make[1]: Leaving directory '/src/avahi/avahi-daemon'
+Making clean in avahi-sharp
+make[1]: Entering directory '/src/avahi/avahi-sharp'
+test -z "avahi-sharp.dll avahi-sharp.dll.mdb avahi-sharp.dll.config" || rm -f avahi-sharp.dll avahi-sharp.dll.mdb avahi-sharp.dll.config
+rm -rf .libs _libs
+rm -f *.lo
+make[1]: Leaving directory '/src/avahi/avahi-sharp'
+Making clean in initscript
+make[1]: Entering directory '/src/avahi/initscript'
+make[2]: Entering directory '/src/avahi/initscript'
+rm -rf .libs _libs
+rm -f *.lo
+make[2]: Leaving directory '/src/avahi/initscript'
+make[1]: Leaving directory '/src/avahi/initscript'
+Making clean in avahi-dnsconfd
+make[1]: Entering directory '/src/avahi/avahi-dnsconfd'
+test -z "" || rm -f 
+rm -rf .libs _libs
+rm -f *.o
+rm -f *.lo
+make[1]: Leaving directory '/src/avahi/avahi-dnsconfd'
+Making clean in avahi-utils
+make[1]: Entering directory '/src/avahi/avahi-utils'
+rm -rf .libs _libs
+rm -f *.o
+rm -f *.lo
+make[1]: Leaving directory '/src/avahi/avahi-utils'
+Making clean in avahi-python
+make[1]: Entering directory '/src/avahi/avahi-python'
+Making clean in avahi
+make[2]: Entering directory '/src/avahi/avahi-python/avahi'
+test -z "*.pyc *.pyo ServiceTypeDatabase.py" || rm -f *.pyc *.pyo ServiceTypeDatabase.py
+rm -rf .libs _libs
+test -z "" || rm -f 
+test -z "" || rm -f 
+test -z "test-suite.log" || rm -f test-suite.log
+rm -f *.lo
+make[2]: Leaving directory '/src/avahi/avahi-python/avahi'
+Making clean in avahi-discover
+make[2]: Entering directory '/src/avahi/avahi-python/avahi-discover'
+test -z "" || rm -f 
+rm -rf .libs _libs
+rm -f *.lo
+make[2]: Leaving directory '/src/avahi/avahi-python/avahi-discover'
+make[2]: Entering directory '/src/avahi/avahi-python'
+test -z "" || rm -f 
+rm -rf .libs _libs
+rm -f *.lo
+make[2]: Leaving directory '/src/avahi/avahi-python'
+make[1]: Leaving directory '/src/avahi/avahi-python'
+Making clean in examples
+make[1]: Entering directory '/src/avahi/examples'
+rm -rf .libs _libs
+rm -f *.o
+rm -f *.lo
+make[1]: Leaving directory '/src/avahi/examples'
+Making clean in man
+make[1]: Entering directory '/src/avahi/man'
+test -z "" || rm -f 
+rm -rf .libs _libs
+rm -f *.lo
+make[1]: Leaving directory '/src/avahi/man'
+Making clean in tests
+make[1]: Entering directory '/src/avahi/tests'
+rm -rf .libs _libs
+rm -f *.o
+rm -f *.lo
+make[1]: Leaving directory '/src/avahi/tests'
+Making clean in service-type-database
+make[1]: Entering directory '/src/avahi/service-type-database'
+test -z "" || rm -f 
+rm -rf .libs _libs
+rm -f *.lo
+make[1]: Leaving directory '/src/avahi/service-type-database'
+Making clean in avahi-compat-libdns_sd
+make[1]: Entering directory '/src/avahi/avahi-compat-libdns_sd'
+test -z "" || rm -f 
+test -z "" || rm -f 
+rm -rf .libs _libs
+rm -f *.o
+test -z "" || rm -f 
+test -z "" || rm -f 
+test -z "test-suite.log" || rm -f test-suite.log
+rm -f *.lo
+make[1]: Leaving directory '/src/avahi/avahi-compat-libdns_sd'
+Making clean in avahi-compat-howl
+make[1]: Entering directory '/src/avahi/avahi-compat-howl'
+Making clean in .
+make[2]: Entering directory '/src/avahi/avahi-compat-howl'
+test -z "" || rm -f 
+rm -rf .libs _libs
+rm -f *.o
+test -z "" || rm -f 
+test -z "" || rm -f 
+test -z "test-suite.log" || rm -f test-suite.log
+rm -f *.lo
+make[2]: Leaving directory '/src/avahi/avahi-compat-howl'
+Making clean in samples
+make[2]: Entering directory '/src/avahi/avahi-compat-howl/samples'
+rm -rf .libs _libs
+rm -f *.o
+rm -f *.lo
+make[2]: Leaving directory '/src/avahi/avahi-compat-howl/samples'
+make[1]: Leaving directory '/src/avahi/avahi-compat-howl'
+Making clean in avahi-autoipd
+make[1]: Entering directory '/src/avahi/avahi-autoipd'
+test -z "dhclient-enter-hook dhclient-exit-hook avahi-autoipd.action" || rm -f dhclient-enter-hook dhclient-exit-hook avahi-autoipd.action
+rm -rf .libs _libs
+rm -f *.o
+rm -f *.lo
+make[1]: Leaving directory '/src/avahi/avahi-autoipd'
+Making clean in avahi-ui
+make[1]: Entering directory '/src/avahi/avahi-ui'
+test -z " bssh.desktop.in bvnc.desktop.in" || rm -f  bssh.desktop.in bvnc.desktop.in
+test -z "" || rm -f 
+rm -rf .libs _libs
+rm -f *.o
+rm -f *.lo
+make[1]: Leaving directory '/src/avahi/avahi-ui'
+Making clean in avahi-ui-sharp
+make[1]: Entering directory '/src/avahi/avahi-ui-sharp'
+test -z "avahi-ui-sharp.dll avahi-ui-sharp.dll.mdb avahi-ui-sharp.dll.config bssh.exe" || rm -f avahi-ui-sharp.dll avahi-ui-sharp.dll.mdb avahi-ui-sharp.dll.config bssh.exe
+rm -rf .libs _libs
+rm -f *.lo
+make[1]: Leaving directory '/src/avahi/avahi-ui-sharp'
+Making clean in avahi-libevent
+make[1]: Entering directory '/src/avahi/avahi-libevent'
+test -z "" || rm -f 
+rm -rf .libs _libs
+rm -f *.o
+test -z "" || rm -f 
+test -z "" || rm -f 
+test -z "test-suite.log" || rm -f test-suite.log
+rm -f *.lo
+make[1]: Leaving directory '/src/avahi/avahi-libevent'
+Making clean in po
+make[1]: Entering directory '/src/avahi/po'
+rm -f *.insert-header
+rm -f remove-potcdate.sed
+rm -f stamp-poT
+rm -f core core.* avahi.po avahi.1po avahi.2po *.new.po
+rm -fr *.o
+make[1]: Leaving directory '/src/avahi/po'
+make[1]: Entering directory '/src/avahi'
+test -z "avahi-core.pc             avahi.devhelp" || rm -f avahi-core.pc             avahi.devhelp
+rm -rf .libs _libs
+test -z "" || rm -f 
+rm -f *.lo
+make[1]: Leaving directory '/src/avahi'
+++ nproc
++ make -j32 V=1
+make  all-recursive
+make[1]: Entering directory '/src/avahi'
+Making all in common
+make[2]: Entering directory '/src/avahi/common'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/src/avahi/common'
+Making all in avahi-common
+make[2]: Entering directory '/src/avahi/avahi-common'
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")'  -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-malloc.lo -MD -MP -MF .deps/libavahi_common_la-malloc.Tpo -c -o libavahi_common_la-malloc.lo `test -f 'malloc.c' || echo './'`malloc.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")'  -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-address.lo -MD -MP -MF .deps/libavahi_common_la-address.Tpo -c -o libavahi_common_la-address.lo `test -f 'address.c' || echo './'`address.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")'  -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-alternative.lo -MD -MP -MF .deps/libavahi_common_la-alternative.Tpo -c -o libavahi_common_la-alternative.lo `test -f 'alternative.c' || echo './'`alternative.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")'  -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-error.lo -MD -MP -MF .deps/libavahi_common_la-error.Tpo -c -o libavahi_common_la-error.lo `test -f 'error.c' || echo './'`error.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")'  -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-strlst.lo -MD -MP -MF .deps/libavahi_common_la-strlst.Tpo -c -o libavahi_common_la-strlst.lo `test -f 'strlst.c' || echo './'`strlst.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")'  -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-domain.lo -MD -MP -MF .deps/libavahi_common_la-domain.Tpo -c -o libavahi_common_la-domain.lo `test -f 'domain.c' || echo './'`domain.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")'  -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-timeval.lo -MD -MP -MF .deps/libavahi_common_la-timeval.Tpo -c -o libavahi_common_la-timeval.lo `test -f 'timeval.c' || echo './'`timeval.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")'  -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-simple-watch.lo -MD -MP -MF .deps/libavahi_common_la-simple-watch.Tpo -c -o libavahi_common_la-simple-watch.lo `test -f 'simple-watch.c' || echo './'`simple-watch.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")'  -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-thread-watch.lo -MD -MP -MF .deps/libavahi_common_la-thread-watch.Tpo -c -o libavahi_common_la-thread-watch.lo `test -f 'thread-watch.c' || echo './'`thread-watch.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")'  -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-rlist.lo -MD -MP -MF .deps/libavahi_common_la-rlist.Tpo -c -o libavahi_common_la-rlist.lo `test -f 'rlist.c' || echo './'`rlist.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")'  -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-utf8.lo -MD -MP -MF .deps/libavahi_common_la-utf8.Tpo -c -o libavahi_common_la-utf8.lo `test -f 'utf8.c' || echo './'`utf8.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")'  -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-i18n.lo -MD -MP -MF .deps/libavahi_common_la-i18n.Tpo -c -o libavahi_common_la-i18n.lo `test -f 'i18n.c' || echo './'`i18n.c
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-alternative.lo -MD -MP -MF .deps/libavahi_common_la-alternative.Tpo -c alternative.c  -fPIC -DPIC -o .libs/libavahi_common_la-alternative.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-strlst.lo -MD -MP -MF .deps/libavahi_common_la-strlst.Tpo -c strlst.c  -fPIC -DPIC -o .libs/libavahi_common_la-strlst.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-domain.lo -MD -MP -MF .deps/libavahi_common_la-domain.Tpo -c domain.c  -fPIC -DPIC -o .libs/libavahi_common_la-domain.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-utf8.lo -MD -MP -MF .deps/libavahi_common_la-utf8.Tpo -c utf8.c  -fPIC -DPIC -o .libs/libavahi_common_la-utf8.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-simple-watch.lo -MD -MP -MF .deps/libavahi_common_la-simple-watch.Tpo -c simple-watch.c  -fPIC -DPIC -o .libs/libavahi_common_la-simple-watch.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-i18n.lo -MD -MP -MF .deps/libavahi_common_la-i18n.Tpo -c i18n.c  -fPIC -DPIC -o .libs/libavahi_common_la-i18n.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-error.lo -MD -MP -MF .deps/libavahi_common_la-error.Tpo -c error.c  -fPIC -DPIC -o .libs/libavahi_common_la-error.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-thread-watch.lo -MD -MP -MF .deps/libavahi_common_la-thread-watch.Tpo -c thread-watch.c  -fPIC -DPIC -o .libs/libavahi_common_la-thread-watch.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-address.lo -MD -MP -MF .deps/libavahi_common_la-address.Tpo -c address.c  -fPIC -DPIC -o .libs/libavahi_common_la-address.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-malloc.lo -MD -MP -MF .deps/libavahi_common_la-malloc.Tpo -c malloc.c  -fPIC -DPIC -o .libs/libavahi_common_la-malloc.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-rlist.lo -MD -MP -MF .deps/libavahi_common_la-rlist.Tpo -c rlist.c  -fPIC -DPIC -o .libs/libavahi_common_la-rlist.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-timeval.lo -MD -MP -MF .deps/libavahi_common_la-timeval.Tpo -c timeval.c  -fPIC -DPIC -o .libs/libavahi_common_la-timeval.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-i18n.lo -MD -MP -MF .deps/libavahi_common_la-i18n.Tpo -c i18n.c -o libavahi_common_la-i18n.o >/dev/null 2>&1
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-error.lo -MD -MP -MF .deps/libavahi_common_la-error.Tpo -c error.c -o libavahi_common_la-error.o >/dev/null 2>&1
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-utf8.lo -MD -MP -MF .deps/libavahi_common_la-utf8.Tpo -c utf8.c -o libavahi_common_la-utf8.o >/dev/null 2>&1
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-rlist.lo -MD -MP -MF .deps/libavahi_common_la-rlist.Tpo -c rlist.c -o libavahi_common_la-rlist.o >/dev/null 2>&1
+mv -f .deps/libavahi_common_la-i18n.Tpo .deps/libavahi_common_la-i18n.Plo
+mv -f .deps/libavahi_common_la-error.Tpo .deps/libavahi_common_la-error.Plo
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-timeval.lo -MD -MP -MF .deps/libavahi_common_la-timeval.Tpo -c timeval.c -o libavahi_common_la-timeval.o >/dev/null 2>&1
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-address.lo -MD -MP -MF .deps/libavahi_common_la-address.Tpo -c address.c -o libavahi_common_la-address.o >/dev/null 2>&1
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-thread-watch.lo -MD -MP -MF .deps/libavahi_common_la-thread-watch.Tpo -c thread-watch.c -o libavahi_common_la-thread-watch.o >/dev/null 2>&1
+mv -f .deps/libavahi_common_la-utf8.Tpo .deps/libavahi_common_la-utf8.Plo
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-alternative.lo -MD -MP -MF .deps/libavahi_common_la-alternative.Tpo -c alternative.c -o libavahi_common_la-alternative.o >/dev/null 2>&1
+mv -f .deps/libavahi_common_la-rlist.Tpo .deps/libavahi_common_la-rlist.Plo
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-malloc.lo -MD -MP -MF .deps/libavahi_common_la-malloc.Tpo -c malloc.c -o libavahi_common_la-malloc.o >/dev/null 2>&1
+mv -f .deps/libavahi_common_la-timeval.Tpo .deps/libavahi_common_la-timeval.Plo
+mv -f .deps/libavahi_common_la-address.Tpo .deps/libavahi_common_la-address.Plo
+mv -f .deps/libavahi_common_la-thread-watch.Tpo .deps/libavahi_common_la-thread-watch.Plo
+mv -f .deps/libavahi_common_la-alternative.Tpo .deps/libavahi_common_la-alternative.Plo
+mv -f .deps/libavahi_common_la-malloc.Tpo .deps/libavahi_common_la-malloc.Plo
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-strlst.lo -MD -MP -MF .deps/libavahi_common_la-strlst.Tpo -c strlst.c -o libavahi_common_la-strlst.o >/dev/null 2>&1
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-simple-watch.lo -MD -MP -MF .deps/libavahi_common_la-simple-watch.Tpo -c simple-watch.c -o libavahi_common_la-simple-watch.o >/dev/null 2>&1
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_common_la-domain.lo -MD -MP -MF .deps/libavahi_common_la-domain.Tpo -c domain.c -o libavahi_common_la-domain.o >/dev/null 2>&1
+mv -f .deps/libavahi_common_la-strlst.Tpo .deps/libavahi_common_la-strlst.Plo
+mv -f .deps/libavahi_common_la-simple-watch.Tpo .deps/libavahi_common_la-simple-watch.Plo
+mv -f .deps/libavahi_common_la-domain.Tpo .deps/libavahi_common_la-domain.Plo
+/bin/bash ../libtool  --tag=CC   --mode=link /usr/local/bin/clang-jcc -I.. '-DDEBUG_TRAP=__asm__("int $3")'  -DAVAHI_LOCALEDIR=\"/usr/local//locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing   -version-info 8:4:5  -o libavahi-common.la -rpath /usr/local/lib libavahi_common_la-malloc.lo libavahi_common_la-address.lo libavahi_common_la-alternative.lo libavahi_common_la-error.lo libavahi_common_la-strlst.lo libavahi_common_la-domain.lo libavahi_common_la-timeval.lo libavahi_common_la-simple-watch.lo libavahi_common_la-thread-watch.lo libavahi_common_la-rlist.lo libavahi_common_la-utf8.lo libavahi_common_la-i18n.lo     
+libtool: link: /usr/local/bin/clang-jcc -shared  -fPIC -DPIC  .libs/libavahi_common_la-malloc.o .libs/libavahi_common_la-address.o .libs/libavahi_common_la-alternative.o .libs/libavahi_common_la-error.o .libs/libavahi_common_la-strlst.o .libs/libavahi_common_la-domain.o .libs/libavahi_common_la-timeval.o .libs/libavahi_common_la-simple-watch.o .libs/libavahi_common_la-thread-watch.o .libs/libavahi_common_la-rlist.o .libs/libavahi_common_la-utf8.o .libs/libavahi_common_la-i18n.o    -O1 -gline-tables-only -fsanitize=address -fsanitize=fuzzer-no-link   -Wl,-soname -Wl,libavahi-common.so.3 -o .libs/libavahi-common.so.3.5.4
+libtool: link: (cd ".libs" && rm -f "libavahi-common.so.3" && ln -s "libavahi-common.so.3.5.4" "libavahi-common.so.3")
+libtool: link: (cd ".libs" && rm -f "libavahi-common.so" && ln -s "libavahi-common.so.3.5.4" "libavahi-common.so")
+libtool: link: ar cr .libs/libavahi-common.a  libavahi_common_la-malloc.o libavahi_common_la-address.o libavahi_common_la-alternative.o libavahi_common_la-error.o libavahi_common_la-strlst.o libavahi_common_la-domain.o libavahi_common_la-timeval.o libavahi_common_la-simple-watch.o libavahi_common_la-thread-watch.o libavahi_common_la-rlist.o libavahi_common_la-utf8.o libavahi_common_la-i18n.o
+libtool: link: ranlib .libs/libavahi-common.a
+libtool: link: ( cd ".libs" && rm -f "libavahi-common.la" && ln -s "../libavahi-common.la" "libavahi-common.la" )
+make[2]: Leaving directory '/src/avahi/avahi-common'
+Making all in avahi-core
+make[2]: Entering directory '/src/avahi/avahi-core'
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")' -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-timeeventq.lo -MD -MP -MF .deps/libavahi_core_la-timeeventq.Tpo -c -o libavahi_core_la-timeeventq.lo `test -f 'timeeventq.c' || echo './'`timeeventq.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")' -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-iface.lo -MD -MP -MF .deps/libavahi_core_la-iface.Tpo -c -o libavahi_core_la-iface.lo `test -f 'iface.c' || echo './'`iface.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")' -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-server.lo -MD -MP -MF .deps/libavahi_core_la-server.Tpo -c -o libavahi_core_la-server.lo `test -f 'server.c' || echo './'`server.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")' -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-entry.lo -MD -MP -MF .deps/libavahi_core_la-entry.Tpo -c -o libavahi_core_la-entry.lo `test -f 'entry.c' || echo './'`entry.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")' -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-prioq.lo -MD -MP -MF .deps/libavahi_core_la-prioq.Tpo -c -o libavahi_core_la-prioq.lo `test -f 'prioq.c' || echo './'`prioq.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")' -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-cache.lo -MD -MP -MF .deps/libavahi_core_la-cache.Tpo -c -o libavahi_core_la-cache.lo `test -f 'cache.c' || echo './'`cache.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")' -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-socket.lo -MD -MP -MF .deps/libavahi_core_la-socket.Tpo -c -o libavahi_core_la-socket.lo `test -f 'socket.c' || echo './'`socket.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")' -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-response-sched.lo -MD -MP -MF .deps/libavahi_core_la-response-sched.Tpo -c -o libavahi_core_la-response-sched.lo `test -f 'response-sched.c' || echo './'`response-sched.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")' -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-query-sched.lo -MD -MP -MF .deps/libavahi_core_la-query-sched.Tpo -c -o libavahi_core_la-query-sched.lo `test -f 'query-sched.c' || echo './'`query-sched.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")' -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-probe-sched.lo -MD -MP -MF .deps/libavahi_core_la-probe-sched.Tpo -c -o libavahi_core_la-probe-sched.lo `test -f 'probe-sched.c' || echo './'`probe-sched.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")' -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-announce.lo -MD -MP -MF .deps/libavahi_core_la-announce.Tpo -c -o libavahi_core_la-announce.lo `test -f 'announce.c' || echo './'`announce.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")' -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-browse.lo -MD -MP -MF .deps/libavahi_core_la-browse.Tpo -c -o libavahi_core_la-browse.lo `test -f 'browse.c' || echo './'`browse.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")' -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-rrlist.lo -MD -MP -MF .deps/libavahi_core_la-rrlist.Tpo -c -o libavahi_core_la-rrlist.lo `test -f 'rrlist.c' || echo './'`rrlist.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")' -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-resolve-host-name.lo -MD -MP -MF .deps/libavahi_core_la-resolve-host-name.Tpo -c -o libavahi_core_la-resolve-host-name.lo `test -f 'resolve-host-name.c' || echo './'`resolve-host-name.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")' -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-resolve-address.lo -MD -MP -MF .deps/libavahi_core_la-resolve-address.Tpo -c -o libavahi_core_la-resolve-address.lo `test -f 'resolve-address.c' || echo './'`resolve-address.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")' -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-browse-domain.lo -MD -MP -MF .deps/libavahi_core_la-browse-domain.Tpo -c -o libavahi_core_la-browse-domain.lo `test -f 'browse-domain.c' || echo './'`browse-domain.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")' -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-browse-service-type.lo -MD -MP -MF .deps/libavahi_core_la-browse-service-type.Tpo -c -o libavahi_core_la-browse-service-type.lo `test -f 'browse-service-type.c' || echo './'`browse-service-type.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")' -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-browse-service.lo -MD -MP -MF .deps/libavahi_core_la-browse-service.Tpo -c -o libavahi_core_la-browse-service.lo `test -f 'browse-service.c' || echo './'`browse-service.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")' -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-resolve-service.lo -MD -MP -MF .deps/libavahi_core_la-resolve-service.Tpo -c -o libavahi_core_la-resolve-service.lo `test -f 'resolve-service.c' || echo './'`resolve-service.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")' -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-dns.lo -MD -MP -MF .deps/libavahi_core_la-dns.Tpo -c -o libavahi_core_la-dns.lo `test -f 'dns.c' || echo './'`dns.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")' -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-rr.lo -MD -MP -MF .deps/libavahi_core_la-rr.Tpo -c -o libavahi_core_la-rr.lo `test -f 'rr.c' || echo './'`rr.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")' -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-log.lo -MD -MP -MF .deps/libavahi_core_la-log.Tpo -c -o libavahi_core_la-log.lo `test -f 'log.c' || echo './'`log.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")' -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-browse-dns-server.lo -MD -MP -MF .deps/libavahi_core_la-browse-dns-server.Tpo -c -o libavahi_core_la-browse-dns-server.lo `test -f 'browse-dns-server.c' || echo './'`browse-dns-server.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")' -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-fdutil.lo -MD -MP -MF .deps/libavahi_core_la-fdutil.Tpo -c -o libavahi_core_la-fdutil.lo `test -f 'fdutil.c' || echo './'`fdutil.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")' -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-util.lo -MD -MP -MF .deps/libavahi_core_la-util.Tpo -c -o libavahi_core_la-util.lo `test -f 'util.c' || echo './'`util.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")' -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-hashmap.lo -MD -MP -MF .deps/libavahi_core_la-hashmap.Tpo -c -o libavahi_core_la-hashmap.lo `test -f 'hashmap.c' || echo './'`hashmap.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")' -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-wide-area.lo -MD -MP -MF .deps/libavahi_core_la-wide-area.Tpo -c -o libavahi_core_la-wide-area.lo `test -f 'wide-area.c' || echo './'`wide-area.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")' -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-multicast-lookup.lo -MD -MP -MF .deps/libavahi_core_la-multicast-lookup.Tpo -c -o libavahi_core_la-multicast-lookup.lo `test -f 'multicast-lookup.c' || echo './'`multicast-lookup.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")' -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-querier.lo -MD -MP -MF .deps/libavahi_core_la-querier.Tpo -c -o libavahi_core_la-querier.lo `test -f 'querier.c' || echo './'`querier.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")' -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-addr-util.lo -MD -MP -MF .deps/libavahi_core_la-addr-util.Tpo -c -o libavahi_core_la-addr-util.lo `test -f 'addr-util.c' || echo './'`addr-util.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")' -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-domain-util.lo -MD -MP -MF .deps/libavahi_core_la-domain-util.Tpo -c -o libavahi_core_la-domain-util.lo `test -f 'domain-util.c' || echo './'`domain-util.c
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")' -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-iface-linux.lo -MD -MP -MF .deps/libavahi_core_la-iface-linux.Tpo -c -o libavahi_core_la-iface-linux.lo `test -f 'iface-linux.c' || echo './'`iface-linux.c
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-entry.lo -MD -MP -MF .deps/libavahi_core_la-entry.Tpo -c entry.c  -fPIC -DPIC -o .libs/libavahi_core_la-entry.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-timeeventq.lo -MD -MP -MF .deps/libavahi_core_la-timeeventq.Tpo -c timeeventq.c  -fPIC -DPIC -o .libs/libavahi_core_la-timeeventq.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-cache.lo -MD -MP -MF .deps/libavahi_core_la-cache.Tpo -c cache.c  -fPIC -DPIC -o .libs/libavahi_core_la-cache.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-probe-sched.lo -MD -MP -MF .deps/libavahi_core_la-probe-sched.Tpo -c probe-sched.c  -fPIC -DPIC -o .libs/libavahi_core_la-probe-sched.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-server.lo -MD -MP -MF .deps/libavahi_core_la-server.Tpo -c server.c  -fPIC -DPIC -o .libs/libavahi_core_la-server.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-resolve-address.lo -MD -MP -MF .deps/libavahi_core_la-resolve-address.Tpo -c resolve-address.c  -fPIC -DPIC -o .libs/libavahi_core_la-resolve-address.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-iface.lo -MD -MP -MF .deps/libavahi_core_la-iface.Tpo -c iface.c  -fPIC -DPIC -o .libs/libavahi_core_la-iface.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-announce.lo -MD -MP -MF .deps/libavahi_core_la-announce.Tpo -c announce.c  -fPIC -DPIC -o .libs/libavahi_core_la-announce.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-prioq.lo -MD -MP -MF .deps/libavahi_core_la-prioq.Tpo -c prioq.c  -fPIC -DPIC -o .libs/libavahi_core_la-prioq.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-multicast-lookup.lo -MD -MP -MF .deps/libavahi_core_la-multicast-lookup.Tpo -c multicast-lookup.c  -fPIC -DPIC -o .libs/libavahi_core_la-multicast-lookup.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-response-sched.lo -MD -MP -MF .deps/libavahi_core_la-response-sched.Tpo -c response-sched.c  -fPIC -DPIC -o .libs/libavahi_core_la-response-sched.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-query-sched.lo -MD -MP -MF .deps/libavahi_core_la-query-sched.Tpo -c query-sched.c  -fPIC -DPIC -o .libs/libavahi_core_la-query-sched.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-dns.lo -MD -MP -MF .deps/libavahi_core_la-dns.Tpo -c dns.c  -fPIC -DPIC -o .libs/libavahi_core_la-dns.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-browse.lo -MD -MP -MF .deps/libavahi_core_la-browse.Tpo -c browse.c  -fPIC -DPIC -o .libs/libavahi_core_la-browse.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-rrlist.lo -MD -MP -MF .deps/libavahi_core_la-rrlist.Tpo -c rrlist.c  -fPIC -DPIC -o .libs/libavahi_core_la-rrlist.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-util.lo -MD -MP -MF .deps/libavahi_core_la-util.Tpo -c util.c  -fPIC -DPIC -o .libs/libavahi_core_la-util.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-socket.lo -MD -MP -MF .deps/libavahi_core_la-socket.Tpo -c socket.c  -fPIC -DPIC -o .libs/libavahi_core_la-socket.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-fdutil.lo -MD -MP -MF .deps/libavahi_core_la-fdutil.Tpo -c fdutil.c  -fPIC -DPIC -o .libs/libavahi_core_la-fdutil.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-browse-dns-server.lo -MD -MP -MF .deps/libavahi_core_la-browse-dns-server.Tpo -c browse-dns-server.c  -fPIC -DPIC -o .libs/libavahi_core_la-browse-dns-server.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-resolve-service.lo -MD -MP -MF .deps/libavahi_core_la-resolve-service.Tpo -c resolve-service.c  -fPIC -DPIC -o .libs/libavahi_core_la-resolve-service.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-resolve-host-name.lo -MD -MP -MF .deps/libavahi_core_la-resolve-host-name.Tpo -c resolve-host-name.c  -fPIC -DPIC -o .libs/libavahi_core_la-resolve-host-name.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-addr-util.lo -MD -MP -MF .deps/libavahi_core_la-addr-util.Tpo -c addr-util.c  -fPIC -DPIC -o .libs/libavahi_core_la-addr-util.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-iface-linux.lo -MD -MP -MF .deps/libavahi_core_la-iface-linux.Tpo -c iface-linux.c  -fPIC -DPIC -o .libs/libavahi_core_la-iface-linux.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-browse-service-type.lo -MD -MP -MF .deps/libavahi_core_la-browse-service-type.Tpo -c browse-service-type.c  -fPIC -DPIC -o .libs/libavahi_core_la-browse-service-type.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-browse-domain.lo -MD -MP -MF .deps/libavahi_core_la-browse-domain.Tpo -c browse-domain.c  -fPIC -DPIC -o .libs/libavahi_core_la-browse-domain.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-browse-service.lo -MD -MP -MF .deps/libavahi_core_la-browse-service.Tpo -c browse-service.c  -fPIC -DPIC -o .libs/libavahi_core_la-browse-service.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-hashmap.lo -MD -MP -MF .deps/libavahi_core_la-hashmap.Tpo -c hashmap.c  -fPIC -DPIC -o .libs/libavahi_core_la-hashmap.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-rr.lo -MD -MP -MF .deps/libavahi_core_la-rr.Tpo -c rr.c  -fPIC -DPIC -o .libs/libavahi_core_la-rr.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-log.lo -MD -MP -MF .deps/libavahi_core_la-log.Tpo -c log.c  -fPIC -DPIC -o .libs/libavahi_core_la-log.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-querier.lo -MD -MP -MF .deps/libavahi_core_la-querier.Tpo -c querier.c  -fPIC -DPIC -o .libs/libavahi_core_la-querier.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-wide-area.lo -MD -MP -MF .deps/libavahi_core_la-wide-area.Tpo -c wide-area.c  -fPIC -DPIC -o .libs/libavahi_core_la-wide-area.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-domain-util.lo -MD -MP -MF .deps/libavahi_core_la-domain-util.Tpo -c domain-util.c  -fPIC -DPIC -o .libs/libavahi_core_la-domain-util.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-fdutil.lo -MD -MP -MF .deps/libavahi_core_la-fdutil.Tpo -c fdutil.c -o libavahi_core_la-fdutil.o >/dev/null 2>&1
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-addr-util.lo -MD -MP -MF .deps/libavahi_core_la-addr-util.Tpo -c addr-util.c -o libavahi_core_la-addr-util.o >/dev/null 2>&1
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-util.lo -MD -MP -MF .deps/libavahi_core_la-util.Tpo -c util.c -o libavahi_core_la-util.o >/dev/null 2>&1
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-log.lo -MD -MP -MF .deps/libavahi_core_la-log.Tpo -c log.c -o libavahi_core_la-log.o >/dev/null 2>&1
+mv -f .deps/libavahi_core_la-fdutil.Tpo .deps/libavahi_core_la-fdutil.Plo
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-timeeventq.lo -MD -MP -MF .deps/libavahi_core_la-timeeventq.Tpo -c timeeventq.c -o libavahi_core_la-timeeventq.o >/dev/null 2>&1
+/bin/bash ../libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I..    -I.. '-DDEBUG_TRAP=__asm__("int $3")' -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-netlink.lo -MD -MP -MF .deps/libavahi_core_la-netlink.Tpo -c -o libavahi_core_la-netlink.lo `test -f 'netlink.c' || echo './'`netlink.c
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-browse-service-type.lo -MD -MP -MF .deps/libavahi_core_la-browse-service-type.Tpo -c browse-service-type.c -o libavahi_core_la-browse-service-type.o >/dev/null 2>&1
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-rrlist.lo -MD -MP -MF .deps/libavahi_core_la-rrlist.Tpo -c rrlist.c -o libavahi_core_la-rrlist.o >/dev/null 2>&1
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-browse-service.lo -MD -MP -MF .deps/libavahi_core_la-browse-service.Tpo -c browse-service.c -o libavahi_core_la-browse-service.o >/dev/null 2>&1
+mv -f .deps/libavahi_core_la-addr-util.Tpo .deps/libavahi_core_la-addr-util.Plo
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-browse-domain.lo -MD -MP -MF .deps/libavahi_core_la-browse-domain.Tpo -c browse-domain.c -o libavahi_core_la-browse-domain.o >/dev/null 2>&1
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-browse-dns-server.lo -MD -MP -MF .deps/libavahi_core_la-browse-dns-server.Tpo -c browse-dns-server.c -o libavahi_core_la-browse-dns-server.o >/dev/null 2>&1
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-hashmap.lo -MD -MP -MF .deps/libavahi_core_la-hashmap.Tpo -c hashmap.c -o libavahi_core_la-hashmap.o >/dev/null 2>&1
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-resolve-address.lo -MD -MP -MF .deps/libavahi_core_la-resolve-address.Tpo -c resolve-address.c -o libavahi_core_la-resolve-address.o >/dev/null 2>&1
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-prioq.lo -MD -MP -MF .deps/libavahi_core_la-prioq.Tpo -c prioq.c -o libavahi_core_la-prioq.o >/dev/null 2>&1
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-domain-util.lo -MD -MP -MF .deps/libavahi_core_la-domain-util.Tpo -c domain-util.c -o libavahi_core_la-domain-util.o >/dev/null 2>&1
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-querier.lo -MD -MP -MF .deps/libavahi_core_la-querier.Tpo -c querier.c -o libavahi_core_la-querier.o >/dev/null 2>&1
+mv -f .deps/libavahi_core_la-log.Tpo .deps/libavahi_core_la-log.Plo
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-resolve-host-name.lo -MD -MP -MF .deps/libavahi_core_la-resolve-host-name.Tpo -c resolve-host-name.c -o libavahi_core_la-resolve-host-name.o >/dev/null 2>&1
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-iface-linux.lo -MD -MP -MF .deps/libavahi_core_la-iface-linux.Tpo -c iface-linux.c -o libavahi_core_la-iface-linux.o >/dev/null 2>&1
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-probe-sched.lo -MD -MP -MF .deps/libavahi_core_la-probe-sched.Tpo -c probe-sched.c -o libavahi_core_la-probe-sched.o >/dev/null 2>&1
+mv -f .deps/libavahi_core_la-util.Tpo .deps/libavahi_core_la-util.Plo
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-multicast-lookup.lo -MD -MP -MF .deps/libavahi_core_la-multicast-lookup.Tpo -c multicast-lookup.c -o libavahi_core_la-multicast-lookup.o >/dev/null 2>&1
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-netlink.lo -MD -MP -MF .deps/libavahi_core_la-netlink.Tpo -c netlink.c  -fPIC -DPIC -o .libs/libavahi_core_la-netlink.o
+mv -f .deps/libavahi_core_la-browse-service-type.Tpo .deps/libavahi_core_la-browse-service-type.Plo
+mv -f .deps/libavahi_core_la-timeeventq.Tpo .deps/libavahi_core_la-timeeventq.Plo
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-query-sched.lo -MD -MP -MF .deps/libavahi_core_la-query-sched.Tpo -c query-sched.c -o libavahi_core_la-query-sched.o >/dev/null 2>&1
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-cache.lo -MD -MP -MF .deps/libavahi_core_la-cache.Tpo -c cache.c -o libavahi_core_la-cache.o >/dev/null 2>&1
+mv -f .deps/libavahi_core_la-browse-service.Tpo .deps/libavahi_core_la-browse-service.Plo
+mv -f .deps/libavahi_core_la-rrlist.Tpo .deps/libavahi_core_la-rrlist.Plo
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-resolve-service.lo -MD -MP -MF .deps/libavahi_core_la-resolve-service.Tpo -c resolve-service.c -o libavahi_core_la-resolve-service.o >/dev/null 2>&1
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-response-sched.lo -MD -MP -MF .deps/libavahi_core_la-response-sched.Tpo -c response-sched.c -o libavahi_core_la-response-sched.o >/dev/null 2>&1
+mv -f .deps/libavahi_core_la-querier.Tpo .deps/libavahi_core_la-querier.Plo
+mv -f .deps/libavahi_core_la-browse-domain.Tpo .deps/libavahi_core_la-browse-domain.Plo
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-browse.lo -MD -MP -MF .deps/libavahi_core_la-browse.Tpo -c browse.c -o libavahi_core_la-browse.o >/dev/null 2>&1
+mv -f .deps/libavahi_core_la-resolve-address.Tpo .deps/libavahi_core_la-resolve-address.Plo
+mv -f .deps/libavahi_core_la-prioq.Tpo .deps/libavahi_core_la-prioq.Plo
+mv -f .deps/libavahi_core_la-hashmap.Tpo .deps/libavahi_core_la-hashmap.Plo
+mv -f .deps/libavahi_core_la-domain-util.Tpo .deps/libavahi_core_la-domain-util.Plo
+mv -f .deps/libavahi_core_la-browse-dns-server.Tpo .deps/libavahi_core_la-browse-dns-server.Plo
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-netlink.lo -MD -MP -MF .deps/libavahi_core_la-netlink.Tpo -c netlink.c -o libavahi_core_la-netlink.o >/dev/null 2>&1
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-socket.lo -MD -MP -MF .deps/libavahi_core_la-socket.Tpo -c socket.c -o libavahi_core_la-socket.o >/dev/null 2>&1
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-announce.lo -MD -MP -MF .deps/libavahi_core_la-announce.Tpo -c announce.c -o libavahi_core_la-announce.o >/dev/null 2>&1
+mv -f .deps/libavahi_core_la-resolve-host-name.Tpo .deps/libavahi_core_la-resolve-host-name.Plo
+mv -f .deps/libavahi_core_la-iface-linux.Tpo .deps/libavahi_core_la-iface-linux.Plo
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-rr.lo -MD -MP -MF .deps/libavahi_core_la-rr.Tpo -c rr.c -o libavahi_core_la-rr.o >/dev/null 2>&1
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-wide-area.lo -MD -MP -MF .deps/libavahi_core_la-wide-area.Tpo -c wide-area.c -o libavahi_core_la-wide-area.o >/dev/null 2>&1
+mv -f .deps/libavahi_core_la-probe-sched.Tpo .deps/libavahi_core_la-probe-sched.Plo
+mv -f .deps/libavahi_core_la-query-sched.Tpo .deps/libavahi_core_la-query-sched.Plo
+mv -f .deps/libavahi_core_la-netlink.Tpo .deps/libavahi_core_la-netlink.Plo
+mv -f .deps/libavahi_core_la-multicast-lookup.Tpo .deps/libavahi_core_la-multicast-lookup.Plo
+mv -f .deps/libavahi_core_la-cache.Tpo .deps/libavahi_core_la-cache.Plo
+mv -f .deps/libavahi_core_la-resolve-service.Tpo .deps/libavahi_core_la-resolve-service.Plo
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-iface.lo -MD -MP -MF .deps/libavahi_core_la-iface.Tpo -c iface.c -o libavahi_core_la-iface.o >/dev/null 2>&1
+mv -f .deps/libavahi_core_la-response-sched.Tpo .deps/libavahi_core_la-response-sched.Plo
+mv -f .deps/libavahi_core_la-browse.Tpo .deps/libavahi_core_la-browse.Plo
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-dns.lo -MD -MP -MF .deps/libavahi_core_la-dns.Tpo -c dns.c -o libavahi_core_la-dns.o >/dev/null 2>&1
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-entry.lo -MD -MP -MF .deps/libavahi_core_la-entry.Tpo -c entry.c -o libavahi_core_la-entry.o >/dev/null 2>&1
+mv -f .deps/libavahi_core_la-socket.Tpo .deps/libavahi_core_la-socket.Plo
+mv -f .deps/libavahi_core_la-announce.Tpo .deps/libavahi_core_la-announce.Plo
+mv -f .deps/libavahi_core_la-rr.Tpo .deps/libavahi_core_la-rr.Plo
+mv -f .deps/libavahi_core_la-wide-area.Tpo .deps/libavahi_core_la-wide-area.Plo
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I.. -I.. "-DDEBUG_TRAP=__asm__(\"int \$3\")" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing -MT libavahi_core_la-server.lo -MD -MP -MF .deps/libavahi_core_la-server.Tpo -c server.c -o libavahi_core_la-server.o >/dev/null 2>&1
+mv -f .deps/libavahi_core_la-iface.Tpo .deps/libavahi_core_la-iface.Plo
+mv -f .deps/libavahi_core_la-dns.Tpo .deps/libavahi_core_la-dns.Plo
+mv -f .deps/libavahi_core_la-entry.Tpo .deps/libavahi_core_la-entry.Plo
+mv -f .deps/libavahi_core_la-server.Tpo .deps/libavahi_core_la-server.Plo
+/bin/bash ../libtool  --tag=CC   --mode=link /usr/local/bin/clang-jcc -I.. '-DDEBUG_TRAP=__asm__("int $3")' -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -std=c99 -Wall -W -Wextra -pedantic -pipe -Wformat -Wold-style-definition -Wdeclaration-after-statement -Wfloat-equal -Wmissing-declarations -Wmissing-prototypes -Wstrict-prototypes -Wredundant-decls -Wmissing-noreturn -Wshadow -Wendif-labels -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wwrite-strings -fdiagnostics-show-option -Wno-cast-qual -fno-strict-aliasing   -version-info 8:0:1  -o libavahi-core.la -rpath /usr/local/lib libavahi_core_la-timeeventq.lo libavahi_core_la-iface.lo libavahi_core_la-server.lo libavahi_core_la-entry.lo libavahi_core_la-prioq.lo libavahi_core_la-cache.lo libavahi_core_la-socket.lo libavahi_core_la-response-sched.lo libavahi_core_la-query-sched.lo libavahi_core_la-probe-sched.lo libavahi_core_la-announce.lo libavahi_core_la-browse.lo libavahi_core_la-rrlist.lo libavahi_core_la-resolve-host-name.lo libavahi_core_la-resolve-address.lo libavahi_core_la-browse-domain.lo libavahi_core_la-browse-service-type.lo libavahi_core_la-browse-service.lo libavahi_core_la-resolve-service.lo libavahi_core_la-dns.lo libavahi_core_la-rr.lo libavahi_core_la-log.lo libavahi_core_la-browse-dns-server.lo libavahi_core_la-fdutil.lo libavahi_core_la-util.lo libavahi_core_la-hashmap.lo libavahi_core_la-wide-area.lo libavahi_core_la-multicast-lookup.lo libavahi_core_la-querier.lo libavahi_core_la-addr-util.lo libavahi_core_la-domain-util.lo libavahi_core_la-iface-linux.lo libavahi_core_la-netlink.lo    ../avahi-common/libavahi-common.la 
+libtool: link: /usr/local/bin/clang-jcc -shared  -fPIC -DPIC  .libs/libavahi_core_la-timeeventq.o .libs/libavahi_core_la-iface.o .libs/libavahi_core_la-server.o .libs/libavahi_core_la-entry.o .libs/libavahi_core_la-prioq.o .libs/libavahi_core_la-cache.o .libs/libavahi_core_la-socket.o .libs/libavahi_core_la-response-sched.o .libs/libavahi_core_la-query-sched.o .libs/libavahi_core_la-probe-sched.o .libs/libavahi_core_la-announce.o .libs/libavahi_core_la-browse.o .libs/libavahi_core_la-rrlist.o .libs/libavahi_core_la-resolve-host-name.o .libs/libavahi_core_la-resolve-address.o .libs/libavahi_core_la-browse-domain.o .libs/libavahi_core_la-browse-service-type.o .libs/libavahi_core_la-browse-service.o .libs/libavahi_core_la-resolve-service.o .libs/libavahi_core_la-dns.o .libs/libavahi_core_la-rr.o .libs/libavahi_core_la-log.o .libs/libavahi_core_la-browse-dns-server.o .libs/libavahi_core_la-fdutil.o .libs/libavahi_core_la-util.o .libs/libavahi_core_la-hashmap.o .libs/libavahi_core_la-wide-area.o .libs/libavahi_core_la-multicast-lookup.o .libs/libavahi_core_la-querier.o .libs/libavahi_core_la-addr-util.o .libs/libavahi_core_la-domain-util.o .libs/libavahi_core_la-iface-linux.o .libs/libavahi_core_la-netlink.o   -Wl,-rpath -Wl,/src/avahi/avahi-common/.libs ../avahi-common/.libs/libavahi-common.so  -O1 -gline-tables-only -fsanitize=address -fsanitize=fuzzer-no-link   -Wl,-soname -Wl,libavahi-core.so.7 -o .libs/libavahi-core.so.7.1.0
+libtool: link: (cd ".libs" && rm -f "libavahi-core.so.7" && ln -s "libavahi-core.so.7.1.0" "libavahi-core.so.7")
+libtool: link: (cd ".libs" && rm -f "libavahi-core.so" && ln -s "libavahi-core.so.7.1.0" "libavahi-core.so")
+libtool: link: ar cr .libs/libavahi-core.a  libavahi_core_la-timeeventq.o libavahi_core_la-iface.o libavahi_core_la-server.o libavahi_core_la-entry.o libavahi_core_la-prioq.o libavahi_core_la-cache.o libavahi_core_la-socket.o libavahi_core_la-response-sched.o libavahi_core_la-query-sched.o libavahi_core_la-probe-sched.o libavahi_core_la-announce.o libavahi_core_la-browse.o libavahi_core_la-rrlist.o libavahi_core_la-resolve-host-name.o libavahi_core_la-resolve-address.o libavahi_core_la-browse-domain.o libavahi_core_la-browse-service-type.o libavahi_core_la-browse-service.o libavahi_core_la-resolve-service.o libavahi_core_la-dns.o libavahi_core_la-rr.o libavahi_core_la-log.o libavahi_core_la-browse-dns-server.o libavahi_core_la-fdutil.o libavahi_core_la-util.o libavahi_core_la-hashmap.o libavahi_core_la-wide-area.o libavahi_core_la-multicast-lookup.o libavahi_core_la-querier.o libavahi_core_la-addr-util.o libavahi_core_la-domain-util.o libavahi_core_la-iface-linux.o libavahi_core_la-netlink.o
+libtool: link: ranlib .libs/libavahi-core.a
+libtool: link: ( cd ".libs" && rm -f "libavahi-core.la" && ln -s "../libavahi-core.la" "libavahi-core.la" )
+make[2]: Leaving directory '/src/avahi/avahi-core'
+Making all in avahi-qt
+make[2]: Entering directory '/src/avahi/avahi-qt'
+make  all-am
+make[3]: Entering directory '/src/avahi/avahi-qt'
+make[3]: Nothing to be done for 'all-am'.
+make[3]: Leaving directory '/src/avahi/avahi-qt'
+make[2]: Leaving directory '/src/avahi/avahi-qt'
+Making all in avahi-client
+make[2]: Entering directory '/src/avahi/avahi-client'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/src/avahi/avahi-client'
+Making all in avahi-glib
+make[2]: Entering directory '/src/avahi/avahi-glib'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/src/avahi/avahi-glib'
+Making all in avahi-gobject
+make[2]: Entering directory '/src/avahi/avahi-gobject'
+make  all-am
+make[3]: Entering directory '/src/avahi/avahi-gobject'
+make[3]: Nothing to be done for 'all-am'.
+make[3]: Leaving directory '/src/avahi/avahi-gobject'
+make[2]: Leaving directory '/src/avahi/avahi-gobject'
+Making all in avahi-discover-standalone
+make[2]: Entering directory '/src/avahi/avahi-discover-standalone'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/src/avahi/avahi-discover-standalone'
+Making all in avahi-daemon
+make[2]: Entering directory '/src/avahi/avahi-daemon'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/src/avahi/avahi-daemon'
+Making all in avahi-sharp
+make[2]: Entering directory '/src/avahi/avahi-sharp'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/src/avahi/avahi-sharp'
+Making all in initscript
+make[2]: Entering directory '/src/avahi/initscript'
+make[3]: Entering directory '/src/avahi/initscript'
+make[3]: Nothing to be done for 'all-am'.
+make[3]: Leaving directory '/src/avahi/initscript'
+make[2]: Leaving directory '/src/avahi/initscript'
+Making all in avahi-dnsconfd
+make[2]: Entering directory '/src/avahi/avahi-dnsconfd'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/src/avahi/avahi-dnsconfd'
+Making all in avahi-utils
+make[2]: Entering directory '/src/avahi/avahi-utils'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/src/avahi/avahi-utils'
+Making all in avahi-python
+make[2]: Entering directory '/src/avahi/avahi-python'
+Making all in avahi
+make[3]: Entering directory '/src/avahi/avahi-python/avahi'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/src/avahi/avahi-python/avahi'
+Making all in avahi-discover
+make[3]: Entering directory '/src/avahi/avahi-python/avahi-discover'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/src/avahi/avahi-python/avahi-discover'
+make[3]: Entering directory '/src/avahi/avahi-python'
+make[3]: Nothing to be done for 'all-am'.
+make[3]: Leaving directory '/src/avahi/avahi-python'
+make[2]: Leaving directory '/src/avahi/avahi-python'
+Making all in examples
+make[2]: Entering directory '/src/avahi/examples'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/src/avahi/examples'
+Making all in man
+make[2]: Entering directory '/src/avahi/man'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/src/avahi/man'
+Making all in tests
+make[2]: Entering directory '/src/avahi/tests'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/src/avahi/tests'
+Making all in service-type-database
+make[2]: Entering directory '/src/avahi/service-type-database'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/src/avahi/service-type-database'
+Making all in avahi-compat-libdns_sd
+make[2]: Entering directory '/src/avahi/avahi-compat-libdns_sd'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/src/avahi/avahi-compat-libdns_sd'
+Making all in avahi-compat-howl
+make[2]: Entering directory '/src/avahi/avahi-compat-howl'
+Making all in .
+make[3]: Entering directory '/src/avahi/avahi-compat-howl'
+make[3]: Nothing to be done for 'all-am'.
+make[3]: Leaving directory '/src/avahi/avahi-compat-howl'
+Making all in samples
+make[3]: Entering directory '/src/avahi/avahi-compat-howl/samples'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/src/avahi/avahi-compat-howl/samples'
+make[2]: Leaving directory '/src/avahi/avahi-compat-howl'
+Making all in avahi-autoipd
+make[2]: Entering directory '/src/avahi/avahi-autoipd'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/src/avahi/avahi-autoipd'
+Making all in avahi-ui
+make[2]: Entering directory '/src/avahi/avahi-ui'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/src/avahi/avahi-ui'
+Making all in avahi-ui-sharp
+make[2]: Entering directory '/src/avahi/avahi-ui-sharp'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/src/avahi/avahi-ui-sharp'
+Making all in avahi-libevent
+make[2]: Entering directory '/src/avahi/avahi-libevent'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/src/avahi/avahi-libevent'
+Making all in po
+make[2]: Entering directory '/src/avahi/po'
+make avahi.pot-update
+make[3]: Entering directory '/src/avahi/po'
+sed -e '/^#/d' remove-potcdate.sin > t-remove-potcdate.sed
+mv t-remove-potcdate.sed remove-potcdate.sed
+package_gnu="no"; \
+test -n "$package_gnu" || { \
+  if { if (LC_ALL=C find --version) 2>/dev/null | grep GNU >/dev/null; then \
+	 LC_ALL=C find -L .. -maxdepth 1 -type f \
+		       -size -10000000c -exec grep 'GNU avahi' \
+		       /dev/null '{}' ';' 2>/dev/null; \
+       else \
+	 LC_ALL=C grep 'GNU avahi' ../* 2>/dev/null; \
+       fi; \
+     } | grep -v 'libtool:' >/dev/null; then \
+     package_gnu=yes; \
+   else \
+     package_gnu=no; \
+   fi; \
+}; \
+if test "$package_gnu" = "yes"; then \
+  package_prefix='GNU '; \
+else \
+  package_prefix=''; \
+fi; \
+if test -n 'https://github.com/avahi/avahi/issues' || test 'avahi (at) lists (dot) freedesktop (dot) org' = '@'PACKAGE_BUGREPORT'@'; then \
+  msgid_bugs_address='https://github.com/avahi/avahi/issues'; \
+else \
+  msgid_bugs_address='avahi (at) lists (dot) freedesktop (dot) org'; \
+fi; \
+case `/usr/bin/xgettext --version | sed 1q | sed -e 's,^[^0-9]*,,'` in \
+  '' | 0.[0-9] | 0.[0-9].* | 0.1[0-5] | 0.1[0-5].* | 0.16 | 0.16.[0-1]*) \
+    /usr/bin/xgettext --default-domain=avahi --directory=.. \
+      --add-comments=TRANSLATORS: --from-code=UTF-8 --keyword=_ --keyword=N_ --add-comments  \
+      --files-from=./POTFILES.in \
+      --copyright-holder='The Avahi developers.' \
+      --msgid-bugs-address="$msgid_bugs_address" \
+    ;; \
+  *) \
+    /usr/bin/xgettext --default-domain=avahi --directory=.. \
+      --add-comments=TRANSLATORS: --from-code=UTF-8 --keyword=_ --keyword=N_ --add-comments  \
+      --files-from=./POTFILES.in \
+      --copyright-holder='The Avahi developers.' \
+      --package-name="${package_prefix}avahi" \
+      --package-version='0.8' \
+      --msgid-bugs-address="$msgid_bugs_address" \
+    ;; \
+esac
+test ! -f avahi.po || { \
+  if test -f ./avahi.pot-header; then \
+    sed -e '1,/^#$/d' < avahi.po > avahi.1po && \
+    cat ./avahi.pot-header avahi.1po > avahi.po; \
+    rm -f avahi.1po; \
+  fi; \
+  if test -f ./avahi.pot; then \
+    sed -f remove-potcdate.sed < ./avahi.pot > avahi.1po && \
+    sed -f remove-potcdate.sed < avahi.po > avahi.2po && \
+    if cmp avahi.1po avahi.2po >/dev/null 2>&1; then \
+      rm -f avahi.1po avahi.2po avahi.po; \
+    else \
+      rm -f avahi.1po avahi.2po ./avahi.pot && \
+      mv avahi.po ./avahi.pot; \
+    fi; \
+  else \
+    mv avahi.po ./avahi.pot; \
+  fi; \
+}
+make[3]: Leaving directory '/src/avahi/po'
+test ! -f ./avahi.pot || \
+  test -z "ach.gmo ar.gmo bg.gmo ca.gmo cs.gmo da.gmo de.gmo el.gmo en_AU.gmo en_CA.gmo en_GB.gmo en_NZ.gmo eo.gmo es.gmo et.gmo fa.gmo fi.gmo fo.gmo fr.gmo gl.gmo he.gmo hr.gmo hu.gmo id.gmo it.gmo ja.gmo ka.gmo ko.gmo lv.gmo ms.gmo nl.gmo oc.gmo pl.gmo pt_BR.gmo ro.gmo ru.gmo sk.gmo sl.gmo sr.gmo sr@latin.gmo sv.gmo tr.gmo uk.gmo zh_CN.gmo zh_TW.gmo" || make ach.gmo ar.gmo bg.gmo ca.gmo cs.gmo da.gmo de.gmo el.gmo en_AU.gmo en_CA.gmo en_GB.gmo en_NZ.gmo eo.gmo es.gmo et.gmo fa.gmo fi.gmo fo.gmo fr.gmo gl.gmo he.gmo hr.gmo hu.gmo id.gmo it.gmo ja.gmo ka.gmo ko.gmo lv.gmo ms.gmo nl.gmo oc.gmo pl.gmo pt_BR.gmo ro.gmo ru.gmo sk.gmo sl.gmo sr.gmo sr@latin.gmo sv.gmo tr.gmo uk.gmo zh_CN.gmo zh_TW.gmo
+make[3]: Entering directory '/src/avahi/po'
+rm -f ach.gmo && /usr/bin/msgfmt -c --statistics --verbose -o ach.gmo ach.po
+rm -f bg.gmo && /usr/bin/msgfmt -c --statistics --verbose -o bg.gmo bg.po
+rm -f ca.gmo && /usr/bin/msgfmt -c --statistics --verbose -o ca.gmo ca.po
+rm -f ar.gmo && /usr/bin/msgfmt -c --statistics --verbose -o ar.gmo ar.po
+rm -f cs.gmo && /usr/bin/msgfmt -c --statistics --verbose -o cs.gmo cs.po
+rm -f el.gmo && /usr/bin/msgfmt -c --statistics --verbose -o el.gmo el.po
+rm -f da.gmo && /usr/bin/msgfmt -c --statistics --verbose -o da.gmo da.po
+rm -f de.gmo && /usr/bin/msgfmt -c --statistics --verbose -o de.gmo de.po
+rm -f en_AU.gmo && /usr/bin/msgfmt -c --statistics --verbose -o en_AU.gmo en_AU.po
+rm -f en_GB.gmo && /usr/bin/msgfmt -c --statistics --verbose -o en_GB.gmo en_GB.po
+rm -f en_NZ.gmo && /usr/bin/msgfmt -c --statistics --verbose -o en_NZ.gmo en_NZ.po
+rm -f et.gmo && /usr/bin/msgfmt -c --statistics --verbose -o et.gmo et.po
+rm -f es.gmo && /usr/bin/msgfmt -c --statistics --verbose -o es.gmo es.po
+rm -f fi.gmo && /usr/bin/msgfmt -c --statistics --verbose -o fi.gmo fi.po
+ach.po:7: warning: header field 'Last-Translator' still has the initial default value
+ach.po: 0 translated messages, 168 untranslated messages.
+rm -f fo.gmo && /usr/bin/msgfmt -c --statistics --verbose -o fo.gmo fo.po
+rm -f eo.gmo && /usr/bin/msgfmt -c --statistics --verbose -o eo.gmo eo.po
+rm -f en_CA.gmo && /usr/bin/msgfmt -c --statistics --verbose -o en_CA.gmo en_CA.po
+rm -f gl.gmo && /usr/bin/msgfmt -c --statistics --verbose -o gl.gmo gl.po
+rm -f fa.gmo && /usr/bin/msgfmt -c --statistics --verbose -o fa.gmo fa.po
+rm -f he.gmo && /usr/bin/msgfmt -c --statistics --verbose -o he.gmo he.po
+rm -f hr.gmo && /usr/bin/msgfmt -c --statistics --verbose -o hr.gmo hr.po
+rm -f hu.gmo && /usr/bin/msgfmt -c --statistics --verbose -o hu.gmo hu.po
+rm -f fr.gmo && /usr/bin/msgfmt -c --statistics --verbose -o fr.gmo fr.po
+rm -f it.gmo && /usr/bin/msgfmt -c --statistics --verbose -o it.gmo it.po
+rm -f id.gmo && /usr/bin/msgfmt -c --statistics --verbose -o id.gmo id.po
+cs.po: 168 translated messages.
+rm -f ja.gmo && /usr/bin/msgfmt -c --statistics --verbose -o ja.gmo ja.po
+rm -f ko.gmo && /usr/bin/msgfmt -c --statistics --verbose -o ko.gmo ko.po
+rm -f ka.gmo && /usr/bin/msgfmt -c --statistics --verbose -o ka.gmo ka.po
+ca.po: 165 translated messages, 2 fuzzy translations, 1 untranslated message.
+rm -f lv.gmo && /usr/bin/msgfmt -c --statistics --verbose -o lv.gmo lv.po
+en_AU.po:7: warning: header field 'Last-Translator' still has the initial default value
+en_AU.po: 2 translated messages, 1 fuzzy translationel.po: , 165 untranslated messages.
+165 translated messages, 2 fuzzy translations, 1 untranslated message.
+rm -f ms.gmo && /usr/bin/msgfmt -c --statistics --verbose -o ms.gmo ms.po
+ar.po: 91 translated messages, 2 fuzzy translations, 75 untranslated messages.
+da.po: 168 translated messages.
+rm -f nl.gmo && /usr/bin/msgfmt -c --statistics --verbose -o nl.gmo nl.po
+de.po: 168 translated messages.
+rm -f oc.gmo && /usr/bin/msgfmt -c --statistics --verbose -o oc.gmo oc.po
+en_GB.po: 165 translated messages, 2 fuzzy translations, 1 untranslated message.
+rm -f pl.gmo && /usr/bin/msgfmt -c --statistics --verbose -o pl.gmo pl.po
+et.po: 129 translated messages, 2 fuzzy translations, 37 untranslated messages.
+en_NZ.po:6: warning: header field 'Language' still has the initial default value
+en_NZ.po: 152 translated messages, 11 fuzzy translations, 5 untranslated messages.
+fi.po: 164 translated messagesfo.po:7: warning: , 2 fuzzy translationsheader field 'Last-Translator' still has the initial default value
+, 2 untranslated messages.
+/usr/bin/msgfmt: en_CA.po: warning: PO file header fuzzy
+                           warning: older versions of msgfmt will give an error on this
+en_CA.po:7: warning: header field 'Project-Id-Version' missing in header
+en_CA.po:7: warning: header field 'Language-Team' missing in header
+en_CA.po:7: warning: header field 'Language' missing in header
+fo.po: 113 translated messages, 2 fuzzy translations, 53 untranslated messages.
+en_CA.po: 1 translated message, 1 fuzzy translation, 166 untranslated messages.
+bg.po: 165 translated messages, 2 fuzzy translations, 1 untranslated message.
+es.po: 165 translated messages, 2 fuzzy translations, 1 untranslated message.
+rm -f pt_BR.gmo && /usr/bin/msgfmt -c --statistics --verbose -o pt_BR.gmo pt_BR.po
+rm -f ro.gmo && /usr/bin/msgfmt -c --statistics --verbose -o ro.gmo ro.po
+rm -f sk.gmo && /usr/bin/msgfmt -c --statistics --verbose -o sk.gmo sk.po
+rm -f ru.gmo && /usr/bin/msgfmt -c --statistics --verbose -o ru.gmo ru.po
+eo.po: 67 translated messages, 1 fuzzy translation, 100 untranslated messages.
+rm -f sl.gmo && /usr/bin/msgfmt -c --statistics --verbose -o sl.gmo sl.po
+gl.po: rm -f sr.gmo && /usr/bin/msgfmt -c --statistics --verbose -o sr.gmo sr.po
+165 translated messages, 2 fuzzy translations, 1 untranslated message.
+he.po: 103 translated messages, 2 fuzzy translations, 63 untranslated messages.
+fa.po: 94 translated messages, 75 untranslated messages.
+ko.po:7: warning: header field 'Last-Translator' still has the initial default value
+hr.po: 168 translated messages.
+ko.po: 0 translated messages, 168 untranslated messages.
+hu.po: rm -f sr@latin.gmo && /usr/bin/msgfmt -c --statistics --verbose -o sr@latin.gmo sr@latin.po
+169 translated messages.
+rm -f sv.gmo && /usr/bin/msgfmt -c --statistics --verbose -o sv.gmo sv.po
+id.po: 168 translated messages.
+it.po: 168 translated messages.
+ja.po:7: warning: header field 'Last-Translator' still has the initial default value
+rm -f tr.gmo && /usr/bin/msgfmt -c --statistics --verbose -o tr.gmo tr.po
+ms.po:7: warning: header field 'Last-Translator' still has the initial default value
+ja.po: 165 translated messages, 2 fuzzy translations, 1 untranslated message.
+ms.po: 40 translated messages, 1 fuzzy translation, 127 untranslated messages.
+rm -f uk.gmo && /usr/bin/msgfmt -c --statistics --verbose -o uk.gmo uk.po
+lv.po: 165 translated messages, 2 fuzzy translations, 1 untranslated message.
+fr.po: 165 translated messages, 2 fuzzy translations, 1 untranslated message.
+ka.po: 168 translated messages.
+rm -f zh_CN.gmo && /usr/bin/msgfmt -c --statistics --verbose -o zh_CN.gmo zh_CN.po
+nl.po: 165 translated messages, 2 fuzzy translations, 1 untranslated message.
+rm -f zh_TW.gmo && /usr/bin/msgfmt -c --statistics --verbose -o zh_TW.gmo zh_TW.po
+oc.po: 168 translated messages.
+pl.po: 169 translated messages.
+pt_BR.po: 169 translated messages.
+ro.po: 169 translated messages.
+sk.po: 165 translated messages, 2 fuzzy translations, 1 untranslated message.
+sv.po: 169 translated messages.
+tr.po: 168 translated messages.
+sl.po: 165 translated messages, 2 fuzzy translations, 1 untranslated message.
+zh_TW.po: 165 translated messages, 2 fuzzy translations, 1 untranslated message.
+uk.po: 168 translated messages.
+zh_CN.po: 165 translated messages, 2 fuzzy translations, 1 untranslated message.
+ru.po: 168 translated messages.
+sr@latin.po: 165 translated messages, 2 fuzzy translations, 1 untranslated message.
+sr.po: 165 translated messages, 2 fuzzy translations, 1 untranslated message.
+make[3]: Leaving directory '/src/avahi/po'
+touch stamp-po
+make[2]: Leaving directory '/src/avahi/po'
+make[2]: Entering directory '/src/avahi'
+sed -e 's,@prefix\@,/usr/local,g' \
+    -e 's,@libdir\@,/usr/local/lib,g' \
+    -e 's,@HOWL_COMPAT_VERSION\@,0.9.8,g' \
+    -e 's,@PACKAGE_VERSION\@,0.8,g' avahi-core.pc.in > avahi-core.pc
+make[2]: Leaving directory '/src/avahi'
+make[1]: Leaving directory '/src/avahi'
++ for f in fuzz/fuzz-*.c
+++ basename fuzz/fuzz-consume-key.c .c
++ fuzz_target=fuzz-consume-key
++ /usr/local/bin/clang-jcc -c -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -I. fuzz/fuzz-consume-key.c -o fuzz-consume-key.o
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ fuzz-consume-key.o -o /workspace/out/libfuzzer-address-x86_64/fuzz-consume-key -fsanitize=fuzzer avahi-core/.libs/libavahi-core.a avahi-common/.libs/libavahi-common.a
++ for f in fuzz/fuzz-*.c
+++ basename fuzz/fuzz-consume-record.c .c
++ fuzz_target=fuzz-consume-record
++ /usr/local/bin/clang-jcc -c -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -I. fuzz/fuzz-consume-record.c -o fuzz-consume-record.o
+fuzz/fuzz-consume-record.c:9:10: fatal error: 'avahi-common/thread-watch-unix.h' file not found
+#include "avahi-common/thread-watch-unix.h"
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.
+
+Fix failure
+fuzz/fuzz-consume-record.cpp:9:10: fatal error: 'avahi-common/thread-watch-unix.h' file not found
+#include "avahi-common/thread-watch-unix.h"
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.

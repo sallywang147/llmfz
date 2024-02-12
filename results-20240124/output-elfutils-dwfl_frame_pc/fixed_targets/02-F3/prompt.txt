@@ -1,0 +1,78 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <algorithm>
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+
+extern "C" {
+#include <dwarfdump.h>
+#include <libdwarf.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  Dwarf_Debug dbg = nullptr;
+  if (dwarf_init(&dbg, DWARF_C_READ, nullptr, nullptr, nullptr) != DW_DLV_OK) {
+    return 0;
+  }
+
+  Dwarf_Addr base_address = stream.ConsumeIntegral<Dwarf_Addr>();
+  Dwarf_Die die = stream.ConsumeIntegral<Dwarf_Die>();
+  Dwarf_Frame_Op* ops = nullptr;
+  Dwarf_Signed ops_count = 0;
+  Dwarf_Error error = dwarf_get_frame_instructions(
+      dbg, base_address, die, &ops, &ops_count, nullptr);
+  if (error != DW_DLV_OK) {
+    dwarf_finish(dbg, nullptr);
+    return 0;
+  }
+
+  Dwarf_Frame frame;
+  if (dwarf_frame_init(&frame, dbg, base_address, die, ops, ops_count) !=
+      DW_DLV_OK) {
+    dwarf_free(dbg, ops, DW_DLA_FRAME_BLOCK);
+    dwarf_finish(dbg, nullptr);
+    return 0;
+  }
+
+  size_t pc = 0;
+  char is_activation = 0;
+  dwfl_frame_pc(&frame, &pc, &is_activation);
+
+  dwarf_free(dbg, ops, DW_DLA_FRAME_BLOCK);
+  dwarf_finish(dbg, nullptr);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:16:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+/src/fuzz-libdwfl.cpp:10:10: fatal error: 'dwarfdump.h' file not found
+#include <dwarfdump.h>
+         ^~~~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

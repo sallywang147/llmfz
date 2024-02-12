@@ -1,0 +1,22 @@
+Using seed corpus: h2o-fuzzer-http3_seed_corpus.zip
+/workspace/out/libfuzzer-address-x86_64/h2o-fuzzer-http3 -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/h2o-fuzzer-http3 -close_fd_mask=3 -max_len=16384 -dict=http.dict < /dev/null
+Dictionary: 126 entries
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 332117332
+INFO: Loaded 1 modules   (38009 inline 8-bit counters): 38009 [0xea59d4, 0xeaee4d), 
+INFO: Loaded 1 PC tables (38009 PCs): 38009 [0xce1898,0xd76028), 
+INFO:      319 files found in /workspace/corpus/h2o-fuzzer-http3
+INFO: seed corpus: files: 319 min: 1b max: 915b total: 58545b rss: 39Mb
+#16	pulse  cov: 142 ft: 151 corp: 5/24b exec/s: 5 rss: 41Mb
+#32	pulse  cov: 143 ft: 155 corp: 7/65b exec/s: 5 rss: 41Mb
+#64	pulse  cov: 143 ft: 158 corp: 11/231b exec/s: 5 rss: 42Mb
+#128	pulse  cov: 148 ft: 175 corp: 22/726b exec/s: 5 rss: 44Mb
+#256	pulse  cov: 148 ft: 179 corp: 26/1049b exec/s: 5 rss: 47Mb
+#348	INITED cov: 148 ft: 181 corp: 28/1887b exec/s: 4 rss: 49Mb
+#348	DONE   cov: 148 ft: 181 corp: 28/1887b lim: 419 exec/s: 4 rss: 49Mb
+Done 348 runs in 70 second(s)
+stat::number_of_executed_units: 348
+stat::average_exec_per_sec:     4
+stat::new_units_added:          0
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              49

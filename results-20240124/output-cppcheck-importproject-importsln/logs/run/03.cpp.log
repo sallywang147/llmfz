@@ -1,0 +1,29 @@
+/workspace/out/libfuzzer-address-x86_64/oss-fuzz-client -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/oss-fuzz-client < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 3889706878
+INFO: Loaded 1 modules   (177055 inline 8-bit counters): 177055 [0x1815850, 0x1840bef), 
+INFO: Loaded 1 PC tables (177055 PCs): 177055 [0x1391060,0x1644a50), 
+INFO:        0 files found in /workspace/corpus/oss-fuzz-client
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: A corpus is not provided, starting from an empty corpus
+#2	INITED cov: 23 ft: 24 corp: 1/1b exec/s: 0 rss: 41Mb
+#20	NEW    cov: 26 ft: 27 corp: 2/57b lim: 4096 exec/s: 0 rss: 41Mb L: 56/56 MS: 3 CMP-EraseBytes-InsertRepeatedBytes- DE: "\377\377\377\377"-
+#33	REDUCE cov: 26 ft: 27 corp: 2/37b lim: 4096 exec/s: 0 rss: 42Mb L: 36/36 MS: 3 InsertRepeatedBytes-EraseBytes-EraseBytes-
+#67	REDUCE cov: 26 ft: 27 corp: 2/24b lim: 4096 exec/s: 0 rss: 42Mb L: 23/23 MS: 4 CopyPart-InsertByte-ShuffleBytes-EraseBytes-
+	NEW_FUNC[1/1]: 0x5afd90 in std::__1::basic_filebuf<char, std::__1::char_traits<char> >::sync() /usr/local/bin/../include/c++/v1/fstream:976
+#1959	NEW    cov: 35 ft: 39 corp: 3/25b lim: 4096 exec/s: 1959 rss: 54Mb L: 1/23 MS: 2 CopyPart-ChangeByte-
+#32768	pulse  cov: 35 ft: 39 corp: 3/25b lim: 4096 exec/s: 16384 rss: 58Mb
+#65536	pulse  cov: 35 ft: 39 corp: 3/25b lim: 4096 exec/s: 16384 rss: 59Mb
+#131072	pulse  cov: 35 ft: 39 corp: 3/25b lim: 4096 exec/s: 18724 rss: 59Mb
+#262144	pulse  cov: 35 ft: 39 corp: 3/25b lim: 4096 exec/s: 20164 rss: 59Mb
+#524288	pulse  cov: 35 ft: 39 corp: 3/25b lim: 4096 exec/s: 20164 rss: 59Mb
+#625709	DONE   cov: 35 ft: 39 corp: 3/25b lim: 4096 exec/s: 20184 rss: 59Mb
+###### Recommended dictionary. ######
+"\377\377\377\377" # Uses: 50046
+###### End of recommended dictionary. ######
+Done 625709 runs in 31 second(s)
+stat::number_of_executed_units: 625709
+stat::average_exec_per_sec:     20184
+stat::new_units_added:          4
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              59

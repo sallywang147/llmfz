@@ -1,0 +1,94 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+
+#include "ares.h"
+
+extern "C" {
+#include <ares_version.h>
+#include <ares_private.h>
+}
+
+// Entrypoint for Clang's libfuzzer
+int LLVMFuzzerTestOneInput(const unsigned char *data,
+                           unsigned long size) {
+  // Feed the data into ares_getnameinfo
+  ares_channel channel;
+  ares_channel_init(&channel, ARES_OPT_FLAGS, 0, 0, NULL, NULL);
+  struct sockaddr_in addr;
+  addr.sin_family = AF_INET;
+  addr.sin_port = 0;
+  addr.sin_addr.s_addr = 0;
+  ares_getnameinfo(&channel, (struct sockaddr*)&addr, sizeof(addr),
+                   ARES_NI_NUMERICHOST, NULL, NULL);
+  ares_channel_destroy(&channel);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/c-ares/test/ares-test-fuzz-name.c:5:8: error: expected identifier or '('
+extern "C" {
+       ^
+1 error generated.
+
+Fix failure
+In file included from /src/c-ares/test/ares-test-fuzz-name.cpp:7:
+In file included from src/lib/ares_private.h:107:
+src/lib/ares_ipv6.h:35:8: error: redefinition of 'sockaddr_in6'
+struct sockaddr_in6 {
+       ^
+/usr/include/netinet/in.h:253:8: note: previous definition is here
+struct sockaddr_in6
+       ^
+In file included from /src/c-ares/test/ares-test-fuzz-name.cpp:7:
+In file included from src/lib/ares_private.h:123:
+In file included from src/lib/ares_getenv.h:30:
+In file included from src/lib/ares_setup.h:243:
+src/lib/setup_once.h:117:8: error: redefinition of 'timeval'
+struct timeval {
+       ^
+/usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h:8:8: note: previous definition is here
+struct timeval
+       ^
+In file included from /src/c-ares/test/ares-test-fuzz-name.cpp:7:
+In file included from src/lib/ares_private.h:123:
+In file included from src/lib/ares_getenv.h:30:
+In file included from src/lib/ares_setup.h:243:
+src/lib/setup_once.h:179:1: error: unknown type name 'Error'
+Error Missing_definition_of_macro_sread
+^
+src/lib/setup_once.h:179:40: error: expected ';' after top level declarator
+Error Missing_definition_of_macro_sread
+                                       ^
+                                       ;
+/src/c-ares/test/ares-test-fuzz-name.cpp:15:3: error: use of undeclared identifier 'ares_channel_init'; did you mean 'ares_channeldata'?
+  ares_channel_init(&channel, ARES_OPT_FLAGS, 0, 0, NULL, NULL);
+  ^
+src/lib/ares_private.h:235:8: note: 'ares_channeldata' declared here
+struct ares_channeldata {
+       ^
+/src/c-ares/test/ares-test-fuzz-name.cpp:20:3: error: no matching function for call to 'ares_getnameinfo'
+  ares_getnameinfo(&channel, (struct sockaddr*)&addr, sizeof(addr),
+  ^~~~~~~~~~~~~~~~
+include/ares.h:489:19: note: candidate function not viable: no known conversion from 'ares_channel *' (aka 'ares_channeldata **') to 'ares_channel_t *' (aka 'ares_channeldata *') for 1st argument; remove &
+CARES_EXTERN void ares_getnameinfo(ares_channel_t        *channel,
+                  ^
+/src/c-ares/test/ares-test-fuzz-name.cpp:22:3: error: use of undeclared identifier 'ares_channel_destroy'
+  ares_channel_destroy(&channel);
+  ^
+7 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,73 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <gpac/filters.h>
+#include <fuzzer/FuzzedDataProvider.h>
+
+extern "C" {
+#include <algorithm>
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  struct __gf_filter *filter = gf_filter_create();
+  gf_filter_set_input(filter, data, size);
+  dashdmx_process(filter);
+  gf_filter_delete(filter);
+  return 0;
+}
+}
+</code>
+
+The code has the following build issues:
+<error>
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:16:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+/src/testsuite/oss-fuzzers/fuzz_parse.cpp:9:32: error: use of undeclared identifier 'gf_filter_create'
+  struct __gf_filter *filter = gf_filter_create();
+                               ^
+/src/testsuite/oss-fuzzers/fuzz_parse.cpp:10:3: error: use of undeclared identifier 'gf_filter_set_input'; did you mean 'gf_filter_get_info'?
+  gf_filter_set_input(filter, data, size);
+  ^~~~~~~~~~~~~~~~~~~
+  gf_filter_get_info
+./include/gpac/filters.h:2891:25: note: 'gf_filter_get_info' declared here
+const GF_PropertyValue *gf_filter_get_info(GF_Filter *filter, u32 prop_4cc, GF_PropertyEntry **propentry);
+                        ^
+/src/testsuite/oss-fuzzers/fuzz_parse.cpp:10:31: error: cannot initialize a parameter of type 'u32' (aka 'unsigned int') with an lvalue of type 'const uint8_t *' (aka 'const unsigned char *')
+  gf_filter_set_input(filter, data, size);
+                              ^~~~
+./include/gpac/filters.h:2891:67: note: passing argument to parameter 'prop_4cc' here
+const GF_PropertyValue *gf_filter_get_info(GF_Filter *filter, u32 prop_4cc, GF_PropertyEntry **propentry);
+                                                                  ^
+/src/testsuite/oss-fuzzers/fuzz_parse.cpp:11:3: error: use of undeclared identifier 'dashdmx_process'
+  dashdmx_process(filter);
+  ^
+/src/testsuite/oss-fuzzers/fuzz_parse.cpp:12:3: error: use of undeclared identifier 'gf_filter_delete'; did you mean 'gf_file_delete'?
+  gf_filter_delete(filter);
+  ^~~~~~~~~~~~~~~~
+  gf_file_delete
+./include/gpac/tools.h:1670:8: note: 'gf_file_delete' declared here
+GF_Err gf_file_delete(const char *fileName);
+       ^
+/src/testsuite/oss-fuzzers/fuzz_parse.cpp:12:20: error: cannot initialize a parameter of type 'const char *' with an lvalue of type 'struct __gf_filter *'
+  gf_filter_delete(filter);
+                   ^~~~~~
+./include/gpac/tools.h:1670:35: note: passing argument to parameter 'fileName' here
+GF_Err gf_file_delete(const char *fileName);
+                                  ^
+6 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

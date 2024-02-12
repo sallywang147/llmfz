@@ -1,0 +1,59 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <config.h>
+
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "../../htslib/hts.h"
+#include "../../htslib/sam.h"
+
+extern "C" {
+#include "libfuzzer/libfuzzer_macro.h"
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+    FuzzedDataProvider stream(data, size);
+    const std::string filename = stream.ConsumeRemainingBytesAsString();
+    char *fn = strdup(filename.c_str());
+    char *fnidx = strdup(filename.c_str());
+    strcat(fnidx, ".bai");
+    const int min_shift = stream.ConsumeIntegralInRange<int>(0, 10);
+    sam_index_build2(fn, fnidx, min_shift);
+    free(fn);
+    free(fnidx);
+    return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+test/fuzz/hts_open_fuzzer.c:12:8: error: expected identifier or '('
+extern "C" {
+       ^
+test/fuzz/hts_open_fuzzer.c:13:10: fatal error: 'libfuzzer/libfuzzer_macro.h' file not found
+#include "libfuzzer/libfuzzer_macro.h"
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+2 errors generated.
+
+Fix failure
+test/fuzz/hts_open_fuzzer.cpp:13:10: fatal error: 'libfuzzer/libfuzzer_macro.h' file not found
+#include "libfuzzer/libfuzzer_macro.h"
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

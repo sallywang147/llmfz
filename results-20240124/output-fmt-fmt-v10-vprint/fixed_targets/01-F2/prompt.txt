@@ -1,0 +1,87 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fmt/core.h>
+
+#include <cstdint>
+#include <cstdio>
+
+#include "fuzzer-common.h"
+
+extern "C" {
+#include <fmt/format.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  static_assert(sizeof(fmt::detail::value<void*>) == 8,
+                "fixed size is too small");
+  if (size <= fixed_size + 1) return 0;
+
+  const auto args = assign_from_buf<size_t>(data);
+  data += fixed_size;
+  size -= fixed_size;
+
+  const auto format_str = fmt::string_view(as_chars(data), size);
+
+  fmt::vprint(stdout, format_str, args.data(), args.size());
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/fmt/include/fmt/base.h:1287:30: error: type 'void *' cannot be used prior to '::' because it has no members
+  using char_type = typename Context::char_type;
+                             ^
+/src/fmt/test/fuzzing/chrono-timepoint.cc:13:17: note: in instantiation of template class 'fmt::detail::value<void *>' requested here
+  static_assert(sizeof(fmt::detail::value<void*>) == 8,
+                ^
+In file included from /src/fmt/test/fuzzing/chrono-timepoint.cc:1:
+In file included from /src/fmt/include/fmt/core.h:5:
+In file included from /src/fmt/include/fmt/format.h:54:
+/src/fmt/include/fmt/base.h:1279:34: error: type 'void *' cannot be used prior to '::' because it has no members
+  using parse_context = typename Context::parse_context_type;
+                                 ^
+/src/fmt/include/fmt/base.h:1304:27: note: in instantiation of template class 'fmt::detail::custom_value<void *>' requested here
+    custom_value<Context> custom;
+                          ^
+/src/fmt/include/fmt/base.h:1289:3: note: in instantiation of member class 'fmt::detail::value<void *>::(anonymous)' requested here
+  union {
+  ^
+/src/fmt/test/fuzzing/chrono-timepoint.cc:13:17: note: in instantiation of template class 'fmt::detail::value<void *>' requested here
+  static_assert(sizeof(fmt::detail::value<void*>) == 8,
+                ^
+In file included from /src/fmt/test/fuzzing/chrono-timepoint.cc:1:
+In file included from /src/fmt/include/fmt/core.h:5:
+In file included from /src/fmt/include/fmt/format.h:54:
+/src/fmt/include/fmt/base.h:1320:31: error: multiple overloads of 'value' instantiate to the same signature 'void (fmt::detail::value<void *>::char_type)' (aka 'void (int)')
+  constexpr FMT_ALWAYS_INLINE value(char_type val) : char_value(val) {}
+                              ^
+/src/fmt/test/fuzzing/chrono-timepoint.cc:13:17: note: in instantiation of template class 'fmt::detail::value<void *>' requested here
+  static_assert(sizeof(fmt::detail::value<void*>) == 8,
+                ^
+/src/fmt/include/fmt/base.h:1309:31: note: previous declaration is here
+  constexpr FMT_ALWAYS_INLINE value(int val) : int_value(val) {}
+                              ^
+/src/fmt/include/fmt/base.h:1356:42: error: type 'void *' cannot be used prior to '::' because it has no members
+                                typename Context::parse_context_type& parse_ctx,
+                                         ^
+/src/fmt/test/fuzzing/chrono-timepoint.cc:23:39: error: member reference base type 'unsigned long const' is not a structure or union
+  fmt::vprint(stdout, format_str, args.data(), args.size());
+                                  ~~~~^~~~~
+/src/fmt/test/fuzzing/chrono-timepoint.cc:23:52: error: member reference base type 'unsigned long const' is not a structure or union
+  fmt::vprint(stdout, format_str, args.data(), args.size());
+                                               ~~~~^~~~~
+6 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

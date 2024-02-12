@@ -1,0 +1,122 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include "cppcheck.h"
+#include "type2.h"
+
+enum class Color;
+
+class DummyErrorLogger : public ErrorLogger {
+public:
+    void reportOut(const std::string& /*outmsg*/, Color /*c*/) override {}
+    void reportErr(const ErrorMessage& /*msg*/) override {}
+    void reportProgress(const std::string& /*filename*/,
+                        const char /*stage*/[],
+                        const std::size_t /*value*/) override {} // FN
+};
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t dataSize);
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t dataSize)
+{
+    if (dataSize < 10000) {
+        FileSettings fs;
+        fs.filename = "test.cpp";
+        fs.fileContents = std::string(data, dataSize);
+        DummyErrorLogger errorLogger;
+        CppCheck cppcheck(errorLogger, false, nullptr);
+        cppcheck.settings().addEnabled("all");
+        cppcheck.settings().certainty.setEnabled(Certainty::inconclusive, true);
+        cppcheck.check(&cppcheck, &fs);
+    }
+    return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+main.cpp:20:22: error: variable has incomplete type 'FileSettings'
+        FileSettings fs;
+                     ^
+../lib/analyzerinfo.h:32:8: note: forward declaration of 'FileSettings'
+struct FileSettings;
+       ^
+main.cpp:22:27: error: no matching constructor for initialization of 'std::string' (aka 'basic_string<char, char_traits<char>, allocator<char>>')
+        fs.fileContents = std::string(data, dataSize);
+                          ^           ~~~~~~~~~~~~~~
+/usr/local/bin/../include/c++/v1/string:810:5: note: candidate constructor not viable: no known conversion from 'const uint8_t *' (aka 'const unsigned char *') to 'std::basic_string<char>::size_type' (aka 'unsigned long') for 1st argument; dereference the argument with *
+    basic_string(size_type __n, _CharT __c);
+    ^
+/usr/local/bin/../include/c++/v1/string:806:5: note: candidate constructor not viable: no known conversion from 'const uint8_t *' (aka 'const unsigned char *') to 'const char *' for 1st argument
+    basic_string(const _CharT* __s, size_type __n);
+    ^
+/usr/local/bin/../include/c++/v1/string:819:5: note: candidate constructor not viable: no known conversion from 'const uint8_t *' (aka 'const unsigned char *') to 'const std::string' for 1st argument
+    basic_string(const basic_string& __str, size_type __pos,
+    ^
+/usr/local/bin/../include/c++/v1/string:774:5: note: candidate constructor not viable: no known conversion from 'const uint8_t *' (aka 'const unsigned char *') to 'const std::string' for 1st argument
+    basic_string(const basic_string& __str, const allocator_type& __a);
+    ^
+/usr/local/bin/../include/c++/v1/string:786:5: note: candidate constructor not viable: no known conversion from 'const uint8_t *' (aka 'const unsigned char *') to 'std::string' for 1st argument
+    basic_string(basic_string&& __str, const allocator_type& __a);
+    ^
+/usr/local/bin/../include/c++/v1/string:799:9: note: candidate constructor template not viable: no known conversion from 'const uint8_t *' (aka 'const unsigned char *') to 'const char *' for 1st argument
+        basic_string(const _CharT* __s, const _Allocator& __a);
+        ^
+/usr/local/bin/../include/c++/v1/string:846:5: note: candidate constructor not viable: no known conversion from 'const uint8_t *' (aka 'const unsigned char *') to 'initializer_list<char>' for 1st argument
+    basic_string(initializer_list<_CharT> __il, const _Allocator& __a);
+    ^
+/usr/local/bin/../include/c++/v1/string:838:9: note: candidate template ignored: deduced conflicting types for parameter '_InputIterator' ('const uint8_t *' (aka 'const unsigned char *') vs. 'size_t' (aka 'unsigned long'))
+        basic_string(_InputIterator __first, _InputIterator __last);
+        ^
+/usr/local/bin/../include/c++/v1/string:834:18: note: candidate template ignored: requirement '__can_be_converted_to_string_view<char, std::char_traits<char>, const unsigned char *>::value' was not satisfied [with _Tp = const unsigned char *]
+        explicit basic_string(const _Tp& __t, const allocator_type& __a);
+                 ^
+/usr/local/bin/../include/c++/v1/string:766:40: note: candidate constructor not viable: requires single argument '__a', but 2 arguments were provided
+    _LIBCPP_INLINE_VISIBILITY explicit basic_string(const allocator_type& __a)
+                                       ^
+/usr/local/bin/../include/c++/v1/string:773:5: note: candidate constructor not viable: requires single argument '__str', but 2 arguments were provided
+    basic_string(const basic_string& __str);
+    ^
+/usr/local/bin/../include/c++/v1/string:778:5: note: candidate constructor not viable: requires single argument '__str', but 2 arguments were provided
+    basic_string(basic_string&& __str)
+    ^
+/usr/local/bin/../include/c++/v1/string:791:5: note: candidate constructor template not viable: requires single argument '__s', but 2 arguments were provided
+    basic_string(const _CharT* __s) : __r_(__default_init_tag(), __default_init_tag()) {
+    ^
+/usr/local/bin/../include/c++/v1/string:830:18: note: candidate constructor template not viable: requires single argument '__t', but 2 arguments were provided
+        explicit basic_string(const _Tp& __t);
+                 ^
+/usr/local/bin/../include/c++/v1/string:844:5: note: candidate constructor not viable: requires single argument '__il', but 2 arguments were provided
+    basic_string(initializer_list<_CharT> __il);
+    ^
+/usr/local/bin/../include/c++/v1/string:808:5: note: candidate constructor not viable: requires 3 arguments, but 2 were provided
+    basic_string(const _CharT* __s, size_type __n, const _Allocator& __a);
+    ^
+/usr/local/bin/../include/c++/v1/string:814:9: note: candidate constructor template not viable: requires 3 arguments, but 2 were provided
+        basic_string(size_type __n, _CharT __c, const _Allocator& __a);
+        ^
+/usr/local/bin/../include/c++/v1/string:841:9: note: candidate constructor template not viable: requires 3 arguments, but 2 were provided
+        basic_string(_InputIterator __first, _InputIterator __last, const allocator_type& __a);
+        ^
+/usr/local/bin/../include/c++/v1/string:763:31: note: candidate constructor not viable: requires 0 arguments, but 2 were provided
+    _LIBCPP_INLINE_VISIBILITY basic_string()
+                              ^
+/usr/local/bin/../include/c++/v1/string:816:5: note: candidate constructor not viable: requires at least 3 arguments, but 2 were provided
+    basic_string(const basic_string& __str, size_type __pos, size_type __n,
+    ^
+/usr/local/bin/../include/c++/v1/string:824:9: note: candidate constructor template not viable: requires at least 3 arguments, but 2 were provided
+        basic_string(const _Tp& __t, size_type __pos, size_type __n,
+        ^
+2 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

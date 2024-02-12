@@ -1,0 +1,58 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <brunsli/jpeg_data.h>
+#include "../common/platform.h"
+#include <brunsli/status.h>
+#include <brunsli/types.h>
+#include <brunsli/brunsli_decode.h>
+#include <brunsli/jpeg_data_writer.h>
+#include "../dec/state.h"
+
+size_t DiscardOutputFunction(void* data, const uint8_t* buf, size_t count) {
+  BRUNSLI_UNUSED(data);
+  BRUNSLI_UNUSED(buf);
+  return count;
+}
+
+// Entry point for LibFuzzer.
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  brunsli::JPEGOutput out(DiscardOutputFunction, nullptr);
+  brunsli::JPEGData jpg;
+  brunsli::internal::dec::State state;
+  brunsli::BrunsliStatus status;
+
+  size_t start = 0;
+  for (size_t end = 0; end <= size; ++end) {
+    state.data = data + start;
+    state.pos = 0;
+    state.len = end - start;
+    status = brunsli::internal::dec::ProcessJpeg(&state, &jpg);
+    brunsli::BrunsliStatus expected_status =
+        end < size ? brunsli::BRUNSLI_NOT_ENOUGH_DATA : brunsli::BRUNSLI_OK;
+    if (status != expected_status) return 0;
+    start += state.pos;
+  }
+
+  // TODO(eustas): check that streaming and non-streaming decoders produce the
+  //               same output
+  brunsli::WriteJpeg(jpg, out);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+The target function `void brunsli::internal::dec::InternalState::~InternalState(struct brunsli::internal::dec::InternalState * )` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `void brunsli::internal::dec::InternalState::~InternalState(struct brunsli::internal::dec::InternalState * )` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

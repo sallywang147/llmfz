@@ -1,0 +1,56 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "cppcheck.h"
+#include "type2.h"
+
+enum class Color;
+
+class DummyErrorLogger : public ErrorLogger {
+public:
+    void reportOut(const std::string& /*outmsg*/, Color /*c*/) override {}
+    void reportErr(const ErrorMessage& /*msg*/) override {}
+    void reportProgress(const std::string& /*filename*/,
+                        const char /*stage*/[],
+                        const std::size_t /*value*/) override {} // FN
+};
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t dataSize);
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t dataSize)
+{
+    if (dataSize < 10000) {
+        FileSettings fs; // Move the definition of fs to the beginning of the function
+        fs.filename = "test.cpp";
+        fs.fileContents = std::string(reinterpret_cast<const char*>(data), dataSize); // Change the type of data to const char*
+        DummyErrorLogger errorLogger;
+        CppCheck cppcheck(errorLogger, false, nullptr);
+        cppcheck.settings().addEnabled("all");
+        cppcheck.settings().certainty.setEnabled(Certainty::inconclusive, true);
+        cppcheck.check(&cppcheck, &fs);
+    }
+    return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+main.cpp:20:22: error: variable has incomplete type 'FileSettings'
+        FileSettings fs; // Move the definition of fs to the beginning of the function
+                     ^
+../lib/analyzerinfo.h:32:8: note: forward declaration of 'FileSettings'
+struct FileSettings;
+       ^
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

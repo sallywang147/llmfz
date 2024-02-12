@@ -1,0 +1,51 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <libssh/libssh.h>
+#include <libssh/server.h>
+
+extern "C" {
+#include <libssh/server.h>
+}
+
+int main(int argc, char **argv) {
+  ssh_bind sshbind;
+  sshbind.port = 22;
+  sshbind.bind_address = "0.0.0.0";
+  int verbosity = SSH_LOG_PROTOCOL;
+  ssh_server server;
+
+  ssh_bind_options_set(sshbind, SSH_BIND_OPTIONS_RSAKEY, "/etc/ssh/ssh_host_rsa_key");
+  ssh_bind_options_set(sshbind, SSH_BIND_OPTIONS_DSAKEY, "/etc/ssh/ssh_host_dsa_key");
+
+  ssh_server_options_set(server, SSH_SERVER_OPTIONS_BIND, &sshbind);
+  ssh_server_options_set(server, SSH_SERVER_OPTIONS_LOG_VERBOSITY, &verbosity);
+  ssh_server_options_set(server, SSH_SERVER_OPTIONS_HOSTKEY, "/etc/ssh/ssh_host_rsa_key");
+
+  if (ssh_server_start(&server) != SSH_OK) {
+    fprintf(stderr, "Error starting server: %s\n", ssh_get_error(&server));
+    return 1;
+  }
+
+  ssh_server_join(&server);
+  ssh_server_free(&server);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+The target function `void svr_ensure_hostkey()` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `void svr_ensure_hostkey()` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

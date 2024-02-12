@@ -1,0 +1,1 @@
+error: undefined reference to 'avahi_service_name_split'

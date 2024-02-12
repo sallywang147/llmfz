@@ -1,0 +1,63 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <iostream>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+#include <boost/asio.hpp>
+
+using namespace boost::asio;
+
+class TcpServer {
+public:
+    TcpServer(io_service& io_service, const std::string& address, const std::string& port)
+        : io_service_(io_service),
+          acceptor_(io_service, ip::tcp::endpoint(ip::tcp::v4(), std::stoi(port))),
+          socket_(io_service) {
+        StartAccept();
+    }
+
+private:
+    void StartAccept() {
+        acceptor_.async_accept(socket_, [this](boost::system::error_code ec) {
+            if (!ec) {
+                std::cout << "New connection accepted" << std::endl;
+            }
+
+            StartAccept();
+        });
+    }
+
+    io_service& io_service_;
+    ip::tcp::acceptor acceptor_;
+    ip::tcp::socket socket_;
+};
+
+void StartTcpServer(const std::string& address, const std::string& port) {
+    io_service io_service;
+    TcpServer server(io_service, address, port);
+    io_service.run();
+}
+
+int main() {
+    StartTcpServer("localhost", "8080");
+    return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

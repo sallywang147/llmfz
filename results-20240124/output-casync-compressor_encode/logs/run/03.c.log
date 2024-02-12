@@ -1,0 +1,57 @@
+/workspace/out/libfuzzer-address-x86_64/fuzz-compress -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/fuzz-compress < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 3393136080
+INFO: Loaded 1 modules   (779 inline 8-bit counters): 779 [0x5fc6c8, 0x5fc9d3), 
+INFO: Loaded 1 PC tables (779 PCs): 779 [0x5fc9d8,0x5ffa88), 
+INFO:        0 files found in /workspace/corpus/fuzz-compress
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: A corpus is not provided, starting from an empty corpus
+#2	INITED cov: 2 ft: 2 corp: 1/1b exec/s: 0 rss: 35Mb
+	NEW_FUNC[1/5]: 0x4de8f0 in compressor_start_encode /work/build/../../src/casync/src/compressor.c:114
+	NEW_FUNC[2/5]: 0x4dead0 in compressor_finish /work/build/../../src/casync/src/compressor.c:171
+#11	NEW    cov: 13 ft: 14 corp: 2/27b lim: 4096 exec/s: 0 rss: 36Mb L: 26/26 MS: 4 ChangeByte-ChangeBit-ChangeByte-InsertRepeatedBytes-
+#71	NEW    cov: 14 ft: 15 corp: 3/142b lim: 4096 exec/s: 0 rss: 36Mb L: 115/115 MS: 5 InsertByte-ShuffleBytes-ShuffleBytes-CopyPart-InsertRepeatedBytes-
+#128	REDUCE cov: 14 ft: 15 corp: 3/119b lim: 4096 exec/s: 0 rss: 36Mb L: 92/92 MS: 2 CopyPart-EraseBytes-
+#215	REDUCE cov: 14 ft: 15 corp: 3/100b lim: 4096 exec/s: 0 rss: 36Mb L: 73/73 MS: 2 ShuffleBytes-EraseBytes-
+#260	REDUCE cov: 14 ft: 15 corp: 3/65b lim: 4096 exec/s: 0 rss: 36Mb L: 38/38 MS: 5 ChangeBinInt-ChangeByte-CrossOver-InsertByte-EraseBytes-
+#333	REDUCE cov: 14 ft: 15 corp: 3/64b lim: 4096 exec/s: 0 rss: 36Mb L: 25/38 MS: 3 CopyPart-InsertByte-EraseBytes-
+#419	REDUCE cov: 14 ft: 15 corp: 3/61b lim: 4096 exec/s: 0 rss: 36Mb L: 35/35 MS: 1 EraseBytes-
+#448	REDUCE cov: 14 ft: 15 corp: 3/58b lim: 4096 exec/s: 0 rss: 36Mb L: 32/32 MS: 4 ChangeBinInt-InsertByte-InsertRepeatedBytes-EraseBytes-
+	NEW_FUNC[1/3]: 0x4dec80 in compressor_input /work/build/../../src/casync/src/compressor.c:212
+	NEW_FUNC[2/3]: 0x4df4d0 in compressor_encode /work/build/../../src/casync/src/compressor.c:373
+#482	NEW    cov: 25 ft: 26 corp: 4/152b lim: 4096 exec/s: 0 rss: 45Mb L: 94/94 MS: 4 ChangeBit-ChangeByte-ChangeByte-InsertRepeatedBytes-
+#493	REDUCE cov: 25 ft: 26 corp: 4/108b lim: 4096 exec/s: 0 rss: 45Mb L: 50/50 MS: 1 EraseBytes-
+#505	REDUCE cov: 25 ft: 26 corp: 4/91b lim: 4096 exec/s: 0 rss: 45Mb L: 33/33 MS: 2 ChangeBinInt-EraseBytes-
+#551	REDUCE cov: 25 ft: 26 corp: 4/85b lim: 4096 exec/s: 0 rss: 45Mb L: 26/33 MS: 1 EraseBytes-
+#566	REDUCE cov: 25 ft: 26 corp: 4/78b lim: 4096 exec/s: 566 rss: 47Mb L: 26/26 MS: 5 CrossOver-InsertRepeatedBytes-ShuffleBytes-EraseBytes-EraseBytes-
+#664	REDUCE cov: 25 ft: 26 corp: 4/77b lim: 4096 exec/s: 664 rss: 47Mb L: 25/26 MS: 3 ChangeBinInt-InsertByte-EraseBytes-
+#697	REDUCE cov: 26 ft: 27 corp: 5/238b lim: 4096 exec/s: 697 rss: 47Mb L: 161/161 MS: 3 CrossOver-InsertRepeatedBytes-InsertRepeatedBytes-
+#765	REDUCE cov: 26 ft: 27 corp: 5/227b lim: 4096 exec/s: 382 rss: 47Mb L: 150/150 MS: 3 InsertByte-EraseBytes-CopyPart-
+#865	REDUCE cov: 26 ft: 27 corp: 5/216b lim: 4096 exec/s: 432 rss: 47Mb L: 139/139 MS: 5 ShuffleBytes-ChangeBit-EraseBytes-ChangeBinInt-CrossOver-
+#1024	pulse  cov: 26 ft: 27 corp: 5/216b lim: 4096 exec/s: 341 rss: 47Mb
+#1770	REDUCE cov: 26 ft: 27 corp: 5/212b lim: 4096 exec/s: 221 rss: 47Mb L: 135/135 MS: 5 InsertByte-ChangeBinInt-EraseBytes-InsertRepeatedBytes-EraseBytes-
+#1783	NEW    cov: 30 ft: 31 corp: 6/239b lim: 4096 exec/s: 222 rss: 47Mb L: 27/135 MS: 3 CrossOver-ChangeBit-CrossOver-
+#1903	NEW    cov: 31 ft: 32 corp: 7/296b lim: 4096 exec/s: 237 rss: 48Mb L: 57/135 MS: 5 CopyPart-ShuffleBytes-ChangeBit-CrossOver-InsertRepeatedBytes-
+#1910	REDUCE cov: 31 ft: 32 corp: 7/289b lim: 4096 exec/s: 238 rss: 48Mb L: 50/135 MS: 2 ShuffleBytes-EraseBytes-
+#2048	pulse  cov: 31 ft: 32 corp: 7/289b lim: 4096 exec/s: 227 rss: 49Mb
+#2050	REDUCE cov: 31 ft: 32 corp: 7/278b lim: 4096 exec/s: 227 rss: 49Mb L: 39/135 MS: 5 ChangeBinInt-ShuffleBytes-CopyPart-CopyPart-EraseBytes-
+#2281	REDUCE cov: 31 ft: 32 corp: 7/275b lim: 4096 exec/s: 228 rss: 49Mb L: 36/135 MS: 1 EraseBytes-
+#2383	REDUCE cov: 31 ft: 32 corp: 7/267b lim: 4096 exec/s: 238 rss: 49Mb L: 28/135 MS: 2 CMP-EraseBytes- DE: "\011\000"-
+#2582	REDUCE cov: 31 ft: 32 corp: 7/265b lim: 4096 exec/s: 234 rss: 50Mb L: 26/135 MS: 4 ChangeBinInt-ShuffleBytes-ChangeBit-EraseBytes-
+#2629	REDUCE cov: 31 ft: 32 corp: 7/259b lim: 4096 exec/s: 239 rss: 50Mb L: 129/129 MS: 2 InsertByte-EraseBytes-
+#2651	REDUCE cov: 31 ft: 32 corp: 7/258b lim: 4096 exec/s: 241 rss: 50Mb L: 25/129 MS: 2 ChangeBit-EraseBytes-
+#3156	REDUCE cov: 31 ft: 32 corp: 7/257b lim: 4096 exec/s: 225 rss: 50Mb L: 26/129 MS: 5 CMP-ChangeBit-ChangeBit-InsertByte-EraseBytes- DE: "\000\000\000\000\000\000\000\200"-
+#3287	REDUCE cov: 31 ft: 32 corp: 7/256b lim: 4096 exec/s: 219 rss: 50Mb L: 25/129 MS: 1 EraseBytes-
+#4096	pulse  cov: 31 ft: 32 corp: 7/256b lim: 4096 exec/s: 215 rss: 50Mb
+#4193	REDUCE cov: 31 ft: 32 corp: 7/255b lim: 4096 exec/s: 209 rss: 50Mb L: 25/129 MS: 1 EraseBytes-
+#6718	DONE   cov: 31 ft: 32 corp: 7/255b lim: 4096 exec/s: 216 rss: 52Mb
+###### Recommended dictionary. ######
+"\011\000" # Uses: 227
+"\000\000\000\000\000\000\000\200" # Uses: 134
+###### End of recommended dictionary. ######
+Done 6718 runs in 31 second(s)
+stat::number_of_executed_units: 6718
+stat::average_exec_per_sec:     216
+stat::new_units_added:          30
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              52

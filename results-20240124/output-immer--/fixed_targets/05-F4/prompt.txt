@@ -1,0 +1,76 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstddef>
+#include <cstdint>
+#include <tuple>
+#include <vector>
+
+#include "fuzzer/FuzzedDataProvider.h"
+#include "immer/detail/rbts/node.hpp"
+#include "immer/detail/rbts/slice_right_mut_visitor.hpp"
+
+extern "C" {
+int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  auto pos = std::make_tuple(
+      stream.ConsumeIntegral<uint32_t>(),
+      stream.ConsumeIntegral<immer::detail::rbts::node<int,
+                                                    immer::memory_policy<
+                                                        immer::heap_policy<
+                                                            immer::cpp_heap>,
+                                                        immer::unsafe_refcount_policy,
+                                                        immer::no_lock_policy,
+                                                        immer::no_transience_policy,
+                                                        false, true>,
+                                                    2u, 2u>*>(),
+      stream.ConsumeIntegral<uint32_t>(),
+      stream.ConsumeIntegral<immer::detail::rbts::node<int,
+                                                    immer::memory_policy<
+                                                        immer::heap_policy<
+                                                            immer::cpp_heap>,
+                                                        immer::unsafe_refcount_policy,
+                                                        immer::no_lock_policy,
+                                                        immer::no_transience_policy,
+                                                        false, true>,
+                                                    2u, 2u>*>());
+  auto last = stream.ConsumeIntegral<immer::detail::rbts::regular_sub_pos*>();
+  auto e = stream.ConsumeIntegral<size_t>();
+  immer::detail::rbts::slice_right_mut_visitor<
+      immer::detail::rbts::node<int,
+                                immer::memory_policy<
+                                    immer::heap_policy<immer::cpp_heap>,
+                                    immer::unsafe_refcount_policy,
+                                    immer::no_lock_policy,
+                                    immer::no_transience_policy, false, true>,
+                              2u, 2u>,
+      true, true>::visit_regular<
+      immer::detail::rbts::regular_pos<immer::detail::rbts::node<int,
+                                                              immer::memory_policy<
+                                                                  immer::heap_policy<
+                                                                      immer::cpp_heap>,
+                                                                  immer::unsafe_refcount_policy,
+                                                                  immer::no_lock_policy,
+                                                                  immer::no_transience_policy,
+                                                                  false, true>,
+                                                              2u, 2u>>>(pos, last, e);
+  return 0;
+}
+}
+</code>
+
+The code has the following build issues:
+<error>
+The target function `void std::__1::tuple<unsigned int, immer::detail::rbts::node<int, immer::memory_policy<immer::heap_policy<immer::cpp_heap>, immer::unsafe_refcount_policy, immer::no_lock_policy, immer::no_transience_policy, false, true>, 2u, 2u>*, unsigned int, immer::detail::rbts::node<int, immer::memory_policy<immer::heap_policy<immer::cpp_heap>, immer::unsafe_refcount_policy, immer::no_lock_policy, immer::no_transience_policy, false, true>, 2u, 2u>*> immer::detail::rbts::slice_right_mut_visitor<immer::detail::rbts::node<int, immer::memory_policy<immer::heap_policy<immer::cpp_heap>, immer::unsafe_refcount_policy, immer::no_lock_policy, immer::no_transience_policy, false, true>, 2u, 2u>, true, true>::visit_regular<immer::detail::rbts::regular_pos<immer::detail::rbts::node<int, immer::memory_policy<immer::heap_policy<immer::cpp_heap>, immer::unsafe_refcount_policy, immer::no_lock_policy, immer::no_transience_policy, false, true>, 2u, 2u> >&>(std::tuple * pos, struct immer::detail::rbts::regular_sub_pos * last, size_t e)` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `void std::__1::tuple<unsigned int, immer::detail::rbts::node<int, immer::memory_policy<immer::heap_policy<immer::cpp_heap>, immer::unsafe_refcount_policy, immer::no_lock_policy, immer::no_transience_policy, false, true>, 2u, 2u>*, unsigned int, immer::detail::rbts::node<int, immer::memory_policy<immer::heap_policy<immer::cpp_heap>, immer::unsafe_refcount_policy, immer::no_lock_policy, immer::no_transience_policy, false, true>, 2u, 2u>*> immer::detail::rbts::slice_right_mut_visitor<immer::detail::rbts::node<int, immer::memory_policy<immer::heap_policy<immer::cpp_heap>, immer::unsafe_refcount_policy, immer::no_lock_policy, immer::no_transience_policy, false, true>, 2u, 2u>, true, true>::visit_regular<immer::detail::rbts::regular_pos<immer::detail::rbts::node<int, immer::memory_policy<immer::heap_policy<immer::cpp_heap>, immer::unsafe_refcount_policy, immer::no_lock_policy, immer::no_transience_policy, false, true>, 2u, 2u> >&>(std::tuple * pos, struct immer::detail::rbts::regular_sub_pos * last, size_t e)` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,45 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <libdwfl.h>
+
+extern "C" {
+#include <dlfcn.h>
+#include <link.h>
+}
+
+int main() {
+  void *handle = dlopen(nullptr, RTLD_NOW);
+  if (handle == nullptr) {
+    return 1;
+  }
+
+  dl_iterate_phdr(handle, [](struct dl_phdr_info *info, size_t, void *) {
+    char *base = reinterpret_cast<char *>(info->dlpi_addr);
+    for (ElfW(Addr) addr = info->dlpi_addr; addr < info->dlpi_addr + info->dlpi_memsz;
+         addr += DW_CFA_STACK_SIZE) {
+      __libdwfl_frame_unwind(base, addr, nullptr);
+    }
+    return 0;
+  }, nullptr);
+
+  dlclose(handle);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

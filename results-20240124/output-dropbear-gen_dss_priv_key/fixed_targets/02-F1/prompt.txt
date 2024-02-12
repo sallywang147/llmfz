@@ -1,0 +1,276 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include "fuzz.h"
+#include "session.h"
+#include "fuzz-wrapfd.h"
+#include "debug.h"
+#include "dss.h"
+#include "ed25519.h"
+
+static void setup_fuzzer(void) {
+	fuzz_common_setup();
+}
+
+static buffer *verifydata;
+
+/* Tests reading a public key and verifying a signature */
+int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+	static int once = 0;
+	if (!once) {
+		setup_fuzzer();
+		verifydata = buf_new(30);
+		buf_putstring(verifydata, "x", 1);
+		once = 1;
+	}
+
+	if (fuzz_set_input(Data, Size) == DROPBEAR_FAILURE) {
+		return 0;
+	}
+
+	m_malloc_set_epoch(1);
+
+	if (setjmp(fuzz.jmp) == 0) {
+		sign_key *key = new_sign_key();
+		enum signkey_type keytype = DROPBEAR_SIGNKEY_ANY;
+		if (buf_get_pub_key(fuzz.input, key, &keytype) == DROPBEAR_SUCCESS) {
+			enum signature_type sigtype;
+			if (keytype == DROPBEAR_SIGNKEY_RSA) {
+				/* Flip a coin to decide rsa signature type */
+				int flag = buf_getbyte(fuzz.input);
+				if (flag & 0x01) {
+					sigtype = DROPBEAR_SIGNATURE_RSA_SHA256;
+				} else {
+					sigtype = DROPBEAR_SIGNATURE_RSA_SHA1;
+				}
+			} else {
+				sigtype = signature_type_from_signkey(keytype);
+			}
+			if (buf_verify(fuzz.input, key, sigtype, verifydata) == DROPBEAR_SUCCESS) {
+				/* The fuzzer is capable of generating keys with a signature to match.
+				We don't want false positives if the key is bogus, since a client/server 
+				wouldn't be trusting a bogus key anyway */
+				int boguskey = 0;
+
+				if (keytype == DROPBEAR_SIGNKEY_DSS) {
+					/* So far have seen dss keys with bad p/q/g domain parameters */
+					int pprime, qprime, trials;
+					trials = mp_prime_rabin_miller_trials(mp_count_bits(key->dsskey->p));
+					assert(mp_prime_is_prime(key->dsskey->p, trials, &pprime) == MP_OKAY);
+					trials = mp_prime_rabin_miller_trials(mp_count_bits(key->dsskey->q));
+					assert(mp_prime_is_prime(key->dsskey->q, trials, &qprime) == MP_OKAY);
+					boguskey = !(pprime && qprime);
+					/* Could also check g**q mod p == 1 */
+				}
+
+				if (keytype == DROPBEAR_SIGNKEY_SK_ED25519 || keytype == DROPBEAR_SIGNKEY_ED25519) {
+					dropbear_ed25519_key **eck = (dropbear_ed25519_key**)signkey_key_ptr(key, keytype);
+					if (eck && *eck) {
+						int i;
+						/* we've seen all-zero keys validate */
+						boguskey = 1;
+						for (i = 0; i < CURVE25519_LEN; i++) {
+							if ((*eck)->priv[i] != 0x00 || (*eck)->pub[i] != 0x00) {
+								boguskey = 0;
+							}
+						}
+
+					}
+				}
+
+				if (!boguskey) {
+					printf("Random key/signature managed to verify!\n");
+					abort();
+				}
+
+
+			}
+		}
+		sign_key_free(key);
+		m_malloc_free_epoch(1, 0);
+	} else {
+		m_malloc_free_epoch(1, 1);
+		TRACE(("dropbear_exit longjmped"))
+		/* dropbear_exit jumped here */
+	}
+
+	return 0;
+}
+
+struct dropbear_DSS_Key * gen_dss_priv_key(int size) {
+	struct dropbear_DSS_Key *key = NULL;
+	if (size < 512 || size > 4096 || size % 64 != 0) {
+		return NULL;
+	}
+
+	key = m_malloc(sizeof(*key));
+	if (key == NULL) {
+		return NULL;
+	}
+
+	key->p = mp_init();
+	key->q = mp_init();
+	key->g = mp_init();
+	key->x = mp_init();
+
+	key->pbits = size;
+	key->qbits = size / 8;
+	key->gbits = size;
+
+	if (dss_gen_primes(key) != DROPBEAR_SUCCESS) {
+		dropbear_dss_key_free(key);
+		return NULL;
+	}
+
+	return key;
+}
+</code>
+
+The code has the following build issues:
+<error>
+src/../fuzz/fuzzer-verify.c:108:19: error: too few arguments to function call, single argument 'a' was not specified
+        key->p = mp_init();
+                 ~~~~~~~ ^
+./src/../libtommath/tommath.h:268:8: note: 'mp_init' declared here
+mp_err mp_init(mp_int *a) MP_WUR;
+       ^
+src/../fuzz/fuzzer-verify.c:109:19: error: too few arguments to function call, single argument 'a' was not specified
+        key->q = mp_init();
+                 ~~~~~~~ ^
+./src/../libtommath/tommath.h:268:8: note: 'mp_init' declared here
+mp_err mp_init(mp_int *a) MP_WUR;
+       ^
+src/../fuzz/fuzzer-verify.c:110:19: error: too few arguments to function call, single argument 'a' was not specified
+        key->g = mp_init();
+                 ~~~~~~~ ^
+./src/../libtommath/tommath.h:268:8: note: 'mp_init' declared here
+mp_err mp_init(mp_int *a) MP_WUR;
+       ^
+src/../fuzz/fuzzer-verify.c:111:19: error: too few arguments to function call, single argument 'a' was not specified
+        key->x = mp_init();
+                 ~~~~~~~ ^
+./src/../libtommath/tommath.h:268:8: note: 'mp_init' declared here
+mp_err mp_init(mp_int *a) MP_WUR;
+       ^
+src/../fuzz/fuzzer-verify.c:113:7: error: no member named 'pbits' in 'struct dropbear_DSS_Key'
+        key->pbits = size;
+        ~~~  ^
+src/../fuzz/fuzzer-verify.c:114:7: error: no member named 'qbits' in 'struct dropbear_DSS_Key'
+        key->qbits = size / 8;
+        ~~~  ^
+src/../fuzz/fuzzer-verify.c:115:7: error: no member named 'gbits' in 'struct dropbear_DSS_Key'
+        key->gbits = size;
+        ~~~  ^
+7 errors generated.
+
+Fix failure
+In file included from src/../fuzz/fuzzer-verify.cpp:1:
+In file included from ./src/fuzz.h:8:
+In file included from ./src/includes.h:135:
+In file included from ./src/../libtomcrypt/src/headers/tomcrypt.h:84:
+./src/../libtomcrypt/src/headers/tomcrypt_cfg.h:33:28: error: declaration of 'm_malloc' has a different language linkage
+LTC_EXPORT void * LTC_CALL XMALLOC(size_t n);
+                           ^
+./src/../libtomcrypt/src/headers/tomcrypt_custom.h:16:17: note: expanded from macro 'XMALLOC'
+#define XMALLOC m_malloc
+                ^
+./src/dbmalloc.h:8:8: note: previous declaration is here
+void * m_malloc(size_t size);
+       ^
+In file included from src/../fuzz/fuzzer-verify.cpp:1:
+In file included from ./src/fuzz.h:8:
+In file included from ./src/includes.h:135:
+In file included from ./src/../libtomcrypt/src/headers/tomcrypt.h:84:
+./src/../libtomcrypt/src/headers/tomcrypt_cfg.h:34:28: error: declaration of 'm_realloc' has a different language linkage
+LTC_EXPORT void * LTC_CALL XREALLOC(void *p, size_t n);
+                           ^
+./src/../libtomcrypt/src/headers/tomcrypt_custom.h:18:18: note: expanded from macro 'XREALLOC'
+#define XREALLOC m_realloc
+                 ^
+./src/dbmalloc.h:11:8: note: previous declaration is here
+void * m_realloc(void* ptr, size_t size);
+       ^
+In file included from src/../fuzz/fuzzer-verify.cpp:1:
+In file included from ./src/fuzz.h:8:
+In file included from ./src/includes.h:135:
+In file included from ./src/../libtomcrypt/src/headers/tomcrypt.h:84:
+./src/../libtomcrypt/src/headers/tomcrypt_cfg.h:35:28: error: declaration of 'm_calloc' has a different language linkage
+LTC_EXPORT void * LTC_CALL XCALLOC(size_t n, size_t s);
+                           ^
+./src/../libtomcrypt/src/headers/tomcrypt_custom.h:19:17: note: expanded from macro 'XCALLOC'
+#define XCALLOC m_calloc
+                ^
+./src/dbmalloc.h:9:8: note: previous declaration is here
+void * m_calloc(size_t nmemb, size_t size);
+       ^
+In file included from src/../fuzz/fuzzer-verify.cpp:1:
+In file included from ./src/fuzz.h:8:
+In file included from ./src/includes.h:135:
+In file included from ./src/../libtomcrypt/src/headers/tomcrypt.h:84:
+./src/../libtomcrypt/src/headers/tomcrypt_cfg.h:36:26: error: declaration of 'm_free_direct' has a different language linkage
+LTC_EXPORT void LTC_CALL XFREE(void *p);
+                         ^
+./src/../libtomcrypt/src/headers/tomcrypt_custom.h:17:15: note: expanded from macro 'XFREE'
+#define XFREE m_free_direct
+              ^
+./src/dbmalloc.h:14:6: note: previous declaration is here
+void m_free_direct(void* ptr);
+     ^
+src/../fuzz/fuzzer-verify.cpp:103:8: error: assigning to 'struct dropbear_DSS_Key *' from incompatible type 'void *'
+        key = m_malloc(sizeof(*key));
+              ^~~~~~~~~~~~~~~~~~~~~~
+src/../fuzz/fuzzer-verify.cpp:108:11: error: no matching function for call to 'mp_init'
+        key->p = mp_init();
+                 ^~~~~~~
+./src/../libtommath/tommath.h:268:8: note: candidate function not viable: requires single argument 'a', but no arguments were provided
+mp_err mp_init(mp_int *a) MP_WUR;
+       ^
+src/../fuzz/fuzzer-verify.cpp:109:11: error: no matching function for call to 'mp_init'
+        key->q = mp_init();
+                 ^~~~~~~
+./src/../libtommath/tommath.h:268:8: note: candidate function not viable: requires single argument 'a', but no arguments were provided
+mp_err mp_init(mp_int *a) MP_WUR;
+       ^
+src/../fuzz/fuzzer-verify.cpp:110:11: error: no matching function for call to 'mp_init'
+        key->g = mp_init();
+                 ^~~~~~~
+./src/../libtommath/tommath.h:268:8: note: candidate function not viable: requires single argument 'a', but no arguments were provided
+mp_err mp_init(mp_int *a) MP_WUR;
+       ^
+src/../fuzz/fuzzer-verify.cpp:111:11: error: no matching function for call to 'mp_init'
+        key->x = mp_init();
+                 ^~~~~~~
+./src/../libtommath/tommath.h:268:8: note: candidate function not viable: requires single argument 'a', but no arguments were provided
+mp_err mp_init(mp_int *a) MP_WUR;
+       ^
+src/../fuzz/fuzzer-verify.cpp:113:7: error: no member named 'pbits' in 'dropbear_DSS_Key'
+        key->pbits = size;
+        ~~~  ^
+src/../fuzz/fuzzer-verify.cpp:114:7: error: no member named 'qbits' in 'dropbear_DSS_Key'
+        key->qbits = size / 8;
+        ~~~  ^
+src/../fuzz/fuzzer-verify.cpp:115:7: error: no member named 'gbits' in 'dropbear_DSS_Key'
+        key->gbits = size;
+        ~~~  ^
+src/../fuzz/fuzzer-verify.cpp:117:6: error: use of undeclared identifier 'dss_gen_primes'
+        if (dss_gen_primes(key) != DROPBEAR_SUCCESS) {
+            ^
+src/../fuzz/fuzzer-verify.cpp:118:3: error: use of undeclared identifier 'dropbear_dss_key_free'; did you mean 'dropbear_dss_key'?
+                dropbear_dss_key_free(key);
+                ^
+./src/dss.h:42:3: note: 'dropbear_dss_key' declared here
+} dropbear_dss_key;
+  ^
+14 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

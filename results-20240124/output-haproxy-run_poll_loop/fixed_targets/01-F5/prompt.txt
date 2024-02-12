@@ -1,0 +1,91 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <algorithm>
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <vector>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const uint8_t num_threads = stream.ConsumeIntegral<uint8_t>();
+  const uint8_t num_fds = stream.ConsumeIntegral<uint8_t>();
+  const uint8_t num_events = stream.ConsumeIntegral<uint8_t>();
+  const uint8_t num_timers = stream.ConsumeIntegral<uint8_t>();
+  const uint8_t num_loops = stream.ConsumeIntegral<uint8_t>();
+  const uint8_t num_calls = stream.ConsumeIntegral<uint8_t>();
+
+  // Create a fake poll loop.
+  std::vector<int> fds;
+  std::vector<void*> events;
+  std::vector<void*> timers;
+  for (uint8_t i = 0; i < num_fds; i++) {
+    fds.push_back(stream.ConsumeIntegral<int>());
+  }
+  for (uint8_t i = 0; i < num_events; i++) {
+    events.push_back(stream.ConsumeIntegral<void*>());
+  }
+  for (uint8_t i = 0; i < num_timers; i++) {
+    timers.push_back(stream.ConsumeIntegral<void*>());
+  }
+
+  // Run the poll loop.
+  for (uint8_t i = 0; i < num_loops; i++) {
+    for (uint8_t j = 0; j < num_calls; j++) {
+      // Fix: Call the function that was missing.
+      run_poll_loop(fds, events, timers);
+    }
+  }
+
+  return 0;
+}
+
+// Fix: Implement the missing function.
+void run_poll_loop(std::vector<int>& fds, std::vector<void*>& events, std::vector<void*>& timers) {
+  // Implement the logic for the poll loop here.
+}
+</code>
+
+The code has the following build issues:
+<error>
+fuzz_cfg_parser.c:1:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+fuzz_cfg_parser.cpp:35:7: error: use of undeclared identifier 'run_poll_loop'
+      run_poll_loop(fds, events, timers);
+      ^
+In file included from fuzz_cfg_parser.cpp:5:
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:205:3: error: static_assert failed due to requirement 'std::is_integral<void *>::value' "An integral type is required."
+  static_assert(std::is_integral<T>::value, "An integral type is required.");
+  ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:195:10: note: in instantiation of function template specialization 'FuzzedDataProvider::ConsumeIntegralInRange<void *>' requested here
+  return ConsumeIntegralInRange(std::numeric_limits<T>::min(),
+         ^
+fuzz_cfg_parser.cpp:25:29: note: in instantiation of function template specialization 'FuzzedDataProvider::ConsumeIntegral<void *>' requested here
+    events.push_back(stream.ConsumeIntegral<void*>());
+                            ^
+In file included from fuzz_cfg_parser.cpp:5:
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:212:20: error: static_cast from 'void *' to 'uint64_t' (aka 'unsigned long') is not allowed
+  uint64_t range = static_cast<uint64_t>(max) - min;
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:233:29: error: arithmetic on a pointer to void
+  return static_cast<T>(min + result);
+                        ~~~ ^
+4 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

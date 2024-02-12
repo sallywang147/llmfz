@@ -1,0 +1,73 @@
+/workspace/out/libfuzzer-address-x86_64/fuzzerResolutions -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/fuzzerResolutions < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 2074536447
+INFO: Loaded 1 modules   (2125 inline 8-bit counters): 2125 [0x6295c0, 0x629e0d), 
+INFO: Loaded 1 PC tables (2125 PCs): 2125 [0x5d98d8,0x5e1da8), 
+INFO:        0 files found in /workspace/corpus/fuzzerResolutions
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+=================================================================
+==13==ERROR: AddressSanitizer: stack-buffer-overflow on address 0x7f3e96b39838 at pc 0x000000573660 bp 0x7ffefd484290 sp 0x7ffefd484288
+WRITE of size 8 at 0x7f3e96b39838 thread T0
+SCARINESS: 57 (8-byte-write-stack-buffer-overflow)
+    #0 0x57365f in iterInitRes /src/h3/src/h3lib/lib/iterators.c:307:61
+    #1 0x5729b0 in LLVMFuzzerTestOneInput /src/h3/src/apps/fuzzers/fuzzerResolutions.cpp:29:3
+    #2 0x443e73 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #3 0x445224 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:804:3
+    #4 0x4456f9 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #5 0x434d5f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #6 0x45e3b2 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #7 0x7f3e96fb2082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #8 0x42579d in _start (out/libfuzzer-address-x86_64/fuzzerResolutions+0x42579d)
+
+DEDUP_TOKEN: iterInitRes--LLVMFuzzerTestOneInput--fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long)
+Address 0x7f3e96b39838 is located in stack of thread T0 at offset 56 in frame
+    #0 0x57244f in LLVMFuzzerTestOneInput /src/h3/src/apps/fuzzers/fuzzerResolutions.cpp:19
+
+DEDUP_TOKEN: LLVMFuzzerTestOneInput
+  This frame has 1 object(s):
+    [32, 56) 'res' (line 21) <== Memory access at offset 56 overflows this variable
+HINT: this may be a false positive if your program uses some custom stack unwind mechanism, swapcontext or vfork
+      (longjmp and C++ exceptions *are* supported)
+SUMMARY: AddressSanitizer: stack-buffer-overflow /src/h3/src/h3lib/lib/iterators.c:307:61 in iterInitRes
+Shadow bytes around the buggy address:
+  0x0fe852d5f2b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe852d5f2c0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe852d5f2d0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe852d5f2e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe852d5f2f0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+=>0x0fe852d5f300: f1 f1 f1 f1 00 00 00[f3]f3 f3 f3 f3 00 00 00 00
+  0x0fe852d5f310: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe852d5f320: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe852d5f330: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe852d5f340: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fe852d5f350: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07 
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+==13==ABORTING
+MS: 0 ; base unit: 0000000000000000000000000000000000000000
+
+
+artifact_prefix='./'; Test unit written to ./crash-da39a3ee5e6b4b0d3255bfef95601890afd80709
+Base64: 
+stat::number_of_executed_units: 1
+stat::average_exec_per_sec:     0
+stat::new_units_added:          0
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              36

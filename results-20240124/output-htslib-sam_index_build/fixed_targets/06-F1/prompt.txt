@@ -1,0 +1,75 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <config.h>
+
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "../../htslib/sam.h"
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+    FuzzedDataProvider stream(data, size);
+    const std::string filename = stream.ConsumeRemainingBytesAsString();
+    const char* fn = filename.c_str();
+    const int min_shift = stream.ConsumeIntegral<int>();
+    int ret = sam_index_build(const_cast<char*>(fn), min_shift);
+    if (ret < 0) {
+        abort();
+    }
+    return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+test/fuzz/hts_open_fuzzer.c:12:5: error: use of undeclared identifier 'FuzzedDataProvider'
+    FuzzedDataProvider stream(data, size);
+    ^
+test/fuzz/hts_open_fuzzer.c:13:14: error: expected ';' at end of declaration
+    const std::string filename = stream.ConsumeRemainingBytesAsString();
+             ^
+             ;
+test/fuzz/hts_open_fuzzer.c:13:15: error: expected expression
+    const std::string filename = stream.ConsumeRemainingBytesAsString();
+              ^
+test/fuzz/hts_open_fuzzer.c:14:22: error: use of undeclared identifier 'filename'
+    const char* fn = filename.c_str();
+                     ^
+test/fuzz/hts_open_fuzzer.c:15:50: error: expected expression
+    const int min_shift = stream.ConsumeIntegral<int>();
+                                                 ^
+test/fuzz/hts_open_fuzzer.c:15:27: error: use of undeclared identifier 'stream'
+    const int min_shift = stream.ConsumeIntegral<int>();
+                          ^
+test/fuzz/hts_open_fuzzer.c:16:42: error: expected expression
+    int ret = sam_index_build(const_cast<char*>(fn), min_shift);
+                                         ^
+test/fuzz/hts_open_fuzzer.c:16:31: error: use of undeclared identifier 'const_cast'
+    int ret = sam_index_build(const_cast<char*>(fn), min_shift);
+                              ^
+8 errors generated.
+
+Fix failure
+test/fuzz/hts_open_fuzzer.cpp:12:5: error: unknown type name 'FuzzedDataProvider'
+    FuzzedDataProvider stream(data, size);
+    ^
+test/fuzz/hts_open_fuzzer.cpp:13:16: error: no type named 'string' in namespace 'std'
+    const std::string filename = stream.ConsumeRemainingBytesAsString();
+          ~~~~~^
+2 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

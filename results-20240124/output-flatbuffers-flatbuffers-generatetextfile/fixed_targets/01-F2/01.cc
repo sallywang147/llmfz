@@ -1,0 +1,1 @@
+extern "C" char * flatbuffers::GenerateTextFile(flatbuffers::Parser * , std::string * , std::string * );

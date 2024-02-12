@@ -1,0 +1,66 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+#include "gpsd.h"
+
+#define kMinInputLength 10
+#define kMaxInputLength 9216
+
+extern int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+    if (Size < kMinInputLength || Size > kMaxInputLength) {
+        return 0;
+    }
+
+    {
+        struct gps_device_t device;
+
+        device_init(&device, NULL, NULL);
+
+        ubx_parse(&device, (char *)Data, Size);
+    }
+
+    return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+../gpsd-3.25.1~dev/include/gpsd.h:14:6: error: "Missing GPSD_CONFIG_H"
+    #error "Missing GPSD_CONFIG_H"
+     ^
+In file included from FuzzJson.c:6:
+In file included from ../gpsd-3.25.1~dev/include/gpsd.h:17:
+../gpsd-3.25.1~dev/include/compiler.h:13:6: error: "Missing GPSD_CONFIG_H"
+    #error "Missing GPSD_CONFIG_H"
+     ^
+In file included from FuzzJson.c:6:
+../gpsd-3.25.1~dev/include/gpsd.h:365:38: error: use of undeclared identifier 'MAX_DEVICES'
+    volatile struct shmTime *shmTime[NTPSHMSEGS];
+                                     ^
+../gpsd-3.25.1~dev/include/gpsd.h:328:26: note: expanded from macro 'NTPSHMSEGS'
+#define NTPSHMSEGS      (MAX_DEVICES * 2)       // number of NTP SHM segments
+                         ^
+../gpsd-3.25.1~dev/include/gpsd.h:366:23: error: use of undeclared identifier 'MAX_DEVICES'
+    bool shmTimeInuse[NTPSHMSEGS];
+                      ^
+../gpsd-3.25.1~dev/include/gpsd.h:328:26: note: expanded from macro 'NTPSHMSEGS'
+#define NTPSHMSEGS      (MAX_DEVICES * 2)       // number of NTP SHM segments
+                         ^
+4 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

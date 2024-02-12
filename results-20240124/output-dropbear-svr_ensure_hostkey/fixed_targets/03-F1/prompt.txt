@@ -1,0 +1,56 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+
+#include "dropbear.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  svr_context context;
+  memset(&context, 0, sizeof(context));
+  context.hostkey = (sign_key*)malloc(sizeof(sign_key));
+  memset(context.hostkey, 0, sizeof(sign_key));
+  context.hostkey->type = DROPBEAR_SIGNKEY_RSA;
+  context.hostkey->key = (rsa_key*)malloc(sizeof(rsa_key));
+  memset(context.hostkey->key, 0, sizeof(rsa_key));
+  context.hostkey->key->p = mp_init();
+  context.hostkey->key->q = mp_init();
+  context.hostkey->key->pub = mp_init();
+  context.hostkey->key->priv = mp_init();
+  context.hostkey->key->iqmp = mp_init();
+
+  svr_ensure_hostkey(&context);
+
+  mp_clear(context.hostkey->key->p);
+  mp_clear(context.hostkey->key->q);
+  mp_clear(context.hostkey->key->pub);
+  mp_clear(context.hostkey->key->priv);
+  mp_clear(context.hostkey->key->iqmp);
+  free(context.hostkey->key);
+  free(context.hostkey);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

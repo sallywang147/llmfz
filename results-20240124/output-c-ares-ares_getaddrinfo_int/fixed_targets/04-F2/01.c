@@ -1,0 +1,21 @@
+#include <stddef.h>
+
+#include "ares.h"
+
+// Entrypoint for Clang's libfuzzer
+int LLVMFuzzerTestOneInput(const unsigned char *data,
+                           unsigned long size) {
+  // Feed the data into each of the ares_parse_*_reply functions.
+  extern "C" {
+    struct ares_channeldata channel;
+    ares_init(&channel);
+  }
+  struct ares_addrinfo_hints hints;
+  hints.ai_flags = ARES_AI_CANONNAME;
+  hints.ai_family = AF_UNSPEC;
+  hints.ai_socktype = SOCK_STREAM;
+  hints.ai_protocol = IPPROTO_TCP;
+  ares_getaddrinfo_int(&channel, NULL, NULL, &hints, NULL, NULL);
+  ares_destroy(&channel);
+  return 0;
+}

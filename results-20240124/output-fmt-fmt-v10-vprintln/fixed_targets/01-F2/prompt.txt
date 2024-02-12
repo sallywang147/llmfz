@@ -1,0 +1,117 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstdint>
+#include <cstdio>
+#include <string>
+#include <vector>
+
+#include "fuzzer-common.h"
+#include "fmt/core.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  if (size <= fixed_size + 1) return 0;
+
+  const auto format_str = fmt::string_view(as_chars(data), size - fixed_size);
+  data += fixed_size;
+  size -= fixed_size;
+
+  std::vector<fmt::detail::value<fmt::format_context>> args;
+  while (size > 0) {
+    args.emplace_back(assign_from_buf<int64_t>(data));
+    data += sizeof(int64_t);
+    size -= sizeof(int64_t);
+  }
+  fmt::vprintln(stderr, format_str, args);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/fmt/test/fuzzing/chrono-timepoint.cc:22:37: error: no viable conversion from 'std::vector<fmt::detail::value<fmt::format_context>>' (aka 'vector<value<fmt::context>>') to 'fmt::format_args' (aka 'basic_format_args<fmt::context>')
+  fmt::vprintln(stderr, format_str, args);
+                                    ^~~~
+/src/fmt/include/fmt/base.h:1787:35: note: candidate constructor (the implicit copy constructor) not viable: no known conversion from 'std::vector<fmt::detail::value<fmt::format_context>>' (aka 'vector<value<fmt::context>>') to 'const fmt::basic_format_args<fmt::context> &' for 1st argument
+template <typename Context> class basic_format_args {
+                                  ^
+/src/fmt/include/fmt/base.h:1787:35: note: candidate constructor (the implicit move constructor) not viable: no known conversion from 'std::vector<fmt::detail::value<fmt::format_context>>' (aka 'vector<value<fmt::context>>') to 'fmt::basic_format_args<fmt::context> &&' for 1st argument
+/src/fmt/include/fmt/base.h:1849:13: note: candidate constructor not viable: no known conversion from 'std::vector<fmt::detail::value<fmt::format_context>>' (aka 'vector<value<fmt::context>>') to 'const dynamic_format_arg_store<fmt::context> &' for 1st argument
+  constexpr basic_format_args(const dynamic_format_arg_store<Context>& store)
+            ^
+/src/fmt/include/fmt/base.h:1831:31: note: candidate template ignored: could not match 'format_arg_store' against 'vector'
+  constexpr FMT_ALWAYS_INLINE basic_format_args(
+                              ^
+/src/fmt/include/fmt/base.h:1838:13: note: candidate template ignored: could not match 'format_arg_store' against 'vector'
+  constexpr basic_format_args(
+            ^
+/src/fmt/include/fmt/base.h:2966:61: note: passing argument to parameter 'args' here
+FMT_API void vprintln(FILE* f, string_view fmt, format_args args);
+                                                            ^
+In file included from /src/fmt/test/fuzzing/chrono-timepoint.cc:3:
+In file included from /usr/local/bin/../include/c++/v1/string:525:
+In file included from /usr/local/bin/../include/c++/v1/algorithm:684:
+In file included from /usr/local/bin/../include/c++/v1/functional:506:
+In file included from /usr/local/bin/../include/c++/v1/__functional/function.h:22:
+In file included from /usr/local/bin/../include/c++/v1/__memory/shared_ptr.h:20:
+/usr/local/bin/../include/c++/v1/__memory/allocator.h:151:28: error: call to constructor of 'fmt::detail::value<fmt::context>' is ambiguous
+        ::new ((void*)__p) _Up(_VSTD::forward<_Args>(__args)...);
+                           ^   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/local/bin/../include/c++/v1/__memory/allocator_traits.h:290:13: note: in instantiation of function template specialization 'std::allocator<fmt::detail::value<fmt::context>>::construct<fmt::detail::value<fmt::context>, long>' requested here
+        __a.construct(__p, _VSTD::forward<_Args>(__args)...);
+            ^
+/usr/local/bin/../include/c++/v1/vector:787:21: note: in instantiation of function template specialization 'std::allocator_traits<std::allocator<fmt::detail::value<fmt::context>>>::construct<fmt::detail::value<fmt::context>, long, void>' requested here
+    __alloc_traits::construct(this->__alloc(), _VSTD::__to_address(__tx.__pos_),
+                    ^
+/usr/local/bin/../include/c++/v1/vector:1586:9: note: in instantiation of function template specialization 'std::vector<fmt::detail::value<fmt::context>>::__construct_one_at_end<long>' requested here
+        __construct_one_at_end(_VSTD::forward<_Args>(__args)...);
+        ^
+/src/fmt/test/fuzzing/chrono-timepoint.cc:18:10: note: in instantiation of function template specialization 'std::vector<fmt::detail::value<fmt::context>>::emplace_back<long>' requested here
+    args.emplace_back(assign_from_buf<int64_t>(data));
+         ^
+/src/fmt/include/fmt/base.h:1309:31: note: candidate constructor
+  constexpr FMT_ALWAYS_INLINE value(int val) : int_value(val) {}
+                              ^
+/src/fmt/include/fmt/base.h:1310:31: note: candidate constructor
+  constexpr FMT_ALWAYS_INLINE value(unsigned val) : uint_value(val) {}
+                              ^
+/src/fmt/include/fmt/base.h:1311:31: note: candidate constructor
+  constexpr FMT_ALWAYS_INLINE value(long long val) : long_long_value(val) {}
+                              ^
+/src/fmt/include/fmt/base.h:1312:31: note: candidate constructor
+  constexpr FMT_ALWAYS_INLINE value(unsigned long long val)
+                              ^
+/src/fmt/include/fmt/base.h:1314:21: note: candidate constructor
+  FMT_ALWAYS_INLINE value(int128_opt val) : int128_value(val) {}
+                    ^
+/src/fmt/include/fmt/base.h:1315:21: note: candidate constructor
+  FMT_ALWAYS_INLINE value(uint128_opt val) : uint128_value(val) {}
+                    ^
+/src/fmt/include/fmt/base.h:1316:31: note: candidate constructor
+  constexpr FMT_ALWAYS_INLINE value(float val) : float_value(val) {}
+                              ^
+/src/fmt/include/fmt/base.h:1317:31: note: candidate constructor
+  constexpr FMT_ALWAYS_INLINE value(double val) : double_value(val) {}
+                              ^
+/src/fmt/include/fmt/base.h:1318:21: note: candidate constructor
+  FMT_ALWAYS_INLINE value(long double val) : long_double_value(val) {}
+                    ^
+/src/fmt/include/fmt/base.h:1319:31: note: candidate constructor
+  constexpr FMT_ALWAYS_INLINE value(bool val) : bool_value(val) {}
+                              ^
+/src/fmt/include/fmt/base.h:1320:31: note: candidate constructor
+  constexpr FMT_ALWAYS_INLINE value(char_type val) : char_value(val) {}
+                              ^
+2 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

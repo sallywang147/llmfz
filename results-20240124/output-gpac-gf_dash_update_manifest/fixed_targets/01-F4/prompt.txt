@@ -1,0 +1,71 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdio.h>
+#include <unistd.h>
+
+#include <gpac/constants.h>
+#include <gpac/dash.h>
+
+extern "C" {
+#include <gpac/dash.h>
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  char filename[256];
+  GF_Err e;
+  sprintf(filename, "/tmp/libfuzzer.%d", getpid());
+
+  FILE *fp = fopen(filename, "wb");
+  if (!fp)
+    return 0;
+  fwrite(data, size, 1, fp);
+  fclose(fp);
+
+  GF_DASHFileIO *dash_io = gf_dash_fileio_new(filename);
+  GF_DashClient *dash = gf_dash_new(dash_io, NULL, NULL, NULL, NULL, NULL, NULL);
+  gf_dash_load_manifest(dash, filename, NULL, &e);
+  gf_dash_update_manifest(dash);
+  gf_dash_del(dash);
+
+  unlink(filename);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/testsuite/oss-fuzzers/fuzz_parse.c:7:8: error: expected identifier or '('
+extern "C" {
+       ^
+1 error generated.
+
+Fix failure
+/src/testsuite/oss-fuzzers/fuzz_parse.cpp:22:28: error: use of undeclared identifier 'gf_dash_fileio_new'
+  GF_DASHFileIO *dash_io = gf_dash_fileio_new(filename);
+                           ^
+/src/testsuite/oss-fuzzers/fuzz_parse.cpp:23:25: error: no matching function for call to 'gf_dash_new'
+  GF_DashClient *dash = gf_dash_new(dash_io, NULL, NULL, NULL, NULL, NULL, NULL);
+                        ^~~~~~~~~~~
+./include/gpac/dash.h:189:16: note: candidate function not viable: no known conversion from 'long' to 'Bool' for 4th argument
+GF_DashClient *gf_dash_new(GF_DASHFileIO *dash_io,
+               ^
+/src/testsuite/oss-fuzzers/fuzz_parse.cpp:24:3: error: use of undeclared identifier 'gf_dash_load_manifest'
+  gf_dash_load_manifest(dash, filename, NULL, &e);
+  ^
+/src/testsuite/oss-fuzzers/fuzz_parse.cpp:25:3: error: use of undeclared identifier 'gf_dash_update_manifest'
+  gf_dash_update_manifest(dash);
+  ^
+4 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

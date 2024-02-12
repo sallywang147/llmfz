@@ -1,0 +1,79 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+#include "GeoPolygon.h"
+#include "GeoPolygon.cpp"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const int num_points = stream.ConsumeIntegral<int>();
+  const int num_bboxes = stream.ConsumeIntegral<int>();
+  const int num_boundaries = stream.ConsumeIntegral<int>();
+  struct GeoPolygon *geoPolygon = createGeoPolygon(num_points);
+  struct BBox *bboxes_array = createBBoxArray(num_bboxes);
+  struct CellBoundary *boundary = createCellBoundary();
+  struct BBox *boundaryBBox = createBBox();
+
+  for (int i = 0; i < num_points; i++) {
+    const double x = stream.ConsumeFloatingPoint<double>();
+    const double y = stream.ConsumeFloatingPoint<double>();
+    addPoint(geoPolygon, x, y);
+  }
+
+  for (int i = 0; i < num_bboxes; i++) {
+    const double x1 = stream.ConsumeFloatingPoint<double>();
+    const double y1 = stream.ConsumeFloatingPoint<double>();
+    const double x2 = stream.ConsumeFloatingPoint<double>();
+    const double y2 = stream.ConsumeFloatingPoint<double>();
+    addBBox(bboxes_array, x1, y1, x2, y2);
+  }
+
+  for (int i = 0; i < num_boundaries; i++) {
+    const double x1 = stream.ConsumeFloatingPoint<double>();
+    const double y1 = stream.ConsumeFloatingPoint<double>();
+    const double x2 = stream.ConsumeFloatingPoint<double>();
+    const double y2 = stream.ConsumeFloatingPoint<double>();
+    addBoundary(boundary, x1, y1, x2, y2);
+  }
+
+  cellBoundaryInsidePolygon(geoPolygon, bboxes_array, boundary, boundaryBBox);
+
+  destroyGeoPolygon(geoPolygon);
+  destroyBBoxArray(bboxes_array);
+  destroyCellBoundary(boundary);
+  destroyBBox(boundaryBBox);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:16:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+/src/h3//src/apps/fuzzers/fuzzerResolutions.cpp:8:10: fatal error: 'GeoPolygon.h' file not found
+#include "GeoPolygon.h"
+         ^~~~~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

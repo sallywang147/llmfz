@@ -1,0 +1,20 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ cd /src/cppcheck/oss-fuzz
++ make oss-fuzz-client
+/usr/local/bin/clang++-jcc -std=c++11 -g -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -o oss-fuzz-client -I ../lib -I ../externals/picojson -I ../externals/simplecpp -I ../externals/tinyxml2 -I ../externals main.cpp type2.cpp ../externals/simplecpp/simplecpp.cpp ../externals/tinyxml2/tinyxml2.cpp ../lib/*.cpp -fsanitize=fuzzer
+main.cpp:20:22: error: variable has incomplete type 'FileSettings'
+        FileSettings fs; // Fix: move the definition of fs to the beginning of the function
+                     ^
+../lib/analyzerinfo.h:32:8: note: forward declaration of 'FileSettings'
+struct FileSettings;
+       ^
+1 error generated.
+make: *** [Makefile:15: oss-fuzz-client] Error 1

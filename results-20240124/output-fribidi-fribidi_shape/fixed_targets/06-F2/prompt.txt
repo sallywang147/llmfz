@@ -1,0 +1,71 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdint.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
+#include <assert.h>
+
+#include <fribidi.h>
+
+extern "C" {
+#include <fribidi-deprecated.h>
+#include <fribidi-joining-types.h>
+#include <fribidi-shape.h>
+}
+
+int LLVMFuzzerTestOneInput (const uint8_t *data, size_t size)
+{
+  const FriBidiStrIndex str_len = size / 4;
+  FriBidiChar *str = (FriBidiChar *) data;
+
+  FriBidiLevel *levels = (FriBidiLevel *) calloc (str_len, sizeof (FriBidiLevel));
+  FriBidiArabicProp *ar_props = (FriBidiArabicProp *) calloc (str_len, sizeof (FriBidiArabicProp));
+  fribidi_get_par_embedding_levels (str, str_len, levels, &fribidi_par_embedding_levels_default);
+  fribidi_get_arabic_shaping (str, str_len, levels, ar_props);
+  fribidi_shape (FRIBIDI_FLAGS_DEFAULT, levels, str_len, ar_props, str);
+  free (levels);
+  free (ar_props);
+  return 0;
+}
+
+/* Editor directions:
+ * vim:textwidth=78:tabstop=8:shiftwidth=2:autoindent:cindent
+ */
+</code>
+
+The code has the following build issues:
+<error>
+../../src/fribidi/bin/fribidi-fuzzer.c:9:8: error: expected identifier or '('
+extern "C" {
+       ^
+../../src/fribidi/bin/fribidi-fuzzer.c:22:60: error: use of undeclared identifier 'fribidi_par_embedding_levels_default'; did you mean 'fribidi_get_par_embedding_levels_ex'?
+  fribidi_get_par_embedding_levels (str, str_len, levels, &fribidi_par_embedding_levels_default);
+                                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                           fribidi_get_par_embedding_levels_ex
+../../src/fribidi/lib/fribidi-bidi.h:80:1: note: 'fribidi_get_par_embedding_levels_ex' declared here
+fribidi_get_par_embedding_levels_ex (
+^
+2 errors generated.
+
+Fix failure
+../../src/fribidi/bin/fribidi-fuzzer.cpp:22:60: error: use of undeclared identifier 'fribidi_par_embedding_levels_default'
+  fribidi_get_par_embedding_levels (str, str_len, levels, &fribidi_par_embedding_levels_default);
+                                                           ^
+../../src/fribidi/bin/fribidi-fuzzer.cpp:23:3: error: use of undeclared identifier 'fribidi_get_arabic_shaping'
+  fribidi_get_arabic_shaping (str, str_len, levels, ar_props);
+  ^
+2 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

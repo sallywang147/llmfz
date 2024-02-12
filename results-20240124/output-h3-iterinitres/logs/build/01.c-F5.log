@@ -1,0 +1,135 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ mkdir build
++ cd build
++ cmake ..
+-- The C compiler identification is Clang 15.0.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/local/bin/clang-jcc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+CMake Warning at CMakeLists.txt:392 (message):
+  clang-format was not detected, so automatic source code reformatting is
+  disabled
+
+
+CMake Warning at CMakeLists.txt:404 (message):
+  clang-tidy was not detected, so source code linting is disabled
+
+
+-- Could NOT find Doxygen (missing: DOXYGEN_EXECUTABLE) 
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /src/h3/build
+++ nproc
++ make -j32 h3
+[  0%] Building C object CMakeFiles/h3.dir/src/h3lib/lib/h3Assert.c.o
+[  0%] Building C object CMakeFiles/h3.dir/src/h3lib/lib/algos.c.o
+[ 33%] Building C object CMakeFiles/h3.dir/src/h3lib/lib/coordijk.c.o
+[ 33%] Building C object CMakeFiles/h3.dir/src/h3lib/lib/bbox.c.o
+[ 33%] Building C object CMakeFiles/h3.dir/src/h3lib/lib/polygon.c.o
+[ 33%] Building C object CMakeFiles/h3.dir/src/h3lib/lib/polyfill.c.o
+[ 33%] Building C object CMakeFiles/h3.dir/src/h3lib/lib/h3Index.c.o
+[ 33%] Building C object CMakeFiles/h3.dir/src/h3lib/lib/vec2d.c.o
+[ 66%] Building C object CMakeFiles/h3.dir/src/h3lib/lib/vec3d.c.o
+[ 66%] Building C object CMakeFiles/h3.dir/src/h3lib/lib/vertex.c.o
+[ 66%] Building C object CMakeFiles/h3.dir/src/h3lib/lib/linkedGeo.c.o
+[ 66%] Building C object CMakeFiles/h3.dir/src/h3lib/lib/localij.c.o
+[ 66%] Building C object CMakeFiles/h3.dir/src/h3lib/lib/latLng.c.o
+[ 66%] Building C object CMakeFiles/h3.dir/src/h3lib/lib/directedEdge.c.o
+[ 66%] Building C object CMakeFiles/h3.dir/src/h3lib/lib/iterators.c.o
+[100%] Building C object CMakeFiles/h3.dir/src/h3lib/lib/mathExtensions.c.o
+[100%] Building C object CMakeFiles/h3.dir/src/h3lib/lib/vertexGraph.c.o
+[100%] Building C object CMakeFiles/h3.dir/src/h3lib/lib/faceijk.c.o
+[100%] Building C object CMakeFiles/h3.dir/src/h3lib/lib/baseCells.c.o
+[100%] Linking C static library lib/libh3.a
+[100%] Built target h3
++ H3_BASE=/src/h3/
+++ find /src/h3//src/apps/fuzzers -name '*.c'
++ for fuzzer in $(find $H3_BASE/src/apps/fuzzers -name '*.c')
+++ basename -s .c /src/h3//src/apps/fuzzers/fuzzerInternalAlgos.c
++ fuzzer_basename=fuzzerInternalAlgos
++ /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -DH3_PREFIX= -DH3_USE_LIBFUZZER=1 -I/src/h3//src/apps/applib/include -I/src/h3//src/h3lib/include -I/src/h3//build/src/h3lib/include -o fuzzerInternalAlgos.o -c /src/h3//src/apps/fuzzers/fuzzerInternalAlgos.c
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -fsanitize=fuzzer -rdynamic fuzzerInternalAlgos.o -o /workspace/out/libfuzzer-address-x86_64/fuzzerInternalAlgos lib/libh3.a
++ for fuzzer in $(find $H3_BASE/src/apps/fuzzers -name '*.c')
+++ basename -s .c /src/h3//src/apps/fuzzers/fuzzerCellToLatLng.c
++ fuzzer_basename=fuzzerCellToLatLng
++ /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -DH3_PREFIX= -DH3_USE_LIBFUZZER=1 -I/src/h3//src/apps/applib/include -I/src/h3//src/h3lib/include -I/src/h3//build/src/h3lib/include -o fuzzerCellToLatLng.o -c /src/h3//src/apps/fuzzers/fuzzerCellToLatLng.c
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -fsanitize=fuzzer -rdynamic fuzzerCellToLatLng.o -o /workspace/out/libfuzzer-address-x86_64/fuzzerCellToLatLng lib/libh3.a
++ for fuzzer in $(find $H3_BASE/src/apps/fuzzers -name '*.c')
+++ basename -s .c /src/h3//src/apps/fuzzers/fuzzerPolygonToCellsNoHoles.c
++ fuzzer_basename=fuzzerPolygonToCellsNoHoles
++ /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -DH3_PREFIX= -DH3_USE_LIBFUZZER=1 -I/src/h3//src/apps/applib/include -I/src/h3//src/h3lib/include -I/src/h3//build/src/h3lib/include -o fuzzerPolygonToCellsNoHoles.o -c /src/h3//src/apps/fuzzers/fuzzerPolygonToCellsNoHoles.c
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -fsanitize=fuzzer -rdynamic fuzzerPolygonToCellsNoHoles.o -o /workspace/out/libfuzzer-address-x86_64/fuzzerPolygonToCellsNoHoles lib/libh3.a
++ for fuzzer in $(find $H3_BASE/src/apps/fuzzers -name '*.c')
+++ basename -s .c /src/h3//src/apps/fuzzers/fuzzerCompact.c
++ fuzzer_basename=fuzzerCompact
++ /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -DH3_PREFIX= -DH3_USE_LIBFUZZER=1 -I/src/h3//src/apps/applib/include -I/src/h3//src/h3lib/include -I/src/h3//build/src/h3lib/include -o fuzzerCompact.o -c /src/h3//src/apps/fuzzers/fuzzerCompact.c
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -fsanitize=fuzzer -rdynamic fuzzerCompact.o -o /workspace/out/libfuzzer-address-x86_64/fuzzerCompact lib/libh3.a
++ for fuzzer in $(find $H3_BASE/src/apps/fuzzers -name '*.c')
+++ basename -s .c /src/h3//src/apps/fuzzers/fuzzerEdgeLength.c
++ fuzzer_basename=fuzzerEdgeLength
++ /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -DH3_PREFIX= -DH3_USE_LIBFUZZER=1 -I/src/h3//src/apps/applib/include -I/src/h3//src/h3lib/include -I/src/h3//build/src/h3lib/include -o fuzzerEdgeLength.o -c /src/h3//src/apps/fuzzers/fuzzerEdgeLength.c
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -fsanitize=fuzzer -rdynamic fuzzerEdgeLength.o -o /workspace/out/libfuzzer-address-x86_64/fuzzerEdgeLength lib/libh3.a
++ for fuzzer in $(find $H3_BASE/src/apps/fuzzers -name '*.c')
+++ basename -s .c /src/h3//src/apps/fuzzers/fuzzerInternalCoordIjk.c
++ fuzzer_basename=fuzzerInternalCoordIjk
++ /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -DH3_PREFIX= -DH3_USE_LIBFUZZER=1 -I/src/h3//src/apps/applib/include -I/src/h3//src/h3lib/include -I/src/h3//build/src/h3lib/include -o fuzzerInternalCoordIjk.o -c /src/h3//src/apps/fuzzers/fuzzerInternalCoordIjk.c
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -fsanitize=fuzzer -rdynamic fuzzerInternalCoordIjk.o -o /workspace/out/libfuzzer-address-x86_64/fuzzerInternalCoordIjk lib/libh3.a
++ for fuzzer in $(find $H3_BASE/src/apps/fuzzers -name '*.c')
+++ basename -s .c /src/h3//src/apps/fuzzers/fuzzerPolygonToCells.c
++ fuzzer_basename=fuzzerPolygonToCells
++ /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -DH3_PREFIX= -DH3_USE_LIBFUZZER=1 -I/src/h3//src/apps/applib/include -I/src/h3//src/h3lib/include -I/src/h3//build/src/h3lib/include -o fuzzerPolygonToCells.o -c /src/h3//src/apps/fuzzers/fuzzerPolygonToCells.c
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -fsanitize=fuzzer -rdynamic fuzzerPolygonToCells.o -o /workspace/out/libfuzzer-address-x86_64/fuzzerPolygonToCells lib/libh3.a
++ for fuzzer in $(find $H3_BASE/src/apps/fuzzers -name '*.c')
+++ basename -s .c /src/h3//src/apps/fuzzers/fuzzerHierarchy.c
++ fuzzer_basename=fuzzerHierarchy
++ /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -DH3_PREFIX= -DH3_USE_LIBFUZZER=1 -I/src/h3//src/apps/applib/include -I/src/h3//src/h3lib/include -I/src/h3//build/src/h3lib/include -o fuzzerHierarchy.o -c /src/h3//src/apps/fuzzers/fuzzerHierarchy.c
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -fsanitize=fuzzer -rdynamic fuzzerHierarchy.o -o /workspace/out/libfuzzer-address-x86_64/fuzzerHierarchy lib/libh3.a
++ for fuzzer in $(find $H3_BASE/src/apps/fuzzers -name '*.c')
+++ basename -s .c /src/h3//src/apps/fuzzers/fuzzerGridDisk.c
++ fuzzer_basename=fuzzerGridDisk
++ /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -DH3_PREFIX= -DH3_USE_LIBFUZZER=1 -I/src/h3//src/apps/applib/include -I/src/h3//src/h3lib/include -I/src/h3//build/src/h3lib/include -o fuzzerGridDisk.o -c /src/h3//src/apps/fuzzers/fuzzerGridDisk.c
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -fsanitize=fuzzer -rdynamic fuzzerGridDisk.o -o /workspace/out/libfuzzer-address-x86_64/fuzzerGridDisk lib/libh3.a
++ for fuzzer in $(find $H3_BASE/src/apps/fuzzers -name '*.c')
+++ basename -s .c /src/h3//src/apps/fuzzers/fuzzerIndexIO.c
++ fuzzer_basename=fuzzerIndexIO
++ /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -DH3_PREFIX= -DH3_USE_LIBFUZZER=1 -I/src/h3//src/apps/applib/include -I/src/h3//src/h3lib/include -I/src/h3//build/src/h3lib/include -o fuzzerIndexIO.o -c /src/h3//src/apps/fuzzers/fuzzerIndexIO.c
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -fsanitize=fuzzer -rdynamic fuzzerIndexIO.o -o /workspace/out/libfuzzer-address-x86_64/fuzzerIndexIO lib/libh3.a
++ for fuzzer in $(find $H3_BASE/src/apps/fuzzers -name '*.c')
+++ basename -s .c /src/h3//src/apps/fuzzers/fuzzerDirectedEdge.c
++ fuzzer_basename=fuzzerDirectedEdge
++ /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -DH3_PREFIX= -DH3_USE_LIBFUZZER=1 -I/src/h3//src/apps/applib/include -I/src/h3//src/h3lib/include -I/src/h3//build/src/h3lib/include -o fuzzerDirectedEdge.o -c /src/h3//src/apps/fuzzers/fuzzerDirectedEdge.c
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -fsanitize=fuzzer -rdynamic fuzzerDirectedEdge.o -o /workspace/out/libfuzzer-address-x86_64/fuzzerDirectedEdge lib/libh3.a
++ for fuzzer in $(find $H3_BASE/src/apps/fuzzers -name '*.c')
+++ basename -s .c /src/h3//src/apps/fuzzers/fuzzerCellProperties.c
++ fuzzer_basename=fuzzerCellProperties
++ /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -DH3_PREFIX= -DH3_USE_LIBFUZZER=1 -I/src/h3//src/apps/applib/include -I/src/h3//src/h3lib/include -I/src/h3//build/src/h3lib/include -o fuzzerCellProperties.o -c /src/h3//src/apps/fuzzers/fuzzerCellProperties.c
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -fsanitize=fuzzer -rdynamic fuzzerCellProperties.o -o /workspace/out/libfuzzer-address-x86_64/fuzzerCellProperties lib/libh3.a
++ for fuzzer in $(find $H3_BASE/src/apps/fuzzers -name '*.c')
+++ basename -s .c /src/h3//src/apps/fuzzers/fuzzerCellArea.c
++ fuzzer_basename=fuzzerCellArea
++ /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -DH3_PREFIX= -DH3_USE_LIBFUZZER=1 -I/src/h3//src/apps/applib/include -I/src/h3//src/h3lib/include -I/src/h3//build/src/h3lib/include -o fuzzerCellArea.o -c /src/h3//src/apps/fuzzers/fuzzerCellArea.c
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -fsanitize=fuzzer -rdynamic fuzzerCellArea.o -o /workspace/out/libfuzzer-address-x86_64/fuzzerCellArea lib/libh3.a
++ for fuzzer in $(find $H3_BASE/src/apps/fuzzers -name '*.c')
+++ basename -s .c /src/h3//src/apps/fuzzers/fuzzerResolutions.c
++ fuzzer_basename=fuzzerResolutions
++ /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -DH3_PREFIX= -DH3_USE_LIBFUZZER=1 -I/src/h3//src/apps/applib/include -I/src/h3//src/h3lib/include -I/src/h3//build/src/h3lib/include -o fuzzerResolutions.o -c /src/h3//src/apps/fuzzers/fuzzerResolutions.c
+/src/h3//src/apps/fuzzers/fuzzerResolutions.c:1:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+/src/h3//src/apps/fuzzers/fuzzerResolutions.cpp:9:10: fatal error: 'iter.h' file not found
+#include "iter.h"
+         ^~~~~~~~
+1 error generated.

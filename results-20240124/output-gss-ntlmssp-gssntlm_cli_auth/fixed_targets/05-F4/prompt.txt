@@ -1,0 +1,39 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <gssntlmssp.h>
+
+extern "C" {
+#include <gssntlmssp.h>
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  // Fix the build error by calling the function `gssntlm_cli_auth` inside the function `LLVMFuzzerTestOneInput`.
+  int minor_status;
+  struct gssntlm_ctx ctx;
+  struct gssntlm_cred cred;
+  struct ntlm_buffer target_info;
+  int in_flags;
+  struct gss_channel_bindings_struct input_chan_bindings;
+
+  gssntlm_cli_auth(&minor_status, &ctx, &cred, &target_info, in_flags, &input_chan_bindings);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

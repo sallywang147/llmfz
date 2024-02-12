@@ -1,0 +1,41 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+#include <ares.h>
+#include <netdb.h>
+
+extern "C" {
+#include <ares_version.h>
+}
+
+// Entrypoint for Clang's libfuzzer
+extern "C" int LLVMFuzzerTestOneInput(const unsigned char *data,
+                           unsigned long size) {
+  // Feed the data into ares_getnameinfo_int.
+  struct ares_channeldata channel;
+  struct sockaddr addr;
+  int addrlen = sizeof(addr);
+  int flags = 0;
+  ares_callback callback = NULL;
+  char host[NI_MAXHOST];
+  ares_getnameinfo_int(&channel, &addr, addrlen, flags, callback, host);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,43 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <brunsli/brunsli_decode.h>
+#include <fuzzer/FuzzedDataProvider.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  brunsli::BrunsliDecoder decoder;
+  FuzzedDataProvider stream(data, size);
+  size_t input_size = stream.ConsumeIntegralInRange<size_t>(0, size);
+  size_t output_size;
+  char* output_data;
+  size_t metadata_size;
+  char* metadata_data;
+  int ret = decoder.Decode(data, input_size, &output_data, &output_size,
+                           &metadata_data, &metadata_size);
+  free(output_data);
+  free(metadata_data);
+  return ret;
+}
+</code>
+
+The code has the following build issues:
+<error>
+c/tests/fuzz_decode_streaming.cc:13:28: error: too many arguments to function call, expected 4, have 6
+                           &metadata_data, &metadata_size);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./c/include/brunsli/brunsli_decode.h:55:10: note: 'Decode' declared here
+  Status Decode(size_t* available_in, const uint8_t** next_in,
+         ^
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

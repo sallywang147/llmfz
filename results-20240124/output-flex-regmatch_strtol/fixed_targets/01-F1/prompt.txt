@@ -1,0 +1,70 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+#include <regex.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider provider(data, size);
+
+  // Create a regular expression.
+  const std::string regex_string = provider.ConsumeRemainingBytesAsString();
+  const char* regex_cstr = regex_string.c_str();
+
+  // Compile the regular expression.
+  regex_t regex;
+  if (regcomp(&regex, regex_cstr, REG_EXTENDED) != 0) {
+    return 0;
+  }
+
+  // Create a string to match against.
+  const std::string input_string = provider.ConsumeRemainingBytesAsString();
+  const char* input_cstr = input_string.c_str();
+
+  // Match the regular expression against the string.
+  regmatch_t match;
+  if (regexec(&regex, input_cstr, 1, &match, 0) != 0) {
+    regfree(&regex);
+    return 0;
+  }
+
+  // Convert the matched substring to an integer.
+  char* endptr;
+  int base = provider.ConsumeIntegralInRange<int>(2, 36);
+  int value = regmatch_strtol(&match, (char*)input_cstr, &endptr, base);
+
+  // Free the regular expression.
+  regfree(&regex);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:16:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+/src/fuzz-main.cpp:35:15: error: use of undeclared identifier 'regmatch_strtol'
+  int value = regmatch_strtol(&match, (char*)input_cstr, &endptr, base);
+              ^
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,1 @@
+error: undefined reference to 'flatbuffers::Parser::Parse(char const*)'

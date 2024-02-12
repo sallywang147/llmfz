@@ -1,0 +1,1 @@
+undefined reference to `hb_ot_shape_glyphs_closure'

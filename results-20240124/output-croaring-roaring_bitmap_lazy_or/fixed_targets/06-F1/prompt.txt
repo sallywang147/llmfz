@@ -1,0 +1,60 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <vector>
+
+#include "roaring/roaring.h"
+
+#include "fuzzer/FuzzedDataProvider.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider fdp(data, size);
+  std::vector<uint32_t> bitmap_data_a =
+      fdp.ConsumeVecInRange<uint32_t>(500, 0, 1000);
+  roaring_bitmap_t* a = roaring_bitmap_create();
+  roaring_bitmap_add_many(a, bitmap_data_a.size(), bitmap_data_a.data());
+
+  std::vector<uint32_t> bitmap_data_b =
+      fdp.ConsumeVecInRange<uint32_t>(500, 0, 1000);
+  roaring_bitmap_t* b = roaring_bitmap_create();
+  roaring_bitmap_add_many(b, bitmap_data_b.size(), bitmap_data_b.data());
+
+  bool lazy = fdp.ConsumeBool();
+  roaring_bitmap_lazy_or(a, b, lazy);
+  roaring_bitmap_free(a);
+  roaring_bitmap_free(b);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/croaring_fuzzer_cc.cc:13:11: error: no member named 'ConsumeVecInRange' in 'FuzzedDataProvider'
+      fdp.ConsumeVecInRange<uint32_t>(500, 0, 1000);
+      ~~~ ^
+/src/croaring_fuzzer_cc.cc:13:29: error: unexpected type name 'uint32_t': expected expression
+      fdp.ConsumeVecInRange<uint32_t>(500, 0, 1000);
+                            ^
+/src/croaring_fuzzer_cc.cc:18:11: error: no member named 'ConsumeVecInRange' in 'FuzzedDataProvider'
+      fdp.ConsumeVecInRange<uint32_t>(500, 0, 1000);
+      ~~~ ^
+/src/croaring_fuzzer_cc.cc:18:29: error: unexpected type name 'uint32_t': expected expression
+      fdp.ConsumeVecInRange<uint32_t>(500, 0, 1000);
+                            ^
+4 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

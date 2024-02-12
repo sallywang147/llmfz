@@ -1,0 +1,57 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "fuzzer/FuzzedDataProvider.h"
+#include <vector>
+#include <roaring/roaring.h>
+
+extern "C" {
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider fdp(data, size);
+  size_t count = fdp.ConsumeIntegralInRange<size_t>(0, 100);
+  std::vector<roaring_bitmap_t*> bitmaps;
+  for (size_t i = 0; i < count; i++) {
+    size_t bitmap_size = fdp.ConsumeIntegralInRange<size_t>(0, 1000);
+    std::vector<uint32_t> bitmap_data = fdp.ConsumeFixedLengthVector<uint32_t>(bitmap_size);
+    bitmaps.push_back(roaring_bitmap_create());
+    for (uint32_t value : bitmap_data) {
+      roaring_bitmap_add(bitmaps.back(), value);
+    }
+  }
+  roaring_bitmap_t* result = roaring_bitmap_or_many(count, bitmaps.data());
+  roaring_bitmap_free(result);
+  for (roaring_bitmap_t* bitmap : bitmaps) {
+    roaring_bitmap_free(bitmap);
+  }
+  return 0;
+}
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/croaring_fuzzer_cc.cc:12:45: error: no member named 'ConsumeFixedLengthVector' in 'FuzzedDataProvider'
+    std::vector<uint32_t> bitmap_data = fdp.ConsumeFixedLengthVector<uint32_t>(bitmap_size);
+                                        ~~~ ^
+/src/croaring_fuzzer_cc.cc:12:70: error: unexpected type name 'uint32_t': expected expression
+    std::vector<uint32_t> bitmap_data = fdp.ConsumeFixedLengthVector<uint32_t>(bitmap_size);
+                                                                     ^
+/src/croaring_fuzzer_cc.cc:18:30: error: no matching function for call to 'roaring_bitmap_or_many'
+  roaring_bitmap_t* result = roaring_bitmap_or_many(count, bitmaps.data());
+                             ^~~~~~~~~~~~~~~~~~~~~~
+/src/croaring/include/roaring/roaring.h:211:19: note: candidate function not viable: no known conversion from 'std::vector<roaring::api::roaring_bitmap_s *>::value_type *' (aka 'roaring::api::roaring_bitmap_s **') to 'const roaring::api::roaring_bitmap_t **' (aka 'const roaring::api::roaring_bitmap_s **') for 2nd argument
+roaring_bitmap_t *roaring_bitmap_or_many(size_t number,
+                  ^
+3 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,116 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <stdio.h>
+#include <unistd.h>
+
+#include <gpac/constants.h>
+#include <gpac/dash.h>
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  char filename[256];
+  GF_Err e;
+  sprintf(filename, "/tmp/libfuzzer.%d", getpid());
+
+  FILE *fp = fopen(filename, "wb");
+  if (!fp)
+    return 0;
+  fwrite(data, size, 1, fp);
+  fclose(fp);
+
+  GF_DashClient *dash = gf_dash_client_new();
+  GF_FilterSession *fs = gf_fs_new_defaults(0);
+  GF_Filter *src = gf_fs_load_source(fs, filename, NULL, NULL, &e);
+  GF_Filter *insp = gf_fs_load_filter(fs, "inspect:deep:analyze=bs", &e);
+  gf_fs_run(fs);
+  gf_dash_update_manifest(dash);
+  gf_dash_client_del(dash);
+  gf_fs_del(fs);
+
+  unlink(filename);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/testsuite/oss-fuzzers/fuzz_parse.c:19:3: error: use of undeclared identifier 'GF_FilterSession'
+  GF_FilterSession *fs = gf_fs_new_defaults(0);
+  ^
+/src/testsuite/oss-fuzzers/fuzz_parse.c:19:21: error: use of undeclared identifier 'fs'
+  GF_FilterSession *fs = gf_fs_new_defaults(0);
+                    ^
+/src/testsuite/oss-fuzzers/fuzz_parse.c:20:3: error: unknown type name 'GF_Filter'; did you mean 'GF_FileIO'?
+  GF_Filter *src = gf_fs_load_source(fs, filename, NULL, NULL, &e);
+  ^~~~~~~~~
+  GF_FileIO
+./include/gpac/tools.h:1719:29: note: 'GF_FileIO' declared here
+typedef struct __gf_file_io GF_FileIO;
+                            ^
+/src/testsuite/oss-fuzzers/fuzz_parse.c:20:38: error: use of undeclared identifier 'fs'
+  GF_Filter *src = gf_fs_load_source(fs, filename, NULL, NULL, &e);
+                                     ^
+/src/testsuite/oss-fuzzers/fuzz_parse.c:21:3: error: unknown type name 'GF_Filter'; did you mean 'GF_FileIO'?
+  GF_Filter *insp = gf_fs_load_filter(fs, "inspect:deep:analyze=bs", &e);
+  ^~~~~~~~~
+  GF_FileIO
+./include/gpac/tools.h:1719:29: note: 'GF_FileIO' declared here
+typedef struct __gf_file_io GF_FileIO;
+                            ^
+/src/testsuite/oss-fuzzers/fuzz_parse.c:21:39: error: use of undeclared identifier 'fs'
+  GF_Filter *insp = gf_fs_load_filter(fs, "inspect:deep:analyze=bs", &e);
+                                      ^
+/src/testsuite/oss-fuzzers/fuzz_parse.c:22:13: error: use of undeclared identifier 'fs'
+  gf_fs_run(fs);
+            ^
+/src/testsuite/oss-fuzzers/fuzz_parse.c:25:13: error: use of undeclared identifier 'fs'
+  gf_fs_del(fs);
+            ^
+8 errors generated.
+
+Fix failure
+/src/testsuite/oss-fuzzers/fuzz_parse.cpp:18:25: error: use of undeclared identifier 'gf_dash_client_new'; did you mean '__dash_client'?
+  GF_DashClient *dash = gf_dash_client_new();
+                        ^
+./include/gpac/dash.h:161:16: note: '__dash_client' declared here
+typedef struct __dash_client GF_DashClient;
+               ^
+/src/testsuite/oss-fuzzers/fuzz_parse.cpp:19:3: error: unknown type name 'GF_FilterSession'
+  GF_FilterSession *fs = gf_fs_new_defaults(0);
+  ^
+/src/testsuite/oss-fuzzers/fuzz_parse.cpp:19:26: error: use of undeclared identifier 'gf_fs_new_defaults'
+  GF_FilterSession *fs = gf_fs_new_defaults(0);
+                         ^
+/src/testsuite/oss-fuzzers/fuzz_parse.cpp:20:3: error: unknown type name 'GF_Filter'; did you mean 'GF_FileIO'?
+  GF_Filter *src = gf_fs_load_source(fs, filename, NULL, NULL, &e);
+  ^~~~~~~~~
+  GF_FileIO
+./include/gpac/tools.h:1719:29: note: 'GF_FileIO' declared here
+typedef struct __gf_file_io GF_FileIO;
+                            ^
+/src/testsuite/oss-fuzzers/fuzz_parse.cpp:21:3: error: unknown type name 'GF_Filter'; did you mean 'GF_FileIO'?
+  GF_Filter *insp = gf_fs_load_filter(fs, "inspect:deep:analyze=bs", &e);
+  ^~~~~~~~~
+  GF_FileIO
+./include/gpac/tools.h:1719:29: note: 'GF_FileIO' declared here
+typedef struct __gf_file_io GF_FileIO;
+                            ^
+/src/testsuite/oss-fuzzers/fuzz_parse.cpp:23:3: error: use of undeclared identifier 'gf_dash_update_manifest'
+  gf_dash_update_manifest(dash);
+  ^
+/src/testsuite/oss-fuzzers/fuzz_parse.cpp:24:3: error: use of undeclared identifier 'gf_dash_client_del'
+  gf_dash_client_del(dash);
+  ^
+7 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

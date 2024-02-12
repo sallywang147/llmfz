@@ -1,0 +1,40 @@
+Using seed corpus: fribidi-fuzzer_seed_corpus.zip
+/workspace/out/libfuzzer-address-x86_64/fribidi-fuzzer -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/fribidi-fuzzer < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 2208464206
+INFO: Loaded 1 modules   (1027 inline 8-bit counters): 1027 [0x612e80, 0x613283), 
+INFO: Loaded 1 PC tables (1027 PCs): 1027 [0x613288,0x6172b8), 
+INFO:       14 files found in /workspace/corpus/fribidi-fuzzer
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: seed corpus: files: 14 min: 38b max: 2362b total: 12804b rss: 32Mb
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+==14==ERROR: AddressSanitizer: SEGV on unknown address 0x000000000000 (pc 0x00000056a3bc bp 0x7ffe31d790a0 sp 0x7ffe31d78f40 T0)
+==14==The signal is caused by a READ memory access.
+==14==Hint: address points to the zero page.
+SCARINESS: 10 (null-deref)
+    #0 0x56a3bc in fribidi_get_par_embedding_levels_ex /work/build/../../src/fribidi/lib/fribidi-bidi.c:558:16
+    #1 0x569d89 in LLVMFuzzerTestOneInput /work/build/../../src/fribidi/bin/fribidi-fuzzer.c:17:3
+    #2 0x43ddc3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #3 0x43d5aa in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #4 0x43f414 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:826:7
+    #5 0x43f649 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #6 0x42ecaf in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #7 0x458302 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #8 0x7f54cb875082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #9 0x41f6ed in _start (out/libfuzzer-address-x86_64/fribidi-fuzzer+0x41f6ed)
+
+DEDUP_TOKEN: fribidi_get_par_embedding_levels_ex--LLVMFuzzerTestOneInput--fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long)
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: SEGV /work/build/../../src/fribidi/lib/fribidi-bidi.c:558:16 in fribidi_get_par_embedding_levels_ex
+==14==ABORTING
+MS: 0 ; base unit: 0000000000000000000000000000000000000000
+0x68,0x20,0x0,0x0,0x0,0x0,0x1,0xa,0x1,0x8,0xb7,0x0,0x0,0x0,0x1,0x7,0xff,0xfe,0x27,0x27,0x0,0x24,0x1,0x20,0x2a,0x2d,0x0,0x25,0xd,0x0,0x0,0x0,0x0,0x20,0x0,0x0,0x0,0x0,
+h \000\000\000\000\001\012\001\010\267\000\000\000\001\007\377\376''\000$\001 *-\000%\015\000\000\000\000 \000\000\000\000
+artifact_prefix='./'; Test unit written to ./crash-69ebdb74927bd63911e9af32e7da3b0216279461
+Base64: aCAAAAAAAQoBCLcAAAABB//+JycAJAEgKi0AJQ0AAAAAIAAAAAA=
+stat::number_of_executed_units: 2
+stat::average_exec_per_sec:     0
+stat::new_units_added:          0
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              32

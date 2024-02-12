@@ -1,0 +1,34 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ cd /src/ada-url
++ mkdir build
++ AMALGAMATE_OUTPUT_PATH=./build/singleheader
++ python3 singleheader/amalgamate.py
+SCRIPTPATH=/src/ada-url/singleheader PROJECTPATH=/src/ada-url
+timestamp is 2024-01-22 09:15:53 -0500
+Creating ./build/singleheader/ada.h
+
+
+Creating ./build/singleheader/ada.cpp
+Done with all files generation.
+Files have been written to directory: ./build/singleheader/
+Done with all files generation.
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -std=c++17 -I build/singleheader -c fuzz/parse.cc -o parse.o
+fuzz/parse.cc:122:12: error: cannot initialize a variable of type 'ada_url *' (aka 'void **') with an rvalue of type 'ada_url' (aka 'void *')
+  ada_url *out = ada_parse_with_base(source.data(), source.length(),
+           ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fuzz/parse.cc:124:3: error: use of undeclared identifier 'ada_url_free'; did you mean 'ada_free'?
+  ada_url_free(out);
+  ^~~~~~~~~~~~
+  ada_free
+build/singleheader/ada.cpp:14972:6: note: 'ada_free' declared here
+void ada_free(ada_url result) noexcept {
+     ^
+2 errors generated.

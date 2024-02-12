@@ -1,0 +1,43 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <cstddef>
+#include <cstdint>
+#include <cstring>
+#include <string>
+
+#include "botan.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  Botan::EC_PrivateKey* ec_private_key = new Botan::EC_PrivateKey;
+  char** argv = new char*;
+  Botan::AlgorithmIdentifier* algorithm_identifier = new Botan::AlgorithmIdentifier;
+  char* key_data = new char[size];
+  bool use_default_rng = false;
+
+  ec_private_key->EC_PrivateKey(ec_private_key, argv, algorithm_identifier, key_data, size, use_default_rng);
+
+  delete ec_private_key;
+  delete argv;
+  delete algorithm_identifier;
+  delete[] key_data;
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

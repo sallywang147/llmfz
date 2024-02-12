@@ -1,0 +1,73 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <algorithm>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+extern "C" {
+#include <capstone/capstone.h>
+#include <capstone/tricore.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const size_t handle = stream.ConsumeIntegral<size_t>();
+  const size_t byte_len = stream.ConsumeIntegral<size_t>();
+  const size_t address = stream.ConsumeIntegral<size_t>();
+  char bytes[byte_len];
+  stream.ConsumeBytes<char>(bytes, byte_len);
+  struct MCInst mi;
+  short size;
+  char info[100];
+  TriCore_getInstruction(handle, bytes, byte_len, &mi, &size, address, info);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:16:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:20:10: error: no matching member function for call to 'ConsumeBytes'
+  stream.ConsumeBytes<char>(bytes, byte_len);
+  ~~~~~~~^~~~~~~~~~~~~~~~~~
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:352:36: note: candidate function template not viable: no known conversion from 'char[byte_len]' to 'size_t' (aka 'unsigned long') for 1st argument
+std::vector<T> FuzzedDataProvider::ConsumeBytes(size_t size, size_t num_bytes) {
+                                   ^
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:108:36: note: candidate function template not viable: requires single argument 'num_bytes', but 2 arguments were provided
+std::vector<T> FuzzedDataProvider::ConsumeBytes(size_t num_bytes) {
+                                   ^
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:21:17: error: variable has incomplete type 'struct MCInst'
+  struct MCInst mi;
+                ^
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:21:10: note: forward declaration of 'MCInst'
+  struct MCInst mi;
+         ^
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:22:9: error: redefinition of 'size' with a different type: 'short' vs 'size_t' (aka 'unsigned long')
+  short size;
+        ^
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:14:67: note: previous definition is here
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+                                                                  ^
+3 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

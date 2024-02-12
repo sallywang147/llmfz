@@ -1,0 +1,37 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <openssl/ec.h>
+#include <openssl/pem.h>
+
+extern "C" {
+#include <openssl/bio.h>
+#include <openssl/pem.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  BIO* bio = BIO_new_mem_buf(data, size);
+  PEM_read_bio_ECPrivateKey(bio, nullptr, nullptr, nullptr);
+  BIO_free(bio);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+The target function `struct ec_key_st * PEM_read_ECPrivateKey(struct _IO_FILE * , struct ec_key_st.4884 ** , func_type * , char * )` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `struct ec_key_st * PEM_read_ECPrivateKey(struct _IO_FILE * , struct ec_key_st.4884 ** , func_type * , char * )` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

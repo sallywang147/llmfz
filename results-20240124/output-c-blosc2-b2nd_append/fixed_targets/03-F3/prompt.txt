@@ -1,0 +1,73 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <inttypes.h>
+
+#include <b2nd.h>
+
+#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  struct b2nd_array_t *array = b2nd_array_new(10000);
+  if (array == NULL) {
+    return 0;
+  }
+  int i = 0, n = 0;
+  char *str;
+  size_t str_size = 0;
+  char c = 0;
+  if (size > 0) {
+    /* Variable size string */
+    str_size = data[0] % 1000;
+  }
+  if (size > 1) {
+    /* Variable character */
+    c = data[1];
+  }
+  if (size > 2) {
+    /* Variable number of strings */
+    n = data[2] % 100;
+  }
+  for (i = 0; i < n; i++) {
+    str = (char *)malloc(str_size + 1);
+    if (str == NULL) {
+      b2nd_array_free(array);
+      return 0;
+    }
+    memset(str, c, str_size);
+    str[str_size] = '\0';
+    b2nd_append(array, str, str_size, c);
+    free(str);
+  }
+  b2nd_array_free(array);
+  return 0;
+}
+
+#ifdef __cplusplus
+}
+#endif
+</code>
+
+The code has the following build issues:
+<error>
+fuzz_decompress_frame.c:(.text.LLVMFuzzerTestOneInput[LLVMFuzzerTestOneInput]+0x2c): undefined reference to `b2nd_array_new'
+/usr/bin/ld: fuzz_decompress_frame.c:(.text.LLVMFuzzerTestOneInput[LLVMFuzzerTestOneInput]+0x1f5): undefined reference to `b2nd_array_free'
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

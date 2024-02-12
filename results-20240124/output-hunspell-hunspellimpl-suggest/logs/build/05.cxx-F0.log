@@ -1,0 +1,420 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ /src/hunspell/oss-fuzz-build.sh
+autoreconf: Entering directory `.'
+autoreconf: running: autopoint --force
+Copying file m4/codeset.m4
+Copying file m4/fcntl-o.m4
+Copying file m4/glibc2.m4
+Copying file m4/glibc21.m4
+Copying file m4/intdiv0.m4
+Copying file m4/intl.m4
+Copying file m4/intldir.m4
+Copying file m4/intlmacosx.m4
+Copying file m4/intmax.m4
+Copying file m4/inttypes-pri.m4
+Copying file m4/inttypes_h.m4
+Copying file m4/lcmessage.m4
+Copying file m4/lock.m4
+Copying file m4/longlong.m4
+Copying file m4/printf-posix.m4
+Copying file m4/size_max.m4
+Copying file m4/stdint_h.m4
+Copying file m4/threadlib.m4
+Copying file m4/uintmax_t.m4
+Copying file m4/wchar_t.m4
+Copying file m4/wint_t.m4
+Copying file m4/xsize.m4
+Copying file po/Makevars.template
+autoreconf: running: aclocal --force -I m4
+autoreconf: configure.ac: tracing
+autoreconf: running: libtoolize --copy --force
+libtoolize: putting auxiliary files in '.'.
+libtoolize: copying file './ltmain.sh'
+libtoolize: putting macros in AC_CONFIG_MACRO_DIRS, 'm4'.
+libtoolize: copying file 'm4/libtool.m4'
+libtoolize: copying file 'm4/ltoptions.m4'
+libtoolize: copying file 'm4/ltsugar.m4'
+libtoolize: copying file 'm4/ltversion.m4'
+libtoolize: copying file 'm4/lt~obsolete.m4'
+autoreconf: running: /usr/bin/autoconf --force
+autoreconf: running: /usr/bin/autoheader --force
+autoreconf: running: automake --add-missing --copy --force-missing
+configure.ac:41: warning: The 'AM_PROG_MKDIR_P' macro is deprecated, and its use is discouraged.
+configure.ac:41: You should use the Autoconf-provided 'AC_PROG_MKDIR_P' macro instead,
+configure.ac:41: and use '$(MKDIR_P)' instead of '$(mkdir_p)'in your Makefile.am files.
+configure.ac:9: installing './compile'
+configure.ac:8: installing './config.guess'
+configure.ac:8: installing './config.sub'
+configure.ac:11: installing './install-sh'
+configure.ac:11: installing './missing'
+configure.ac:29: installing './tap-driver.sh'
+Makefile.am: installing './INSTALL'
+src/hunspell/Makefile.am: installing './depcomp'
+parallel-tests: installing './test-driver'
+autoreconf: Leaving directory `.'
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... x86_64-pc-linux-gnu
+checking for gcc... /usr/local/bin/clang-jcc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether /usr/local/bin/clang-jcc accepts -g... yes
+checking for /usr/local/bin/clang-jcc option to accept ISO C89... none needed
+checking whether /usr/local/bin/clang-jcc understands -c and -o together... yes
+checking how to run the C preprocessor... /usr/local/bin/clang-jcc -E
+checking for grep that handles long lines and -e... /usr/bin/grep
+checking for egrep... /usr/bin/grep -E
+checking for ANSI C header files... yes
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for memory.h... yes
+checking for strings.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for unistd.h... yes
+checking minix/config.h usability... no
+checking minix/config.h presence... no
+checking for minix/config.h... no
+checking whether it is safe to define __EXTENSIONS__... yes
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for a thread-safe mkdir -p... /usr/bin/mkdir -p
+checking for gawk... no
+checking for mawk... mawk
+checking whether make sets $(MAKE)... yes
+checking whether make supports the include directive... yes (GNU style)
+checking whether make supports nested variables... yes
+checking dependency style of /usr/local/bin/clang-jcc... gcc3
+checking whether we are using the GNU C++ compiler... yes
+checking whether /usr/local/bin/clang++-jcc accepts -g... yes
+checking dependency style of /usr/local/bin/clang++-jcc... gcc3
+checking for gcc... (cached) /usr/local/bin/clang-jcc
+checking whether we are using the GNU C compiler... (cached) yes
+checking whether /usr/local/bin/clang-jcc accepts -g... (cached) yes
+checking for /usr/local/bin/clang-jcc option to accept ISO C89... (cached) none needed
+checking whether /usr/local/bin/clang-jcc understands -c and -o together... (cached) yes
+checking how to print strings... printf
+checking for a sed that does not truncate output... /usr/bin/sed
+checking for fgrep... /usr/bin/grep -F
+checking for ld used by /usr/local/bin/clang-jcc... /usr/bin/ld
+checking if the linker (/usr/bin/ld) is GNU ld... yes
+checking for BSD- or MS-compatible name lister (nm)... /usr/bin/nm -B
+checking the name lister (/usr/bin/nm -B) interface... BSD nm
+checking whether ln -s works... yes
+checking the maximum length of command line arguments... 1572864
+checking how to convert x86_64-pc-linux-gnu file names to x86_64-pc-linux-gnu format... func_convert_file_noop
+checking how to convert x86_64-pc-linux-gnu file names to toolchain format... func_convert_file_noop
+checking for /usr/bin/ld option to reload object files... -r
+checking for objdump... objdump
+checking how to recognize dependent libraries... pass_all
+checking for dlltool... no
+checking how to associate runtime and link libraries... printf %s\n
+checking for ar... ar
+checking for archiver @FILE support... @
+checking for strip... strip
+checking for ranlib... ranlib
+checking command to parse /usr/bin/nm -B output from /usr/local/bin/clang-jcc object... ok
+checking for sysroot... no
+checking for a working dd... /usr/bin/dd
+checking how to truncate binary pipes... /usr/bin/dd bs=4096 count=1
+checking for mt... no
+checking if : is a manifest tool... no
+checking for dlfcn.h... yes
+checking for objdir... .libs
+checking if /usr/local/bin/clang-jcc supports -fno-rtti -fno-exceptions... yes
+checking for /usr/local/bin/clang-jcc option to produce PIC... -fPIC -DPIC
+checking if /usr/local/bin/clang-jcc PIC flag -fPIC -DPIC works... yes
+checking if /usr/local/bin/clang-jcc static flag -static works... no
+checking if /usr/local/bin/clang-jcc supports -c -o file.o... yes
+checking if /usr/local/bin/clang-jcc supports -c -o file.o... (cached) yes
+checking whether the /usr/local/bin/clang-jcc linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking dynamic linker characteristics... GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... no
+checking whether to build static libraries... yes
+checking how to run the C++ preprocessor... /usr/local/bin/clang++-jcc -E
+checking for ld used by /usr/local/bin/clang++-jcc... /usr/bin/ld -m elf_x86_64
+checking if the linker (/usr/bin/ld -m elf_x86_64) is GNU ld... yes
+checking whether the /usr/local/bin/clang++-jcc linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking for /usr/local/bin/clang++-jcc option to produce PIC... -fPIC -DPIC
+checking if /usr/local/bin/clang++-jcc PIC flag -fPIC -DPIC works... yes
+checking if /usr/local/bin/clang++-jcc static flag -static works... no
+checking if /usr/local/bin/clang++-jcc supports -c -o file.o... yes
+checking if /usr/local/bin/clang++-jcc supports -c -o file.o... (cached) yes
+checking whether the /usr/local/bin/clang++-jcc linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking dynamic linker characteristics... (cached) GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking for gawk... (cached) mawk
+checking whether /usr/local/bin/clang++-jcc supports C++11 features by default... yes
+checking for ld used by /usr/local/bin/clang-jcc... /usr/bin/ld -m elf_x86_64
+checking if the linker (/usr/bin/ld -m elf_x86_64) is GNU ld... yes
+checking for shared library run path origin... done
+checking for iconv... yes
+checking for working iconv... no
+checking for iconv declaration... 
+         extern size_t iconv (iconv_t cd, char * *inbuf, size_t *inbytesleft, char * *outbuf, size_t *outbytesleft);
+checking locale.h usability... yes
+checking locale.h presence... yes
+checking for locale.h... yes
+checking langinfo.h usability... yes
+checking langinfo.h presence... yes
+checking for langinfo.h... yes
+checking whether the -Werror option is usable... yes
+checking for simple visibility declarations... yes
+checking whether NLS is requested... yes
+checking for msgfmt... no
+checking for gmsgfmt... :
+checking for xgettext... no
+checking for msgmerge... no
+checking for CFPreferencesCopyAppValue... no
+checking for CFLocaleCopyCurrent... no
+checking for GNU gettext in libc... yes
+checking whether to use NLS... yes
+checking where the gettext function comes from... libc
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating hunspell.pc
+config.status: creating man/Makefile
+config.status: creating man/hu/Makefile
+config.status: creating po/Makefile.in
+config.status: creating src/Makefile
+config.status: creating src/hunspell/Makefile
+config.status: creating src/hunspell/hunvisapi.h
+config.status: creating src/parsers/Makefile
+config.status: creating src/tools/Makefile
+config.status: creating tests/Makefile
+config.status: creating tests/suggestiontest/Makefile
+config.status: creating config.h
+config.status: executing depfiles commands
+config.status: executing libtool commands
+config.status: executing po-directories commands
+config.status: creating po/POTFILES
+config.status: creating po/Makefile
+Making clean in po
+make[1]: Entering directory '/src/hunspell/po'
+rm -f *.insert-header
+rm -f remove-potcdate.sed
+rm -f stamp-poT
+rm -f core core.* hunspell.po hunspell.1po hunspell.2po *.new.po
+rm -fr *.o
+make[1]: Leaving directory '/src/hunspell/po'
+Making clean in src
+make[1]: Entering directory '/src/hunspell/src'
+Making clean in hunspell
+make[2]: Entering directory '/src/hunspell/src/hunspell'
+test -z "libhunspell-1.7.la" || rm -f libhunspell-1.7.la
+rm -f ./so_locations
+rm -rf .libs _libs
+rm -f *.o
+rm -f *.lo
+make[2]: Leaving directory '/src/hunspell/src/hunspell'
+Making clean in parsers
+make[2]: Entering directory '/src/hunspell/src/parsers'
+rm -rf .libs _libs
+test -z "libparsers.a" || rm -f libparsers.a
+ rm -f testparser
+rm -f *.o
+rm -f *.lo
+make[2]: Leaving directory '/src/hunspell/src/parsers'
+Making clean in tools
+make[2]: Entering directory '/src/hunspell/src/tools'
+ rm -f analyze chmorph hunspell munch unmunch hzip hunzip
+rm -rf .libs _libs
+ rm -f example
+rm -f *.o
+rm -f *.lo
+make[2]: Leaving directory '/src/hunspell/src/tools'
+make[2]: Entering directory '/src/hunspell/src'
+rm -rf .libs _libs
+rm -f *.lo
+make[2]: Leaving directory '/src/hunspell/src'
+make[1]: Leaving directory '/src/hunspell/src'
+Making clean in man
+make[1]: Entering directory '/src/hunspell/man'
+Making clean in hu
+make[2]: Entering directory '/src/hunspell/man/hu'
+rm -rf .libs _libs
+rm -f *.lo
+make[2]: Leaving directory '/src/hunspell/man/hu'
+make[2]: Entering directory '/src/hunspell/man'
+rm -rf .libs _libs
+rm -f *.lo
+make[2]: Leaving directory '/src/hunspell/man'
+make[1]: Leaving directory '/src/hunspell/man'
+Making clean in tests
+make[1]: Entering directory '/src/hunspell/tests'
+Making clean in suggestiontest
+make[2]: Entering directory '/src/hunspell/tests/suggestiontest'
+rm -rf .libs _libs
+rm -f *.lo
+make[2]: Leaving directory '/src/hunspell/tests/suggestiontest'
+make[2]: Entering directory '/src/hunspell/tests'
+rm -rf .libs _libs
+rm -rf testSubDir
+test -z "affixes.log condition.log condition_utf.log base.log base_utf.log allcaps.log allcaps_utf.log allcaps2.log allcaps3.log keepcase.log dotless_i.log i58202.log map.log rep.log sug.log sug2.log wordpair.log sugutf.log phone.log ph.log ph2.log flag.log flaglong.log flagnum.log flagutf8.log slash.log forbiddenword.log nosuggest.log alias.log alias2.log alias3.log breakdefault.log break.log needaffix.log needaffix2.log needaffix3.log needaffix4.log needaffix5.log circumfix.log fogemorpheme.log onlyincompound.log complexprefixes.log complexprefixes2.log complexprefixesutf.log conditionalprefix.log zeroaffix.log utf8.log utf8_bom.log utf8_bom2.log utf8_nonbmp.test.log compoundflag.log compoundrule.log compoundrule2.log compoundrule3.log compoundrule4.log compoundrule5.log compoundrule6.log compoundrule7.log compoundrule8.log compoundaffix.log compoundaffix2.log compoundaffix3.log compoundforbid.log checkcompounddup.log checkcompoundtriple.log simplifiedtriple.log checkcompoundrep.log checkcompoundrep2.log checkcompoundcase2.log checkcompoundcaseutf.log checkcompoundpattern.log checkcompoundpattern2.log checkcompoundpattern3.log checkcompoundpattern4.log utfcompound.log checksharps.log checksharpsutf.log germancompounding.log germancompoundingold.log i35725.log i53643.log i54633.log i54980.log maputf.log reputf.log ignore.log ignoreutf.log right_to_left_mark.log 1592880.log 1695964.log 1463589.log 1463589_utf.log IJ.log i68568.log i68568utf.log 1706659.log 1748408-1.log 1748408-2.log 1748408-3.log 1748408-4.log digits_in_words.log colons_in_words.log ngram_utf_fix.log morph.log 1975530.log fullstrip.log iconv.log iconv2.log oconv.log oconv2.log encoding.log korean.log opentaal_forbiddenword1.log opentaal_forbiddenword2.log opentaal_keepcase.log arabic.log 2970240.log 2970242.log breakoff.log opentaal_cpdpat.log opentaal_cpdpat2.log 2999225.log onlyincompound2.log forceucase.log nepali.log hu.log warn.log timelimit.log ignoresug.log limit-multiple-compounding.log" || rm -f affixes.log condition.log condition_utf.log base.log base_utf.log allcaps.log allcaps_utf.log allcaps2.log allcaps3.log keepcase.log dotless_i.log i58202.log map.log rep.log sug.log sug2.log wordpair.log sugutf.log phone.log ph.log ph2.log flag.log flaglong.log flagnum.log flagutf8.log slash.log forbiddenword.log nosuggest.log alias.log alias2.log alias3.log breakdefault.log break.log needaffix.log needaffix2.log needaffix3.log needaffix4.log needaffix5.log circumfix.log fogemorpheme.log onlyincompound.log complexprefixes.log complexprefixes2.log complexprefixesutf.log conditionalprefix.log zeroaffix.log utf8.log utf8_bom.log utf8_bom2.log utf8_nonbmp.test.log compoundflag.log compoundrule.log compoundrule2.log compoundrule3.log compoundrule4.log compoundrule5.log compoundrule6.log compoundrule7.log compoundrule8.log compoundaffix.log compoundaffix2.log compoundaffix3.log compoundforbid.log checkcompounddup.log checkcompoundtriple.log simplifiedtriple.log checkcompoundrep.log checkcompoundrep2.log checkcompoundcase2.log checkcompoundcaseutf.log checkcompoundpattern.log checkcompoundpattern2.log checkcompoundpattern3.log checkcompoundpattern4.log utfcompound.log checksharps.log checksharpsutf.log germancompounding.log germancompoundingold.log i35725.log i53643.log i54633.log i54980.log maputf.log reputf.log ignore.log ignoreutf.log right_to_left_mark.log 1592880.log 1695964.log 1463589.log 1463589_utf.log IJ.log i68568.log i68568utf.log 1706659.log 1748408-1.log 1748408-2.log 1748408-3.log 1748408-4.log digits_in_words.log colons_in_words.log ngram_utf_fix.log morph.log 1975530.log fullstrip.log iconv.log iconv2.log oconv.log oconv2.log encoding.log korean.log opentaal_forbiddenword1.log opentaal_forbiddenword2.log opentaal_keepcase.log arabic.log 2970240.log 2970242.log breakoff.log opentaal_cpdpat.log opentaal_cpdpat2.log 2999225.log onlyincompound2.log forceucase.log nepali.log hu.log warn.log timelimit.log ignoresug.log limit-multiple-compounding.log
+test -z "affixes.trs condition.trs condition_utf.trs base.trs base_utf.trs allcaps.trs allcaps_utf.trs allcaps2.trs allcaps3.trs keepcase.trs dotless_i.trs i58202.trs map.trs rep.trs sug.trs sug2.trs wordpair.trs sugutf.trs phone.trs ph.trs ph2.trs flag.trs flaglong.trs flagnum.trs flagutf8.trs slash.trs forbiddenword.trs nosuggest.trs alias.trs alias2.trs alias3.trs breakdefault.trs break.trs needaffix.trs needaffix2.trs needaffix3.trs needaffix4.trs needaffix5.trs circumfix.trs fogemorpheme.trs onlyincompound.trs complexprefixes.trs complexprefixes2.trs complexprefixesutf.trs conditionalprefix.trs zeroaffix.trs utf8.trs utf8_bom.trs utf8_bom2.trs utf8_nonbmp.test.trs compoundflag.trs compoundrule.trs compoundrule2.trs compoundrule3.trs compoundrule4.trs compoundrule5.trs compoundrule6.trs compoundrule7.trs compoundrule8.trs compoundaffix.trs compoundaffix2.trs compoundaffix3.trs compoundforbid.trs checkcompounddup.trs checkcompoundtriple.trs simplifiedtriple.trs checkcompoundrep.trs checkcompoundrep2.trs checkcompoundcase2.trs checkcompoundcaseutf.trs checkcompoundpattern.trs checkcompoundpattern2.trs checkcompoundpattern3.trs checkcompoundpattern4.trs utfcompound.trs checksharps.trs checksharpsutf.trs germancompounding.trs germancompoundingold.trs i35725.trs i53643.trs i54633.trs i54980.trs maputf.trs reputf.trs ignore.trs ignoreutf.trs right_to_left_mark.trs 1592880.trs 1695964.trs 1463589.trs 1463589_utf.trs IJ.trs i68568.trs i68568utf.trs 1706659.trs 1748408-1.trs 1748408-2.trs 1748408-3.trs 1748408-4.trs digits_in_words.trs colons_in_words.trs ngram_utf_fix.trs morph.trs 1975530.trs fullstrip.trs iconv.trs iconv2.trs oconv.trs oconv2.trs encoding.trs korean.trs opentaal_forbiddenword1.trs opentaal_forbiddenword2.trs opentaal_keepcase.trs arabic.trs 2970240.trs 2970242.trs breakoff.trs opentaal_cpdpat.trs opentaal_cpdpat2.trs 2999225.trs onlyincompound2.trs forceucase.trs nepali.trs hu.trs warn.trs timelimit.trs ignoresug.trs limit-multiple-compounding.trs" || rm -f affixes.trs condition.trs condition_utf.trs base.trs base_utf.trs allcaps.trs allcaps_utf.trs allcaps2.trs allcaps3.trs keepcase.trs dotless_i.trs i58202.trs map.trs rep.trs sug.trs sug2.trs wordpair.trs sugutf.trs phone.trs ph.trs ph2.trs flag.trs flaglong.trs flagnum.trs flagutf8.trs slash.trs forbiddenword.trs nosuggest.trs alias.trs alias2.trs alias3.trs breakdefault.trs break.trs needaffix.trs needaffix2.trs needaffix3.trs needaffix4.trs needaffix5.trs circumfix.trs fogemorpheme.trs onlyincompound.trs complexprefixes.trs complexprefixes2.trs complexprefixesutf.trs conditionalprefix.trs zeroaffix.trs utf8.trs utf8_bom.trs utf8_bom2.trs utf8_nonbmp.test.trs compoundflag.trs compoundrule.trs compoundrule2.trs compoundrule3.trs compoundrule4.trs compoundrule5.trs compoundrule6.trs compoundrule7.trs compoundrule8.trs compoundaffix.trs compoundaffix2.trs compoundaffix3.trs compoundforbid.trs checkcompounddup.trs checkcompoundtriple.trs simplifiedtriple.trs checkcompoundrep.trs checkcompoundrep2.trs checkcompoundcase2.trs checkcompoundcaseutf.trs checkcompoundpattern.trs checkcompoundpattern2.trs checkcompoundpattern3.trs checkcompoundpattern4.trs utfcompound.trs checksharps.trs checksharpsutf.trs germancompounding.trs germancompoundingold.trs i35725.trs i53643.trs i54633.trs i54980.trs maputf.trs reputf.trs ignore.trs ignoreutf.trs right_to_left_mark.trs 1592880.trs 1695964.trs 1463589.trs 1463589_utf.trs IJ.trs i68568.trs i68568utf.trs 1706659.trs 1748408-1.trs 1748408-2.trs 1748408-3.trs 1748408-4.trs digits_in_words.trs colons_in_words.trs ngram_utf_fix.trs morph.trs 1975530.trs fullstrip.trs iconv.trs iconv2.trs oconv.trs oconv2.trs encoding.trs korean.trs opentaal_forbiddenword1.trs opentaal_forbiddenword2.trs opentaal_keepcase.trs arabic.trs 2970240.trs 2970242.trs breakoff.trs opentaal_cpdpat.trs opentaal_cpdpat2.trs 2999225.trs onlyincompound2.trs forceucase.trs nepali.trs hu.trs warn.trs timelimit.trs ignoresug.trs limit-multiple-compounding.trs
+test -z "test-suite.log" || rm -f test-suite.log
+rm -f *.lo
+make[2]: Leaving directory '/src/hunspell/tests'
+make[1]: Leaving directory '/src/hunspell/tests'
+make[1]: Entering directory '/src/hunspell'
+rm -rf .libs _libs
+rm -f *.lo
+make[1]: Leaving directory '/src/hunspell'
+make  all-recursive
+make[1]: Entering directory '/src/hunspell'
+Making all in po
+make[2]: Entering directory '/src/hunspell/po'
+make[2]: Leaving directory '/src/hunspell/po'
+Making all in src
+make[2]: Entering directory '/src/hunspell/src'
+Making all in hunspell
+make[3]: Entering directory '/src/hunspell/src/hunspell'
+/bin/bash ../../libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../..    -fvisibility=hidden -DBUILDING_LIBHUNSPELL -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT affentry.lo -MD -MP -MF .deps/affentry.Tpo -c -o affentry.lo affentry.cxx
+/bin/bash ../../libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../..    -fvisibility=hidden -DBUILDING_LIBHUNSPELL -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT affixmgr.lo -MD -MP -MF .deps/affixmgr.Tpo -c -o affixmgr.lo affixmgr.cxx
+/bin/bash ../../libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../..    -fvisibility=hidden -DBUILDING_LIBHUNSPELL -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT csutil.lo -MD -MP -MF .deps/csutil.Tpo -c -o csutil.lo csutil.cxx
+/bin/bash ../../libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../..    -fvisibility=hidden -DBUILDING_LIBHUNSPELL -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT filemgr.lo -MD -MP -MF .deps/filemgr.Tpo -c -o filemgr.lo filemgr.cxx
+/bin/bash ../../libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../..    -fvisibility=hidden -DBUILDING_LIBHUNSPELL -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT hashmgr.lo -MD -MP -MF .deps/hashmgr.Tpo -c -o hashmgr.lo hashmgr.cxx
+/bin/bash ../../libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../..    -fvisibility=hidden -DBUILDING_LIBHUNSPELL -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT hunspell.lo -MD -MP -MF .deps/hunspell.Tpo -c -o hunspell.lo hunspell.cxx
+/bin/bash ../../libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../..    -fvisibility=hidden -DBUILDING_LIBHUNSPELL -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT hunzip.lo -MD -MP -MF .deps/hunzip.Tpo -c -o hunzip.lo hunzip.cxx
+/bin/bash ../../libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../..    -fvisibility=hidden -DBUILDING_LIBHUNSPELL -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT phonet.lo -MD -MP -MF .deps/phonet.Tpo -c -o phonet.lo phonet.cxx
+/bin/bash ../../libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../..    -fvisibility=hidden -DBUILDING_LIBHUNSPELL -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT replist.lo -MD -MP -MF .deps/replist.Tpo -c -o replist.lo replist.cxx
+/bin/bash ../../libtool  --tag=CXX   --mode=compile /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../..    -fvisibility=hidden -DBUILDING_LIBHUNSPELL -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT suggestmgr.lo -MD -MP -MF .deps/suggestmgr.Tpo -c -o suggestmgr.lo suggestmgr.cxx
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../.. -fvisibility=hidden -DBUILDING_LIBHUNSPELL -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT affixmgr.lo -MD -MP -MF .deps/affixmgr.Tpo -c affixmgr.cxx -o affixmgr.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../.. -fvisibility=hidden -DBUILDING_LIBHUNSPELL -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT hashmgr.lo -MD -MP -MF .deps/hashmgr.Tpo -c hashmgr.cxx -o hashmgr.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../.. -fvisibility=hidden -DBUILDING_LIBHUNSPELL -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT affentry.lo -MD -MP -MF .deps/affentry.Tpo -c affentry.cxx -o affentry.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../.. -fvisibility=hidden -DBUILDING_LIBHUNSPELL -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT filemgr.lo -MD -MP -MF .deps/filemgr.Tpo -c filemgr.cxx -o filemgr.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../.. -fvisibility=hidden -DBUILDING_LIBHUNSPELL -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT hunspell.lo -MD -MP -MF .deps/hunspell.Tpo -c hunspell.cxx -o hunspell.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../.. -fvisibility=hidden -DBUILDING_LIBHUNSPELL -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT hunzip.lo -MD -MP -MF .deps/hunzip.Tpo -c hunzip.cxx -o hunzip.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../.. -fvisibility=hidden -DBUILDING_LIBHUNSPELL -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT csutil.lo -MD -MP -MF .deps/csutil.Tpo -c csutil.cxx -o csutil.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../.. -fvisibility=hidden -DBUILDING_LIBHUNSPELL -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT replist.lo -MD -MP -MF .deps/replist.Tpo -c replist.cxx -o replist.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../.. -fvisibility=hidden -DBUILDING_LIBHUNSPELL -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT phonet.lo -MD -MP -MF .deps/phonet.Tpo -c phonet.cxx -o phonet.o
+libtool: compile:  /usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../.. -fvisibility=hidden -DBUILDING_LIBHUNSPELL -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT suggestmgr.lo -MD -MP -MF .deps/suggestmgr.Tpo -c suggestmgr.cxx -o suggestmgr.o
+mv -f .deps/phonet.Tpo .deps/phonet.Plo
+mv -f .deps/filemgr.Tpo .deps/filemgr.Plo
+mv -f .deps/replist.Tpo .deps/replist.Plo
+mv -f .deps/hunzip.Tpo .deps/hunzip.Plo
+mv -f .deps/affentry.Tpo .deps/affentry.Plo
+mv -f .deps/hashmgr.Tpo .deps/hashmgr.Plo
+mv -f .deps/csutil.Tpo .deps/csutil.Plo
+mv -f .deps/hunspell.Tpo .deps/hunspell.Plo
+mv -f .deps/suggestmgr.Tpo .deps/suggestmgr.Plo
+mv -f .deps/affixmgr.Tpo .deps/affixmgr.Plo
+/bin/bash ../../libtool  --tag=CXX   --mode=link /usr/local/bin/clang++-jcc -fvisibility=hidden -DBUILDING_LIBHUNSPELL -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -no-undefined -version-info 0:1:0  -o libhunspell-1.7.la -rpath /usr/local/lib affentry.lo affixmgr.lo csutil.lo filemgr.lo hashmgr.lo hunspell.lo hunzip.lo phonet.lo replist.lo suggestmgr.lo   
+libtool: link: ar cr .libs/libhunspell-1.7.a  affentry.o affixmgr.o csutil.o filemgr.o hashmgr.o hunspell.o hunzip.o phonet.o replist.o suggestmgr.o
+libtool: link: ranlib .libs/libhunspell-1.7.a
+libtool: link: ( cd ".libs" && rm -f "libhunspell-1.7.la" && ln -s "../libhunspell-1.7.la" "libhunspell-1.7.la" )
+make[3]: Leaving directory '/src/hunspell/src/hunspell'
+Making all in parsers
+make[3]: Entering directory '/src/hunspell/src/parsers'
+/usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../..  -I../../src/hunspell   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT firstparser.o -MD -MP -MF .deps/firstparser.Tpo -c -o firstparser.o firstparser.cxx
+/usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../..  -I../../src/hunspell   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT xmlparser.o -MD -MP -MF .deps/xmlparser.Tpo -c -o xmlparser.o xmlparser.cxx
+/usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../..  -I../../src/hunspell   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT latexparser.o -MD -MP -MF .deps/latexparser.Tpo -c -o latexparser.o latexparser.cxx
+/usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../..  -I../../src/hunspell   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT manparser.o -MD -MP -MF .deps/manparser.Tpo -c -o manparser.o manparser.cxx
+/usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../..  -I../../src/hunspell   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT testparser.o -MD -MP -MF .deps/testparser.Tpo -c -o testparser.o testparser.cxx
+/usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../..  -I../../src/hunspell   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT textparser.o -MD -MP -MF .deps/textparser.Tpo -c -o textparser.o textparser.cxx
+/usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../..  -I../../src/hunspell   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT htmlparser.o -MD -MP -MF .deps/htmlparser.Tpo -c -o htmlparser.o htmlparser.cxx
+/usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../..  -I../../src/hunspell   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT odfparser.o -MD -MP -MF .deps/odfparser.Tpo -c -o odfparser.o odfparser.cxx
+mv -f .deps/testparser.Tpo .deps/testparser.Po
+mv -f .deps/odfparser.Tpo .deps/odfparser.Po
+mv -f .deps/htmlparser.Tpo .deps/htmlparser.Po
+mv -f .deps/firstparser.Tpo .deps/firstparser.Po
+mv -f .deps/manparser.Tpo .deps/manparser.Po
+mv -f .deps/latexparser.Tpo .deps/latexparser.Po
+mv -f .deps/xmlparser.Tpo .deps/xmlparser.Po
+mv -f .deps/textparser.Tpo .deps/textparser.Po
+rm -f libparsers.a
+/bin/bash ../../libtool  --tag=CXX   --mode=link /usr/local/bin/clang++-jcc  -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++   -o testparser firstparser.o xmlparser.o latexparser.o manparser.o testparser.o textparser.o htmlparser.o odfparser.o ../hunspell/libhunspell-1.7.la 
+ar cru libparsers.a firstparser.o xmlparser.o latexparser.o manparser.o textparser.o htmlparser.o odfparser.o 
+ar: `u' modifier ignored since `D' is the default (see `U')
+ranlib libparsers.a
+libtool: link: /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -o testparser firstparser.o xmlparser.o latexparser.o manparser.o testparser.o textparser.o htmlparser.o odfparser.o  ../hunspell/.libs/libhunspell-1.7.a
+make[3]: Leaving directory '/src/hunspell/src/parsers'
+Making all in tools
+make[3]: Entering directory '/src/hunspell/src/tools'
+/usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../..  -I../../src/hunspell -I../../src/hunspell -I../../src/parsers   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT analyze.o -MD -MP -MF .deps/analyze.Tpo -c -o analyze.o analyze.cxx
+/usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../..  -I../../src/hunspell -I../../src/hunspell -I../../src/parsers   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT chmorph.o -MD -MP -MF .deps/chmorph.Tpo -c -o chmorph.o chmorph.cxx
+/usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../..  -I../../src/hunspell -I../../src/hunspell -I../../src/parsers   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT hunspell.o -MD -MP -MF .deps/hunspell.Tpo -c -o hunspell.o hunspell.cxx
+/usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../..  -I../../src/hunspell -I../../src/hunspell -I../../src/parsers   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT munch.o -MD -MP -MF .deps/munch.Tpo -c -o munch.o munch.cxx
+/usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../..  -I../../src/hunspell -I../../src/hunspell -I../../src/parsers   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT unmunch.o -MD -MP -MF .deps/unmunch.Tpo -c -o unmunch.o unmunch.cxx
+/usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../..  -I../../src/hunspell -I../../src/hunspell -I../../src/parsers   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT hzip.o -MD -MP -MF .deps/hzip.Tpo -c -o hzip.o hzip.cxx
+/usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../..  -I../../src/hunspell -I../../src/hunspell -I../../src/parsers   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT hunzip.o -MD -MP -MF .deps/hunzip.Tpo -c -o hunzip.o hunzip.cxx
+/usr/local/bin/clang++-jcc -DHAVE_CONFIG_H -I. -I../..  -I../../src/hunspell -I../../src/hunspell -I../../src/parsers   -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -MT example.o -MD -MP -MF .deps/example.Tpo -c -o example.o example.cxx
+mv -f .deps/chmorph.Tpo .deps/chmorph.Po
+/bin/bash ../../libtool  --tag=CXX   --mode=link /usr/local/bin/clang++-jcc  -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++   -o chmorph chmorph.o ../parsers/libparsers.a ../hunspell/libhunspell-1.7.la 
+mv -f .deps/analyze.Tpo .deps/analyze.Po
+mv -f .deps/hzip.Tpo .deps/hzip.Po
+/bin/bash ../../libtool  --tag=CXX   --mode=link /usr/local/bin/clang++-jcc  -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++   -o analyze analyze.o ../hunspell/libhunspell-1.7.la 
+/bin/bash ../../libtool  --tag=CXX   --mode=link /usr/local/bin/clang++-jcc  -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++   -o hzip hzip.o  
+mv -f .deps/unmunch.Tpo .deps/unmunch.Po
+/bin/bash ../../libtool  --tag=CXX   --mode=link /usr/local/bin/clang++-jcc  -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++   -o unmunch unmunch.o  
+mv -f .deps/hunzip.Tpo .deps/hunzip.Po
+/bin/bash ../../libtool  --tag=CXX   --mode=link /usr/local/bin/clang++-jcc  -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++   -o hunzip hunzip.o ../hunspell/libhunspell-1.7.la 
+libtool: link: /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -o chmorph chmorph.o  ../parsers/libparsers.a ../hunspell/.libs/libhunspell-1.7.a
+libtool: link: /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -o hzip hzip.o 
+libtool: link: /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -o analyze analyze.o  ../hunspell/.libs/libhunspell-1.7.a
+libtool: link: /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -o unmunch unmunch.o 
+mv -f .deps/munch.Tpo .deps/munch.Po
+/bin/bash ../../libtool  --tag=CXX   --mode=link /usr/local/bin/clang++-jcc  -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++   -o munch munch.o  
+libtool: link: /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -o hunzip hunzip.o  ../hunspell/.libs/libhunspell-1.7.a
+libtool: link: /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -o munch munch.o 
+mv -f .deps/example.Tpo .deps/example.Po
+/bin/bash ../../libtool  --tag=CXX   --mode=link /usr/local/bin/clang++-jcc  -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++   -o example example.o ../hunspell/libhunspell-1.7.la 
+libtool: link: /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -o example example.o  ../hunspell/.libs/libhunspell-1.7.a
+mv -f .deps/hunspell.Tpo .deps/hunspell.Po
+/bin/bash ../../libtool  --tag=CXX   --mode=link /usr/local/bin/clang++-jcc  -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++   -o hunspell hunspell.o  ../parsers/libparsers.a ../hunspell/libhunspell-1.7.la   
+libtool: link: /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -o hunspell hunspell.o  ../parsers/libparsers.a ../hunspell/.libs/libhunspell-1.7.a
+make[3]: Leaving directory '/src/hunspell/src/tools'
+make[3]: Entering directory '/src/hunspell/src'
+make[3]: Nothing to be done for 'all-am'.
+make[3]: Leaving directory '/src/hunspell/src'
+make[2]: Leaving directory '/src/hunspell/src'
+Making all in man
+make[2]: Entering directory '/src/hunspell/man'
+Making all in hu
+make[3]: Entering directory '/src/hunspell/man/hu'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/src/hunspell/man/hu'
+make[3]: Entering directory '/src/hunspell/man'
+make[3]: Nothing to be done for 'all-am'.
+make[3]: Leaving directory '/src/hunspell/man'
+make[2]: Leaving directory '/src/hunspell/man'
+Making all in tests
+make[2]: Entering directory '/src/hunspell/tests'
+Making all in suggestiontest
+make[3]: Entering directory '/src/hunspell/tests/suggestiontest'
+make[3]: Nothing to be done for 'all'.
+make[3]: Leaving directory '/src/hunspell/tests/suggestiontest'
+make[3]: Entering directory '/src/hunspell/tests'
+make[3]: Nothing to be done for 'all-am'.
+make[3]: Leaving directory '/src/hunspell/tests'
+make[2]: Leaving directory '/src/hunspell/tests'
+make[2]: Entering directory '/src/hunspell'
+make[2]: Leaving directory '/src/hunspell'
+make[1]: Leaving directory '/src/hunspell'
+./src/tools/fuzzer.cxx:38:20: error: no matching member function for call to 'suggest'
+    int ret = dict.suggest(&slst, word);
+              ~~~~~^~~~~~~
+./src/hunspell/hunspell.hxx:142:20: note: candidate function not viable: no known conversion from 'std::string' (aka 'basic_string<char, char_traits<char>, allocator<char>>') to 'const char *' for 2nd argument
+  H_DEPRECATED int suggest(char*** slst, const char* word);
+                   ^
+./src/hunspell/hunspell.hxx:141:28: note: candidate function not viable: requires single argument 'word', but 2 arguments were provided
+  std::vector<std::string> suggest(const std::string& word);
+                           ^
+1 error generated.

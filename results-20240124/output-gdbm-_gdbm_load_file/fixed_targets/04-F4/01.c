@@ -1,0 +1,3 @@
+extern "C" int gdbm_init(const void *data, size_t size) {
+  // ...
+}

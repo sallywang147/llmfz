@@ -1,0 +1,88 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <iostream>
+#include <memory>
+#include <string>
+#include <vector>
+
+#include "import_project.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  std::unique_ptr<ImportProject> import_project(new ImportProject());
+  std::string solution_path = stream.ConsumeRemainingBytesAsString();
+  std::vector<std::string> solution_files = stream.ConsumeRemainingBytesAsString().split('\n');
+  std::string project_path = stream.ConsumeRemainingBytesAsString();
+  std::vector<std::string> project_files = stream.ConsumeRemainingBytesAsString().split('\n');
+  std::string project_name = stream.ConsumeRemainingBytesAsString();
+  std::string project_type = stream.ConsumeRemainingBytesAsString();
+  std::string project_guid = stream.ConsumeRemainingBytesAsString();
+  std::string project_version = stream.ConsumeRemainingBytesAsString();
+  std::string project_configuration = stream.ConsumeRemainingBytesAsString();
+  std::string project_platform = stream.ConsumeRemainingBytesAsString();
+  std::string project_output_path = stream.ConsumeRemainingBytesAsString();
+  std::string project_intermediate_path = stream.ConsumeRemainingBytesAsString();
+  std::string project_resource_path = stream.ConsumeRemainingBytesAsString();
+  std::string project_preprocessor_definitions = stream.ConsumeRemainingBytesAsString();
+  std::string project_include_directories = stream.ConsumeRemainingBytesAsString();
+  std::string project_library_directories = stream.ConsumeRemainingBytesAsString();
+  std::string project_additional_dependencies = stream.ConsumeRemainingBytesAsString();
+  std::string project_additional_link_flags = stream.ConsumeRemainingBytesAsString();
+  std::string project_additional_compile_flags = stream.ConsumeRemainingBytesAsString();
+  std::string project_target_name = stream.ConsumeRemainingBytesAsString();
+  std::string project_target_type = stream.ConsumeRemainingBytesAsString();
+  std::string project_target_platform = stream.ConsumeRemainingBytesAsString();
+  std::string project_target_configuration = stream.ConsumeRemainingBytesAsString();
+  std::string project_target_output_path = stream.ConsumeRemainingBytesAsString();
+  std::string project_target_intermediate_path = stream.ConsumeRemainingBytesAsString();
+  std::string project_target_resource_path = stream.ConsumeRemainingBytesAsString();
+  std::string project_target_preprocessor_definitions = stream.ConsumeRemainingBytesAsString();
+  std::string project_target_include_directories = stream.ConsumeRemainingBytesAsString();
+  std::string project_target_library_directories = stream.ConsumeRemainingBytesAsString();
+  std::string project_target_additional_dependencies = stream.ConsumeRemainingBytesAsString();
+  std::string project_target_additional_link_flags = stream.ConsumeRemainingBytesAsString();
+  std::string project_target_additional_compile_flags = stream.ConsumeRemainingBytesAsString();
+  std::string project_target_target_name = stream.ConsumeRemainingBytesAsString();
+  std::string project_target_target_type = stream.ConsumeRemainingBytesAsString();
+  std::string project_target_target_platform = stream.ConsumeRemainingBytesAsString();
+  std::string project_target_target_configuration = stream.ConsumeRemainingBytesAsString();
+  std::string project_target_target_output_path = stream.ConsumeRemainingBytesAsString();
+  std::string project_target_target_intermediate_path = stream.ConsumeRemainingBytesAsString();
+  std::string project_target_target_resource_path = stream.ConsumeRemainingBytesAsString();
+  std::string project_target_target_preprocessor_definitions = stream.ConsumeRemainingBytesAsString();
+  std::string project_target_target_include_directories = stream.ConsumeRemainingBytesAsString();
+  std::string project_target_target_library_directories = stream.ConsumeRemainingBytesAsString();
+  std::string project_target_target_additional_dependencies = stream.ConsumeRemainingBytesAsString();
+  std::string project_target_target_additional_link_flags = stream.ConsumeRemainingBytesAsString();
+  std::string project_target_target_additional_compile_flags = stream.ConsumeRemainingBytesAsString();
+
+  import_project->importSln(import_project.get(), &std::cin, &solution_path, &solution_files);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+main.cpp:11:10: fatal error: 'import_project.h' file not found
+#include "import_project.h"
+         ^~~~~~~~~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

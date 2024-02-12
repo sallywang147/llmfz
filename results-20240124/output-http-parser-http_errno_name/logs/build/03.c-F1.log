@@ -1,0 +1,28 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ cd http-parser
++ make http_parser.o
+/usr/local/bin/clang-jcc  -I. -DHTTP_PARSER_STRICT=0  -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Wall -Wextra -Werror -O3  -c http_parser.c
++ /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -I. -DHTTP_PARSER_STRICT=0 -Wall -Wextra -Werror -c fuzzers/fuzz_parser.c -o fuzz_parser.o
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -fsanitize=fuzzer -Wall -Wextra -Werror http_parser.o fuzz_parser.o -o /workspace/out/libfuzzer-address-x86_64/fuzz_parser
++ /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -I. -DHTTP_PARSER_STRICT=0 -Wall -Wextra -Werror -c fuzzers/fuzz_url.c -o fuzz_url.o
+fuzzers/fuzz_url.c:6:8: error: expected identifier or '('
+extern "C" {
+       ^
+fuzzers/fuzz_url.c:12:47: error: use of undeclared identifier 'HTTP_PARSER_ERRNO_MAX'
+  char * err_name = http_errno_name(data[0] % HTTP_PARSER_ERRNO_MAX);
+                                              ^
+2 errors generated.
+
+Fix failure
+fuzzers/fuzz_url.cpp:12:47: error: use of undeclared identifier 'HTTP_PARSER_ERRNO_MAX'
+  char * err_name = http_errno_name(data[0] % HTTP_PARSER_ERRNO_MAX);
+                                              ^
+1 error generated.

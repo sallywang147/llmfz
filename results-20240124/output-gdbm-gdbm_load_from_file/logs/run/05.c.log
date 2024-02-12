@@ -1,0 +1,39 @@
+Using seed corpus: gdbm_fuzzer_seed_corpus.zip
+/workspace/out/libfuzzer-address-x86_64/gdbm_fuzzer -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/gdbm_fuzzer < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 3642044018
+INFO: Loaded 1 modules   (1906 inline 8-bit counters): 1906 [0x654ee0, 0x655652), 
+INFO: Loaded 1 PC tables (1906 PCs): 1906 [0x5fa348,0x601a68), 
+INFO:       20 files found in /workspace/corpus/gdbm_fuzzer
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 16384 bytes
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+==14==ERROR: AddressSanitizer: SEGV on unknown address 0x000000000000 (pc 0x7f97a4692ddb bp 0x000000000000 sp 0x7ffeb8a45750 T0)
+==14==The signal is caused by a READ memory access.
+==14==Hint: address points to the zero page.
+SCARINESS: 10 (null-deref)
+    #0 0x7f97a4692ddb in _IO_fclose (/lib/x86_64-linux-gnu/libc.so.6+0x81ddb) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #1 0x50197f in fclose /src/llvm-project/compiler-rt/lib/asan/../sanitizer_common/sanitizer_common_interceptors.inc
+    #2 0x56c946 in LLVMFuzzerTestOneInput /src/gdbm/fuzz/gdbm_fuzzer.cpp:20:3
+    #3 0x43df23 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #4 0x43f2d4 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:804:3
+    #5 0x43f7a9 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #6 0x42ee0f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #7 0x458462 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #8 0x7f97a4635082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #9 0x41f84d in _start (out/libfuzzer-address-x86_64/gdbm_fuzzer+0x41f84d)
+
+DEDUP_TOKEN: _IO_fclose--fclose--LLVMFuzzerTestOneInput
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: SEGV (/lib/x86_64-linux-gnu/libc.so.6+0x81ddb) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca) in _IO_fclose
+==14==ABORTING
+MS: 0 ; base unit: 0000000000000000000000000000000000000000
+
+
+artifact_prefix='./'; Test unit written to ./crash-da39a3ee5e6b4b0d3255bfef95601890afd80709
+Base64: 
+stat::number_of_executed_units: 1
+stat::average_exec_per_sec:     0
+stat::new_units_added:          0
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              34

@@ -1,0 +1,51 @@
+Using seed corpus: decode_fuzzer_seed_corpus.zip
+/workspace/out/libfuzzer-address-x86_64/decode_fuzzer -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/decode_fuzzer < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 745961896
+INFO: Loaded 1 modules   (1266 inline 8-bit counters): 1266 [0x63fd20, 0x640212), 
+INFO: Loaded 1 PC tables (1266 PCs): 1266 [0x640218,0x645138), 
+INFO:       58 files found in /workspace/corpus/decode_fuzzer
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 15392 bytes
+INFO: seed corpus: files: 58 min: 1b max: 15392b total: 27809b rss: 34Mb
+=================================================================
+==14==ERROR: AddressSanitizer: attempting free on address which was not malloc()-ed: 0x61e000001c80 in thread T0
+SCARINESS: 40 (bad-free)
+    #0 0x52eca2 in free /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:52:3
+    #1 0x56c759 in LLVMFuzzerTestOneInput /src/brotli/c/fuzz/decode_fuzzer.c:51:9
+    #2 0x43ddb3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #3 0x43d59a in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #4 0x43f404 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:826:7
+    #5 0x43f639 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #6 0x42ec9f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #7 0x4582f2 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #8 0x7f86ae1df082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #9 0x41f6dd in _start (out/libfuzzer-address-x86_64/decode_fuzzer+0x41f6dd)
+
+DEDUP_TOKEN: free--LLVMFuzzerTestOneInput--fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long)
+0x61e000001c80 is located 1024 bytes inside of 2590-byte region [0x61e000001880,0x61e00000229e)
+allocated by thread T0 here:
+    #0 0x52ef46 in __interceptor_malloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:69:3
+    #1 0x57b5e6 in BrotliEnsureRingBuffer /src/brotli/c/dec/decode.c:1341:29
+    #2 0x570a8e in BrotliDecoderDecompressStream /src/brotli/c/dec/decode.c:2683:14
+    #3 0x56c6d2 in LLVMFuzzerTestOneInput /src/brotli/c/fuzz/decode_fuzzer.c:45:16
+    #4 0x43ddb3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #5 0x43d59a in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #6 0x43f404 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:826:7
+    #7 0x43f639 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #8 0x42ec9f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #9 0x4582f2 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #10 0x7f86ae1df082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_malloc--BrotliEnsureRingBuffer--BrotliDecoderDecompressStream
+SUMMARY: AddressSanitizer: bad-free /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:52:3 in free
+==14==ABORTING
+MS: 0 ; base unit: 0000000000000000000000000000000000000000
+0x82,0x90,0x0,0xd1,0x4,0x69,0xa8,0x10,0x5,
+\202\220\000\321\004i\250\020\005
+artifact_prefix='./'; Test unit written to ./crash-04bdd9f35a2881027adddb039026623cd2e86664
+Base64: gpAA0QRpqBAF
+stat::number_of_executed_units: 16
+stat::average_exec_per_sec:     0
+stat::new_units_added:          0
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              35

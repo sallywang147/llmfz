@@ -1,0 +1,46 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <stddef.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "../../htslib/sam.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const size_t max_file_name_len = stream.ConsumeIntegralInRange<size_t>(1, 1024);
+  char *file_name = static_cast<char*>(calloc(max_file_name_len + 1, sizeof(char)));
+  stream.ConsumeBytesAsString(file_name, max_file_name_len);
+  const int min_shift = stream.ConsumeIntegral<int>();
+  sam_index_build(file_name, min_shift);
+  free(file_name);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+test/fuzz/hts_open_fuzzer.c:8:8: error: expected identifier or '('
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+       ^
+1 error generated.
+
+Fix failure
+test/fuzz/hts_open_fuzzer.cpp:9:3: error: unknown type name 'FuzzedDataProvider'
+  FuzzedDataProvider stream(data, size);
+  ^
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

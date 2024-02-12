@@ -1,0 +1,61 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include "cppcheck.h"
+#include "type2.h"
+
+enum class Color;
+
+class DummyErrorLogger : public ErrorLogger {
+public:
+    void reportOut(const std::string& /*outmsg*/, Color /*c*/) override {}
+    void reportErr(const ErrorMessage& /*msg*/) override {}
+    void reportProgress(const std::string& /*filename*/,
+                        const char /*stage*/[],
+                        const std::size_t /*value*/) override {} // FN
+};
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t dataSize);
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t dataSize)
+{
+    if (dataSize < 10000) {
+        const std::string code = generateCode2(data, dataSize);
+
+        DummyErrorLogger errorLogger;
+        CppCheck cppcheck(errorLogger, false, nullptr);
+        cppcheck.settings().addEnabled("all");
+        cppcheck.settings().certainty.setEnabled(Certainty::inconclusive, true);
+        cppcheck.check(&cppcheck, nullptr);
+    }
+    return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+main.cpp:26:18: error: no matching member function for call to 'check'
+        cppcheck.check(&cppcheck, nullptr);
+        ~~~~~~~~~^~~~~
+../lib/cppcheck.h:99:18: note: candidate function not viable: no known conversion from 'CppCheck *' to 'const std::string' (aka 'const basic_string<char, char_traits<char>, allocator<char>>') for 1st argument
+    unsigned int check(const std::string &path, const std::string &content);
+                 ^
+../lib/cppcheck.h:85:18: note: candidate function not viable: requires single argument 'path', but 2 arguments were provided
+    unsigned int check(const std::string &path);
+                 ^
+../lib/cppcheck.h:86:18: note: candidate function not viable: requires single argument 'fs', but 2 arguments were provided
+    unsigned int check(const FileSettings &fs);
+                 ^
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

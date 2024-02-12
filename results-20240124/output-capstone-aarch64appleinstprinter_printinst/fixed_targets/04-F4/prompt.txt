@@ -1,0 +1,121 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <algorithm>
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+#include "llvm/MC/MCInst.h"
+#include "llvm/MC/MCInstPrinter.h"
+#include "llvm/MC/MCStreamer.h"
+#include "llvm/MC/MCSubtargetInfo.h"
+#include "llvm/Support/SourceMgr.h"
+
+extern "C" {
+void AArch64AppleInstPrinter_printInst(struct MCInst * MI, size_t Address, char * Annot, struct SStream * O);
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const uint8_t instruction_size = stream.ConsumeIntegral<uint8_t>();
+  std::vector<uint8_t> instruction_bytes = stream.ConsumeBytes<uint8_t>(instruction_size);
+  const uint8_t address = stream.ConsumeIntegral<uint8_t>();
+  const std::string annotation = stream.ConsumeRemainingBytesAsString();
+  const char* annotation_c_str = annotation.c_str();
+  MCInst instruction;
+  instruction.setOpcode(0);
+  instruction.addOperand(llvm::MCOperand::createImm(0));
+  MCInstPrinter printer(nullptr, nullptr);
+  MCStreamer streamer(nullptr, nullptr);
+  MCSubtargetInfo subtarget_info;
+  SStream stream_buffer;
+  AArch64AppleInstPrinter_printInst(&instruction, address, (char*)annotation_c_str, &stream_buffer);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:16:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:26:10: error: variable has incomplete type 'MCInst'
+  MCInst instruction;
+         ^
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:16:47: note: forward declaration of 'MCInst'
+void AArch64AppleInstPrinter_printInst(struct MCInst * MI, size_t Address, char * Annot, struct SStream * O);
+                                              ^
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:29:3: error: unknown type name 'MCInstPrinter'; did you mean 'llvm::MCInstPrinter'?
+  MCInstPrinter printer(nullptr, nullptr);
+  ^~~~~~~~~~~~~
+  llvm::MCInstPrinter
+/usr/local/include/llvm/MC/MCStreamer.h:48:7: note: 'llvm::MCInstPrinter' declared here
+class MCInstPrinter;
+      ^
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:29:17: error: variable type 'llvm::MCInstPrinter' is an abstract class
+  MCInstPrinter printer(nullptr, nullptr);
+                ^
+/usr/local/include/llvm/MC/MCInstPrinter.h:96:45: note: unimplemented pure virtual method 'getMnemonic' in 'MCInstPrinter'
+  virtual std::pair<const char *, uint64_t> getMnemonic(const MCInst *MI) = 0;
+                                            ^
+/usr/local/include/llvm/MC/MCInstPrinter.h:105:16: note: unimplemented pure virtual method 'printInst' in 'MCInstPrinter'
+  virtual void printInst(const MCInst *MI, uint64_t Address, StringRef Annot,
+               ^
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:30:3: error: unknown type name 'MCStreamer'; did you mean 'llvm::MCStreamer'?
+  MCStreamer streamer(nullptr, nullptr);
+  ^~~~~~~~~~
+  llvm::MCStreamer
+/usr/local/include/llvm/MC/MCStreamer.h:201:7: note: 'llvm::MCStreamer' declared here
+class MCStreamer {
+      ^
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:30:14: error: variable type 'llvm::MCStreamer' is an abstract class
+  MCStreamer streamer(nullptr, nullptr);
+             ^
+/usr/local/include/llvm/MC/MCStreamer.h:543:16: note: unimplemented pure virtual method 'emitSymbolAttribute' in 'MCStreamer'
+  virtual bool emitSymbolAttribute(MCSymbol *Symbol,
+               ^
+/usr/local/include/llvm/MC/MCStreamer.h:652:16: note: unimplemented pure virtual method 'emitCommonSymbol' in 'MCStreamer'
+  virtual void emitCommonSymbol(MCSymbol *Symbol, uint64_t Size,
+               ^
+/usr/local/include/llvm/MC/MCStreamer.h:670:16: note: unimplemented pure virtual method 'emitZerofill' in 'MCStreamer'
+  virtual void emitZerofill(MCSection *Section, MCSymbol *Symbol = nullptr,
+               ^
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:31:3: error: unknown type name 'MCSubtargetInfo'; did you mean 'llvm::MCSubtargetInfo'?
+  MCSubtargetInfo subtarget_info;
+  ^~~~~~~~~~~~~~~
+  llvm::MCSubtargetInfo
+/usr/local/include/llvm/MC/MCSubtargetInfo.h:76:7: note: 'llvm::MCSubtargetInfo' declared here
+class MCSubtargetInfo {
+      ^
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:31:19: error: call to deleted constructor of 'llvm::MCSubtargetInfo'
+  MCSubtargetInfo subtarget_info;
+                  ^
+/usr/local/include/llvm/MC/MCSubtargetInfo.h:103:3: note: 'MCSubtargetInfo' has been explicitly marked deleted here
+  MCSubtargetInfo() = delete;
+  ^
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:32:11: error: variable has incomplete type 'SStream'
+  SStream stream_buffer;
+          ^
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:16:97: note: forward declaration of 'SStream'
+void AArch64AppleInstPrinter_printInst(struct MCInst * MI, size_t Address, char * Annot, struct SStream * O);
+                                                                                                ^
+8 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,28 @@
+/workspace/out/libfuzzer-address-x86_64/compress_fuzzer -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/compress_fuzzer < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 3997715677
+INFO: Loaded 1 modules   (19159 inline 8-bit counters): 19159 [0x8cb1a8, 0x8cfc7f), 
+INFO: Loaded 1 PC tables (19159 PCs): 19159 [0x82a588,0x8752f8), 
+INFO:        0 files found in /workspace/corpus/compress_fuzzer
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: A corpus is not provided, starting from an empty corpus
+#2	INITED cov: 162 ft: 163 corp: 1/1b exec/s: 0 rss: 34Mb
+	NEW_FUNC[1/1]: 0x574610 in std::__1::vector<unsigned char, std::__1::allocator<unsigned char> >::shrink_to_fit() /usr/local/bin/../include/c++/v1/vector:1497
+#4	NEW    cov: 171 ft: 172 corp: 2/3b lim: 4096 exec/s: 0 rss: 38Mb L: 2/2 MS: 2 ChangeBit-InsertByte-
+#454	NEW    cov: 172 ft: 173 corp: 3/287b lim: 4096 exec/s: 454 rss: 38Mb L: 284/284 MS: 5 InsertRepeatedBytes-ChangeASCIIInt-EraseBytes-CopyPart-InsertRepeatedBytes-
+#689	REDUCE cov: 172 ft: 173 corp: 3/259b lim: 4096 exec/s: 689 rss: 38Mb L: 256/256 MS: 5 InsertByte-ChangeBit-EraseBytes-CMP-CrossOver- DE: "\377\377\377\377\377\377\377\377"-
+#1024	pulse  cov: 172 ft: 173 corp: 3/259b lim: 4096 exec/s: 512 rss: 38Mb
+#2048	pulse  cov: 172 ft: 173 corp: 3/259b lim: 4096 exec/s: 682 rss: 38Mb
+#4096	pulse  cov: 172 ft: 173 corp: 3/259b lim: 4096 exec/s: 682 rss: 38Mb
+#8192	pulse  cov: 172 ft: 173 corp: 3/259b lim: 4096 exec/s: 744 rss: 38Mb
+#16384	pulse  cov: 172 ft: 173 corp: 3/259b lim: 4096 exec/s: 744 rss: 38Mb
+#23019	DONE   cov: 172 ft: 173 corp: 3/259b lim: 4096 exec/s: 742 rss: 38Mb
+###### Recommended dictionary. ######
+"\377\377\377\377\377\377\377\377" # Uses: 1709
+###### End of recommended dictionary. ######
+Done 23019 runs in 31 second(s)
+stat::number_of_executed_units: 23019
+stat::average_exec_per_sec:     742
+stat::new_units_added:          3
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              38

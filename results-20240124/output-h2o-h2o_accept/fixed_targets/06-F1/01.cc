@@ -1,0 +1,1 @@
+#error "Please defined one of HTTP1 or HTTP2"

@@ -1,0 +1,98 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <stddef.h>
+
+#include "ares.h"
+
+// Entrypoint for Clang's libfuzzer
+int LLVMFuzzerTestOneInput(const unsigned char *data,
+                           unsigned long size) {
+  // Feed the data into each of the ares_parse_*_reply functions.
+  struct ares_channeldata channel;
+  memset(&channel, 0, sizeof(channel));
+
+  struct sockaddr_in addr;
+  memset(&addr, 0, sizeof(addr));
+  addr.sin_family = AF_INET;
+  addr.sin_port = 12345;
+  addr.sin_addr.s_addr = 0x10203040;
+
+  struct sockaddr_in6 addr6;
+  memset(&addr6, 0, sizeof(addr6));
+  addr6.sin6_family = AF_INET6;
+  addr6.sin6_port = 12345;
+  addr6.sin6_addr.s6_addr[0] = 0x10;
+  addr6.sin6_addr.s6_addr[1] = 0x20;
+  addr6.sin6_addr.s6_addr[2] = 0x30;
+  addr6.sin6_addr.s6_addr[3] = 0x40;
+
+  ares_getnameinfo_int(&channel, reinterpret_cast<struct sockaddr*>(&addr),
+                        sizeof(addr), NI_NUMERICHOST, NULL, NULL);
+  ares_getnameinfo_int(&channel, reinterpret_cast<struct sockaddr*>(&addr6),
+                        sizeof(addr6), NI_NUMERICHOST, NULL, NULL);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/c-ares/test/ares-test-fuzz-name.c:9:27: error: variable has incomplete type 'struct ares_channeldata'
+  struct ares_channeldata channel;
+                          ^
+include/ares.h:342:8: note: forward declaration of 'struct ares_channeldata'
+struct ares_channeldata;
+       ^
+/src/c-ares/test/ares-test-fuzz-name.c:27:51: error: expected expression
+  ares_getnameinfo_int(&channel, reinterpret_cast<struct sockaddr*>(&addr),
+                                                  ^
+/src/c-ares/test/ares-test-fuzz-name.c:27:34: error: use of undeclared identifier 'reinterpret_cast'
+  ares_getnameinfo_int(&channel, reinterpret_cast<struct sockaddr*>(&addr),
+                                 ^
+/src/c-ares/test/ares-test-fuzz-name.c:28:39: error: use of undeclared identifier 'NI_NUMERICHOST'
+                        sizeof(addr), NI_NUMERICHOST, NULL, NULL);
+                                      ^
+/src/c-ares/test/ares-test-fuzz-name.c:29:51: error: expected expression
+  ares_getnameinfo_int(&channel, reinterpret_cast<struct sockaddr*>(&addr6),
+                                                  ^
+/src/c-ares/test/ares-test-fuzz-name.c:29:34: error: use of undeclared identifier 'reinterpret_cast'
+  ares_getnameinfo_int(&channel, reinterpret_cast<struct sockaddr*>(&addr6),
+                                 ^
+/src/c-ares/test/ares-test-fuzz-name.c:30:40: error: use of undeclared identifier 'NI_NUMERICHOST'
+                        sizeof(addr6), NI_NUMERICHOST, NULL, NULL);
+                                       ^
+7 errors generated.
+
+Fix failure
+/src/c-ares/test/ares-test-fuzz-name.cpp:9:27: error: variable has incomplete type 'struct ares_channeldata'
+  struct ares_channeldata channel;
+                          ^
+include/ares.h:342:8: note: forward declaration of 'ares_channeldata'
+struct ares_channeldata;
+       ^
+/src/c-ares/test/ares-test-fuzz-name.cpp:13:3: error: use of undeclared identifier 'memset'
+  memset(&addr, 0, sizeof(addr));
+  ^
+/src/c-ares/test/ares-test-fuzz-name.cpp:19:3: error: use of undeclared identifier 'memset'
+  memset(&addr6, 0, sizeof(addr6));
+  ^
+/src/c-ares/test/ares-test-fuzz-name.cpp:28:39: error: use of undeclared identifier 'NI_NUMERICHOST'
+                        sizeof(addr), NI_NUMERICHOST, NULL, NULL);
+                                      ^
+/src/c-ares/test/ares-test-fuzz-name.cpp:30:40: error: use of undeclared identifier 'NI_NUMERICHOST'
+                        sizeof(addr6), NI_NUMERICHOST, NULL, NULL);
+                                       ^
+5 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

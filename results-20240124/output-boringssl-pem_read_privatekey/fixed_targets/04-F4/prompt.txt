@@ -1,0 +1,200 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <fstream>
+#include <string>
+
+#include <openssl/bio.h>
+#include <openssl/evp.h>
+#include <openssl/pem.h>
+
+extern "C" {
+#include <openssl/err.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  const std::string filename = stream.ConsumeRandomLengthString();
+  std::ofstream file(filename);
+  file << stream;
+  file.close();
+
+  BIO* bio = BIO_new_file(filename.c_str(), "r");
+  if (bio == nullptr) {
+    return 0;
+  }
+
+  EVP_PKEY* pkey = PEM_read_PrivateKey(bio, nullptr, nullptr, nullptr);
+  BIO_free(bio);
+
+  EVP_PKEY_free(pkey);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/boringssl/fuzz/ssl_ctx_api.cc:22:8: error: invalid operands to binary expression ('std::ofstream' (aka 'basic_ofstream<char>') and 'FuzzedDataProvider')
+  file << stream;
+  ~~~~ ^  ~~~~~~
+/usr/local/bin/../include/c++/v1/cstddef:141:3: note: candidate function template not viable: no known conversion from 'std::ofstream' (aka 'basic_ofstream<char>') to 'std::byte' for 1st argument
+  operator<< (byte  __lhs, _Integer __shift) noexcept
+  ^
+/usr/local/bin/../include/c++/v1/ostream:756:1: note: candidate function template not viable: no known conversion from 'FuzzedDataProvider' to 'char' for 2nd argument
+operator<<(basic_ostream<_CharT, _Traits>& __os, char __cn)
+^
+/usr/local/bin/../include/c++/v1/ostream:789:1: note: candidate function template not viable: no known conversion from 'FuzzedDataProvider' to 'char' for 2nd argument
+operator<<(basic_ostream<char, _Traits>& __os, char __c)
+^
+/usr/local/bin/../include/c++/v1/ostream:796:1: note: candidate function template not viable: no known conversion from 'FuzzedDataProvider' to 'signed char' for 2nd argument
+operator<<(basic_ostream<char, _Traits>& __os, signed char __c)
+^
+/usr/local/bin/../include/c++/v1/ostream:803:1: note: candidate function template not viable: no known conversion from 'FuzzedDataProvider' to 'unsigned char' for 2nd argument
+operator<<(basic_ostream<char, _Traits>& __os, unsigned char __c)
+^
+/usr/local/bin/../include/c++/v1/ostream:817:1: note: candidate function template not viable: no known conversion from 'FuzzedDataProvider' to 'const char *' for 2nd argument
+operator<<(basic_ostream<_CharT, _Traits>& __os, const char* __strn)
+^
+/usr/local/bin/../include/c++/v1/ostream:863:1: note: candidate function template not viable: no known conversion from 'FuzzedDataProvider' to 'const char *' for 2nd argument
+operator<<(basic_ostream<char, _Traits>& __os, const char* __str)
+^
+/usr/local/bin/../include/c++/v1/ostream:870:1: note: candidate function template not viable: no known conversion from 'FuzzedDataProvider' to 'const signed char *' for 2nd argument
+operator<<(basic_ostream<char, _Traits>& __os, const signed char* __str)
+^
+/usr/local/bin/../include/c++/v1/ostream:878:1: note: candidate function template not viable: no known conversion from 'FuzzedDataProvider' to 'const unsigned char *' for 2nd argument
+operator<<(basic_ostream<char, _Traits>& __os, const unsigned char* __str)
+^
+/usr/local/bin/../include/c++/v1/ostream:1063:1: note: candidate function template not viable: no known conversion from 'FuzzedDataProvider' to 'const std::error_code' for 2nd argument
+operator<<(basic_ostream<_CharT, _Traits>& __os, const error_code& __ec)
+^
+/usr/local/bin/../include/c++/v1/ostream:749:1: note: candidate template ignored: deduced conflicting types for parameter '_CharT' ('char' vs. 'FuzzedDataProvider')
+operator<<(basic_ostream<_CharT, _Traits>& __os, _CharT __c)
+^
+/usr/local/bin/../include/c++/v1/__random/uniform_int_distribution.h:256:1: note: candidate template ignored: could not match 'uniform_int_distribution<_IT>' against 'FuzzedDataProvider'
+operator<<(basic_ostream<_CharT, _Traits>& __os,
+^
+/usr/local/bin/../include/c++/v1/ostream:810:1: note: candidate template ignored: could not match 'const _CharT *' against 'FuzzedDataProvider'
+operator<<(basic_ostream<_CharT, _Traits>& __os, const _CharT* __str)
+^
+/usr/local/bin/../include/c++/v1/ostream:1046:1: note: candidate template ignored: could not match 'basic_string<_CharT, _Traits, _Allocator>' against 'FuzzedDataProvider'
+operator<<(basic_ostream<_CharT, _Traits>& __os,
+^
+/usr/local/bin/../include/c++/v1/ostream:1054:1: note: candidate template ignored: could not match 'basic_string_view<_CharT, _Traits>' against 'FuzzedDataProvider'
+operator<<(basic_ostream<_CharT, _Traits>& __os,
+^
+/usr/local/bin/../include/c++/v1/ostream:1071:1: note: candidate template ignored: could not match 'shared_ptr<_Yp>' against 'FuzzedDataProvider'
+operator<<(basic_ostream<_CharT, _Traits>& __os, shared_ptr<_Yp> const& __p)
+^
+/usr/local/bin/../include/c++/v1/ostream:1083:1: note: candidate template ignored: could not match 'unique_ptr<_Yp, _Dp>' against 'FuzzedDataProvider'
+operator<<(basic_ostream<_CharT, _Traits>& __os, unique_ptr<_Yp, _Dp> const& __p)
+^
+/usr/local/bin/../include/c++/v1/ostream:1090:1: note: candidate template ignored: could not match 'bitset<_Size>' against 'FuzzedDataProvider'
+operator<<(basic_ostream<_CharT, _Traits>& __os, const bitset<_Size>& __x)
+^
+/usr/local/bin/../include/c++/v1/ostream:1038:11: note: candidate template ignored: requirement 'integral_constant<bool, false>::value' was not satisfied [with _Stream = std::ofstream &, _Tp = FuzzedDataProvider]
+_Stream&& operator<<(_Stream&& __os, const _Tp& __x)
+          ^
+/usr/local/bin/../include/c++/v1/iomanip:362:1: note: candidate template ignored: could not match '__iom_t8<_MoneyT>' against 'FuzzedDataProvider'
+operator<<(basic_ostream<_CharT, _Traits>& __os, const __iom_t8<_MoneyT>& __x)
+^
+/usr/local/bin/../include/c++/v1/iomanip:482:1: note: candidate template ignored: could not match '__iom_t10<_CharT>' against 'FuzzedDataProvider'
+operator<<(basic_ostream<_CharT, _Traits>& __os, const __iom_t10<_CharT>& __x)
+^
+/usr/local/bin/../include/c++/v1/iomanip:572:33: note: candidate template ignored: could not match '__quoted_output_proxy<_CharT, _Iter, _Traits>' against 'FuzzedDataProvider'
+basic_ostream<_CharT, _Traits>& operator<<(
+                                ^
+/usr/local/bin/../include/c++/v1/iomanip:592:33: note: candidate template ignored: could not match '__quoted_proxy<_CharT, _Traits, _Allocator>' against 'FuzzedDataProvider'
+basic_ostream<_CharT, _Traits>& operator<<(
+                                ^
+/usr/local/bin/../include/c++/v1/ostream:189:20: note: candidate function not viable: no known conversion from 'FuzzedDataProvider' to 'std::ostream &(*)(std::ostream &)' for 1st argument
+    basic_ostream& operator<<(basic_ostream& (*__pf)(basic_ostream&))
+                   ^
+/usr/local/bin/../include/c++/v1/ostream:193:20: note: candidate function not viable: no known conversion from 'FuzzedDataProvider' to 'basic_ios<std::basic_ostream<char>::char_type, std::basic_ostream<char>::traits_type> &(*)(basic_ios<std::basic_ostream<char>::char_type, std::basic_ostream<char>::traits_type> &)' (aka 'basic_ios<char, std::char_traits<char>> &(*)(basic_ios<char, std::char_traits<char>> &)') for 1st argument
+    basic_ostream& operator<<(basic_ios<char_type, traits_type>&
+                   ^
+/usr/local/bin/../include/c++/v1/ostream:198:20: note: candidate function not viable: no known conversion from 'FuzzedDataProvider' to 'std::ios_base &(*)(std::ios_base &)' for 1st argument
+    basic_ostream& operator<<(ios_base& (*__pf)(ios_base&))
+                   ^
+/usr/local/bin/../include/c++/v1/ostream:201:20: note: candidate function not viable: no known conversion from 'FuzzedDataProvider' to 'bool' for 1st argument
+    basic_ostream& operator<<(bool __n);
+                   ^
+/usr/local/bin/../include/c++/v1/ostream:202:20: note: candidate function not viable: no known conversion from 'FuzzedDataProvider' to 'short' for 1st argument
+    basic_ostream& operator<<(short __n);
+                   ^
+/usr/local/bin/../include/c++/v1/ostream:203:20: note: candidate function not viable: no known conversion from 'FuzzedDataProvider' to 'unsigned short' for 1st argument
+    basic_ostream& operator<<(unsigned short __n);
+                   ^
+/usr/local/bin/../include/c++/v1/ostream:204:20: note: candidate function not viable: no known conversion from 'FuzzedDataProvider' to 'int' for 1st argument
+    basic_ostream& operator<<(int __n);
+                   ^
+/usr/local/bin/../include/c++/v1/ostream:205:20: note: candidate function not viable: no known conversion from 'FuzzedDataProvider' to 'unsigned int' for 1st argument
+    basic_ostream& operator<<(unsigned int __n);
+                   ^
+/usr/local/bin/../include/c++/v1/ostream:206:20: note: candidate function not viable: no known conversion from 'FuzzedDataProvider' to 'long' for 1st argument
+    basic_ostream& operator<<(long __n);
+                   ^
+/usr/local/bin/../include/c++/v1/ostream:207:20: note: candidate function not viable: no known conversion from 'FuzzedDataProvider' to 'unsigned long' for 1st argument
+    basic_ostream& operator<<(unsigned long __n);
+                   ^
+/usr/local/bin/../include/c++/v1/ostream:208:20: note: candidate function not viable: no known conversion from 'FuzzedDataProvider' to 'long long' for 1st argument
+    basic_ostream& operator<<(long long __n);
+                   ^
+/usr/local/bin/../include/c++/v1/ostream:209:20: note: candidate function not viable: no known conversion from 'FuzzedDataProvider' to 'unsigned long long' for 1st argument
+    basic_ostream& operator<<(unsigned long long __n);
+                   ^
+/usr/local/bin/../include/c++/v1/ostream:210:20: note: candidate function not viable: no known conversion from 'FuzzedDataProvider' to 'float' for 1st argument
+    basic_ostream& operator<<(float __f);
+                   ^
+/usr/local/bin/../include/c++/v1/ostream:211:20: note: candidate function not viable: no known conversion from 'FuzzedDataProvider' to 'double' for 1st argument
+    basic_ostream& operator<<(double __f);
+                   ^
+/usr/local/bin/../include/c++/v1/ostream:212:20: note: candidate function not viable: no known conversion from 'FuzzedDataProvider' to 'long double' for 1st argument
+    basic_ostream& operator<<(long double __f);
+                   ^
+/usr/local/bin/../include/c++/v1/ostream:213:20: note: candidate function not viable: no known conversion from 'FuzzedDataProvider' to 'const void *' for 1st argument; take the address of the argument with &
+    basic_ostream& operator<<(const void* __p);
+                   ^
+/usr/local/bin/../include/c++/v1/ostream:222:20: note: candidate function not viable: no known conversion from 'FuzzedDataProvider' to 'basic_streambuf<std::basic_ostream<char>::char_type, std::basic_ostream<char>::traits_type> *' (aka 'basic_streambuf<char, std::char_traits<char>> *') for 1st argument
+    basic_ostream& operator<<(basic_streambuf<char_type, traits_type>* __sb);
+                   ^
+/usr/local/bin/../include/c++/v1/ostream:225:20: note: candidate function not viable: no known conversion from 'FuzzedDataProvider' to 'nullptr_t' (aka 'std::nullptr_t') for 1st argument
+    basic_ostream& operator<<(nullptr_t)
+                   ^
+/src/boringssl/fuzz/ssl_ctx_api.cc:30:20: error: no matching function for call to 'PEM_read_PrivateKey'
+  EVP_PKEY* pkey = PEM_read_PrivateKey(bio, nullptr, nullptr, nullptr);
+                   ^~~~~~~~~~~~~~~~~~~
+/src/boringssl/include/openssl/pem.h:427:1: note: candidate function not viable: no known conversion from 'BIO *' (aka 'bio_st *') to 'FILE *' (aka '_IO_FILE *') for 1st argument
+DECLARE_PEM_rw_cb(PrivateKey, EVP_PKEY)
+^
+/src/boringssl/include/openssl/pem.h:309:3: note: expanded from macro 'DECLARE_PEM_rw_cb'
+  DECLARE_PEM_read(name, type)        \
+  ^
+/src/boringssl/include/openssl/pem.h:298:3: note: expanded from macro 'DECLARE_PEM_read'
+  DECLARE_PEM_read_fp(name, type)
+  ^
+/src/boringssl/include/openssl/pem.h:254:24: note: expanded from macro 'DECLARE_PEM_read_fp'
+  OPENSSL_EXPORT type *PEM_read_##name(FILE *fp, type **x, \
+                       ^
+<scratch space>:96:1: note: expanded from here
+PEM_read_PrivateKey
+^
+2 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

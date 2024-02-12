@@ -1,0 +1,81 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstddef>
+#include <cstdint>
+#include <string>
+#include <vector>
+
+#include "Firestore/core/src/model/document_key.h"
+#include "Firestore/core/src/model/field_path.h"
+#include "Firestore/core/src/model/resource_path.h"
+#include "Firestore/core/src/model/types.h"
+#include "Firestore/core/src/query/query.h"
+#include "Firestore/core/src/query/query_builder.h"
+
+using firebase::firestore::core::DocumentKey;
+using firebase::firestore::core::FieldPath;
+using firebase::firestore::core::FieldValue;
+using firebase::firestore::core::Query;
+using firebase::firestore::core::QueryBuilder;
+using firebase::firestore::core::ResourcePath;
+using firebase::firestore::core::TargetId;
+
+extern "C" {
+#include "Firestore/core/src/model/field_value.h"
+
+int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  std::vector<std::string> path_segments;
+  while (stream.remaining_bytes() > 0) {
+    path_segments.push_back(stream.ConsumeRemainingBytesAsString());
+  }
+  ResourcePath path = ResourcePath::FromSegments(path_segments);
+
+  // Generate a random document key.
+  DocumentKey key = DocumentKey(path, stream.ConsumeIntegral<int64_t>());
+
+  // Generate a random field path.
+  std::vector<std::string> field_path_segments;
+  while (stream.remaining_bytes() > 0) {
+    field_path_segments.push_back(stream.ConsumeRemainingBytesAsString());
+  }
+  FieldPath field_path = FieldPath::FromSegments(field_path_segments);
+
+  // Generate a random field value.
+  FieldValue field_value = FieldValue::FromDouble(stream.ConsumeFloatingPoint<double>());
+
+  // Generate a random target ID.
+  TargetId target_id = TargetId(stream.ConsumeIntegral<int64_t>());
+
+  // Generate a random query.
+  Query query = QueryBuilder::NewQuery(std::move(path)).WhereEqualTo(std::move(field_path), std::move(field_value)).Build();
+
+  // Hash the query.
+  size_t hash = query.Hash(&query);
+
+  // Return the hash.
+  return hash;
+}
+}  // extern "C"
+</code>
+
+The code has the following build issues:
+<error>
+/src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:10:10: fatal error: 'Firestore/core/src/query/query.h' file not found
+#include "Firestore/core/src/query/query.h"
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

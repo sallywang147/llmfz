@@ -1,0 +1,66 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+
+#include "ipp.h"
+#include "http.h"
+#include "cups.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const char* resource = stream.ConsumeRandomLengthString().c_str();
+  const char* filename = stream.ConsumeRandomLengthString().c_str();
+  const std::vector<uint8_t> request_bytes = stream.ConsumeRemainingBytes();
+  ipp_t* request = ippNew();
+  ippReadMem(request, request_bytes.data(), request_bytes.size());
+  http_t* http = httpConnectEncrypt(nullptr, 0);
+  cupsDoFileRequest(http, request, const_cast<char*>(resource), const_cast<char*>(filename));
+  httpClose(http);
+  ippDelete(request);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:16:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+FuzzIPP.cpp:17:53: error: no matching member function for call to 'ConsumeRemainingBytes'
+  const std::vector<uint8_t> request_bytes = stream.ConsumeRemainingBytes();
+                                             ~~~~~~~^~~~~~~~~~~~~~~~~~~~~
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:128:36: note: candidate template ignored: couldn't infer template argument 'T'
+std::vector<T> FuzzedDataProvider::ConsumeRemainingBytes() {
+                                   ^
+FuzzIPP.cpp:19:3: error: use of undeclared identifier 'ippReadMem'
+  ippReadMem(request, request_bytes.data(), request_bytes.size());
+  ^
+FuzzIPP.cpp:20:18: error: no matching function for call to 'httpConnectEncrypt'
+  http_t* http = httpConnectEncrypt(nullptr, 0);
+                 ^~~~~~~~~~~~~~~~~~
+./../cups/http.h:418:17: note: candidate function not viable: requires 3 arguments, but 2 were provided
+extern http_t           *httpConnectEncrypt(const char *host, int port, http_encryption_t encryption) _CUPS_DEPRECATED_MSG("Use httpConnect2 instead.");
+                         ^
+3 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,72 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <boost/regex.hpp>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
+  FuzzedDataProvider fuzzed_data(Data, Size);
+  // First value is length of the regex string
+  size_t regex_length = fuzzed_data.ConsumeIntegral<uint8_t>();
+  // Second value is regexp string whose length is `regex_length`
+  std::string regex_string = fuzzed_data.ConsumeBytesAsString(regex_length);
+  try {
+    boost::regex_parser parser;
+    parser.parse_basic(&parser, regex_string.c_str());
+  }
+  catch (const std::runtime_error &) {
+  }
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+../boost_ptree_jsonread_fuzzer.cc:11:25: error: use of undeclared identifier 'parser'; did you mean 'pause'?
+    boost::regex_parser parser;
+                        ^~~~~~
+                        pause
+/usr/include/unistd.h:469:12: note: 'pause' declared here
+extern int pause (void);
+           ^
+../boost_ptree_jsonread_fuzzer.cc:11:24: error: expected ';' after expression
+    boost::regex_parser parser;
+                       ^
+                       ;
+../boost_ptree_jsonread_fuzzer.cc:11:12: error: no member named 'regex_parser' in namespace 'boost'; did you mean 'regex_merge'?
+    boost::regex_parser parser;
+    ~~~~~~~^~~~~~~~~~~~
+           regex_merge
+./boost/regex/v5/regex_merge.hpp:28:23: note: 'regex_merge' declared here
+inline OutputIterator regex_merge(OutputIterator out,
+                      ^
+../boost_ptree_jsonread_fuzzer.cc:12:5: error: use of undeclared identifier 'parser'; did you mean 'pause'?
+    parser.parse_basic(&parser, regex_string.c_str());
+    ^~~~~~
+    pause
+/usr/include/unistd.h:469:12: note: 'pause' declared here
+extern int pause (void);
+           ^
+../boost_ptree_jsonread_fuzzer.cc:12:11: error: member reference base type 'int ()' is not a structure or union
+    parser.parse_basic(&parser, regex_string.c_str());
+    ~~~~~~^~~~~~~~~~~~
+../boost_ptree_jsonread_fuzzer.cc:12:25: error: use of undeclared identifier 'parser'; did you mean 'pause'?
+    parser.parse_basic(&parser, regex_string.c_str());
+                        ^~~~~~
+                        pause
+/usr/include/unistd.h:469:12: note: 'pause' declared here
+extern int pause (void);
+           ^
+6 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,31 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+
+extern "C" {
+#include "exprtk/parser/expression_generator.hpp"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  exprtk::parser<double> parser;
+  exprtk::details::expression_node* expression_tree = parser.compile(data, data + size);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+The target function `exprtk::details::expression_node * exprtk::parser<double>::expression_generator<double>::operator(exprtk::parser<double>::expression_generator * , int * , bool  )` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `exprtk::details::expression_node * exprtk::parser<double>::expression_generator<double>::operator(exprtk::parser<double>::expression_generator * , int * , bool  )` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

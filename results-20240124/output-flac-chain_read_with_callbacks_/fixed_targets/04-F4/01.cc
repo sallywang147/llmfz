@@ -1,0 +1,1 @@
+if(!chain.read_with_callbacks_(filename, ogg))

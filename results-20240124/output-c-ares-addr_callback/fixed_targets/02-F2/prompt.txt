@@ -1,0 +1,86 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+
+#include "ares.h"
+
+extern "C" {
+// Entrypoint for Clang's libfuzzer
+int LLVMFuzzerTestOneInput(const unsigned char *data,
+                           unsigned long size) {
+  ares_addr_callback addr_callback = [](void *data,
+                                      int status,
+                                      int timeouts,
+                                      char *addr,
+                                      int addrlen) {
+    // Do nothing.
+  };
+  ares_addrinfo_callback addrinfo_callback = [](void *data,
+                                              int status,
+                                              int timeouts,
+                                              struct hostent *hostent) {
+    // Do nothing.
+  };
+  ares_channel channel;
+  ares_init(&channel);
+  ares_gethostbyname(&channel, "example.com", AF_INET, addrinfo_callback,
+                     data);
+  ares_gethostbyname(&channel, "example.com", AF_INET6, addrinfo_callback,
+                     data);
+  ares_gethostbyaddr(&channel, data, size, AF_INET, addr_callback, data);
+  ares_gethostbyaddr(&channel, data, size, AF_INET6, addr_callback, data);
+  ares_destroy(&channel);
+  return 0;
+}
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/c-ares/test/ares-test-fuzz-name.c:5:8: error: expected identifier or '('
+extern "C" {
+       ^
+1 error generated.
+
+Fix failure
+/src/c-ares/test/ares-test-fuzz-name.cpp:9:3: error: unknown type name 'ares_addr_callback'
+  ares_addr_callback addr_callback = [](void *data,
+  ^
+/src/c-ares/test/ares-test-fuzz-name.cpp:16:26: error: no viable conversion from '(lambda at /src/c-ares/test/ares-test-fuzz-name.cpp:16:46)' to 'ares_addrinfo_callback' (aka 'void (*)(void *, int, int, struct ares_addrinfo *)')
+  ares_addrinfo_callback addrinfo_callback = [](void *data,
+                         ^                   ~~~~~~~~~~~~~~
+/src/c-ares/test/ares-test-fuzz-name.cpp:16:46: note: candidate function
+  ares_addrinfo_callback addrinfo_callback = [](void *data,
+                                             ^
+/src/c-ares/test/ares-test-fuzz-name.cpp:24:3: error: no matching function for call to 'ares_gethostbyname'
+  ares_gethostbyname(&channel, "example.com", AF_INET, addrinfo_callback,
+  ^~~~~~~~~~~~~~~~~~
+include/ares.h:477:19: note: candidate function not viable: no known conversion from 'ares_channel *' (aka 'ares_channeldata **') to 'ares_channel_t *' (aka 'ares_channeldata *') for 1st argument; remove &
+CARES_EXTERN void ares_gethostbyname(ares_channel_t *channel, const char *name,
+                  ^
+/src/c-ares/test/ares-test-fuzz-name.cpp:26:3: error: no matching function for call to 'ares_gethostbyname'
+  ares_gethostbyname(&channel, "example.com", AF_INET6, addrinfo_callback,
+  ^~~~~~~~~~~~~~~~~~
+include/ares.h:477:19: note: candidate function not viable: no known conversion from 'ares_channel *' (aka 'ares_channeldata **') to 'ares_channel_t *' (aka 'ares_channeldata *') for 1st argument; remove &
+CARES_EXTERN void ares_gethostbyname(ares_channel_t *channel, const char *name,
+                  ^
+/src/c-ares/test/ares-test-fuzz-name.cpp:30:3: error: no matching function for call to 'ares_destroy'
+  ares_destroy(&channel);
+  ^~~~~~~~~~~~
+include/ares.h:405:28: note: candidate function not viable: no known conversion from 'ares_channel *' (aka 'ares_channeldata **') to 'ares_channel_t *' (aka 'ares_channeldata *') for 1st argument; remove &
+CARES_EXTERN void          ares_destroy(ares_channel_t *channel);
+                           ^
+5 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

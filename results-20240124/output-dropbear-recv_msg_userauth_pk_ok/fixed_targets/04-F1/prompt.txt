@@ -1,0 +1,59 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <string>
+
+#include "buffer.h"
+#include "common.h"
+#include "dbutil.h"
+#include "log.h"
+#include "network.h"
+#include "session.h"
+#include "ssh.h"
+#include "ssh2.h"
+#include "sshbuf.h"
+#include "userauth.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const std::string username = stream.ConsumeRemainingBytesAsString();
+  const buffer* username_buf = buf_new((const void*)username.c_str(), username.size());
+
+  ssh_session session;
+  memset(&session, 0, sizeof(session));
+  session.authstate.auth_methods = SSH2_AUTH_METHOD_PUBLICKEY;
+  session.authstate.auth_tried = SSH2_AUTH_METHOD_PUBLICKEY;
+  session.authstate.username = username_buf;
+  session.authstate.pw_auth_pw = nullptr;
+  session.authstate.pw_auth_pwlen = 0;
+  session.authstate.pw_auth_pw_hash = nullptr;
+
+  recv_msg_userauth_pk_ok(&session);
+
+  buf_free(session.authstate.username);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,51 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include "gpsd_config.h"  /* must be before all includes */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+#include "gpsd.h"
+
+#define kMinInputLength 10
+#define kMaxInputLength 9216
+
+extern int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) 
+{//gpsd/tests//test_packet.c
+
+    if (Size < kMinInputLength || Size > kMaxInputLength){
+        return 0;
+    }
+
+    {
+        struct gps_device_t device;
+
+        device.lexer.errout.debug = 0;
+
+        memcpy(device.lexer.inbufptr = device.lexer.inbuffer, Data, Size);
+        device.lexer.inbuflen = Size;
+
+        parse_input(&device);
+    }
+    return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+FuzzJson.c:(.text.LLVMFuzzerTestOneInput[LLVMFuzzerTestOneInput]+0x175): undefined reference to `parse_input'
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

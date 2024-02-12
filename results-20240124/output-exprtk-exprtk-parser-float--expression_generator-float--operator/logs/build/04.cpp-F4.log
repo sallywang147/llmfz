@@ -1,0 +1,42 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ cp /src/exprtk_test_expressions.dict /workspace/out/libfuzzer-address-x86_64/
++ CXXFLAGS='-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -O2 -fno-sanitize=integer-divide-by-zero,float-divide-by-zero'
++ /usr/local/bin/clang++-jcc -std=c++11 -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -O2 -fno-sanitize=integer-divide-by-zero,float-divide-by-zero -I. -I/src/exprtk /src/exprtk_fuzzer.cpp -o /workspace/out/libfuzzer-address-x86_64/exprtk_fuzzer -fsanitize=fuzzer
+/src/exprtk_fuzzer.cpp:119:21: error: no template named 'expression_node_ptr' in namespace 'exprtk::details'; did you mean 'expression_node'?
+   exprtk::details::expression_node_ptr exprtk::parser<float>::expression_generator<float>::operator()(exprtk::parser<float>::expression_generator *, int *, bool);
+   ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
+                    expression_node
+./exprtk.hpp:5142:13: note: 'expression_node' declared here
+      class expression_node : public node_collector_interface<expression_node<T> >,
+            ^
+/src/exprtk_fuzzer.cpp:119:21: error: use of class template 'exprtk::details::expression_node' requires template arguments
+   exprtk::details::expression_node_ptr exprtk::parser<float>::expression_generator<float>::operator()(exprtk::parser<float>::expression_generator *, int *, bool);
+                    ^
+./exprtk.hpp:5142:13: note: template is declared here
+      class expression_node : public node_collector_interface<expression_node<T> >,
+            ^
+/src/exprtk_fuzzer.cpp:119:127: error: no type named 'expression_generator' in 'exprtk::parser<float>'; did you mean 'expression_node_ptr'?
+   exprtk::details::expression_node_ptr exprtk::parser<float>::expression_generator<float>::operator()(exprtk::parser<float>::expression_generator *, int *, bool);
+                                                                                                       ~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~
+                                                                                                                              expression_node_ptr
+./exprtk.hpp:19582:59: note: 'expression_node_ptr' declared here
+      typedef expression_node_t*                          expression_node_ptr;
+                                                          ^
+/src/exprtk_fuzzer.cpp:119:93: error: template specialization requires 'template<>'
+   exprtk::details::expression_node_ptr exprtk::parser<float>::expression_generator<float>::operator()(exprtk::parser<float>::expression_generator *, int *, bool);
+                                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~  ^
+/src/exprtk_fuzzer.cpp:118:4: error: templates must have C++ linkage
+   template<>
+   ^~~~~~~~~~
+/src/exprtk_fuzzer.cpp:117:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+5 errors generated.

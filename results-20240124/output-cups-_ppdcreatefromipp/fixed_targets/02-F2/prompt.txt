@@ -1,0 +1,75 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "file.h"
+#include "string-private.h"
+#include "ipp-private.h"
+#include <spawn.h>
+#include <sys/wait.h>
+#include <unistd.h>
+#include <fcntl.h>
+
+#define kMinInputLength 10
+#define kMaxInputLength 10240
+
+void LoadIPP(char *filename) {
+    cups_file_t *fp;
+    ipp_t *request;
+
+    request = ippNew();
+    fp = cupsFileOpen(filename, "r");
+
+    ippReadIO(fp, (ipp_iocb_t)cupsFileRead, 1, NULL, request);
+
+    cupsFileClose(fp);
+    ippDelete(request);
+}
+
+extern "C" {
+#include "cups/file.h"
+#include "cups/ipp-private.h"
+#include "cups/ipp.h"
+#include "cups/ppd.h"
+
+char *
+LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size)
+{/*cups/cups/fuzzipp.c*/
+
+    if (Size < kMinInputLength || Size > kMaxInputLength) {
+        return nullptr;
+    }
+
+    char filename[256];
+
+    sprintf(filename, "/tmp/libfuzzer.%d", getpid());
+    FILE *fp = fopen(filename, "wb");
+    if (!fp) {
+        return nullptr;
+    }
+
+    fwrite(Data, Size, 1, fp);
+    fclose(fp);
+
+    LoadIPP(filename);
+    unlink(filename);
+
+    return _ppdCreateFromIPP(nullptr, 0, nullptr);
+}
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

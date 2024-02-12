@@ -1,0 +1,25 @@
+/workspace/out/libfuzzer-address-x86_64/fuzzer-verify -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/fuzzer-verify -max_len=50000 < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 1129042688
+INFO: Loaded 1 modules   (6872 inline 8-bit counters): 6872 [0x6d6620, 0x6d80f8), 
+INFO: Loaded 1 PC tables (6872 PCs): 6872 [0x65a4d8,0x675258), 
+INFO:        0 files found in /workspace/corpus/fuzzer-verify
+Dropbear fuzzer: Disabling stderr output
+INFO: A corpus is not provided, starting from an empty corpus
+#2	INITED cov: 48 ft: 49 corp: 1/1b exec/s: 0 rss: 32Mb
+#19	NEW    cov: 49 ft: 50 corp: 2/91b lim: 50000 exec/s: 0 rss: 33Mb L: 90/90 MS: 2 ShuffleBytes-InsertRepeatedBytes-
+#35	REDUCE cov: 49 ft: 50 corp: 2/52b lim: 50000 exec/s: 0 rss: 33Mb L: 51/51 MS: 1 EraseBytes-
+#43	REDUCE cov: 49 ft: 50 corp: 2/33b lim: 50000 exec/s: 0 rss: 33Mb L: 32/32 MS: 3 ChangeByte-ChangeBinInt-EraseBytes-
+#89	REDUCE cov: 49 ft: 50 corp: 2/18b lim: 50000 exec/s: 0 rss: 33Mb L: 17/17 MS: 1 EraseBytes-
+#169	REDUCE cov: 49 ft: 50 corp: 2/17b lim: 50000 exec/s: 0 rss: 33Mb L: 16/16 MS: 5 ShuffleBytes-ChangeByte-InsertRepeatedBytes-EraseBytes-InsertByte-
+#131072	pulse  cov: 49 ft: 50 corp: 2/17b lim: 50000 exec/s: 65536 rss: 54Mb
+#262144	pulse  cov: 49 ft: 50 corp: 2/17b lim: 50000 exec/s: 65536 rss: 54Mb
+#524288	pulse  cov: 49 ft: 50 corp: 2/17b lim: 50000 exec/s: 58254 rss: 54Mb
+#1048576	pulse  cov: 49 ft: 50 corp: 2/17b lim: 50000 exec/s: 58254 rss: 55Mb
+#1780389	DONE   cov: 49 ft: 50 corp: 2/17b lim: 50000 exec/s: 57431 rss: 55Mb
+Done 1780389 runs in 31 second(s)
+stat::number_of_executed_units: 1780389
+stat::average_exec_per_sec:     57431
+stat::new_units_added:          5
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              55

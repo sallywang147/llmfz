@@ -1,0 +1,87 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+#include "../../htslib/hfile.h"
+#include "../../htslib/hts.h"
+#include "../../htslib/sam.h"
+#include "../../htslib/vcf.h"
+
+static void hts_close_or_abort(htsFile* file) {
+    if (hts_close(file) != 0) {
+        abort();
+    }
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+    hFILE *memfile;
+    uint8_t *copy = malloc(size);
+    if (copy == NULL) {
+        abort();
+    }
+    memcpy(copy, data, size);
+    // hopen does not take ownership of `copy`, but hts_hopen does.
+    memfile = hopen("mem:", "rb:", copy, size);
+    if (memfile == NULL) {
+        free(copy);
+        return 0;
+    }
+
+    htsFile *ht_file = hts_hopen(memfile, "data", "rb");
+    if (ht_file == NULL) {
+        if (hclose(memfile) != 0) {
+            abort();
+        }
+        return 0;
+    }
+
+    if (ht_file->format.category != sequence_data) {
+        hts_close(ht_file);
+        return 0;
+    }
+
+    const char *fn = "index.bai";
+    int min_shift = 14;
+    int ret = bam_index_build(const_cast<char*>(fn), min_shift);
+    if (ret != 0) {
+        abort();
+    }
+
+    hts_close(ht_file);
+    return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+test/fuzz/hts_open_fuzzer.c:48:42: error: expected expression
+    int ret = bam_index_build(const_cast<char*>(fn), min_shift);
+                                         ^
+test/fuzz/hts_open_fuzzer.c:48:31: error: use of undeclared identifier 'const_cast'
+    int ret = bam_index_build(const_cast<char*>(fn), min_shift);
+                              ^
+2 errors generated.
+
+Fix failure
+test/fuzz/hts_open_fuzzer.cpp:21:14: error: cannot initialize a variable of type 'uint8_t *' (aka 'unsigned char *') with an rvalue of type 'void *'
+    uint8_t *copy = malloc(size);
+             ^      ~~~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

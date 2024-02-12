@@ -1,0 +1,89 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <ArduinoJson.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  ArduinoJson::V701HB4::detail::VariantSlot* slot = new ArduinoJson::V701HB4::detail::VariantSlot();
+  delete slot;
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+msgpack_fuzzer.cpp:4:16: error: no member named 'V701HB4' in namespace 'ArduinoJson'; did you mean 'V702HB4'?
+  ArduinoJson::V701HB4::detail::VariantSlot* slot = new ArduinoJson::V701HB4::detail::VariantSlot();
+  ~~~~~~~~~~~~~^~~~~~~
+               V702HB4
+../../src/ArduinoJson/compatibility.hpp:59:1: note: 'V702HB4' declared here
+ARDUINOJSON_BEGIN_PUBLIC_NAMESPACE
+^
+../../src/ArduinoJson/Namespace.hpp:28:20: note: expanded from macro 'ARDUINOJSON_BEGIN_PUBLIC_NAMESPACE'
+  inline namespace ARDUINOJSON_VERSION_NAMESPACE {
+                   ^
+../../src/ArduinoJson/Namespace.hpp:14:5: note: expanded from macro 'ARDUINOJSON_VERSION_NAMESPACE'
+    ARDUINOJSON_CONCAT4(ARDUINOJSON_VERSION_MACRO,                         \
+    ^
+../../src/ArduinoJson/Polyfills/preprocessor.hpp:10:3: note: expanded from macro 'ARDUINOJSON_CONCAT4'
+  ARDUINOJSON_CONCAT2(ARDUINOJSON_CONCAT2(A, B), ARDUINOJSON_CONCAT2(C, D))
+  ^
+../../src/ArduinoJson/Polyfills/preprocessor.hpp:8:35: note: expanded from macro 'ARDUINOJSON_CONCAT2'
+#define ARDUINOJSON_CONCAT2(A, B) ARDUINOJSON_CONCAT_(A, B)
+                                  ^
+../../src/ArduinoJson/Polyfills/preprocessor.hpp:7:35: note: expanded from macro 'ARDUINOJSON_CONCAT_'
+#define ARDUINOJSON_CONCAT_(A, B) A##B
+                                  ^
+<scratch space>:32:1: note: expanded from here
+V702HB4
+^
+msgpack_fuzzer.cpp:4:70: error: no member named 'V701HB4' in namespace 'ArduinoJson'; did you mean 'V702HB4'?
+  ArduinoJson::V701HB4::detail::VariantSlot* slot = new ArduinoJson::V701HB4::detail::VariantSlot();
+                                                        ~~~~~~~~~~~~~^~~~~~~
+                                                                     V702HB4
+../../src/ArduinoJson/compatibility.hpp:59:1: note: 'V702HB4' declared here
+ARDUINOJSON_BEGIN_PUBLIC_NAMESPACE
+^
+../../src/ArduinoJson/Namespace.hpp:28:20: note: expanded from macro 'ARDUINOJSON_BEGIN_PUBLIC_NAMESPACE'
+  inline namespace ARDUINOJSON_VERSION_NAMESPACE {
+                   ^
+../../src/ArduinoJson/Namespace.hpp:14:5: note: expanded from macro 'ARDUINOJSON_VERSION_NAMESPACE'
+    ARDUINOJSON_CONCAT4(ARDUINOJSON_VERSION_MACRO,                         \
+    ^
+../../src/ArduinoJson/Polyfills/preprocessor.hpp:10:3: note: expanded from macro 'ARDUINOJSON_CONCAT4'
+  ARDUINOJSON_CONCAT2(ARDUINOJSON_CONCAT2(A, B), ARDUINOJSON_CONCAT2(C, D))
+  ^
+../../src/ArduinoJson/Polyfills/preprocessor.hpp:8:35: note: expanded from macro 'ARDUINOJSON_CONCAT2'
+#define ARDUINOJSON_CONCAT2(A, B) ARDUINOJSON_CONCAT_(A, B)
+                                  ^
+../../src/ArduinoJson/Polyfills/preprocessor.hpp:7:35: note: expanded from macro 'ARDUINOJSON_CONCAT_'
+#define ARDUINOJSON_CONCAT_(A, B) A##B
+                                  ^
+<scratch space>:32:1: note: expanded from here
+V702HB4
+^
+msgpack_fuzzer.cpp:4:53: error: no matching function for call to 'operator new'
+  ArduinoJson::V701HB4::detail::VariantSlot* slot = new ArduinoJson::V701HB4::detail::VariantSlot();
+                                                    ^
+../../src/ArduinoJson/Variant/VariantSlot.hpp:27:16: note: candidate function not viable: requires 2 arguments, but 1 was provided
+  static void* operator new(size_t, void* p) noexcept {
+               ^
+msgpack_fuzzer.cpp:5:3: error: no suitable member 'operator delete' in 'VariantSlot'
+  delete slot;
+  ^
+../../src/ArduinoJson/Variant/VariantSlot.hpp:31:15: note: member 'operator delete' declared here
+  static void operator delete(void*, void*) noexcept {}
+              ^
+4 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

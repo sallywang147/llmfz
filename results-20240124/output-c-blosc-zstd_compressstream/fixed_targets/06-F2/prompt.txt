@@ -1,0 +1,77 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+extern "C" {
+#include <algorithm>
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+#include "zstd.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider provider(data, size);
+
+  ZSTD_CCtx* cctx = ZSTD_createCCtx();
+  if (cctx == nullptr) {
+    return 0;
+  }
+
+  ZSTD_inBuffer input = {nullptr, 0, 0};
+  ZSTD_outBuffer output = {nullptr, 0, 0};
+
+  size_t compressed_size = 0;
+  size_t input_size = 0;
+  while (provider.remaining_bytes() > 0) {
+    if (input_size == 0) {
+      input_size = provider.ConsumeIntegralInRange<size_t>(0, provider.remaining_bytes());
+      input.src = provider.ConsumeBytes<unsigned char>(input_size).data();
+      input.size = input_size;
+    }
+
+    compressed_size = ZSTD_compressStream(cctx, &output, &input);
+    if (ZSTD_isError(compressed_size)) {
+      ZSTD_freeCCtx(cctx);
+      return 0;
+    }
+
+    output.src = nullptr;
+    output.size = 0;
+    input_size = 0;
+  }
+
+  ZSTD_freeCCtx(cctx);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:16:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+/src/c-blosc/tests/fuzz/fuzz_compress.cpp:40:12: error: no member named 'src' in 'ZSTD_outBuffer_s'
+    output.src = nullptr;
+    ~~~~~~ ^
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

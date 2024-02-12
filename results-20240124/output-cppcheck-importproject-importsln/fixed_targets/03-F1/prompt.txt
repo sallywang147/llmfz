@@ -1,0 +1,63 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <vector>
+
+class ImportProject {
+public:
+  bool importSln(ImportProject*, std::istream*, std::string*, std::vector*);
+};
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  std::string sln_file = stream.ConsumeRemainingBytesAsString();
+  std::ifstream in(sln_file);
+  if (!in.is_open()) {
+    return 0;
+  }
+
+  std::string solution_filename = stream.ConsumeRemainingBytesAsString();
+  std::vector<std::string> project_filenames;
+  ImportProject import_project;
+  import_project.importSln(nullptr, &in, &solution_filename, &project_filenames);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+main.cpp:13:68: error: no type named 'vector' in namespace 'std'; did you mean 'hecto'?
+  bool importSln(ImportProject*, std::istream*, std::string*, std::vector*);
+                                                              ~~~~~^~~~~~
+                                                                   hecto
+/usr/local/bin/../include/c++/v1/ratio:283:43: note: 'hecto' declared here
+typedef ratio<                100LL, 1LL> hecto;
+                                          ^
+main.cpp:28:62: error: cannot initialize a parameter of type 'std::hecto *' (aka 'ratio<100LL, 1LL> *') with an rvalue of type 'std::vector<std::string> *' (aka 'vector<basic_string<char, char_traits<char>, allocator<char>>> *')
+  import_project.importSln(nullptr, &in, &solution_filename, &project_filenames);
+                                                             ^~~~~~~~~~~~~~~~~~
+main.cpp:13:75: note: passing argument to parameter here
+  bool importSln(ImportProject*, std::istream*, std::string*, std::vector*);
+                                                                          ^
+2 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,120 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ cmake . '-DCMAKE_C_FLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link' '-DCMAKE_CXX_FLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++' -DBUILD_FUZZERS=ON -DBUILD_TESTS=OFF -DBUILD_BENCHMARKS=OFF -DBUILD_STATIC=ON -DBUILD_SHARED=OFF
+Configuring for Blosc version: 1.21.6.dev
+-- The C compiler identification is Clang 15.0.0
+-- The ASM compiler identification is Clang with GNU-like command-line
+-- Found assembler: /usr/local/bin/clang-jcc
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/local/bin/clang-jcc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Using LZ4 internal sources.
+-- Using zlib internal sources.
+-- Using ZSTD internal sources.
+-- No build type specified. Defaulting to 'Release'.
+-- Building for system processor x86_64
+-- Adding run-time support for SSE2
+-- Adding run-time support for AVX2
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE  
+-- Adding support for assembly sources in ZSTD
+-- The CXX compiler identification is Clang 15.0.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/local/bin/clang++-jcc - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /src/c-blosc
++ make clean
+++ nproc
++ make -j32
+Scanning dependencies of target blosc_static
+[  1%] Building C object blosc/CMakeFiles/blosc_static.dir/blosc.c.o
+[  3%] Building C object blosc/CMakeFiles/blosc_static.dir/blosclz.c.o
+[  4%] Building C object blosc/CMakeFiles/blosc_static.dir/fastcopy.c.o
+[  6%] Building C object blosc/CMakeFiles/blosc_static.dir/shuffle-generic.c.o
+[  8%] Building C object blosc/CMakeFiles/blosc_static.dir/bitshuffle-generic.c.o
+[  9%] Building C object blosc/CMakeFiles/blosc_static.dir/shuffle-sse2.c.o
+[ 11%] Building C object blosc/CMakeFiles/blosc_static.dir/bitshuffle-sse2.c.o
+[ 12%] Building C object blosc/CMakeFiles/blosc_static.dir/shuffle-avx2.c.o
+[ 14%] Building C object blosc/CMakeFiles/blosc_static.dir/bitshuffle-avx2.c.o
+[ 16%] Building C object blosc/CMakeFiles/blosc_static.dir/shuffle.c.o
+[ 17%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/lz4-1.9.4/lz4.c.o
+[ 19%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zlib-1.2.13/adler32.c.o
+[ 20%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/lz4-1.9.4/lz4hc.c.o
+[ 22%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zlib-1.2.13/crc32.c.o
+[ 25%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zlib-1.2.13/deflate.c.o
+[ 25%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zlib-1.2.13/compress.c.o
+[ 27%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zlib-1.2.13/gzclose.c.o
+[ 29%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zlib-1.2.13/gzwrite.c.o
+[ 30%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zlib-1.2.13/inffast.c.o
+[ 32%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zlib-1.2.13/infback.c.o
+[ 35%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zlib-1.2.13/gzread.c.o
+[ 35%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zlib-1.2.13/gzlib.c.o
+[ 37%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zlib-1.2.13/inflate.c.o
+[ 38%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zlib-1.2.13/inftrees.c.o
+[ 40%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zlib-1.2.13/trees.c.o
+[ 41%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zlib-1.2.13/uncompr.c.o
+[ 43%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zstd-1.5.5/common/debug.c.o
+[ 45%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zstd-1.5.5/common/entropy_common.c.o
+[ 46%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zstd-1.5.5/common/fse_decompress.c.o
+[ 48%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zstd-1.5.5/common/pool.c.o
+[ 50%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zlib-1.2.13/zutil.c.o
+[ 51%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zstd-1.5.5/common/error_private.c.o
+[ 53%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zstd-1.5.5/common/threading.c.o
+[ 54%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zstd-1.5.5/common/xxhash.c.o
+[ 56%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zstd-1.5.5/common/zstd_common.c.o
+[ 58%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zstd-1.5.5/compress/fse_compress.c.o
+[ 59%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zstd-1.5.5/compress/hist.c.o
+[ 61%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zstd-1.5.5/compress/huf_compress.c.o
+[ 62%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zstd-1.5.5/compress/zstd_compress.c.o
+[ 64%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zstd-1.5.5/compress/zstd_compress_literals.c.o
+[ 66%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zstd-1.5.5/compress/zstd_compress_sequences.c.o
+[ 67%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zstd-1.5.5/compress/zstd_compress_superblock.c.o
+[ 69%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zstd-1.5.5/compress/zstd_double_fast.c.o
+[ 70%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zstd-1.5.5/compress/zstd_fast.c.o
+[ 72%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zstd-1.5.5/compress/zstd_lazy.c.o
+[ 74%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zstd-1.5.5/compress/zstd_ldm.c.o
+[ 75%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zstd-1.5.5/compress/zstd_opt.c.o
+[ 77%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zstd-1.5.5/compress/zstdmt_compress.c.o
+[ 79%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zstd-1.5.5/decompress/huf_decompress.c.o
+[ 80%] Building ASM object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zstd-1.5.5/decompress/huf_decompress_amd64.S.o
+[ 82%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zstd-1.5.5/decompress/zstd_ddict.c.o
+[ 83%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zstd-1.5.5/decompress/zstd_decompress.c.o
+[ 85%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zstd-1.5.5/decompress/zstd_decompress_block.c.o
+[ 87%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zstd-1.5.5/dictBuilder/cover.c.o
+[ 88%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zstd-1.5.5/dictBuilder/divsufsort.c.o
+[ 90%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zstd-1.5.5/dictBuilder/fastcover.c.o
+[ 91%] Building C object blosc/CMakeFiles/blosc_static.dir/__/internal-complibs/zstd-1.5.5/dictBuilder/zdict.c.o
+[ 93%] Linking C static library libblosc.a
+[ 93%] Built target blosc_static
+[ 95%] Building C object tests/fuzz/CMakeFiles/fuzz_compress.dir/fuzz_compress.c.o
+[ 96%] Building C object tests/fuzz/CMakeFiles/fuzz_decompress.dir/fuzz_decompress.c.o
+[ 98%] Linking CXX executable decompress_fuzzer
+[ 98%] Built target fuzz_decompress
+In file included from /src/c-blosc/tests/fuzz/fuzz_compress.c:1:
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:16:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+/src/c-blosc/tests/fuzz/fuzz_compress.cpp:14:10: fatal error: 'zstd_seekable.h' file not found
+#include "zstd_seekable.h"
+         ^~~~~~~~~~~~~~~~~
+1 error generated.
+make[2]: *** [tests/fuzz/CMakeFiles/fuzz_compress.dir/build.make:76: tests/fuzz/CMakeFiles/fuzz_compress.dir/fuzz_compress.c.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:171: tests/fuzz/CMakeFiles/fuzz_compress.dir/all] Error 2
+make: *** [Makefile:166: all] Error 2

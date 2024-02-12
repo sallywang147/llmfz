@@ -1,0 +1,63 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <hb.h>
+#include <stddef.h>
+#include <cstdint>
+#include <vector>
+#include <fuzzer/FuzzedDataProvider.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const size_t num_glyphs = stream.ConsumeIntegralInRange<size_t>(1, 100);
+  std::vector<hb_codepoint_t> glyphs;
+  for (size_t i = 0; i < num_glyphs; ++i) {
+    glyphs.push_back(stream.ConsumeIntegral<hb_codepoint_t>());
+  }
+  const hb_face_t* face = hb_face_create_for_data(data, size);
+  hb_face_t* subset_face = hb_subset_preprocess(face);
+  if (subset_face) {
+    hb_face_destroy(subset_face);
+  }
+  hb_face_destroy(face);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+../../src/harfbuzz/test/fuzzing/hb-repacker-fuzzer.cc:14:27: error: use of undeclared identifier 'hb_face_create_for_data'; did you mean 'hb_face_get_user_data'?
+  const hb_face_t* face = hb_face_create_for_data(data, size);
+                          ^~~~~~~~~~~~~~~~~~~~~~~
+                          hb_face_get_user_data
+../../src/harfbuzz/src/hb-face.h:100:1: note: 'hb_face_get_user_data' declared here
+hb_face_get_user_data (const hb_face_t    *face,
+^
+../../src/harfbuzz/test/fuzzing/hb-repacker-fuzzer.cc:14:51: error: cannot initialize a parameter of type 'const hb_face_t *' with an lvalue of type 'const uint8_t *' (aka 'const unsigned char *')
+  const hb_face_t* face = hb_face_create_for_data(data, size);
+                                                  ^~~~
+../../src/harfbuzz/src/hb-face.h:100:44: note: passing argument to parameter 'face' here
+hb_face_get_user_data (const hb_face_t    *face,
+                                           ^
+../../src/harfbuzz/test/fuzzing/hb-repacker-fuzzer.cc:15:28: error: use of undeclared identifier 'hb_subset_preprocess'
+  hb_face_t* subset_face = hb_subset_preprocess(face);
+                           ^
+../../src/harfbuzz/test/fuzzing/hb-repacker-fuzzer.cc:19:3: error: no matching function for call to 'hb_face_destroy'
+  hb_face_destroy(face);
+  ^~~~~~~~~~~~~~~
+../../src/harfbuzz/src/hb-face.h:90:1: note: candidate function not viable: 1st argument ('const hb_face_t *') would lose const qualifier
+hb_face_destroy (hb_face_t *face);
+^
+4 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,75 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "gpsd_config.h"  /* must be before all includes */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+#include "gpsd.h"
+
+extern "C" {
+#include "gpsd.h"
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size)
+{
+    struct gps_device_t *device;
+    int fd;
+    char buf[BUFSIZ];
+    ssize_t len;
+    int ret;
+
+    device = gpsd_open(NULL);
+    if (!device) {
+        return 0;
+    }
+
+    fd = gpsd_fileno(device);
+    if (fd < 0) {
+        gpsd_close(device);
+        return 0;
+    }
+
+    if (Size > 0) {
+        len = write(fd, Data, Size);
+        if (len < 0) {
+            gpsd_close(device);
+            return 0;
+        }
+    }
+
+    len = read(fd, buf, sizeof(buf));
+    if (len < 0) {
+        gpsd_close(device);
+        return 0;
+    }
+
+    ret = gpsd_multipoll(false, device, NULL, 0.0);
+
+    gpsd_close(device);
+
+    return ret;
+}
+</code>
+
+The code has the following build issues:
+<error>
+FuzzJson.c:10:8: error: expected identifier or '('
+extern "C" {
+       ^
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

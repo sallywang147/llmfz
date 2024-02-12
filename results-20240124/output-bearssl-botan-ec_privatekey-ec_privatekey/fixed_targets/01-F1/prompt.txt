@@ -1,0 +1,50 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <vector>
+
+#include "botan.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  Botan::EC_PrivateKey* ec_private_key = new Botan::EC_PrivateKey;
+  char** arg1 = new char*[stream.ConsumeIntegralInRange<size_t>(0, 10)];
+  for (size_t i = 0; i < stream.ConsumeIntegralInRange<size_t>(0, 10); i++) {
+    arg1[i] = new char[stream.ConsumeIntegralInRange<size_t>(0, 10)];
+  }
+  Botan::AlgorithmIdentifier* arg2 = new Botan::AlgorithmIdentifier;
+  char* arg3 = new char[stream.ConsumeIntegralInRange<size_t>(0, 10)];
+  size_t arg4 = stream.ConsumeIntegralInRange<size_t>(0, 10);
+  bool arg5 = stream.ConsumeBool();
+
+  ec_private_key->EC_PrivateKey(arg1, arg2, arg3, arg4, arg5);
+
+  for (size_t i = 0; i < stream.ConsumeIntegralInRange<size_t>(0, 10); i++) {
+    delete[] arg1[i];
+  }
+  delete[] arg1;
+  delete arg2;
+  delete[] arg3;
+  delete ec_private_key;
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

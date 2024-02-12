@@ -1,0 +1,39 @@
+/workspace/out/libfuzzer-address-x86_64/parse -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/parse < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 2128059288
+INFO: Loaded 1 modules   (12925 inline 8-bit counters): 12925 [0x787d90, 0x78b00d), 
+INFO: Loaded 1 PC tables (12925 PCs): 12925 [0x6fc330,0x72eb00), 
+INFO:        0 files found in /workspace/corpus/parse
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+parse: build/singleheader/ada.h:3780: T *tl::expected<ada::url_aggregator, ada::errors>::operator->() [T = ada::url_aggregator, E = ada::errors]: Assertion `has_value()' failed.
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+==13==ERROR: AddressSanitizer: ABRT on unknown address 0x00000000000d (pc 0x7f51ad9ca00b bp 0x7f51adb3f588 sp 0x7fff62414d10 T0)
+SCARINESS: 10 (signal)
+    #0 0x7f51ad9ca00b in raise (/lib/x86_64-linux-gnu/libc.so.6+0x4300b) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #1 0x7f51ad9a9858 in abort (/lib/x86_64-linux-gnu/libc.so.6+0x22858) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #2 0x7f51ad9a9728  (/lib/x86_64-linux-gnu/libc.so.6+0x22728) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #3 0x7f51ad9bafd5 in __assert_fail (/lib/x86_64-linux-gnu/libc.so.6+0x33fd5) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #4 0x6106cf in LLVMFuzzerTestOneInput /src/ada-url/fuzz/parse.cc
+    #5 0x43e1f3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #6 0x43f5a4 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:804:3
+    #7 0x43fa79 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #8 0x42f0df in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #9 0x458732 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #10 0x7f51ad9ab082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #11 0x41fb1d in _start (out/libfuzzer-address-x86_64/parse+0x41fb1d)
+
+DEDUP_TOKEN: raise--abort--
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: ABRT (/lib/x86_64-linux-gnu/libc.so.6+0x4300b) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca) in raise
+==13==ABORTING
+MS: 0 ; base unit: 0000000000000000000000000000000000000000
+
+
+artifact_prefix='./'; Test unit written to ./crash-da39a3ee5e6b4b0d3255bfef95601890afd80709
+Base64: 
+stat::number_of_executed_units: 1
+stat::average_exec_per_sec:     0
+stat::new_units_added:          0
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              34

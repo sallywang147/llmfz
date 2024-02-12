@@ -1,0 +1,1 @@
+error: undefined reference to 'FLAC__metadata_chain_read_with_callbacks_'

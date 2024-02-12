@@ -1,0 +1,44 @@
+/workspace/out/libfuzzer-address-x86_64/fuzzer -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/fuzzer -max_len=262144 < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 964050495
+INFO: Loaded 1 modules   (17574 inline 8-bit counters): 17574 [0x8a4d78, 0x8a921e), 
+INFO: Loaded 1 PC tables (17574 PCs): 17574 [0x7dd680,0x8220e0), 
+INFO:        0 files found in /workspace/corpus/fuzzer
+INFO: A corpus is not provided, starting from an empty corpus
+#2	INITED cov: 2 ft: 2 corp: 1/1b exec/s: 0 rss: 34Mb
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+==17==ERROR: AddressSanitizer: SEGV on unknown address 0x000000000000 (pc 0x7fd005c5f915 bp 0x7ffccb7f1270 sp 0x7ffccb7f0a28 T0)
+==17==The signal is caused by a READ memory access.
+==17==Hint: address points to the zero page.
+SCARINESS: 10 (null-deref)
+    #0 0x7fd005c5f915  (/lib/x86_64-linux-gnu/libc.so.6+0x188915) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #1 0x4c49e8 in strlen /src/llvm-project/compiler-rt/lib/asan/../sanitizer_common/sanitizer_common_interceptors.inc
+    #2 0x5a2c1a in length /usr/local/bin/../include/c++/v1/__string:355:14
+    #3 0x5a2c1a in basic_string<std::nullptr_t> /usr/local/bin/../include/c++/v1/string:793:19
+    #4 0x5a2c1a in HunspellImpl::generate(char***, char const*, char const*) /src/hunspell/src/hunspell/hunspell.cxx:2092:51
+    #5 0x5a5b82 in Hunspell::generate(char***, char const*, char const*) /src/hunspell/src/hunspell/hunspell.cxx:2246:18
+    #6 0x56e253 in LLVMFuzzerTestOneInput /src/hunspell/./src/tools/fuzzer.cxx:38:20
+    #7 0x43ec23 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #8 0x43e40a in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #9 0x43fad9 in fuzzer::Fuzzer::MutateAndTestOne() /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:757:19
+    #10 0x4407a5 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:895:5
+    #11 0x42fb0f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #12 0x459162 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #13 0x7fd005afb082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #14 0x42054d in _start (out/libfuzzer-address-x86_64/fuzzer+0x42054d)
+
+DEDUP_TOKEN: strlen--length
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: SEGV (/lib/x86_64-linux-gnu/libc.so.6+0x188915) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca) 
+==17==ABORTING
+MS: 2 ShuffleBytes-InsertRepeatedBytes-; base unit: adc83b19e793491b1c6ea0fd8b46cd9f32e592fc
+0xa,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,0x40,
+\012@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+artifact_prefix='./'; Test unit written to ./crash-4fd4516b82945b5298f948c7f46eee215458fe65
+Base64: CkBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQA==
+stat::number_of_executed_units: 4
+stat::average_exec_per_sec:     0
+stat::new_units_added:          0
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              36

@@ -1,0 +1,92 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ bazel_build_fuzz_tests
+Using Bazel query to find fuzz targets: 
+        let all_fuzz_tests = attr(tags, "fuzz-test", "//...") in
+        let lang_fuzz_tests = attr(generator_function, "^cc_fuzz_test$", $all_fuzz_tests) in
+        $lang_fuzz_tests - attr(tags, "no-oss-fuzz", $lang_fuzz_tests)
+    
+2024/01/24 00:18:27 Downloading https://releases.bazel.build/4.0.0/release/bazel-4.0.0-linux-x86_64...
+Extracting Bazel installation...
+Starting local Bazel server and connecting to it...
+Loading: 0 packages loaded
+Loading: 0 packages loaded
+Loading: 0 packages loaded
+Loading: 0 packages loaded
+Loading: 4 packages loaded
+Loading: 4 packages loaded
+Found 2 fuzz test packages:
+  //test:message_reader_fuzz_test_oss_fuzz
+  //test:http_template_fuzz_test_oss_fuzz
+Building the fuzz tests with the following Bazel options:
+  -c opt --@rules_fuzzing//fuzzing:cc_engine=@rules_fuzzing_oss_fuzz//:oss_fuzz_engine --@rules_fuzzing//fuzzing:java_engine=@rules_fuzzing_oss_fuzz//:oss_fuzz_java_engine --@rules_fuzzing//fuzzing:cc_engine_instrumentation=oss-fuzz --@rules_fuzzing//fuzzing:cc_engine_sanitizer=none --cxxopt=-stdlib=libc++ --linkopt=-lc++ --verbose_failures --spawn_strategy=standalone --action_env=CC=/usr/local/bin/clang-jcc --action_env=CXX=/usr/local/bin/clang++-jcc
+Loading:  (1 packages loaded)
+Loading: 1 packages loaded
+Analyzing: 2 targets (1 packages loaded, 0 targets configured)
+Analyzing: 2 targets (15 packages loaded, 15 targets configured)
+Analyzing: 2 targets (15 packages loaded, 15 targets configured)
+Analyzing: 2 targets (24 packages loaded, 321 targets configured)
+Analyzing: 2 targets (64 packages loaded, 1220 targets configured)
+INFO: Analyzed 2 targets (76 packages loaded, 2078 targets configured).
+INFO: Found 2 targets...
+[0 / 37] [Prepa] BazelWorkspaceStatusAction stable-status.txt
+[670 / 1,239] Compiling src/google/protobuf/map_field.cc; 0s local ... (32 actions, 31 running)
+[687 / 1,239] Compiling src/google/protobuf/map_field.cc; 2s local ... (32 actions, 31 running)
+[704 / 1,239] Compiling src/google/protobuf/map_field.cc; 3s local ... (32 actions, 31 running)
+[728 / 1,239] Compiling src/google/protobuf/extension_set.cc; 4s local ... (32 actions, 31 running)
+[763 / 1,239] Compiling src/google/protobuf/text_format.cc; 6s local ... (32 actions, 31 running)
+INFO: From Linking test/http_template_fuzz_test_raw_:
+/usr/bin/ld.gold: warning: Cannot export local symbol '__asan_extra_spill_area'
+[806 / 1,239] Compiling src/google/protobuf/compiler/command_line_interface.cc; 8s local ... (32 actions, 31 running)
+[840 / 1,239] Compiling src/google/protobuf/compiler/command_line_interface.cc; 11s local ... (32 actions, 31 running)
+[859 / 1,239] Compiling src/google/protobuf/compiler/csharp/csharp_field_base.cc; 5s local ... (32 actions, 31 running)
+[895 / 1,239] Compiling src/google/protobuf/compiler/cpp/helpers.cc; 7s local ... (32 actions, 31 running)
+[921 / 1,239] Compiling src/google/protobuf/compiler/cpp/file.cc; 9s local ... (32 actions, 31 running)
+[975 / 1,239] Compiling src/google/protobuf/compiler/cpp/file.cc; 13s local ... (32 actions, 31 running)
+[1,040 / 1,239] Compiling src/google/protobuf/compiler/cpp/message.cc; 18s local ... (32 actions, 31 running)
+[1,072 / 1,239] Compiling src/google/protobuf/compiler/cpp/message.cc; 23s local ... (32 actions, 31 running)
+[1,139 / 1,239] Compiling src/google/protobuf/descriptor.cc; 18s local ... (9 actions running)
+INFO: From Generating C++ proto_library @com_google_googleapis//google/api:billing_proto:
+google/api/billing.proto:19:1: warning: Import google/api/metric.proto is unused.
+INFO: From Generating C++ proto_library @com_google_googleapis//google/api:service_proto:
+google/api/service.proto:38:1: warning: Import google/protobuf/any.proto is unused.
+google/api/service.proto:34:1: warning: Import google/api/resource.proto is unused.
+google/api/service.proto:27:1: warning: Import google/api/label.proto is unused.
+[1,235 / 1,239] Compiling src/google/protobuf/descriptor.cc; 23s local ... (2 actions running)
+ERROR: /src/grpc-httpjson-transcoding/test/BUILD:243:13: Compiling test/message_reader_fuzz_test.cc failed: (Exit 1): clang-jcc failed: error executing command 
+  (cd /root/.cache/bazel/_bazel_root/1f2d02b1c30820fa03d68ff064b1166c/execroot/__main__ && \
+  exec env - \
+    CC=/usr/local/bin/clang-jcc \
+    CXX=/usr/local/bin/clang++-jcc \
+    FUZZINTRO_OUTDIR=/src \
+    PATH=/root/.cache/bazelisk/downloads/bazelbuild/bazel-4.0.0-linux-x86_64/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/out \
+    PWD=/proc/self/cwd \
+  /usr/local/bin/clang-jcc -U_FORTIFY_SOURCE -fstack-protector -Wall -Wthread-safety -Wself-assign -Wunused-but-set-parameter -Wno-free-nonheap-object -fcolor-diagnostics -fno-omit-frame-pointer -g0 -O2 '-D_FORTIFY_SOURCE=1' -DNDEBUG -ffunction-sections -fdata-sections '-std=c++0x' -MD -MF bazel-out/k8-opt-ST-ef5d11befd01/bin/test/_objs/message_reader_fuzz_test_raw_/message_reader_fuzz_test.d '-frandom-seed=bazel-out/k8-opt-ST-ef5d11befd01/bin/test/_objs/message_reader_fuzz_test_raw_/message_reader_fuzz_test.o' -iquote . -iquote bazel-out/k8-opt-ST-ef5d11befd01/bin -iquote external/com_google_protobuf -iquote bazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf -iquote external/com_google_absl -iquote bazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_absl -iquote external/utf8_range -iquote bazel-out/k8-opt-ST-ef5d11befd01/bin/external/utf8_range -iquote external/zlib -iquote bazel-out/k8-opt-ST-ef5d11befd01/bin/external/zlib -iquote external/com_google_googleapis -iquote bazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_googleapis -iquote external/com_google_googletest -iquote bazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_googletest -iquote external/rules_fuzzing_oss_fuzz -iquote bazel-out/k8-opt-ST-ef5d11befd01/bin/external/rules_fuzzing_oss_fuzz -iquote external/bazel_tools -iquote bazel-out/k8-opt-ST-ef5d11befd01/bin/external/bazel_tools -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/_virtual_includes/protobuf -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/_virtual_includes/protobuf -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/_virtual_includes/protobuf_nowkt -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/_virtual_includes/protobuf_lite -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/_virtual_includes/arena -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/_virtual_includes/arena_align -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/stubs/_virtual_includes/lite -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/_virtual_includes/port_def -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/_virtual_includes/arena_allocation_policy -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/_virtual_includes/arena_config -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/_virtual_includes/arena_cleanup -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/_virtual_includes/string_block -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/_virtual_includes/varint_shuffle -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/io/_virtual_includes/io -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/io/_virtual_includes/io_win32 -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/io/_virtual_includes/gzip_stream -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/stubs/_virtual_includes/stubs -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/io/_virtual_includes/printer -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/io/_virtual_includes/zero_copy_sink -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/io/_virtual_includes/tokenizer -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/_virtual_includes/any_proto -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/_virtual_includes/api_proto -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/_virtual_includes/source_context_proto -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/_virtual_includes/type_proto -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/_virtual_includes/duration_proto -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/_virtual_includes/empty_proto -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/_virtual_includes/field_mask_proto -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/_virtual_includes/struct_proto -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/_virtual_includes/timestamp_proto -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/_virtual_includes/wrappers_proto -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/compiler/_virtual_includes/importer -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/util/_virtual_includes/delimited_message_util -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/util/_virtual_includes/differencer -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/util/_virtual_includes/field_mask_util -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/util/_virtual_includes/json_util -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/json/_virtual_includes/json -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/json/_virtual_includes/parser -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/json/_virtual_includes/descriptor_traits -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/json/_virtual_includes/lexer -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/json/_virtual_includes/message_path -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/json/_virtual_includes/zero_copy_buffered_stream -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/json/_virtual_includes/untyped_message -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/util/_virtual_includes/type_resolver_util -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/_virtual_includes/descriptor_legacy -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/json/_virtual_includes/unparser -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/json/_virtual_includes/writer -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/util/_virtual_includes/time_util -Ibazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_protobuf/src/google/protobuf/_virtual_includes/descriptor_proto -isystem src/include -isystem bazel-out/k8-opt-ST-ef5d11befd01/bin/src/include -isystem external/zlib/zlib/include -isystem bazel-out/k8-opt-ST-ef5d11befd01/bin/external/zlib/zlib/include -isystem external/com_google_googletest/googlemock -isystem bazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_googletest/googlemock -isystem external/com_google_googletest/googlemock/include -isystem bazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_googletest/googlemock/include -isystem external/com_google_googletest/googletest -isystem bazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_googletest/googletest -isystem external/com_google_googletest/googletest/include -isystem bazel-out/k8-opt-ST-ef5d11befd01/bin/external/com_google_googletest/googletest/include -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION '-std=c++14' '-stdlib=libc++' -O1 -fno-omit-frame-pointer -gline-tables-only '-fsanitize=address' -fsanitize-address-use-after-scope '-fsanitize=fuzzer-no-link' '-stdlib=libc++' -no-canonical-prefixes -Wno-builtin-macro-redefined '-D__DATE__="redacted"' '-D__TIMESTAMP__="redacted"' '-D__TIME__="redacted"' -c test/message_reader_fuzz_test.cc -o bazel-out/k8-opt-ST-ef5d11befd01/bin/test/_objs/message_reader_fuzz_test_raw_/message_reader_fuzz_test.o)
+Execution platform: @local_config_platform//:host
+test/message_reader_fuzz_test.cc:32:3: error: no matching function for call to 'ExpectJsonArrayEq'
+  ExpectJsonArrayEq(&json_string, &expected_json_string);
+  ^~~~~~~~~~~~~~~~~
+test/test_common.h:121:6: note: candidate function not viable: no known conversion from 'std::string *' (aka 'basic_string<char, char_traits<char>, allocator<char>> *') to 'const std::string' (aka 'const basic_string<char, char_traits<char>, allocator<char>>') for 1st argument; remove &
+bool ExpectJsonArrayEq(const std::string& expected, const std::string& actual);
+     ^
+1 error generated.
+test/message_reader_fuzz_test.cc:32:3: error: no matching function for call to 'ExpectJsonArrayEq'
+  ExpectJsonArrayEq(&json_string, &expected_json_string);
+  ^~~~~~~~~~~~~~~~~
+test/test_common.h:121:6: note: candidate function not viable: no known conversion from 'std::string *' (aka 'basic_string<char, char_traits<char>, allocator<char>> *') to 'const std::string' (aka 'const basic_string<char, char_traits<char>, allocator<char>>') for 1st argument; remove &
+bool ExpectJsonArrayEq(const std::string& expected, const std::string& actual);
+     ^
+1 error generated.
+
+Fix failure
+INFO: Elapsed time: 63.288s, Critical Path: 36.61s
+INFO: 1237 processes: 667 internal, 570 local.
+FAILED: Build did NOT complete successfully
+FAILED: Build did NOT complete successfully

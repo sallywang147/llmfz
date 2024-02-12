@@ -1,0 +1,60 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cups/cups.h>
+
+extern "C" {
+#include <cups/http.h>
+#include <cups/ipp.h>
+}
+
+int main() {
+    http_t *http = httpConnectEncrypt(AF_UNSPEC, "localhost", 631);
+    cupsDoFileRequest(http, NULL, "/jobs", "GET", NULL, 0, NULL);
+    httpClose(http);
+    return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+FuzzIPP.c:3:8: error: expected identifier or '('
+extern "C" {
+       ^
+FuzzIPP.c:10:51: error: too many arguments to function call, expected 4, have 7
+    cupsDoFileRequest(http, NULL, "/jobs", "GET", NULL, 0, NULL);
+    ~~~~~~~~~~~~~~~~~                             ^~~~~~~~~~~~~
+/usr/local/lib/clang/15.0.0/include/stddef.h:89:16: note: expanded from macro 'NULL'
+#  define NULL ((void*)0)
+               ^
+./../cups/cups.h:404:16: note: 'cupsDoFileRequest' declared here
+extern ipp_t            *cupsDoFileRequest(http_t *http, ipp_t *request, const char *resource, const char *filename) _CUPS_PUBLIC;
+                         ^
+2 errors generated.
+
+Fix failure
+FuzzIPP.cpp:9:20: error: no matching function for call to 'httpConnectEncrypt'
+    http_t *http = httpConnectEncrypt(AF_UNSPEC, "localhost", 631);
+                   ^~~~~~~~~~~~~~~~~~
+./../cups/http.h:418:17: note: candidate function not viable: no known conversion from 'const char[10]' to 'int' for 2nd argument
+extern http_t           *httpConnectEncrypt(const char *host, int port, http_encryption_t encryption) _CUPS_DEPRECATED_MSG("Use httpConnect2 instead.");
+                         ^
+FuzzIPP.cpp:10:5: error: no matching function for call to 'cupsDoFileRequest'
+    cupsDoFileRequest(http, NULL, "/jobs", "GET", NULL, 0, NULL);
+    ^~~~~~~~~~~~~~~~~
+./../cups/cups.h:404:16: note: candidate function not viable: requires 4 arguments, but 7 were provided
+extern ipp_t            *cupsDoFileRequest(http_t *http, ipp_t *request, const char *resource, const char *filename) _CUPS_PUBLIC;
+                         ^
+2 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

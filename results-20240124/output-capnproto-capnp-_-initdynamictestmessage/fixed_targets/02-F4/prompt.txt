@@ -1,0 +1,50 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "capnp/test.capnp.h"
+#include <capnp/message.h>
+#include <kj/string-tree.h>
+#include <kj/debug.h>
+#include <kj/array.h>
+#include <kj/vector.h>
+#include <kj/main.h>
+#include <kj/io.h>
+#include <kj/test.h>
+#include <kj/units.h>
+#include <capnp/serialize-packed.h>
+#include <kj/debug.h>
+#include <kj/vector.h>
+#include <kj/array.h>
+#include <kj/string.h>
+#include <kj/string-tree.h>
+#include <kj/units.h>
+#include <capnp/dynamic.h>
+#include <unistd.h>
+#include <iostream>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* Data, size_t Size) {
+  capnp::DynamicStruct::Builder builder;
+  capnp::_::initDynamicTestMessage(&builder);
+  for (int i = 0; i < 100; i++) {
+    capnp::DynamicStruct::Builder dynamicBuilder = builder.init("dynamicNestedStruct", i);
+    capnp::_::initDynamicTestMessage(&dynamicBuilder);
+  }
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

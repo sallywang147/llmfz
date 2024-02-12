@@ -1,0 +1,77 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
+#include <string>
+#include <vector>
+
+#include <openssl/pem.h>
+#include <openssl/rsa.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  std::vector<uint8_t> pem_data = stream.ConsumeRemainingBytes();
+  BIO* bio = BIO_new_mem_buf(pem_data.data(), pem_data.size());
+  if (bio == nullptr) {
+    return 0;
+  }
+
+  RSA* rsa = nullptr;
+  PEM_read_RSAPrivateKey(bio, &rsa, nullptr, nullptr);
+  BIO_free(bio);
+
+  if (rsa != nullptr) {
+    RSA_free(rsa);
+  }
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/boringssl/fuzz/ssl_ctx_api.cc:18:42: error: no matching member function for call to 'ConsumeRemainingBytes'
+  std::vector<uint8_t> pem_data = stream.ConsumeRemainingBytes();
+                                  ~~~~~~~^~~~~~~~~~~~~~~~~~~~~
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:128:36: note: candidate template ignored: couldn't infer template argument 'T'
+std::vector<T> FuzzedDataProvider::ConsumeRemainingBytes() {
+                                   ^
+/src/boringssl/fuzz/ssl_ctx_api.cc:25:3: error: no matching function for call to 'PEM_read_RSAPrivateKey'
+  PEM_read_RSAPrivateKey(bio, &rsa, nullptr, nullptr);
+  ^~~~~~~~~~~~~~~~~~~~~~
+/src/boringssl/include/openssl/pem.h:405:1: note: candidate function not viable: no known conversion from 'BIO *' (aka 'bio_st *') to 'FILE *' (aka '_IO_FILE *') for 1st argument
+DECLARE_PEM_rw_cb(RSAPrivateKey, RSA)
+^
+/src/boringssl/include/openssl/pem.h:309:3: note: expanded from macro 'DECLARE_PEM_rw_cb'
+  DECLARE_PEM_read(name, type)        \
+  ^
+/src/boringssl/include/openssl/pem.h:298:3: note: expanded from macro 'DECLARE_PEM_read'
+  DECLARE_PEM_read_fp(name, type)
+  ^
+/src/boringssl/include/openssl/pem.h:254:24: note: expanded from macro 'DECLARE_PEM_read_fp'
+  OPENSSL_EXPORT type *PEM_read_##name(FILE *fp, type **x, \
+                       ^
+<scratch space>:53:1: note: expanded from here
+PEM_read_RSAPrivateKey
+^
+2 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

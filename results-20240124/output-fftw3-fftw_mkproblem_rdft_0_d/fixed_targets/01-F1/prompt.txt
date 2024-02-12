@@ -1,0 +1,113 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <fftw3.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <string>
+#include <vector>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  if (size < 1) {
+    return 0;
+  }
+  uint8_t ARRAY_SIZE = (*data) % 250 + 1;
+  data++;
+  size -= 1;
+  if ((ARRAY_SIZE * sizeof(double) * 2) > size) {
+    return 0;
+  }
+  std::vector<double> signal(ARRAY_SIZE);
+  std::vector<double> result(ARRAY_SIZE);
+
+  // Seed the signals with fuzz data
+  memcpy(signal.data(), data, (ARRAY_SIZE * sizeof(double) * 2));
+
+  struct tensor vecsz;
+  vecs.dims = 1;
+  vecs.dim[0] = ARRAY_SIZE;
+
+  struct problem_s * problem = fftw_mkproblem_rdft_0_d(&vecs, signal.data(), result.data());
+
+  fftw_execute(problem);
+  fftw_destroy_problem(problem);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/fftw3_fuzzer.cc:23:17: error: variable has incomplete type 'struct tensor'
+  struct tensor vecsz;
+                ^
+/src/fftw3_fuzzer.cc:23:10: note: forward declaration of 'tensor'
+  struct tensor vecsz;
+         ^
+/src/fftw3_fuzzer.cc:24:3: error: use of undeclared identifier 'vecs'; did you mean 'vecsz'?
+  vecs.dims = 1;
+  ^~~~
+  vecsz
+/src/fftw3_fuzzer.cc:23:17: note: 'vecsz' declared here
+  struct tensor vecsz;
+                ^
+/src/fftw3_fuzzer.cc:25:3: error: use of undeclared identifier 'vecs'; did you mean 'vecsz'?
+  vecs.dim[0] = ARRAY_SIZE;
+  ^~~~
+  vecsz
+/src/fftw3_fuzzer.cc:23:17: note: 'vecsz' declared here
+  struct tensor vecsz;
+                ^
+/src/fftw3_fuzzer.cc:27:57: error: use of undeclared identifier 'vecs'
+  struct problem_s * problem = fftw_mkproblem_rdft_0_d(&vecs, signal.data(), result.data());
+                                                        ^
+/src/fftw3_fuzzer.cc:29:3: error: no matching function for call to 'fftw_execute'
+  fftw_execute(problem);
+  ^~~~~~~~~~~~
+/src/fftw3/api/fftw3.h:468:17: note: candidate function not viable: cannot convert argument of incomplete type 'struct problem_s *' to 'const fftw_plan' (aka 'fftw_plan_s *const') for 1st argument
+FFTW_DEFINE_API(FFTW_MANGLE_DOUBLE, double, fftw_complex)
+                ^
+/src/fftw3/api/fftw3.h:142:12: note: expanded from macro 'FFTW_DEFINE_API'
+FFTW_CDECL X(execute)(const X(plan) p);                                 \
+           ^
+/src/fftw3/api/fftw3.h:66:34: note: expanded from macro 'FFTW_MANGLE_DOUBLE'
+#define FFTW_MANGLE_DOUBLE(name) FFTW_CONCAT(fftw_, name)
+                                 ^
+/src/fftw3/api/fftw3.h:65:35: note: expanded from macro 'FFTW_CONCAT'
+#define FFTW_CONCAT(prefix, name) prefix ## name
+                                  ^
+<scratch space>:76:1: note: expanded from here
+fftw_execute
+^
+/src/fftw3_fuzzer.cc:30:3: error: use of undeclared identifier 'fftw_destroy_problem'; did you mean 'fftw_destroy_plan'?
+  fftw_destroy_problem(problem);
+  ^~~~~~~~~~~~~~~~~~~~
+  fftw_destroy_plan
+/src/fftw3/api/fftw3.h:468:17: note: 'fftw_destroy_plan' declared here
+FFTW_DEFINE_API(FFTW_MANGLE_DOUBLE, double, fftw_complex)
+                ^
+/src/fftw3_fuzzer.cc:30:24: error: cannot initialize a parameter of type 'fftw_plan' (aka 'fftw_plan_s *') with an lvalue of type 'struct problem_s *'
+  fftw_destroy_problem(problem);
+                       ^~~~~~~
+/src/fftw3_fuzzer.cc:27:10: note: 'problem_s' is not defined, but forward declared here; conversion would be valid if it was derived from 'fftw_plan_s'
+  struct problem_s * problem = fftw_mkproblem_rdft_0_d(&vecs, signal.data(), result.data());
+         ^
+/src/fftw3/api/fftw3.h:468:1: note: passing argument to parameter 'p' here
+FFTW_DEFINE_API(FFTW_MANGLE_DOUBLE, double, fftw_complex)
+^
+/src/fftw3/api/fftw3.h:372:36: note: expanded from macro 'FFTW_DEFINE_API'
+FFTW_CDECL X(destroy_plan)(X(plan) p);                                  \
+                                   ^
+7 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

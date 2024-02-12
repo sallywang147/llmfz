@@ -1,0 +1,1 @@
+error: undefined reference to `boost::json::stream_parser::write(boost::string_view, boost::system::error_code&)'

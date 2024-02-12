@@ -1,0 +1,57 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ mkdir build
++ cd build
++ cmake .. -GNinja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_STANDARD=14 -DFMT_DOC=Off -DFMT_TEST=Off -DFMT_SAFE_DURATION_CAST=On -DFMT_FUZZ=On -DFMT_FUZZ_LINKMAIN=Off -DFMT_FUZZ_LDFLAGS=-fsanitize=fuzzer
+-- CMake version: 3.24.2
+-- The CXX compiler identification is Clang 15.0.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/local/bin/clang++-jcc - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Version: 10.2.2
+-- Build type: Debug
+-- Performing Test HAS_NULLPTR_WARNING
+-- Performing Test HAS_NULLPTR_WARNING - Success
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /src/fmt/build
++ cmake --build .
+[1/15] Building CXX object test/fuzzing/CMakeFiles/float-fuzzer.dir/float.cc.o
+[2/15] Building CXX object CMakeFiles/fmt.dir/src/os.cc.o
+[3/15] Building CXX object test/fuzzing/CMakeFiles/chrono-timepoint-fuzzer.dir/chrono-timepoint.cc.o
+FAILED: test/fuzzing/CMakeFiles/chrono-timepoint-fuzzer.dir/chrono-timepoint.cc.o 
+/usr/local/bin/clang++-jcc -DFMT_FUZZ -DFMT_SAFE_DURATION_CAST -I/src/fmt/include -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fvisibility=hidden -fvisibility-inlines-hidden -MD -MT test/fuzzing/CMakeFiles/chrono-timepoint-fuzzer.dir/chrono-timepoint.cc.o -MF test/fuzzing/CMakeFiles/chrono-timepoint-fuzzer.dir/chrono-timepoint.cc.o.d -o test/fuzzing/CMakeFiles/chrono-timepoint-fuzzer.dir/chrono-timepoint.cc.o -c /src/fmt/test/fuzzing/chrono-timepoint.cc
+/src/fmt/test/fuzzing/chrono-timepoint.cc:17:10: error: no matching member function for call to 'push_back'
+    args.push_back(fmt::format(provider.ConsumeRemainingBytesAsString()));
+    ~~~~~^~~~~~~~~
+/usr/local/bin/../include/c++/v1/vector:569:36: note: candidate function not viable: no known conversion from 'std::string' (aka 'basic_string<char, char_traits<char>, allocator<char>>') to 'const std::vector<fmt::basic_format_arg<fmt::context>>::value_type' (aka 'const fmt::basic_format_arg<fmt::context>') for 1st argument
+    _LIBCPP_INLINE_VISIBILITY void push_back(const_reference __x);
+                                   ^
+/usr/local/bin/../include/c++/v1/vector:572:36: note: candidate function not viable: no known conversion from 'std::string' (aka 'basic_string<char, char_traits<char>, allocator<char>>') to 'std::vector<fmt::basic_format_arg<fmt::context>>::value_type' (aka 'fmt::basic_format_arg<fmt::context>') for 1st argument
+    _LIBCPP_INLINE_VISIBILITY void push_back(value_type&& __x);
+                                   ^
+/src/fmt/test/fuzzing/chrono-timepoint.cc:21:3: error: no matching function for call to 'vprint'
+  fmt::vprint(f, format_str.c_str(), args);
+  ^~~~~~~~~~~
+/src/fmt/include/fmt/base.h:2965:14: note: candidate function not viable: no known conversion from 'std::vector<fmt::basic_format_arg<fmt::format_context>>' (aka 'vector<basic_format_arg<fmt::context>>') to 'fmt::format_args' (aka 'basic_format_args<fmt::context>') for 3rd argument
+FMT_API void vprint(FILE* f, string_view fmt, format_args args);
+             ^
+/src/fmt/include/fmt/base.h:2964:14: note: candidate function not viable: requires 2 arguments, but 3 were provided
+FMT_API void vprint(string_view fmt, format_args args);
+             ^
+2 errors generated.
+[4/15] Building CXX object test/fuzzing/CMakeFiles/named-arg-fuzzer.dir/named-arg.cc.o
+[5/15] Building CXX object test/fuzzing/CMakeFiles/one-arg-fuzzer.dir/one-arg.cc.o
+[6/15] Building CXX object test/fuzzing/CMakeFiles/two-args-fuzzer.dir/two-args.cc.o
+[7/15] Building CXX object CMakeFiles/fmt.dir/src/format.cc.o
+[8/15] Building CXX object test/fuzzing/CMakeFiles/chrono-duration-fuzzer.dir/chrono-duration.cc.o
+ninja: build stopped: subcommand failed.

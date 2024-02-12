@@ -1,0 +1,1 @@
+error: undefined reference to `boost::json::value::value()'

@@ -1,0 +1,58 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <config.h>
+
+#include <stddef.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+#include "../../htslib/hts.h"
+#include "../../htslib/sam.h"
+
+#include <string>
+
+extern "C" {
+#include <string>
+#include "FuzzerDataProvider.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+    FuzzedDataProvider stream(data, size);
+    std::string filename = stream.ConsumeRandomLengthString();
+    std::string filename_index = stream.ConsumeRandomLengthString();
+    int min_shift = stream.ConsumeIntegral<int>();
+    int nthreads = stream.ConsumeIntegral<int>();
+    return sam_index_build3(const_cast<char*>(filename.c_str()),
+                            const_cast<char*>(filename_index.c_str()), min_shift,
+                            nthreads);
+}
+</code>
+
+The code has the following build issues:
+<error>
+test/fuzz/hts_open_fuzzer.c:13:10: fatal error: 'string' file not found
+#include <string>
+         ^~~~~~~~
+1 error generated.
+
+Fix failure
+test/fuzz/hts_open_fuzzer.cpp:17:10: fatal error: 'FuzzerDataProvider.h' file not found
+#include "FuzzerDataProvider.h"
+         ^~~~~~~~~~~~~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

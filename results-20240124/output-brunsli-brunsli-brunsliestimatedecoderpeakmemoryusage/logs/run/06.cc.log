@@ -1,0 +1,98 @@
+/workspace/out/libfuzzer-address-x86_64/fuzz_decode_streaming -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/fuzz_decode_streaming < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 1618426104
+INFO: Loaded 1 modules   (7175 inline 8-bit counters): 7175 [0x7c3e48, 0x7c5a4f), 
+INFO: Loaded 1 PC tables (7175 PCs): 7175 [0x7c5a50,0x7e1ac0), 
+INFO:        0 files found in /workspace/corpus/fuzz_decode_streaming
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: A corpus is not provided, starting from an empty corpus
+#2	INITED cov: 11 ft: 12 corp: 1/1b exec/s: 0 rss: 34Mb
+	NEW_FUNC[1/20]: 0x56da20 in std::__1::vector<unsigned char, std::__1::allocator<unsigned char> >::shrink_to_fit() /usr/local/bin/../include/c++/v1/vector:1497
+	NEW_FUNC[2/20]: 0x56de90 in std::__1::vector<unsigned char, std::__1::allocator<unsigned char> >::__construct_at_end(unsigned long) /usr/local/bin/../include/c++/v1/vector:979
+#6	NEW    cov: 86 ft: 90 corp: 2/45b lim: 4096 exec/s: 0 rss: 35Mb L: 44/44 MS: 4 ChangeBit-ShuffleBytes-ShuffleBytes-InsertRepeatedBytes-
+#52	NEW    cov: 86 ft: 91 corp: 3/47b lim: 4096 exec/s: 0 rss: 35Mb L: 2/44 MS: 1 CrossOver-
+=================================================================
+==13==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x6020000007b1 at pc 0x0000004c8e36 bp 0x7ffdb5de16c0 sp 0x7ffdb5de0e70
+READ of size 6 at 0x6020000007b1 thread T0
+SCARINESS: 20 (6-byte-read-heap-buffer-overflow)
+    #0 0x4c8e35 in MemcmpInterceptorCommon(void*, int (*)(void const*, void const*, unsigned long), void const*, void const*, unsigned long) /src/llvm-project/compiler-rt/lib/asan/../sanitizer_common/sanitizer_common_interceptors.inc:860:7
+    #1 0x4c932b in memcmp /src/llvm-project/compiler-rt/lib/asan/../sanitizer_common/sanitizer_common_interceptors.inc:892:10
+    #2 0x587843 in VerifySignature /src/brunsli/c/dec/brunsli_decode.cc:1096:8
+    #3 0x587843 in brunsli::internal::dec::DoProcessJpeg(brunsli::internal::dec::State*, brunsli::JPEGData*) /src/brunsli/c/dec/brunsli_decode.cc:2267:24
+    #4 0x59b56d in brunsli::internal::dec::ProcessJpeg(brunsli::internal::dec::State*, brunsli::JPEGData*) /src/brunsli/c/dec/brunsli_decode.cc:2433:14
+    #5 0x59bdcb in brunsli::BrunsliEstimateDecoderPeakMemoryUsage(unsigned char const*, unsigned long) /src/brunsli/c/dec/brunsli_decode.cc:2474:26
+    #6 0x56d4c3 in LLVMFuzzerTestOneInput /src/brunsli/c/tests/fuzz_decode_streaming.cc:8:10
+    #7 0x43eca3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #8 0x43e48a in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #9 0x43fb59 in fuzzer::Fuzzer::MutateAndTestOne() /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:757:19
+    #10 0x440825 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:895:5
+    #11 0x42fb8f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #12 0x4591e2 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #13 0x7f3c2bf35082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #14 0x4205cd in _start (out/libfuzzer-address-x86_64/fuzz_decode_streaming+0x4205cd)
+
+DEDUP_TOKEN: MemcmpInterceptorCommon(void*, int (*)(void const*, void const*, unsigned long), void const*, void const*, unsigned long)--memcmp--VerifySignature
+0x6020000007b1 is located 0 bytes to the right of 1-byte region [0x6020000007b0,0x6020000007b1)
+allocated by thread T0 here:
+    #0 0x56ac7d in operator new(unsigned long) /src/llvm-project/compiler-rt/lib/asan/asan_new_delete.cpp:95:3
+    #1 0x56d835 in __libcpp_operator_new<unsigned long> /usr/local/bin/../include/c++/v1/new:245:10
+    #2 0x56d835 in __libcpp_allocate /usr/local/bin/../include/c++/v1/new:271:10
+    #3 0x56d835 in allocate /usr/local/bin/../include/c++/v1/__memory/allocator.h:105:38
+    #4 0x56d835 in allocate /usr/local/bin/../include/c++/v1/__memory/allocator_traits.h:262:20
+    #5 0x56d835 in __vallocate /usr/local/bin/../include/c++/v1/vector:931:37
+    #6 0x56d835 in vector /usr/local/bin/../include/c++/v1/vector:1062:9
+    #7 0x56d835 in std::__1::vector<unsigned char, std::__1::allocator<unsigned char> > FuzzedDataProvider::ConsumeBytes<unsigned char>(unsigned long, unsigned long) /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:361:18
+    #8 0x56d4a2 in ConsumeBytes<unsigned char> /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:110:10
+    #9 0x56d4a2 in LLVMFuzzerTestOneInput /src/brunsli/c/tests/fuzz_decode_streaming.cc:7:42
+    #10 0x43eca3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #11 0x43e48a in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #12 0x43fb59 in fuzzer::Fuzzer::MutateAndTestOne() /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:757:19
+    #13 0x440825 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:895:5
+    #14 0x42fb8f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #15 0x4591e2 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #16 0x7f3c2bf35082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: operator new(unsigned long)--__libcpp_operator_new<unsigned long>--__libcpp_allocate
+SUMMARY: AddressSanitizer: heap-buffer-overflow /src/llvm-project/compiler-rt/lib/asan/../sanitizer_common/sanitizer_common_interceptors.inc:860:7 in MemcmpInterceptorCommon(void*, int (*)(void const*, void const*, unsigned long), void const*, void const*, unsigned long)
+Shadow bytes around the buggy address:
+  0x0c047fff80a0: fa fa fd fa fa fa fd fa fa fa fd fa fa fa fd fa
+  0x0c047fff80b0: fa fa fd fa fa fa fd fa fa fa fd fa fa fa fd fa
+  0x0c047fff80c0: fa fa fd fa fa fa fd fa fa fa fd fa fa fa 02 fa
+  0x0c047fff80d0: fa fa 04 fa fa fa fd fa fa fa fd fa fa fa fd fa
+  0x0c047fff80e0: fa fa fd fd fa fa fd fa fa fa fd fa fa fa fd fa
+=>0x0c047fff80f0: fa fa 04 fa fa fa[01]fa fa fa fa fa fa fa fa fa
+  0x0c047fff8100: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0c047fff8110: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0c047fff8120: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0c047fff8130: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0c047fff8140: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07 
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+==13==ABORTING
+MS: 5 ChangeByte-ShuffleBytes-ChangeByte-ChangeByte-CrossOver-; base unit: 71853c6197a6a7f222db0f1978c7cb232b87c5ee
+0x32,0xb6,0xa,0xa,
+2\266\012\012
+artifact_prefix='./'; Test unit written to ./crash-160084d6b9d4194a1c6897c0fa0c641905a78bd2
+Base64: MrYKCg==
+stat::number_of_executed_units: 57
+stat::average_exec_per_sec:     0
+stat::new_units_added:          2
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              36

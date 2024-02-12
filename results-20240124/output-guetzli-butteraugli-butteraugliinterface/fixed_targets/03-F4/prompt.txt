@@ -1,0 +1,46 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdint.h>
+#include <vector>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "butteraugli.h"
+
+#ifdef __cplusplus
+}
+#endif
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  std::vector<uint8_t> img1(data, data + size);
+  std::vector<uint8_t> img2(data, data + size);
+  butteraugli::Image image1(img1.data(), img1.size(), butteraugli::Image::Format::JPEG);
+  butteraugli::Image image2(img2.data(), img2.size(), butteraugli::Image::Format::JPEG);
+  double distance;
+  (void)butteraugli::ButteraugliInterface(&img1, &img2, &image1, &distance);
+  // TODO(robryk): Verify distance if ButteraugliInterface() succeeded.
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+fuzz_target.cc:8:10: fatal error: 'butteraugli.h' file not found
+#include "butteraugli.h"
+         ^~~~~~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

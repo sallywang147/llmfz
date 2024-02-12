@@ -1,0 +1,50 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <iostream>
+#include <string>
+
+#include "cctz/civil_time.h"
+#include "cctz/time_zone.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+	FuzzedDataProvider fuzzed_data(data, size);
+
+	cctz::time_zone lax;
+	std::string tz = fuzzed_data.ConsumeRandomLengthString();
+	if (load_time_zone(tz, &lax)) {
+		std::chrono::system_clock::time_point tp;
+		cctz::time_zone::civil_transition trans;
+		lax.prev_transition(&tp, &trans);
+	}
+
+	return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+./fuzz_cctz.cc:17:7: error: no matching member function for call to 'prev_transition'
+                lax.prev_transition(&tp, &trans);
+                ~~~~^~~~~~~~~~~~~~~
+../include/cctz/time_zone.h:190:8: note: candidate function not viable: no known conversion from 'std::chrono::system_clock::time_point *' (aka 'time_point<std::chrono::system_clock> *') to 'const time_point<cctz::seconds>' (aka 'const time_point<std::chrono::system_clock, std::chrono::duration<long>>') for 1st argument
+  bool prev_transition(const time_point<seconds>& tp,
+       ^
+../include/cctz/time_zone.h:193:8: note: candidate template ignored: could not match 'time_point<D>' (aka 'time_point<std::chrono::system_clock, type-parameter-0-0>') against 'std::chrono::system_clock::time_point *' (aka 'time_point<std::chrono::system_clock> *')
+  bool prev_transition(const time_point<D>& tp,
+       ^
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

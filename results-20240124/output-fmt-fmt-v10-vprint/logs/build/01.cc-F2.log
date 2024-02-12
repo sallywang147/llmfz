@@ -1,0 +1,84 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ mkdir build
++ cd build
++ cmake .. -GNinja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_STANDARD=14 -DFMT_DOC=Off -DFMT_TEST=Off -DFMT_SAFE_DURATION_CAST=On -DFMT_FUZZ=On -DFMT_FUZZ_LINKMAIN=Off -DFMT_FUZZ_LDFLAGS=-fsanitize=fuzzer
+-- CMake version: 3.24.2
+-- The CXX compiler identification is Clang 15.0.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/local/bin/clang++-jcc - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Version: 10.2.2
+-- Build type: Debug
+-- Performing Test HAS_NULLPTR_WARNING
+-- Performing Test HAS_NULLPTR_WARNING - Success
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /src/fmt/build
++ cmake --build .
+[1/15] Building CXX object test/fuzzing/CMakeFiles/float-fuzzer.dir/float.cc.o
+[2/15] Building CXX object CMakeFiles/fmt.dir/src/os.cc.o
+[3/15] Building CXX object test/fuzzing/CMakeFiles/chrono-timepoint-fuzzer.dir/chrono-timepoint.cc.o
+FAILED: test/fuzzing/CMakeFiles/chrono-timepoint-fuzzer.dir/chrono-timepoint.cc.o 
+/usr/local/bin/clang++-jcc -DFMT_FUZZ -DFMT_SAFE_DURATION_CAST -I/src/fmt/include -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fvisibility=hidden -fvisibility-inlines-hidden -MD -MT test/fuzzing/CMakeFiles/chrono-timepoint-fuzzer.dir/chrono-timepoint.cc.o -MF test/fuzzing/CMakeFiles/chrono-timepoint-fuzzer.dir/chrono-timepoint.cc.o.d -o test/fuzzing/CMakeFiles/chrono-timepoint-fuzzer.dir/chrono-timepoint.cc.o -c /src/fmt/test/fuzzing/chrono-timepoint.cc
+In file included from /src/fmt/test/fuzzing/chrono-timepoint.cc:1:
+In file included from /src/fmt/include/fmt/core.h:5:
+In file included from /src/fmt/include/fmt/format.h:54:
+/src/fmt/include/fmt/base.h:1287:30: error: type 'void *' cannot be used prior to '::' because it has no members
+  using char_type = typename Context::char_type;
+                             ^
+/src/fmt/test/fuzzing/chrono-timepoint.cc:13:17: note: in instantiation of template class 'fmt::detail::value<void *>' requested here
+  static_assert(sizeof(fmt::detail::value<void*>) == 8,
+                ^
+In file included from /src/fmt/test/fuzzing/chrono-timepoint.cc:1:
+In file included from /src/fmt/include/fmt/core.h:5:
+In file included from /src/fmt/include/fmt/format.h:54:
+/src/fmt/include/fmt/base.h:1279:34: error: type 'void *' cannot be used prior to '::' because it has no members
+  using parse_context = typename Context::parse_context_type;
+                                 ^
+/src/fmt/include/fmt/base.h:1304:27: note: in instantiation of template class 'fmt::detail::custom_value<void *>' requested here
+    custom_value<Context> custom;
+                          ^
+/src/fmt/include/fmt/base.h:1289:3: note: in instantiation of member class 'fmt::detail::value<void *>::(anonymous)' requested here
+  union {
+  ^
+/src/fmt/test/fuzzing/chrono-timepoint.cc:13:17: note: in instantiation of template class 'fmt::detail::value<void *>' requested here
+  static_assert(sizeof(fmt::detail::value<void*>) == 8,
+                ^
+In file included from /src/fmt/test/fuzzing/chrono-timepoint.cc:1:
+In file included from /src/fmt/include/fmt/core.h:5:
+In file included from /src/fmt/include/fmt/format.h:54:
+/src/fmt/include/fmt/base.h:1320:31: error: multiple overloads of 'value' instantiate to the same signature 'void (fmt::detail::value<void *>::char_type)' (aka 'void (int)')
+  constexpr FMT_ALWAYS_INLINE value(char_type val) : char_value(val) {}
+                              ^
+/src/fmt/test/fuzzing/chrono-timepoint.cc:13:17: note: in instantiation of template class 'fmt::detail::value<void *>' requested here
+  static_assert(sizeof(fmt::detail::value<void*>) == 8,
+                ^
+/src/fmt/include/fmt/base.h:1309:31: note: previous declaration is here
+  constexpr FMT_ALWAYS_INLINE value(int val) : int_value(val) {}
+                              ^
+/src/fmt/include/fmt/base.h:1356:42: error: type 'void *' cannot be used prior to '::' because it has no members
+                                typename Context::parse_context_type& parse_ctx,
+                                         ^
+/src/fmt/test/fuzzing/chrono-timepoint.cc:23:39: error: member reference base type 'unsigned long const' is not a structure or union
+  fmt::vprint(stdout, format_str, args.data(), args.size());
+                                  ~~~~^~~~~
+/src/fmt/test/fuzzing/chrono-timepoint.cc:23:52: error: member reference base type 'unsigned long const' is not a structure or union
+  fmt::vprint(stdout, format_str, args.data(), args.size());
+                                               ~~~~^~~~~
+6 errors generated.
+[4/15] Building CXX object test/fuzzing/CMakeFiles/named-arg-fuzzer.dir/named-arg.cc.o
+[5/15] Building CXX object test/fuzzing/CMakeFiles/one-arg-fuzzer.dir/one-arg.cc.o
+[6/15] Building CXX object test/fuzzing/CMakeFiles/two-args-fuzzer.dir/two-args.cc.o
+[7/15] Building CXX object CMakeFiles/fmt.dir/src/format.cc.o
+[8/15] Building CXX object test/fuzzing/CMakeFiles/chrono-duration-fuzzer.dir/chrono-duration.cc.o
+ninja: build stopped: subcommand failed.

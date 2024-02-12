@@ -1,0 +1,1 @@
+error: undefined reference to 'flatbuffers::Parser::Parse(uint8_t const*, size_t)'

@@ -1,0 +1,39 @@
+/workspace/out/libfuzzer-address-x86_64/ext2fs_image_read_write_fuzzer -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/ext2fs_image_read_write_fuzzer < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 3179036915
+INFO: Loaded 1 modules   (7175 inline 8-bit counters): 7175 [0x70c620, 0x70e227), 
+INFO: Loaded 1 PC tables (7175 PCs): 7175 [0x695c80,0x6b1cf0), 
+INFO:        0 files found in /workspace/corpus/ext2fs_image_read_write_fuzzer
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: A corpus is not provided, starting from an empty corpus
+#2	INITED cov: 112 ft: 113 corp: 1/1b exec/s: 0 rss: 32Mb
+#7	NEW    cov: 114 ft: 116 corp: 2/6b lim: 4096 exec/s: 0 rss: 33Mb L: 5/5 MS: 5 ShuffleBytes-ChangeByte-ChangeBit-ChangeASCIIInt-InsertRepeatedBytes-
+	NEW_FUNC[1/2]: 0x56d3b0 in std::__1::vector<char, std::__1::allocator<char> >::shrink_to_fit() /usr/local/bin/../include/c++/v1/vector:1497
+	NEW_FUNC[2/2]: 0x56d820 in std::__1::vector<char, std::__1::allocator<char> >::__construct_at_end(unsigned long) /usr/local/bin/../include/c++/v1/vector:979
+#8	NEW    cov: 124 ft: 126 corp: 3/128b lim: 4096 exec/s: 0 rss: 33Mb L: 122/122 MS: 1 InsertRepeatedBytes-
+#25	REDUCE cov: 124 ft: 126 corp: 3/103b lim: 4096 exec/s: 0 rss: 34Mb L: 97/97 MS: 2 CopyPart-EraseBytes-
+#27	NEW    cov: 124 ft: 128 corp: 4/105b lim: 4096 exec/s: 0 rss: 34Mb L: 2/97 MS: 2 ShuffleBytes-CopyPart-
+#28	NEW    cov: 124 ft: 130 corp: 5/108b lim: 4096 exec/s: 0 rss: 34Mb L: 3/97 MS: 1 EraseBytes-
+#30	REDUCE cov: 124 ft: 130 corp: 5/88b lim: 4096 exec/s: 0 rss: 34Mb L: 77/77 MS: 2 ChangeBit-EraseBytes-
+#53	REDUCE cov: 124 ft: 130 corp: 5/64b lim: 4096 exec/s: 0 rss: 34Mb L: 53/53 MS: 3 InsertByte-ShuffleBytes-EraseBytes-
+#75	NEW    cov: 124 ft: 131 corp: 6/68b lim: 4096 exec/s: 0 rss: 35Mb L: 4/53 MS: 2 ShuffleBytes-InsertByte-
+#333	REDUCE cov: 124 ft: 131 corp: 6/60b lim: 4096 exec/s: 0 rss: 39Mb L: 45/45 MS: 3 ChangeByte-InsertByte-EraseBytes-
+#339	REDUCE cov: 124 ft: 131 corp: 6/46b lim: 4096 exec/s: 0 rss: 39Mb L: 31/31 MS: 1 EraseBytes-
+#353	REDUCE cov: 124 ft: 131 corp: 6/37b lim: 4096 exec/s: 0 rss: 39Mb L: 22/22 MS: 4 ChangeBinInt-CopyPart-ChangeBit-EraseBytes-
+#409	REDUCE cov: 124 ft: 131 corp: 6/32b lim: 4096 exec/s: 0 rss: 40Mb L: 17/17 MS: 1 EraseBytes-
+#540	REDUCE cov: 124 ft: 131 corp: 6/25b lim: 4096 exec/s: 0 rss: 42Mb L: 10/10 MS: 1 EraseBytes-
+#968	REDUCE cov: 124 ft: 131 corp: 6/23b lim: 4096 exec/s: 0 rss: 48Mb L: 8/8 MS: 3 CrossOver-ChangeBit-EraseBytes-
+#1055	REDUCE cov: 124 ft: 131 corp: 6/22b lim: 4096 exec/s: 0 rss: 48Mb L: 7/7 MS: 2 EraseBytes-CrossOver-
+#1104	REDUCE cov: 124 ft: 131 corp: 6/21b lim: 4096 exec/s: 0 rss: 48Mb L: 6/6 MS: 4 InsertByte-CopyPart-CopyPart-EraseBytes-
+#32768	pulse  cov: 124 ft: 131 corp: 6/21b lim: 4096 exec/s: 16384 rss: 49Mb
+#65536	pulse  cov: 124 ft: 131 corp: 6/21b lim: 4096 exec/s: 16384 rss: 49Mb
+#131072	pulse  cov: 124 ft: 131 corp: 6/21b lim: 4096 exec/s: 18724 rss: 49Mb
+#262144	pulse  cov: 124 ft: 131 corp: 6/21b lim: 4096 exec/s: 21845 rss: 49Mb
+#524288	pulse  cov: 124 ft: 131 corp: 6/21b lim: 4096 exec/s: 21845 rss: 49Mb
+#672289	DONE   cov: 124 ft: 131 corp: 6/21b lim: 4096 exec/s: 21686 rss: 49Mb
+Done 672289 runs in 31 second(s)
+stat::number_of_executed_units: 672289
+stat::average_exec_per_sec:     21686
+stat::new_units_added:          16
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              49

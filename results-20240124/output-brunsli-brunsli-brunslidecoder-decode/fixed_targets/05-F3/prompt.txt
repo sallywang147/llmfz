@@ -1,0 +1,37 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <brunsli/brunsli_decode.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  brunsli::BrunsliDecoder decoder;
+  size_t decoded_size;
+  char* decoded_data;
+  size_t available_in = size;
+  const uint8_t* next_in = data;
+  int status = decoder.Decode(&available_in, &next_in, &decoded_size, &decoded_data);
+  return status;
+}
+</code>
+
+The code has the following build issues:
+<error>
+c/tests/fuzz_decode_streaming.cc:9:71: error: cannot initialize a parameter of type 'uint8_t **' (aka 'unsigned char **') with an rvalue of type 'char **'
+  int status = decoder.Decode(&available_in, &next_in, &decoded_size, &decoded_data);
+                                                                      ^~~~~~~~~~~~~
+./c/include/brunsli/brunsli_decode.h:56:50: note: passing argument to parameter 'next_out' here
+                size_t* available_out, uint8_t** next_out);
+                                                 ^
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

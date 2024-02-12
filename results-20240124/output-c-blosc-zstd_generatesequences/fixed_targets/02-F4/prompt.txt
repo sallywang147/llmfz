@@ -1,0 +1,54 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <algorithm>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+#include "zstd.h"
+
+extern "C" {
+#include "zstd_errors.h"
+#include "zstd_seekable.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider fuzzed_data(data, size);
+  ZSTD_CCtx* cctx = ZSTD_createCCtx();
+  if (cctx == nullptr) {
+    return 0;
+  }
+  size_t seq_size = fuzzed_data.ConsumeIntegral<size_t>();
+  std::vector<char> seq_buffer(seq_size);  // modified
+  fuzzed_data.ConsumeBytes<char>(seq_buffer.data(), seq_size);  // modified
+  size_t max_seq_size = fuzzed_data.ConsumeIntegral<size_t>();
+  size_t const ret = ZSTD_generateSequences(cctx, nullptr, max_seq_size, seq_buffer.data(), seq_size);
+  if (ZSTD_isError(ret)) {
+    fprintf(stderr, "Error generating sequences: %s\n", ZSTD_getErrorName(ret));
+    return 0;
+  }
+  ZSTD_freeCCtx(cctx);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

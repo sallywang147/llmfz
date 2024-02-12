@@ -1,0 +1,1 @@
+error: undefined reference to 'recv_msg_userauth_pk_ok'

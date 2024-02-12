@@ -1,0 +1,78 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+#include <vector>
+
+#include "cell_boundary.h"
+#include "geo_polygon.h"
+#include "geo_types.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+
+  const uint32_t num_bboxes = stream.ConsumeIntegral<uint32_t>();
+  std::vector<BBox> bboxes(num_bboxes);
+  for (uint32_t i = 0; i < num_bboxes; ++i) {
+    bboxes[i].min_x = stream.ConsumeIntegral<double>();
+    bboxes[i].max_x = stream.ConsumeIntegral<double>();
+    bboxes[i].min_y = stream.ConsumeIntegral<double>();
+    bboxes[i].max_y = stream.ConsumeIntegral<double>();
+  }
+
+  CellBoundary boundary;
+  boundary.cell_id = stream.ConsumeIntegral<uint64_t>();
+  boundary.edge_index = stream.ConsumeIntegral<uint32_t>();
+  boundary.vertex_index = stream.ConsumeIntegral<uint32_t>();
+
+  GeoPolygon geo_polygon;
+  geo_polygon.num_vertices = stream.ConsumeIntegral<uint32_t>();
+  geo_polygon.vertices = new GeoVertex[geo_polygon.num_vertices];
+  for (uint32_t i = 0; i < geo_polygon.num_vertices; ++i) {
+    geo_polygon.vertices[i].x = stream.ConsumeIntegral<double>();
+    geo_polygon.vertices[i].y = stream.ConsumeIntegral<double>();
+  }
+
+  BBox boundary_bbox;
+  boundary_bbox.min_x = stream.ConsumeIntegral<double>();
+  boundary_bbox.max_x = stream.ConsumeIntegral<double>();
+  boundary_bbox.min_y = stream.ConsumeIntegral<double>();
+  boundary_bbox.max_y = stream.ConsumeIntegral<double>();
+
+  cellBoundaryInsidePolygon(&geo_polygon, bboxes.data(), &boundary, &boundary_bbox);
+
+  delete[] geo_polygon.vertices;
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:16:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+/src/h3//src/apps/fuzzers/fuzzerResolutions.cpp:9:10: fatal error: 'cell_boundary.h' file not found
+#include "cell_boundary.h"
+         ^~~~~~~~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,15 @@
+/workspace/out/libfuzzer-address-x86_64/fuzz_tpm_server -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/fuzz_tpm_server < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 3508160089
+INFO: Loaded 1 modules   (7100 inline 8-bit counters): 7100 [0x720990, 0x72254c), 
+INFO: Loaded 1 PC tables (7100 PCs): 7100 [0x6ab878,0x6c7438), 
+INFO:        0 files found in /workspace/corpus/fuzz_tpm_server
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: A corpus is not provided, starting from an empty corpus
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+==13==ERROR: AddressSanitizer: SEGV on unknown address (pc 0x7f4289519dbe bp 0x966d9921eece6d76 sp 0x966d9921eece6d76 T0)
+==13==The signal is caused by a READ memory access.
+==13==Hint: this fault was caused by a dereference of a high value address (see register values below).  Disassemble the provided pc to learn which register was used.
+SCARINESS: 20 (wild-addr-read)
+bash: line 1:    13 Segmentation fault      /workspace/out/libfuzzer-address-x86_64/fuzz_tpm_server -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/fuzz_tpm_server < /dev/null

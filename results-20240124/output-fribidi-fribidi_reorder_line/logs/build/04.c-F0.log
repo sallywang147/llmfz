@@ -1,0 +1,93 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ build=/work/build
++ rm -rf /work/build
++ mkdir -p /work/build
+++ echo -fsanitize=fuzzer
++ meson --default-library=static --wrap-mode=nodownload -Ddocs=false -Dfuzzer_ldflags=-fsanitize=fuzzer /work/build
+The Meson build system
+Version: 0.54.0
+Source dir: /src/fribidi
+Build dir: /work/build
+Build type: native build
+Project name: fribidi
+Project version: 1.0.13
+Using 'CC' from environment with value: '/usr/local/bin/clang-jcc'
+Using 'CFLAGS' from environment with value: '-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link'
+Using 'CC' from environment with value: '/usr/local/bin/clang-jcc'
+Using 'CFLAGS' from environment with value: '-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link'
+C compiler for the host machine: /usr/local/bin/clang-jcc (clang 15.0.0 "clang version 15.0.0 (https://github.com/llvm/llvm-project.git bf7f8d6fa6f460bf0a16ffec319cd71592216bf4)")
+C linker for the host machine: /usr/local/bin/clang-jcc ld.bfd 2.34
+Host machine cpu family: x86_64
+Host machine cpu: x86_64
+Checking for function "memmove" : YES 
+Checking for function "memset" : YES 
+Checking for function "strdup" : YES 
+Has header "stdlib.h" : YES 
+Has header "string.h" : YES 
+Has header "memory.h" : YES 
+Has header "strings.h" : YES 
+Has header "sys/times.h" : YES 
+Has header "strings.h" : YES (cached)
+Configuring config.h using configuration
+Has header "stdlib.h" : YES (cached)
+Has header "string.h" : YES (cached)
+Has header "strings.h" : YES (cached)
+Checking for size of "int" : 4
+Configuring fribidi-config.h using configuration
+Program test-runner.py found: YES (/src/fribidi/test/test-runner.py)
+Program python3 found: YES (/usr/local/bin/python3.8)
+Build targets in project: 22
+
+Found ninja-1.11.1.git.kitware.jobserver-1 at /usr/local/bin/ninja
+++ nproc
++ ninja -v -j32 -C /work/build bin/fribidi-fuzzer
+ninja: Entering directory `/work/build'
+[1/48] /usr/local/bin/clang-jcc -Igen.tab/1a55e88@@gen-unicode-version@exe -Igen.tab -I../../src/fribidi/gen.tab -I. -I../../src/fribidi -Ilib -I../../src/fribidi/lib -Xclang -fcolor-diagnostics -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -g -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -UHAVE_CONFIG_H -DHAVE_STRINGIZE -DDONT_HAVE_FRIBIDI_CONFIG_H -DHAVE_STDLIB_H -DHAVE_STRING_H -DHAVE_STRINGS_H -DSTDC_HEADERS=1 -MD -MQ 'gen.tab/1a55e88@@gen-unicode-version@exe/gen-unicode-version.c.o' -MF 'gen.tab/1a55e88@@gen-unicode-version@exe/gen-unicode-version.c.o.d' -o 'gen.tab/1a55e88@@gen-unicode-version@exe/gen-unicode-version.c.o' -c ../../src/fribidi/gen.tab/gen-unicode-version.c
+[2/48] /usr/local/bin/clang-jcc  -o gen.tab/gen-unicode-version 'gen.tab/1a55e88@@gen-unicode-version@exe/gen-unicode-version.c.o' -Wl,--as-needed -Wl,--no-undefined -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+[3/48] /usr/local/bin/meson --internal exe --capture gen.tab/fribidi-unicode-version.h -- /work/build/gen.tab/gen-unicode-version ../../src/fribidi/gen.tab/unidata/ReadMe.txt ../../src/fribidi/gen.tab/unidata/BidiMirroring.txt gen-unicode-version
+[4/48] /usr/local/bin/clang-jcc -Igen.tab/1a55e88@@gen-mirroring-tab@exe -Igen.tab -I../../src/fribidi/gen.tab -I. -I../../src/fribidi -Ilib -I../../src/fribidi/lib -Xclang -fcolor-diagnostics -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -g -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -UHAVE_CONFIG_H -DHAVE_STRINGIZE -DDONT_HAVE_FRIBIDI_CONFIG_H -DHAVE_STDLIB_H -DHAVE_STRING_H -DHAVE_STRINGS_H -DSTDC_HEADERS=1 -MD -MQ 'gen.tab/1a55e88@@gen-mirroring-tab@exe/gen-mirroring-tab.c.o' -MF 'gen.tab/1a55e88@@gen-mirroring-tab@exe/gen-mirroring-tab.c.o.d' -o 'gen.tab/1a55e88@@gen-mirroring-tab@exe/gen-mirroring-tab.c.o' -c ../../src/fribidi/gen.tab/gen-mirroring-tab.c
+[5/48] /usr/local/bin/clang-jcc -Igen.tab/1a55e88@@gen-brackets-type-tab@exe -Igen.tab -I../../src/fribidi/gen.tab -I. -I../../src/fribidi -Ilib -I../../src/fribidi/lib -Xclang -fcolor-diagnostics -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -g -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -UHAVE_CONFIG_H -DHAVE_STRINGIZE -DDONT_HAVE_FRIBIDI_CONFIG_H -DHAVE_STDLIB_H -DHAVE_STRING_H -DHAVE_STRINGS_H -DSTDC_HEADERS=1 -MD -MQ 'gen.tab/1a55e88@@gen-brackets-type-tab@exe/gen-brackets-type-tab.c.o' -MF 'gen.tab/1a55e88@@gen-brackets-type-tab@exe/gen-brackets-type-tab.c.o.d' -o 'gen.tab/1a55e88@@gen-brackets-type-tab@exe/gen-brackets-type-tab.c.o' -c ../../src/fribidi/gen.tab/gen-brackets-type-tab.c
+[6/48] /usr/local/bin/clang-jcc -Igen.tab/1a55e88@@gen-arabic-shaping-tab@exe -Igen.tab -I../../src/fribidi/gen.tab -I. -I../../src/fribidi -Ilib -I../../src/fribidi/lib -Xclang -fcolor-diagnostics -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -g -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -UHAVE_CONFIG_H -DHAVE_STRINGIZE -DDONT_HAVE_FRIBIDI_CONFIG_H -DHAVE_STDLIB_H -DHAVE_STRING_H -DHAVE_STRINGS_H -DSTDC_HEADERS=1 -MD -MQ 'gen.tab/1a55e88@@gen-arabic-shaping-tab@exe/gen-arabic-shaping-tab.c.o' -MF 'gen.tab/1a55e88@@gen-arabic-shaping-tab@exe/gen-arabic-shaping-tab.c.o.d' -o 'gen.tab/1a55e88@@gen-arabic-shaping-tab@exe/gen-arabic-shaping-tab.c.o' -c ../../src/fribidi/gen.tab/gen-arabic-shaping-tab.c
+[7/48] /usr/local/bin/clang-jcc -Igen.tab/1a55e88@@gen-brackets-tab@exe -Igen.tab -I../../src/fribidi/gen.tab -I. -I../../src/fribidi -Ilib -I../../src/fribidi/lib -Xclang -fcolor-diagnostics -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -g -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -UHAVE_CONFIG_H -DHAVE_STRINGIZE -DDONT_HAVE_FRIBIDI_CONFIG_H -DHAVE_STDLIB_H -DHAVE_STRING_H -DHAVE_STRINGS_H -DSTDC_HEADERS=1 -MD -MQ 'gen.tab/1a55e88@@gen-brackets-tab@exe/gen-brackets-tab.c.o' -MF 'gen.tab/1a55e88@@gen-brackets-tab@exe/gen-brackets-tab.c.o.d' -o 'gen.tab/1a55e88@@gen-brackets-tab@exe/gen-brackets-tab.c.o' -c ../../src/fribidi/gen.tab/gen-brackets-tab.c
+[8/48] /usr/local/bin/clang-jcc -Igen.tab/1a55e88@@gen-joining-type-tab@exe -Igen.tab -I../../src/fribidi/gen.tab -I. -I../../src/fribidi -Ilib -I../../src/fribidi/lib -Xclang -fcolor-diagnostics -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -g -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -UHAVE_CONFIG_H -DHAVE_STRINGIZE -DDONT_HAVE_FRIBIDI_CONFIG_H -DHAVE_STDLIB_H -DHAVE_STRING_H -DHAVE_STRINGS_H -DSTDC_HEADERS=1 -MD -MQ 'gen.tab/1a55e88@@gen-joining-type-tab@exe/gen-joining-type-tab.c.o' -MF 'gen.tab/1a55e88@@gen-joining-type-tab@exe/gen-joining-type-tab.c.o.d' -o 'gen.tab/1a55e88@@gen-joining-type-tab@exe/gen-joining-type-tab.c.o' -c ../../src/fribidi/gen.tab/gen-joining-type-tab.c
+[9/48] /usr/local/bin/clang-jcc -Ibin/51a1f05@@fribidi-fuzzer@exe -Ibin -I../../src/fribidi/bin -I. -I../../src/fribidi -Ilib -I../../src/fribidi/lib -Igen.tab -I../../src/fribidi/gen.tab -Xclang -fcolor-diagnostics -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -g -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -DHAVE_CONFIG_H -MD -MQ 'bin/51a1f05@@fribidi-fuzzer@exe/fribidi-fuzzer.c.o' -MF 'bin/51a1f05@@fribidi-fuzzer@exe/fribidi-fuzzer.c.o.d' -o 'bin/51a1f05@@fribidi-fuzzer@exe/fribidi-fuzzer.c.o' -c ../../src/fribidi/bin/fribidi-fuzzer.c
+FAILED: bin/51a1f05@@fribidi-fuzzer@exe/fribidi-fuzzer.c.o 
+/usr/local/bin/clang-jcc -Ibin/51a1f05@@fribidi-fuzzer@exe -Ibin -I../../src/fribidi/bin -I. -I../../src/fribidi -Ilib -I../../src/fribidi/lib -Igen.tab -I../../src/fribidi/gen.tab -Xclang -fcolor-diagnostics -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -g -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -DHAVE_CONFIG_H -MD -MQ 'bin/51a1f05@@fribidi-fuzzer@exe/fribidi-fuzzer.c.o' -MF 'bin/51a1f05@@fribidi-fuzzer@exe/fribidi-fuzzer.c.o.d' -o 'bin/51a1f05@@fribidi-fuzzer@exe/fribidi-fuzzer.c.o' -c ../../src/fribidi/bin/fribidi-fuzzer.c
+../../src/fribidi/bin/fribidi-fuzzer.c:23:8: error: conflicting types for 'fribidi_reorder_line'
+  char fribidi_reorder_line(int flags, int * bidi_types, int len, int False, int base_dir, char * embedding_levels, int * visual_str, int * map);
+       ^
+../../src/fribidi/lib/fribidi-bidi.h:121:28: note: previous declaration is here
+FRIBIDI_ENTRY FriBidiLevel fribidi_reorder_line (
+                           ^
+1 error generated.
+
+Fix failure
+../../src/fribidi/bin/fribidi-fuzzer.cpp:14:20: error: cannot initialize a variable of type 'FriBidiCharType *' (aka 'unsigned int *') with an rvalue of type 'void *'
+  FriBidiCharType *types = calloc (str_len, sizeof (FriBidiCharType));
+                   ^       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../src/fribidi/bin/fribidi-fuzzer.cpp:19:17: error: cannot initialize a variable of type 'FriBidiLevel *' (aka 'signed char *') with an rvalue of type 'void *'
+  FriBidiLevel *levels = calloc (str_len, sizeof (FriBidiLevel));
+                ^        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../src/fribidi/bin/fribidi-fuzzer.cpp:21:8: error: cannot initialize a variable of type 'int *' with an rvalue of type 'void *'
+  int *visual_str = calloc (str_len, sizeof (int));
+       ^            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../src/fribidi/bin/fribidi-fuzzer.cpp:22:8: error: cannot initialize a variable of type 'int *' with an rvalue of type 'void *'
+  int *map = calloc (str_len, sizeof (int));
+       ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+4 errors generated.
+[10/48] /usr/local/bin/clang-jcc -Igen.tab/1a55e88@@gen-bidi-type-tab@exe -Igen.tab -I../../src/fribidi/gen.tab -I. -I../../src/fribidi -Ilib -I../../src/fribidi/lib -Xclang -fcolor-diagnostics -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -g -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -UHAVE_CONFIG_H -DHAVE_STRINGIZE -DDONT_HAVE_FRIBIDI_CONFIG_H -DHAVE_STDLIB_H -DHAVE_STRING_H -DHAVE_STRINGS_H -DSTDC_HEADERS=1 -MD -MQ 'gen.tab/1a55e88@@gen-bidi-type-tab@exe/gen-bidi-type-tab.c.o' -MF 'gen.tab/1a55e88@@gen-bidi-type-tab@exe/gen-bidi-type-tab.c.o.d' -o 'gen.tab/1a55e88@@gen-bidi-type-tab@exe/gen-bidi-type-tab.c.o' -c ../../src/fribidi/gen.tab/gen-bidi-type-tab.c
+[11/48] /usr/local/bin/clang-jcc -Igen.tab/1a55e88@@gen-arabic-shaping-tab@exe -Igen.tab -I../../src/fribidi/gen.tab -I. -I../../src/fribidi -Ilib -I../../src/fribidi/lib -Xclang -fcolor-diagnostics -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -g -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -UHAVE_CONFIG_H -DHAVE_STRINGIZE -DDONT_HAVE_FRIBIDI_CONFIG_H -DHAVE_STDLIB_H -DHAVE_STRING_H -DHAVE_STRINGS_H -DSTDC_HEADERS=1 -MD -MQ 'gen.tab/1a55e88@@gen-arabic-shaping-tab@exe/packtab.c.o' -MF 'gen.tab/1a55e88@@gen-arabic-shaping-tab@exe/packtab.c.o.d' -o 'gen.tab/1a55e88@@gen-arabic-shaping-tab@exe/packtab.c.o' -c ../../src/fribidi/gen.tab/packtab.c
+[12/48] /usr/local/bin/clang-jcc -Igen.tab/1a55e88@@gen-brackets-type-tab@exe -Igen.tab -I../../src/fribidi/gen.tab -I. -I../../src/fribidi -Ilib -I../../src/fribidi/lib -Xclang -fcolor-diagnostics -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -g -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -UHAVE_CONFIG_H -DHAVE_STRINGIZE -DDONT_HAVE_FRIBIDI_CONFIG_H -DHAVE_STDLIB_H -DHAVE_STRING_H -DHAVE_STRINGS_H -DSTDC_HEADERS=1 -MD -MQ 'gen.tab/1a55e88@@gen-brackets-type-tab@exe/packtab.c.o' -MF 'gen.tab/1a55e88@@gen-brackets-type-tab@exe/packtab.c.o.d' -o 'gen.tab/1a55e88@@gen-brackets-type-tab@exe/packtab.c.o' -c ../../src/fribidi/gen.tab/packtab.c
+[13/48] /usr/local/bin/clang-jcc -Igen.tab/1a55e88@@gen-joining-type-tab@exe -Igen.tab -I../../src/fribidi/gen.tab -I. -I../../src/fribidi -Ilib -I../../src/fribidi/lib -Xclang -fcolor-diagnostics -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -g -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -UHAVE_CONFIG_H -DHAVE_STRINGIZE -DDONT_HAVE_FRIBIDI_CONFIG_H -DHAVE_STDLIB_H -DHAVE_STRING_H -DHAVE_STRINGS_H -DSTDC_HEADERS=1 -MD -MQ 'gen.tab/1a55e88@@gen-joining-type-tab@exe/packtab.c.o' -MF 'gen.tab/1a55e88@@gen-joining-type-tab@exe/packtab.c.o.d' -o 'gen.tab/1a55e88@@gen-joining-type-tab@exe/packtab.c.o' -c ../../src/fribidi/gen.tab/packtab.c
+[14/48] /usr/local/bin/clang-jcc -Igen.tab/1a55e88@@gen-bidi-type-tab@exe -Igen.tab -I../../src/fribidi/gen.tab -I. -I../../src/fribidi -Ilib -I../../src/fribidi/lib -Xclang -fcolor-diagnostics -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -g -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -UHAVE_CONFIG_H -DHAVE_STRINGIZE -DDONT_HAVE_FRIBIDI_CONFIG_H -DHAVE_STDLIB_H -DHAVE_STRING_H -DHAVE_STRINGS_H -DSTDC_HEADERS=1 -MD -MQ 'gen.tab/1a55e88@@gen-bidi-type-tab@exe/packtab.c.o' -MF 'gen.tab/1a55e88@@gen-bidi-type-tab@exe/packtab.c.o.d' -o 'gen.tab/1a55e88@@gen-bidi-type-tab@exe/packtab.c.o' -c ../../src/fribidi/gen.tab/packtab.c
+[15/48] /usr/local/bin/clang-jcc -Igen.tab/1a55e88@@gen-brackets-tab@exe -Igen.tab -I../../src/fribidi/gen.tab -I. -I../../src/fribidi -Ilib -I../../src/fribidi/lib -Xclang -fcolor-diagnostics -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -g -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -UHAVE_CONFIG_H -DHAVE_STRINGIZE -DDONT_HAVE_FRIBIDI_CONFIG_H -DHAVE_STDLIB_H -DHAVE_STRING_H -DHAVE_STRINGS_H -DSTDC_HEADERS=1 -MD -MQ 'gen.tab/1a55e88@@gen-brackets-tab@exe/packtab.c.o' -MF 'gen.tab/1a55e88@@gen-brackets-tab@exe/packtab.c.o.d' -o 'gen.tab/1a55e88@@gen-brackets-tab@exe/packtab.c.o' -c ../../src/fribidi/gen.tab/packtab.c
+[16/48] /usr/local/bin/clang-jcc -Igen.tab/1a55e88@@gen-mirroring-tab@exe -Igen.tab -I../../src/fribidi/gen.tab -I. -I../../src/fribidi -Ilib -I../../src/fribidi/lib -Xclang -fcolor-diagnostics -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -g -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -UHAVE_CONFIG_H -DHAVE_STRINGIZE -DDONT_HAVE_FRIBIDI_CONFIG_H -DHAVE_STDLIB_H -DHAVE_STRING_H -DHAVE_STRINGS_H -DSTDC_HEADERS=1 -MD -MQ 'gen.tab/1a55e88@@gen-mirroring-tab@exe/packtab.c.o' -MF 'gen.tab/1a55e88@@gen-mirroring-tab@exe/packtab.c.o.d' -o 'gen.tab/1a55e88@@gen-mirroring-tab@exe/packtab.c.o' -c ../../src/fribidi/gen.tab/packtab.c
+ninja: build stopped: subcommand failed.

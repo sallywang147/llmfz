@@ -1,0 +1,67 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+#include <gssapi/gssapi.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const int minor_status = stream.ConsumeIntegral<int>();
+  gss_cred_id_t cred_handle =
+      reinterpret_cast<gss_cred_id_t>(stream.ConsumeIntegral<uint64_t>());
+  const gss_OID_desc_struct mech_type = {
+      stream.ConsumeIntegral<size_t>(),
+      const_cast<char*>(stream.ConsumeRemainingBytesAsString().c_str())};
+  gss_name_t name = nullptr;
+  int initiator_lifetime = stream.ConsumeIntegral<int>();
+  int acceptor_lifetime = stream.ConsumeIntegral<int>();
+  int cred_usage = stream.ConsumeIntegral<int>();
+
+  gss_inquire_cred_by_mech(&minor_status, cred_handle, &mech_type, &name,
+                           &initiator_lifetime, &acceptor_lifetime,
+                           &cred_usage);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:16:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+fuzz-accept-sec-context.cpp:16:7: error: non-constant-expression cannot be narrowed from type 'unsigned long' to 'OM_uint32' (aka 'unsigned int') in initializer list [-Wc++11-narrowing]
+      stream.ConsumeIntegral<size_t>(),
+      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fuzz-accept-sec-context.cpp:16:7: note: insert an explicit cast to silence this issue
+      stream.ConsumeIntegral<size_t>(),
+      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      static_cast<OM_uint32>(         )
+fuzz-accept-sec-context.cpp:23:3: error: no matching function for call to 'gss_inquire_cred_by_mech'
+  gss_inquire_cred_by_mech(&minor_status, cred_handle, &mech_type, &name,
+  ^~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/gssapi/gssapi.h:649:1: note: candidate function not viable: no known conversion from 'const int *' to 'OM_uint32 *' (aka 'unsigned int *') for 1st argument
+gss_inquire_cred_by_mech(
+^
+2 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

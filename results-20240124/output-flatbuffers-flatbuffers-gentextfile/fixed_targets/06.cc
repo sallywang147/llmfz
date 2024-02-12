@@ -1,0 +1,1 @@
+error: undefined reference to `flatbuffers::GenTextFile(flatbuffers::Parser*, std::string*, std::string*)'

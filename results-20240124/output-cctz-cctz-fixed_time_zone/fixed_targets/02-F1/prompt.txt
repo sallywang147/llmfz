@@ -1,0 +1,46 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <fuzzer/FuzzedDataProvider.h>
+
+#include <iostream>
+#include <string>
+
+#include "cctz/civil_time.h"
+#include "cctz/time_zone.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider fuzzed_data(data, size);
+
+  std::chrono::duration<long long, std::ratio<1, 1000000>> offset;
+  offset.count() = fuzzed_data.ConsumeIntegral<long long>();
+  cctz::time_zone::Impl *tz = cctz::fixed_time_zone(&offset);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+./fuzz_cctz.cc:13:18: error: expression is not assignable
+  offset.count() = fuzzed_data.ConsumeIntegral<long long>();
+  ~~~~~~~~~~~~~~ ^
+./fuzz_cctz.cc:14:53: error: reference to type 'const cctz::seconds' (aka 'const duration<long>') could not bind to an rvalue of type 'std::chrono::duration<long long, std::ratio<1, 1000000>> *'
+  cctz::time_zone::Impl *tz = cctz::fixed_time_zone(&offset);
+                                                    ^~~~~~~
+../include/cctz/time_zone.h:235:42: note: passing argument to parameter 'offset' here
+time_zone fixed_time_zone(const seconds& offset);
+                                         ^
+2 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

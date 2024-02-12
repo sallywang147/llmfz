@@ -1,0 +1,28 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ cd extras/fuzzing
++ make
+/usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -I../../src -DARDUINOJSON_DEBUG=1 -std=c++11 json_fuzzer.cpp -o/workspace/out/libfuzzer-address-x86_64/json_fuzzer -fsanitize=fuzzer
+zip -j /workspace/out/libfuzzer-address-x86_64/json_fuzzer_seed_corpus.zip json_seed_corpus/EmptyObject.json json_seed_corpus/Strings.json json_seed_corpus/Comments.json json_seed_corpus/OpenWeatherMap.json json_seed_corpus/EmptyArray.json json_seed_corpus/ExcessiveNesting.json json_seed_corpus/IntegerOverflow.json json_seed_corpus/WeatherUnderground.json json_seed_corpus/Numbers.json
+  adding: EmptyObject.json (stored 0%)
+  adding: Strings.json (deflated 40%)
+  adding: Comments.json (deflated 65%)
+  adding: OpenWeatherMap.json (deflated 57%)
+  adding: EmptyArray.json (stored 0%)
+  adding: ExcessiveNesting.json (deflated 64%)
+  adding: IntegerOverflow.json (deflated 25%)
+  adding: WeatherUnderground.json (deflated 64%)
+  adding: Numbers.json (deflated 61%)
+/usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -I../../src -DARDUINOJSON_DEBUG=1 -std=c++11 msgpack_fuzzer.cpp -o/workspace/out/libfuzzer-address-x86_64/msgpack_fuzzer -fsanitize=fuzzer
+msgpack_fuzzer.cpp:4:10: fatal error: 'ArduinoJson/Variant/Variant.h' file not found
+#include <ArduinoJson/Variant/Variant.h>
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.
+make: *** [Makefile:14: /workspace/out/libfuzzer-address-x86_64/msgpack_fuzzer] Error 1

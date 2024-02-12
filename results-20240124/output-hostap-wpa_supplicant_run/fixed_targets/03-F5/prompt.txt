@@ -1,0 +1,53 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "includes.h"
+#include "common.h"
+#include "wpa_supplicant_i.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "wpa_fuzzer_i.h"
+
+#ifdef __cplusplus
+}
+#endif
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  struct wpa_global *global = wpa_supplicant_init(0);
+  if (global == NULL) {
+    return 0;
+  }
+  wpa_fuzzer_set_debug_level(global, 1);
+  wpa_supplicant_run(global);
+  wpa_supplicant_deinit(global);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+../fuzzer-common.c:9:10: fatal error: 'wpa_fuzzer_i.h' file not found
+#include "wpa_fuzzer_i.h"
+         ^~~~~~~~~~~~~~~~
+1 error generated.
+
+Fix failure
+../fuzzer-common.cpp:9:10: fatal error: 'wpa_fuzzer_i.h' file not found
+#include "wpa_fuzzer_i.h"
+         ^~~~~~~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

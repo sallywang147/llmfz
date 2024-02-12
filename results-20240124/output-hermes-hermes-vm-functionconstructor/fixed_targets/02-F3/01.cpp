@@ -1,0 +1,1 @@
+error: undefined reference to 'hermes::vm::functionConstructor'

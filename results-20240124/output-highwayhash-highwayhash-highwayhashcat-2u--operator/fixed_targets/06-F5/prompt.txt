@@ -1,0 +1,58 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "highwayhash/highwayhash_target.h"
+#include "highwayhash/highwayhash_types.h"
+#include "highwayhash/string_view.h"
+
+using highwayhash::HHKey;
+using highwayhash::HHResult64;
+using highwayhash::HighwayHash;
+using highwayhash::HighwayHashCat;
+using highwayhash::StringView;
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  if (size < sizeof(uint64_t) * 4) {
+    return 0;
+  }
+
+  // Generate the key.
+  const uint64_t *u64s = reinterpret_cast<const uint64_t*>(data);
+  HH_ALIGNAS(32) const HHKey key = {u64s[0], u64s[1], u64s[2], u64s[3]};
+  data += sizeof(uint64_t) * 4;
+  size -= sizeof(uint64_t) * 4;
+
+  // Generate the fragments.
+  std::vector<StringView> fragments;
+  while (size > 0) {
+    const size_t fragment_size = std::min(size, 1024 * 1024);
+    fragments.emplace_back(reinterpret_cast<const char*>(data), fragment_size);
+    data += fragment_size;
+    size -= fragment_size;
+  }
+
+  // Compute the hash.
+  HHResult64 result;
+  HighwayHashCat<2u>()(nullptr, key, fragments.data(), fragments.size(), false, &result);
+
+  // Call the function that was not called by the fuzz target.
+  HighwayHashCat<2u>()(nullptr, key, fragments.data(), fragments.size(), false, &result);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+The target function `void highwayhash::HighwayHashCat<2u>::operator(struct std::integral_constant * this, bool  key, struct highwayhash::StringView * fragments, size_t num_fragments, bool  hash) const` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `void highwayhash::HighwayHashCat<2u>::operator(struct std::integral_constant * this, bool  key, struct highwayhash::StringView * fragments, size_t num_fragments, bool  hash) const` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

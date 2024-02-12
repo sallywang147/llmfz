@@ -1,0 +1,63 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <algorithm>
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+#include <string>
+
+#include "llvm/MC/MCInst.h"
+#include "llvm/MC/MCStreamer.h"
+#include "llvm/MC/MCSubtargetInfo.h"
+#include "llvm/Support/raw_ostream.h"
+#include "llvm/Support/raw_ostream_support.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  llvm::SmallVector<uint8_t, 100> mc_inst_data;
+  mc_inst_data.resize(size);
+  memcpy(mc_inst_data.data(), data, size);
+  llvm::MCInst mc_inst;
+  mc_inst.setOpcode(stream.ConsumeIntegral<uint16_t>());
+  mc_inst.setDesc(llvm::MCInstDesc(stream.ConsumeIntegral<uint16_t>(),
+                   stream.ConsumeIntegral<uint16_t>(),
+                   stream.ConsumeIntegral<uint16_t>(),
+                   stream.ConsumeIntegral<uint16_t>()));
+  mc_inst.addOperand(llvm::MCOperand::createReg(stream.ConsumeIntegral<uint16_t>()));
+  mc_inst.addOperand(llvm::MCOperand::createImm(stream.ConsumeIntegral<uint64_t>()));
+  mc_inst.addOperand(llvm::MCOperand::createReg(stream.ConsumeIntegral<uint16_t>()));
+  mc_inst.addOperand(llvm::MCOperand::createImm(stream.ConsumeIntegral<uint64_t>()));
+
+  llvm::raw_string_ostream streamer(nullptr);
+  char info[100];
+  memset(info, 0, sizeof(info));
+  Alpha_LLVM_printInstruction(&mc_inst, &streamer, info);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/capstonev5/suite/fuzz/fuzz_disasm.c:1:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:12:10: fatal error: 'llvm/Support/raw_ostream_support.h' file not found
+#include "llvm/Support/raw_ostream_support.h"
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

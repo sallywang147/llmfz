@@ -1,0 +1,72 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <FLAC++/metadata.h>
+#include <FLAC/stream_decoder.h>
+
+extern "C" {
+#include "FLAC/stream_decoder.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FLAC__StreamDecoder *decoder = FLAC__stream_decoder_new();
+  FLAC__Metadata_Chain *chain = FLAC__metadata_chain_new();
+  FLAC__IOCallbacks callbacks = {0};
+  FLAC__stream_decoder_set_read_callback(decoder, &callbacks.read_callback);
+  FLAC__stream_decoder_set_seek_callback(decoder, &callbacks.seek_callback);
+  FLAC__stream_decoder_set_tell_callback(decoder, &callbacks.tell_callback);
+  FLAC__stream_decoder_set_eof_callback(decoder, &callbacks.eof_callback);
+  FLAC__stream_decoder_set_write_callback(decoder, &callbacks.write_callback);
+  FLAC__stream_decoder_set_metadata_callback(decoder, &callbacks.metadata_callback);
+  FLAC__stream_decoder_set_error_callback(decoder, &callbacks.error_callback);
+
+  FLAC__metadata_chain_read_with_callbacks(chain, (char *)data, &callbacks);
+
+  FLAC__metadata_chain_delete(chain);
+  FLAC__stream_decoder_delete(decoder);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+seek.cc:12:62: error: no member named 'read_callback' in 'FLAC__IOCallbacks'
+  FLAC__stream_decoder_set_read_callback(decoder, &callbacks.read_callback);
+                                                   ~~~~~~~~~ ^
+seek.cc:13:62: error: no member named 'seek_callback' in 'FLAC__IOCallbacks'
+  FLAC__stream_decoder_set_seek_callback(decoder, &callbacks.seek_callback);
+                                                   ~~~~~~~~~ ^
+seek.cc:14:62: error: no member named 'tell_callback' in 'FLAC__IOCallbacks'
+  FLAC__stream_decoder_set_tell_callback(decoder, &callbacks.tell_callback);
+                                                   ~~~~~~~~~ ^
+seek.cc:15:61: error: no member named 'eof_callback' in 'FLAC__IOCallbacks'
+  FLAC__stream_decoder_set_eof_callback(decoder, &callbacks.eof_callback);
+                                                  ~~~~~~~~~ ^
+seek.cc:16:63: error: no member named 'write_callback' in 'FLAC__IOCallbacks'
+  FLAC__stream_decoder_set_write_callback(decoder, &callbacks.write_callback);
+                                                    ~~~~~~~~~ ^
+seek.cc:17:66: error: no member named 'metadata_callback' in 'FLAC__IOCallbacks'
+  FLAC__stream_decoder_set_metadata_callback(decoder, &callbacks.metadata_callback);
+                                                       ~~~~~~~~~ ^
+seek.cc:18:63: error: no member named 'error_callback' in 'FLAC__IOCallbacks'
+  FLAC__stream_decoder_set_error_callback(decoder, &callbacks.error_callback);
+                                                    ~~~~~~~~~ ^
+seek.cc:20:3: error: no matching function for call to 'FLAC__metadata_chain_read_with_callbacks'
+  FLAC__metadata_chain_read_with_callbacks(chain, (char *)data, &callbacks);
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../include/FLAC/metadata.h:892:21: note: candidate function not viable: no known conversion from 'FLAC__IOCallbacks *' to 'FLAC__IOCallbacks' for 3rd argument; remove &
+FLAC_API FLAC__bool FLAC__metadata_chain_read_with_callbacks(FLAC__Metadata_Chain *chain, FLAC__IOHandle handle, FLAC__IOCallbacks callbacks);
+                    ^
+8 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

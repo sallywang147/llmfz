@@ -1,0 +1,21 @@
+Using seed corpus: decode_fuzzer_seed_corpus.zip
+/workspace/out/libfuzzer-address-x86_64/decode_fuzzer -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/decode_fuzzer < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 1780937300
+INFO: Loaded 1 modules   (1248 inline 8-bit counters): 1248 [0x63fd20, 0x640200), 
+INFO: Loaded 1 PC tables (1248 PCs): 1248 [0x640200,0x645000), 
+INFO:       58 files found in /workspace/corpus/decode_fuzzer
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 15392 bytes
+INFO: seed corpus: files: 58 min: 1b max: 15392b total: 27809b rss: 35Mb
+#59	INITED cov: 27 ft: 28 corp: 1/1b exec/s: 0 rss: 38Mb
+#524288	pulse  cov: 27 ft: 28 corp: 1/1b lim: 15392 exec/s: 174762 rss: 50Mb
+#1048576	pulse  cov: 27 ft: 28 corp: 1/1b lim: 15392 exec/s: 174762 rss: 50Mb
+#2097152	pulse  cov: 27 ft: 28 corp: 1/1b lim: 15392 exec/s: 174762 rss: 50Mb
+#4194304	pulse  cov: 27 ft: 28 corp: 1/1b lim: 15392 exec/s: 174762 rss: 50Mb
+#5328294	DONE   cov: 27 ft: 28 corp: 1/1b lim: 15392 exec/s: 171880 rss: 50Mb
+Done 5328294 runs in 31 second(s)
+stat::number_of_executed_units: 5328294
+stat::average_exec_per_sec:     171880
+stat::new_units_added:          0
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              50

@@ -1,0 +1,153 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <string.h>
+
+extern "C" {
+#include <krb5.h>
+#include <gssapi.h>
+#include "gss_ntlmssp.h"
+}
+
+extern int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size)
+{
+    OM_uint32 maj_stat, min_stat;
+
+    struct gss_ctx_id_struct *ctx = GSS_C_NO_CONTEXT;
+    struct gss_cred_id_struct *cred = GSS_C_NO_CREDENTIAL;
+    struct ntlm_buffer target_info = NTLM_BUFFER_INIT;
+    struct gss_channel_bindings_struct *input_chan_bindings = GSS_C_NO_CHANNEL_BINDINGS;
+
+    if (Size < sizeof(unsigned short))
+        return 0;
+
+    unsigned short target_info_length = *(unsigned short *)Data;
+
+    Data += sizeof(target_info_length);
+    Size -= sizeof(target_info_length);
+
+    if (target_info_length > Size)
+        return 0;
+
+    target_info.length = target_info_length;
+    target_info.value = malloc(target_info_length);
+    memcpy(target_info.value, Data, target_info_length);
+
+    Data += target_info_length;
+    Size -= target_info_length;
+
+    maj_stat = gssntlm_cli_auth(
+        &min_stat,
+        &ctx,
+        &cred,
+        &target_info,
+        0, /* in_flags */
+        input_chan_bindings
+    );
+
+    gss_release_buffer(&min_stat, &target_info);
+
+    gss_delete_sec_context(&min_stat, &ctx, GSS_C_NO_BUFFER);
+
+    gss_release_cred(&min_stat, &cred);
+
+    return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+fuzz-accept-sec-context.c:3:8: error: expected identifier or '('
+extern "C" {
+       ^
+fuzz-accept-sec-context.c:9:41: error: unknown type name 'uint8_t'
+extern int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size)
+                                        ^
+fuzz-accept-sec-context.c:11:5: error: use of undeclared identifier 'OM_uint32'
+    OM_uint32 maj_stat, min_stat;
+    ^
+fuzz-accept-sec-context.c:13:37: error: use of undeclared identifier 'gss_ctx_id_t'
+    struct gss_ctx_id_struct *ctx = GSS_C_NO_CONTEXT;
+                                    ^
+/usr/include/gssapi/gssapi.h:199:28: note: expanded from macro 'GSS_C_NO_CONTEXT'
+#define GSS_C_NO_CONTEXT ((gss_ctx_id_t) 0)
+                           ^
+fuzz-accept-sec-context.c:14:39: error: use of undeclared identifier 'gss_cred_id_t'
+    struct gss_cred_id_struct *cred = GSS_C_NO_CREDENTIAL;
+                                      ^
+/usr/include/gssapi/gssapi.h:200:31: note: expanded from macro 'GSS_C_NO_CREDENTIAL'
+#define GSS_C_NO_CREDENTIAL ((gss_cred_id_t) 0)
+                              ^
+fuzz-accept-sec-context.c:15:24: error: variable has incomplete type 'struct ntlm_buffer'
+    struct ntlm_buffer target_info = NTLM_BUFFER_INIT;
+                       ^
+fuzz-accept-sec-context.c:15:12: note: forward declaration of 'struct ntlm_buffer'
+    struct ntlm_buffer target_info = NTLM_BUFFER_INIT;
+           ^
+fuzz-accept-sec-context.c:16:63: error: use of undeclared identifier 'gss_channel_bindings_t'
+    struct gss_channel_bindings_struct *input_chan_bindings = GSS_C_NO_CHANNEL_BINDINGS;
+                                                              ^
+/usr/include/gssapi/gssapi.h:201:37: note: expanded from macro 'GSS_C_NO_CHANNEL_BINDINGS'
+#define GSS_C_NO_CHANNEL_BINDINGS ((gss_channel_bindings_t) 0)
+                                    ^
+fuzz-accept-sec-context.c:36:5: error: use of undeclared identifier 'maj_stat'
+    maj_stat = gssntlm_cli_auth(
+    ^
+fuzz-accept-sec-context.c:37:10: error: use of undeclared identifier 'min_stat'
+        &min_stat,
+         ^
+fuzz-accept-sec-context.c:45:25: error: use of undeclared identifier 'min_stat'
+    gss_release_buffer(&min_stat, &target_info);
+                        ^
+fuzz-accept-sec-context.c:47:45: error: use of undeclared identifier 'gss_buffer_t'
+    gss_delete_sec_context(&min_stat, &ctx, GSS_C_NO_BUFFER);
+                                            ^
+/usr/include/gssapi/gssapi.h:196:27: note: expanded from macro 'GSS_C_NO_BUFFER'
+#define GSS_C_NO_BUFFER ((gss_buffer_t) 0)
+                          ^
+fuzz-accept-sec-context.c:47:29: error: use of undeclared identifier 'min_stat'
+    gss_delete_sec_context(&min_stat, &ctx, GSS_C_NO_BUFFER);
+                            ^
+fuzz-accept-sec-context.c:49:23: error: use of undeclared identifier 'min_stat'
+    gss_release_cred(&min_stat, &cred);
+                      ^
+fuzz-accept-sec-context.c:15:38: error: use of undeclared identifier 'NTLM_BUFFER_INIT'
+    struct ntlm_buffer target_info = NTLM_BUFFER_INIT;
+                                     ^
+14 errors generated.
+
+Fix failure
+fuzz-accept-sec-context.cpp:15:38: error: use of undeclared identifier 'NTLM_BUFFER_INIT'
+    struct ntlm_buffer target_info = NTLM_BUFFER_INIT;
+                                     ^
+fuzz-accept-sec-context.cpp:30:17: error: no member named 'value' in 'ntlm_buffer'
+    target_info.value = malloc(target_info_length);
+    ~~~~~~~~~~~ ^
+fuzz-accept-sec-context.cpp:31:24: error: no member named 'value' in 'ntlm_buffer'
+    memcpy(target_info.value, Data, target_info_length);
+           ~~~~~~~~~~~ ^
+fuzz-accept-sec-context.cpp:36:16: error: no matching function for call to 'gssntlm_cli_auth'
+    maj_stat = gssntlm_cli_auth(
+               ^~~~~~~~~~~~~~~~
+../src/gss_ntlmssp.h:228:10: note: candidate function not viable: no known conversion from 'struct gss_ctx_id_struct **' to 'struct gssntlm_ctx *' for 2nd argument
+uint32_t gssntlm_cli_auth(uint32_t *minor,
+         ^
+fuzz-accept-sec-context.cpp:45:5: error: no matching function for call to 'gss_release_buffer'
+    gss_release_buffer(&min_stat, &target_info);
+    ^~~~~~~~~~~~~~~~~~
+/usr/include/gssapi/gssapi.h:575:1: note: candidate function not viable: no known conversion from 'struct ntlm_buffer *' to 'gss_buffer_t' (aka 'gss_buffer_desc_struct *') for 2nd argument
+gss_release_buffer(
+^
+5 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

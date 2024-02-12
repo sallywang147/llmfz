@@ -1,0 +1,1 @@
+error: undefined reference to 'sign_key_free'

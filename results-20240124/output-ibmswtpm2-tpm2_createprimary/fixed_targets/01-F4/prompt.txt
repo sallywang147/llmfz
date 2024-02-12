@@ -1,0 +1,61 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <tpm2.h>
+#include <cstdio>
+#include <cstring>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  TPM2B_SENSITIVE_CREATE inSensitive = {0};
+  TPM2B_PUBLIC inPublic = {0};
+  TPM2B_DATA outsideInfo = {0};
+  TPML_PCR_SELECTION creationPCR = {0};
+  TPM2B_NAME name = {0};
+  TPM2B_PUBLIC outPublic = {0};
+  TPM2B_CREATION_DATA creationData = {0};
+  TPM2B_DIGEST creationHash = {0};
+  TPMT_TK_CREATION creationTicket = {0};
+  TPM2B_PRIVATE outPrivate = {0};
+
+  inSensitive.size = 0;
+  inPublic.size = 0;
+  outsideInfo.size = 0;
+  creationPCR.count = 0;
+  name.size = 0;
+  outPublic.size = 0;
+  creationData.size = 0;
+  creationHash.size = 0;
+  creationTicket.tag = TPM2_ST_CREATION;
+  creationTicket.hierarchy = TPM2_RH_OWNER;
+  outPrivate.size = 0;
+
+  TPM2_CreatePrimary(
+      (TPM2_CreatePrimary_In *) &inSensitive,
+      (TPM2_CreatePrimary_Out *) &outPublic,
+      &creationData,
+      &creationHash,
+      &creationTicket,
+      &outPrivate,
+      &name,
+      &creationPCR,
+      &outsideInfo);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

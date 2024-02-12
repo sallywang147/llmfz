@@ -1,0 +1,158 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ cd /src/ada-url
++ mkdir build
++ AMALGAMATE_OUTPUT_PATH=./build/singleheader
++ python3 singleheader/amalgamate.py
+SCRIPTPATH=/src/ada-url/singleheader PROJECTPATH=/src/ada-url
+timestamp is 2024-01-22 09:15:53 -0500
+Creating ./build/singleheader/ada.h
+
+
+Creating ./build/singleheader/ada.cpp
+Done with all files generation.
+Files have been written to directory: ./build/singleheader/
+Done with all files generation.
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -std=c++17 -I build/singleheader -c fuzz/parse.cc -o parse.o
+In file included from fuzz/parse.cc:8:
+build/singleheader/ada.h:133:6: error: conflicting types for 'begins_with'
+bool begins_with(std::string_view view, std::string_view prefix);
+     ^
+build/singleheader/ada.h:132:6: note: previous declaration is here
+bool begins_with(std::u32string_view view, std::u32string_view prefix);
+     ^
+build/singleheader/ada.h:136:16: error: conflicting types for 'is_ascii'
+bool constexpr is_ascii(std::string_view view);
+               ^
+build/singleheader/ada.h:135:16: note: previous declaration is here
+bool constexpr is_ascii(std::u32string_view view);
+               ^
+build/singleheader/ada.h:1057:24: error: conflicting types for 'begins_with'
+ada_really_inline bool begins_with(std::string_view view,
+                       ^
+build/singleheader/ada.h:132:6: note: previous declaration is here
+bool begins_with(std::u32string_view view, std::u32string_view prefix);
+     ^
+In file included from fuzz/parse.cc:8:
+In file included from build/singleheader/ada.h:1078:
+In file included from /usr/local/bin/../include/c++/v1/iostream:37:
+In file included from /usr/local/bin/../include/c++/v1/ios:215:
+In file included from /usr/local/bin/../include/c++/v1/__locale:19:
+In file included from /usr/local/bin/../include/c++/v1/mutex:190:
+In file included from /usr/local/bin/../include/c++/v1/__mutex_base:17:
+/usr/local/bin/../include/c++/v1/system_error:162:1: error: templates must have C++ linkage
+template <class _Tp>
+^~~~~~~~~~~~~~~~~~~~
+fuzz/parse.cc:7:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from fuzz/parse.cc:8:
+In file included from build/singleheader/ada.h:1078:
+In file included from /usr/local/bin/../include/c++/v1/iostream:37:
+In file included from /usr/local/bin/../include/c++/v1/ios:215:
+In file included from /usr/local/bin/../include/c++/v1/__locale:19:
+In file included from /usr/local/bin/../include/c++/v1/mutex:190:
+In file included from /usr/local/bin/../include/c++/v1/__mutex_base:17:
+/usr/local/bin/../include/c++/v1/system_error:167:1: error: templates must have C++ linkage
+template <class _Tp>
+^~~~~~~~~~~~~~~~~~~~
+fuzz/parse.cc:7:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from fuzz/parse.cc:8:
+In file included from build/singleheader/ada.h:1078:
+In file included from /usr/local/bin/../include/c++/v1/iostream:37:
+In file included from /usr/local/bin/../include/c++/v1/ios:215:
+In file included from /usr/local/bin/../include/c++/v1/__locale:19:
+In file included from /usr/local/bin/../include/c++/v1/mutex:190:
+In file included from /usr/local/bin/../include/c++/v1/__mutex_base:17:
+/usr/local/bin/../include/c++/v1/system_error:168:46: error: no template named 'is_error_code_enum'
+inline constexpr bool is_error_code_enum_v = is_error_code_enum<_Tp>::value;
+                                             ^
+/usr/local/bin/../include/c++/v1/system_error:173:1: error: templates must have C++ linkage
+template <class _Tp>
+^~~~~~~~~~~~~~~~~~~~
+fuzz/parse.cc:7:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from fuzz/parse.cc:8:
+In file included from build/singleheader/ada.h:1078:
+In file included from /usr/local/bin/../include/c++/v1/iostream:37:
+In file included from /usr/local/bin/../include/c++/v1/ios:215:
+In file included from /usr/local/bin/../include/c++/v1/__locale:19:
+In file included from /usr/local/bin/../include/c++/v1/mutex:190:
+In file included from /usr/local/bin/../include/c++/v1/__mutex_base:17:
+/usr/local/bin/../include/c++/v1/system_error:178:1: error: templates must have C++ linkage
+template <class _Tp>
+^~~~~~~~~~~~~~~~~~~~
+fuzz/parse.cc:7:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from fuzz/parse.cc:8:
+In file included from build/singleheader/ada.h:1078:
+In file included from /usr/local/bin/../include/c++/v1/iostream:37:
+In file included from /usr/local/bin/../include/c++/v1/ios:215:
+In file included from /usr/local/bin/../include/c++/v1/__locale:19:
+In file included from /usr/local/bin/../include/c++/v1/mutex:190:
+In file included from /usr/local/bin/../include/c++/v1/__mutex_base:17:
+/usr/local/bin/../include/c++/v1/system_error:179:51: error: no template named 'is_error_condition_enum'
+inline constexpr bool is_error_condition_enum_v = is_error_condition_enum<_Tp>::value;
+                                                  ^
+/usr/local/bin/../include/c++/v1/system_error:183:29: error: explicit specialization of undeclared template struct 'is_error_condition_enum'
+struct _LIBCPP_TEMPLATE_VIS is_error_condition_enum<errc>
+                            ^                      ~~~~~~
+/usr/local/bin/../include/c++/v1/system_error:257:57: error: expected '>'
+              typename enable_if<is_error_condition_enum<_Ep>::value>::type* = nullptr
+                                                        ^
+/usr/local/bin/../include/c++/v1/system_error:257:33: note: to match this '<'
+              typename enable_if<is_error_condition_enum<_Ep>::value>::type* = nullptr
+                                ^
+/usr/local/bin/../include/c++/v1/system_error:257:57: error: expected ')'
+              typename enable_if<is_error_condition_enum<_Ep>::value>::type* = nullptr
+                                                        ^
+/usr/local/bin/../include/c++/v1/system_error:256:24: note: to match this '('
+        error_condition(_Ep __e,
+                       ^
+/usr/local/bin/../include/c++/v1/system_error:254:5: error: templates must have C++ linkage
+    template <class _Ep>
+    ^~~~~~~~~~~~~~~~~~~~
+fuzz/parse.cc:7:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from fuzz/parse.cc:8:
+In file included from build/singleheader/ada.h:1078:
+In file included from /usr/local/bin/../include/c++/v1/iostream:37:
+In file included from /usr/local/bin/../include/c++/v1/ios:215:
+In file included from /usr/local/bin/../include/c++/v1/__locale:19:
+In file included from /usr/local/bin/../include/c++/v1/mutex:190:
+In file included from /usr/local/bin/../include/c++/v1/__mutex_base:17:
+/usr/local/bin/../include/c++/v1/system_error:272:36: error: expected '>'
+            is_error_condition_enum<_Ep>::value,
+                                   ^
+/usr/local/bin/../include/c++/v1/system_error:271:9: note: to match this '<'
+        <
+        ^
+/usr/local/bin/../include/c++/v1/system_error:272:36: error: expected member name or ';' after declaration specifiers
+            is_error_condition_enum<_Ep>::value,
+                                   ^
+/usr/local/bin/../include/c++/v1/system_error:307:16: error: no member named 'category' in 'std::error_condition'
+    return __x.category() < __y.category()
+           ~~~ ^
+/usr/local/bin/../include/c++/v1/system_error:307:33: error: no member named 'category' in 'std::error_condition'
+    return __x.category() < __y.category()
+                            ~~~ ^
+/usr/local/bin/../include/c++/v1/system_error:308:17: error: no member named 'category' in 'std::error_condition'
+        || (__x.category() == __y.category() && __x.value() < __y.value());
+            ~~~ ^
+/usr/local/bin/../include/c++/v1/system_error:308:35: error: no member named 'category' in 'std::error_condition'
+        || (__x.category() == __y.category() && __x.value() < __y.value());
+                              ~~~ ^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.

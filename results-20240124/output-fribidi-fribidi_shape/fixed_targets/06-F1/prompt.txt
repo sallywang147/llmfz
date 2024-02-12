@@ -1,0 +1,100 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <stdint.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
+#include <assert.h>
+
+#include <fribidi.h>
+
+int LLVMFuzzerTestOneInput (const uint8_t *data, size_t size)
+{
+  const FriBidiStrIndex str_len = size / 4;
+  FriBidiChar *str = (FriBidiChar *) data;
+
+  FriBidiLevel *levels = calloc (str_len, sizeof (FriBidiLevel));
+  FriBidiArabicShaping *ar_props = calloc (str_len, sizeof (FriBidiArabicShaping));
+  fribidi_get_par_embedding_levels (str, str_len, levels);
+  fribidi_get_arabic_shaping (str, str_len, levels, ar_props);
+  fribidi_shape (FRIBIDI_FLAGS_DEFAULT, (char *) levels, str_len, (char *) ar_props, str);
+  free (levels);
+  free (ar_props);
+  return 0;
+}
+
+/* Editor directions:
+ * vim:textwidth=78:tabstop=8:shiftwidth=2:autoindent:cindent
+ */
+</code>
+
+The code has the following build issues:
+<error>
+../../src/fribidi/bin/fribidi-fuzzer.c:15:3: error: unknown type name 'FriBidiArabicShaping'; did you mean 'FriBidiArabicProp'?
+  FriBidiArabicShaping *ar_props = calloc (str_len, sizeof (FriBidiArabicShaping));
+  ^~~~~~~~~~~~~~~~~~~~
+  FriBidiArabicProp
+../../src/fribidi/lib/fribidi-joining-types.h:97:17: note: 'FriBidiArabicProp' declared here
+typedef uint8_t FriBidiArabicProp;
+                ^
+../../src/fribidi/bin/fribidi-fuzzer.c:15:61: error: use of undeclared identifier 'FriBidiArabicShaping'
+  FriBidiArabicShaping *ar_props = calloc (str_len, sizeof (FriBidiArabicShaping));
+                                                            ^
+../../src/fribidi/bin/fribidi-fuzzer.c:16:57: error: too few arguments to function call, expected 4, have 3
+  fribidi_get_par_embedding_levels (str, str_len, levels);
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                      ^
+../../src/fribidi/lib/fribidi-deprecated.h:136:1: note: 'fribidi_get_par_embedding_levels' declared here
+fribidi_get_par_embedding_levels (
+^
+3 errors generated.
+
+Fix failure
+../../src/fribidi/bin/fribidi-fuzzer.cpp:14:17: error: cannot initialize a variable of type 'FriBidiLevel *' (aka 'signed char *') with an rvalue of type 'void *'
+  FriBidiLevel *levels = calloc (str_len, sizeof (FriBidiLevel));
+                ^        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../src/fribidi/bin/fribidi-fuzzer.cpp:15:3: error: unknown type name 'FriBidiArabicShaping'; did you mean 'FriBidiArabicProp'?
+  FriBidiArabicShaping *ar_props = calloc (str_len, sizeof (FriBidiArabicShaping));
+  ^~~~~~~~~~~~~~~~~~~~
+  FriBidiArabicProp
+../../src/fribidi/lib/fribidi-joining-types.h:97:17: note: 'FriBidiArabicProp' declared here
+typedef uint8_t FriBidiArabicProp;
+                ^
+../../src/fribidi/bin/fribidi-fuzzer.cpp:15:61: error: unknown type name 'FriBidiArabicShaping'; did you mean 'FriBidiArabicProp'?
+  FriBidiArabicShaping *ar_props = calloc (str_len, sizeof (FriBidiArabicShaping));
+                                                            ^~~~~~~~~~~~~~~~~~~~
+                                                            FriBidiArabicProp
+../../src/fribidi/lib/fribidi-joining-types.h:97:17: note: 'FriBidiArabicProp' declared here
+typedef uint8_t FriBidiArabicProp;
+                ^
+../../src/fribidi/bin/fribidi-fuzzer.cpp:15:25: error: cannot initialize a variable of type 'FriBidiArabicProp *' (aka 'unsigned char *') with an rvalue of type 'void *'
+  FriBidiArabicShaping *ar_props = calloc (str_len, sizeof (FriBidiArabicShaping));
+                        ^          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../src/fribidi/bin/fribidi-fuzzer.cpp:16:3: error: no matching function for call to 'fribidi_get_par_embedding_levels'
+  fribidi_get_par_embedding_levels (str, str_len, levels);
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../src/fribidi/lib/fribidi-deprecated.h:136:1: note: candidate function not viable: requires 4 arguments, but 3 were provided
+fribidi_get_par_embedding_levels (
+^
+../../src/fribidi/bin/fribidi-fuzzer.cpp:17:3: error: use of undeclared identifier 'fribidi_get_arabic_shaping'
+  fribidi_get_arabic_shaping (str, str_len, levels, ar_props);
+  ^
+../../src/fribidi/bin/fribidi-fuzzer.cpp:18:3: error: no matching function for call to 'fribidi_shape'
+  fribidi_shape (FRIBIDI_FLAGS_DEFAULT, (char *) levels, str_len, (char *) ar_props, str);
+  ^~~~~~~~~~~~~
+../../src/fribidi/lib/fribidi-shape.h:54:20: note: candidate function not viable: no known conversion from 'char *' to 'const FriBidiLevel *' (aka 'const signed char *') for 2nd argument
+FRIBIDI_ENTRY void fribidi_shape (
+                   ^
+7 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

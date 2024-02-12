@@ -1,0 +1,89 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cups/cups.h>
+#include <cups/http.h>
+#include <cups/ipp.h>
+#include <fuzzer/FuzzedDataProvider.h>
+
+extern "C" {
+#include <algorithm>
+
+cups_http_t *cupsHttpNew();
+const char *httpGetHostname(http_t *http, char *s, int slen);
+bool httpSetEncryption(http_t *http, http_encryption_t e);
+void cupsHttpSetHostname(http_t *http, const char *hostname, int port);
+void cupsHttpSetTimeout(http_t *http, int timeout);
+void cupsHttpConnect(http_t *http);
+void cupsHttpSetLogging(http_t *http, http_log_level_t level);
+ipp_attribute_t *ippAddString(ipp_t *ipp, ipp_tag_t group, ipp_tag_t value_tag, const char *name, const char *value);
+ipp_t *cupsDoIORequest(http_t *http, ipp_t *request, const char *resource, int infile, int outfile);
+void cupsHttpClose(http_t *http);
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  http_t *http = cupsHttpNew();
+  cupsHttpSetHostname(http, "localhost", 631);
+  cupsHttpSetTimeout(http, 30);
+  httpSetEncryption(http, HTTP_ENCRYPTION_NEVER);
+  cupsHttpConnect(http);
+  cupsHttpSetLogging(http, HTTP_DEBUG_LOGGING);
+
+  ipp_t *request = ippNew();
+  ippSetVersion(request, 1, 1);
+  ippAddString(request, IPP_TAG_OPERATION, IPP_TAG_KEYWORD, "Get-Printer-Attributes",
+              nullptr);
+  ippAddString(request, IPP_TAG_PRINTER, IPP_TAG_URI, "ipp://localhost:631/printers/MyPrinter",
+              nullptr);
+
+  cupsDoIORequest(http, request, "/printers/MyPrinter", 0, 0);
+  ippDelete(request);
+  cupsHttpClose(http);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:16:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+FuzzIPP.cpp:9:1: error: unknown type name 'cups_http_t'; did you mean 'cups_ptype_t'?
+cups_http_t *cupsHttpNew();
+^~~~~~~~~~~
+cups_ptype_t
+./../cups/cups.h:274:18: note: 'cups_ptype_t' declared here
+typedef unsigned cups_ptype_t;          // Combined printer type/capability flags
+                 ^
+FuzzIPP.cpp:15:39: error: unknown type name 'http_log_level_t'
+void cupsHttpSetLogging(http_t *http, http_log_level_t level);
+                                      ^
+FuzzIPP.cpp:16:18: error: conflicting types for 'ippAddString'
+ipp_attribute_t *ippAddString(ipp_t *ipp, ipp_tag_t group, ipp_tag_t value_tag, const char *name, const char *value);
+                 ^
+./../cups/ipp.h:543:25: note: previous declaration is here
+extern ipp_attribute_t  *ippAddString(ipp_t *ipp, ipp_tag_t group, ipp_tag_t value_tag, const char *name, const char *language, const char *value) _CUPS_PUBLIC;
+                         ^
+FuzzIPP.cpp:23:11: error: cannot initialize a variable of type 'http_t *' (aka '_http_s *') with an rvalue of type 'cups_ptype_t *' (aka 'unsigned int *')
+  http_t *http = cupsHttpNew();
+          ^      ~~~~~~~~~~~~~
+FuzzIPP.cpp:28:28: error: use of undeclared identifier 'HTTP_DEBUG_LOGGING'
+  cupsHttpSetLogging(http, HTTP_DEBUG_LOGGING);
+                           ^
+5 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

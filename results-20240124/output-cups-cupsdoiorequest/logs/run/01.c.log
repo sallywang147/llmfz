@@ -1,0 +1,92 @@
+Using seed corpus: FuzzIPP_seed_corpus.zip
+/workspace/out/libfuzzer-address-x86_64/FuzzIPP -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/FuzzIPP < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 1032910637
+INFO: Loaded 1 modules   (7541 inline 8-bit counters): 7541 [0x75edf0, 0x760b65), 
+INFO: Loaded 1 PC tables (7541 PCs): 7541 [0x760b68,0x77e2b8), 
+INFO:        3 files found in /workspace/corpus/FuzzIPP
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+=================================================================
+==14==ERROR: AddressSanitizer: heap-use-after-free on address 0x611000000078 at pc 0x00000059a428 bp 0x7ffc7cee6d40 sp 0x7ffc7cee6d38
+READ of size 4 at 0x611000000078 thread T0
+SCARINESS: 45 (4-byte-read-heap-use-after-free)
+    #0 0x59a427 in ippDelete /src/cups/cups/ipp.c:1638:12
+    #1 0x5703d2 in LLVMFuzzerTestOneInput /src/cups/fuzzer/FuzzIPP.cpp:22:3
+    #2 0x441a73 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #3 0x442e24 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:804:3
+    #4 0x4432f9 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #5 0x43295f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #6 0x45bfb2 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #7 0x7ff2943eb082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #8 0x42339d in _start (out/libfuzzer-address-x86_64/FuzzIPP+0x42339d)
+
+DEDUP_TOKEN: ippDelete--LLVMFuzzerTestOneInput--fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long)
+0x611000000078 is located 56 bytes inside of 200-byte region [0x611000000040,0x611000000108)
+freed by thread T0 here:
+    #0 0x532962 in __interceptor_free /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:52:3
+    #1 0x59a407 in ippDelete /src/cups/cups/ipp.c:1661:3
+    #2 0x5b48b1 in cupsDoIORequest /src/cups/cups/request.c
+    #3 0x5703ca in LLVMFuzzerTestOneInput /src/cups/fuzzer/FuzzIPP.cpp:21:3
+    #4 0x441a73 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #5 0x442e24 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:804:3
+    #6 0x4432f9 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #7 0x43295f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #8 0x45bfb2 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #9 0x7ff2943eb082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_free--ippDelete--cupsDoIORequest
+previously allocated by thread T0 here:
+    #0 0x532dde in __interceptor_calloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:77:3
+    #1 0x59d7a8 in ippNew /src/cups/cups/ipp.c:2416:24
+    #2 0x5703a1 in LLVMFuzzerTestOneInput /src/cups/fuzzer/FuzzIPP.cpp:19:28
+    #3 0x441a73 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #4 0x442e24 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:804:3
+    #5 0x4432f9 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #6 0x43295f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #7 0x45bfb2 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #8 0x7ff2943eb082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_calloc--ippNew--LLVMFuzzerTestOneInput
+SUMMARY: AddressSanitizer: heap-use-after-free /src/cups/cups/ipp.c:1638:12 in ippDelete
+Shadow bytes around the buggy address:
+  0x0c227fff7fb0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0c227fff7fc0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0c227fff7fd0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0c227fff7fe0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0c227fff7ff0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+=>0x0c227fff8000: fa fa fa fa fa fa fa fa fd fd fd fd fd fd fd[fd]
+  0x0c227fff8010: fd fd fd fd fd fd fd fd fd fd fd fd fd fd fd fd
+  0x0c227fff8020: fd fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0c227fff8030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0c227fff8040: 00 00 00 00 00 00 00 00 00 00 00 fa fa fa fa fa
+  0x0c227fff8050: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07 
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+==14==ABORTING
+MS: 0 ; base unit: 0000000000000000000000000000000000000000
+
+
+artifact_prefix='./'; Test unit written to ./crash-da39a3ee5e6b4b0d3255bfef95601890afd80709
+Base64: 
+stat::number_of_executed_units: 1
+stat::average_exec_per_sec:     0
+stat::new_units_added:          0
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              33

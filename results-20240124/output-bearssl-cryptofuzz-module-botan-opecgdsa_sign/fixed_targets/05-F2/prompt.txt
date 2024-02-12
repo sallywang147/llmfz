@@ -1,0 +1,41 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstddef>
+#include <cstdint>
+#include <memory>
+
+#include "cryptofuzz/module/Botan.h"
+#include "cryptofuzz/module/BearSSL.h"
+#include "cryptofuzz/operation/ECDSA_Sign.h"
+
+extern "C" {
+#include "cryptofuzz/Cryptofuzz.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  cryptofuzz::module::Botan botan;
+  cryptofuzz::module::BearSSL bearssl;
+  cryptofuzz::operation::ECDSA_Sign ecdsa_sign;
+  std::optional<cryptofuzz::module::BearSSL> bearssl_opt;
+  bearssl_opt = bearssl;
+  botan.OpECGDSA_Sign(&bearssl_opt, &ecdsa_sign);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

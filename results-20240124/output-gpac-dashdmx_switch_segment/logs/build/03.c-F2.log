@@ -1,0 +1,637 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ cd gpac
++ ./configure --static-build '--extra-cflags=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link' '--extra-ldflags=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link'
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+
+Fix failure
+diff: ./include/gpac/revision.h: No such file or directory
+revision has changed
+rm: cannot remove './include/gpac/revision.h': No such file or directory
+
+** System Configuration
+Install prefix: /usr/local
+Source path: /src/gpac
+C   compiler: /usr/local/bin/clang-jcc
+C++ compiler: /usr/local/bin/clang++-jcc
+make: make
+CPU: x86_64
+Big Endian: no
+
+** GPAC 2.3-DEV rev829-g93b54873c-master Core Configuration **
+Static build enabled
+debug version: no
+GProf enabled: no
+Memory tracking enabled: no
+Sanitizer enabled: no
+Fixed-Point Version: no
+IPV6 Support: yes
+QuickJS Support: yes (with qjs-libc)
+
+** Detected libraries **
+zlib: system (pkgconfig)
+OpenGL support: no
+OpenSSL support: system (pkgconfig)
+nghttp2: no
+OSS Audio: yes
+ALSA Audio: no
+Jack Audio: no
+Pulse Audio: no
+DirectFB: no
+X11: no
+SDL: no
+DVB for Linux: yes
+FreeType: no
+JPEG: no
+OpenJPEG: no
+PNG: no
+MAD: no
+FAAD: no
+XVID: no
+libcaption: no
+MpeghDecoder: no
+libcaca: no
+FFMPEG: no
+LZMA: no
+Xiph Vorbis: no
+Xiph Theora: no
+A52 (AC3): no
+OpenSVCDecoder: no
+OpenHEVCDecoder: no
+Platinum UPnP: no
+Freenect: no
+
+Creating config.mak
+Check config.log for detection failures
+Done - type 'make help' for make info, 'make' to build
++ make
+make -C src all
+make[1]: Entering directory '/src/gpac/src'
+  CC utils/os_divers.c
+  CC utils/os_file.c
+  CC utils/list.c
+  CC utils/bitstream.c
+  CC utils/constants.c
+  CC utils/error.c
+  CC utils/alloc.c
+  CC utils/url.c
+  CC utils/configfile.c
+  CC utils/gltools.c
+  CC utils/gzio.c
+  CC utils/xml_parser.c
+  CC utils/sha1.c
+  CC utils/sha256.c
+  CC utils/base_encoding.c
+  CC utils/math.c
+  CC utils/os_net.c
+  CC utils/os_thread.c
+  CC utils/os_config_init.c
+  CC utils/cache.c
+  CC utils/downloader.c
+  CC utils/utf.c
+  CC utils/token.c
+  CC utils/color.c
+  CC utils/Remotery.c
+  CC utils/uni_bidi.c
+  CC utils/unicode.c
+  CC utils/os_module.c
+  CC utils/module.c
+  CC utils/path2d.c
+  CC utils/path2d_stroker.c
+  CC ietf/rtcp.c
+  CC ietf/rtp.c
+  CC ietf/rtp_packetizer.c
+  CC ietf/rtp_pck_3gpp.c
+  CC ietf/rtp_pck_mpeg12.c
+  CC ietf/rtp_pck_mpeg4.c
+  CC ietf/rtsp_command.c
+  CC ietf/rtsp_common.c
+  CC ietf/rtsp_response.c
+  CC ietf/rtsp_session.c
+  CC ietf/sdp.c
+  CC ietf/rtp_depacketizer.c
+  CC ietf/rtp_streamer.c
+  CC bifs/bifs_codec.c
+  CC bifs/bifs_node_tables.c
+  CC bifs/com_dec.c
+  CC bifs/com_enc.c
+  CC bifs/conditional.c
+  CC bifs/field_decode.c
+  CC bifs/field_encode.c
+  CC bifs/memory_decoder.c
+  CC bifs/quantize.c
+  CC bifs/script_dec.c
+  CC bifs/script_enc.c
+  CC bifs/unquantize.c
+  CC odf/desc_private.c
+  CC odf/descriptors.c
+  CC odf/odf_code.c
+  CC odf/odf_codec.c
+  CC odf/odf_command.c
+  CC odf/slc.c
+  CC odf/odf_dump.c
+  CC odf/odf_parse.c
+  CC laser/lsr_enc.c
+  CC laser/lsr_dec.c
+  CC laser/lsr_tables.c
+  CC isomedia/avc_ext.c
+  CC isomedia/box_code_3gpp.c
+  CC isomedia/box_code_apple.c
+  CC isomedia/box_code_base.c
+  CC isomedia/box_code_drm.c
+  CC isomedia/box_code_meta.c
+  CC isomedia/box_dump.c
+  CC isomedia/box_funcs.c
+  CC isomedia/data_map.c
+  CC isomedia/drm_sample.c
+  CC isomedia/isom_intern.c
+  CC isomedia/isom_read.c
+  CC isomedia/isom_store.c
+  CC isomedia/isom_write.c
+  CC isomedia/media.c
+  CC isomedia/media_odf.c
+  CC isomedia/meta.c
+  CC isomedia/movie_fragments.c
+  CC isomedia/sample_descs.c
+  CC isomedia/stbl_read.c
+  CC isomedia/stbl_write.c
+  CC isomedia/track.c
+  CC isomedia/tx3g.c
+  CC isomedia/iff.c
+  CC isomedia/hint_track.c
+  CC isomedia/hinting.c
+  CC isomedia/box_code_adobe.c
+  CC scene_manager/scene_manager.c
+  CC scene_manager/text_to_bifs.c
+  CC scene_manager/loader_bt.c
+  CC scene_manager/loader_xmt.c
+  CC scene_manager/loader_isom.c
+  CC scene_manager/loader_qt.c
+  CC scene_manager/loader_svg.c
+  CC scene_manager/swf_parse.c
+  CC scene_manager/swf_bifs.c
+  CC scene_manager/swf_svg.c
+  CC scene_manager/scene_dump.c
+  CC scene_manager/scene_stats.c
+  CC scene_manager/scene_engine.c
+  CC scene_manager/encode_isom.c
+  CC compositor/audio_mixer.c
+  CC compositor/font_engine.c
+  CC compositor/mesh.c
+  CC compositor/mesh_collide.c
+  CC compositor/mesh_tesselate.c
+  CC compositor/audio_input.c
+  CC compositor/audio_render.c
+  CC compositor/bindable.c
+  CC compositor/camera.c
+  CC compositor/compositor.c
+  CC compositor/compositor_2d.c
+  CC compositor/compositor_3d.c
+  CC compositor/compositor_node_init.c
+  CC compositor/drawable.c
+  CC compositor/events.c
+  CC compositor/hardcoded_protos.c
+  CC compositor/mpeg4_animstream.c
+  CC compositor/mpeg4_audio.c
+  CC compositor/mpeg4_background.c
+  CC compositor/mpeg4_background2d.c
+  CC compositor/mpeg4_bitmap.c
+  CC compositor/mpeg4_composite.c
+  CC compositor/mpeg4_form.c
+  CC compositor/mpeg4_geometry_2d.c
+  CC compositor/mpeg4_geometry_3d.c
+  CC compositor/mpeg4_geometry_ifs2d.c
+  CC compositor/mpeg4_geometry_ils2d.c
+  CC compositor/mpeg4_gradients.c
+  CC compositor/mpeg4_grouping.c
+  CC compositor/mpeg4_grouping_2d.c
+  CC compositor/mpeg4_grouping_3d.c
+  CC compositor/mpeg4_layer_2d.c
+  CC compositor/mpeg4_layer_3d.c
+  CC compositor/mpeg4_layout.c
+  CC compositor/mpeg4_lighting.c
+  CC compositor/mpeg4_path_layout.c
+  CC compositor/mpeg4_sensors.c
+  CC compositor/mpeg4_sound.c
+  CC compositor/mpeg4_text.c
+  CC compositor/mpeg4_textures.c
+  CC compositor/mpeg4_timesensor.c
+  CC compositor/mpeg4_viewport.c
+  CC compositor/navigate.c
+  CC compositor/offscreen_cache.c
+  CC compositor/svg_base.c
+  CC compositor/svg_font.c
+  CC compositor/svg_geometry.c
+  CC compositor/svg_grouping.c
+  CC compositor/svg_media.c
+  CC compositor/svg_paint_servers.c
+  CC compositor/svg_text.c
+  CC compositor/texturing.c
+  CC compositor/texturing_gl.c
+  CC compositor/visual_manager.c
+  CC compositor/visual_manager_2d.c
+  CC compositor/visual_manager_2d_draw.c
+  CC compositor/visual_manager_3d.c
+  CC compositor/visual_manager_3d_gl.c
+  CC compositor/x3d_geometry.c
+  CC compositor/clock.c
+  CC compositor/mpeg4_inputsensor.c
+  CC compositor/mpeg4_mediacontrol.c
+  CC compositor/media_object.c
+  CC compositor/mpeg4_mediasensor.c
+  CC compositor/mpeg4_inline.c
+  CC compositor/scene_ns.c
+  CC compositor/object_manager.c
+  CC compositor/scene.c
+  CC compositor/svg_external.c
+  CC compositor/scene_node_init.c
+  CC scenegraph/base_scenegraph.c
+  CC scenegraph/mpeg4_animators.c
+  CC scenegraph/commands.c
+  CC scenegraph/mpeg4_nodes.c
+  CC scenegraph/mpeg4_valuator.c
+  CC scenegraph/vrml_interpolators.c
+  CC scenegraph/vrml_proto.c
+  CC scenegraph/vrml_route.c
+  CC scenegraph/vrml_script.c
+  CC scenegraph/vrml_js.c
+  CC scenegraph/vrml_tools.c
+  CC scenegraph/x3d_nodes.c
+  CC scenegraph/svg_attributes.c
+  CC scenegraph/svg_types.c
+  CC scenegraph/svg_js.c
+  CC scenegraph/smil_anim.c
+  CC scenegraph/smil_timing.c
+  CC scenegraph/svg_properties.c
+  CC scenegraph/dom_events.c
+  CC scenegraph/dom_js.c
+  CC scenegraph/xml_ns.c
+  CC media_tools/isom_tools.c
+  CC media_tools/dash_segmenter.c
+  CC media_tools/av_parsers.c
+  CC media_tools/route_dmx.c
+  CC media_tools/img.c
+  CC media_tools/media_import.c
+  CC media_tools/mpegts.c
+  CC media_tools/m3u8.c
+  CC media_tools/mpd.c
+  CC media_tools/dash_client.c
+  CC media_tools/media_export.c
+  CC media_tools/m2ts_mux.c
+  CC media_tools/avilib.c
+  CC media_tools/mpeg2_ps.c
+  CC media_tools/gpac_ogg.c
+  CC media_tools/crypt_tools.c
+  CC media_tools/isom_hinter.c
+  CC media_tools/saf.c
+  CC media_tools/vobsub.c
+  CC media_tools/webvtt.c
+  CC crypto/g_crypt.c
+  CC crypto/g_crypt_openssl.c
+  CC filter_core/filter_pck.c
+  CC filter_core/filter_pid.c
+  CC filter_core/filter_props.c
+  CC filter_core/filter_queue.c
+  CC filter_core/filter_session.c
+  CC filter_core/filter_register.c
+  CC filter_core/filter.c
+  CC filter_core/filter_session_js.c
+  CC filters/bs_agg.c
+  CC filters/bs_split.c
+  CC filters/bsrw.c
+  CC filters/compose.c
+  CC filters/dasher.c
+  CC filters/dec_ac52.c
+  CC filters/dec_bifs.c
+  CC filters/dec_faad.c
+  CC filters/dec_img.c
+  CC filters/dec_j2k.c
+  CC filters/dec_laser.c
+  CC filters/dec_mad.c
+  CC filters/dec_mediacodec.c
+  CC filters/dec_nvdec.c
+  CC filters/dec_nvdec_sdk.c
+  CC filters/dec_odf.c
+  CC filters/dec_theora.c
+  CC filters/dec_ttml.c
+  CC filters/dec_ttxt.c
+  CC filters/dec_uncv.c
+  CC filters/dec_vorbis.c
+  CC filters/dec_vtb.c
+  CC filters/dec_webvtt.c
+  CC filters/dec_xvid.c
+  CC filters/decrypt_cenc_isma.c
+  CC filters/dmx_avi.c
+  CC filters/dmx_dash.c
+  CC filters/dmx_ghi.c
+  CC filters/dmx_gsf.c
+  CC filters/dmx_m2ts.c
+  CC filters/dmx_mpegps.c
+  CC filters/dmx_nhml.c
+  CC filters/dmx_nhnt.c
+  CC filters/dmx_ogg.c
+  CC filters/dmx_saf.c
+  CC filters/dmx_vobsub.c
+  CC filters/enc_jpg.c
+  CC filters/enc_png.c
+  CC filters/encrypt_cenc_isma.c
+  CC filters/evg_rescale.c
+  CC filters/filelist.c
+  CC filters/hevcmerge.c
+  CC filters/hevcsplit.c
+  CC filters/in_dvb4linux.c
+  CC filters/in_file.c
+  CC filters/in_http.c
+  CC filters/in_pipe.c
+  CC filters/in_route.c
+  CC filters/in_rtp.c
+  CC filters/in_rtp_rtsp.c
+  CC filters/in_rtp_sdp.c
+  CC filters/in_rtp_signaling.c
+  CC filters/in_rtp_stream.c
+  CC filters/in_sock.c
+  CC filters/inspect.c
+  CC filters/io_fcryp.c
+  CC filters/isoffin_load.c
+  CC filters/isoffin_read.c
+  CC filters/isoffin_read_ch.c
+  CC filters/jsfilter.c
+  CC filters/load_bt_xmt.c
+  CC filters/load_svg.c
+  CC filters/load_text.c
+  CC filters/mux_avi.c
+  CC filters/mux_gsf.c
+  CC filters/mux_isom.c
+  CC filters/mux_ts.c
+  CC filters/mux_ogg.c
+  CC filters/out_audio.c
+  CC filters/out_file.c
+  CC filters/out_http.c
+  CC filters/out_pipe.c
+  CC filters/out_route.c
+  CC filters/out_rtp.c
+  CC filters/out_rtsp.c
+  CC filters/out_sock.c
+  CC filters/out_video.c
+  CC filters/reframer.c
+  CC filters/reframe_ac3.c
+  CC filters/reframe_adts.c
+  CC filters/reframe_latm.c
+  CC filters/reframe_amr.c
+  CC filters/reframe_av1.c
+  CC filters/reframe_flac.c
+  CC filters/reframe_h263.c
+  CC filters/reframe_img.c
+  CC filters/reframe_mhas.c
+  CC filters/reframe_mp3.c
+  CC filters/reframe_mpgvid.c
+  CC filters/reframe_nalu.c
+  CC filters/reframe_prores.c
+  CC filters/reframe_qcp.c
+  CC filters/reframe_rawvid.c
+  CC filters/reframe_rawpcm.c
+  CC filters/reframe_truehd.c
+  CC filters/resample_audio.c
+  CC filters/restamp.c
+  CC filters/tileagg.c
+  CC filters/tilesplit.c
+  CC filters/tssplit.c
+  CC filters/ttml_conv.c
+  CC filters/unit_test_filter.c
+  CC filters/rewind.c
+  CC filters/rewrite_adts.c
+  CC filters/rewrite_mhas.c
+  CC filters/rewrite_mp4v.c
+  CC filters/rewrite_nalu.c
+  CC filters/rewrite_obu.c
+  CC filters/vflip.c
+  CC filters/vcrop.c
+  CC filters/write_generic.c
+  CC filters/write_nhml.c
+  CC filters/write_nhnt.c
+  CC filters/write_qcp.c
+  CC filters/write_tx3g.c
+  CC filters/write_vtt.c
+  CC ../modules/dektec_out/dektec_video_decl.c
+  CC filters/dec_opensvc.c
+  CC filters/unframer.c
+  CC filters/ff_common.c
+  CC filters/ff_avf.c
+  CC filters/ff_dec.c
+  CC filters/ff_dmx.c
+  CC filters/ff_enc.c
+  CC filters/ff_rescale.c
+  CC filters/ff_mx.c
+  CC filters/ff_bsf.c
+  CC filters/dec_cc.c
+  CC filters/dec_mpeghdec.c
+  CC filters/dec_openhevc.c
+  CC jsmods/core.c
+  CC jsmods/evg.c
+  CC jsmods/scene_js.c
+  CC jsmods/storage.c
+  CC jsmods/webgl.c
+  CC jsmods/xhr.c
+  CC evg/ftgrays.c
+  CC evg/raster3d.c
+  CC evg/raster_565.c
+  CC evg/raster_argb.c
+  CC evg/raster_rgb.c
+  CC evg/raster_yuv.c
+  CC evg/stencil.c
+  CC evg/surface.c
+  CC quickjs/cutils.c
+  CC quickjs/libbf.c
+  CC quickjs/libregexp.c
+  CC quickjs/libunicode.c
+  CC quickjs/quickjs.c
+  CC quickjs/quickjs-libc.c
+  CC ../modules/validator/validator.c
+make[1]: Leaving directory '/src/gpac/src'
+make -C applications all
+make[1]: Entering directory '/src/gpac/applications'
+set -e; for i in gpac mp4box  ; do make -C $i all; done 
+make[2]: Entering directory '/src/gpac/applications/gpac'
+  CC gpac.c
+  CC compositor_tools.c
+  CC gpac_help.c
+/usr/bin/ld: /usr/local/lib/clang/15.0.0/lib/linux/libclang_rt.asan-x86_64.a(asan_interceptors_vfork.S.o): warning: common of `__interception::real_vfork' overridden by definition from /usr/local/lib/clang/15.0.0/lib/linux/libclang_rt.asan-x86_64.a(asan_interceptors.cpp.o)
+make[2]: Leaving directory '/src/gpac/applications/gpac'
+make[2]: Entering directory '/src/gpac/applications/mp4box'
+  CC mp4box.c
+  CC filedump.c
+  CC fileimport.c
+  CC live.c
+/usr/bin/ld: /usr/local/lib/clang/15.0.0/lib/linux/libclang_rt.asan-x86_64.a(asan_interceptors_vfork.S.o): warning: common of `__interception::real_vfork' overridden by definition from /usr/local/lib/clang/15.0.0/lib/linux/libclang_rt.asan-x86_64.a(asan_interceptors.cpp.o)
+make[2]: Leaving directory '/src/gpac/applications/mp4box'
+make[1]: Leaving directory '/src/gpac/applications'
+make -C modules all
+make[1]: Entering directory '/src/gpac/modules'
+set -e; for i in  ; do make -C $i all; done
+make[1]: Leaving directory '/src/gpac/modules'
+++ find /src/testsuite/oss-fuzzers -name 'fuzz_*.c'
++ fuzzers='/src/testsuite/oss-fuzzers/fuzz_parse.c
+/src/testsuite/oss-fuzzers/fuzz_probe_analyze.c'
++ for f in $fuzzers
+++ basename /src/testsuite/oss-fuzzers/fuzz_parse.c .c
++ fuzzerName=fuzz_parse
++ echo 'Building fuzzer fuzz_parse'
+Building fuzzer fuzz_parse
++ /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -I./include -I./ -DGPAC_HAVE_CONFIG_H -c /src/testsuite/oss-fuzzers/fuzz_parse.c
+In file included from /src/testsuite/oss-fuzzers/fuzz_parse.c:1:
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:16:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+/src/testsuite/oss-fuzzers/fuzz_parse.cpp:11:10: fatal error: 'dashdmx.h' file not found
+#include "dashdmx.h"
+         ^~~~~~~~~~~
+1 error generated.

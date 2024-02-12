@@ -1,0 +1,482 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include "test-util.h"
+#include <kj/main.h>
+#include "serialize.h"
+#include <capnp/test.capnp.h>
+#include <unistd.h>
+
+/* This is the entry point of a fuzz target to be used with libFuzzer
+ * or another fuzz driver.
+ * Such a fuzz driver is used by the autotools target capnp-llvm-fuzzer-testcase
+ * when the environment variable LIB_FUZZING_ENGINE is defined
+ * for instance LIB_FUZZING_ENGINE=-fsanitize=fuzzer for libFuzzer
+ */
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* Data, size_t Size) {
+  kj::ArrayPtr<const uint8_t> array(Data, Size);
+  kj::ArrayInputStream ais(array);
+
+  KJ_IF_MAYBE(e, kj::runCatchingExceptions([&]() {
+    capnp::InputStreamMessageReader reader(ais);
+    capnp::DynamicStruct::Builder builder = reader.getRoot<capnp::DynamicStruct>(capnp::Schema::from<capnp::_::TestAllTypes>()).asBuilder();
+    capnp::Orphan<capnp::DynamicStruct> orphan = builder.asOrphan();
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt(builder.getSchema().getFields()[0], &orphan);
+    builder.adopt
+</code>
+
+The code has the following build issues:
+<error>
+src/capnp/llvm-fuzzer-testcase.c++:26:31: error: no matching constructor for initialization of 'capnp::FlatMessageBuilder'
+    capnp::FlatMessageBuilder builder(ais);
+                              ^       ~~~
+./src/kj/common.h:1351:71: note: expanded from macro 'KJ_IF_MAYBE'
+    if (KJ_DEPRECATE_KJ_IF_MAYBE_STMT; auto name = ::kj::_::readMaybe(exp))
+                                                                      ^~~
+src/capnp/message.h:433:12: note: candidate constructor not viable: no known conversion from 'kj::ArrayInputStream' to 'kj::ArrayPtr<word>' for 1st argument
+  explicit FlatMessageBuilder(kj::ArrayPtr<word> array);
+           ^
+src/capnp/message.h:434:29: note: candidate constructor not viable: no known conversion from 'kj::ArrayInputStream' to 'const capnp::FlatMessageBuilder' for 1st argument
+  KJ_DISALLOW_COPY_AND_MOVE(FlatMessageBuilder);
+                            ^
+./src/kj/common.h:188:3: note: expanded from macro 'KJ_DISALLOW_COPY_AND_MOVE'
+  classname(const classname&) = delete; \
+  ^
+src/capnp/message.h:434:29: note: candidate constructor not viable: no known conversion from 'kj::ArrayInputStream' to 'capnp::FlatMessageBuilder' for 1st argument
+./src/kj/common.h:190:3: note: expanded from macro 'KJ_DISALLOW_COPY_AND_MOVE'
+  classname(classname&&) = delete; \
+  ^
+src/capnp/llvm-fuzzer-testcase.c++:27:48: error: no member named 'adopt' in 'capnproto_test::capnp::test::TestAllTypes::Builder'
+    builder.initRoot<capnp::_::TestAllTypes>().adopt("foo", capnp::Orphan<capnp::DynamicValue>());
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
+./src/kj/common.h:1351:71: note: expanded from macro 'KJ_IF_MAYBE'
+    if (KJ_DEPRECATE_KJ_IF_MAYBE_STMT; auto name = ::kj::_::readMaybe(exp))
+                                                                      ^~~
+2 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

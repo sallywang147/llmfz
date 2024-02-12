@@ -1,0 +1,1 @@
+error: undefined reference to 'FLAC__metadata_object_is_equal'

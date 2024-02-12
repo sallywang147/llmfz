@@ -1,0 +1,1 @@
+#include "hb-fuzzer.hh"

@@ -1,0 +1,1 @@
+error: undefined reference to 'avahi_string_list_new'

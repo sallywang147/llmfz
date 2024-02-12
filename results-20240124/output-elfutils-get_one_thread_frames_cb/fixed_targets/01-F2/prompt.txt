@@ -1,0 +1,70 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <algorithm>
+
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+#include <string>
+
+#include "libdwarf.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const char* filename = stream.ConsumeRandomLengthString().c_str();
+  Dwarf_Debug dbg;
+  int fd = open(filename, O_RDONLY);
+  if (fd < 0) {
+    return 0;
+  }
+  if (dwarf_init(fd, DW_DLC_READ, &dbg) != DW_DLV_OK) {
+    return 0;
+  }
+  Dwarf_Addr base_addr = stream.ConsumeIntegral<Dwarf_Addr>();
+  Dwarf_Addr offset = stream.ConsumeIntegral<Dwarf_Addr>();
+  Dwarf_Die die;
+  Dwarf_Error err;
+  if (dwarf_addrdie_b(dbg, base_addr, &die, &err) != DW_DLV_OK) {
+    return 0;
+  }
+  dwarf_get_die_infotypes_flag(die, &err);
+  dwarf_get_die_threads_flag(die, &err);
+  Dwarf_Thread* thread = dwarf_get_threads(dbg, &err);
+  if (thread == nullptr) {
+    return 0;
+  }
+  get_one_thread_frames_cb(thread, nullptr);
+  dwarf_free(dbg, thread);
+  dwarf_finish(dbg, &err);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/fuzz-libdwfl.c:1:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+/src/fuzz-libdwfl.cpp:11:10: fatal error: 'libdwarf.h' file not found
+#include "libdwarf.h"
+         ^~~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

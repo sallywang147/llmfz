@@ -1,0 +1,1 @@
+error: undefined reference to 'hb_shape_justify::$_3::operator()(hb_glyph_info_t const*, double)'

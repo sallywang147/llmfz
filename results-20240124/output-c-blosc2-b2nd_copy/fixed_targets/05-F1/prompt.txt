@@ -1,0 +1,66 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <stdint.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include "b2nd.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  struct b2nd_context_s *context = b2nd_new();
+  if (context == NULL) {
+    return 0;
+  }
+
+  struct b2nd_array_t *array = b2nd_array_new(context);
+  if (array == NULL) {
+    b2nd_free(context);
+    return 0;
+  }
+
+  struct b2nd_array_t **array_ptr =
+      (struct b2nd_array_t **)malloc(sizeof(struct b2nd_array_t *));
+  if (array_ptr == NULL) {
+    b2nd_free(context);
+    b2nd_array_free(array);
+    return 0;
+  }
+
+  int ret = b2nd_copy(context, array, array_ptr);
+  if (ret != 0) {
+    b2nd_free(context);
+    b2nd_array_free(array);
+    free(array_ptr);
+    return 0;
+  }
+
+  b2nd_free(context);
+  b2nd_array_free(array);
+  free(array_ptr);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:16:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

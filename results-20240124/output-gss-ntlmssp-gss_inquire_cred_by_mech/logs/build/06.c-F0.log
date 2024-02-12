@@ -1,0 +1,309 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ autoreconf -f -i
+aclocal: warning: couldn't open directory 'm4': No such file or directory
+libtoolize: putting auxiliary files in '.'.
+libtoolize: copying file './ltmain.sh'
+libtoolize: putting macros in 'm4'.
+libtoolize: copying file 'm4/libtool.m4'
+libtoolize: copying file 'm4/ltoptions.m4'
+libtoolize: copying file 'm4/ltsugar.m4'
+libtoolize: copying file 'm4/ltversion.m4'
+libtoolize: copying file 'm4/lt~obsolete.m4'
+libtoolize: Consider adding 'AC_CONFIG_MACRO_DIRS([m4])' to configure.ac,
+libtoolize: and rerunning libtoolize and aclocal.
+configure.ac:16: installing './ar-lib'
+configure.ac:8: installing './compile'
+configure.ac:18: installing './config.guess'
+configure.ac:18: installing './config.sub'
+configure.ac:14: installing './install-sh'
+configure.ac:14: installing './missing'
+Makefile.am: installing './depcomp'
+parallel-tests: installing './test-driver'
+man/Makefile.am:17: warning: wildcard $(srcdir: non-POSIX variable name
+man/Makefile.am:17: (probably a GNU make extension)
++ ./configure --disable-shared --enable-static --without-wbclient
+checking for gcc... /usr/local/bin/clang-jcc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether /usr/local/bin/clang-jcc accepts -g... yes
+checking for /usr/local/bin/clang-jcc option to accept ISO C89... none needed
+checking whether /usr/local/bin/clang-jcc understands -c and -o together... yes
+checking how to run the C preprocessor... /usr/local/bin/clang-jcc -E
+checking for grep that handles long lines and -e... /usr/bin/grep
+checking for egrep... /usr/bin/grep -E
+checking for ANSI C header files... yes
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for memory.h... yes
+checking for strings.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for unistd.h... yes
+checking minix/config.h usability... no
+checking minix/config.h presence... no
+checking for minix/config.h... no
+checking whether it is safe to define __EXTENSIONS__... yes
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for a thread-safe mkdir -p... /usr/bin/mkdir -p
+checking for gawk... no
+checking for mawk... mawk
+checking whether make sets $(MAKE)... yes
+checking whether make supports the include directive... yes (GNU style)
+checking whether make supports nested variables... yes
+checking how to create a pax tar archive... gnutar
+checking dependency style of /usr/local/bin/clang-jcc... gcc3
+checking for ar... ar
+checking the archiver (ar) interface... ar
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... x86_64-pc-linux-gnu
+checking how to print strings... printf
+checking for a sed that does not truncate output... /usr/bin/sed
+checking for fgrep... /usr/bin/grep -F
+checking for ld used by /usr/local/bin/clang-jcc... /usr/bin/ld
+checking if the linker (/usr/bin/ld) is GNU ld... yes
+checking for BSD- or MS-compatible name lister (nm)... /usr/bin/nm -B
+checking the name lister (/usr/bin/nm -B) interface... BSD nm
+checking whether ln -s works... yes
+checking the maximum length of command line arguments... 1572864
+checking how to convert x86_64-pc-linux-gnu file names to x86_64-pc-linux-gnu format... func_convert_file_noop
+checking how to convert x86_64-pc-linux-gnu file names to toolchain format... func_convert_file_noop
+checking for /usr/bin/ld option to reload object files... -r
+checking for objdump... objdump
+checking how to recognize dependent libraries... pass_all
+checking for dlltool... no
+checking how to associate runtime and link libraries... printf %s\n
+checking for archiver @FILE support... @
+checking for strip... strip
+checking for ranlib... ranlib
+checking command to parse /usr/bin/nm -B output from /usr/local/bin/clang-jcc object... ok
+checking for sysroot... no
+checking for a working dd... /usr/bin/dd
+checking how to truncate binary pipes... /usr/bin/dd bs=4096 count=1
+checking for mt... no
+checking if : is a manifest tool... no
+checking for dlfcn.h... yes
+checking for objdir... .libs
+checking if /usr/local/bin/clang-jcc supports -fno-rtti -fno-exceptions... yes
+checking for /usr/local/bin/clang-jcc option to produce PIC... -fPIC -DPIC
+checking if /usr/local/bin/clang-jcc PIC flag -fPIC -DPIC works... yes
+checking if /usr/local/bin/clang-jcc static flag -static works... no
+checking if /usr/local/bin/clang-jcc supports -c -o file.o... yes
+checking if /usr/local/bin/clang-jcc supports -c -o file.o... (cached) yes
+checking whether the /usr/local/bin/clang-jcc linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+checking dynamic linker characteristics... GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... no
+checking whether to build static libraries... yes
+checking whether make supports nested variables... (cached) yes
+checking for stdint.h... (cached) yes
+checking for dlfcn.h... (cached) yes
+checking for errno_t... no
+configure: Detected operating system type: debian
+checking for long long... yes
+checking size of int... 4
+checking size of char... 1
+checking size of short... 2
+checking size of long... 8
+checking size of long long... 8
+checking for uint_t... no
+checking for int8_t... yes
+checking for uint8_t... yes
+checking for int16_t... yes
+checking for uint16_t... yes
+checking for int32_t... yes
+checking for uint32_t... yes
+checking for int64_t... yes
+checking for uint64_t... yes
+checking for size_t... yes
+checking for ssize_t... yes
+checking size of off_t... 8
+checking size of size_t... 8
+checking size of ssize_t... 8
+checking for intptr_t... yes
+checking for uintptr_t... yes
+checking for ptrdiff_t... yes
+checking for the pthreads library -lpthreads... no
+checking whether pthreads work without any flags... yes
+checking for joinable pthread attribute... PTHREAD_CREATE_JOINABLE
+checking if more special flags are required for pthreads... no
+checking for PTHREAD_PRIO_INHERIT... yes
+checking gssapi/gssapi.h usability... yes
+checking gssapi/gssapi.h presence... yes
+checking for gssapi/gssapi.h... yes
+checking for krb5-config... /usr/bin/krb5-config
+checking for gss_import_cred in -lgssapi_krb5... yes
+checking for gss_export_cred in -lgssapi_krb5... yes
+checking unicase.h usability... yes
+checking unicase.h presence... yes
+checking for unicase.h... yes
+checking uniconv.h usability... yes
+checking uniconv.h presence... yes
+checking for uniconv.h... yes
+checking for u8_toupper in -lunistring... yes
+checking for pkg-config... no
+checking for openssl/ssl.h in /usr/local/ssl... no
+checking for openssl/ssl.h in /usr/lib/ssl... no
+checking for openssl/ssl.h in /usr/ssl... no
+checking for openssl/ssl.h in /usr/pkg... no
+checking for openssl/ssl.h in /usr/local... no
+checking for openssl/ssl.h in /usr... yes
+checking whether compiling and linking against OpenSSL works... yes
+checking if zlib is wanted... yes
+checking for inflateEnd in -lz... yes
+checking zlib.h usability... yes
+checking zlib.h presence... yes
+checking for zlib.h... yes
+checking for dgettext... yes
+checking for msgfmt... /usr/bin/msgfmt
+checking for xsltproc... /usr/bin/xsltproc
+checking for xmllint... /usr/bin/xmllint
+checking for xmlcatalog... /usr/bin/xmlcatalog
+checking for /etc/xml/catalog... yes
+checking for Docbook XSL templates in XML catalog... yes
+checking for po4a... no
+checking for doxygen... false
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating man/Makefile
+config.status: creating po/Makefile
+config.status: creating contrib/gssntlmssp.spec
+config.status: creating examples/mech.ntlmssp
+config.status: creating config.h
+config.status: executing depfiles commands
+config.status: executing libtool commands
++ make
+make  all-recursive
+make[1]: Entering directory '/src/gss-ntlmssp'
+Making all in man
+make[2]: Entering directory '/src/gss-ntlmssp/man'
+/usr/bin/xmllint --catalogs --postvalid --nonet --xinclude --noout gssntlmssp.8.xml
+/usr/bin/xsltproc -o gssntlmssp.8  --catalogs --xinclude --nonet http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl gssntlmssp.8.xml
+Note: Writing gssntlmssp.8
+make[2]: Leaving directory '/src/gss-ntlmssp/man'
+Making all in po
+make[2]: Entering directory '/src/gss-ntlmssp/po'
+rm -f  && /usr/bin/msgfmt -o en_GB.mo en_GB.po
+rm -f  && /usr/bin/msgfmt -o ko.mo ko.po
+rm -f  && /usr/bin/msgfmt -o ka.mo ka.po
+make[2]: Leaving directory '/src/gss-ntlmssp/po'
+make[2]: Entering directory '/src/gss-ntlmssp'
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include   -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR="\"/usr/local/share/locale\"" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/ntlmssptest-crypto.o -MD -MP -MF src/.deps/ntlmssptest-crypto.Tpo -c -o src/ntlmssptest-crypto.o `test -f 'src/crypto.c' || echo './'`src/crypto.c
+mv -f src/.deps/ntlmssptest-crypto.Tpo src/.deps/ntlmssptest-crypto.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include   -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR="\"/usr/local/share/locale\"" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/ntlmssptest-ntlm_crypto.o -MD -MP -MF src/.deps/ntlmssptest-ntlm_crypto.Tpo -c -o src/ntlmssptest-ntlm_crypto.o `test -f 'src/ntlm_crypto.c' || echo './'`src/ntlm_crypto.c
+mv -f src/.deps/ntlmssptest-ntlm_crypto.Tpo src/.deps/ntlmssptest-ntlm_crypto.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include   -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR="\"/usr/local/share/locale\"" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/ntlmssptest-ntlm.o -MD -MP -MF src/.deps/ntlmssptest-ntlm.Tpo -c -o src/ntlmssptest-ntlm.o `test -f 'src/ntlm.c' || echo './'`src/ntlm.c
+mv -f src/.deps/ntlmssptest-ntlm.Tpo src/.deps/ntlmssptest-ntlm.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include   -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR="\"/usr/local/share/locale\"" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/ntlmssptest-debug.o -MD -MP -MF src/.deps/ntlmssptest-debug.Tpo -c -o src/ntlmssptest-debug.o `test -f 'src/debug.c' || echo './'`src/debug.c
+mv -f src/.deps/ntlmssptest-debug.Tpo src/.deps/ntlmssptest-debug.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include   -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR="\"/usr/local/share/locale\"" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/ntlmssptest-gss_err.o -MD -MP -MF src/.deps/ntlmssptest-gss_err.Tpo -c -o src/ntlmssptest-gss_err.o `test -f 'src/gss_err.c' || echo './'`src/gss_err.c
+mv -f src/.deps/ntlmssptest-gss_err.Tpo src/.deps/ntlmssptest-gss_err.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include   -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR="\"/usr/local/share/locale\"" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/ntlmssptest-gss_spi.o -MD -MP -MF src/.deps/ntlmssptest-gss_spi.Tpo -c -o src/ntlmssptest-gss_spi.o `test -f 'src/gss_spi.c' || echo './'`src/gss_spi.c
+mv -f src/.deps/ntlmssptest-gss_spi.Tpo src/.deps/ntlmssptest-gss_spi.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include   -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR="\"/usr/local/share/locale\"" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/ntlmssptest-gss_names.o -MD -MP -MF src/.deps/ntlmssptest-gss_names.Tpo -c -o src/ntlmssptest-gss_names.o `test -f 'src/gss_names.c' || echo './'`src/gss_names.c
+mv -f src/.deps/ntlmssptest-gss_names.Tpo src/.deps/ntlmssptest-gss_names.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include   -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR="\"/usr/local/share/locale\"" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/ntlmssptest-gss_creds.o -MD -MP -MF src/.deps/ntlmssptest-gss_creds.Tpo -c -o src/ntlmssptest-gss_creds.o `test -f 'src/gss_creds.c' || echo './'`src/gss_creds.c
+mv -f src/.deps/ntlmssptest-gss_creds.Tpo src/.deps/ntlmssptest-gss_creds.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include   -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR="\"/usr/local/share/locale\"" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/ntlmssptest-gss_sec_ctx.o -MD -MP -MF src/.deps/ntlmssptest-gss_sec_ctx.Tpo -c -o src/ntlmssptest-gss_sec_ctx.o `test -f 'src/gss_sec_ctx.c' || echo './'`src/gss_sec_ctx.c
+mv -f src/.deps/ntlmssptest-gss_sec_ctx.Tpo src/.deps/ntlmssptest-gss_sec_ctx.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include   -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR="\"/usr/local/share/locale\"" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/ntlmssptest-gss_signseal.o -MD -MP -MF src/.deps/ntlmssptest-gss_signseal.Tpo -c -o src/ntlmssptest-gss_signseal.o `test -f 'src/gss_signseal.c' || echo './'`src/gss_signseal.c
+mv -f src/.deps/ntlmssptest-gss_signseal.Tpo src/.deps/ntlmssptest-gss_signseal.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include   -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR="\"/usr/local/share/locale\"" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/ntlmssptest-gss_serialize.o -MD -MP -MF src/.deps/ntlmssptest-gss_serialize.Tpo -c -o src/ntlmssptest-gss_serialize.o `test -f 'src/gss_serialize.c' || echo './'`src/gss_serialize.c
+mv -f src/.deps/ntlmssptest-gss_serialize.Tpo src/.deps/ntlmssptest-gss_serialize.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include   -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR="\"/usr/local/share/locale\"" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/ntlmssptest-external.o -MD -MP -MF src/.deps/ntlmssptest-external.Tpo -c -o src/ntlmssptest-external.o `test -f 'src/external.c' || echo './'`src/external.c
+mv -f src/.deps/ntlmssptest-external.Tpo src/.deps/ntlmssptest-external.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include   -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR="\"/usr/local/share/locale\"" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/ntlmssptest-gss_auth.o -MD -MP -MF src/.deps/ntlmssptest-gss_auth.Tpo -c -o src/ntlmssptest-gss_auth.o `test -f 'src/gss_auth.c' || echo './'`src/gss_auth.c
+mv -f src/.deps/ntlmssptest-gss_auth.Tpo src/.deps/ntlmssptest-gss_auth.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include   -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR="\"/usr/local/share/locale\"" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/ntlmssptest-gss_ntlmssp.o -MD -MP -MF src/.deps/ntlmssptest-gss_ntlmssp.Tpo -c -o src/ntlmssptest-gss_ntlmssp.o `test -f 'src/gss_ntlmssp.c' || echo './'`src/gss_ntlmssp.c
+mv -f src/.deps/ntlmssptest-gss_ntlmssp.Tpo src/.deps/ntlmssptest-gss_ntlmssp.Po
+/usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include   -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR="\"/usr/local/share/locale\"" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT tests/ntlmssptest-ntlmssptest.o -MD -MP -MF tests/.deps/ntlmssptest-ntlmssptest.Tpo -c -o tests/ntlmssptest-ntlmssptest.o `test -f 'tests/ntlmssptest.c' || echo './'`tests/ntlmssptest.c
+mv -f tests/.deps/ntlmssptest-ntlmssptest.Tpo tests/.deps/ntlmssptest-ntlmssptest.Po
+/bin/bash ./libtool  --tag=CC   --mode=link /usr/local/bin/clang-jcc   -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR="\"/usr/local/share/locale\"" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -L/usr/local/lib -L/usr/lib -L/usr/lib -o ntlmssptest src/ntlmssptest-crypto.o src/ntlmssptest-ntlm_crypto.o src/ntlmssptest-ntlm.o src/ntlmssptest-debug.o src/ntlmssptest-gss_err.o src/ntlmssptest-gss_spi.o src/ntlmssptest-gss_names.o src/ntlmssptest-gss_creds.o src/ntlmssptest-gss_sec_ctx.o src/ntlmssptest-gss_signseal.o src/ntlmssptest-gss_serialize.o src/ntlmssptest-external.o src/ntlmssptest-gss_auth.o src/ntlmssptest-gss_ntlmssp.o  tests/ntlmssptest-ntlmssptest.o -L/usr/lib/x86_64-linux-gnu/mit-krb5 -Wl,-Bsymbolic-functions -Wl,-z,relro -lgssapi_krb5 -lkrb5 -lk5crypto -lcom_err -lssl -lcrypto  -lunistring -lz -lunistring -lgssapi_krb5 -lgssapi_krb5  -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+libtool: link: /usr/local/bin/clang-jcc -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR=\"/usr/local/share/locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -o ntlmssptest src/ntlmssptest-crypto.o src/ntlmssptest-ntlm_crypto.o src/ntlmssptest-ntlm.o src/ntlmssptest-debug.o src/ntlmssptest-gss_err.o src/ntlmssptest-gss_spi.o src/ntlmssptest-gss_names.o src/ntlmssptest-gss_creds.o src/ntlmssptest-gss_sec_ctx.o src/ntlmssptest-gss_signseal.o src/ntlmssptest-gss_serialize.o src/ntlmssptest-external.o src/ntlmssptest-gss_auth.o src/ntlmssptest-gss_ntlmssp.o tests/ntlmssptest-ntlmssptest.o -Wl,-Bsymbolic-functions -Wl,-z -Wl,relro -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE  -L/usr/local/lib -L/usr/lib -L/usr/lib/x86_64-linux-gnu/mit-krb5 -lkrb5 -lk5crypto -lcom_err -lssl -lcrypto -lz -lunistring -lgssapi_krb5
+/bin/bash ./libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include   -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR="\"/usr/local/share/locale\"" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/gssntlmssp_la-crypto.lo -MD -MP -MF src/.deps/gssntlmssp_la-crypto.Tpo -c -o src/gssntlmssp_la-crypto.lo `test -f 'src/crypto.c' || echo './'`src/crypto.c
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR=\"/usr/local/share/locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/gssntlmssp_la-crypto.lo -MD -MP -MF src/.deps/gssntlmssp_la-crypto.Tpo -c src/crypto.c -o src/gssntlmssp_la-crypto.o
+mv -f src/.deps/gssntlmssp_la-crypto.Tpo src/.deps/gssntlmssp_la-crypto.Plo
+/bin/bash ./libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include   -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR="\"/usr/local/share/locale\"" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/gssntlmssp_la-ntlm_crypto.lo -MD -MP -MF src/.deps/gssntlmssp_la-ntlm_crypto.Tpo -c -o src/gssntlmssp_la-ntlm_crypto.lo `test -f 'src/ntlm_crypto.c' || echo './'`src/ntlm_crypto.c
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR=\"/usr/local/share/locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/gssntlmssp_la-ntlm_crypto.lo -MD -MP -MF src/.deps/gssntlmssp_la-ntlm_crypto.Tpo -c src/ntlm_crypto.c -o src/gssntlmssp_la-ntlm_crypto.o
+mv -f src/.deps/gssntlmssp_la-ntlm_crypto.Tpo src/.deps/gssntlmssp_la-ntlm_crypto.Plo
+/bin/bash ./libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include   -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR="\"/usr/local/share/locale\"" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/gssntlmssp_la-ntlm.lo -MD -MP -MF src/.deps/gssntlmssp_la-ntlm.Tpo -c -o src/gssntlmssp_la-ntlm.lo `test -f 'src/ntlm.c' || echo './'`src/ntlm.c
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR=\"/usr/local/share/locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/gssntlmssp_la-ntlm.lo -MD -MP -MF src/.deps/gssntlmssp_la-ntlm.Tpo -c src/ntlm.c -o src/gssntlmssp_la-ntlm.o
+mv -f src/.deps/gssntlmssp_la-ntlm.Tpo src/.deps/gssntlmssp_la-ntlm.Plo
+/bin/bash ./libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include   -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR="\"/usr/local/share/locale\"" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/gssntlmssp_la-debug.lo -MD -MP -MF src/.deps/gssntlmssp_la-debug.Tpo -c -o src/gssntlmssp_la-debug.lo `test -f 'src/debug.c' || echo './'`src/debug.c
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR=\"/usr/local/share/locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/gssntlmssp_la-debug.lo -MD -MP -MF src/.deps/gssntlmssp_la-debug.Tpo -c src/debug.c -o src/gssntlmssp_la-debug.o
+mv -f src/.deps/gssntlmssp_la-debug.Tpo src/.deps/gssntlmssp_la-debug.Plo
+/bin/bash ./libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include   -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR="\"/usr/local/share/locale\"" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/gssntlmssp_la-gss_err.lo -MD -MP -MF src/.deps/gssntlmssp_la-gss_err.Tpo -c -o src/gssntlmssp_la-gss_err.lo `test -f 'src/gss_err.c' || echo './'`src/gss_err.c
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR=\"/usr/local/share/locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/gssntlmssp_la-gss_err.lo -MD -MP -MF src/.deps/gssntlmssp_la-gss_err.Tpo -c src/gss_err.c -o src/gssntlmssp_la-gss_err.o
+mv -f src/.deps/gssntlmssp_la-gss_err.Tpo src/.deps/gssntlmssp_la-gss_err.Plo
+/bin/bash ./libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include   -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR="\"/usr/local/share/locale\"" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/gssntlmssp_la-gss_spi.lo -MD -MP -MF src/.deps/gssntlmssp_la-gss_spi.Tpo -c -o src/gssntlmssp_la-gss_spi.lo `test -f 'src/gss_spi.c' || echo './'`src/gss_spi.c
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR=\"/usr/local/share/locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/gssntlmssp_la-gss_spi.lo -MD -MP -MF src/.deps/gssntlmssp_la-gss_spi.Tpo -c src/gss_spi.c -o src/gssntlmssp_la-gss_spi.o
+mv -f src/.deps/gssntlmssp_la-gss_spi.Tpo src/.deps/gssntlmssp_la-gss_spi.Plo
+/bin/bash ./libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include   -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR="\"/usr/local/share/locale\"" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/gssntlmssp_la-gss_names.lo -MD -MP -MF src/.deps/gssntlmssp_la-gss_names.Tpo -c -o src/gssntlmssp_la-gss_names.lo `test -f 'src/gss_names.c' || echo './'`src/gss_names.c
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR=\"/usr/local/share/locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/gssntlmssp_la-gss_names.lo -MD -MP -MF src/.deps/gssntlmssp_la-gss_names.Tpo -c src/gss_names.c -o src/gssntlmssp_la-gss_names.o
+mv -f src/.deps/gssntlmssp_la-gss_names.Tpo src/.deps/gssntlmssp_la-gss_names.Plo
+/bin/bash ./libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include   -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR="\"/usr/local/share/locale\"" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/gssntlmssp_la-gss_creds.lo -MD -MP -MF src/.deps/gssntlmssp_la-gss_creds.Tpo -c -o src/gssntlmssp_la-gss_creds.lo `test -f 'src/gss_creds.c' || echo './'`src/gss_creds.c
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR=\"/usr/local/share/locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/gssntlmssp_la-gss_creds.lo -MD -MP -MF src/.deps/gssntlmssp_la-gss_creds.Tpo -c src/gss_creds.c -o src/gssntlmssp_la-gss_creds.o
+mv -f src/.deps/gssntlmssp_la-gss_creds.Tpo src/.deps/gssntlmssp_la-gss_creds.Plo
+/bin/bash ./libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include   -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR="\"/usr/local/share/locale\"" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/gssntlmssp_la-gss_sec_ctx.lo -MD -MP -MF src/.deps/gssntlmssp_la-gss_sec_ctx.Tpo -c -o src/gssntlmssp_la-gss_sec_ctx.lo `test -f 'src/gss_sec_ctx.c' || echo './'`src/gss_sec_ctx.c
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR=\"/usr/local/share/locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/gssntlmssp_la-gss_sec_ctx.lo -MD -MP -MF src/.deps/gssntlmssp_la-gss_sec_ctx.Tpo -c src/gss_sec_ctx.c -o src/gssntlmssp_la-gss_sec_ctx.o
+mv -f src/.deps/gssntlmssp_la-gss_sec_ctx.Tpo src/.deps/gssntlmssp_la-gss_sec_ctx.Plo
+/bin/bash ./libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include   -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR="\"/usr/local/share/locale\"" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/gssntlmssp_la-gss_signseal.lo -MD -MP -MF src/.deps/gssntlmssp_la-gss_signseal.Tpo -c -o src/gssntlmssp_la-gss_signseal.lo `test -f 'src/gss_signseal.c' || echo './'`src/gss_signseal.c
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR=\"/usr/local/share/locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/gssntlmssp_la-gss_signseal.lo -MD -MP -MF src/.deps/gssntlmssp_la-gss_signseal.Tpo -c src/gss_signseal.c -o src/gssntlmssp_la-gss_signseal.o
+mv -f src/.deps/gssntlmssp_la-gss_signseal.Tpo src/.deps/gssntlmssp_la-gss_signseal.Plo
+/bin/bash ./libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include   -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR="\"/usr/local/share/locale\"" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/gssntlmssp_la-gss_serialize.lo -MD -MP -MF src/.deps/gssntlmssp_la-gss_serialize.Tpo -c -o src/gssntlmssp_la-gss_serialize.lo `test -f 'src/gss_serialize.c' || echo './'`src/gss_serialize.c
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR=\"/usr/local/share/locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/gssntlmssp_la-gss_serialize.lo -MD -MP -MF src/.deps/gssntlmssp_la-gss_serialize.Tpo -c src/gss_serialize.c -o src/gssntlmssp_la-gss_serialize.o
+mv -f src/.deps/gssntlmssp_la-gss_serialize.Tpo src/.deps/gssntlmssp_la-gss_serialize.Plo
+/bin/bash ./libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include   -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR="\"/usr/local/share/locale\"" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/gssntlmssp_la-external.lo -MD -MP -MF src/.deps/gssntlmssp_la-external.Tpo -c -o src/gssntlmssp_la-external.lo `test -f 'src/external.c' || echo './'`src/external.c
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR=\"/usr/local/share/locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/gssntlmssp_la-external.lo -MD -MP -MF src/.deps/gssntlmssp_la-external.Tpo -c src/external.c -o src/gssntlmssp_la-external.o
+mv -f src/.deps/gssntlmssp_la-external.Tpo src/.deps/gssntlmssp_la-external.Plo
+/bin/bash ./libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include   -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR="\"/usr/local/share/locale\"" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/gssntlmssp_la-gss_auth.lo -MD -MP -MF src/.deps/gssntlmssp_la-gss_auth.Tpo -c -o src/gssntlmssp_la-gss_auth.lo `test -f 'src/gss_auth.c' || echo './'`src/gss_auth.c
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR=\"/usr/local/share/locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/gssntlmssp_la-gss_auth.lo -MD -MP -MF src/.deps/gssntlmssp_la-gss_auth.Tpo -c src/gss_auth.c -o src/gssntlmssp_la-gss_auth.o
+mv -f src/.deps/gssntlmssp_la-gss_auth.Tpo src/.deps/gssntlmssp_la-gss_auth.Plo
+/bin/bash ./libtool  --tag=CC   --mode=compile /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I.  -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include   -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR="\"/usr/local/share/locale\"" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/gssntlmssp_la-gss_ntlmssp.lo -MD -MP -MF src/.deps/gssntlmssp_la-gss_ntlmssp.Tpo -c -o src/gssntlmssp_la-gss_ntlmssp.lo `test -f 'src/gss_ntlmssp.c' || echo './'`src/gss_ntlmssp.c
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -Wall -Iinclude -I.. -I./include -I. -Iinclude -I. -DLIBDIR=\"/usr/local/lib\" -DVARDIR=\"/usr/local/var\" -DSHLIBEXT=\"\" -DSYSCONFDIR=\"/usr/local/etc\" -DLOCALEDIR=\"/usr/local/share/locale\" -I/usr/include -I/usr/include -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR=\"/usr/local/share/locale\" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -MT src/gssntlmssp_la-gss_ntlmssp.lo -MD -MP -MF src/.deps/gssntlmssp_la-gss_ntlmssp.Tpo -c src/gss_ntlmssp.c -o src/gssntlmssp_la-gss_ntlmssp.o
+mv -f src/.deps/gssntlmssp_la-gss_ntlmssp.Tpo src/.deps/gssntlmssp_la-gss_ntlmssp.Plo
+/bin/bash ./libtool  --tag=CC   --mode=link /usr/local/bin/clang-jcc   -Wall -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Wcast-align -Wwrite-strings -Werror-implicit-function-declaration -fno-strict-aliasing -DLOCALEDIR="\"/usr/local/share/locale\"" -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -L/usr/local/lib -L/usr/lib/x86_64-linux-gnu/mit-krb5 -Wl,-Bsymbolic-functions -Wl,-z,relro -lgssapi_krb5 -lkrb5 -lk5crypto -lcom_err -lssl -lcrypto  -export-symbols-regex '^gss(spi|)_' -avoid-version -module -L/usr/lib -L/usr/lib -o gssntlmssp.la -rpath /usr/local/lib/gssntlmssp src/gssntlmssp_la-crypto.lo src/gssntlmssp_la-ntlm_crypto.lo src/gssntlmssp_la-ntlm.lo src/gssntlmssp_la-debug.lo src/gssntlmssp_la-gss_err.lo src/gssntlmssp_la-gss_spi.lo src/gssntlmssp_la-gss_names.lo src/gssntlmssp_la-gss_creds.lo src/gssntlmssp_la-gss_sec_ctx.lo src/gssntlmssp_la-gss_signseal.lo src/gssntlmssp_la-gss_serialize.lo src/gssntlmssp_la-external.lo src/gssntlmssp_la-gss_auth.lo src/gssntlmssp_la-gss_ntlmssp.lo   -lz -lunistring -lgssapi_krb5 -lgssapi_krb5  -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+libtool: link: ar cr .libs/gssntlmssp.a  src/gssntlmssp_la-crypto.o src/gssntlmssp_la-ntlm_crypto.o src/gssntlmssp_la-ntlm.o src/gssntlmssp_la-debug.o src/gssntlmssp_la-gss_err.o src/gssntlmssp_la-gss_spi.o src/gssntlmssp_la-gss_names.o src/gssntlmssp_la-gss_creds.o src/gssntlmssp_la-gss_sec_ctx.o src/gssntlmssp_la-gss_signseal.o src/gssntlmssp_la-gss_serialize.o src/gssntlmssp_la-external.o src/gssntlmssp_la-gss_auth.o src/gssntlmssp_la-gss_ntlmssp.o
+libtool: link: ranlib .libs/gssntlmssp.a
+libtool: link: ( cd ".libs" && rm -f "gssntlmssp.la" && ln -s "../gssntlmssp.la" "gssntlmssp.la" )
+make[2]: Leaving directory '/src/gss-ntlmssp'
+make[1]: Leaving directory '/src/gss-ntlmssp'
++ pushd fuzzing/
+/src/gss-ntlmssp/fuzzing /src/gss-ntlmssp
++ make fuzzer
+/usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link  -I../include -I../src -c fuzz-accept-sec-context.c
+In file included from fuzz-accept-sec-context.c:1:
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:16:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+fuzz-accept-sec-context.cpp:33:12: error: no member named 'ReadBytes' in 'FuzzedDataProvider'
+    stream.ReadBytes(reinterpret_cast<uint8_t*>(mech_type.elements),
+    ~~~~~~ ^
+fuzz-accept-sec-context.cpp:43:3: error: no matching function for call to 'gss_inquire_cred_by_mech'
+  gss_inquire_cred_by_mech(&minor_status, cred_handle, &mech_type, &name,
+  ^~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/gssapi/gssapi.h:649:1: note: candidate function not viable: no known conversion from 'int *' to 'OM_uint32 *' (aka 'unsigned int *') for 1st argument
+gss_inquire_cred_by_mech(
+^
+2 errors generated.
+make: *** [Makefile:4: fuzzer] Error 1

@@ -1,0 +1,179 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ mkdir build
++ cd build
++ cmake .. -GNinja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_STANDARD=14 -DFMT_DOC=Off -DFMT_TEST=Off -DFMT_SAFE_DURATION_CAST=On -DFMT_FUZZ=On -DFMT_FUZZ_LINKMAIN=Off -DFMT_FUZZ_LDFLAGS=-fsanitize=fuzzer
+-- CMake version: 3.24.2
+-- The CXX compiler identification is Clang 15.0.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/local/bin/clang++-jcc - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Version: 10.2.2
+-- Build type: Debug
+-- Performing Test HAS_NULLPTR_WARNING
+-- Performing Test HAS_NULLPTR_WARNING - Success
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /src/fmt/build
++ cmake --build .
+[1/15] Building CXX object test/fuzzing/CMakeFiles/float-fuzzer.dir/float.cc.o
+[2/15] Building CXX object CMakeFiles/fmt.dir/src/os.cc.o
+[3/15] Building CXX object test/fuzzing/CMakeFiles/chrono-timepoint-fuzzer.dir/chrono-timepoint.cc.o
+FAILED: test/fuzzing/CMakeFiles/chrono-timepoint-fuzzer.dir/chrono-timepoint.cc.o 
+/usr/local/bin/clang++-jcc -DFMT_FUZZ -DFMT_SAFE_DURATION_CAST -I/src/fmt/include -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fvisibility=hidden -fvisibility-inlines-hidden -MD -MT test/fuzzing/CMakeFiles/chrono-timepoint-fuzzer.dir/chrono-timepoint.cc.o -MF test/fuzzing/CMakeFiles/chrono-timepoint-fuzzer.dir/chrono-timepoint.cc.o.d -o test/fuzzing/CMakeFiles/chrono-timepoint-fuzzer.dir/chrono-timepoint.cc.o -c /src/fmt/test/fuzzing/chrono-timepoint.cc
+In file included from /src/fmt/test/fuzzing/chrono-timepoint.cc:6:
+In file included from /src/fmt/test/fuzzing/fuzzer-common.h:7:
+/src/fmt/include/fmt/base.h:1287:30: error: type 'long' cannot be used prior to '::' because it has no members
+  using char_type = typename Context::char_type;
+                             ^
+/src/fmt/test/fuzzing/chrono-timepoint.cc:18:23: note: in instantiation of template class 'fmt::detail::value<long>' requested here
+    args.emplace_back(fmt::detail::value<int64_t>(*reinterpret_cast<const int64_t*>(data)));
+                      ^
+In file included from /src/fmt/test/fuzzing/chrono-timepoint.cc:6:
+In file included from /src/fmt/test/fuzzing/fuzzer-common.h:7:
+/src/fmt/include/fmt/base.h:1279:34: error: type 'long' cannot be used prior to '::' because it has no members
+  using parse_context = typename Context::parse_context_type;
+                                 ^
+/src/fmt/include/fmt/base.h:1304:27: note: in instantiation of template class 'fmt::detail::custom_value<long>' requested here
+    custom_value<Context> custom;
+                          ^
+/src/fmt/include/fmt/base.h:1289:3: note: in instantiation of member class 'fmt::detail::value<long>::(anonymous)' requested here
+  union {
+  ^
+/src/fmt/test/fuzzing/chrono-timepoint.cc:18:23: note: in instantiation of template class 'fmt::detail::value<long>' requested here
+    args.emplace_back(fmt::detail::value<int64_t>(*reinterpret_cast<const int64_t*>(data)));
+                      ^
+In file included from /src/fmt/test/fuzzing/chrono-timepoint.cc:6:
+In file included from /src/fmt/test/fuzzing/fuzzer-common.h:7:
+/src/fmt/include/fmt/base.h:1320:31: error: multiple overloads of 'value' instantiate to the same signature 'void (fmt::detail::value<long>::char_type)' (aka 'void (int)')
+  constexpr FMT_ALWAYS_INLINE value(char_type val) : char_value(val) {}
+                              ^
+/src/fmt/test/fuzzing/chrono-timepoint.cc:18:23: note: in instantiation of template class 'fmt::detail::value<long>' requested here
+    args.emplace_back(fmt::detail::value<int64_t>(*reinterpret_cast<const int64_t*>(data)));
+                      ^
+/src/fmt/include/fmt/base.h:1309:31: note: previous declaration is here
+  constexpr FMT_ALWAYS_INLINE value(int val) : int_value(val) {}
+                              ^
+/src/fmt/include/fmt/base.h:1356:42: error: type 'long' cannot be used prior to '::' because it has no members
+                                typename Context::parse_context_type& parse_ctx,
+                                         ^
+/src/fmt/test/fuzzing/chrono-timepoint.cc:22:37: error: no viable conversion from 'std::vector<fmt::detail::value<fmt::format_context>>' (aka 'vector<value<fmt::context>>') to 'fmt::format_args' (aka 'basic_format_args<fmt::context>')
+  fmt::vprintln(stderr, format_str, args);
+                                    ^~~~
+/src/fmt/include/fmt/base.h:1787:35: note: candidate constructor (the implicit copy constructor) not viable: no known conversion from 'std::vector<fmt::detail::value<fmt::format_context>>' (aka 'vector<value<fmt::context>>') to 'const fmt::basic_format_args<fmt::context> &' for 1st argument
+template <typename Context> class basic_format_args {
+                                  ^
+/src/fmt/include/fmt/base.h:1787:35: note: candidate constructor (the implicit move constructor) not viable: no known conversion from 'std::vector<fmt::detail::value<fmt::format_context>>' (aka 'vector<value<fmt::context>>') to 'fmt::basic_format_args<fmt::context> &&' for 1st argument
+/src/fmt/include/fmt/base.h:1849:13: note: candidate constructor not viable: no known conversion from 'std::vector<fmt::detail::value<fmt::format_context>>' (aka 'vector<value<fmt::context>>') to 'const dynamic_format_arg_store<fmt::context> &' for 1st argument
+  constexpr basic_format_args(const dynamic_format_arg_store<Context>& store)
+            ^
+/src/fmt/include/fmt/base.h:1831:31: note: candidate template ignored: could not match 'format_arg_store' against 'vector'
+  constexpr FMT_ALWAYS_INLINE basic_format_args(
+                              ^
+/src/fmt/include/fmt/base.h:1838:13: note: candidate template ignored: could not match 'format_arg_store' against 'vector'
+  constexpr basic_format_args(
+            ^
+/src/fmt/include/fmt/base.h:2966:61: note: passing argument to parameter 'args' here
+FMT_API void vprintln(FILE* f, string_view fmt, format_args args);
+                                                            ^
+In file included from /src/fmt/test/fuzzing/chrono-timepoint.cc:3:
+In file included from /usr/local/bin/../include/c++/v1/string:525:
+In file included from /usr/local/bin/../include/c++/v1/algorithm:684:
+In file included from /usr/local/bin/../include/c++/v1/functional:506:
+In file included from /usr/local/bin/../include/c++/v1/__functional/function.h:22:
+In file included from /usr/local/bin/../include/c++/v1/__memory/shared_ptr.h:20:
+/usr/local/bin/../include/c++/v1/__memory/allocator.h:151:28: error: no matching constructor for initialization of 'fmt::detail::value<fmt::context>'
+        ::new ((void*)__p) _Up(_VSTD::forward<_Args>(__args)...);
+                           ^   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/local/bin/../include/c++/v1/__memory/allocator_traits.h:290:13: note: in instantiation of function template specialization 'std::allocator<fmt::detail::value<fmt::context>>::construct<fmt::detail::value<fmt::context>, fmt::detail::value<long>>' requested here
+        __a.construct(__p, _VSTD::forward<_Args>(__args)...);
+            ^
+/usr/local/bin/../include/c++/v1/vector:787:21: note: in instantiation of function template specialization 'std::allocator_traits<std::allocator<fmt::detail::value<fmt::context>>>::construct<fmt::detail::value<fmt::context>, fmt::detail::value<long>, void>' requested here
+    __alloc_traits::construct(this->__alloc(), _VSTD::__to_address(__tx.__pos_),
+                    ^
+/usr/local/bin/../include/c++/v1/vector:1586:9: note: in instantiation of function template specialization 'std::vector<fmt::detail::value<fmt::context>>::__construct_one_at_end<fmt::detail::value<long>>' requested here
+        __construct_one_at_end(_VSTD::forward<_Args>(__args)...);
+        ^
+/src/fmt/test/fuzzing/chrono-timepoint.cc:18:10: note: in instantiation of function template specialization 'std::vector<fmt::detail::value<fmt::context>>::emplace_back<fmt::detail::value<long>>' requested here
+    args.emplace_back(fmt::detail::value<int64_t>(*reinterpret_cast<const int64_t*>(data)));
+         ^
+/src/fmt/include/fmt/base.h:1285:35: note: candidate constructor (the implicit copy constructor) not viable: no known conversion from 'value<long>' to 'const value<fmt::context>' for 1st argument
+template <typename Context> class value {
+                                  ^
+/src/fmt/include/fmt/base.h:1285:35: note: candidate constructor (the implicit move constructor) not viable: no known conversion from 'value<long>' to 'value<fmt::context>' for 1st argument
+/src/fmt/include/fmt/base.h:1309:31: note: candidate constructor not viable: no known conversion from 'fmt::detail::value<long>' to 'int' for 1st argument
+  constexpr FMT_ALWAYS_INLINE value(int val) : int_value(val) {}
+                              ^
+/src/fmt/include/fmt/base.h:1310:31: note: candidate constructor not viable: no known conversion from 'fmt::detail::value<long>' to 'unsigned int' for 1st argument
+  constexpr FMT_ALWAYS_INLINE value(unsigned val) : uint_value(val) {}
+                              ^
+/src/fmt/include/fmt/base.h:1311:31: note: candidate constructor not viable: no known conversion from 'fmt::detail::value<long>' to 'long long' for 1st argument
+  constexpr FMT_ALWAYS_INLINE value(long long val) : long_long_value(val) {}
+                              ^
+/src/fmt/include/fmt/base.h:1312:31: note: candidate constructor not viable: no known conversion from 'fmt::detail::value<long>' to 'unsigned long long' for 1st argument
+  constexpr FMT_ALWAYS_INLINE value(unsigned long long val)
+                              ^
+/src/fmt/include/fmt/base.h:1314:21: note: candidate constructor not viable: no known conversion from 'fmt::detail::value<long>' to 'fmt::detail::int128_opt' (aka '__int128') for 1st argument
+  FMT_ALWAYS_INLINE value(int128_opt val) : int128_value(val) {}
+                    ^
+/src/fmt/include/fmt/base.h:1315:21: note: candidate constructor not viable: no known conversion from 'fmt::detail::value<long>' to 'fmt::detail::uint128_opt' (aka 'unsigned __int128') for 1st argument
+  FMT_ALWAYS_INLINE value(uint128_opt val) : uint128_value(val) {}
+                    ^
+/src/fmt/include/fmt/base.h:1316:31: note: candidate constructor not viable: no known conversion from 'fmt::detail::value<long>' to 'float' for 1st argument
+  constexpr FMT_ALWAYS_INLINE value(float val) : float_value(val) {}
+                              ^
+/src/fmt/include/fmt/base.h:1317:31: note: candidate constructor not viable: no known conversion from 'fmt::detail::value<long>' to 'double' for 1st argument
+  constexpr FMT_ALWAYS_INLINE value(double val) : double_value(val) {}
+                              ^
+/src/fmt/include/fmt/base.h:1318:21: note: candidate constructor not viable: no known conversion from 'fmt::detail::value<long>' to 'long double' for 1st argument
+  FMT_ALWAYS_INLINE value(long double val) : long_double_value(val) {}
+                    ^
+/src/fmt/include/fmt/base.h:1319:31: note: candidate constructor not viable: no known conversion from 'fmt::detail::value<long>' to 'bool' for 1st argument
+  constexpr FMT_ALWAYS_INLINE value(bool val) : bool_value(val) {}
+                              ^
+/src/fmt/include/fmt/base.h:1320:31: note: candidate constructor not viable: no known conversion from 'fmt::detail::value<long>' to 'fmt::detail::value<fmt::context>::char_type' (aka 'char') for 1st argument
+  constexpr FMT_ALWAYS_INLINE value(char_type val) : char_value(val) {}
+                              ^
+/src/fmt/include/fmt/base.h:1321:35: note: candidate constructor not viable: no known conversion from 'fmt::detail::value<long>' to 'const fmt::detail::value<fmt::context>::char_type *' (aka 'const char *') for 1st argument
+  FMT_CONSTEXPR FMT_ALWAYS_INLINE value(const char_type* val) {
+                                  ^
+/src/fmt/include/fmt/base.h:1325:35: note: candidate constructor not viable: no known conversion from 'fmt::detail::value<long>' to 'basic_string_view<fmt::detail::value<fmt::context>::char_type>' (aka 'basic_string_view<char>') for 1st argument
+  FMT_CONSTEXPR FMT_ALWAYS_INLINE value(basic_string_view<char_type> val) {
+                                  ^
+/src/fmt/include/fmt/base.h:1329:21: note: candidate constructor not viable: no known conversion from 'fmt::detail::value<long>' to 'const void *' for 1st argument
+  FMT_ALWAYS_INLINE value(const void* val) : pointer(val) {}
+                    ^
+/src/fmt/include/fmt/base.h:1333:59: note: candidate constructor [with T = fmt::detail::value<long>] not viable: expects an lvalue for 1st argument
+  template <typename T> FMT_CONSTEXPR20 FMT_ALWAYS_INLINE value(T& val) {
+                                                          ^
+/src/fmt/include/fmt/base.h:1348:3: note: candidate constructor not viable: no known conversion from 'fmt::detail::value<long>' to 'fmt::detail::unformattable' for 1st argument
+  value(unformattable);
+  ^
+/src/fmt/include/fmt/base.h:1349:3: note: candidate constructor not viable: no known conversion from 'fmt::detail::value<long>' to 'fmt::detail::unformattable_char' for 1st argument
+  value(unformattable_char);
+  ^
+/src/fmt/include/fmt/base.h:1350:3: note: candidate constructor not viable: no known conversion from 'fmt::detail::value<long>' to 'fmt::detail::unformattable_pointer' for 1st argument
+  value(unformattable_pointer);
+  ^
+/src/fmt/include/fmt/base.h:1308:31: note: candidate constructor not viable: requires 0 arguments, but 1 was provided
+  constexpr FMT_ALWAYS_INLINE value() : no_value() {}
+                              ^
+/src/fmt/include/fmt/base.h:1330:21: note: candidate constructor not viable: requires 2 arguments, but 1 was provided
+  FMT_ALWAYS_INLINE value(const named_arg_info<char_type>* args, size_t size)
+                    ^
+6 errors generated.
+[4/15] Building CXX object test/fuzzing/CMakeFiles/named-arg-fuzzer.dir/named-arg.cc.o
+[5/15] Building CXX object test/fuzzing/CMakeFiles/one-arg-fuzzer.dir/one-arg.cc.o
+[6/15] Building CXX object test/fuzzing/CMakeFiles/two-args-fuzzer.dir/two-args.cc.o
+[7/15] Building CXX object CMakeFiles/fmt.dir/src/format.cc.o
+[8/15] Building CXX object test/fuzzing/CMakeFiles/chrono-duration-fuzzer.dir/chrono-duration.cc.o
+ninja: build stopped: subcommand failed.

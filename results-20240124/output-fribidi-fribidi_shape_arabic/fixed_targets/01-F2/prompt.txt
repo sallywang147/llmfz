@@ -1,0 +1,74 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdint.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
+#include <assert.h>
+
+#include <fribidi.h>
+
+extern "C" {
+#include <fribidi-arabic.h>
+}
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  const FriBidiStrIndex str_len = size / 4;
+  FriBidiChar *str = (FriBidiChar *)data;
+
+  FriBidiCharType *types = (FriBidiCharType *)calloc(str_len, sizeof(FriBidiCharType));
+  FriBidiBracketType *btypes = (FriBidiBracketType *)calloc(str_len, sizeof(FriBidiBracketType));
+  FriBidiLevel *levels = (FriBidiLevel *)calloc(str_len, sizeof(FriBidiLevel));
+  fribidi_get_bidi_types(str, str_len, types);
+  fribidi_get_bracket_types(str, str_len, types, btypes);
+  FriBidiParType par_type = FRIBIDI_PAR_ON;
+  FriBidiLevel level = fribidi_get_par_embedding_levels_ex(types, btypes, str_len, &par_type, levels);
+  if ((0)) assert(level);
+  free(types);
+  free(btypes);
+  free(levels);
+
+  FriBidiArabicShapingOptions options = {0};
+  fribidi_shape_arabic(options.flags, levels, str_len, nullptr, str);
+  return 0;
+}
+
+/* Editor directions:
+ * vim:textwidth=78:tabstop=8:shiftwidth=2:autoindent:cindent
+ */
+</code>
+
+The code has the following build issues:
+<error>
+../../src/fribidi/bin/fribidi-fuzzer.c:9:8: error: expected identifier or '('
+extern "C" {
+       ^
+../../src/fribidi/bin/fribidi-fuzzer.c:29:3: error: use of undeclared identifier 'FriBidiArabicShapingOptions'
+  FriBidiArabicShapingOptions options = {0};
+  ^
+../../src/fribidi/bin/fribidi-fuzzer.c:30:24: error: use of undeclared identifier 'options'
+  fribidi_shape_arabic(options.flags, levels, str_len, nullptr, str);
+                       ^
+../../src/fribidi/bin/fribidi-fuzzer.c:30:56: error: use of undeclared identifier 'nullptr'
+  fribidi_shape_arabic(options.flags, levels, str_len, nullptr, str);
+                                                       ^
+4 errors generated.
+
+Fix failure
+../../src/fribidi/bin/fribidi-fuzzer.cpp:29:3: error: unknown type name 'FriBidiArabicShapingOptions'
+  FriBidiArabicShapingOptions options = {0};
+  ^
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,1 @@
+error: undefined reference to 'gen_rsa_priv_key'

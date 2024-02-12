@@ -1,0 +1,173 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "test-util.h"
+#include <kj/main.h>
+#include "serialize.h"
+#include <capnp/test.capnp.h>
+#include <unistd.h>
+
+/* This is the entry point of a fuzz target to be used with libFuzzer
+ * or another fuzz driver.
+ * Such a fuzz driver is used by the autotools target capnp-llvm-fuzzer-testcase
+ * when the environment variable LIB_FUZZING_ENGINE is defined
+ * for instance LIB_FUZZING_ENGINE=-fsanitize=fuzzer for libFuzzer
+ */
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* Data, size_t Size) {
+  kj::ArrayPtr<const uint8_t> array(Data, Size);
+  kj::ArrayInputStream ais(array);
+
+  KJ_IF_MAYBE(e, kj::runCatchingExceptions([&]() {
+    capnp::InputStreamMessageReader reader(ais);
+    capnp::DynamicStruct::Builder builder;
+    capnp::_::checkDynamicTestMessage(builder.init<capnp::_::TestAllTypes>(reader.getRoot<capnp::_::TestAllTypes>()));
+    builder.adopt(builder.asReader().getStructField("int32List"), builder.asReader().getStructField("int32List").getContainingStruct().asOrphan());
+    builder.adopt(builder.asReader().getStructField("int64List"), builder.asReader().getStructField("int64List").getContainingStruct().asOrphan());
+    builder.adopt(builder.asReader().getStructField("float32List"), builder.asReader().getStructField("float32List").getContainingStruct().asOrphan());
+    builder.adopt(builder.asReader().getStructField("float64List"), builder.asReader().getStructField("float64List").getContainingStruct().asOrphan());
+    builder.adopt(builder.asReader().getStructField("boolList"), builder.asReader().getStructField("boolList").getContainingStruct().asOrphan());
+    builder.adopt(builder.asReader().getStructField("stringList"), builder.asReader().getStructField("stringList").getContainingStruct().asOrphan());
+    builder.adopt(builder.asReader().getStructField("byteList"), builder.asReader().getStructField("byteList").getContainingStruct().asOrphan());
+    builder.adopt(builder.asReader().getStructField("enumList"), builder.asReader().getStructField("enumList").getContainingStruct().asOrphan());
+    builder.adopt(builder.asReader().getStructField("structList"), builder.asReader().getStructField("structList").getContainingStruct().asOrphan());
+    builder.adopt(builder.asReader().getStructField("interfaceList"), builder.asReader().getStructField("interfaceList").getContainingStruct().asOrphan());
+    builder.adopt(builder.asReader().getStructField("anyPointerList"), builder.asReader().getStructField("anyPointerList").getContainingStruct().asOrphan());
+    builder.adopt(builder.asReader().getStructField("textList"), builder.asReader().getStructField("textList").getContainingStruct().asOrphan());
+    kj::str(builder.asReader());
+  })) {
+    KJ_LOG(ERROR, "threw");
+  }
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+src/capnp/llvm-fuzzer-testcase.c++:20:74: error: expected '(' for function-style cast or type construction
+    capnp::_::checkDynamicTestMessage(builder.init<capnp::_::TestAllTypes>(reader.getRoot<capnp::_::TestAllTypes>()));
+                                                   ~~~~~~~~~~~~~~~~~~~~~~^
+./src/kj/common.h:1351:71: note: expanded from macro 'KJ_IF_MAYBE'
+    if (KJ_DEPRECATE_KJ_IF_MAYBE_STMT; auto name = ::kj::_::readMaybe(exp))
+                                                                      ^~~
+src/capnp/llvm-fuzzer-testcase.c++:21:38: error: no member named 'getStructField' in 'capnp::DynamicStruct::Reader'
+    builder.adopt(builder.asReader().getStructField("int32List"), builder.asReader().getStructField("int32List").getContainingStruct().asOrphan());
+                  ~~~~~~~~~~~~~~~~~~ ^
+./src/kj/common.h:1351:71: note: expanded from macro 'KJ_IF_MAYBE'
+    if (KJ_DEPRECATE_KJ_IF_MAYBE_STMT; auto name = ::kj::_::readMaybe(exp))
+                                                                      ^~~
+src/capnp/llvm-fuzzer-testcase.c++:21:86: error: no member named 'getStructField' in 'capnp::DynamicStruct::Reader'
+    builder.adopt(builder.asReader().getStructField("int32List"), builder.asReader().getStructField("int32List").getContainingStruct().asOrphan());
+                                                                  ~~~~~~~~~~~~~~~~~~ ^
+./src/kj/common.h:1351:71: note: expanded from macro 'KJ_IF_MAYBE'
+    if (KJ_DEPRECATE_KJ_IF_MAYBE_STMT; auto name = ::kj::_::readMaybe(exp))
+                                                                      ^~~
+src/capnp/llvm-fuzzer-testcase.c++:22:38: error: no member named 'getStructField' in 'capnp::DynamicStruct::Reader'
+    builder.adopt(builder.asReader().getStructField("int64List"), builder.asReader().getStructField("int64List").getContainingStruct().asOrphan());
+                  ~~~~~~~~~~~~~~~~~~ ^
+./src/kj/common.h:1351:71: note: expanded from macro 'KJ_IF_MAYBE'
+    if (KJ_DEPRECATE_KJ_IF_MAYBE_STMT; auto name = ::kj::_::readMaybe(exp))
+                                                                      ^~~
+src/capnp/llvm-fuzzer-testcase.c++:22:86: error: no member named 'getStructField' in 'capnp::DynamicStruct::Reader'
+    builder.adopt(builder.asReader().getStructField("int64List"), builder.asReader().getStructField("int64List").getContainingStruct().asOrphan());
+                                                                  ~~~~~~~~~~~~~~~~~~ ^
+./src/kj/common.h:1351:71: note: expanded from macro 'KJ_IF_MAYBE'
+    if (KJ_DEPRECATE_KJ_IF_MAYBE_STMT; auto name = ::kj::_::readMaybe(exp))
+                                                                      ^~~
+src/capnp/llvm-fuzzer-testcase.c++:23:38: error: no member named 'getStructField' in 'capnp::DynamicStruct::Reader'
+    builder.adopt(builder.asReader().getStructField("float32List"), builder.asReader().getStructField("float32List").getContainingStruct().asOrphan());
+                  ~~~~~~~~~~~~~~~~~~ ^
+./src/kj/common.h:1351:71: note: expanded from macro 'KJ_IF_MAYBE'
+    if (KJ_DEPRECATE_KJ_IF_MAYBE_STMT; auto name = ::kj::_::readMaybe(exp))
+                                                                      ^~~
+src/capnp/llvm-fuzzer-testcase.c++:23:88: error: no member named 'getStructField' in 'capnp::DynamicStruct::Reader'
+    builder.adopt(builder.asReader().getStructField("float32List"), builder.asReader().getStructField("float32List").getContainingStruct().asOrphan());
+                                                                    ~~~~~~~~~~~~~~~~~~ ^
+./src/kj/common.h:1351:71: note: expanded from macro 'KJ_IF_MAYBE'
+    if (KJ_DEPRECATE_KJ_IF_MAYBE_STMT; auto name = ::kj::_::readMaybe(exp))
+                                                                      ^~~
+src/capnp/llvm-fuzzer-testcase.c++:24:38: error: no member named 'getStructField' in 'capnp::DynamicStruct::Reader'
+    builder.adopt(builder.asReader().getStructField("float64List"), builder.asReader().getStructField("float64List").getContainingStruct().asOrphan());
+                  ~~~~~~~~~~~~~~~~~~ ^
+./src/kj/common.h:1351:71: note: expanded from macro 'KJ_IF_MAYBE'
+    if (KJ_DEPRECATE_KJ_IF_MAYBE_STMT; auto name = ::kj::_::readMaybe(exp))
+                                                                      ^~~
+src/capnp/llvm-fuzzer-testcase.c++:24:88: error: no member named 'getStructField' in 'capnp::DynamicStruct::Reader'
+    builder.adopt(builder.asReader().getStructField("float64List"), builder.asReader().getStructField("float64List").getContainingStruct().asOrphan());
+                                                                    ~~~~~~~~~~~~~~~~~~ ^
+./src/kj/common.h:1351:71: note: expanded from macro 'KJ_IF_MAYBE'
+    if (KJ_DEPRECATE_KJ_IF_MAYBE_STMT; auto name = ::kj::_::readMaybe(exp))
+                                                                      ^~~
+src/capnp/llvm-fuzzer-testcase.c++:25:38: error: no member named 'getStructField' in 'capnp::DynamicStruct::Reader'
+    builder.adopt(builder.asReader().getStructField("boolList"), builder.asReader().getStructField("boolList").getContainingStruct().asOrphan());
+                  ~~~~~~~~~~~~~~~~~~ ^
+./src/kj/common.h:1351:71: note: expanded from macro 'KJ_IF_MAYBE'
+    if (KJ_DEPRECATE_KJ_IF_MAYBE_STMT; auto name = ::kj::_::readMaybe(exp))
+                                                                      ^~~
+src/capnp/llvm-fuzzer-testcase.c++:25:85: error: no member named 'getStructField' in 'capnp::DynamicStruct::Reader'
+    builder.adopt(builder.asReader().getStructField("boolList"), builder.asReader().getStructField("boolList").getContainingStruct().asOrphan());
+                                                                 ~~~~~~~~~~~~~~~~~~ ^
+./src/kj/common.h:1351:71: note: expanded from macro 'KJ_IF_MAYBE'
+    if (KJ_DEPRECATE_KJ_IF_MAYBE_STMT; auto name = ::kj::_::readMaybe(exp))
+                                                                      ^~~
+src/capnp/llvm-fuzzer-testcase.c++:26:38: error: no member named 'getStructField' in 'capnp::DynamicStruct::Reader'
+    builder.adopt(builder.asReader().getStructField("stringList"), builder.asReader().getStructField("stringList").getContainingStruct().asOrphan());
+                  ~~~~~~~~~~~~~~~~~~ ^
+./src/kj/common.h:1351:71: note: expanded from macro 'KJ_IF_MAYBE'
+    if (KJ_DEPRECATE_KJ_IF_MAYBE_STMT; auto name = ::kj::_::readMaybe(exp))
+                                                                      ^~~
+src/capnp/llvm-fuzzer-testcase.c++:26:87: error: no member named 'getStructField' in 'capnp::DynamicStruct::Reader'
+    builder.adopt(builder.asReader().getStructField("stringList"), builder.asReader().getStructField("stringList").getContainingStruct().asOrphan());
+                                                                   ~~~~~~~~~~~~~~~~~~ ^
+./src/kj/common.h:1351:71: note: expanded from macro 'KJ_IF_MAYBE'
+    if (KJ_DEPRECATE_KJ_IF_MAYBE_STMT; auto name = ::kj::_::readMaybe(exp))
+                                                                      ^~~
+src/capnp/llvm-fuzzer-testcase.c++:27:38: error: no member named 'getStructField' in 'capnp::DynamicStruct::Reader'
+    builder.adopt(builder.asReader().getStructField("byteList"), builder.asReader().getStructField("byteList").getContainingStruct().asOrphan());
+                  ~~~~~~~~~~~~~~~~~~ ^
+./src/kj/common.h:1351:71: note: expanded from macro 'KJ_IF_MAYBE'
+    if (KJ_DEPRECATE_KJ_IF_MAYBE_STMT; auto name = ::kj::_::readMaybe(exp))
+                                                                      ^~~
+src/capnp/llvm-fuzzer-testcase.c++:27:85: error: no member named 'getStructField' in 'capnp::DynamicStruct::Reader'
+    builder.adopt(builder.asReader().getStructField("byteList"), builder.asReader().getStructField("byteList").getContainingStruct().asOrphan());
+                                                                 ~~~~~~~~~~~~~~~~~~ ^
+./src/kj/common.h:1351:71: note: expanded from macro 'KJ_IF_MAYBE'
+    if (KJ_DEPRECATE_KJ_IF_MAYBE_STMT; auto name = ::kj::_::readMaybe(exp))
+                                                                      ^~~
+src/capnp/llvm-fuzzer-testcase.c++:28:38: error: no member named 'getStructField' in 'capnp::DynamicStruct::Reader'
+    builder.adopt(builder.asReader().getStructField("enumList"), builder.asReader().getStructField("enumList").getContainingStruct().asOrphan());
+                  ~~~~~~~~~~~~~~~~~~ ^
+./src/kj/common.h:1351:71: note: expanded from macro 'KJ_IF_MAYBE'
+    if (KJ_DEPRECATE_KJ_IF_MAYBE_STMT; auto name = ::kj::_::readMaybe(exp))
+                                                                      ^~~
+src/capnp/llvm-fuzzer-testcase.c++:28:85: error: no member named 'getStructField' in 'capnp::DynamicStruct::Reader'
+    builder.adopt(builder.asReader().getStructField("enumList"), builder.asReader().getStructField("enumList").getContainingStruct().asOrphan());
+                                                                 ~~~~~~~~~~~~~~~~~~ ^
+./src/kj/common.h:1351:71: note: expanded from macro 'KJ_IF_MAYBE'
+    if (KJ_DEPRECATE_KJ_IF_MAYBE_STMT; auto name = ::kj::_::readMaybe(exp))
+                                                                      ^~~
+src/capnp/llvm-fuzzer-testcase.c++:29:38: error: no member named 'getStructField' in 'capnp::DynamicStruct::Reader'
+    builder.adopt(builder.asReader().getStructField("structList"), builder.asReader().getStructField("structList").getContainingStruct().asOrphan());
+                  ~~~~~~~~~~~~~~~~~~ ^
+./src/kj/common.h:1351:71: note: expanded from macro 'KJ_IF_MAYBE'
+    if (KJ_DEPRECATE_KJ_IF_MAYBE_STMT; auto name = ::kj::_::readMaybe(exp))
+                                                                      ^~~
+src/capnp/llvm-fuzzer-testcase.c++:29:87: error: no member named 'getStructField' in 'capnp::DynamicStruct::Reader'
+    builder.adopt(builder.asReader().getStructField("structList"), builder.asReader().getStructField("structList").getContainingStruct().asOrphan());
+                                                                   ~~~~~~~~~~~~~~~~~~ ^
+./src/kj/common.h:1351:71: note: expanded from macro 'KJ_IF_MAYBE'
+    if (KJ_DEPRECATE_KJ_IF_MAYBE_STMT; auto name = ::kj::_::readMaybe(exp))
+                                                                      ^~~
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

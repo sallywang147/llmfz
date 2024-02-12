@@ -1,0 +1,42 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+extern "C" {
+#include "acommon.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  acommon::PosibErr config;
+  std::string filename_str = stream.ConsumeRemainingBytesAsString();
+  acommon::Config filename(filename_str.c_str());
+  acommon::set_mode_from_extension(&config, &filename, nullptr, 0, nullptr);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+aspell_fuzzer.cpp:9:10: fatal error: 'acommon.h' file not found
+#include "acommon.h"
+         ^~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

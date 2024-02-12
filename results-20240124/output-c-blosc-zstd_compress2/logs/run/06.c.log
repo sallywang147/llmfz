@@ -1,0 +1,43 @@
+/workspace/out/libfuzzer-address-x86_64/compress_fuzzer -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/compress_fuzzer < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 1138784150
+INFO: Loaded 1 modules   (19156 inline 8-bit counters): 19156 [0x8cb1a8, 0x8cfc7c), 
+INFO: Loaded 1 PC tables (19156 PCs): 19156 [0x82a568,0x8752a8), 
+INFO:        0 files found in /workspace/corpus/compress_fuzzer
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: A corpus is not provided, starting from an empty corpus
+#2	INITED cov: 164 ft: 165 corp: 1/1b exec/s: 0 rss: 31Mb
+#3	NEW    cov: 181 ft: 182 corp: 2/2b lim: 4096 exec/s: 0 rss: 31Mb L: 1/1 MS: 1 ChangeByte-
+==13==WARNING: AddressSanitizer failed to allocate 0xa4c4c4c4c4c4c4c bytes
+=================================================================
+==13==ERROR: AddressSanitizer: allocator is out of memory trying to allocate 0xa4c4c4c4c4c4c4c bytes
+    #0 0x570dfd in operator new(unsigned long) /src/llvm-project/compiler-rt/lib/asan/asan_new_delete.cpp:95:3
+    #1 0x5740ae in __libcpp_operator_new<unsigned long> /usr/local/bin/../include/c++/v1/new:245:10
+    #2 0x5740ae in __libcpp_allocate /usr/local/bin/../include/c++/v1/new:271:10
+    #3 0x5740ae in allocate /usr/local/bin/../include/c++/v1/__memory/allocator.h:105:38
+    #4 0x5740ae in allocate /usr/local/bin/../include/c++/v1/__memory/allocator_traits.h:262:20
+    #5 0x5740ae in __vallocate /usr/local/bin/../include/c++/v1/vector:931:37
+    #6 0x5740ae in std::__1::vector<unsigned char, std::__1::allocator<unsigned char> >::vector(unsigned long) /usr/local/bin/../include/c++/v1/vector:1062:9
+    #7 0x573b4b in LLVMFuzzerTestOneInput /src/c-blosc/tests/fuzz/fuzz_compress.cpp:26:24
+    #8 0x444e23 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #9 0x44460a in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #10 0x445cd9 in fuzzer::Fuzzer::MutateAndTestOne() /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:757:19
+    #11 0x4469a5 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:895:5
+    #12 0x435d0f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #13 0x45f362 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #14 0x7ff978ffa082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: operator new(unsigned long)--__libcpp_operator_new<unsigned long>--__libcpp_allocate
+==13==HINT: if you don't care about these errors you may set allocator_may_return_null=1
+SUMMARY: AddressSanitizer: out-of-memory /src/llvm-project/compiler-rt/lib/asan/asan_new_delete.cpp:95:3 in operator new(unsigned long)
+==13==ABORTING
+MS: 1 InsertRepeatedBytes-; base unit: adc83b19e793491b1c6ea0fd8b46cd9f32e592fc
+0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0x4c,0xa,
+LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL\012
+artifact_prefix='./'; Test unit written to ./crash-8b9fd00f0a39d3dd04fdf74eebdac9690d0149cd
+Base64: TExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTExMTAo=
+stat::number_of_executed_units: 4
+stat::average_exec_per_sec:     0
+stat::new_units_added:          1
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              32

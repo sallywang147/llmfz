@@ -1,0 +1,43 @@
+Using seed corpus: FuzzStun_seed_corpus.zip
+/workspace/out/libfuzzer-address-x86_64/FuzzStun -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/FuzzStun < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 3521676251
+INFO: Loaded 1 modules   (1816 inline 8-bit counters): 1816 [0x60c610, 0x60cd28), 
+INFO: Loaded 1 PC tables (1816 PCs): 1816 [0x5c0b80,0x5c7d00), 
+INFO:        4 files found in /workspace/corpus/FuzzStun
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: seed corpus: files: 4 min: 80b max: 116b total: 396b rss: 35Mb
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+==14==ERROR: AddressSanitizer: SEGV on unknown address 0x000000000000 (pc 0x000000575f57 bp 0x7ffc1ae3d120 sp 0x7ffc1ae3d060 T0)
+==14==The signal is caused by a WRITE memory access.
+==14==Hint: address points to the zero page.
+SCARINESS: 10 (null-deref)
+    #0 0x575f57 in stun_init_buffer_str /src/coturn/src/client/ns_turn_msg.c:625:8
+    #1 0x575f57 in stun_init_command_str /src/coturn/src/client/ns_turn_msg.c:630:3
+    #2 0x575f57 in stun_init_success_response_str /src/coturn/src/client/ns_turn_msg.c:656:3
+    #3 0x575f57 in stun_set_binding_response_str /src/coturn/src/client/ns_turn_msg.c:1146:7
+    #4 0x569fbc in LLVMFuzzerTestOneInput /src/coturn/fuzzing/FuzzStun.c:21:3
+    #5 0x43dfd3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #6 0x43d7ba in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #7 0x43f624 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:826:7
+    #8 0x43f859 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #9 0x42eebf in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #10 0x458512 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #11 0x7f88ffb37082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #12 0x41f8fd in _start (out/libfuzzer-address-x86_64/FuzzStun+0x41f8fd)
+
+DEDUP_TOKEN: stun_init_buffer_str--stun_init_command_str--stun_init_success_response_str
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: SEGV /src/coturn/src/client/ns_turn_msg.c:625:8 in stun_init_buffer_str
+==14==ABORTING
+MS: 0 ; base unit: 0000000000000000000000000000000000000000
+0x1,0x1,0x0,0x3c,0x21,0x12,0xa4,0x42,0xb7,0xe7,0xa7,0x1,0xbc,0x34,0xd6,0x86,0xfa,0x87,0xdf,0xae,0x80,0x22,0x0,0xb,0x74,0x65,0x73,0x74,0x20,0x76,0x65,0x63,0x74,0x6f,0x72,0x20,0x0,0x20,0x0,0x8,0x0,0x1,0xa1,0x47,0xe1,0x12,0xa6,0x43,0x0,0x8,0x0,0x14,0x2b,0x91,0xf5,0x99,0xfd,0x9e,0x90,0xc3,0x8c,0x74,0x89,0xf9,0x2a,0xf9,0xba,0x53,0xf0,0x6b,0xe7,0xd7,0x80,0x28,0x0,0x4,0xc0,0x7d,0x4c,0x96,
+\001\001\000<!\022\244B\267\347\247\001\2744\326\206\372\207\337\256\200\"\000\013test vector \000 \000\010\000\001\241G\341\022\246C\000\010\000\024+\221\365\231\375\236\220\303\214t\211\371*\371\272S\360k\347\327\200(\000\004\300}L\226
+artifact_prefix='./'; Test unit written to ./crash-a873be4a97920860ed7893f580216174ebf00308
+Base64: AQEAPCESpEK356cBvDTWhvqH366AIgALdGVzdCB2ZWN0b3IgACAACAABoUfhEqZDAAgAFCuR9Zn9npDDjHSJ+Sr5ulPwa+fXgCgABMB9TJY=
+stat::number_of_executed_units: 2
+stat::average_exec_per_sec:     0
+stat::new_units_added:          0
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              35

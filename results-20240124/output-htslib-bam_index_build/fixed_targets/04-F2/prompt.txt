@@ -1,0 +1,50 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <string>
+#include <vector>
+
+#include "bam.h"
+
+extern "C" {
+#include "htslib/hts.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider provider(data, size);
+  const std::string filename = provider.ConsumeRemainingBytesAsString();
+  const int min_shift = provider.ConsumeIntegral<int>();
+
+  return bam_index_build(const_cast<char*>(filename.c_str()), min_shift);
+}
+</code>
+
+The code has the following build issues:
+<error>
+test/fuzz/hts_open_fuzzer.c:1:10: fatal error: 'cstddef' file not found
+#include <cstddef>
+         ^~~~~~~~~
+1 error generated.
+
+Fix failure
+test/fuzz/hts_open_fuzzer.cpp:9:10: fatal error: 'bam.h' file not found
+#include "bam.h"
+         ^~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

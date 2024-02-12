@@ -1,0 +1,51 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstdint>
+#include <cstring>
+#include <llvm/MC/MCInst.h>
+#include <llvm/MC/MCParser/MCAsmParser.h>
+#include <llvm/MC/MCStreamer.h>
+#include <llvm/MC/MCSubtargetInfo.h>
+#include <llvm/MC/MCTargetOptions.h>
+#include <llvm/Support/TargetRegistry.h>
+#include <llvm/Support/TargetSelect.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  llvm::FuzzedDataProvider stream(data, size);
+  llvm::MCInst inst;
+  llvm::MCAsmParser parser(stream.ConsumeRemainingBytesAsString());
+  llvm::MCStreamer streamer(llvm::MCSubtargetInfo(), llvm::MCTargetOptions());
+  llvm::MCContext context(llvm::Triple(), llvm::MCAsmInfo(), nullptr, nullptr);
+  if (!parser.parse(inst, context)) {
+    streamer.printInst(&inst, &streamer.getCommentOS(), nullptr);
+    Alpha_printInst(&inst, &streamer.getCommentOS(), nullptr); // Call Alpha_printInst here
+  }
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/capstonev5/suite/fuzz/fuzz_disasm.c:1:10: fatal error: 'cstdint' file not found
+#include <cstdint>
+         ^~~~~~~~~
+1 error generated.
+
+Fix failure
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:8:10: fatal error: 'llvm/Support/TargetRegistry.h' file not found
+#include <llvm/Support/TargetRegistry.h>
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

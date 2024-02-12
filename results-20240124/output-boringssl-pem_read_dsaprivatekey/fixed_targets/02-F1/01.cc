@@ -1,0 +1,1 @@
+error: undefined reference to 'DSA_free'

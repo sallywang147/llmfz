@@ -1,0 +1,203 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+extern "C" {
+#include "fuzzer/FuzzedDataProvider.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const size_t arg_count = stream.ConsumeIntegralInRange<size_t>(0, 10);
+  std::vector<std::string> args;
+  for (size_t i = 0; i < arg_count; ++i) {
+    args.push_back(stream.ConsumeBytesAsString(stream.ConsumeIntegralInRange<size_t>(0, 100)));
+  }
+  main2(arg_count, args.data());
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/fuzz-main.c:1:10: fatal error: 'cstddef' file not found
+#include <cstddef>
+         ^~~~~~~~~
+1 error generated.
+
+Fix failure
+In file included from /src/fuzz-main.cpp:8:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:17:
+/usr/local/bin/../include/c++/v1/array:128:1: error: templates must have C++ linkage
+template <class _Tp, size_t _Size>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fuzz-main.cpp:7:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-main.cpp:8:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:17:
+/usr/local/bin/../include/c++/v1/array:231:1: error: templates must have C++ linkage
+template <class _Tp>
+^~~~~~~~~~~~~~~~~~~~
+/src/fuzz-main.cpp:7:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-main.cpp:8:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:17:
+/usr/local/bin/../include/c++/v1/array:367:1: error: templates must have C++ linkage
+template <class _Tp, size_t _Size>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fuzz-main.cpp:7:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-main.cpp:8:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:17:
+/usr/local/bin/../include/c++/v1/array:375:1: error: templates must have C++ linkage
+template <class _Tp, size_t _Size>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fuzz-main.cpp:7:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-main.cpp:8:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:17:
+/usr/local/bin/../include/c++/v1/array:383:1: error: templates must have C++ linkage
+template <class _Tp, size_t _Size>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fuzz-main.cpp:7:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-main.cpp:8:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:17:
+/usr/local/bin/../include/c++/v1/array:392:1: error: templates must have C++ linkage
+template <class _Tp, size_t _Size>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fuzz-main.cpp:7:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-main.cpp:8:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:17:
+/usr/local/bin/../include/c++/v1/array:400:1: error: templates must have C++ linkage
+template <class _Tp, size_t _Size>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fuzz-main.cpp:7:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-main.cpp:8:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:17:
+/usr/local/bin/../include/c++/v1/array:408:1: error: templates must have C++ linkage
+template <class _Tp, size_t _Size>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fuzz-main.cpp:7:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-main.cpp:8:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:17:
+/usr/local/bin/../include/c++/v1/array:416:1: error: templates must have C++ linkage
+template <class _Tp, size_t _Size>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fuzz-main.cpp:7:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-main.cpp:8:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:17:
+/usr/local/bin/../include/c++/v1/array:430:1: error: templates must have C++ linkage
+template <class _Tp, size_t _Size>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fuzz-main.cpp:7:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-main.cpp:8:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:17:
+/usr/local/bin/../include/c++/v1/array:434:1: error: templates must have C++ linkage
+template <size_t _Ip, class _Tp, size_t _Size>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fuzz-main.cpp:7:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-main.cpp:8:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:17:
+/usr/local/bin/../include/c++/v1/array:441:1: error: templates must have C++ linkage
+template <size_t _Ip, class _Tp, size_t _Size>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fuzz-main.cpp:7:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-main.cpp:8:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:17:
+/usr/local/bin/../include/c++/v1/array:450:1: error: templates must have C++ linkage
+template <size_t _Ip, class _Tp, size_t _Size>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fuzz-main.cpp:7:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-main.cpp:8:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:17:
+/usr/local/bin/../include/c++/v1/array:459:1: error: templates must have C++ linkage
+template <size_t _Ip, class _Tp, size_t _Size>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fuzz-main.cpp:7:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-main.cpp:8:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:17:
+/usr/local/bin/../include/c++/v1/array:468:1: error: templates must have C++ linkage
+template <size_t _Ip, class _Tp, size_t _Size>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fuzz-main.cpp:7:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-main.cpp:8:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:24:
+In file included from /usr/local/bin/../include/c++/v1/string:523:
+/usr/local/bin/../include/c++/v1/__ios/fpos.h:22:1: error: templates must have C++ linkage
+template <class _StateT>
+^~~~~~~~~~~~~~~~~~~~~~~~
+/src/fuzz-main.cpp:7:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-main.cpp:8:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:24:
+In file included from /usr/local/bin/../include/c++/v1/string:523:
+/usr/local/bin/../include/c++/v1/__ios/fpos.h:59:1: error: templates must have C++ linkage
+template <class _StateT>
+^~~~~~~~~~~~~~~~~~~~~~~~
+/src/fuzz-main.cpp:7:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-main.cpp:8:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:24:
+In file included from /usr/local/bin/../include/c++/v1/string:523:
+/usr/local/bin/../include/c++/v1/__ios/fpos.h:65:1: error: templates must have C++ linkage
+template <class _StateT>
+^~~~~~~~~~~~~~~~~~~~~~~~
+/src/fuzz-main.cpp:7:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/fuzz-main.cpp:8:
+In file included from /usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:24:
+In file included from /usr/local/bin/../include/c++/v1/string:523:
+/usr/local/bin/../include/c++/v1/__ios/fpos.h:71:1: error: templates must have C++ linkage
+template <class _StateT>
+^~~~~~~~~~~~~~~~~~~~~~~~
+/src/fuzz-main.cpp:7:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

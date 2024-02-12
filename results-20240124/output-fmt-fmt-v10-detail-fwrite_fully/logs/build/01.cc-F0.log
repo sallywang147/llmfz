@@ -1,0 +1,51 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ mkdir build
++ cd build
++ cmake .. -GNinja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_STANDARD=14 -DFMT_DOC=Off -DFMT_TEST=Off -DFMT_SAFE_DURATION_CAST=On -DFMT_FUZZ=On -DFMT_FUZZ_LINKMAIN=Off -DFMT_FUZZ_LDFLAGS=-fsanitize=fuzzer
+-- CMake version: 3.24.2
+-- The CXX compiler identification is Clang 15.0.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/local/bin/clang++-jcc - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Version: 10.2.2
+-- Build type: Debug
+-- Performing Test HAS_NULLPTR_WARNING
+-- Performing Test HAS_NULLPTR_WARNING - Success
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /src/fmt/build
++ cmake --build .
+[1/15] Building CXX object test/fuzzing/CMakeFiles/float-fuzzer.dir/float.cc.o
+[2/15] Building CXX object CMakeFiles/fmt.dir/src/os.cc.o
+[3/15] Building CXX object test/fuzzing/CMakeFiles/chrono-timepoint-fuzzer.dir/chrono-timepoint.cc.o
+FAILED: test/fuzzing/CMakeFiles/chrono-timepoint-fuzzer.dir/chrono-timepoint.cc.o 
+/usr/local/bin/clang++-jcc -DFMT_FUZZ -DFMT_SAFE_DURATION_CAST -I/src/fmt/include -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -g -fvisibility=hidden -fvisibility-inlines-hidden -MD -MT test/fuzzing/CMakeFiles/chrono-timepoint-fuzzer.dir/chrono-timepoint.cc.o -MF test/fuzzing/CMakeFiles/chrono-timepoint-fuzzer.dir/chrono-timepoint.cc.o.d -o test/fuzzing/CMakeFiles/chrono-timepoint-fuzzer.dir/chrono-timepoint.cc.o -c /src/fmt/test/fuzzing/chrono-timepoint.cc
+/src/fmt/test/fuzzing/chrono-timepoint.cc:15:12: error: no matching member function for call to 'ConsumeBytes'
+  provider.ConsumeBytes(buffer.data(), count);
+  ~~~~~~~~~^~~~~~~~~~~~
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:352:36: note: candidate template ignored: couldn't infer template argument 'T'
+std::vector<T> FuzzedDataProvider::ConsumeBytes(size_t size, size_t num_bytes) {
+                                   ^
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:108:36: note: candidate function template not viable: requires single argument 'num_bytes', but 2 arguments were provided
+std::vector<T> FuzzedDataProvider::ConsumeBytes(size_t num_bytes) {
+                                   ^
+/src/fmt/test/fuzzing/chrono-timepoint.cc:16:16: error: no member named 'fwrite_fully' in namespace 'fmt::detail'
+  fmt::detail::fwrite_fully(buffer.data(), count, stdout);
+  ~~~~~~~~~~~~~^
+2 errors generated.
+[4/15] Building CXX object test/fuzzing/CMakeFiles/named-arg-fuzzer.dir/named-arg.cc.o
+[5/15] Building CXX object test/fuzzing/CMakeFiles/one-arg-fuzzer.dir/one-arg.cc.o
+[6/15] Building CXX object test/fuzzing/CMakeFiles/two-args-fuzzer.dir/two-args.cc.o
+[7/15] Building CXX object CMakeFiles/fmt.dir/src/format.cc.o
+[8/15] Building CXX object test/fuzzing/CMakeFiles/chrono-duration-fuzzer.dir/chrono-duration.cc.o
+ninja: build stopped: subcommand failed.

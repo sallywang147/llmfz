@@ -1,0 +1,41 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <ArduinoJson.h>
+
+extern "C" {
+int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  ArduinoJson::V702HB4::detail::VariantSlot* slot = new (ArduinoJson::V702HB4::detail::VariantSlot::operator new) ArduinoJson::V702HB4::detail::VariantSlot;
+  delete slot;
+  return 0;
+}
+}
+</code>
+
+The code has the following build issues:
+<error>
+msgpack_fuzzer.cpp:5:53: error: no matching function for call to 'operator new'
+  ArduinoJson::V702HB4::detail::VariantSlot* slot = new (ArduinoJson::V702HB4::detail::VariantSlot::operator new) ArduinoJson::V702HB4::detail::VariantSlot;
+                                                    ^   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../src/ArduinoJson/Variant/VariantSlot.hpp:27:16: note: candidate function not viable: no known conversion from 'void *(size_t, void *) noexcept' (aka 'void *(unsigned long, void *) noexcept') to 'void *' for 2nd argument
+  static void* operator new(size_t, void* p) noexcept {
+               ^
+msgpack_fuzzer.cpp:6:3: error: no suitable member 'operator delete' in 'VariantSlot'
+  delete slot;
+  ^
+../../src/ArduinoJson/Variant/VariantSlot.hpp:31:15: note: member 'operator delete' declared here
+  static void operator delete(void*, void*) noexcept {}
+              ^
+2 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

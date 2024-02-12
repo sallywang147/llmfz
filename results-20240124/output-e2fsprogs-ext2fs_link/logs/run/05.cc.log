@@ -1,0 +1,28 @@
+/workspace/out/libfuzzer-address-x86_64/ext2fs_image_read_write_fuzzer -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/ext2fs_image_read_write_fuzzer < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 2339639439
+INFO: Loaded 1 modules   (7175 inline 8-bit counters): 7175 [0x70c620, 0x70e227), 
+INFO: Loaded 1 PC tables (7175 PCs): 7175 [0x695c80,0x6b1cf0), 
+INFO:        0 files found in /workspace/corpus/ext2fs_image_read_write_fuzzer
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: A corpus is not provided, starting from an empty corpus
+#2	INITED cov: 112 ft: 113 corp: 1/1b exec/s: 0 rss: 32Mb
+#3	NEW    cov: 113 ft: 115 corp: 2/3b lim: 4096 exec/s: 0 rss: 33Mb L: 2/2 MS: 1 InsertByte-
+#6	NEW    cov: 113 ft: 117 corp: 3/6b lim: 4096 exec/s: 0 rss: 33Mb L: 3/3 MS: 3 ChangeByte-ChangeBinInt-InsertByte-
+#7	NEW    cov: 113 ft: 119 corp: 4/10b lim: 4096 exec/s: 0 rss: 33Mb L: 4/4 MS: 1 CopyPart-
+	NEW_FUNC[1/2]: 0x56d3b0 in std::__1::vector<char, std::__1::allocator<char> >::shrink_to_fit() /usr/local/bin/../include/c++/v1/vector:1497
+	NEW_FUNC[2/2]: 0x56d820 in std::__1::vector<char, std::__1::allocator<char> >::__construct_at_end(unsigned long) /usr/local/bin/../include/c++/v1/vector:979
+#14	NEW    cov: 124 ft: 131 corp: 5/17b lim: 4096 exec/s: 0 rss: 33Mb L: 7/7 MS: 2 ChangeByte-CopyPart-
+#50	REDUCE cov: 124 ft: 131 corp: 5/16b lim: 4096 exec/s: 0 rss: 34Mb L: 6/6 MS: 1 EraseBytes-
+#32768	pulse  cov: 124 ft: 131 corp: 5/16b lim: 4096 exec/s: 16384 rss: 48Mb
+#65536	pulse  cov: 124 ft: 131 corp: 5/16b lim: 4096 exec/s: 16384 rss: 48Mb
+#131072	pulse  cov: 124 ft: 131 corp: 5/16b lim: 4096 exec/s: 18724 rss: 48Mb
+#262144	pulse  cov: 124 ft: 131 corp: 5/16b lim: 4096 exec/s: 21845 rss: 48Mb
+#524288	pulse  cov: 124 ft: 131 corp: 5/16b lim: 4096 exec/s: 21845 rss: 49Mb
+#666755	DONE   cov: 124 ft: 131 corp: 5/16b lim: 4096 exec/s: 21508 rss: 49Mb
+Done 666755 runs in 31 second(s)
+stat::number_of_executed_units: 666755
+stat::average_exec_per_sec:     21508
+stat::new_units_added:          5
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              49

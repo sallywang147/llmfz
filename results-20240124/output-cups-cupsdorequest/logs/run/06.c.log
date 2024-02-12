@@ -1,0 +1,80 @@
+Using seed corpus: FuzzIPP_seed_corpus.zip
+/workspace/out/libfuzzer-address-x86_64/FuzzIPP -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/FuzzIPP < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 2819680992
+INFO: Loaded 1 modules   (7490 inline 8-bit counters): 7490 [0x708e58, 0x70ab9a), 
+INFO: Loaded 1 PC tables (7490 PCs): 7490 [0x70aba0,0x727fc0), 
+INFO:        3 files found in /workspace/corpus/FuzzIPP
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: seed corpus: files: 3 min: 63b max: 398b total: 657b rss: 32Mb
+=================================================================
+==14==ERROR: AddressSanitizer: heap-use-after-free on address 0x615000000304 at pc 0x000000579a9d bp 0x7fffcb86a700 sp 0x7fffcb86a6f8
+READ of size 1 at 0x615000000304 thread T0
+SCARINESS: 40 (1-byte-read-heap-use-after-free)
+    #0 0x579a9c in cupsFileRead /src/cups/cups/file.c:1419:27
+    #1 0x5a90c5 in ippReadIO /src/cups/cups/ipp.c:2633:15
+    #2 0x57019b in LLVMFuzzerTestOneInput /src/cups/fuzzer/FuzzIPP.cpp:20:5
+    #3 0x441a23 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #4 0x44120a in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #5 0x443074 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:826:7
+    #6 0x4432a9 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #7 0x43290f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #8 0x45bf62 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #9 0x7f3e28fac082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #10 0x42334d in _start (out/libfuzzer-address-x86_64/FuzzIPP+0x42334d)
+
+DEDUP_TOKEN: cupsFileRead--ippReadIO--LLVMFuzzerTestOneInput
+0x615000000304 is located 4 bytes inside of 472-byte region [0x615000000300,0x6150000004d8)
+freed by thread T0 here:
+    #0 0x532912 in __interceptor_free /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:52:3
+    #1 0x7f3e29009ec2 in _IO_fclose (/lib/x86_64-linux-gnu/libc.so.6+0x81ec2) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_free--_IO_fclose
+previously allocated by thread T0 here:
+    #0 0x532bb6 in malloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:69:3
+    #1 0x7f3e2900a92d in fopen64 (/lib/x86_64-linux-gnu/libc.so.6+0x8292d) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: malloc--fopen64
+SUMMARY: AddressSanitizer: heap-use-after-free /src/cups/cups/file.c:1419:27 in cupsFileRead
+Shadow bytes around the buggy address:
+  0x0c2a7fff8010: fd fd fd fd fd fd fd fd fd fd fd fd fd fd fd fd
+  0x0c2a7fff8020: fd fd fd fd fd fd fd fd fd fd fd fd fd fd fd fd
+  0x0c2a7fff8030: fd fd fd fd fd fd fd fd fd fd fd fd fd fd fd fd
+  0x0c2a7fff8040: fd fd fd fd fd fd fd fd fd fd fd fa fa fa fa fa
+  0x0c2a7fff8050: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+=>0x0c2a7fff8060:[fd]fd fd fd fd fd fd fd fd fd fd fd fd fd fd fd
+  0x0c2a7fff8070: fd fd fd fd fd fd fd fd fd fd fd fd fd fd fd fd
+  0x0c2a7fff8080: fd fd fd fd fd fd fd fd fd fd fd fd fd fd fd fd
+  0x0c2a7fff8090: fd fd fd fd fd fd fd fd fd fd fd fa fa fa fa fa
+  0x0c2a7fff80a0: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0c2a7fff80b0: fd fd fd fd fd fd fd fd fd fd fd fd fd fd fd fd
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07 
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+==14==ABORTING
+MS: 0 ; base unit: 0000000000000000000000000000000000000000
+0x1,0x1,0x0,0x2,0x0,0x0,0x0,0x1,0x1,0x21,0x0,0x1f,0x6e,0x6f,0x74,0x69,0x66,0x79,0x2d,0x6c,0x65,0x61,0x73,0x65,0x2d,0x64,0x75,0x72,0x61,0x74,0x69,0x6f,0x6e,0x2d,0x73,0x75,0x70,0x70,0x6f,0x72,0x74,0x65,0x64,0x0,0x4,0x0,0x0,0x0,0x1,0x33,0x0,0x0,0x0,0x8,0x0,0x0,0x0,0x10,0x0,0x0,0x0,0x20,0x3,
+\001\001\000\002\000\000\000\001\001!\000\037notify-lease-duration-supported\000\004\000\000\000\0013\000\000\000\010\000\000\000\020\000\000\000 \003
+artifact_prefix='./'; Test unit written to ./crash-31028c747225cbf6094ce892903989dc7c08265f
+Base64: AQEAAgAAAAEBIQAfbm90aWZ5LWxlYXNlLWR1cmF0aW9uLXN1cHBvcnRlZAAEAAAAATMAAAAIAAAAEAAAACAD
+stat::number_of_executed_units: 2
+stat::average_exec_per_sec:     2
+stat::new_units_added:          0
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              33

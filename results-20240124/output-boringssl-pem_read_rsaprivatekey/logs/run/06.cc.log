@@ -1,0 +1,46 @@
+Using seed corpus: ssl_ctx_api_seed_corpus.zip
+/workspace/out/libfuzzer-address-x86_64/ssl_ctx_api -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/ssl_ctx_api < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 2791474299
+INFO: Loaded 1 modules   (24876 inline 8-bit counters): 24876 [0x977ac0, 0x97dbec), 
+INFO: Loaded 1 PC tables (24876 PCs): 24876 [0x86b8b8,0x8ccb78), 
+INFO:      172 files found in /workspace/corpus/ssl_ctx_api
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+==14==ERROR: AddressSanitizer: SEGV on unknown address 0x000000000000 (pc 0x7f0a09cbb657 bp 0x0000000000fe sp 0x7ffd61de4700 T0)
+==14==The signal is caused by a READ memory access.
+==14==Hint: address points to the zero page.
+SCARINESS: 10 (null-deref)
+    #0 0x7f0a09cbb657 in _IO_fgets (/lib/x86_64-linux-gnu/libc.so.6+0x82657) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #1 0x4ca6aa in fgets /src/llvm-project/compiler-rt/lib/asan/../sanitizer_common/sanitizer_common_interceptors.inc:1252:15
+    #2 0x6edc2a in file_gets /src/boringssl/crypto/bio/file.c:265:8
+    #3 0x6ea181 in BIO_gets /src/boringssl/crypto/bio/bio.c:158:13
+    #4 0x69d121 in PEM_read_bio /src/boringssl/crypto/pem/pem_lib.c:625:9
+    #5 0x69c7ca in PEM_bytes_read_bio /src/boringssl/crypto/pem/pem_lib.c:221:10
+    #6 0x6a1067 in PEM_read_bio_PrivateKey /src/boringssl/crypto/pem/pem_pkey.c:79:8
+    #7 0x6a16b0 in PEM_read_PrivateKey /src/boringssl/crypto/pem/pem_pkey.c:166:19
+    #8 0x69b17a in PEM_read_RSAPrivateKey /src/boringssl/crypto/pem/pem_all.c:160:11
+    #9 0x56c7c5 in LLVMFuzzerTestOneInput /src/boringssl/fuzz/ssl_ctx_api.cc:20:3
+    #10 0x43df03 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #11 0x43f2b4 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:804:3
+    #12 0x43f789 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #13 0x42edef in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #14 0x458442 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #15 0x7f0a09c5d082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #16 0x41f82d in _start (out/libfuzzer-address-x86_64/ssl_ctx_api+0x41f82d)
+
+DEDUP_TOKEN: _IO_fgets--fgets--file_gets
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: SEGV (/lib/x86_64-linux-gnu/libc.so.6+0x82657) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca) in _IO_fgets
+==14==ABORTING
+MS: 0 ; base unit: 0000000000000000000000000000000000000000
+
+
+artifact_prefix='./'; Test unit written to ./crash-da39a3ee5e6b4b0d3255bfef95601890afd80709
+Base64: 
+stat::number_of_executed_units: 1
+stat::average_exec_per_sec:     0
+stat::new_units_added:          0
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              34

@@ -1,0 +1,83 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <err.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+#include "alembic/lib/Alembic/AbcCoreOgawa/All.h"
+#include "alembic/lib/Alembic/AbcCoreOgawa/AprImpl.h"
+#include "alembic/lib/Alembic/Ogawa/OArchive.h"
+
+#include "fuzzer_temp_file.h"
+
+using namespace Alembic::AbcCoreOgawa::v12;
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzerTemporaryFile tempFile(data, size);
+  int fd = open(tempFile.filename(), O_RDONLY);
+  if (fd < 0) {
+    err(EXIT_FAILURE, "open");
+  }
+  Alembic::Ogawa::ReadData readData(fd);
+  Alembic::Ogawa::DataHeader dataHeader;
+  dataHeader.read(readData);
+  AprImpl aprImpl(dataHeader, readData);
+  std::shared_ptr<Alembic::Ogawa::CprData> cprData;
+  aprImpl.getSample(0, &cprData);
+  close(fd);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/alembic_dump_info_fuzzer.cc:24:27: error: expected ';' after expression
+  Alembic::Ogawa::ReadData readData(fd);
+                          ^
+                          ;
+/src/alembic_dump_info_fuzzer.cc:24:19: error: no member named 'ReadData' in namespace 'Alembic::Ogawa'
+  Alembic::Ogawa::ReadData readData(fd);
+  ~~~~~~~~~~~~~~~~^
+/src/alembic_dump_info_fuzzer.cc:24:28: error: use of undeclared identifier 'readData'
+  Alembic::Ogawa::ReadData readData(fd);
+                           ^
+/src/alembic_dump_info_fuzzer.cc:25:19: error: no type named 'DataHeader' in namespace 'Alembic::Ogawa'
+  Alembic::Ogawa::DataHeader dataHeader;
+  ~~~~~~~~~~~~~~~~^
+/src/alembic_dump_info_fuzzer.cc:26:19: error: use of undeclared identifier 'readData'; did you mean 'realpath'?
+  dataHeader.read(readData);
+                  ^~~~~~~~
+                  realpath
+/usr/include/stdlib.h:800:14: note: 'realpath' declared here
+extern char *realpath (const char *__restrict __name,
+             ^
+/src/alembic_dump_info_fuzzer.cc:27:31: error: use of undeclared identifier 'readData'; did you mean 'realpath'?
+  AprImpl aprImpl(dataHeader, readData);
+                              ^~~~~~~~
+                              realpath
+/usr/include/stdlib.h:800:14: note: 'realpath' declared here
+extern char *realpath (const char *__restrict __name,
+             ^
+/src/alembic_dump_info_fuzzer.cc:28:35: error: no member named 'CprData' in namespace 'Alembic::Ogawa'
+  std::shared_ptr<Alembic::Ogawa::CprData> cprData;
+                  ~~~~~~~~~~~~~~~~^
+7 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,62 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstdint>
+#include <cstring>
+#include <iostream>
+#include <string>
+#include <vector>
+
+#include "fmt/core.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider provider(data, size);
+
+  std::string format_str = provider.ConsumeRemainingBytesAsString();
+  std::vector<fmt::basic_format_arg<fmt::format_context>> args;
+  while (provider.remaining_bytes() > 0) {
+    args.push_back(fmt::format(provider.ConsumeRemainingBytesAsString()));
+  }
+
+  FILE* f = fopen("/dev/null", "w");
+  fmt::vprint(f, format_str.c_str(), args);
+  fclose(f);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/fmt/test/fuzzing/chrono-timepoint.cc:17:10: error: no matching member function for call to 'push_back'
+    args.push_back(fmt::format(provider.ConsumeRemainingBytesAsString()));
+    ~~~~~^~~~~~~~~
+/usr/local/bin/../include/c++/v1/vector:569:36: note: candidate function not viable: no known conversion from 'std::string' (aka 'basic_string<char, char_traits<char>, allocator<char>>') to 'const std::vector<fmt::basic_format_arg<fmt::context>>::value_type' (aka 'const fmt::basic_format_arg<fmt::context>') for 1st argument
+    _LIBCPP_INLINE_VISIBILITY void push_back(const_reference __x);
+                                   ^
+/usr/local/bin/../include/c++/v1/vector:572:36: note: candidate function not viable: no known conversion from 'std::string' (aka 'basic_string<char, char_traits<char>, allocator<char>>') to 'std::vector<fmt::basic_format_arg<fmt::context>>::value_type' (aka 'fmt::basic_format_arg<fmt::context>') for 1st argument
+    _LIBCPP_INLINE_VISIBILITY void push_back(value_type&& __x);
+                                   ^
+/src/fmt/test/fuzzing/chrono-timepoint.cc:21:3: error: no matching function for call to 'vprint'
+  fmt::vprint(f, format_str.c_str(), args);
+  ^~~~~~~~~~~
+/src/fmt/include/fmt/base.h:2965:14: note: candidate function not viable: no known conversion from 'std::vector<fmt::basic_format_arg<fmt::format_context>>' (aka 'vector<basic_format_arg<fmt::context>>') to 'fmt::format_args' (aka 'basic_format_args<fmt::context>') for 3rd argument
+FMT_API void vprint(FILE* f, string_view fmt, format_args args);
+             ^
+/src/fmt/include/fmt/base.h:2964:14: note: candidate function not viable: requires 2 arguments, but 3 were provided
+FMT_API void vprint(string_view fmt, format_args args);
+             ^
+2 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

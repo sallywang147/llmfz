@@ -1,0 +1,40 @@
+/workspace/out/libfuzzer-address-x86_64/fuzz_utils -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/fuzz_utils < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 2439785621
+INFO: Loaded 1 modules   (22172 inline 8-bit counters): 22172 [0x8edc98, 0x8f3334), 
+INFO: Loaded 1 PC tables (22172 PCs): 22172 [0x8051b0,0x85bb70), 
+INFO:        0 files found in /workspace/corpus/fuzz_utils
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: A corpus is not provided, starting from an empty corpus
+#2	INITED cov: 9 ft: 9 corp: 1/1b exec/s: 0 rss: 34Mb
+#14	NEW    cov: 13 ft: 13 corp: 2/86b lim: 4096 exec/s: 0 rss: 35Mb L: 85/85 MS: 2 ChangeBit-InsertRepeatedBytes-
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+==13==ERROR: AddressSanitizer: SEGV on unknown address 0x000000000008 (pc 0x00000056f91b bp 0x7ffc093721a0 sp 0x7ffc093720e0 T0)
+==13==The signal is caused by a WRITE memory access.
+==13==Hint: address points to the zero page.
+SCARINESS: 10 (null-deref)
+    #0 0x56f91b in LLVMFuzzerTestOneInput /src/fuzz_utils.c:162:21
+    #1 0x43f313 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #2 0x43eafa in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #3 0x4401c9 in fuzzer::Fuzzer::MutateAndTestOne() /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:757:19
+    #4 0x440e95 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:895:5
+    #5 0x4301ff in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #6 0x459852 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #7 0x7fb0a3f2a082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #8 0x420c3d in _start (out/libfuzzer-address-x86_64/fuzz_utils+0x420c3d)
+
+DEDUP_TOKEN: LLVMFuzzerTestOneInput--fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long)--fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*)
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: SEGV /src/fuzz_utils.c:162:21 in LLVMFuzzerTestOneInput
+==13==ABORTING
+MS: 3 CrossOver-CrossOver-InsertRepeatedBytes-; base unit: 01d4dfb9773e3799f98b08769917364f15de091d
+0x1a,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0xc5,0xc5,0xc5,0xa,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xa,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,0xc5,
+\032\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\305\305\305\012\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\305\012\305\305\305\305\305\305\305\305\305\305\305
+artifact_prefix='./'; Test unit written to ./crash-546eec03d40b0918a9e0ef502b91253e002c8463
+Base64: GsXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADFxcUKxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcXFxcUKxcXFxcXFxcXFxcU=
+stat::number_of_executed_units: 57
+stat::average_exec_per_sec:     0
+stat::new_units_added:          1
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              36

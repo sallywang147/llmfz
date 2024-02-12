@@ -1,0 +1,43 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cstddef>
+#include <cstdint>
+#include <string>
+
+extern "C" {
+#include "Firestore/core/src/query.h"
+#include "Firestore/core/src/query_spec.h"
+}
+
+using firebase::firestore::core::Query;
+using firebase::firestore::core::QuerySpec;
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  const char* str_ptr = reinterpret_cast<const char*>(data);
+  std::string str{str_ptr, size};
+  QuerySpec query_spec = QuerySpec::FromFirestore(str);
+  Query query(query_spec);
+  query.Hash();
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/firebase-ios-sdk/Firestore/fuzzing/fieldpath_fuzzer.cc:6:10: fatal error: 'Firestore/core/src/query.h' file not found
+#include "Firestore/core/src/query.h"
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

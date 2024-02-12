@@ -1,0 +1,3 @@
+<error>
+error: undefined reference to '__cxx_global_var_init'
+</error>

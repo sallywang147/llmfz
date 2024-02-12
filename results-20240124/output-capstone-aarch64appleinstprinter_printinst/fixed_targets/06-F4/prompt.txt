@@ -1,0 +1,87 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <algorithm>
+#include <cstddef>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <string>
+
+#include "llvm/MC/MCInst.h"
+#include "llvm/MC/MCInstrInfo.h"
+#include "llvm/MC/MCRegisterInfo.h"
+#include "llvm/MC/MCSubtargetInfo.h"
+#include "llvm/MC/MCStreamer.h"
+#include "llvm/Support/TargetRegistry.h"
+#include "llvm/Support/TargetSelect.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const uint8_t arch = stream.ConsumeIntegral<uint8_t>();
+  const char* triple = nullptr;
+  switch (arch) {
+    case 0:
+      triple = "aarch64-apple-darwin";
+      break;
+    case 1:
+      triple = "aarch64-linux-gnu";
+      break;
+    case 2:
+      triple = "aarch64-windows";
+      break;
+    default:
+      return 0;
+  }
+
+  std::string error;
+  const llvm::Target* target =
+      llvm::TargetRegistry::lookupTarget(triple, error);
+  if (!target) {
+    return 0;
+  }
+
+  llvm::MCSubtargetInfo STI(target->createMCSubtargetInfo(triple, "", ""));
+  llvm::MCRegisterInfo MRI(target->createMCRegInfo(triple));
+  llvm::MCInstrInfo MII(target->createMCInstrInfo());
+  llvm::MCStreamer OS(llvm::MCStreamer::create(llvm::raw_null_ostream()));
+  llvm::SStream Annot;
+
+  const uint8_t opcode = stream.ConsumeIntegral<uint8_t>();
+  llvm::MCInst inst;
+  if (!MII.parseInstruction(inst, opcode, STI)) {
+    return 0;
+  }
+
+  AArch64AppleInstPrinter_printInst(&inst, 0, nullptr, &OS);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:16:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:15:10: fatal error: 'llvm/Support/TargetRegistry.h' file not found
+#include "llvm/Support/TargetRegistry.h"
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

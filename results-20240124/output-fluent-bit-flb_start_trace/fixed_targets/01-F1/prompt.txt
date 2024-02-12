@@ -1,0 +1,75 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include "flb_fuzz_header.h"
+#include <fluent-bit/flb_lib_ctx.h>
+#include <stdint.h>
+#include <stdlib.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  /* Set fuzzer-malloc chance of failure */
+  flb_malloc_p = 0;
+  flb_malloc_mod = 25000;
+
+  /* Limit the size of the config files to 32KB. */
+  if (size > 32768) {
+    return 0;
+  }
+
+  /* Write the config file to a location we know OSS-Fuzz has */
+  char filename[256];
+  sprintf(filename, "/tmp/libfuzzer.%d", getpid());
+  FILE *fp = fopen(filename, "wb");
+  if (!fp) {
+    return 0;
+  }
+  fwrite(conf_file, strlen(conf_file), 1, fp);
+  fclose(fp);
+
+  /* Now parse random data based on the config files */
+  struct flb_lib_ctx *ctx = NULL;
+  ctx = flb_lib_ctx_init();
+  int ret = flb_lib_ctx_conf_file(filename, ctx);
+  if (ret == 0) {
+    flb_start_trace(ctx);
+  }
+  flb_lib_ctx_exit(ctx);
+
+  /* clean up the file */
+  unlink(filename);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.c:2:10: fatal error: 'fluent-bit/flb_lib_ctx.h' file not found
+#include <fluent-bit/flb_lib_ctx.h>
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.
+
+Fix failure
+In file included from /src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:1:
+/src/fluent-bit/tests/internal/fuzzers/flb_fuzz_header.h:30:15: error: use of undeclared identifier 'flb_malloc'
+  char *tmp = flb_malloc(size+1);
+              ^
+/src/fluent-bit/tests/internal/fuzzers/flb_fuzz_header.h:32:11: error: use of undeclared identifier 'malloc'
+    tmp = malloc(size+1);
+          ^
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:2:10: fatal error: 'fluent-bit/flb_lib_ctx.h' file not found
+#include <fluent-bit/flb_lib_ctx.h>
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+3 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

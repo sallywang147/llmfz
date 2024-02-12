@@ -1,0 +1,92 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "grpc_transcoding/message_reader.h"
+
+#include "test_common.h"
+
+#include <fuzzer/FuzzedDataProvider.h>
+#include <cstddef>
+#include <cstdint>
+#include <string>
+
+namespace google {
+namespace grpc {
+namespace transcoding {
+namespace testing {
+namespace {
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider provider(data, size);
+
+  TestZeroCopyInputStream input_stream;
+  MessageReader reader(&input_stream);
+
+  // Create JsonArrayTester by passing the MessageReader by reference.
+  // Add a const here to make the type match with the constructor of JsonArrayTester.
+  const MessageReader& const_reader = reader;
+  JsonArrayTester tester(const_reader);
+
+  while (provider.remaining_bytes() > 0) {
+    // Add a few chucks of data to the input stream.
+    for (int i = 0; i < provider.ConsumeIntegralInRange(0, 5); i++) {
+      input_stream.AddChunk(provider.ConsumeRandomLengthString(100));
+    }
+
+    // Run the message reader to get the next message.
+    (void)reader.NextMessageAndGrpcFrame();
+
+    // Handle end of input or error due to malformed bytes.
+    if (reader.Finished()) {
+      return 0;
+    }
+
+    // Test if the current message is closed.
+    std::string error;
+    // Pass the error by reference to avoid the issue of passing an rvalue to a const reference.
+    if (tester.TestClosed(error)) {
+      return 0;
+    }
+  }
+
+  return 0;
+}
+}
+}
+}
+}
+}
+</code>
+
+The code has the following build issues:
+<error>
+test/message_reader_fuzz_test.cc:25:19: error: no matching constructor for initialization of 'google::grpc::transcoding::testing::JsonArrayTester'
+  JsonArrayTester tester(const_reader);
+                  ^      ~~~~~~~~~~~~
+test/test_common.h:124:7: note: candidate constructor (the implicit copy constructor) not viable: no known conversion from 'const google::grpc::transcoding::MessageReader' to 'const google::grpc::transcoding::testing::JsonArrayTester' for 1st argument
+class JsonArrayTester {
+      ^
+test/test_common.h:124:7: note: candidate constructor (the implicit move constructor) not viable: no known conversion from 'const google::grpc::transcoding::MessageReader' to 'google::grpc::transcoding::testing::JsonArrayTester' for 1st argument
+test/test_common.h:124:7: note: candidate constructor (the implicit default constructor) not viable: requires 0 arguments, but 1 was provided
+1 error generated.
+test/message_reader_fuzz_test.cc:25:19: error: no matching constructor for initialization of 'google::grpc::transcoding::testing::JsonArrayTester'
+  JsonArrayTester tester(const_reader);
+                  ^      ~~~~~~~~~~~~
+test/test_common.h:124:7: note: candidate constructor (the implicit copy constructor) not viable: no known conversion from 'const google::grpc::transcoding::MessageReader' to 'const google::grpc::transcoding::testing::JsonArrayTester' for 1st argument
+class JsonArrayTester {
+      ^
+test/test_common.h:124:7: note: candidate constructor (the implicit move constructor) not viable: no known conversion from 'const google::grpc::transcoding::MessageReader' to 'google::grpc::transcoding::testing::JsonArrayTester' for 1st argument
+test/test_common.h:124:7: note: candidate constructor (the implicit default constructor) not viable: requires 0 arguments, but 1 was provided
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,1 @@
+error: undefined reference to 'hb_face_create'

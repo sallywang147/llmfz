@@ -1,0 +1,54 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+
+#include "double-conversion.h"
+
+using double_conversion::StringToDoubleConverter;
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  StringToDoubleConverter converter(
+      StringToDoubleConverter::ALLOW_HEX |
+          StringToDoubleConverter::ALLOW_OCTALS |
+          StringToDoubleConverter::ALLOW_TRAILING_JUNK |
+          StringToDoubleConverter::ALLOW_LEADING_SPACES |
+          StringToDoubleConverter::ALLOW_TRAILING_SPACES |
+          StringToDoubleConverter::ALLOW_SPACES_AFTER_SIGN |
+          StringToDoubleConverter::ALLOW_CASE_INSENSIBILITY |
+          StringToDoubleConverter::ALLOW_HEX_FLOATS,
+      /*empty_string_value=*/0.0,
+      /*junk_string_value=*/0.0, "inf", "nan");
+  short buffer[size];
+  int processed_characters_count;
+  converter.StringToFloat(buffer, size, &processed_characters_count);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/string_to_double_fuzzer.cc:23:13: error: no matching member function for call to 'StringToFloat'
+  converter.StringToFloat(buffer, size, &processed_characters_count);
+  ~~~~~~~~~~^~~~~~~~~~~~~
+/src/double-conversion/double-conversion/string-to-double.h:198:9: note: candidate function not viable: no known conversion from 'short[size]' to 'const char *' for 1st argument
+  float StringToFloat(const char* buffer,
+        ^
+/src/double-conversion/double-conversion/string-to-double.h:203:9: note: candidate function not viable: no known conversion from 'short[size]' to 'const uc16 *' (aka 'const unsigned short *') for 1st argument
+  float StringToFloat(const uc16* buffer,
+        ^
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

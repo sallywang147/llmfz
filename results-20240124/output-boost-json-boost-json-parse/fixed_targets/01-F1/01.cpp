@@ -1,0 +1,1 @@
+error: undefined reference to `boost::json::parse(boost::json::value*, char const*, std::size_t, boost::json::parse_options const*, boost::json::parse_options*)'

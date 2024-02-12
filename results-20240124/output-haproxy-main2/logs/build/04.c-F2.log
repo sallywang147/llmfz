@@ -1,0 +1,178 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ export 'ORIG_CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link'
++ ORIG_CFLAGS='-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link'
++ cd haproxy
++ sed 's/CFLAGS = $(ARCH_FLAGS) $(CPU_CFLAGS) $(DEBUG_CFLAGS) $(SPEC_CFLAGS)/CFLAGS = $(ARCH_FLAGS) $(CPU_CFLAGS) $(DEBUG_CFLAGS) $(SPEC_CFLAGS) ${ORIG_CFLAGS}/g' -i Makefile
++ sed 's/LDFLAGS = $(ARCH_FLAGS) -g/LDFLAGS = $(ARCH_FLAGS) -g ${CXXFLAGS}/g' -i Makefile
++ make TARGET=generic CC=/usr/local/bin/clang-jcc LD=/usr/local/bin/clang++-jcc
+  CC      src/slz.o
+  CC      src/ev_poll.o
+  CC      src/mux_h2.o
+  CC      src/mux_fcgi.o
+  CC      src/mux_h1.o
+  CC      src/tcpcheck.o
+  CC      src/stream.o
+  CC      src/stats.o
+  CC      src/http_ana.o
+  CC      src/server.o
+  CC      src/stick_table.o
+  CC      src/sample.o
+  CC      src/flt_spoe.o
+  CC      src/tools.o
+  CC      src/log.o
+  CC      src/cfgparse.o
+  CC      src/peers.o
+  CC      src/backend.o
+  CC      src/resolvers.o
+  CC      src/cli.o
+  CC      src/connection.o
+  CC      src/proxy.o
+  CC      src/http_htx.o
+  CC      src/cfgparse-listen.o
+  CC      src/pattern.o
+  CC      src/check.o
+  CC      src/haproxy.o
+  CC      src/cache.o
+  CC      src/stconn.o
+  CC      src/http_act.o
+  CC      src/http_fetch.o
+  CC      src/http_client.o
+  CC      src/listener.o
+  CC      src/dns.o
+  CC      src/vars.o
+  CC      src/debug.o
+  CC      src/tcp_rules.o
+  CC      src/sink.o
+  CC      src/h1_htx.o
+  CC      src/task.o
+  CC      src/mjson.o
+  CC      src/h2.o
+  CC      src/filters.o
+  CC      src/server_state.o
+  CC      src/payload.o
+  CC      src/fcgi-app.o
+  CC      src/map.o
+  CC      src/htx.o
+  CC      src/h1.o
+  CC      src/pool.o
+  CC      src/cfgparse-global.o
+  CC      src/trace.o
+  CC      src/tcp_sample.o
+  CC      src/http_ext.o
+  CC      src/flt_http_comp.o
+  CC      src/mux_pt.o
+  CC      src/flt_trace.o
+  CC      src/mqtt.o
+  CC      src/acl.o
+  CC      src/sock.o
+  CC      src/mworker.o
+  CC      src/tcp_act.o
+  CC      src/ring.o
+  CC      src/session.o
+  CC      src/proto_tcp.o
+  CC      src/fd.o
+  CC      src/channel.o
+  CC      src/activity.o
+  CC      src/queue.o
+  CC      src/lb_fas.o
+  CC      src/http_rules.o
+  CC      src/extcheck.o
+  CC      src/flt_bwlim.o
+  CC      src/thread.o
+  CC      src/http.o
+  CC      src/lb_chash.o
+  CC      src/applet.o
+  CC      src/compression.o
+  CC      src/raw_sock.o
+  CC      src/ncbuf.o
+  CC      src/frontend.o
+  CC      src/errors.o
+  CC      src/uri_normalizer.o
+  CC      src/http_conv.o
+  CC      src/lb_fwrr.o
+  CC      src/sha1.o
+  CC      src/proto_sockpair.o
+  CC      src/mailers.o
+  CC      src/lb_fwlc.o
+  CC      src/ebmbtree.o
+  CC      src/cfgcond.o
+  CC      src/action.o
+  CC      src/xprt_handshake.o
+  CC      src/protocol.o
+  CC      src/proto_uxst.o
+  CC      src/proto_udp.o
+  CC      src/lb_map.o
+  CC      src/fix.o
+  CC      src/ev_select.o
+  CC      src/arg.o
+  CC      src/sock_inet.o
+  CC      src/event_hdl.o
+  CC      src/mworker-prog.o
+  CC      src/hpack-dec.o
+  CC      src/cfgparse-tcp.o
+  CC      src/sock_unix.o
+  CC      src/shctx.o
+  CC      src/proto_uxdg.o
+  CC      src/fcgi.o
+  CC      src/eb64tree.o
+  CC      src/clock.o
+  CC      src/chunk.o
+  CC      src/cfgdiag.o
+  CC      src/signal.o
+  CC      src/regex.o
+  CC      src/lru.o
+  CC      src/eb32tree.o
+  CC      src/eb32sctree.o
+  CC      src/cfgparse-unix.o
+  CC      src/hpack-tbl.o
+  CC      src/ebsttree.o
+  CC      src/ebimtree.o
+  CC      src/base64.o
+  CC      src/auth.o
+  CC      src/uri_auth.o
+  CC      src/time.o
+  CC      src/ebistree.o
+  CC      src/dynbuf.o
+  CC      src/wdt.o
+  CC      src/pipe.o
+  CC      src/init.o
+  CC      src/http_acl.o
+  CC      src/hpack-huff.o
+  CC      src/hpack-enc.o
+  CC      src/dict.o
+  CC      src/freq_ctr.o
+  CC      src/ebtree.o
+  CC      src/hash.o
+  CC      src/dgram.o
+  CC      src/version.o
+  CC      src/proto_rhttp.o
+  LD      haproxy
+  CC      dev/flags/flags.o
+  LD      dev/flags/flags
++ cd /src/haproxy
++ sed 's/int main(int argc/int main2(int argc/g' -i ./src/haproxy.c
++ sed 's/dladdr(main,/dladdr(main2,/g' -i ./src/tools.c
++ sed 's/(void*)main/(void*)main2/g' -i ./src/tools.c
++ SETTINGS='-Iinclude -g -DUSE_POLL -DUSE_TPROXY -DCONFIG_HAPROXY_VERSION="" -DCONFIG_HAPROXY_DATE=""'
++ /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Iinclude -g -DUSE_POLL -DUSE_TPROXY '-DCONFIG_HAPROXY_VERSION=""' '-DCONFIG_HAPROXY_DATE=""' -c -o ./src/haproxy.o ./src/haproxy.c
++ ar cr libhaproxy.a ./src/acl.o ./src/action.o ./src/activity.o ./src/applet.o ./src/arg.o ./src/auth.o ./src/backend.o ./src/base64.o ./src/cache.o ./src/cfgcond.o ./src/cfgdiag.o ./src/cfgparse-global.o ./src/cfgparse-listen.o ./src/cfgparse-tcp.o ./src/cfgparse-unix.o ./src/cfgparse.o ./src/channel.o ./src/check.o ./src/chunk.o ./src/cli.o ./src/clock.o ./src/compression.o ./src/connection.o ./src/debug.o ./src/dgram.o ./src/dict.o ./src/dns.o ./src/dynbuf.o ./src/eb32sctree.o ./src/eb32tree.o ./src/eb64tree.o ./src/ebimtree.o ./src/ebistree.o ./src/ebmbtree.o ./src/ebsttree.o ./src/ebtree.o ./src/errors.o ./src/ev_poll.o ./src/ev_select.o ./src/event_hdl.o ./src/extcheck.o ./src/fcgi-app.o ./src/fcgi.o ./src/fd.o ./src/filters.o ./src/fix.o ./src/flt_bwlim.o ./src/flt_http_comp.o ./src/flt_spoe.o ./src/flt_trace.o ./src/freq_ctr.o ./src/frontend.o ./src/h1.o ./src/h1_htx.o ./src/h2.o ./src/haproxy.o ./src/hash.o ./src/hpack-dec.o ./src/hpack-enc.o ./src/hpack-huff.o ./src/hpack-tbl.o ./src/http.o ./src/http_acl.o ./src/http_act.o ./src/http_ana.o ./src/http_client.o ./src/http_conv.o ./src/http_ext.o ./src/http_fetch.o ./src/http_htx.o ./src/http_rules.o ./src/htx.o ./src/init.o ./src/lb_chash.o ./src/lb_fas.o ./src/lb_fwlc.o ./src/lb_fwrr.o ./src/lb_map.o ./src/listener.o ./src/log.o ./src/lru.o ./src/mailers.o ./src/map.o ./src/mjson.o ./src/mqtt.o ./src/mux_fcgi.o ./src/mux_h1.o ./src/mux_h2.o ./src/mux_pt.o ./src/mworker-prog.o ./src/mworker.o ./src/ncbuf.o ./src/pattern.o ./src/payload.o ./src/peers.o ./src/pipe.o ./src/pool.o ./src/proto_rhttp.o ./src/proto_sockpair.o ./src/proto_tcp.o ./src/proto_udp.o ./src/proto_uxdg.o ./src/proto_uxst.o ./src/protocol.o ./src/proxy.o ./src/queue.o ./src/raw_sock.o ./src/regex.o ./src/resolvers.o ./src/ring.o ./src/sample.o ./src/server.o ./src/server_state.o ./src/session.o ./src/sha1.o ./src/shctx.o ./src/signal.o ./src/sink.o ./src/slz.o ./src/sock.o ./src/sock_inet.o ./src/sock_unix.o ./src/stats.o ./src/stconn.o ./src/stick_table.o ./src/stream.o ./src/task.o ./src/tcp_act.o ./src/tcp_rules.o ./src/tcp_sample.o ./src/tcpcheck.o ./src/thread.o ./src/time.o ./src/tools.o ./src/trace.o ./src/uri_auth.o ./src/uri_normalizer.o ./src/vars.o ./src/version.o ./src/wdt.o ./src/xprt_handshake.o
++ for fuzzer in hpack_decode cfg_parser
++ cp /src/fuzz_hpack_decode.c .
++ /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Iinclude -g -DUSE_POLL -DUSE_TPROXY '-DCONFIG_HAPROXY_VERSION=""' '-DCONFIG_HAPROXY_DATE=""' -c fuzz_hpack_decode.c -o fuzz_hpack_decode.o
++ /usr/local/bin/clang++-jcc -g -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -fsanitize=fuzzer fuzz_hpack_decode.o libhaproxy.a -o /workspace/out/libfuzzer-address-x86_64/fuzz_hpack_decode
++ for fuzzer in hpack_decode cfg_parser
++ cp /src/fuzz_cfg_parser.c .
++ /usr/local/bin/clang-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -Iinclude -g -DUSE_POLL -DUSE_TPROXY '-DCONFIG_HAPROXY_VERSION=""' '-DCONFIG_HAPROXY_DATE=""' -c fuzz_cfg_parser.c -o fuzz_cfg_parser.o
++ /usr/local/bin/clang++-jcc -g -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -fsanitize=fuzzer fuzz_cfg_parser.o libhaproxy.a -o /workspace/out/libfuzzer-address-x86_64/fuzz_cfg_parser
+/usr/bin/ld: /usr/bin/ld: DWARF error: invalid or unhandled FORM value: 0x25
+fuzz_cfg_parser.o: in function `LLVMFuzzerTestOneInput':
+fuzz_cfg_parser.cpp:(.text.LLVMFuzzerTestOneInput[LLVMFuzzerTestOneInput]+0x5bb): undefined reference to `main2(int, char**)'
+clang-15: error: linker command failed with exit code 1 (use -v to see invocation)

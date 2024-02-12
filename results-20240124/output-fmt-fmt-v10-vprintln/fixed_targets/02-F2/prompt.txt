@@ -1,0 +1,40 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fmt/core.h>
+#include <fuzzer/FuzzedDataProvider.h>
+#include <cstring>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider provider(data, size);
+  const std::string format_str = provider.ConsumeRemainingBytesAsString();
+  const char *format = format_str.c_str();
+  size_t args = provider.ConsumeIntegral<size_t>();
+  size_t next_arg = provider.ConsumeIntegral<size_t>();
+  fmt::v10::detail::value<fmt::v10::basic_format_context<char, char>> *values = nullptr;
+  fmt::v10::vprintln(stdout, const_cast<char*>(format), args, next_arg, values);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/fmt/test/fuzzing/chrono-timepoint.cc:12:63: error: too many arguments to function call, expected 3, have 5
+  fmt::v10::vprintln(stdout, const_cast<char*>(format), args, next_arg, values);
+  ~~~~~~~~~~~~~~~~~~                                          ^~~~~~~~~~~~~~~~
+/src/fmt/include/fmt/base.h:2966:14: note: 'vprintln' declared here
+FMT_API void vprintln(FILE* f, string_view fmt, format_args args);
+             ^
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

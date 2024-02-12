@@ -1,0 +1,19 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ cp /src/exprtk_test_expressions.dict /workspace/out/libfuzzer-address-x86_64/
++ CXXFLAGS='-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -O2 -fno-sanitize=integer-divide-by-zero,float-divide-by-zero'
++ /usr/local/bin/clang++-jcc -std=c++11 -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -O2 -fno-sanitize=integer-divide-by-zero,float-divide-by-zero -I. -I/src/exprtk /src/exprtk_fuzzer.cpp -o /workspace/out/libfuzzer-address-x86_64/exprtk_fuzzer -fsanitize=fuzzer
+/src/exprtk_fuzzer.cpp:11:17: error: no matching member function for call to 'allocate_rrr'
+      allocator.allocate_rrr<exprtk::details::vec_binop_vecvec_node<float,
+      ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./exprtk.hpp:16746:66: note: candidate function template not viable: requires 3 arguments, but 4 were provided
+         inline expression_node<typename node_type::value_type>* allocate_rrr(T1& t1, T2& t2, T3& t3) const
+                                                                 ^
+1 error generated.

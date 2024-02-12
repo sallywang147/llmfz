@@ -1,0 +1,68 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include "includes.h"
+
+#include "common.h"
+#include "eloop.h"
+#include "wpa_supplicant_i.h"
+#include "fuzzer-common.h"
+
+
+static int fuzz_wpa_supplicant_init_iface(struct wpa_supplicant *wpa_s,
+					   struct wpa_interface *iface)
+{
+	return wpa_supplicant_init_iface(wpa_s, iface);
+}
+
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
+{
+	struct wpa_supplicant wpa_s;
+	struct wpa_interface iface;
+
+	wpa_fuzzer_set_debug_level();
+
+	if (os_program_init())
+		return -1;
+
+	os_memset(&wpa_s, 0, sizeof(wpa_s));
+	os_memset(&iface, 0, sizeof(iface));
+
+	if (eloop_init()) {
+		wpa_printf(MSG_ERROR, "Failed to initialize event loop");
+		goto fail;
+	}
+
+	fuzz_wpa_supplicant_init_iface(&wpa_s, &iface);
+
+	wpa_printf(MSG_DEBUG, "Starting eloop");
+	eloop_run();
+	wpa_printf(MSG_DEBUG, "eloop done");
+
+fail:
+	eloop_destroy();
+
+	os_program_deinit();
+
+	return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+ap-mgmt.c:(.text.LLVMFuzzerTestOneInput[LLVMFuzzerTestOneInput]+0x0): multiple definition of `LLVMFuzzerTestOneInput'; /usr/bin/ld: DWARF error: invalid or unhandled FORM value: 0x25
+fuzzer-common.c:(.text.LLVMFuzzerTestOneInput[LLVMFuzzerTestOneInput]+0x10f): undefined reference to `wpa_fuzzer_set_debug_level'
+/usr/bin/ld: fuzzer-common.c:(.text.LLVMFuzzerTestOneInput[LLVMFuzzerTestOneInput]+0x197): undefined reference to `wpa_supplicant_init_iface'
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

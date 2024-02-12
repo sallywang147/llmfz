@@ -1,0 +1,64 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <iostream>
+#include <dlfcn.h>
+
+extern "C" {
+#include <libdwarf.h>
+#include <libunwind.h>
+}
+
+int main() {
+  void *handle = dlopen("libdwfl.so", RTLD_NOW);
+  if (!handle) {
+    std::cerr << "Error: " << dlerror() << std::endl;
+    return 1;
+  }
+
+  Dwarf_Debug dbg = dwarf_begin(handle, DWARF_C_READ, nullptr);
+  if (!dbg) {
+    std::cerr << "Error: " << dwarf_errmsg(dwarf_errno(dbg)) << std::endl;
+    return 1;
+  }
+
+  Dwarf_Die die;
+  int res = dwarf_next_cu_header(dbg, &die, nullptr, nullptr, nullptr);
+  if (res != DW_DLV_OK) {
+    std::cerr << "Error: " << dwarf_errmsg(res) << std::endl;
+    return 1;
+  }
+
+  Dwarf_Addr low_pc = 0;
+  Dwarf_Addr high_pc = 0;
+  res = dwarf_get_cu_die_range(die, &low_pc, &high_pc);
+  if (res != DW_DLV_OK) {
+    std::cerr << "Error: " << dwarf_errmsg(res) << std::endl;
+    return 1;
+  }
+
+  std::cout << "Low PC: " << low_pc << std::endl;
+  std::cout << "High PC: " << high_pc << std::endl;
+
+  dwarf_end(dbg);
+  dlclose(handle);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+The target function `void __libdwfl_frame_unwind(struct Dwfl_Frame * state)` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `void __libdwfl_frame_unwind(struct Dwfl_Frame * state)` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

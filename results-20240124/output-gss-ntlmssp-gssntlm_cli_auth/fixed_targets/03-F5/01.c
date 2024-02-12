@@ -1,0 +1,1 @@
+error: undefined reference to 'gssntlm_cli_auth'

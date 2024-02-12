@@ -1,0 +1,56 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <capnp/serialize-packed.h>
+#include <capnp/serialize.h>
+#include <capnp/dynamic.h>
+
+extern "C" {
+#include <capnp/test.capnp.h>
+}
+
+int main() {
+  capnp::MallocMessageBuilder message;
+  capnp::TestAllTypes::Builder allTypes = message.initRoot<capnp::TestAllTypes>();
+
+  allTypes.setTextField("Hello, world!");
+  allTypes.setUInt32Field(12345);
+
+  capnp::DynamicStruct::Builder dynamicStruct = message.initRoot<capnp::DynamicStruct>(2);
+  dynamicStruct.set("textField", "Hello, world!");
+  dynamicStruct.set("uint32Field", 12345);
+
+  std::string packedMessage = messageToFlatArray(message);
+
+  capnp::PackedMessageReader reader(packedMessage);
+  capnp::TestAllTypes::Reader unpackedAllTypes = reader.getRoot<capnp::TestAllTypes>();
+
+  std::string textField = unpackedAllTypes.getTextField();
+  uint32_t uint32Field = unpackedAllTypes.getUInt32Field();
+
+  capnp::DynamicStruct::Reader unpackedDynamicStruct = reader.getRoot<capnp::DynamicStruct>();
+
+  std::string textField2 = unpackedDynamicStruct.get("textField").as<std::string>();
+  uint32_t uint32Field2 = unpackedDynamicStruct.get("uint32Field").as<uint32_t>();
+
+  capnp::_::checkDynamicTestMessage(&dynamicStruct);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,1 @@
+error: undefined reference to 'highwayhash::HighwayHashCat<4u>::operator()'

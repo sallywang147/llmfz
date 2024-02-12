@@ -1,0 +1,82 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <algorithm>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+#include <vector>
+
+extern "C" {
+#include "GeoPolygon.h"
+#include "BBox.h"
+#include "CellBoundary.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const int num_bboxes = stream.ConsumeIntegral<int>();
+  const int num_boundaries = stream.ConsumeIntegral<int>();
+  const int num_polys = stream.ConsumeIntegral<int>();
+  std::vector<BBox> bboxes(num_bboxes);
+  for (auto& bbox : bboxes) {
+    bbox.min_x = stream.ConsumeIntegral<double>();
+    bbox.max_x = stream.ConsumeIntegral<double>();
+    bbox.min_y = stream.ConsumeIntegral<double>();
+    bbox.max_y = stream.ConsumeIntegral<double>();
+  }
+  std::vector<CellBoundary> boundaries(num_boundaries);
+  for (auto& boundary : boundaries) {
+    boundary.x1 = stream.ConsumeIntegral<double>();
+    boundary.y1 = stream.ConsumeIntegral<double>();
+    boundary.x2 = stream.ConsumeIntegral<double>();
+    boundary.y2 = stream.ConsumeIntegral<double>();
+  }
+  std::vector<GeoPolygon> polys(num_polys);
+  for (auto& poly : polys) {
+    const int num_vertices = stream.ConsumeIntegral<int>();
+    std::vector<double> vertices(2 * num_vertices);
+    for (auto& vertex : vertices) {
+      vertex = stream.ConsumeIntegral<double>();
+    }
+    poly.setVertices(vertices);
+  }
+
+  for (const auto& boundary : boundaries) {
+    for (const auto& poly : polys) {
+      BBox boundary_bbox;
+      cellBoundaryCrossesPolygon(&poly, bboxes.data(), &boundary, &boundary_bbox);
+    }
+  }
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/h3//src/apps/fuzzers/fuzzerResolutions.c:1:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+/src/h3//src/apps/fuzzers/fuzzerResolutions.cpp:11:10: fatal error: 'GeoPolygon.h' file not found
+#include "GeoPolygon.h"
+         ^~~~~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

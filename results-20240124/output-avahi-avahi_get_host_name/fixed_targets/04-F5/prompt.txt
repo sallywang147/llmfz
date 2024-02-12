@@ -1,0 +1,52 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <algorithm>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+extern "C" {
+#include "avahi-common/defs.h"
+#include "avahi-common/malloc.h"
+#include "avahi-core/error.h"
+#include "avahi-core/log.h"
+}
+
+void log_function(AvahiLogLevel level, const char *txt) {}
+
+int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  avahi_set_log_function(log_function);
+
+  FuzzedDataProvider provider(data, size);
+  const size_t requested_size = provider.ConsumeIntegralInRange<size_t>(
+      0, 1000);
+  char *host_name = static_cast<char*>(avahi_malloc(requested_size));
+  if (host_name == nullptr) {
+    return 0;
+  }
+  avahi_get_host_name(host_name, requested_size);
+  avahi_free(host_name);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

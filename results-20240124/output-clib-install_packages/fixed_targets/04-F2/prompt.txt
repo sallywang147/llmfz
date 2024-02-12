@@ -1,0 +1,226 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+#include "../../src/common/clib-package.h"
+
+#include <list.h>
+#include <install.h>
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+    if(size<3){
+            return 0;
+    }
+    char filename[256];
+    sprintf(filename, "libfuzzer.json");
+
+    FILE *fp = fopen(filename, "wb");
+    if (!fp)
+            return 0;
+    fwrite(data, size, 1, fp);
+    fclose(fp);
+    
+    clib_package_t *pkg = 
+	    clib_package_load_from_manifest(filename, 0);
+    if(pkg) {
+	    struct list_t *list = list_new();
+	    list_add(list, pkg);
+	    install_packages(list, strdup("/tmp"), 0);
+	    list_free(list);
+    }
+    unlink(filename);
+    return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+test/fuzzing/fuzz_manifest.c:7:10: fatal error: 'list.h' file not found
+#include <list.h>
+         ^~~~~~~~
+1 error generated.
+
+Fix failure
+src/clib-configure.c:110:26: error: cannot initialize a variable of type 'clib_package_thread_t *' (aka 'clib_package_thread *') with an lvalue of type 'void *'
+  clib_package_thread_t *wrap = arg;
+                         ^      ~~~
+src/clib-configure.c:160:30: error: assigning to 'char *' from incompatible type 'void *'
+      root_package->prefix = malloc(size);
+                             ^~~~~~~~~~~~
+src/clib-configure.c:210:5: error: no matching function for call to 'hash_set'
+    hash_set(configured, path, "t");
+    ^~~~~~~~
+./deps/hash/hash.h:92:1: note: candidate function not viable: no known conversion from 'const char[2]' to 'void *' for 3rd argument
+hash_set(hash_t *self, char *key, void *val);
+^
+src/clib-configure.c:216:11: error: cannot initialize a variable of type 'char *' with an rvalue of type 'const char *'
+    char *args = rest_argc > 0
+          ^      ~~~~~~~~~~~~~
+src/clib-configure.c:234:25: error: assigning to 'char *' from incompatible type 'void *'
+      package->prefix = malloc(size);
+                        ^~~~~~~~~~~~
+src/clib-configure.c:256:5: error: no matching function for call to 'hash_set'
+    hash_set(configured, path, "t");
+    ^~~~~~~~
+./deps/hash/hash.h:92:1: note: candidate function not viable: no known conversion from 'const char[2]' to 'void *' for 3rd argument
+hash_set(hash_t *self, char *key, void *val);
+^
+src/clib-configure.c:263:5: error: no matching function for call to 'hash_set'
+    hash_set(configured, path, "f");
+    ^~~~~~~~
+./deps/hash/hash.h:92:1: note: candidate function not viable: no known conversion from 'const char[2]' to 'void *' for 3rd argument
+hash_set(hash_t *self, char *key, void *val);
+^
+src/clib-configure.c:288:34: error: cannot initialize a variable of type 'clib_package_dependency_t *' with an lvalue of type 'void *'
+      clib_package_dependency_t *dep = node->val;
+                                 ^     ~~~~~~~~~
+src/clib-configure.c:359:34: error: cannot initialize a variable of type 'clib_package_dependency_t *' with an lvalue of type 'void *'
+      clib_package_dependency_t *dep = node->val;
+                                 ^     ~~~~~~~~~
+src/clib-configure.c:515:3: error: no matching function for call to 'hash_set'
+  hash_set(configured, strdup("__" PROGRAM_NAME "__"), CLIB_VERSION);
+  ^~~~~~~~
+./deps/hash/hash.h:92:1: note: candidate function not viable: no known conversion from 'const char[6]' to 'void *' for 3rd argument
+hash_set(hash_t *self, char *key, void *val);
+^
+src/clib-configure.c:558:16: error: assigning to 'const char *' from incompatible type 'void *'
+    opts.dir = malloc(size);
+               ^~~~~~~~~~~~
+src/clib-configure.c:568:19: error: assigning to 'char *' from incompatible type 'void *'
+    opts.prefix = malloc(size);
+                  ^~~~~~~~~~~~
+src/clib-configure.c:590:17: error: assigning to 'char **' from incompatible type 'void *'
+    rest_argv = malloc(rest_argc * sizeof(char *));
+                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/clib-configure.c:660:14: error: no matching function for call to 'strncmp'
+    if (0 == strncmp("t", val, 1)) {
+             ^~~~~~~
+./deps/hash/hash.h:59:7: note: expanded from macro 'hash_each'
+      block; \
+      ^~~~~
+/usr/include/string.h:140:12: note: candidate function not viable: cannot convert argument of incomplete type 'void *' to 'const char *' for 2nd argument
+extern int strncmp (const char *__s1, const char *__s2, size_t __n)
+           ^
+14 errors generated.
+In file included from src/common/clib-package.c:15:
+In file included from src/common/clib-package.h:13:
+In file included from /usr/include/x86_64-linux-gnu/curl/curl.h:49:
+In file included from /usr/local/bin/../include/c++/v1/stdio.h:107:
+/usr/include/stdio.h:366:12: error: exception specification in declaration does not match previous declaration
+extern int vasprintf (char **__restrict __ptr, const char *__restrict __f,
+           ^
+./deps/asprintf/asprintf.h:22:1: note: previous declaration is here
+vasprintf (char **, const char *, va_list);
+^
+In file included from src/common/clib-package.c:15:
+In file included from src/common/clib-package.h:13:
+In file included from /usr/include/x86_64-linux-gnu/curl/curl.h:49:
+In file included from /usr/local/bin/../include/c++/v1/stdio.h:107:
+/usr/include/stdio.h:372:12: error: exception specification in declaration does not match previous declaration
+extern int asprintf (char **__restrict __ptr,
+           ^
+./deps/asprintf/asprintf.h:32:1: note: previous declaration is here
+asprintf (char **, const char *, ...);
+^
+src/common/clib-package.c:213:9: error: cannot initialize a variable of type 'char *' with an rvalue of type 'void *'
+  char *res = malloc(size);
+        ^     ~~~~~~~~~~~~
+src/common/clib-package.c:232:9: error: cannot initialize a variable of type 'char *' with an rvalue of type 'void *'
+  char *slug = malloc(size);
+        ^      ~~~~~~~~~~~~
+src/common/clib-package.c:293:9: error: cannot initialize a variable of type 'char *' with an rvalue of type 'void *'
+  char *repo = malloc(size);
+        ^      ~~~~~~~~~~~~
+src/common/clib-package.c:325:7: error: cannot jump from this goto statement to its label
+      goto loop_cleanup;
+      ^
+src/common/clib-package.c:327:18: note: jump bypasses variable initialization
+    list_node_t* dep_node = list_node_new(dep);
+                 ^
+src/common/clib-package.c:323:7: error: cannot jump from this goto statement to its label
+      goto loop_cleanup;
+      ^
+src/common/clib-package.c:327:18: note: jump bypasses variable initialization
+    list_node_t* dep_node = list_node_new(dep);
+                 ^
+src/common/clib-package.c:321:7: error: cannot jump from this goto statement to its label
+      goto loop_cleanup;
+      ^
+src/common/clib-package.c:327:18: note: jump bypasses variable initialization
+    list_node_t* dep_node = list_node_new(dep);
+                 ^
+src/common/clib-package.c:410:23: error: cannot initialize a variable of type 'clib_package_t *' with an lvalue of type 'void *'
+      clib_package_t *pkg = node->val;
+                      ^     ~~~~~~~~~
+src/common/clib-package.c:441:5: error: no matching function for call to 'curl_share_setopt'
+    curl_share_setopt(clib_package_curl_share, CURLOPT_NETRC,
+    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/x86_64-linux-gnu/curl/curl.h:2892:44: note: expanded from macro 'curl_share_setopt'
+#define curl_share_setopt(share,opt,param) curl_share_setopt(share,opt,param)
+                                           ^~~~~~~~~~~~~~~~~
+/usr/include/x86_64-linux-gnu/curl/curl.h:2721:24: note: candidate function not viable: no known conversion from 'CURLoption' to 'CURLSHoption' for 2nd argument
+CURL_EXTERN CURLSHcode curl_share_setopt(CURLSH *, CURLSHoption option, ...);
+                       ^
+src/common/clib-package.c:482:15: error: assigning to 'clib_package_t *' from incompatible type 'void *'
+  if (!(pkg = malloc(sizeof(clib_package_t)))) {
+              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/common/clib-package.c:838:9: error: cannot initialize a variable of type 'char *' with an rvalue of type 'void *'
+  char *slug = malloc(size);
+        ^      ~~~~~~~~~~~~
+src/common/clib-package.c:864:9: error: cannot initialize a variable of type 'char *' with an rvalue of type 'void *'
+  char *slug = malloc(size);
+        ^      ~~~~~~~~~~~~
+src/common/clib-package.c:910:30: error: cannot initialize a variable of type 'clib_package_dependency_t *' with an rvalue of type 'void *'
+  clib_package_dependency_t *dep = malloc(sizeof(clib_package_dependency_t));
+                             ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/common/clib-package.c:1024:37: error: cannot initialize a variable of type 'fetch_package_file_thread_data_t *' (aka 'fetch_package_file_thread_data *') with an lvalue of type 'void *'
+  fetch_package_file_thread_data_t *data = arg;
+                                    ^      ~~~
+src/common/clib-package.c:1025:8: error: cannot initialize a variable of type 'int *' with an rvalue of type 'void *'
+  int *status = malloc(sizeof(int));
+       ^        ~~~~~~~~~~~~~~~~~~~
+src/common/clib-package.c:1046:37: error: cannot initialize a variable of type 'fetch_package_file_thread_data_t *' (aka 'fetch_package_file_thread_data *') with an rvalue of type 'void *'
+  fetch_package_file_thread_data_t *fetch = malloc(sizeof(*fetch));
+                                    ^       ~~~~~~~~~~~~~~~~~~~~~~
+src/common/clib-package.c:1187:5: error: cannot jump from this goto statement to its label
+    goto cleanup;
+    ^
+src/common/clib-package.c:1203:9: note: jump bypasses variable initialization
+  char *version = pkg->version;
+        ^
+src/common/clib-package.c:1194:15: note: jump bypasses variable initialization
+  const char *configure = pkg->configure;
+              ^
+src/common/clib-package.c:1177:3: error: cannot jump from this goto statement to its label
+  E_FORMAT(&command, "cd %s && gzip -dc %s | tar x", tmp, file);
+  ^
+src/common/clib-package.c:96:7: note: expanded from macro 'E_FORMAT'
+      goto cleanup;                                                            \
+      ^
+src/common/clib-package.c:1203:9: note: jump bypasses variable initialization
+  char *version = pkg->version;
+        ^
+src/common/clib-package.c:1194:15: note: jump bypasses variable initialization
+  const char *configure = pkg->configure;
+              ^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+test/fuzzing/fuzz_manifest.c:7:10: fatal error: 'list.h' file not found
+#include <list.h>
+         ^~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

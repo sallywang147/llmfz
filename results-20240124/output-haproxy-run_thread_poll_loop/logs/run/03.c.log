@@ -1,0 +1,32 @@
+/workspace/out/libfuzzer-address-x86_64/fuzz_cfg_parser -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/fuzz_cfg_parser < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 177185660
+INFO: Loaded 1 modules   (13 inline 8-bit counters): 13 [0x613fa0, 0x613fad), 
+INFO: Loaded 1 PC tables (13 PCs): 13 [0x5c79e0,0x5c7ab0), 
+INFO:        0 files found in /workspace/corpus/fuzz_cfg_parser
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: A corpus is not provided, starting from an empty corpus
+#2	INITED cov: 4 ft: 4 corp: 1/1b exec/s: 0 rss: 31Mb
+#4	NEW    cov: 6 ft: 6 corp: 2/101b lim: 4096 exec/s: 0 rss: 32Mb L: 100/100 MS: 2 CopyPart-InsertRepeatedBytes-
+#28	REDUCE cov: 6 ft: 6 corp: 2/77b lim: 4096 exec/s: 0 rss: 32Mb L: 76/76 MS: 4 InsertByte-CopyPart-CMP-EraseBytes- DE: "\376\377\377\377\377\377\377\357"-
+#33	REDUCE cov: 6 ft: 6 corp: 2/73b lim: 4096 exec/s: 0 rss: 32Mb L: 72/72 MS: 5 CMP-ChangeByte-ChangeBinInt-CrossOver-EraseBytes- DE: "\001\000\000\000"-
+#51	REDUCE cov: 6 ft: 6 corp: 2/57b lim: 4096 exec/s: 0 rss: 32Mb L: 56/56 MS: 3 ChangeBinInt-PersAutoDict-EraseBytes- DE: "\001\000\000\000"-
+#62	REDUCE cov: 6 ft: 6 corp: 2/37b lim: 4096 exec/s: 0 rss: 32Mb L: 36/36 MS: 1 EraseBytes-
+#70	REDUCE cov: 6 ft: 6 corp: 2/26b lim: 4096 exec/s: 0 rss: 32Mb L: 25/25 MS: 3 ChangeBinInt-PersAutoDict-EraseBytes- DE: "\001\000\000\000"-
+#89	REDUCE cov: 6 ft: 6 corp: 2/25b lim: 4096 exec/s: 0 rss: 32Mb L: 24/24 MS: 4 InsertByte-CrossOver-CrossOver-EraseBytes-
+#466	REDUCE cov: 6 ft: 6 corp: 2/24b lim: 4096 exec/s: 0 rss: 32Mb L: 23/23 MS: 2 PersAutoDict-EraseBytes- DE: "\376\377\377\377\377\377\377\357"-
+#2097152	pulse  cov: 6 ft: 6 corp: 2/24b lim: 4096 exec/s: 699050 rss: 53Mb
+#4194304	pulse  cov: 6 ft: 6 corp: 2/24b lim: 4096 exec/s: 699050 rss: 53Mb
+#8388608	pulse  cov: 6 ft: 6 corp: 2/24b lim: 4096 exec/s: 699050 rss: 53Mb
+#16777216	pulse  cov: 6 ft: 6 corp: 2/24b lim: 4096 exec/s: 671088 rss: 53Mb
+#20513786	DONE   cov: 6 ft: 6 corp: 2/24b lim: 4096 exec/s: 661735 rss: 53Mb
+###### Recommended dictionary. ######
+"\376\377\377\377\377\377\377\357" # Uses: 843742
+"\001\000\000\000" # Uses: 862794
+###### End of recommended dictionary. ######
+Done 20513786 runs in 31 second(s)
+stat::number_of_executed_units: 20513786
+stat::average_exec_per_sec:     661735
+stat::new_units_added:          8
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              53

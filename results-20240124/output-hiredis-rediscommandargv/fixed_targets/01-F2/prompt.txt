@@ -1,0 +1,53 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdlib.h>
+#include <string.h>
+#include "hiredis.h"
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+    char *new_str;
+    int argc = 0;
+    char **argv = NULL;
+    size_t *argvlen = NULL;
+    struct redisContext *c;
+
+    if (size < 3)
+        return 0;
+
+    new_str = malloc(size+1);
+    if (new_str == NULL)
+        return 0;
+
+    memcpy(new_str, data, size);
+    new_str[size] = '\0';
+
+    c = redisConnect("localhost", 6379);
+    if (c == NULL) {
+        free(new_str);
+        return 0;
+    }
+
+    redisCommandArgv(c, argc, argv, argvlen);
+    redisFree(c);
+
+    free(new_str);
+    return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

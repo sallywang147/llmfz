@@ -1,0 +1,1 @@
+error: undefined reference to 'PEM_read_DSAPrivateKey'

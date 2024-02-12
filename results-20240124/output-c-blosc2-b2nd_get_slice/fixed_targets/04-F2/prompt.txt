@@ -1,0 +1,70 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <inttypes.h>
+
+#include <b2nd.h>
+
+#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+struct b2nd_array_t {
+  uint64_t nbytes;
+  uint64_t nitems;
+  uint32_t ndims;
+  uint32_t type;
+  uint32_t flags;
+  uint32_t magic;
+  uint32_t version;
+  uint32_t checksum;
+  uint32_t padding[2];
+  uint8_t data[0];
+};
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  struct b2nd_context_s *ctx = b2nd_init();
+  if (ctx == NULL) {
+    return 0;
+  }
+
+  struct b2nd_array_t *arr = NULL;
+  struct b2nd_array_t arr2 = {0};
+  size_t n_slices = 0;
+  size_t slice_size = 0;
+  int ret = b2nd_get_slice(ctx, &arr, &arr2, &n_slices, &slice_size);
+  if (ret != 0) {
+    b2nd_destroy(ctx);
+    return 0;
+  }
+
+  b2nd_destroy(ctx);
+  return 0;
+}
+
+#ifdef __cplusplus
+}
+#endif
+</code>
+
+The code has the following build issues:
+<error>
+fuzz_decompress_frame.c:(.text.LLVMFuzzerTestOneInput[LLVMFuzzerTestOneInput]+0xd2): undefined reference to `b2nd_init'
+/usr/bin/ld: fuzz_decompress_frame.c:(.text.LLVMFuzzerTestOneInput[LLVMFuzzerTestOneInput]+0x1ab): undefined reference to `b2nd_destroy'
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,2320 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ find /usr/ -name 'libyaml*.so' -exec rm '{}' ';'
++ find /usr/ -name 'libyaml-0*' -exec rm '{}' ';'
+rm: cannot remove '/usr/share/doc/libyaml-0-2': Is a directory
++ export FUZZ_INTROSPECTOR_CONFIG=/src/fuzz_introspector_exclusion.config
++ FUZZ_INTROSPECTOR_CONFIG=/src/fuzz_introspector_exclusion.config
++ cat
++ cd fluent-bit
+++ grep fuzz -ic ./lib/msgpack-c/src/zone.c
++ '[' 0 -eq 0 ']'
++ sed -i 's/prepare_unit_tests(flb/#prepare_unit_tests(flb/g' ./tests/internal/CMakeLists.txt
++ sed -i 's/malloc(/fuzz_malloc(/g' ./lib/msgpack-c/src/zone.c
++ sed -i 's/struct msgpack_zone_chunk {/void *fuzz_malloc(size_t size) {if (size > 0xa00000) return NULL;\nreturn malloc(size);}\nstruct msgpack_zone_chunk {/g' ./lib/msgpack-c/src/zone.c
++ rm -rf ./build
++ mkdir build
++ cd build
++ export 'CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -fcommon -DFLB_TESTS_OSSFUZZ=ON'
++ CFLAGS='-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -fcommon -DFLB_TESTS_OSSFUZZ=ON'
++ export 'CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -fcommon -DFLB_TESTS_OSSFUZZ=ON'
++ CXXFLAGS='-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -fcommon -DFLB_TESTS_OSSFUZZ=ON'
++ INPUT_PLUGINS='-DFLB_IN_COLLECTD=OFF   -DFLB_IN_CPU=OFF       -DFLB_IN_DISK=OFF      -DFLB_IN_DOCKER=OFF    -DFLB_IN_EXEC=OFF      -DFLB_IN_FORWARD=OFF   -DFLB_IN_HEAD=OFF      -DFLB_IN_HEALTH=OFF    -DFLB_IN_KMSG=OFF      -DFLB_IN_MEM=OFF       -DFLB_IN_MQTT=OFF      -DFLB_IN_NETIF=OFF     -DFLB_IN_PROC=OFF      -DFLB_IN_RANDOM=OFF    -DFLB_IN_SERIAL=OFF    -DFLB_IN_STDIN=OFF     -DFLB_IN_SYSLOG=OFF    -DFLB_IN_SYSTEMD=OFF   -DFLB_IN_TAIL=OFF      -DFLB_IN_TCP=OFF       -DFLB_IN_THERMAL=OFF   -DFLB_IN_WINLOG=OFF'
++ OUTPUT_PLUGINS='-DFLB_OUT_AZURE=OFF    -DFLB_OUT_BIGQUERY=OFF        -DFLB_OUT_COUNTER=OFF         -DFLB_OUT_DATADOG=OFF         -DFLB_OUT_ES=OFF              -DFLB_OUT_FILE=OFF            -DFLB_OUT_FLOWCOUNTER=OFF     -DFLB_OUT_FORWARD=OFF         -DFLB_OUT_GELF=OFF            -DFLB_OUT_HTTP=ON             -DFLB_OUT_INFLUXDB=OFF        -DFLB_OUT_KAFKA=OFF           -DFLB_OUT_KAFKA_REST=OFF      -DFLB_OUT_LOKI=OFF            -DFLB_OUT_NATS=OFF            -DFLB_OUT_NRLOGS=OFF          -DFLB_OUT_NULL=OFF            -DFLB_OUT_PGSQL=OFF           -DFLB_OUT_PLOT=OFF            -DFLB_OUT_SLACK=OFF           -DFLB_OUT_SPLUNK=OFF          -DFLB_OUT_STACKDRIVER=OFF     -DFLB_OUT_STDOUT=ON           -DFLB_OUT_SYSLOG=OFF          -DFLB_OUT_TCP=OFF'
++ MISC_PLUGINS='-DFLB_LUAJIT=OFF   -DFLB_STREAM_PROCESSOR=OFF'
++ FILTER_PLUGINS='-DFLB_FILTER_ALTER_SIZE=ON    -DFLB_FILTER_AWS=ON                -DFLB_FILTER_GREP=ON               -DFLB_FILTER_KUBERNETES=ON         -DFLB_FILTER_MODIFY=ON             -DFLB_FILTER_NEST=ON               -DFLB_FILTER_PARSER=ON             -DFLB_FILTER_RECORD_MODIFIER=ON    -DFLB_FILTER_REWRITE_TAG=ON        -DFLB_FILTER_THROTTLE=ON'
++ EXTRA_FLAGS='-DFLB_BINARY=OFF   -DFLB_EXAMPLES=OFF   -DFLB_METRICS=ON     -DFLB_DEBUG=ON       -DMBEDTLS_FATAL_WARNINGS=OFF   -DFLB_CONFIG_YAML=ON'
++ cmake -DFLB_TESTS_INTERNAL=ON -DFLB_TESTS_INTERNAL_FUZZ=ON -DFLB_TESTS_OSSFUZZ=ON -DFLB_BINARY=OFF -DFLB_EXAMPLES=OFF -DFLB_METRICS=ON -DFLB_DEBUG=ON -DMBEDTLS_FATAL_WARNINGS=OFF -DFLB_CONFIG_YAML=ON -DFLB_IN_COLLECTD=OFF -DFLB_IN_CPU=OFF -DFLB_IN_DISK=OFF -DFLB_IN_DOCKER=OFF -DFLB_IN_EXEC=OFF -DFLB_IN_FORWARD=OFF -DFLB_IN_HEAD=OFF -DFLB_IN_HEALTH=OFF -DFLB_IN_KMSG=OFF -DFLB_IN_MEM=OFF -DFLB_IN_MQTT=OFF -DFLB_IN_NETIF=OFF -DFLB_IN_PROC=OFF -DFLB_IN_RANDOM=OFF -DFLB_IN_SERIAL=OFF -DFLB_IN_STDIN=OFF -DFLB_IN_SYSLOG=OFF -DFLB_IN_SYSTEMD=OFF -DFLB_IN_TAIL=OFF -DFLB_IN_TCP=OFF -DFLB_IN_THERMAL=OFF -DFLB_IN_WINLOG=OFF -DFLB_FILTER_ALTER_SIZE=ON -DFLB_FILTER_AWS=ON -DFLB_FILTER_GREP=ON -DFLB_FILTER_KUBERNETES=ON -DFLB_FILTER_MODIFY=ON -DFLB_FILTER_NEST=ON -DFLB_FILTER_PARSER=ON -DFLB_FILTER_RECORD_MODIFIER=ON -DFLB_FILTER_REWRITE_TAG=ON -DFLB_FILTER_THROTTLE=ON -DFLB_LUAJIT=OFF -DFLB_STREAM_PROCESSOR=OFF -DFLB_OUT_AZURE=OFF -DFLB_OUT_BIGQUERY=OFF -DFLB_OUT_COUNTER=OFF -DFLB_OUT_DATADOG=OFF -DFLB_OUT_ES=OFF -DFLB_OUT_FILE=OFF -DFLB_OUT_FLOWCOUNTER=OFF -DFLB_OUT_FORWARD=OFF -DFLB_OUT_GELF=OFF -DFLB_OUT_HTTP=ON -DFLB_OUT_INFLUXDB=OFF -DFLB_OUT_KAFKA=OFF -DFLB_OUT_KAFKA_REST=OFF -DFLB_OUT_LOKI=OFF -DFLB_OUT_NATS=OFF -DFLB_OUT_NRLOGS=OFF -DFLB_OUT_NULL=OFF -DFLB_OUT_PGSQL=OFF -DFLB_OUT_PLOT=OFF -DFLB_OUT_SLACK=OFF -DFLB_OUT_SPLUNK=OFF -DFLB_OUT_STACKDRIVER=OFF -DFLB_OUT_STDOUT=ON -DFLB_OUT_SYSLOG=OFF -DFLB_OUT_TCP=OFF ..
+-- The C compiler identification is Clang 15.0.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/local/bin/clang-jcc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Could NOT find PkgConfig (missing: PKG_CONFIG_EXECUTABLE) 
+-- Could NOT find Journald (missing: JOURNALD_LIBRARY JOURNALD_INCLUDE_DIR) 
+-- Found Monkey: /src/fluent-bit/lib/monkey/include  
+-- Looking for sys/wait.h
+-- Looking for sys/wait.h - found
+-- Could NOT find LibEdit (missing: libedit_INCLUDE_DIRS libedit_LIBRARIES) 
+-- Found Git: /usr/bin/git (found version "2.25.1") 
+-- Git hash: 228b85715f27993b41fa012b736d5a8b4d5f139c
+-- Found FLEX: /usr/bin/flex (found suitable version "2.6.4", minimum required is "2") 
+-- Found BISON: /usr/bin/bison (found suitable version "3.5.1", minimum required is "3") 
+-- Enabling FLB_REGEX since FLB_PARSER requires
+-- Performing Test CFL_HAVE_TIMESPEC_GET
+-- Performing Test CFL_HAVE_TIMESPEC_GET - Success
+-- Performing Test CFL_HAVE_GMTIME_R
+-- Performing Test CFL_HAVE_GMTIME_R - Success
+-- Performing Test CFL_HAVE_GMTIME_S
+-- Performing Test CFL_HAVE_GMTIME_S - Failed
+-- Performing Test CFL_HAVE_CLOCK_GET_TIME
+-- Performing Test CFL_HAVE_CLOCK_GET_TIME - Failed
+-- xxHash build type: Debug
+CMake Deprecation Warning at lib/msgpack-c/CMakeLists.txt:1 (cmake_minimum_required):
+  Compatibility with CMake < 2.8.12 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value or use a ...<max> suffix to tell
+  CMake that the project does not need compatibility with older versions.
+
+
+-- Performing Test COMPILER_HAS_HIDDEN_VISIBILITY
+-- Performing Test COMPILER_HAS_HIDDEN_VISIBILITY - Success
+-- Performing Test COMPILER_HAS_HIDDEN_INLINE_VISIBILITY
+-- Performing Test COMPILER_HAS_HIDDEN_INLINE_VISIBILITY - Success
+-- Performing Test COMPILER_HAS_DEPRECATED_ATTR
+-- Performing Test COMPILER_HAS_DEPRECATED_ATTR - Success
+Entering /src/fluent-bit/lib/lwrb/lwrb/CMakeLists.txt
+Exiting /src/fluent-bit/lib/lwrb/lwrb/CMakeLists.txt
+CMake Deprecation Warning at lib/tutf8e/CMakeLists.txt:1 (cmake_minimum_required):
+  Compatibility with CMake < 2.8.12 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value or use a ...<max> suffix to tell
+  CMake that the project does not need compatibility with older versions.
+
+
+CMake Deprecation Warning at lib/snappy-fef67ac/CMakeLists.txt:1 (cmake_minimum_required):
+  Compatibility with CMake < 2.8.12 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value or use a ...<max> suffix to tell
+  CMake that the project does not need compatibility with older versions.
+
+
+-- Performing Test CMT_HAVE_TIMESPEC_GET
+-- Performing Test CMT_HAVE_TIMESPEC_GET - Success
+-- Performing Test CMT_HAVE_GMTIME_R
+-- Performing Test CMT_HAVE_GMTIME_R - Success
+-- Performing Test CMT_HAVE_GMTIME_S
+-- Performing Test CMT_HAVE_GMTIME_S - Failed
+-- Performing Test CMT_HAVE_CLOCK_GET_TIME
+-- Performing Test CMT_HAVE_CLOCK_GET_TIME - Failed
+-- Performing Test CMT_HAVE_MSGPACK
+-- Performing Test CMT_HAVE_MSGPACK - Failed
+-- Performing Test CMT_HAVE_CFL
+-- Performing Test CMT_HAVE_CFL - Success
+-- CFL found in the system. OK
+-- Performing Test CMT_HAVE_FLUENT_OTEL_PROTO
+-- Performing Test CMT_HAVE_FLUENT_OTEL_PROTO - Success
+-- Performing Test CTR_HAVE_TIMESPEC_GET
+-- Performing Test CTR_HAVE_TIMESPEC_GET - Success
+-- Performing Test CTR_HAVE_GMTIME_R
+-- Performing Test CTR_HAVE_GMTIME_R - Success
+-- Performing Test CTR_HAVE_GMTIME_S
+-- Performing Test CTR_HAVE_GMTIME_S - Failed
+-- Performing Test CTR_HAVE_CLOCK_GET_TIME
+-- Performing Test CTR_HAVE_CLOCK_GET_TIME - Failed
+-- Performing Test CTR_HAVE_GETRANDOM
+-- Performing Test CTR_HAVE_GETRANDOM - Success
+-- Performing Test CTR_HAVE_MSGPACK
+-- Performing Test CTR_HAVE_MSGPACK - Failed
+-- Performing Test CTR_HAVE_CFL
+-- Performing Test CTR_HAVE_CFL - Success
+-- Performing Test CTR_HAVE_FLUENT_OTEL_PROTO
+-- Performing Test CTR_HAVE_FLUENT_OTEL_PROTO - Success
+-- Performing Test HAVE__Wall
+-- Performing Test HAVE__Wall - Success
+-- Performing Test HAVE__Wextra
+-- Performing Test HAVE__Wextra - Success
+-- Performing Test HAVE__Wcast_align
+-- Performing Test HAVE__Wcast_align - Success
+-- Performing Test HAVE__Wconversion
+-- Performing Test HAVE__Wconversion - Success
+-- Performing Test HAVE__Wdeclaration_after_statement
+-- Performing Test HAVE__Wdeclaration_after_statement - Success
+-- Performing Test HAVE__Wdouble_promotion
+-- Performing Test HAVE__Wdouble_promotion - Success
+-- Performing Test HAVE__Wfloat_equal
+-- Performing Test HAVE__Wfloat_equal - Success
+-- Performing Test HAVE__Wformat_security
+-- Performing Test HAVE__Wformat_security - Success
+-- Performing Test HAVE__Winit_self
+-- Performing Test HAVE__Winit_self - Success
+-- Performing Test HAVE__Wjump_misses_init
+-- Performing Test HAVE__Wjump_misses_init - Success
+-- Performing Test HAVE__Wlogical_op
+-- Performing Test HAVE__Wlogical_op - Success
+-- Performing Test HAVE__Wmissing_braces
+-- Performing Test HAVE__Wmissing_braces - Success
+-- Performing Test HAVE__Wmissing_declarations
+-- Performing Test HAVE__Wmissing_declarations - Success
+-- Performing Test HAVE__Wmissing_format_attribute
+-- Performing Test HAVE__Wmissing_format_attribute - Success
+-- Performing Test HAVE__Wmissing_include_dirs
+-- Performing Test HAVE__Wmissing_include_dirs - Success
+-- Performing Test HAVE__Wmissing_prototypes
+-- Performing Test HAVE__Wmissing_prototypes - Success
+-- Performing Test HAVE__Wnested_externs
+-- Performing Test HAVE__Wnested_externs - Success
+-- Performing Test HAVE__Wno_coverage_mismatch
+-- Performing Test HAVE__Wno_coverage_mismatch - Success
+-- Performing Test HAVE__Wold_style_definition
+-- Performing Test HAVE__Wold_style_definition - Success
+-- Performing Test HAVE__Wpacked
+-- Performing Test HAVE__Wpacked - Success
+-- Performing Test HAVE__Wpointer_arith
+-- Performing Test HAVE__Wpointer_arith - Success
+-- Performing Test HAVE__Wredundant_decls
+-- Performing Test HAVE__Wredundant_decls - Success
+-- Performing Test HAVE__Wshadow
+-- Performing Test HAVE__Wshadow - Success
+-- Performing Test HAVE__Wsign_conversion
+-- Performing Test HAVE__Wsign_conversion - Success
+-- Performing Test HAVE__Wstrict_overflow
+-- Performing Test HAVE__Wstrict_overflow - Success
+-- Performing Test HAVE__Wstrict_prototypes
+-- Performing Test HAVE__Wstrict_prototypes - Success
+-- Performing Test HAVE__Wtrampolines
+-- Performing Test HAVE__Wtrampolines - Success
+-- Performing Test HAVE__Wundef
+-- Performing Test HAVE__Wundef - Success
+-- Performing Test HAVE__Wunused
+-- Performing Test HAVE__Wunused - Success
+-- Performing Test HAVE__Wvariadic_macros
+-- Performing Test HAVE__Wvariadic_macros - Success
+-- Performing Test HAVE__Wvla
+-- Performing Test HAVE__Wvla - Success
+-- Performing Test HAVE__Wwrite_strings
+-- Performing Test HAVE__Wwrite_strings - Success
+-- Performing Test HAVE__Wimplicit_fallthrough_3
+-- Performing Test HAVE__Wimplicit_fallthrough_3 - Success
+-- Performing Test HAVE__Werror_implicit_int
+-- Performing Test HAVE__Werror_implicit_int - Success
+-- Performing Test HAVE__Werror_implicit_function_declaration
+-- Performing Test HAVE__Werror_implicit_function_declaration - Success
+-- Performing Test HAVE__Werror_partial_availability
+-- Performing Test HAVE__Werror_partial_availability - Success
+-- Performing Test HAVE__Qunused_arguments
+-- Performing Test HAVE__Qunused_arguments - Success
+-- Performing Test HAVE__fno_omit_frame_pointer
+-- Performing Test HAVE__fno_omit_frame_pointer - Success
+-- Performing Test HAVE__O0
+-- Performing Test HAVE__O0 - Success
+-- Looking for res_servicename
+-- Looking for res_servicename - not found
+-- Looking for res_servicename in resolv
+-- Looking for res_servicename in resolv - not found
+-- Looking for gethostbyname
+-- Looking for gethostbyname - found
+-- Looking for socket
+-- Looking for socket - found
+-- Looking for clock_gettime
+-- Looking for clock_gettime - found
+-- Looking for include file sys/types.h
+-- Looking for include file sys/types.h - found
+-- Looking for include file sys/random.h
+-- Looking for include file sys/random.h - found
+-- Looking for include file sys/socket.h
+-- Looking for include file sys/socket.h - found
+-- Looking for include file sys/sockio.h
+-- Looking for include file sys/sockio.h - not found
+-- Looking for include file arpa/inet.h
+-- Looking for include file arpa/inet.h - found
+-- Looking for include file arpa/nameser_compat.h
+-- Looking for include file arpa/nameser_compat.h - found
+-- Looking for include file arpa/nameser.h
+-- Looking for include file arpa/nameser.h - found
+-- Looking for include file assert.h
+-- Looking for include file assert.h - found
+-- Looking for include file errno.h
+-- Looking for include file errno.h - found
+-- Looking for include file fcntl.h
+-- Looking for include file fcntl.h - found
+-- Looking for include file inttypes.h
+-- Looking for include file inttypes.h - found
+-- Looking for include file limits.h
+-- Looking for include file limits.h - found
+-- Looking for include file malloc.h
+-- Looking for include file malloc.h - found
+-- Looking for include file memory.h
+-- Looking for include file memory.h - found
+-- Looking for include file netdb.h
+-- Looking for include file netdb.h - found
+-- Looking for include file netinet/in.h
+-- Looking for include file netinet/in.h - found
+-- Looking for include file net/if.h
+-- Looking for include file net/if.h - found
+-- Looking for include file signal.h
+-- Looking for include file signal.h - found
+-- Looking for include file socket.h
+-- Looking for include file socket.h - not found
+-- Looking for include file stdbool.h
+-- Looking for include file stdbool.h - found
+-- Looking for include file stdint.h
+-- Looking for include file stdint.h - found
+-- Looking for include file stdlib.h
+-- Looking for include file stdlib.h - found
+-- Looking for include file strings.h
+-- Looking for include file strings.h - found
+-- Looking for include file string.h
+-- Looking for include file string.h - found
+-- Looking for include file stropts.h
+-- Looking for include file stropts.h - not found
+-- Looking for include file sys/ioctl.h
+-- Looking for include file sys/ioctl.h - found
+-- Looking for include file sys/param.h
+-- Looking for include file sys/param.h - found
+-- Looking for include file sys/select.h
+-- Looking for include file sys/select.h - found
+-- Looking for include file sys/stat.h
+-- Looking for include file sys/stat.h - found
+-- Looking for include file sys/time.h
+-- Looking for include file sys/time.h - found
+-- Looking for include file sys/uio.h
+-- Looking for include file sys/uio.h - found
+-- Looking for include file ifaddrs.h
+-- Looking for include file ifaddrs.h - found
+-- Looking for include file time.h
+-- Looking for include file time.h - found
+-- Looking for include file dlfcn.h
+-- Looking for include file dlfcn.h - found
+-- Looking for include file unistd.h
+-- Looking for include file unistd.h - found
+-- Looking for include files sys/types.h, netinet/tcp.h
+-- Looking for include files sys/types.h, netinet/tcp.h - found
+-- Performing Test HAVE_SOCKLEN_T
+-- Performing Test HAVE_SOCKLEN_T - Success
+-- Performing Test HAVE_TYPE_SOCKET
+-- Performing Test HAVE_TYPE_SOCKET - Failed
+-- Performing Test HAVE_BOOL_T
+-- Performing Test HAVE_BOOL_T - Success
+-- Performing Test HAVE_SSIZE_T
+-- Performing Test HAVE_SSIZE_T - Success
+-- Performing Test HAVE_LONGLONG
+-- Performing Test HAVE_LONGLONG - Success
+-- Performing Test HAVE_SIG_ATOMIC_T
+-- Performing Test HAVE_SIG_ATOMIC_T - Success
+-- Performing Test HAVE_STRUCT_ADDRINFO
+-- Performing Test HAVE_STRUCT_ADDRINFO - Success
+-- Performing Test HAVE_STRUCT_IN6_ADDR
+-- Performing Test HAVE_STRUCT_IN6_ADDR - Success
+-- Performing Test HAVE_STRUCT_SOCKADDR_IN6
+-- Performing Test HAVE_STRUCT_SOCKADDR_IN6 - Success
+-- Performing Test HAVE_STRUCT_SOCKADDR_STORAGE
+-- Performing Test HAVE_STRUCT_SOCKADDR_STORAGE - Success
+-- Performing Test HAVE_STRUCT_TIMEVAL
+-- Performing Test HAVE_STRUCT_TIMEVAL - Success
+-- Looking for AF_INET6
+-- Looking for AF_INET6 - found
+-- Looking for O_NONBLOCK
+-- Looking for O_NONBLOCK - found
+-- Looking for FIONBIO
+-- Looking for FIONBIO - found
+-- Looking for SIOCGIFADDR
+-- Looking for SIOCGIFADDR - found
+-- Looking for MSG_NOSIGNAL
+-- Looking for MSG_NOSIGNAL - found
+-- Looking for PF_INET6
+-- Looking for PF_INET6 - found
+-- Looking for SO_NONBLOCK
+-- Looking for SO_NONBLOCK - not found
+-- Looking for CLOCK_MONOTONIC
+-- Looking for CLOCK_MONOTONIC - found
+-- Performing Test HAVE_SOCKADDR_IN6_SIN6_SCOPE_ID
+-- Performing Test HAVE_SOCKADDR_IN6_SIN6_SCOPE_ID - Success
+-- Performing Test HAVE_LL
+-- Performing Test HAVE_LL - Success
+-- Looking for bitncmp
+-- Looking for bitncmp - not found
+-- Looking for closesocket
+-- Looking for closesocket - not found
+-- Looking for CloseSocket
+-- Looking for CloseSocket - not found
+-- Looking for connect
+-- Looking for connect - found
+-- Looking for fcntl
+-- Looking for fcntl - found
+-- Looking for freeaddrinfo
+-- Looking for freeaddrinfo - found
+-- Looking for getaddrinfo
+-- Looking for getaddrinfo - found
+-- Looking for getenv
+-- Looking for getenv - found
+-- Looking for gethostbyaddr
+-- Looking for gethostbyaddr - found
+-- Looking for gethostbyname
+-- Looking for gethostbyname - found
+-- Looking for gethostname
+-- Looking for gethostname - found
+-- Looking for getnameinfo
+-- Looking for getnameinfo - found
+-- Looking for getrandom
+-- Looking for getrandom - found
+-- Looking for getservbyport_r
+-- Looking for getservbyport_r - found
+-- Looking for getservbyname_r
+-- Looking for getservbyname_r - found
+-- Looking for gettimeofday
+-- Looking for gettimeofday - found
+-- Looking for if_indextoname
+-- Looking for if_indextoname - found
+-- Looking for if_nametoindex
+-- Looking for if_nametoindex - found
+-- Looking for ConvertInterfaceIndexToLuid
+-- Looking for ConvertInterfaceIndexToLuid - not found
+-- Looking for ConvertInterfaceLuidToNameA
+-- Looking for ConvertInterfaceLuidToNameA - not found
+-- Looking for inet_net_pton
+-- Looking for inet_net_pton - not found
+-- Looking for inet_ntop
+-- Looking for inet_ntop - found
+-- Looking for inet_pton
+-- Looking for inet_pton - found
+-- Looking for ioctl
+-- Looking for ioctl - found
+-- Looking for ioctlsocket
+-- Looking for ioctlsocket - not found
+-- Looking for IoctlSocket
+-- Looking for IoctlSocket - not found
+-- Looking for recv
+-- Looking for recv - found
+-- Looking for recvfrom
+-- Looking for recvfrom - found
+-- Looking for send
+-- Looking for send - found
+-- Looking for setsockopt
+-- Looking for setsockopt - found
+-- Looking for socket
+-- Looking for socket - found
+-- Looking for strcasecmp
+-- Looking for strcasecmp - found
+-- Looking for strcmpi
+-- Looking for strcmpi - not found
+-- Looking for strdup
+-- Looking for strdup - found
+-- Looking for stricmp
+-- Looking for stricmp - not found
+-- Looking for strncasecmp
+-- Looking for strncasecmp - found
+-- Looking for strncmpi
+-- Looking for strncmpi - not found
+-- Looking for strnicmp
+-- Looking for strnicmp - not found
+-- Looking for writev
+-- Looking for writev - found
+-- Looking for arc4random_buf
+-- Looking for arc4random_buf - not found
+-- Looking for stat
+-- Looking for stat - found
+-- Looking for getifaddrs
+-- Looking for getifaddrs - found
+-- Looking for __system_property_get
+-- Looking for __system_property_get - not found
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE  
+-- Looking for include file pthread.h
+-- Looking for include file pthread.h - found
+-- Looking for include file pthread_np.h
+-- Looking for include file pthread_np.h - not found
+-- Looking for pthread_init
+-- Looking for pthread_init - not found
+-- Performing Test CIO_HAVE_GETPAGESIZE
+-- Performing Test CIO_HAVE_GETPAGESIZE - Success
+-- Performing Test CIO_HAVE_FALLOCATE
+-- Performing Test CIO_HAVE_FALLOCATE - Success
+-- Performing Test CIO_HAVE_POSIX_FALLOCATE
+-- Performing Test CIO_HAVE_POSIX_FALLOCATE - Success
+-- Looking for accept4
+-- Looking for accept4 - found
+-- Looking for execinfo.h
+-- Looking for execinfo.h - found
+-- Performing Test HAVE_C_TLS
+-- Performing Test HAVE_C_TLS - Success
+-- Performing Test MK_HAVE_VALGRIND
+-- Performing Test MK_HAVE_VALGRIND - Failed
+-- Performing Test HAVE_REGEX
+-- Performing Test HAVE_REGEX - Failed
+-- Looking for posix_memalign
+-- Looking for posix_memalign - found
+Found posix_memalign in stdlib.h -DHAVE_POSIX_MEMALIGN_IN_STDLIB -DHAVE_POSIX_MEMALIGN
+-- Looking for posix_memalign
+-- Looking for posix_memalign - not found
+-- Performing Test HAVE_STAT_H
+-- Performing Test HAVE_STAT_H - Success
+-- Performing Test HAVE_MEMMEM
+-- Performing Test HAVE_MEMMEM - Success
+-- Performing Test HAVE_EPOLL
+-- Performing Test HAVE_EPOLL - Success
+-- Performing Test HAVE_KQUEUE
+-- Performing Test HAVE_KQUEUE - Failed
+-- Performing Test HAVE_TIMERFD_CREATE
+-- Performing Test HAVE_TIMERFD_CREATE - Success
+-- Performing Test HAVE_EVENTFD
+-- Performing Test HAVE_EVENTFD - Success
+-- Performing Test MK_HAVE_MEMRCHR
+-- Performing Test MK_HAVE_MEMRCHR - Success
+-- Plugin dirlisting enabled 
+-- Plugin liana enabled [== static ==]
+-- Plugin mandril enabled 
+-- LINKING monkey-liana-static;
+-- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "1.1.1f")  
+-- Performing Test FLB_HAVE_STDATOMIC_H
+-- Performing Test FLB_HAVE_STDATOMIC_H - Success
+-- The ASM compiler identification is Clang with GNU-like command-line
+-- Found assembler: /usr/local/bin/clang-jcc
+-- Performing Test FLB_HAVE_VALGRIND
+-- Performing Test FLB_HAVE_VALGRIND - Failed
+-- Performing Test FLB_HAVE_FORK
+-- Performing Test FLB_HAVE_FORK - Success
+-- Performing Test FLB_HAVE_TIMESPEC_GET
+-- Performing Test FLB_HAVE_TIMESPEC_GET - Success
+-- Performing Test FLB_HAVE_GMTOFF
+-- Performing Test FLB_HAVE_GMTOFF - Success
+-- Performing Test FLB_HAVE_CLOCK_GET_TIME
+-- Performing Test FLB_HAVE_CLOCK_GET_TIME - Failed
+-- Performing Test FLB_HAVE_UNIX_SOCKET
+-- Performing Test FLB_HAVE_UNIX_SOCKET - Success
+-- Could NOT find PkgConfig (missing: PKG_CONFIG_EXECUTABLE) 
+-- Performing Test FLB_HAVE_LIBYAML
+-- Performing Test FLB_HAVE_LIBYAML - Success
+-- Performing Test FLB_HAVE_ATTRIBUTE_ALLOC_SIZE
+-- Performing Test FLB_HAVE_ATTRIBUTE_ALLOC_SIZE - Success
+-- The CXX compiler identification is Clang 15.0.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/local/bin/clang++-jcc - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Looking for pow in m
+-- Looking for pow in m - found
+-- Using python executable is: /usr/local/bin/python3
+-- Looking for stddef.h
+-- Looking for stddef.h - found
+-- Check size of int
+-- Check size of int - done
+-- Check size of short
+-- Check size of short - done
+-- Check size of long
+-- Check size of long - done
+-- Check size of void*
+-- Check size of void* - done
+-- Check size of long long
+-- Check size of long long - done
+-- Check size of size_t
+-- Check size of size_t - done
+-- Performing Test STDC_HEADERS
+-- Performing Test STDC_HEADERS - Success
+-- Performing Test TIME_WITH_SYS_TIME
+-- Performing Test TIME_WITH_SYS_TIME - Success
+-- Looking for sys/times.h
+-- Looking for sys/times.h - found
+-- Looking for alloca
+-- Looking for alloca - found
+-- Looking for memcmp
+-- Looking for memcmp - found
+-- Could NOT find PostgreSQL (missing: PostgreSQL_LIBRARY PostgreSQL_INCLUDE_DIR) 
+-- Could NOT find PkgConfig (missing: PKG_CONFIG_EXECUTABLE) 
+-- Performing Test FLB_HAVE_C_TLS
+-- Performing Test FLB_HAVE_C_TLS - Success
+-- Performing Test FLB_HAVE_ACCEPT4
+-- Performing Test FLB_HAVE_ACCEPT4 - Success
+-- Performing Test FLB_HAVE_INOTIFY
+-- Performing Test FLB_HAVE_INOTIFY - Success
+-- Looking for getentropy
+-- Looking for getentropy - found
+-- Looking for getentropy
+-- Looking for getentropy - found
+-- Check size of unsigned __int128
+-- Check size of unsigned __int128 - done
+-- Check size of unsigned int __attribute__((mode(TI)))
+-- Check size of unsigned int __attribute__((mode(TI))) - done
+-- Build as target X86_64
+-- Build Configurations:
+     Build as target X86_64
+     CMAKE_BUILD_TYPE Debug
+     WAMR Interpreter enabled
+     WAMR AOT enabled
+     WAMR Fast JIT disabled
+     WAMR LLVM ORC JIT disabled
+     Libc builtin enabled
+     Libc WASI enabled
+     Fast interpreter enabled
+     Multiple modules disabled
+     Bulk memory feature enabled
+     Shared memory enabled
+     Thread manager enabled
+     Lib pthread enabled
+     Wakeup of blocking operations enabled
+     Reference types disabled
+     Module instance context enabled
+-- Configuring done
+-- Generating done
+CMake Warning:
+  Manually-specified variables were not used by the project:
+
+    MBEDTLS_FATAL_WARNINGS
+
+
+-- Build files have been written to: /src/fluent-bit/build
++ [[ address == introspector ]]
+++ nproc
++ make -j32
+[  0%] Creating directories for 'backtrace'
+Scanning dependencies of target vmlib-static
+[  0%] Building C object lib/jsmn/CMakeFiles/jsmn.dir/jsmn.c.o
+[  0%] Building C object lib/sqlite-amalgamation-3440200/CMakeFiles/sqlite3.dir/sqlite3.c.o
+[  0%] Building C object tools/xxd-c/CMakeFiles/xxd-c.dir/xxd-c.c.o
+[  0%] Building C object lib/cfl/lib/xxhash/cmake_unofficial/CMakeFiles/xxhash.dir/__/xxhash.c.o
+[  0%] Building C object lib/msgpack-c/CMakeFiles/msgpack-c-static.dir/src/objectc.c.o
+[  0%] Building C object lib/msgpack-c/CMakeFiles/msgpack-c-static.dir/src/unpack.c.o
+[  0%] Building C object lib/msgpack-c/CMakeFiles/msgpack-c-static.dir/src/version.c.o
+[  0%] Building C object lib/fluent-otel-proto/src/CMakeFiles/fluent-otel-proto.dir/fluent-otel.c.o
+[  0%] Building C object lib/mpack-amalgamation-1.1.1/CMakeFiles/mpack-static.dir/src/mpack/mpack.c.o
+[  0%] Building C object lib/msgpack-c/CMakeFiles/msgpack-c-static.dir/src/vrefbuffer.c.o
+[  0%] Building C object lib/fluent-otel-proto/src/CMakeFiles/fluent-otel-proto.dir/__/proto_c/protobuf-c/protobuf-c.c.o
+[  0%] Building C object lib/msgpack-c/CMakeFiles/msgpack-c-static.dir/src/zone.c.o
+[  1%] Building C object lib/fluent-otel-proto/src/CMakeFiles/fluent-otel-proto.dir/__/proto_c/opentelemetry/proto/common/v1/common.pb-c.c.o
+[  1%] Building C object lib/miniz/CMakeFiles/miniz.dir/miniz.c.o
+[  1%] Building C object lib/fluent-otel-proto/src/CMakeFiles/fluent-otel-proto.dir/__/proto_c/opentelemetry/proto/resource/v1/resource.pb-c.c.o
+[  1%] Building C object lib/fluent-otel-proto/src/CMakeFiles/fluent-otel-proto.dir/__/proto_c/opentelemetry/proto/trace/v1/trace.pb-c.c.o
+[  1%] Building C object lib/miniz/CMakeFiles/miniz.dir/miniz_zip.c.o
+[  1%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares__addrinfo2hostent.c.o
+[  1%] Building C object lib/snappy-fef67ac/CMakeFiles/snappy-c.dir/snappy.c.o
+[  1%] Building C object lib/fluent-otel-proto/src/CMakeFiles/fluent-otel-proto.dir/__/proto_c/opentelemetry/proto/collector/trace/v1/trace_service.pb-c.c.o
+[  1%] Building C object lib/miniz/CMakeFiles/miniz.dir/miniz_tinfl.c.o
+[  1%] Building C object lib/tutf8e/CMakeFiles/tutf8e.dir/src/tutf8e.c.o
+[  1%] Building C object lib/chunkio/deps/crc32/CMakeFiles/cio-crc32.dir/crc32.c.o
+[  1%] Building C object lib/fluent-otel-proto/src/CMakeFiles/fluent-otel-proto.dir/__/proto_c/opentelemetry/proto/logs/v1/logs.pb-c.c.o
+[  1%] Building C object lib/miniz/CMakeFiles/miniz.dir/miniz_tdef.c.o
+[  2%] Building C object lib/monkey/deps/rbtree/CMakeFiles/rbtree.dir/rbtree.c.o
+[  2%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares__addrinfo_localhost.c.o
+[  2%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/shared/platform/linux/platform_init.c.o
+[  2%] Building C object lib/monkey/deps/flb_libco/CMakeFiles/co.dir/libco.c.o
+[  2%] No download step for 'backtrace'
+[  2%] Building C object lib/monkey/deps/regex/CMakeFiles/regex.dir/re.c.o
+[  2%] Building C object lib/monkey/mk_core/CMakeFiles/mk_core.dir/mk_rconf.c.o
+[  2%] No update step for 'backtrace'
+[  2%] No patch step for 'backtrace'
+[  2%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares__buf.c.o
+[  3%] Performing configure step for 'backtrace'
+[  3%] Building C object lib/fluent-otel-proto/src/CMakeFiles/fluent-otel-proto.dir/__/proto_c/opentelemetry/proto/collector/logs/v1/logs_service.pb-c.c.o
+[  3%] Linking C static library ../../library/libco.a
+[  3%] Linking C static library ../../../../library/libcio-crc32.a
+[  3%] Built target co
+[  3%] Building C object lib/fluent-otel-proto/src/CMakeFiles/fluent-otel-proto.dir/__/proto_c/opentelemetry/proto/metrics/v1/metrics.pb-c.c.o
+[  3%] Building C object lib/monkey/plugins/liana/CMakeFiles/monkey-liana-static.dir/liana.c.o
+[  3%] Built target cio-crc32
+[  3%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares__close_sockets.c.o
+[  3%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/crc32c.c.o
+[  3%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/regerror.c.o
+[  3%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/regparse.c.o
+[  3%] Building C object lib/monkey/mk_core/CMakeFiles/mk_core.dir/mk_string.c.o
+[  3%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/shared/platform/common/posix/posix_blocking_op.c.o
+[  3%] Linking C executable ../../bin/xxd-c
+[  3%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/shared/platform/common/posix/posix_clock.c.o
+[  3%] Building C object lib/monkey/mk_core/CMakeFiles/mk_core.dir/mk_memory.c.o
+[  3%] Linking C static library ../../library/libtutf8e.a
+[  3%] Building C object lib/fluent-otel-proto/src/CMakeFiles/fluent-otel-proto.dir/__/proto_c/opentelemetry/proto/collector/metrics/v1/metrics_service.pb-c.c.o
+[  3%] Building C object lib/monkey/mk_core/CMakeFiles/mk_core.dir/mk_event.c.o
+[  3%] Built target tutf8e
+[  3%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares__hosts_file.c.o
+[  3%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/shared/platform/common/posix/posix_file.c.o
+[  3%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares__htable.c.o
+[  3%] Linking C static library ../../library/monkey-liana.a
+[  3%] Linking C static library ../../library/libjsmn.a
+[  3%] Building C object lib/monkey/mk_core/CMakeFiles/mk_core.dir/mk_utils.c.o
+[  4%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares__htable_asvp.c.o
+[  4%] Built target monkey-liana-static
+[  4%] Built target jsmn
+[  4%] Building C object plugins/filter_geoip2/libmaxminddb/CMakeFiles/maxminddb.dir/src/maxminddb.c.o
+[  4%] Building C object src/aws/CMakeFiles/flb-aws.dir/flb_aws_compress.c.o
+[  4%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/shared/platform/common/posix/posix_malloc.c.o
+[  4%] Linking C static library ../../library/libregex.a
+[  5%] Building C object plugins/filter_geoip2/libmaxminddb/CMakeFiles/maxminddb.dir/src/data-pool.c.o
+[  5%] Building C object src/aws/CMakeFiles/flb-aws.dir/flb_aws_util.c.o
+[  5%] Built target regex
+[  5%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdaddr.c.o
+[  5%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares__htable_strvp.c.o
+[  5%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/regext.c.o
+checking build system type... [  5%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares__htable_szvp.c.o
+[  6%] Building C object lib/monkey/mk_core/CMakeFiles/mk_core.dir/mk_file.c.o
+[  6%] Built target xxd-c
+[  6%] Building C object src/aws/CMakeFiles/flb-aws.dir/flb_aws_credentials.c.o
+[  6%] Linking C static library ../../library/librbtree.a
+[  6%] Building C object lib/chunkio/src/CMakeFiles/chunkio-static.dir/cio_os.c.o
+[  6%] Building C object lib/monkey/mk_core/CMakeFiles/mk_core.dir/mk_iov.c.o
+[  7%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/regcomp.c.o
+[  7%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/regexec.c.o
+[  7%] Building C object lib/chunkio/src/CMakeFiles/chunkio-static.dir/cio_log.c.o
+[  7%] Built target rbtree
+[  7%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/reggnu.c.o
+[  7%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares__iface_ips.c.o
+[  7%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares__llist.c.o
+x86_64-pc-linux-gnu
+checking host system type... x86_64-pc-linux-gnu
+checking target system type... x86_64-pc-linux-gnu
+checking for gcc... /usr/local/bin/clang-jcc
+[  7%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares__parse_into_addrinfo.c.o
+[  7%] Building C object lib/chunkio/src/CMakeFiles/chunkio-static.dir/cio_file.c.o
+[  8%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/shared/platform/common/posix/posix_memmap.c.o
+[  8%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/shared/platform/common/posix/posix_sleep.c.o
+[  8%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares__read_line.c.o
+[  9%] Building C object src/aws/CMakeFiles/flb-aws.dir/flb_aws_credentials_sts.c.o
+[  9%] Building C object src/aws/CMakeFiles/flb-aws.dir/flb_aws_credentials_ec2.c.o
+[  9%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares__slist.c.o
+[  9%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/regenc.c.o
+[  9%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdavl.c.o
+[  9%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/regsyntax.c.o
+[  9%] Building C object src/aws/CMakeFiles/flb-aws.dir/flb_aws_imds.c.o
+[  9%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/shared/platform/common/posix/posix_socket.c.o
+[  9%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares__socket.c.o
+[  9%] Building C object src/aws/CMakeFiles/flb-aws.dir/flb_aws_credentials_http.c.o
+[  9%] Linking C static library ../library/libmk_core.a
+[  9%] Linking C static library ../../library/libsnappy-c.a
+checking whether the C compiler works... [  9%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/shared/platform/common/posix/posix_thread.c.o
+[  9%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares__sortaddrinfo.c.o
+[  9%] Building C object src/aws/CMakeFiles/flb-aws.dir/flb_aws_credentials_profile.c.o
+[  9%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/shared/platform/common/posix/posix_time.c.o
+[  9%] Built target snappy-c
+[  9%] Built target mk_core
+[  9%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/shared/platform/common/libc-util/libc_errno.c.o
+[  9%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/shared/mem-alloc/ems/ems_alloc.c.o
+[  9%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/regtrav.c.o
+[  9%] Building C object lib/monkey/mk_server/CMakeFiles/monkey-core-static.dir/monkey.c.o
+[  9%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/shared/mem-alloc/ems/ems_hmu.c.o
+[  9%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/regversion.c.o
+[  9%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/st.c.o
+[  9%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares__threads.c.o
+[  9%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/regposix.c.o
+[  9%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/shared/mem-alloc/ems/ems_kfc.c.o
+[  9%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/shared/mem-alloc/mem_alloc.c.o
+[  9%] Linking C static library ../../library/libmsgpack-c-static.a
+[  9%] Building C object lib/monkey/mk_server/CMakeFiles/monkey-core-static.dir/mk_lib.c.o
+[  9%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares__timeval.c.o
+[  9%] Built target msgpack-c-static
+[  9%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/regposerr.c.o
+yes
+checking for C compiler default output file name... a.out
+[ 10%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_android.c.o
+checking for suffix of executables... [ 10%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/unicode.c.o
+[ 10%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_cancel.c.o
+[ 10%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/ascii.c.o
+[ 10%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_data.c.o
+[ 10%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdbuf.c.o
+[ 10%] Building C object src/aws/CMakeFiles/flb-aws.dir/flb_aws_credentials_process.c.o
+[ 10%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/shared/utils/bh_assert.c.o
+[ 11%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/utf_8.c.o
+[ 11%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/shared/utils/bh_bitmap.c.o
+[ 12%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/shared/utils/bh_common.c.o
+[ 12%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_destroy.c.o
+[ 12%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/utf_16be.c.o
+[ 12%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/utf_16le.c.o
+[ 12%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdcrc32.c.o
+[ 13%] Building C object lib/chunkio/src/CMakeFiles/chunkio-static.dir/cio_memfs.c.o
+[ 13%] Building C object lib/chunkio/src/CMakeFiles/chunkio-static.dir/cio_chunk.c.o
+[ 13%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/shared/utils/bh_hashmap.c.o
+[ 13%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/shared/utils/bh_list.c.o
+[ 13%] Building C object lib/chunkio/src/CMakeFiles/chunkio-static.dir/cio_meta.c.o
+[ 13%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/utf_32be.c.o
+[ 13%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_dns_mapping.c.o
+[ 13%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/utf_32le.c.o
+[ 13%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/euc_jp.c.o
+[ 13%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdfnv1a.c.o
+[ 13%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/shift_jis.c.o
+[ 13%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_dns_name.c.o
+
+checking whether we are cross compiling... [ 13%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/windows_31j.c.o
+[ 13%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_dns_parse.c.o
+[ 13%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/iso_8859_1.c.o
+[ 13%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/iso_8859_2.c.o
+[ 13%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/shared/utils/bh_log.c.o
+[ 13%] Building C object lib/chunkio/src/CMakeFiles/chunkio-static.dir/cio_scan.c.o
+[ 13%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdbase64.c.o
+[ 13%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/shared/utils/bh_queue.c.o
+[ 13%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_dns_record.c.o
+[ 13%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/iso_8859_3.c.o
+[ 13%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_dns_write.c.o
+[ 13%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/shared/utils/runtime_timer.c.o
+[ 13%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/iwasm/libraries/libc-builtin/libc_builtin_wrapper.c.o
+[ 13%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/shared/utils/bh_vector.c.o
+[ 13%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/iso_8859_4.c.o
+[ 13%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka.c.o
+[ 13%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_expand_name.c.o
+[ 14%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/iso_8859_5.c.o
+[ 14%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/iso_8859_6.c.o
+[ 14%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/iso_8859_7.c.o
+[ 14%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/iwasm/libraries/libc-wasi/libc_wasi_wrapper.c.o
+[ 14%] Building C object lib/monkey/mk_server/CMakeFiles/monkey-core-static.dir/mk_fifo.c.o
+[ 14%] Linking C static library ../../../library/libmaxminddb.a
+[ 14%] Building C object lib/chunkio/src/CMakeFiles/chunkio-static.dir/cio_utils.c.o
+[ 14%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/iso_8859_8.c.o
+[ 14%] Built target maxminddb
+[ 14%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/iso_8859_9.c.o
+[ 14%] Building C object lib/chunkio/src/CMakeFiles/chunkio-static.dir/cio_stream.c.o
+[ 14%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/iso_8859_10.c.o
+[ 14%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/iso_8859_11.c.o
+[ 14%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/iso_8859_13.c.o
+[ 14%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_expand_string.c.o
+[ 14%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/iso_8859_14.c.o
+[ 14%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_fds.c.o
+no
+checking for suffix of object files... [ 15%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_free_hostent.c.o
+[ 15%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/iso_8859_15.c.o
+[ 15%] Building C object lib/chunkio/src/CMakeFiles/chunkio-static.dir/cio_stats.c.o
+[ 15%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/iwasm/libraries/libc-wasi/sandboxed-system-primitives/src/blocking_op.c.o
+o
+checking whether we are using the GNU C compiler... [ 15%] Building C object lib/chunkio/src/CMakeFiles/chunkio-static.dir/cio_error.c.o
+[ 15%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_assignor.c.o
+[ 15%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/iso_8859_16.c.o
+[ 15%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/euc_tw.c.o
+yes
+checking whether /usr/local/bin/clang-jcc accepts -g... [ 15%] Building C object lib/chunkio/src/CMakeFiles/chunkio-static.dir/chunkio.c.o
+[ 15%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_free_string.c.o
+[ 15%] Building C object lib/chunkio/src/CMakeFiles/chunkio-static.dir/cio_file_unix.c.o
+[ 16%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_broker.c.o
+yes
+checking for /usr/local/bin/clang-jcc option to accept ISO C89... [ 16%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/iwasm/libraries/libc-wasi/sandboxed-system-primitives/src/posix.c.o
+[ 16%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/iwasm/libraries/libc-wasi/sandboxed-system-primitives/src/random.c.o
+[ 17%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/iwasm/libraries/libc-wasi/sandboxed-system-primitives/src/str.c.o
+[ 18%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/euc_kr.c.o
+[ 18%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/big5.c.o
+[ 18%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_freeaddrinfo.c.o
+[ 18%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_buf.c.o
+[ 18%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/iwasm/common/wasm_application.c.o
+[ 18%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/gb18030.c.o
+[ 18%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_cgrp.c.o
+none needed
+checking whether /usr/local/bin/clang-jcc understands -c and -o together... [ 18%] Linking C static library ../../library/libflb-aws.a
+[ 18%] Building C object lib/monkey/mk_server/CMakeFiles/monkey-core-static.dir/mk_mimetype.c.o
+[ 19%] Building C object lib/monkey/mk_server/CMakeFiles/monkey-core-static.dir/mk_vhost.c.o
+[ 19%] Built target flb-aws
+[ 19%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/iwasm/common/wasm_blocking_op.c.o
+[ 19%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/iwasm/common/wasm_c_api.c.o
+yes
+checking how to run the C preprocessor... [ 19%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/koi8_r.c.o
+[ 19%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_getaddrinfo.c.o
+[ 19%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_getenv.c.o
+[ 19%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/iwasm/common/wasm_exec_env.c.o
+[ 19%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/iwasm/common/wasm_memory.c.o
+[ 19%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/iwasm/common/wasm_native.c.o
+[ 19%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/koi8_u.c.o
+[ 19%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_gethostbyaddr.c.o
+[ 19%] Linking C static library ../../../library/libchunkio-static.a
+[ 19%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/windows_1250.c.o
+[ 19%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/iwasm/common/wasm_runtime_common.c.o
+[ 19%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/windows_1251.c.o
+[ 19%] Built target chunkio-static
+[ 19%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/iwasm/common/wasm_shared_memory.c.o
+[ 19%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_gethostbyname.c.o
+[ 19%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_getnameinfo.c.o
+[ 19%] Building C object lib/monkey/mk_server/CMakeFiles/monkey-core-static.dir/mk_header.c.o
+[ 19%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_conf.c.o
+[ 19%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/windows_1252.c.o
+[ 19%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_getsock.c.o
+[ 19%] Building ASM object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/iwasm/common/arch/invokeNative_em64.s.o
+[ 19%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/iwasm/interpreter/wasm_interp_fast.c.o
+[ 19%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_init.c.o
+[ 19%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/windows_1253.c.o
+[ 19%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_library_init.c.o
+[ 19%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/windows_1254.c.o
+[ 19%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/iwasm/interpreter/wasm_loader.c.o
+[ 19%] Building C object lib/onigmo/CMakeFiles/onigmo-static.dir/enc/windows_1257.c.o
+[ 20%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_math.c.o
+[ 20%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/iwasm/interpreter/wasm_runtime.c.o
+[ 20%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/iwasm/aot/aot_intrinsic.c.o
+[ 21%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_mkquery.c.o
+[ 21%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_create_query.c.o
+[ 21%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_event.c.o
+[ 21%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/iwasm/aot/aot_loader.c.o
+[ 21%] Building C object lib/monkey/mk_server/CMakeFiles/monkey-core-static.dir/mk_config.c.o
+[ 21%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_options.c.o
+[ 21%] Building C object lib/monkey/mk_server/CMakeFiles/monkey-core-static.dir/mk_user.c.o
+[ 21%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_parse_a_reply.c.o
+[ 21%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_parse_aaaa_reply.c.o
+[ 21%] Building C object lib/monkey/mk_server/CMakeFiles/monkey-core-static.dir/mk_utils.c.o
+[ 21%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_parse_caa_reply.c.o
+[ 21%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_parse_mx_reply.c.o
+[ 21%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_parse_naptr_reply.c.o
+[ 21%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_parse_ns_reply.c.o
+[ 21%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/iwasm/aot/aot_runtime.c.o
+[ 21%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/iwasm/aot/arch/aot_reloc_x86_64.c.o
+[ 21%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_feature.c.o
+[ 21%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_parse_ptr_reply.c.o
+[ 21%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_parse_soa_reply.c.o
+[ 22%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_parse_srv_reply.c.o
+[ 22%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_lz4.c.o
+[ 22%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_parse_txt_reply.c.o
+[ 22%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_parse_uri_reply.c.o
+[ 22%] Building C object lib/monkey/mk_server/CMakeFiles/monkey-core-static.dir/mk_stream.c.o
+[ 22%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_platform.c.o
+[ 22%] Building C object lib/monkey/mk_server/CMakeFiles/monkey-core-static.dir/mk_scheduler.c.o
+[ 22%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_process.c.o
+[ 22%] Linking C static library ../../../library/libfluent-otel-proto.a
+[ 22%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_metadata.c.o
+[ 22%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_qcache.c.o
+[ 22%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/iwasm/libraries/lib-pthread/lib_pthread_wrapper.c.o
+[ 22%] Built target fluent-otel-proto
+[ 22%] Building C object src/wasm/CMakeFiles/vmlib-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/iwasm/libraries/thread-mgr/thread_manager.c.o
+[ 22%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_query.c.o
+[ 22%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_rand.c.o
+[ 22%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_search.c.o
+[ 22%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_metadata_cache.c.o
+[ 22%] Building C object lib/monkey/mk_server/CMakeFiles/monkey-core-static.dir/mk_http.c.o
+[ 22%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_msg.c.o
+[ 22%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_send.c.o
+[ 22%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_strcasecmp.c.o
+[ 22%] Building C object lib/monkey/mk_server/CMakeFiles/monkey-core-static.dir/mk_http_parser.c.o
+[ 22%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_str.c.o
+[ 22%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_msgset_reader.c.o
+[ 22%] Building C object lib/monkey/mk_server/CMakeFiles/monkey-core-static.dir/mk_http_thread.c.o
+[ 23%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_strerror.c.o
+[ 23%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_strsplit.c.o
+[ 23%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_sysconfig.c.o
+[ 23%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_msgset_writer.c.o
+[ 23%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_sysconfig_files.c.o
+[ 24%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_offset.c.o
+[ 24%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_timeout.c.o
+[ 24%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_update_servers.c.o
+[ 24%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/ares_version.c.o
+[ 24%] Building C object lib/monkey/mk_server/CMakeFiles/monkey-core-static.dir/mk_socket.c.o
+[ 24%] Building C object lib/monkey/mk_server/CMakeFiles/monkey-core-static.dir/mk_net.c.o
+[ 24%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/inet_net_pton.c.o
+[ 24%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/inet_ntop.c.o
+[ 24%] Building C object lib/c-ares-1.24.0/src/lib/CMakeFiles/c-ares.dir/windows_port.c.o
+[ 25%] Building C object lib/monkey/mk_server/CMakeFiles/monkey-core-static.dir/mk_clock.c.o
+[ 25%] Building C object lib/monkey/mk_server/CMakeFiles/monkey-core-static.dir/mk_cache.c.o
+[ 25%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_op.c.o
+[ 25%] Linking C static library ../../lib/libcares.a
+[ 26%] Linking C static library ../../../../../library/libxxhash.a
+[ 26%] Built target c-ares
+[ 26%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_partition.c.o
+[ 26%] Built target xxhash
+[ 26%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_pattern.c.o
+[ 26%] Building C object lib/monkey/mk_server/CMakeFiles/monkey-core-static.dir/mk_server.c.o
+[ 26%] Building C object lib/monkey/mk_server/CMakeFiles/monkey-core-static.dir/mk_kernel.c.o
+[ 26%] Building C object lib/monkey/mk_server/CMakeFiles/monkey-core-static.dir/mk_plugin.c.o
+[ 26%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_queue.c.o
+[ 26%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_range_assignor.c.o
+[ 26%] Building C object lib/cfl/src/CMakeFiles/cfl-static.dir/cfl.c.o
+[ 26%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_request.c.o
+[ 27%] Building C object lib/cfl/src/CMakeFiles/cfl-static.dir/cfl_log.c.o
+[ 27%] Building C object lib/cfl/src/CMakeFiles/cfl-static.dir/cfl_sds.c.o
+[ 27%] Building C object lib/cfl/src/CMakeFiles/cfl-static.dir/cfl_time.c.o
+[ 27%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_roundrobin_assignor.c.o
+[ 27%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_sasl.c.o
+[ 27%] Building C object lib/cfl/src/CMakeFiles/cfl-static.dir/cfl_kv.c.o
+[ 27%] Building C object lib/cfl/src/CMakeFiles/cfl-static.dir/cfl_kvlist.c.o
+[ 27%] Building C object lib/cfl/src/CMakeFiles/cfl-static.dir/cfl_array.c.o
+[ 27%] Building C object lib/cfl/src/CMakeFiles/cfl-static.dir/cfl_variant.c.o
+[ 27%] Building C object lib/cfl/src/CMakeFiles/cfl-static.dir/cfl_checksum.c.o
+[ 27%] Linking C static library ../library/libmonkey.a
+[ 27%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_sasl_plain.c.o
+[ 27%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_sticky_assignor.c.o
+[ 27%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_subscription.c.o
+[ 27%] Built target monkey-core-static
+[ 28%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_assignment.c.o
+[ 28%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_timer.c.o
+/usr/local/bin/clang-jcc -E
+[ 28%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_topic.c.o
+[ 28%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_transport.c.o
+[ 28%] Linking C static library ../../../library/libcfl.a
+[ 28%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_interceptor.c.o
+[ 28%] Built target cfl-static
+[ 28%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_header.c.o
+[ 28%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_admin.c.o
+[ 28%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_aux.c.o
+[ 28%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_background.c.o
+[ 28%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_idempotence.c.o
+[ 28%] Linking C static library ../../library/libminiz.a
+/usr/local/bin/llvm-ar qc ../../library/libminiz.a CMakeFiles/miniz.dir/miniz.c.o CMakeFiles/miniz.dir/miniz_zip.c.o CMakeFiles/miniz.dir/miniz_tinfl.c.o CMakeFiles/miniz.dir/miniz_tdef.c.o
+/usr/local/bin/llvm-ranlib ../../library/libminiz.a
+[ 28%] Built target miniz
+[ 28%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_txnmgr.c.o
+[ 28%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_cert.c.o
+[ 29%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_coord.c.o
+[ 29%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_mock.c.o
+[ 29%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_mock_handlers.c.o
+[ 29%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_mock_cgrp.c.o
+[ 29%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_error.c.o
+[ 29%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_fetcher.c.o
+[ 29%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdlist.c.o
+[ 29%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdlog.c.o
+[ 29%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdmurmur2.c.o
+[ 29%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdports.c.o
+[ 29%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdrand.c.o
+[ 29%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdregex.c.o
+[ 30%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdstring.c.o
+[ 30%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdunittest.c.o
+[ 30%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdvarint.c.o
+[ 30%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdmap.c.o
+[ 30%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/snappy.c.o
+[ 30%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/tinycthread.c.o
+[ 30%] Linking C static library ../../library/libmpack-static.a
+[ 30%] Built target mpack-static
+[ 30%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/tinycthread_extra.c.o
+[ 30%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdxxhash.c.o
+[ 30%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/cJSON.c.o
+[ 30%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_ssl.c.o
+[ 30%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdhdrhistogram.c.o
+[ 30%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rddl.c.o
+[ 31%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/rdkafka_plugin.c.o
+[ 31%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/lz4.c.o
+[ 31%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/lz4frame.c.o
+[ 31%] Building C object lib/librdkafka-2.3.0/src/CMakeFiles/rdkafka.dir/lz4hc.c.o
+[ 31%] [BISON][cmt_decode_prometheus_parser] Building parser with bison 3.5.1
+cmt_decode_prometheus.y:2.1-37: warning: deprecated directive: '%name-prefix "cmt_decode_prometheus_"', use '%define api.prefix {cmt_decode_prometheus_}' [-Wdeprecated]
+    2 | %name-prefix "cmt_decode_prometheus_"
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      | %define api.prefix {cmt_decode_prometheus_}
+cmt_decode_prometheus.y: warning: 5 shift/reduce conflicts [-Wconflicts-sr]
+[ 31%] [FLEX][cmt_decode_prometheus_lexer] Building scanner with flex 2.6.4
+cmt_decode_prometheus.l:196: warning, -s option given but default rule can be matched
+cmt_decode_prometheus.y: warning: fix-its can be applied.  Rerun with option '--update'. [-Wother]
+[ 31%] Building C object lib/ctraces/src/CMakeFiles/ctraces-static.dir/ctraces.c.o
+[ 31%] Building C object lib/ctraces/src/CMakeFiles/ctraces-static.dir/ctr_resource.c.o
+[ 31%] Building C object lib/cmetrics/src/CMakeFiles/cmetrics-static.dir/cmt_gauge.c.o
+[ 31%] Building C object lib/cmetrics/src/CMakeFiles/cmetrics-static.dir/cmt_counter.c.o
+[ 31%] Building C object lib/cmetrics/src/CMakeFiles/cmetrics-static.dir/cmt_untyped.c.o
+[ 31%] Building C object lib/cmetrics/src/CMakeFiles/cmetrics-static.dir/cmt_summary.c.o
+[ 31%] Building C object lib/ctraces/src/CMakeFiles/ctraces-static.dir/ctr_span.c.o
+[ 31%] Building C object lib/ctraces/src/CMakeFiles/ctraces-static.dir/ctr_link.c.o
+[ 31%] Building C object lib/cmetrics/src/CMakeFiles/cmetrics-static.dir/cmt_histogram.c.o
+[ 31%] Building C object lib/cmetrics/src/CMakeFiles/cmetrics-static.dir/cmt_metric.c.o
+[ 31%] Building C object lib/cmetrics/src/CMakeFiles/cmetrics-static.dir/cmt_metric_histogram.c.o
+[ 32%] Building C object lib/cmetrics/src/CMakeFiles/cmetrics-static.dir/cmt_map.c.o
+[ 32%] Building C object lib/cmetrics/src/CMakeFiles/cmetrics-static.dir/cmt_log.c.o
+[ 32%] Building C object lib/ctraces/src/CMakeFiles/ctraces-static.dir/ctr_scope.c.o
+[ 32%] Building C object lib/cmetrics/src/CMakeFiles/cmetrics-static.dir/cmt_opts.c.o
+[ 32%] Building C object lib/cmetrics/src/CMakeFiles/cmetrics-static.dir/cmt_time.c.o
+[ 32%] Building C object lib/cmetrics/src/CMakeFiles/cmetrics-static.dir/cmt_label.c.o
+[ 32%] Building C object lib/cmetrics/src/CMakeFiles/cmetrics-static.dir/cmt_cat.c.o
+[ 32%] Building C object lib/cmetrics/src/CMakeFiles/cmetrics-static.dir/cmetrics.c.o
+[ 32%] Building C object lib/ctraces/src/CMakeFiles/ctraces-static.dir/ctr_log.c.o
+[ 32%] Building C object lib/cmetrics/src/CMakeFiles/cmetrics-static.dir/cmt_encode_opentelemetry.c.o
+[ 32%] Building C object lib/cmetrics/src/CMakeFiles/cmetrics-static.dir/cmt_decode_opentelemetry.c.o
+[ 32%] Building C object lib/ctraces/src/CMakeFiles/ctraces-static.dir/ctr_id.c.o
+[ 32%] Building C object lib/cmetrics/src/CMakeFiles/cmetrics-static.dir/cmt_encode_prometheus.c.o
+[ 32%] Building C object lib/ctraces/src/CMakeFiles/ctraces-static.dir/ctr_random.c.o
+[ 32%] Building C object lib/cmetrics/src/CMakeFiles/cmetrics-static.dir/cmt_encode_prometheus_remote_write.c.o
+[ 32%] Building C object lib/ctraces/src/CMakeFiles/ctraces-static.dir/ctr_utils.c.o
+[ 34%] Building C object lib/cmetrics/src/CMakeFiles/cmetrics-static.dir/cmt_encode_splunk_hec.c.o
+[ 35%] Building C object lib/ctraces/src/CMakeFiles/ctraces-static.dir/ctr_attributes.c.o
+[ 35%] Building C object lib/ctraces/src/CMakeFiles/ctraces-static.dir/ctr_version.c.o
+[ 35%] Building C object lib/ctraces/src/CMakeFiles/ctraces-static.dir/ctr_mpack_utils.c.o
+[ 35%] Building C object lib/ctraces/src/CMakeFiles/ctraces-static.dir/ctr_encode_text.c.o
+[ 35%] Building C object lib/cmetrics/src/CMakeFiles/cmetrics-static.dir/cmt_encode_cloudwatch_emf.c.o
+[ 35%] Building C object lib/ctraces/src/CMakeFiles/ctraces-static.dir/ctr_encode_msgpack.c.o
+[ 35%] Building C object lib/ctraces/src/CMakeFiles/ctraces-static.dir/ctr_encode_opentelemetry.c.o
+checking for grep that handles long lines and -e... /usr/bin/grep
+checking for egrep... /usr/bin/grep -E
+checking for ANSI C header files... [ 35%] Building C object lib/ctraces/src/CMakeFiles/ctraces-static.dir/ctr_decode_msgpack.c.o
+[ 35%] Building C object lib/ctraces/src/CMakeFiles/ctraces-static.dir/ctr_decode_opentelemetry.c.o
+[ 35%] Building C object lib/cmetrics/src/CMakeFiles/cmetrics-static.dir/cmt_encode_text.c.o
+[ 35%] Building C object lib/cmetrics/src/CMakeFiles/cmetrics-static.dir/cmt_encode_influx.c.o
+[ 35%] Building C object lib/cmetrics/src/CMakeFiles/cmetrics-static.dir/cmt_encode_msgpack.c.o
+[ 35%] Building C object lib/cmetrics/src/CMakeFiles/cmetrics-static.dir/cmt_decode_msgpack.c.o
+[ 35%] Building C object lib/cmetrics/src/CMakeFiles/cmetrics-static.dir/cmt_mpack_utils.c.o
+[ 35%] Building C object lib/cmetrics/src/CMakeFiles/cmetrics-static.dir/external/remote.pb-c.c.o
+[ 35%] Building C object lib/cmetrics/src/CMakeFiles/cmetrics-static.dir/external/types.pb-c.c.o
+[ 35%] Building C object lib/cmetrics/src/CMakeFiles/cmetrics-static.dir/cmt_atomic_clang.c.o
+[ 35%] Building C object lib/cmetrics/src/CMakeFiles/cmetrics-static.dir/__/cmt_decode_prometheus_lexer.c.o
+[ 35%] Building C object lib/cmetrics/src/CMakeFiles/cmetrics-static.dir/__/cmt_decode_prometheus_parser.c.o
+yes
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for memory.h... yes
+checking for strings.h... [ 35%] Linking C static library ../../../library/libctraces.a
+yes
+checking for inttypes.h... [ 35%] Built target ctraces-static
+yes
+checking for stdint.h... yes
+checking for unistd.h... yes
+checking minix/config.h usability... [ 36%] Linking C static library ../../../library/libcmetrics.a
+[ 36%] Built target cmetrics-static
+[ 36%] Linking C static library library/libonigmo-static.a
+[ 36%] Built target onigmo-static
+[ 36%] [BISON][parser] Building parser with bison 3.5.1
+[ 36%] [FLEX][lexer] Building scanner with flex 2.6.4
+ra.y:2.1-22: warning: deprecated directive: '%name-prefix "flb_ra_"', use '%define api.prefix {flb_ra_}' [-Wdeprecated]
+    2 | %name-prefix "flb_ra_"
+      | ^~~~~~~~~~~~~~~~~~~~~~
+      | %define api.prefix {flb_ra_}
+[ 36%] Building C object src/proxy/go/CMakeFiles/flb-plugin-proxy-go.dir/go.c.o
+ra.y: warning: fix-its can be applied.  Rerun with option '--update'. [-Wother]
+[ 36%] Building C object src/record_accessor/CMakeFiles/flb-ra-parser.dir/flb_ra_parser.c.o
+[ 36%] Building C object src/record_accessor/CMakeFiles/flb-ra-parser.dir/ra_lex.c.o
+[ 36%] Building C object src/record_accessor/CMakeFiles/flb-ra-parser.dir/ra_parser.c.o
+[ 36%] Linking C static library ../../../library/libflb-plugin-proxy-go.a
+[ 36%] Built target flb-plugin-proxy-go
+[ 37%] Linking C static library ../../library/libflb-ra-parser.a
+[ 37%] Built target flb-ra-parser
+no
+checking minix/config.h presence... no
+checking for minix/config.h... no
+checking whether it is safe to define __EXTENSIONS__... yes
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for a thread-safe mkdir -p... /usr/bin/mkdir -p
+checking for gawk... no
+checking for mawk... mawk
+checking whether make sets $(MAKE)... yes
+checking whether make supports nested variables... yes
+checking whether to enable maintainer-specific portions of Makefiles... no
+checking for gcc... (cached) /usr/local/bin/clang-jcc
+checking whether we are using the GNU C compiler... (cached) yes
+checking whether /usr/local/bin/clang-jcc accepts -g... (cached) yes
+checking for /usr/local/bin/clang-jcc option to accept ISO C89... (cached) none needed
+checking whether /usr/local/bin/clang-jcc understands -c and -o together... (cached) yes
+checking for ranlib... ranlib
+checking for gawk... (cached) mawk
+checking for dwz... no
+checking how to print strings... printf
+checking for a sed that does not truncate output... /usr/bin/sed
+checking for fgrep... /usr/bin/grep -F
+checking for ld used by /usr/local/bin/clang-jcc... /usr/bin/ld
+checking if the linker (/usr/bin/ld) is GNU ld... yes
+checking for BSD- or MS-compatible name lister (nm)... /usr/bin/nm -B
+checking the name lister (/usr/bin/nm -B) interface... BSD nm
+checking whether ln -s works... yes
+checking the maximum length of command line arguments... 1572864
+checking whether the shell understands some XSI constructs... yes
+checking whether the shell understands "+="... yes
+checking for /usr/bin/ld option to reload object files... -r
+checking for objdump... objdump
+checking how to recognize dependent libraries... pass_all
+checking for ar... ar
+checking for strip... strip
+checking for ranlib... (cached) ranlib
+checking command to parse /usr/bin/nm -B output from /usr/local/bin/clang-jcc object... ok
+/src/fluent-bit/lib/libbacktrace-8602fda/configure: line 7029: /usr/bin/file: No such file or directory
+checking for dlfcn.h... yes
+checking for objdir... .libs
+checking if /usr/local/bin/clang-jcc supports -fno-rtti -fno-exceptions... yes
+checking for /usr/local/bin/clang-jcc option to produce PIC... -fPIC -DPIC
+checking if /usr/local/bin/clang-jcc PIC flag -fPIC -DPIC works... yes
+checking if /usr/local/bin/clang-jcc static flag -static works... [ 37%] Linking C static library ../../library/libvmlib-static.a
+[ 37%] Built target vmlib-static
+[ 37%] Building C object src/wasm/CMakeFiles/flb-wasm-static.dir/flb_wasm.c.o
+[ 37%] Building C object src/wasm/CMakeFiles/flb-wasm-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/shared/utils/uncommon/bh_getopt.c.o
+[ 37%] Building C object src/wasm/CMakeFiles/flb-wasm-static.dir/__/__/lib/wasm-micro-runtime-WAMR-1.3.0/core/shared/utils/uncommon/bh_read_file.c.o
+no
+checking if /usr/local/bin/clang-jcc supports -c -o file.o... yes
+checking if /usr/local/bin/clang-jcc supports -c -o file.o... (cached) yes
+checking whether the /usr/local/bin/clang-jcc linker (/usr/bin/ld) supports shared libraries... yes
+checking dynamic linker characteristics... [ 37%] Linking C static library ../../library/libflb-wasm-static.a
+[ 37%] Built target flb-wasm-static
+GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... no
+checking whether to build static libraries... yes
+checking for special C compiler options needed for large files... no
+checking for _FILE_OFFSET_BITS value needed for large files... no
+checking unwind.h usability... yes
+checking unwind.h presence... yes
+checking for unwind.h... yes
+checking for _Unwind_Backtrace... yes
+checking for -funwind-tables option... yes
+checking for -frandom-seed=string option... yes
+checking whether /usr/local/bin/clang-jcc supports -W... yes
+checking whether /usr/local/bin/clang-jcc supports -Wall... yes
+checking whether /usr/local/bin/clang-jcc supports -Wwrite-strings... yes
+checking whether /usr/local/bin/clang-jcc supports -Wstrict-prototypes... yes
+checking whether /usr/local/bin/clang-jcc supports -Wmissing-prototypes... yes
+checking whether /usr/local/bin/clang-jcc supports -Wold-style-definition... yes
+checking whether /usr/local/bin/clang-jcc supports -Wmissing-format-attribute... yes
+checking whether /usr/local/bin/clang-jcc supports -Wcast-qual... yes
+checking for _Unwind_GetIPInfo... yes
+checking __sync extensions... yes
+checking __atomic extensions... yes
+checking output filetype... elf64
+checking sys/mman.h usability... yes
+checking sys/mman.h presence... yes
+checking for sys/mman.h... yes
+checking for mmap... yes
+checking link.h usability... yes
+checking link.h presence... yes
+checking for link.h... yes
+checking sys/link.h usability... no
+checking sys/link.h presence... no
+checking for sys/link.h... no
+checking for dl_iterate_phdr... yes
+checking mach-o/dyld.h usability... no
+checking mach-o/dyld.h presence... no
+checking for mach-o/dyld.h... no
+checking sys/ldr.h usability... no
+checking sys/ldr.h presence... [ 37%] Linking C static library ../../../library/librdkafka.a
+[ 37%] Built target rdkafka
+no
+checking for sys/ldr.h... no
+checking for fcntl... yes
+checking whether strnlen is declared... yes
+checking whether getpagesize is declared... yes
+checking for lstat... yes
+checking for readlink... yes
+checking for getexecname... no
+checking for KERN_PROC... no
+checking for KERN_PROG_ARGS... no
+checking for clock_gettime... yes
+checking whether -pthread is supported... yes
+checking whether -gdwarf-5 is supported... yes
+checking for compress in -lz... no
+checking whether --compress-debug-sections is supported... yes
+checking for objcopy... objcopy
+checking for readelf... readelf
+checking whether objcopy supports debuglink... yes
+checking for dsymutil... no
+checking for nm... /usr/bin/nm -B
+checking for xz... xz
+checking for comm... comm
+checking for lzma_auto_decoder in -llzma... no
+checking whether tests can run... yes
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating backtrace-supported.h
+config.status: creating install-debuginfo-for-buildid.sh
+config.status: creating config.h
+config.status: executing libtool commands
+config.status: executing default commands
+[ 37%] Performing build step for 'backtrace'
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I/src/fluent-bit/lib/libbacktrace-8602fda -funwind-tables -frandom-seed=atomic.lo -W -Wall -Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes -Wold-style-definition -Wmissing-format-attribute -Wcast-qual -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -fcommon -DFLB_TESTS_OSSFUZZ=ON -c /src/fluent-bit/lib/libbacktrace-8602fda/atomic.c -o atomic.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I/src/fluent-bit/lib/libbacktrace-8602fda -funwind-tables -frandom-seed=dwarf.lo -W -Wall -Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes -Wold-style-definition -Wmissing-format-attribute -Wcast-qual -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -fcommon -DFLB_TESTS_OSSFUZZ=ON -c /src/fluent-bit/lib/libbacktrace-8602fda/dwarf.c -o dwarf.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I/src/fluent-bit/lib/libbacktrace-8602fda -funwind-tables -frandom-seed=posix.lo -W -Wall -Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes -Wold-style-definition -Wmissing-format-attribute -Wcast-qual -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -fcommon -DFLB_TESTS_OSSFUZZ=ON -c /src/fluent-bit/lib/libbacktrace-8602fda/posix.c -o posix.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I/src/fluent-bit/lib/libbacktrace-8602fda -funwind-tables -frandom-seed=fileline.lo -W -Wall -Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes -Wold-style-definition -Wmissing-format-attribute -Wcast-qual -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -fcommon -DFLB_TESTS_OSSFUZZ=ON -c /src/fluent-bit/lib/libbacktrace-8602fda/fileline.c -o fileline.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I/src/fluent-bit/lib/libbacktrace-8602fda -funwind-tables -frandom-seed=print.lo -W -Wall -Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes -Wold-style-definition -Wmissing-format-attribute -Wcast-qual -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -fcommon -DFLB_TESTS_OSSFUZZ=ON -c /src/fluent-bit/lib/libbacktrace-8602fda/print.c -o print.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I/src/fluent-bit/lib/libbacktrace-8602fda -funwind-tables -frandom-seed=state.lo -W -Wall -Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes -Wold-style-definition -Wmissing-format-attribute -Wcast-qual -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -fcommon -DFLB_TESTS_OSSFUZZ=ON -c /src/fluent-bit/lib/libbacktrace-8602fda/state.c -o state.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I/src/fluent-bit/lib/libbacktrace-8602fda -funwind-tables -frandom-seed=backtrace.lo -W -Wall -Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes -Wold-style-definition -Wmissing-format-attribute -Wcast-qual -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -fcommon -DFLB_TESTS_OSSFUZZ=ON -c /src/fluent-bit/lib/libbacktrace-8602fda/backtrace.c -o backtrace.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I/src/fluent-bit/lib/libbacktrace-8602fda -funwind-tables -frandom-seed=sort.lo -W -Wall -Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes -Wold-style-definition -Wmissing-format-attribute -Wcast-qual -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -fcommon -DFLB_TESTS_OSSFUZZ=ON -c /src/fluent-bit/lib/libbacktrace-8602fda/sort.c -o sort.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I/src/fluent-bit/lib/libbacktrace-8602fda -funwind-tables -frandom-seed=elf.lo -W -Wall -Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes -Wold-style-definition -Wmissing-format-attribute -Wcast-qual -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -fcommon -DFLB_TESTS_OSSFUZZ=ON -c /src/fluent-bit/lib/libbacktrace-8602fda/elf.c -o elf.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I/src/fluent-bit/lib/libbacktrace-8602fda -funwind-tables -frandom-seed=mmapio.lo -W -Wall -Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes -Wold-style-definition -Wmissing-format-attribute -Wcast-qual -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -fcommon -DFLB_TESTS_OSSFUZZ=ON -c /src/fluent-bit/lib/libbacktrace-8602fda/mmapio.c -o mmapio.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I/src/fluent-bit/lib/libbacktrace-8602fda -funwind-tables -frandom-seed=simple.lo -W -Wall -Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes -Wold-style-definition -Wmissing-format-attribute -Wcast-qual -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -fcommon -DFLB_TESTS_OSSFUZZ=ON -c /src/fluent-bit/lib/libbacktrace-8602fda/simple.c -o simple.o
+libtool: compile:  /usr/local/bin/clang-jcc -DHAVE_CONFIG_H -I. -I/src/fluent-bit/lib/libbacktrace-8602fda -funwind-tables -frandom-seed=mmap.lo -W -Wall -Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes -Wold-style-definition -Wmissing-format-attribute -Wcast-qual -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -fcommon -DFLB_TESTS_OSSFUZZ=ON -c /src/fluent-bit/lib/libbacktrace-8602fda/mmap.c -o mmap.o
+libtool: link: ar cru .libs/libbacktrace.a  atomic.o dwarf.o fileline.o posix.o print.o sort.o state.o backtrace.o simple.o elf.o mmapio.o mmap.o
+ar: `u' modifier ignored since `D' is the default (see `U')
+libtool: link: ranlib .libs/libbacktrace.a
+libtool: link: ( cd ".libs" && rm -f "libbacktrace.la" && ln -s "../libbacktrace.la" "libbacktrace.la" )
+[ 37%] Performing install step for 'backtrace'
+ /usr/bin/mkdir -p '/src/fluent-bit/build/backtrace-prefix/include'
+ /usr/bin/mkdir -p '/src/fluent-bit/build/backtrace-prefix/lib'
+ /usr/bin/install -c -m 644 /src/fluent-bit/lib/libbacktrace-8602fda/backtrace.h backtrace-supported.h '/src/fluent-bit/build/backtrace-prefix/include'
+ /bin/bash ./libtool   --mode=install /usr/bin/install -c   libbacktrace.la '/src/fluent-bit/build/backtrace-prefix/lib'
+libtool: install: /usr/bin/install -c .libs/libbacktrace.lai /src/fluent-bit/build/backtrace-prefix/lib/libbacktrace.la
+libtool: install: /usr/bin/install -c .libs/libbacktrace.a /src/fluent-bit/build/backtrace-prefix/lib/libbacktrace.a
+libtool: install: chmod 644 /src/fluent-bit/build/backtrace-prefix/lib/libbacktrace.a
+libtool: install: ranlib /src/fluent-bit/build/backtrace-prefix/lib/libbacktrace.a
+libtool: finish: PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/out:/sbin" ldconfig -n /src/fluent-bit/build/backtrace-prefix/lib
+----------------------------------------------------------------------
+Libraries have been installed in:
+   /src/fluent-bit/build/backtrace-prefix/lib
+
+If you ever happen to want to link against installed libraries
+in a given directory, LIBDIR, you must either use libtool, and
+specify the full pathname of the library, or use the `-LLIBDIR'
+flag during linking and do at least one of the following:
+   - add LIBDIR to the `LD_LIBRARY_PATH' environment variable
+     during execution
+   - add LIBDIR to the `LD_RUN_PATH' environment variable
+     during linking
+   - use the `-Wl,-rpath -Wl,LIBDIR' linker flag
+   - have your system administrator add LIBDIR to `/etc/ld.so.conf'
+
+See any operating system documentation about shared libraries for
+more information, such as the ld(1) and ld.so(8) manual pages.
+----------------------------------------------------------------------
+[ 37%] Completed 'backtrace'
+[ 37%] Built target backtrace
+[ 38%] Linking C static library ../../library/libsqlite3.a
+[ 38%] Built target sqlite3
+[ 38%] Building C object src/http_server/api/v2/CMakeFiles/api-v2.dir/metrics.c.o
+[ 38%] Building C object src/http_server/api/v2/CMakeFiles/api-v2.dir/reload.c.o
+[ 38%] Building C object src/http_server/api/v2/CMakeFiles/api-v2.dir/register.c.o
+[ 38%] Building C object src/http_server/api/v2/CMakeFiles/api-v2.dir/__/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 38%] Linking C static library ../../../../library/libapi-v2.a
+[ 38%] Built target api-v2
+[ 38%] Building C object src/http_server/api/v1/CMakeFiles/api-v1.dir/uptime.c.o
+[ 38%] Building C object src/http_server/api/v1/CMakeFiles/api-v1.dir/metrics.c.o
+[ 38%] Building C object src/http_server/api/v1/CMakeFiles/api-v1.dir/storage.c.o
+[ 38%] Building C object src/http_server/api/v1/CMakeFiles/api-v1.dir/plugins.c.o
+[ 38%] Building C object src/http_server/api/v1/CMakeFiles/api-v1.dir/register.c.o
+[ 38%] Building C object src/http_server/api/v1/CMakeFiles/api-v1.dir/health.c.o
+[ 38%] Building C object src/http_server/api/v1/CMakeFiles/api-v1.dir/trace.c.o
+[ 38%] Building C object src/http_server/api/v1/CMakeFiles/api-v1.dir/__/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 39%] Linking C static library ../../../../library/libapi-v1.a
+[ 39%] Built target api-v1
+[ 39%] Building C object src/http_server/CMakeFiles/flb-http-server.dir/flb_hs.c.o
+[ 39%] Building C object src/http_server/CMakeFiles/flb-http-server.dir/flb_hs_endpoints.c.o
+[ 39%] Building C object src/http_server/CMakeFiles/flb-http-server.dir/flb_hs_utils.c.o
+[ 39%] Linking C static library ../../library/libflb-http-server.a
+[ 39%] Built target flb-http-server
+[ 39%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_mp.c.o
+[ 39%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_kv.c.o
+[ 39%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_api.c.o
+[ 39%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_csv.c.o
+[ 39%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_lib.c.o
+[ 40%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_log.c.o
+[ 40%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_env.c.o
+[ 40%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_file.c.o
+[ 40%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_uri.c.o
+[ 40%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_hash_table.c.o
+[ 40%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_help.c.o
+[ 40%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_pack.c.o
+[ 40%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_pack_gelf.c.o
+[ 40%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_sds.c.o
+[ 40%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_sds_list.c.o
+[ 40%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_pipe.c.o
+[ 41%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_meta.c.o
+[ 41%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_custom.c.o
+[ 41%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_kernel.c.o
+[ 41%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_input.c.o
+[ 41%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_input_chunk.c.o
+[ 41%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_input_log.c.o
+[ 41%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_input_metric.c.o
+[ 41%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_input_trace.c.o
+[ 41%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_input_thread.c.o
+[ 41%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_filter.c.o
+[ 41%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_output_thread.c.o
+[ 41%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_output.c.o
+[ 42%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_config.c.o
+[ 42%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_network.c.o
+[ 42%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_socket.c.o
+[ 42%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_config_map.c.o
+[ 42%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_utils.c.o
+[ 42%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_slist.c.o
+[ 42%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_engine.c.o
+[ 42%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_engine_dispatch.c.o
+[ 42%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_task.c.o
+[ 42%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_unescape.c.o
+[ 42%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_scheduler.c.o
+[ 42%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_io.c.o
+[ 43%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_storage.c.o
+[ 43%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_connection.c.o
+[ 43%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_downstream.c.o
+[ 43%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_upstream.c.o
+[ 43%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_upstream_ha.c.o
+[ 43%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_upstream_node.c.o
+[ 43%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_router.c.o
+[ 43%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_worker.c.o
+[ 43%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_coro.c.o
+[ 43%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_time.c.o
+[ 43%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_sosreport.c.o
+[ 43%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_hmac.c.o
+[ 44%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_hash.c.o
+[ 44%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_crypto.c.o
+[ 44%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_random.c.o
+[ 44%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_plugin.c.o
+[ 44%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_gzip.c.o
+[ 44%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_snappy.c.o
+[ 44%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_compression.c.o
+[ 44%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_http_client.c.o
+[ 44%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_callback.c.o
+[ 44%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_strptime.c.o
+[ 44%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_fstore.c.o
+[ 44%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_thread_pool.c.o
+[ 45%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_routes_mask.c.o
+[ 45%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_typecast.c.o
+[ 45%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_event.c.o
+[ 45%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_ring_buffer.c.o
+[ 45%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_base64.c.o
+[ 45%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_log_event_decoder.c.o
+[ 45%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_log_event_encoder.c.o
+[ 45%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_log_event_encoder_primitives.c.o
+[ 45%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_log_event_encoder_dynamic_field.c.o
+[ 45%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_processor.c.o
+[ 45%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_reload.c.o
+[ 45%] Building C object src/CMakeFiles/fluent-bit-static.dir/config_format/flb_config_format.c.o
+[ 46%] Building C object src/CMakeFiles/fluent-bit-static.dir/config_format/flb_cf_fluentbit.c.o
+[ 46%] Building C object src/CMakeFiles/fluent-bit-static.dir/config_format/flb_cf_yaml.c.o
+[ 46%] Building C object src/CMakeFiles/fluent-bit-static.dir/multiline/flb_ml_parser_cri.c.o
+[ 46%] Building C object src/CMakeFiles/fluent-bit-static.dir/multiline/flb_ml_parser_docker.c.o
+[ 46%] Building C object src/CMakeFiles/fluent-bit-static.dir/multiline/flb_ml_parser_python.c.o
+[ 46%] Building C object src/CMakeFiles/fluent-bit-static.dir/multiline/flb_ml_parser_java.c.o
+[ 46%] Building C object src/CMakeFiles/fluent-bit-static.dir/multiline/flb_ml_parser_go.c.o
+[ 46%] Building C object src/CMakeFiles/fluent-bit-static.dir/multiline/flb_ml_parser_ruby.c.o
+[ 46%] Building C object src/CMakeFiles/fluent-bit-static.dir/multiline/flb_ml_stream.c.o
+[ 46%] Building C object src/CMakeFiles/fluent-bit-static.dir/multiline/flb_ml_parser.c.o
+[ 46%] Building C object src/CMakeFiles/fluent-bit-static.dir/multiline/flb_ml_group.c.o
+[ 47%] Building C object src/CMakeFiles/fluent-bit-static.dir/multiline/flb_ml_rule.c.o
+[ 47%] Building C object src/CMakeFiles/fluent-bit-static.dir/multiline/flb_ml.c.o
+[ 47%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_parser.c.o
+[ 47%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_parser_regex.c.o
+[ 47%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_parser_json.c.o
+[ 47%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_parser_decoder.c.o
+[ 47%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_parser_ltsv.c.o
+[ 47%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_parser_logfmt.c.o
+[ 47%] Building C object src/CMakeFiles/fluent-bit-static.dir/tls/flb_tls.c.o
+[ 47%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_oauth2.c.o
+[ 47%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_plugin_proxy.c.o
+[ 47%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_metrics.c.o
+[ 48%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_metrics_exporter.c.o
+[ 48%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_signv4.c.o
+[ 48%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_kafka.c.o
+[ 48%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_regex.c.o
+[ 48%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_sqldb.c.o
+[ 48%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_chunk_trace.c.o
+[ 48%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_record_accessor.c.o
+[ 48%] Building C object src/CMakeFiles/fluent-bit-static.dir/flb_ra_key.c.o
+[ 48%] Building C object src/CMakeFiles/fluent-bit-static.dir/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 48%] Linking C static library ../library/libfluent-bit.a
+[ 48%] Built target fluent-bit-static
+[ 48%] Building C object plugins/filter_wasm/CMakeFiles/flb-plugin-filter_wasm.dir/filter_wasm.c.o
+[ 48%] Building C object plugins/filter_wasm/CMakeFiles/flb-plugin-filter_wasm.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 48%] Linking C static library ../../library/libflb-plugin-filter_wasm.a
+[ 48%] Built target flb-plugin-filter_wasm
+[ 48%] Building C object plugins/filter_nightfall/CMakeFiles/flb-plugin-filter_nightfall.dir/nightfall.c.o
+[ 48%] Building C object plugins/filter_nightfall/CMakeFiles/flb-plugin-filter_nightfall.dir/nightfall_api.c.o
+[ 48%] Building C object plugins/filter_nightfall/CMakeFiles/flb-plugin-filter_nightfall.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 48%] Linking C static library ../../library/libflb-plugin-filter_nightfall.a
+[ 48%] Built target flb-plugin-filter_nightfall
+[ 49%] Building C object plugins/filter_geoip2/CMakeFiles/flb-plugin-filter_geoip2.dir/geoip2.c.o
+[ 49%] Building C object plugins/filter_geoip2/CMakeFiles/flb-plugin-filter_geoip2.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 49%] Linking C static library ../../library/libflb-plugin-filter_geoip2.a
+[ 49%] Built target flb-plugin-filter_geoip2
+[ 49%] Building C object plugins/filter_stdout/CMakeFiles/flb-plugin-filter_stdout.dir/stdout.c.o
+[ 49%] Building C object plugins/filter_stdout/CMakeFiles/flb-plugin-filter_stdout.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 49%] Linking C static library ../../library/libflb-plugin-filter_stdout.a
+[ 49%] Built target flb-plugin-filter_stdout
+[ 49%] Building C object plugins/filter_log_to_metrics/CMakeFiles/flb-plugin-filter_log_to_metrics.dir/log_to_metrics.c.o
+[ 49%] Building C object plugins/filter_log_to_metrics/CMakeFiles/flb-plugin-filter_log_to_metrics.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 49%] Linking C static library ../../library/libflb-plugin-filter_log_to_metrics.a
+[ 49%] Built target flb-plugin-filter_log_to_metrics
+[ 49%] Building C object plugins/filter_rewrite_tag/CMakeFiles/flb-plugin-filter_rewrite_tag.dir/rewrite_tag.c.o
+[ 49%] Building C object plugins/filter_rewrite_tag/CMakeFiles/flb-plugin-filter_rewrite_tag.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 49%] Linking C static library ../../library/libflb-plugin-filter_rewrite_tag.a
+[ 49%] Built target flb-plugin-filter_rewrite_tag
+[ 49%] Building C object plugins/filter_grep/CMakeFiles/flb-plugin-filter_grep.dir/grep.c.o
+[ 49%] Building C object plugins/filter_grep/CMakeFiles/flb-plugin-filter_grep.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 49%] Linking C static library ../../library/libflb-plugin-filter_grep.a
+[ 49%] Built target flb-plugin-filter_grep
+[ 49%] Building C object plugins/filter_expect/CMakeFiles/flb-plugin-filter_expect.dir/expect.c.o
+[ 49%] Building C object plugins/filter_expect/CMakeFiles/flb-plugin-filter_expect.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 49%] Linking C static library ../../library/libflb-plugin-filter_expect.a
+[ 49%] Built target flb-plugin-filter_expect
+[ 49%] Building C object plugins/filter_parser/CMakeFiles/flb-plugin-filter_parser.dir/filter_parser.c.o
+[ 49%] Building C object plugins/filter_parser/CMakeFiles/flb-plugin-filter_parser.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 49%] Linking C static library ../../library/libflb-plugin-filter_parser.a
+[ 49%] Built target flb-plugin-filter_parser
+[ 49%] Building C object plugins/filter_nest/CMakeFiles/flb-plugin-filter_nest.dir/nest.c.o
+[ 50%] Building C object plugins/filter_nest/CMakeFiles/flb-plugin-filter_nest.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 50%] Linking C static library ../../library/libflb-plugin-filter_nest.a
+[ 50%] Built target flb-plugin-filter_nest
+[ 50%] Building C object plugins/filter_multiline/CMakeFiles/flb-plugin-filter_multiline.dir/ml.c.o
+[ 50%] Building C object plugins/filter_multiline/CMakeFiles/flb-plugin-filter_multiline.dir/ml_concat.c.o
+[ 50%] Building C object plugins/filter_multiline/CMakeFiles/flb-plugin-filter_multiline.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 50%] Linking C static library ../../library/libflb-plugin-filter_multiline.a
+[ 50%] Built target flb-plugin-filter_multiline
+[ 50%] Building C object plugins/filter_modify/CMakeFiles/flb-plugin-filter_modify.dir/modify.c.o
+[ 50%] Building C object plugins/filter_modify/CMakeFiles/flb-plugin-filter_modify.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 50%] Linking C static library ../../library/libflb-plugin-filter_modify.a
+[ 50%] Built target flb-plugin-filter_modify
+[ 50%] Building C object plugins/filter_kubernetes/CMakeFiles/flb-plugin-filter_kubernetes.dir/kube_conf.c.o
+[ 50%] Building C object plugins/filter_kubernetes/CMakeFiles/flb-plugin-filter_kubernetes.dir/kube_meta.c.o
+[ 50%] Building C object plugins/filter_kubernetes/CMakeFiles/flb-plugin-filter_kubernetes.dir/kube_regex.c.o
+[ 50%] Building C object plugins/filter_kubernetes/CMakeFiles/flb-plugin-filter_kubernetes.dir/kube_property.c.o
+[ 50%] Building C object plugins/filter_kubernetes/CMakeFiles/flb-plugin-filter_kubernetes.dir/kubernetes.c.o
+[ 50%] Building C object plugins/filter_kubernetes/CMakeFiles/flb-plugin-filter_kubernetes.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 51%] Linking C static library ../../library/libflb-plugin-filter_kubernetes.a
+[ 51%] Built target flb-plugin-filter_kubernetes
+[ 51%] Building C object plugins/filter_type_converter/CMakeFiles/flb-plugin-filter_type_converter.dir/type_converter.c.o
+[ 51%] Building C object plugins/filter_type_converter/CMakeFiles/flb-plugin-filter_type_converter.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 51%] Linking C static library ../../library/libflb-plugin-filter_type_converter.a
+[ 51%] Built target flb-plugin-filter_type_converter
+[ 51%] Building C object plugins/filter_throttle/CMakeFiles/flb-plugin-filter_throttle.dir/window.c.o
+[ 52%] Building C object plugins/filter_throttle/CMakeFiles/flb-plugin-filter_throttle.dir/throttle.c.o
+[ 52%] Building C object plugins/filter_throttle/CMakeFiles/flb-plugin-filter_throttle.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 52%] Linking C static library ../../library/libflb-plugin-filter_throttle.a
+[ 52%] Built target flb-plugin-filter_throttle
+[ 52%] Building C object plugins/filter_sysinfo/CMakeFiles/flb-plugin-filter_sysinfo.dir/sysinfo.c.o
+[ 52%] Building C object plugins/filter_sysinfo/CMakeFiles/flb-plugin-filter_sysinfo.dir/sysinfo_platform.c.o
+[ 52%] Building C object plugins/filter_sysinfo/CMakeFiles/flb-plugin-filter_sysinfo.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 52%] Linking C static library ../../library/libflb-plugin-filter_sysinfo.a
+[ 52%] Built target flb-plugin-filter_sysinfo
+[ 52%] Building C object plugins/filter_record_modifier/CMakeFiles/flb-plugin-filter_record_modifier.dir/filter_modifier.c.o
+[ 52%] Building C object plugins/filter_record_modifier/CMakeFiles/flb-plugin-filter_record_modifier.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 53%] Linking C static library ../../library/libflb-plugin-filter_record_modifier.a
+[ 53%] Built target flb-plugin-filter_record_modifier
+[ 53%] Building C object plugins/filter_ecs/CMakeFiles/flb-plugin-filter_ecs.dir/ecs.c.o
+[ 53%] Building C object plugins/filter_ecs/CMakeFiles/flb-plugin-filter_ecs.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 53%] Linking C static library ../../library/libflb-plugin-filter_ecs.a
+[ 53%] Built target flb-plugin-filter_ecs
+[ 53%] Building C object plugins/filter_checklist/CMakeFiles/flb-plugin-filter_checklist.dir/checklist.c.o
+[ 53%] Building C object plugins/filter_checklist/CMakeFiles/flb-plugin-filter_checklist.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 53%] Linking C static library ../../library/libflb-plugin-filter_checklist.a
+[ 53%] Built target flb-plugin-filter_checklist
+[ 54%] Building C object plugins/filter_aws/CMakeFiles/flb-plugin-filter_aws.dir/aws.c.o
+[ 54%] Building C object plugins/filter_aws/CMakeFiles/flb-plugin-filter_aws.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 54%] Linking C static library ../../library/libflb-plugin-filter_aws.a
+[ 54%] Built target flb-plugin-filter_aws
+[ 54%] Building C object plugins/filter_alter_size/CMakeFiles/flb-plugin-filter_alter_size.dir/alter_size.c.o
+[ 54%] Building C object plugins/filter_alter_size/CMakeFiles/flb-plugin-filter_alter_size.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 54%] Linking C static library ../../library/libflb-plugin-filter_alter_size.a
+[ 54%] Built target flb-plugin-filter_alter_size
+[ 54%] Building C object plugins/out_chronicle/CMakeFiles/flb-plugin-out_chronicle.dir/chronicle_conf.c.o
+[ 54%] Building C object plugins/out_chronicle/CMakeFiles/flb-plugin-out_chronicle.dir/chronicle.c.o
+[ 54%] Building C object plugins/out_chronicle/CMakeFiles/flb-plugin-out_chronicle.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 54%] Linking C static library ../../library/libflb-plugin-out_chronicle.a
+[ 54%] Built target flb-plugin-out_chronicle
+[ 54%] Building C object plugins/out_vivo_exporter/CMakeFiles/flb-plugin-out_vivo_exporter.dir/vivo_http.c.o
+[ 54%] Building C object plugins/out_vivo_exporter/CMakeFiles/flb-plugin-out_vivo_exporter.dir/vivo_stream.c.o
+[ 54%] Building C object plugins/out_vivo_exporter/CMakeFiles/flb-plugin-out_vivo_exporter.dir/vivo.c.o
+[ 54%] Building C object plugins/out_vivo_exporter/CMakeFiles/flb-plugin-out_vivo_exporter.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 54%] Linking C static library ../../library/libflb-plugin-out_vivo_exporter.a
+[ 54%] Built target flb-plugin-out_vivo_exporter
+[ 54%] Building C object plugins/out_s3/CMakeFiles/flb-plugin-out_s3.dir/s3.c.o
+[ 54%] Building C object plugins/out_s3/CMakeFiles/flb-plugin-out_s3.dir/s3_store.c.o
+[ 54%] Building C object plugins/out_s3/CMakeFiles/flb-plugin-out_s3.dir/s3_multipart.c.o
+[ 54%] Building C object plugins/out_s3/CMakeFiles/flb-plugin-out_s3.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 54%] Linking C static library ../../library/libflb-plugin-out_s3.a
+[ 54%] Built target flb-plugin-out_s3
+[ 54%] Building C object plugins/out_prometheus_remote_write/CMakeFiles/flb-plugin-out_prometheus_remote_write.dir/remote_write.c.o
+[ 54%] Building C object plugins/out_prometheus_remote_write/CMakeFiles/flb-plugin-out_prometheus_remote_write.dir/remote_write_conf.c.o
+[ 54%] Building C object plugins/out_prometheus_remote_write/CMakeFiles/flb-plugin-out_prometheus_remote_write.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 54%] Linking C static library ../../library/libflb-plugin-out_prometheus_remote_write.a
+[ 54%] Built target flb-plugin-out_prometheus_remote_write
+[ 54%] Building C object plugins/out_prometheus_exporter/CMakeFiles/flb-plugin-out_prometheus_exporter.dir/prom_http.c.o
+[ 54%] Building C object plugins/out_prometheus_exporter/CMakeFiles/flb-plugin-out_prometheus_exporter.dir/prom.c.o
+[ 54%] Building C object plugins/out_prometheus_exporter/CMakeFiles/flb-plugin-out_prometheus_exporter.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 55%] Linking C static library ../../library/libflb-plugin-out_prometheus_exporter.a
+[ 55%] Built target flb-plugin-out_prometheus_exporter
+[ 55%] Building C object plugins/out_opentelemetry/CMakeFiles/flb-plugin-out_opentelemetry.dir/opentelemetry.c.o
+[ 55%] Building C object plugins/out_opentelemetry/CMakeFiles/flb-plugin-out_opentelemetry.dir/opentelemetry_conf.c.o
+[ 55%] Building C object plugins/out_opentelemetry/CMakeFiles/flb-plugin-out_opentelemetry.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 55%] Linking C static library ../../library/libflb-plugin-out_opentelemetry.a
+[ 55%] Built target flb-plugin-out_opentelemetry
+[ 55%] Building C object plugins/out_kinesis_streams/CMakeFiles/flb-plugin-out_kinesis_streams.dir/kinesis.c.o
+[ 56%] Building C object plugins/out_kinesis_streams/CMakeFiles/flb-plugin-out_kinesis_streams.dir/kinesis_api.c.o
+[ 56%] Building C object plugins/out_kinesis_streams/CMakeFiles/flb-plugin-out_kinesis_streams.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 56%] Linking C static library ../../library/libflb-plugin-out_kinesis_streams.a
+[ 56%] Built target flb-plugin-out_kinesis_streams
+[ 56%] Building C object plugins/out_kinesis_firehose/CMakeFiles/flb-plugin-out_kinesis_firehose.dir/firehose.c.o
+[ 56%] Building C object plugins/out_kinesis_firehose/CMakeFiles/flb-plugin-out_kinesis_firehose.dir/firehose_api.c.o
+[ 56%] Building C object plugins/out_kinesis_firehose/CMakeFiles/flb-plugin-out_kinesis_firehose.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 56%] Linking C static library ../../library/libflb-plugin-out_kinesis_firehose.a
+[ 56%] Built target flb-plugin-out_kinesis_firehose
+[ 56%] Building C object plugins/out_cloudwatch_logs/CMakeFiles/flb-plugin-out_cloudwatch_logs.dir/cloudwatch_logs.c.o
+[ 56%] Building C object plugins/out_cloudwatch_logs/CMakeFiles/flb-plugin-out_cloudwatch_logs.dir/cloudwatch_api.c.o
+[ 56%] Building C object plugins/out_cloudwatch_logs/CMakeFiles/flb-plugin-out_cloudwatch_logs.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 56%] Linking C static library ../../library/libflb-plugin-out_cloudwatch_logs.a
+[ 56%] Built target flb-plugin-out_cloudwatch_logs
+[ 56%] Building C object plugins/out_websocket/CMakeFiles/flb-plugin-out_websocket.dir/websocket_conf.c.o
+[ 56%] Building C object plugins/out_websocket/CMakeFiles/flb-plugin-out_websocket.dir/websocket.c.o
+[ 56%] Building C object plugins/out_websocket/CMakeFiles/flb-plugin-out_websocket.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 56%] Linking C static library ../../library/libflb-plugin-out_websocket.a
+[ 56%] Built target flb-plugin-out_websocket
+[ 56%] Building C object plugins/out_lib/CMakeFiles/flb-plugin-out_lib.dir/out_lib.c.o
+[ 56%] Building C object plugins/out_lib/CMakeFiles/flb-plugin-out_lib.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 56%] Linking C static library ../../library/libflb-plugin-out_lib.a
+[ 56%] Built target flb-plugin-out_lib
+[ 56%] Building C object plugins/out_td/CMakeFiles/flb-plugin-out_td.dir/td_http.c.o
+[ 56%] Building C object plugins/out_td/CMakeFiles/flb-plugin-out_td.dir/td_config.c.o
+[ 56%] Building C object plugins/out_td/CMakeFiles/flb-plugin-out_td.dir/td.c.o
+[ 56%] Building C object plugins/out_td/CMakeFiles/flb-plugin-out_td.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 56%] Linking C static library ../../library/libflb-plugin-out_td.a
+[ 56%] Built target flb-plugin-out_td
+[ 56%] Building C object plugins/out_udp/CMakeFiles/flb-plugin-out_udp.dir/udp.c.o
+[ 56%] Building C object plugins/out_udp/CMakeFiles/flb-plugin-out_udp.dir/udp_conf.c.o
+[ 56%] Building C object plugins/out_udp/CMakeFiles/flb-plugin-out_udp.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 57%] Linking C static library ../../library/libflb-plugin-out_udp.a
+[ 57%] Built target flb-plugin-out_udp
+[ 57%] Building C object plugins/out_stdout/CMakeFiles/flb-plugin-out_stdout.dir/stdout.c.o
+[ 57%] Building C object plugins/out_stdout/CMakeFiles/flb-plugin-out_stdout.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 57%] Linking C static library ../../library/libflb-plugin-out_stdout.a
+[ 57%] Built target flb-plugin-out_stdout
+[ 57%] Building C object plugins/out_skywalking/CMakeFiles/flb-plugin-out_skywalking.dir/skywalking.c.o
+[ 57%] Building C object plugins/out_skywalking/CMakeFiles/flb-plugin-out_skywalking.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 58%] Linking C static library ../../library/libflb-plugin-out_skywalking.a
+[ 58%] Built target flb-plugin-out_skywalking
+[ 58%] Building C object plugins/out_oracle_log_analytics/CMakeFiles/flb-plugin-out_oracle_log_analytics.dir/oci_logan.c.o
+[ 58%] Building C object plugins/out_oracle_log_analytics/CMakeFiles/flb-plugin-out_oracle_log_analytics.dir/oci_logan_conf.c.o
+[ 58%] Building C object plugins/out_oracle_log_analytics/CMakeFiles/flb-plugin-out_oracle_log_analytics.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 58%] Linking C static library ../../library/libflb-plugin-out_oracle_log_analytics.a
+[ 58%] Built target flb-plugin-out_oracle_log_analytics
+[ 58%] Building C object plugins/out_opensearch/CMakeFiles/flb-plugin-out_opensearch.dir/os_conf.c.o
+[ 58%] Building C object plugins/out_opensearch/CMakeFiles/flb-plugin-out_opensearch.dir/opensearch.c.o
+[ 58%] Building C object plugins/out_opensearch/CMakeFiles/flb-plugin-out_opensearch.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 59%] Linking C static library ../../library/libflb-plugin-out_opensearch.a
+[ 59%] Built target flb-plugin-out_opensearch
+[ 59%] Building C object plugins/out_logdna/CMakeFiles/flb-plugin-out_logdna.dir/logdna.c.o
+[ 59%] Building C object plugins/out_logdna/CMakeFiles/flb-plugin-out_logdna.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 59%] Linking C static library ../../library/libflb-plugin-out_logdna.a
+[ 59%] Built target flb-plugin-out_logdna
+[ 59%] Building C object plugins/out_http/CMakeFiles/flb-plugin-out_http.dir/http.c.o
+[ 59%] Building C object plugins/out_http/CMakeFiles/flb-plugin-out_http.dir/http_conf.c.o
+[ 59%] Building C object plugins/out_http/CMakeFiles/flb-plugin-out_http.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 59%] Linking C static library ../../library/libflb-plugin-out_http.a
+[ 59%] Built target flb-plugin-out_http
+[ 60%] Building C object plugins/out_exit/CMakeFiles/flb-plugin-out_exit.dir/exit.c.o
+[ 60%] Building C object plugins/out_exit/CMakeFiles/flb-plugin-out_exit.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 60%] Linking C static library ../../library/libflb-plugin-out_exit.a
+[ 60%] Built target flb-plugin-out_exit
+[ 60%] Building C object plugins/out_calyptia/CMakeFiles/flb-plugin-out_calyptia.dir/calyptia.c.o
+[ 60%] Building C object plugins/out_calyptia/CMakeFiles/flb-plugin-out_calyptia.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 60%] Linking C static library ../../library/libflb-plugin-out_calyptia.a
+[ 60%] Built target flb-plugin-out_calyptia
+[ 60%] Building C object plugins/out_azure_kusto/CMakeFiles/flb-plugin-out_azure_kusto.dir/azure_kusto.c.o
+[ 60%] Building C object plugins/out_azure_kusto/CMakeFiles/flb-plugin-out_azure_kusto.dir/azure_kusto_conf.c.o
+[ 60%] Building C object plugins/out_azure_kusto/CMakeFiles/flb-plugin-out_azure_kusto.dir/azure_kusto_ingest.c.o
+[ 60%] Building C object plugins/out_azure_kusto/CMakeFiles/flb-plugin-out_azure_kusto.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 60%] Linking C static library ../../library/libflb-plugin-out_azure_kusto.a
+[ 60%] Built target flb-plugin-out_azure_kusto
+[ 60%] Building C object plugins/out_azure_logs_ingestion/CMakeFiles/flb-plugin-out_azure_logs_ingestion.dir/azure_logs_ingestion.c.o
+[ 60%] Building C object plugins/out_azure_logs_ingestion/CMakeFiles/flb-plugin-out_azure_logs_ingestion.dir/azure_logs_ingestion_conf.c.o
+[ 60%] Building C object plugins/out_azure_logs_ingestion/CMakeFiles/flb-plugin-out_azure_logs_ingestion.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 61%] Linking C static library ../../library/libflb-plugin-out_azure_logs_ingestion.a
+[ 61%] Built target flb-plugin-out_azure_logs_ingestion
+[ 61%] Building C object plugins/out_azure_blob/CMakeFiles/flb-plugin-out_azure_blob.dir/azure_blob.c.o
+[ 61%] Building C object plugins/out_azure_blob/CMakeFiles/flb-plugin-out_azure_blob.dir/azure_blob_uri.c.o
+[ 61%] Building C object plugins/out_azure_blob/CMakeFiles/flb-plugin-out_azure_blob.dir/azure_blob_conf.c.o
+[ 61%] Building C object plugins/out_azure_blob/CMakeFiles/flb-plugin-out_azure_blob.dir/azure_blob_http.c.o
+[ 61%] Building C object plugins/out_azure_blob/CMakeFiles/flb-plugin-out_azure_blob.dir/azure_blob_appendblob.c.o
+[ 62%] Building C object plugins/out_azure_blob/CMakeFiles/flb-plugin-out_azure_blob.dir/azure_blob_blockblob.c.o
+[ 62%] Building C object plugins/out_azure_blob/CMakeFiles/flb-plugin-out_azure_blob.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 62%] Linking C static library ../../library/libflb-plugin-out_azure_blob.a
+[ 62%] Built target flb-plugin-out_azure_blob
+[ 62%] Building C object plugins/processor_attributes/CMakeFiles/flb-plugin-processor_attributes.dir/attributes.c.o
+[ 63%] Building C object plugins/processor_attributes/CMakeFiles/flb-plugin-processor_attributes.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 63%] Linking C static library ../../library/libflb-plugin-processor_attributes.a
+[ 63%] Built target flb-plugin-processor_attributes
+[ 63%] Building C object plugins/processor_labels/CMakeFiles/flb-plugin-processor_labels.dir/labels.c.o
+[ 63%] Building C object plugins/processor_labels/CMakeFiles/flb-plugin-processor_labels.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 63%] Linking C static library ../../library/libflb-plugin-processor_labels.a
+[ 63%] Built target flb-plugin-processor_labels
+[ 63%] Building C object plugins/in_lib/CMakeFiles/flb-plugin-in_lib.dir/in_lib.c.o
+[ 63%] Building C object plugins/in_lib/CMakeFiles/flb-plugin-in_lib.dir/__/__/src/flb_pack.c.o
+[ 63%] Building C object plugins/in_lib/CMakeFiles/flb-plugin-in_lib.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 63%] Linking C static library ../../library/libflb-plugin-in_lib.a
+[ 63%] Built target flb-plugin-in_lib
+[ 63%] Building C object plugins/in_exec_wasi/CMakeFiles/flb-plugin-in_exec_wasi.dir/in_exec_wasi.c.o
+[ 63%] Building C object plugins/in_exec_wasi/CMakeFiles/flb-plugin-in_exec_wasi.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 63%] Linking C static library ../../library/libflb-plugin-in_exec_wasi.a
+[ 63%] Built target flb-plugin-in_exec_wasi
+[ 63%] Building C object plugins/in_udp/CMakeFiles/flb-plugin-in_udp.dir/udp.c.o
+[ 63%] Building C object plugins/in_udp/CMakeFiles/flb-plugin-in_udp.dir/udp_conn.c.o
+[ 63%] Building C object plugins/in_udp/CMakeFiles/flb-plugin-in_udp.dir/udp_config.c.o
+[ 63%] Building C object plugins/in_udp/CMakeFiles/flb-plugin-in_udp.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 63%] Linking C static library ../../library/libflb-plugin-in_udp.a
+[ 63%] Built target flb-plugin-in_udp
+[ 63%] Building C object plugins/in_nginx_exporter_metrics/CMakeFiles/flb-plugin-in_nginx_exporter_metrics.dir/nginx.c.o
+[ 63%] Building C object plugins/in_nginx_exporter_metrics/CMakeFiles/flb-plugin-in_nginx_exporter_metrics.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 63%] Linking C static library ../../library/libflb-plugin-in_nginx_exporter_metrics.a
+[ 63%] Built target flb-plugin-in_nginx_exporter_metrics
+[ 63%] Building C object plugins/in_storage_backlog/CMakeFiles/flb-plugin-in_storage_backlog.dir/sb.c.o
+[ 64%] Building C object plugins/in_storage_backlog/CMakeFiles/flb-plugin-in_storage_backlog.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 64%] Linking C static library ../../library/libflb-plugin-in_storage_backlog.a
+[ 64%] Built target flb-plugin-in_storage_backlog
+[ 64%] Building C object plugins/in_event_type/CMakeFiles/flb-plugin-in_event_type.dir/event_type.c.o
+[ 64%] Building C object plugins/in_event_type/CMakeFiles/flb-plugin-in_event_type.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 64%] Linking C static library ../../library/libflb-plugin-in_event_type.a
+[ 64%] Built target flb-plugin-in_event_type
+[ 64%] Building C object plugins/in_splunk/CMakeFiles/flb-plugin-in_splunk.dir/splunk.c.o
+[ 64%] Building C object plugins/in_splunk/CMakeFiles/flb-plugin-in_splunk.dir/splunk_conn.c.o
+[ 64%] Building C object plugins/in_splunk/CMakeFiles/flb-plugin-in_splunk.dir/splunk_prot.c.o
+[ 64%] Building C object plugins/in_splunk/CMakeFiles/flb-plugin-in_splunk.dir/splunk_config.c.o
+[ 64%] Building C object plugins/in_splunk/CMakeFiles/flb-plugin-in_splunk.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 64%] Linking C static library ../../library/libflb-plugin-in_splunk.a
+[ 64%] Built target flb-plugin-in_splunk
+[ 64%] Building C object plugins/in_calyptia_fleet/CMakeFiles/flb-plugin-in_calyptia_fleet.dir/in_calyptia_fleet.c.o
+[ 64%] Building C object plugins/in_calyptia_fleet/CMakeFiles/flb-plugin-in_calyptia_fleet.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 64%] Linking C static library ../../library/libflb-plugin-in_calyptia_fleet.a
+[ 64%] Built target flb-plugin-in_calyptia_fleet
+[ 64%] Building C object plugins/in_elasticsearch/CMakeFiles/flb-plugin-in_elasticsearch.dir/in_elasticsearch.c.o
+[ 64%] Building C object plugins/in_elasticsearch/CMakeFiles/flb-plugin-in_elasticsearch.dir/in_elasticsearch_config.c.o
+[ 64%] Building C object plugins/in_elasticsearch/CMakeFiles/flb-plugin-in_elasticsearch.dir/in_elasticsearch_bulk_conn.c.o
+[ 64%] Building C object plugins/in_elasticsearch/CMakeFiles/flb-plugin-in_elasticsearch.dir/in_elasticsearch_bulk_prot.c.o
+[ 64%] Building C object plugins/in_elasticsearch/CMakeFiles/flb-plugin-in_elasticsearch.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 65%] Linking C static library ../../library/libflb-plugin-in_elasticsearch.a
+[ 65%] Built target flb-plugin-in_elasticsearch
+[ 65%] Building C object plugins/in_opentelemetry/CMakeFiles/flb-plugin-in_opentelemetry.dir/http_conn.c.o
+[ 65%] Building C object plugins/in_opentelemetry/CMakeFiles/flb-plugin-in_opentelemetry.dir/opentelemetry.c.o
+[ 65%] Building C object plugins/in_opentelemetry/CMakeFiles/flb-plugin-in_opentelemetry.dir/opentelemetry_prot.c.o
+[ 65%] Building C object plugins/in_opentelemetry/CMakeFiles/flb-plugin-in_opentelemetry.dir/opentelemetry_config.c.o
+[ 65%] Building C object plugins/in_opentelemetry/CMakeFiles/flb-plugin-in_opentelemetry.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 67%] Linking C static library ../../library/libflb-plugin-in_opentelemetry.a
+[ 67%] Built target flb-plugin-in_opentelemetry
+[ 67%] Building C object plugins/in_statsd/CMakeFiles/flb-plugin-in_statsd.dir/statsd.c.o
+[ 67%] Building C object plugins/in_statsd/CMakeFiles/flb-plugin-in_statsd.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 67%] Linking C static library ../../library/libflb-plugin-in_statsd.a
+[ 67%] Built target flb-plugin-in_statsd
+[ 67%] Building C object plugins/in_http/CMakeFiles/flb-plugin-in_http.dir/http.c.o
+[ 67%] Building C object plugins/in_http/CMakeFiles/flb-plugin-in_http.dir/http_conn.c.o
+[ 67%] Building C object plugins/in_http/CMakeFiles/flb-plugin-in_http.dir/http_prot.c.o
+[ 67%] Building C object plugins/in_http/CMakeFiles/flb-plugin-in_http.dir/http_config.c.o
+[ 67%] Building C object plugins/in_http/CMakeFiles/flb-plugin-in_http.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 67%] Linking C static library ../../library/libflb-plugin-in_http.a
+[ 67%] Built target flb-plugin-in_http
+[ 67%] Building C object plugins/in_dummy/CMakeFiles/flb-plugin-in_dummy.dir/in_dummy.c.o
+[ 67%] Building C object plugins/in_dummy/CMakeFiles/flb-plugin-in_dummy.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 67%] Linking C static library ../../library/libflb-plugin-in_dummy.a
+[ 67%] Built target flb-plugin-in_dummy
+[ 67%] Building C object plugins/in_emitter/CMakeFiles/flb-plugin-in_emitter.dir/emitter.c.o
+[ 67%] Building C object plugins/in_emitter/CMakeFiles/flb-plugin-in_emitter.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 67%] Linking C static library ../../library/libflb-plugin-in_emitter.a
+[ 67%] Built target flb-plugin-in_emitter
+[ 67%] Building C object plugins/in_prometheus_scrape/CMakeFiles/flb-plugin-in_prometheus_scrape.dir/prom_scrape.c.o
+[ 68%] Building C object plugins/in_prometheus_scrape/CMakeFiles/flb-plugin-in_prometheus_scrape.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 68%] Linking C static library ../../library/libflb-plugin-in_prometheus_scrape.a
+[ 68%] Built target flb-plugin-in_prometheus_scrape
+[ 68%] Building C object plugins/in_fluentbit_metrics/CMakeFiles/flb-plugin-in_fluentbit_metrics.dir/metrics.c.o
+[ 68%] Building C object plugins/in_fluentbit_metrics/CMakeFiles/flb-plugin-in_fluentbit_metrics.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 69%] Linking C static library ../../library/libflb-plugin-in_fluentbit_metrics.a
+[ 69%] Built target flb-plugin-in_fluentbit_metrics
+[ 69%] Building C object plugins/in_kafka/CMakeFiles/flb-plugin-in_kafka.dir/in_kafka.c.o
+[ 69%] Building C object plugins/in_kafka/CMakeFiles/flb-plugin-in_kafka.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 69%] Linking C static library ../../library/libflb-plugin-in_kafka.a
+[ 69%] Built target flb-plugin-in_kafka
+[ 69%] Building C object plugins/in_kubernetes_events/CMakeFiles/flb-plugin-in_kubernetes_events.dir/kubernetes_events_conf.c.o
+[ 69%] Building C object plugins/in_kubernetes_events/CMakeFiles/flb-plugin-in_kubernetes_events.dir/kubernetes_events.c.o
+[ 70%] Building C object plugins/in_kubernetes_events/CMakeFiles/flb-plugin-in_kubernetes_events.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 70%] Linking C static library ../../library/libflb-plugin-in_kubernetes_events.a
+[ 70%] Built target flb-plugin-in_kubernetes_events
+[ 70%] Building C object plugins/in_node_exporter_metrics/CMakeFiles/flb-plugin-in_node_exporter_metrics.dir/ne_cpu.c.o
+[ 70%] Building C object plugins/in_node_exporter_metrics/CMakeFiles/flb-plugin-in_node_exporter_metrics.dir/ne_meminfo.c.o
+[ 71%] Building C object plugins/in_node_exporter_metrics/CMakeFiles/flb-plugin-in_node_exporter_metrics.dir/ne_diskstats.c.o
+[ 71%] Building C object plugins/in_node_exporter_metrics/CMakeFiles/flb-plugin-in_node_exporter_metrics.dir/ne_filesystem.c.o
+[ 71%] Building C object plugins/in_node_exporter_metrics/CMakeFiles/flb-plugin-in_node_exporter_metrics.dir/ne_uname.c.o
+[ 71%] Building C object plugins/in_node_exporter_metrics/CMakeFiles/flb-plugin-in_node_exporter_metrics.dir/ne_stat.c.o
+[ 71%] Building C object plugins/in_node_exporter_metrics/CMakeFiles/flb-plugin-in_node_exporter_metrics.dir/ne_vmstat.c.o
+[ 71%] Building C object plugins/in_node_exporter_metrics/CMakeFiles/flb-plugin-in_node_exporter_metrics.dir/ne_netdev.c.o
+[ 71%] Building C object plugins/in_node_exporter_metrics/CMakeFiles/flb-plugin-in_node_exporter_metrics.dir/ne_time.c.o
+[ 71%] Building C object plugins/in_node_exporter_metrics/CMakeFiles/flb-plugin-in_node_exporter_metrics.dir/ne_loadavg.c.o
+[ 71%] Building C object plugins/in_node_exporter_metrics/CMakeFiles/flb-plugin-in_node_exporter_metrics.dir/ne_filefd.c.o
+[ 71%] Building C object plugins/in_node_exporter_metrics/CMakeFiles/flb-plugin-in_node_exporter_metrics.dir/ne_textfile.c.o
+[ 71%] Building C object plugins/in_node_exporter_metrics/CMakeFiles/flb-plugin-in_node_exporter_metrics.dir/ne_processes.c.o
+[ 71%] Building C object plugins/in_node_exporter_metrics/CMakeFiles/flb-plugin-in_node_exporter_metrics.dir/ne_nvme.c.o
+[ 72%] Building C object plugins/in_node_exporter_metrics/CMakeFiles/flb-plugin-in_node_exporter_metrics.dir/ne_utils.c.o
+[ 72%] Building C object plugins/in_node_exporter_metrics/CMakeFiles/flb-plugin-in_node_exporter_metrics.dir/ne_config.c.o
+[ 72%] Building C object plugins/in_node_exporter_metrics/CMakeFiles/flb-plugin-in_node_exporter_metrics.dir/ne_systemd.c.o
+[ 72%] Building C object plugins/in_node_exporter_metrics/CMakeFiles/flb-plugin-in_node_exporter_metrics.dir/ne_thermalzone.c.o
+[ 72%] Building C object plugins/in_node_exporter_metrics/CMakeFiles/flb-plugin-in_node_exporter_metrics.dir/ne.c.o
+[ 72%] Building C object plugins/in_node_exporter_metrics/CMakeFiles/flb-plugin-in_node_exporter_metrics.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 72%] Linking C static library ../../library/libflb-plugin-in_node_exporter_metrics.a
+[ 72%] Built target flb-plugin-in_node_exporter_metrics
+[ 72%] Building C object plugins/in_process_exporter_metrics/CMakeFiles/flb-plugin-in_process_exporter_metrics.dir/pe.c.o
+[ 72%] Building C object plugins/in_process_exporter_metrics/CMakeFiles/flb-plugin-in_process_exporter_metrics.dir/pe_config.c.o
+[ 72%] Building C object plugins/in_process_exporter_metrics/CMakeFiles/flb-plugin-in_process_exporter_metrics.dir/pe_process.c.o
+[ 72%] Building C object plugins/in_process_exporter_metrics/CMakeFiles/flb-plugin-in_process_exporter_metrics.dir/pe_utils.c.o
+[ 72%] Building C object plugins/in_process_exporter_metrics/CMakeFiles/flb-plugin-in_process_exporter_metrics.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 72%] Linking C static library ../../library/libflb-plugin-in_process_exporter_metrics.a
+[ 72%] Built target flb-plugin-in_process_exporter_metrics
+[ 72%] Building C object plugins/in_podman_metrics/CMakeFiles/flb-plugin-in_podman_metrics.dir/podman_metrics.c.o
+[ 72%] Building C object plugins/in_podman_metrics/CMakeFiles/flb-plugin-in_podman_metrics.dir/podman_metrics_data.c.o
+[ 72%] Building C object plugins/in_podman_metrics/CMakeFiles/flb-plugin-in_podman_metrics.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 72%] Linking C static library ../../library/libflb-plugin-in_podman_metrics.a
+[ 72%] Built target flb-plugin-in_podman_metrics
+[ 73%] Building C object plugins/in_docker_events/CMakeFiles/flb-plugin-in_docker_events.dir/docker_events.c.o
+[ 73%] Building C object plugins/in_docker_events/CMakeFiles/flb-plugin-in_docker_events.dir/docker_events_config.c.o
+[ 73%] Building C object plugins/in_docker_events/CMakeFiles/flb-plugin-in_docker_events.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 73%] Linking C static library ../../library/libflb-plugin-in_docker_events.a
+[ 73%] Built target flb-plugin-in_docker_events
+[ 73%] Building C object plugins/custom_calyptia/CMakeFiles/flb-plugin-custom_calyptia.dir/calyptia.c.o
+[ 73%] Building C object plugins/custom_calyptia/CMakeFiles/flb-plugin-custom_calyptia.dir/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 73%] Linking C static library ../../library/libflb-plugin-custom_calyptia.a
+[ 73%] Built target flb-plugin-custom_calyptia
+[ 73%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-aws_util_fuzzer.dir/aws_util_fuzzer.c.o
+[ 73%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-aws_util_fuzzer_OSSFUZZ.dir/aws_util_fuzzer.c.o
+[ 73%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-aws_util_fuzzer_OSSFUZZ.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 73%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-aws_util_fuzzer.dir/local_test.c.o
+[ 73%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-aws_credentials_fuzzer_OSSFUZZ.dir/aws_credentials_fuzzer.c.o
+[ 73%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-aws_util_fuzzer.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 73%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-base64_fuzzer.dir/base64_fuzzer.c.o
+[ 73%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-aws_credentials_fuzzer_OSSFUZZ.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 73%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-aws_credentials_fuzzer.dir/aws_credentials_fuzzer.c.o
+[ 74%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-aws_credentials_fuzzer.dir/local_test.c.o
+[ 74%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-base64_fuzzer.dir/local_test.c.o
+[ 74%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-base64_fuzzer_OSSFUZZ.dir/base64_fuzzer.c.o
+[ 74%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-aws_credentials_fuzzer.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 74%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-base64_fuzzer.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 74%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-base64_fuzzer_OSSFUZZ.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 74%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-engine_fuzzer.dir/local_test.c.o
+[ 74%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-engine_fuzzer.dir/engine_fuzzer.c.o
+[ 74%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-cmetrics_decode_fuzz.dir/cmetrics_decode_fuzz.c.o
+[ 74%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-engine_fuzzer_OSSFUZZ.dir/engine_fuzzer.c.o
+[ 74%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-config_fuzzer.dir/config_fuzzer.c.o
+[ 74%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-config_fuzzer_OSSFUZZ.dir/config_fuzzer.c.o
+[ 74%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-cmetrics_decode_fuzz_OSSFUZZ.dir/cmetrics_decode_fuzz.c.o
+[ 74%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-config_random_fuzzer.dir/config_random_fuzzer.c.o
+[ 74%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-ctrace_fuzzer.dir/ctrace_fuzzer.c.o
+[ 74%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-config_random_fuzzer_OSSFUZZ.dir/config_random_fuzzer.c.o
+[ 75%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-ctrace_fuzzer_OSSFUZZ.dir/ctrace_fuzzer.c.o
+[ 75%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_mp.c.o
+[ 75%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-input_fuzzer.dir/input_fuzzer.c.o
+[ 75%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-signv4_fuzzer.dir/signv4_fuzzer.c.o
+[ 75%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-input_fuzzer_OSSFUZZ.dir/input_fuzzer.c.o
+[ 75%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-signv4_fuzzer_OSSFUZZ.dir/signv4_fuzzer.c.o
+[ 75%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-flb_json_fuzzer.dir/flb_json_fuzzer.c.o
+[ 75%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-input_fuzzer.dir/local_test.c.o
+[ 75%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-config_random_fuzzer_OSSFUZZ.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 76%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-input_fuzzer.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 76%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-flb_json_fuzzer.dir/local_test.c.o
+[ 76%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-flb_json_fuzzer_OSSFUZZ.dir/flb_json_fuzzer.c.o
+[ 76%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-cmetrics_decode_fuzz.dir/local_test.c.o
+[ 76%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-cmetrics_decode_fuzz_OSSFUZZ.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 76%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_kv.c.o
+[ 76%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-ctrace_fuzzer.dir/local_test.c.o
+[ 76%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-ctrace_fuzzer_OSSFUZZ.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 76%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-engine_fuzzer_OSSFUZZ.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 76%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-config_random_fuzzer.dir/local_test.c.o
+[ 76%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-signv4_fuzzer_OSSFUZZ.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 76%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-engine_fuzzer.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 76%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-config_fuzzer_OSSFUZZ.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 76%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-flb_json_fuzzer.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 76%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-cmetrics_decode_fuzz.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 76%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-config_random_fuzzer.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 76%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-ctrace_fuzzer.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 76%] Linking C executable ../../../bin/flb-it-fuzz-base64_fuzzer_OSSFUZZ
+[ 77%] Linking C executable ../../../bin/flb-it-fuzz-aws_util_fuzzer_OSSFUZZ
+[ 77%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_api.c.o
+[ 77%] Linking C executable ../../../bin/flb-it-fuzz-aws_util_fuzzer
+[ 77%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-signv4_fuzzer.dir/local_test.c.o
+[ 77%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-signv4_fuzzer.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 77%] Linking C executable ../../../bin/flb-it-fuzz-base64_fuzzer
+[ 77%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-flb_json_fuzzer_OSSFUZZ.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 77%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-input_fuzzer_OSSFUZZ.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 77%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_lib.c.o
+[ 77%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-config_fuzzer.dir/local_test.c.o
+[ 77%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_csv.c.o
+[ 78%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-flb_mp_fuzzer.dir/flb_mp_fuzzer.c.o
+[ 78%] Linking C executable ../../../bin/flb-it-fuzz-aws_credentials_fuzzer_OSSFUZZ
+[ 78%] Linking C executable ../../../bin/flb-it-fuzz-aws_credentials_fuzzer
+[ 78%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-flb_mp_fuzzer.dir/local_test.c.o
+[ 78%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-flb_mp_fuzzer.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 79%] Linking C executable ../../../bin/flb-it-fuzz-config_random_fuzzer_OSSFUZZ
+[ 79%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-flb_mp_fuzzer_OSSFUZZ.dir/flb_mp_fuzzer.c.o
+[ 79%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-filter_stdout_fuzzer.dir/filter_stdout_fuzzer.c.o
+[ 79%] Linking C executable ../../../bin/flb-it-fuzz-input_fuzzer
+[ 79%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_log.c.o
+[ 79%] Linking C executable ../../../bin/flb-it-fuzz-cmetrics_decode_fuzz_OSSFUZZ
+[ 79%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_env.c.o
+[ 79%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-config_fuzzer.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 80%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_file.c.o
+[ 80%] Linking C executable ../../../bin/flb-it-fuzz-ctrace_fuzzer_OSSFUZZ
+[ 80%] Linking C executable ../../../bin/flb-it-fuzz-engine_fuzzer_OSSFUZZ
+[ 80%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-flb_mp_fuzzer_OSSFUZZ.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 80%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_uri.c.o
+[ 80%] Linking C executable ../../../bin/flb-it-fuzz-signv4_fuzzer_OSSFUZZ
+[ 80%] Linking C executable ../../../bin/flb-it-fuzz-config_fuzzer_OSSFUZZ
+[ 80%] Linking C executable ../../../bin/flb-it-fuzz-flb_json_fuzzer
+[ 81%] Linking C executable ../../../bin/flb-it-fuzz-cmetrics_decode_fuzz
+[ 81%] Linking C executable ../../../bin/flb-it-fuzz-engine_fuzzer
+[ 81%] Linking C executable ../../../bin/flb-it-fuzz-config_random_fuzzer
+[ 81%] Linking C executable ../../../bin/flb-it-fuzz-ctrace_fuzzer
+[ 82%] Linking C executable ../../../bin/flb-it-fuzz-signv4_fuzzer
+[ 82%] Linking C executable ../../../bin/flb-it-fuzz-flb_json_fuzzer_OSSFUZZ
+[ 82%] Linking C executable ../../../bin/flb-it-fuzz-input_fuzzer_OSSFUZZ
+[ 82%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_hash_table.c.o
+[ 82%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_help.c.o
+[ 82%] Linking C executable ../../../bin/flb-it-fuzz-flb_mp_fuzzer
+[ 82%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-filter_stdout_fuzzer.dir/local_test.c.o
+[ 82%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_pack.c.o
+[ 82%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_pack_gelf.c.o
+[ 82%] Linking C executable ../../../bin/flb-it-fuzz-config_fuzzer
+[ 83%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-filter_stdout_fuzzer.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 83%] Built target flb-it-fuzz-base64_fuzzer
+[ 83%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-filter_stdout_fuzzer_OSSFUZZ.dir/filter_stdout_fuzzer.c.o
+[ 83%] Linking C executable ../../../bin/flb-it-fuzz-flb_mp_fuzzer_OSSFUZZ
+[ 83%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-filter_stdout_fuzzer_OSSFUZZ.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 83%] Built target flb-it-fuzz-base64_fuzzer_OSSFUZZ
+[ 83%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-fstore_fuzzer.dir/fstore_fuzzer.c.o
+[ 83%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_sds.c.o
+[ 83%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_sds_list.c.o
+[ 83%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-fstore_fuzzer.dir/local_test.c.o
+[ 83%] Built target flb-it-fuzz-cmetrics_decode_fuzz_OSSFUZZ
+[ 84%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-fstore_fuzzer_OSSFUZZ.dir/fstore_fuzzer.c.o
+[ 84%] Linking C executable ../../../bin/flb-it-fuzz-filter_stdout_fuzzer
+[ 84%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_pipe.c.o
+[ 84%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-fstore_fuzzer_OSSFUZZ.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 84%] Linking C executable ../../../bin/flb-it-fuzz-filter_stdout_fuzzer_OSSFUZZ
+[ 84%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-fstore_fuzzer.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 84%] Built target flb-it-fuzz-cmetrics_decode_fuzz
+[ 84%] Built target flb-it-fuzz-ctrace_fuzzer_OSSFUZZ
+[ 84%] Built target flb-it-fuzz-ctrace_fuzzer
+[ 84%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-parser_fuzzer.dir/parser_fuzzer.c.o
+[ 84%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-parse_json_fuzzer.dir/parse_json_fuzzer.c.o
+[ 84%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-parser_fuzzer_OSSFUZZ.dir/parser_fuzzer.c.o
+[ 84%] Built target flb-it-fuzz-flb_json_fuzzer
+[ 84%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-parser_fuzzer.dir/local_test.c.o
+[ 84%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-parse_json_fuzzer.dir/local_test.c.o
+[ 84%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-parse_json_fuzzer.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 84%] Built target flb-it-fuzz-flb_mp_fuzzer
+[ 84%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-parse_json_fuzzer_OSSFUZZ.dir/parse_json_fuzzer.c.o
+[ 84%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-parser_fuzzer_OSSFUZZ.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 84%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-parse_json_fuzzer_OSSFUZZ.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 84%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_meta.c.o
+[ 84%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_kernel.c.o
+[ 84%] Built target flb-it-fuzz-flb_json_fuzzer_OSSFUZZ
+[ 84%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_custom.c.o
+[ 84%] Linking C executable ../../../bin/flb-it-fuzz-fstore_fuzzer_OSSFUZZ
+[ 84%] Linking C executable ../../../bin/flb-it-fuzz-fstore_fuzzer
+[ 85%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_input.c.o
+[ 85%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-parse_logfmt_fuzzer.dir/parse_logfmt_fuzzer.c.o
+[ 85%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-parse_logfmt_fuzzer_OSSFUZZ.dir/parse_logfmt_fuzzer.c.o
+[ 85%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-parse_logfmt_fuzzer.dir/local_test.c.o
+[ 85%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-parse_logfmt_fuzzer.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 85%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-parser_fuzzer.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 85%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_input_chunk.c.o
+[ 86%] Linking C executable ../../../bin/flb-it-fuzz-parse_json_fuzzer
+[ 86%] Built target flb-it-fuzz-flb_mp_fuzzer_OSSFUZZ
+[ 86%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-parse_logfmt_fuzzer_OSSFUZZ.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 87%] Linking C executable ../../../bin/flb-it-fuzz-parser_fuzzer_OSSFUZZ
+[ 87%] Linking C executable ../../../bin/flb-it-fuzz-parse_json_fuzzer_OSSFUZZ
+[ 87%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-parse_ltsv_fuzzer.dir/parse_ltsv_fuzzer.c.o
+[ 87%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-parse_ltsv_fuzzer_OSSFUZZ.dir/parse_ltsv_fuzzer.c.o
+[ 87%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-msgpack_parse_fuzzer.dir/msgpack_parse_fuzzer.c.o
+[ 88%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-parse_ltsv_fuzzer.dir/local_test.c.o
+[ 88%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-msgpack_parse_fuzzer.dir/local_test.c.o
+[ 88%] Linking C executable ../../../bin/flb-it-fuzz-parse_logfmt_fuzzer
+[ 88%] Linking C executable ../../../bin/flb-it-fuzz-parser_fuzzer
+[ 88%] Linking C executable ../../../bin/flb-it-fuzz-parse_logfmt_fuzzer_OSSFUZZ
+[ 88%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-parse_ltsv_fuzzer.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 88%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-msgpack_parse_fuzzer.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 88%] Built target flb-it-fuzz-fstore_fuzzer
+[ 88%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-parse_ltsv_fuzzer_OSSFUZZ.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 88%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-msgpack_parse_fuzzer_OSSFUZZ.dir/msgpack_parse_fuzzer.c.o
+[ 89%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-msgpack_to_gelf_fuzzer.dir/msgpack_to_gelf_fuzzer.c.o
+[ 89%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-msgpack_to_gelf_fuzzer.dir/local_test.c.o
+[ 89%] Built target flb-it-fuzz-fstore_fuzzer_OSSFUZZ
+[ 89%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-msgpack_to_gelf_fuzzer_OSSFUZZ.dir/msgpack_to_gelf_fuzzer.c.o
+[ 89%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-msgpack_to_gelf_fuzzer.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 89%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_input_log.c.o
+[ 89%] Linking C executable ../../../bin/flb-it-fuzz-parse_ltsv_fuzzer
+[ 89%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-msgpack_parse_fuzzer_OSSFUZZ.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 89%] Linking C executable ../../../bin/flb-it-fuzz-msgpack_parse_fuzzer
+[ 89%] Linking C executable ../../../bin/flb-it-fuzz-parse_ltsv_fuzzer_OSSFUZZ
+[ 89%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_input_metric.c.o
+[ 89%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_input_trace.c.o
+[ 89%] Linking C executable ../../../bin/flb-it-fuzz-msgpack_parse_fuzzer_OSSFUZZ
+[ 89%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_input_thread.c.o
+[ 89%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_filter.c.o
+[ 89%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_output.c.o
+[ 89%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-multiline_fuzzer.dir/multiline_fuzzer.c.o
+[ 89%] Built target flb-it-fuzz-msgpack_parse_fuzzer
+[ 89%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-multiline_fuzzer_OSSFUZZ.dir/multiline_fuzzer.c.o
+[ 89%] Built target flb-it-fuzz-aws_util_fuzzer
+[ 89%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-pack_json_state_fuzzer.dir/pack_json_state_fuzzer.c.o
+[ 89%] Built target flb-it-fuzz-aws_credentials_fuzzer
+[ 89%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-pack_json_state_fuzzer_OSSFUZZ.dir/pack_json_state_fuzzer.c.o
+In file included from /src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.c:3:
+In file included from /src/fluent-bit/include/fluent-bit/flb_parser.h:27:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time.h:24:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time_utils.h:24:
+In file included from /src/fluent-bit/include/fluent-bit/flb_coro.h:35:
+/src/fluent-bit/include/fluent-bit/flb_mem.h:67:7: error: static declaration of 'flb_malloc' follows non-static declaration
+void *flb_malloc(const size_t size) {
+      ^
+/src/fluent-bit/tests/internal/fuzzers/flb_fuzz_header.h:30:15: note: previous implicit declaration is here
+  char *tmp = flb_malloc(size+1);
+              ^
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.c:373:40: error: conflicting types for 'pthread_getspecific'
+    extern struct flb_libco_in_params *pthread_getspecific(pthread_key_t key);
+                                       ^
+/usr/include/pthread.h:1131:14: note: previous declaration is here
+extern void *pthread_getspecific (pthread_key_t __key) __THROW;
+             ^
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.c:374:40: error: conflicting types for 'flb_calloc'
+    extern struct flb_libco_in_params *flb_calloc(size_t nmemb, size_t size);
+                                       ^
+/src/fluent-bit/include/fluent-bit/flb_mem.h:84:7: note: previous definition is here
+void *flb_calloc(size_t n, const size_t size) {
+      ^
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.c:375:36: error: conflicting types for 'flb_event_chunk_create'
+    extern struct flb_event_chunk *flb_event_chunk_create(int type, void *records, char *tag, int tag_len, void *p_buf, size_t p_size);
+                                   ^
+/src/fluent-bit/include/fluent-bit/flb_event.h:50:25: note: previous declaration is here
+struct flb_event_chunk *flb_event_chunk_create(int type,
+                        ^
+4 errors generated.
+
+Fix failure
+In file included from /src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:1:
+/src/fluent-bit/tests/internal/fuzzers/flb_fuzz_header.h:30:15: error: use of undeclared identifier 'flb_malloc'
+  char *tmp = flb_malloc(size+1);
+              ^
+/src/fluent-bit/tests/internal/fuzzers/flb_fuzz_header.h:32:11: error: use of undeclared identifier 'malloc'
+    tmp = malloc(size+1);
+          ^
+In file included from /src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:3:
+In file included from /src/fluent-bit/include/fluent-bit/flb_parser.h:27:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time.h:24:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time_utils.h:25:
+In file included from /src/fluent-bit/include/fluent-bit/flb_scheduler.h:25:
+In file included from /src/fluent-bit/include/fluent-bit/flb_task.h:25:
+/src/fluent-bit/include/fluent-bit/flb_input.h:479:14: error: assigning to 'struct flb_libco_in_params *' from incompatible type 'void *'
+    params = pthread_getspecific(libco_in_param_key);
+             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fluent-bit/include/fluent-bit/flb_input.h:481:18: error: assigning to 'struct flb_libco_in_params *' from incompatible type 'void *'
+        params = flb_calloc(1, sizeof(struct flb_libco_in_params));
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fluent-bit/include/fluent-bit/flb_input.h:503:14: error: assigning to 'struct flb_libco_in_params *' from incompatible type 'void *'
+    params = pthread_getspecific(libco_in_param_key);
+             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fluent-bit/include/fluent-bit/flb_input.h:505:18: error: assigning to 'struct flb_libco_in_params *' from incompatible type 'void *'
+        params = flb_calloc(1, sizeof(struct flb_libco_in_params));
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:3:
+In file included from /src/fluent-bit/include/fluent-bit/flb_parser.h:27:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time.h:24:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time_utils.h:25:
+In file included from /src/fluent-bit/include/fluent-bit/flb_scheduler.h:26:
+/src/fluent-bit/include/fluent-bit/flb_output.h:682:19: error: no matching function for call to 'flb_event_chunk_create'
+            tmp = flb_event_chunk_create(evc->type, records, evc->tag, flb_sds_len(evc->tag), p_buf, p_size);
+                  ^~~~~~~~~~~~~~~~~~~~~~
+/src/fluent-bit/include/fluent-bit/flb_event.h:50:25: note: candidate function not viable: cannot convert argument of incomplete type 'void *' to 'char *' for 5th argument
+struct flb_event_chunk *flb_event_chunk_create(int type,
+                        ^
+In file included from /src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:3:
+In file included from /src/fluent-bit/include/fluent-bit/flb_parser.h:27:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time.h:24:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time_utils.h:25:
+In file included from /src/fluent-bit/include/fluent-bit/flb_scheduler.h:26:
+/src/fluent-bit/include/fluent-bit/flb_output.h:739:29: error: assigning to 'char *' from incompatible type 'void *'
+                            flb_realloc(p_buf, p_size + serialized_context_size);
+                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fluent-bit/include/fluent-bit/flb_output.h:772:48: error: no matching function for call to 'flb_event_chunk_create'
+            out_flush->processed_event_chunk = flb_event_chunk_create(
+                                               ^~~~~~~~~~~~~~~~~~~~~~
+/src/fluent-bit/include/fluent-bit/flb_event.h:50:25: note: candidate function not viable: cannot convert argument of incomplete type 'void *' to 'char *' for 5th argument
+struct flb_event_chunk *flb_event_chunk_create(int type,
+                        ^
+In file included from /src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:3:
+In file included from /src/fluent-bit/include/fluent-bit/flb_parser.h:27:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time.h:24:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time_utils.h:25:
+In file included from /src/fluent-bit/include/fluent-bit/flb_scheduler.h:26:
+/src/fluent-bit/include/fluent-bit/flb_output.h:836:29: error: assigning to 'char *' from incompatible type 'void *'
+                            flb_realloc(p_buf, p_size + serialized_context_size);
+                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fluent-bit/include/fluent-bit/flb_output.h:869:48: error: no matching function for call to 'flb_event_chunk_create'
+            out_flush->processed_event_chunk = flb_event_chunk_create(
+                                               ^~~~~~~~~~~~~~~~~~~~~~
+/src/fluent-bit/include/fluent-bit/flb_event.h:50:25: note: candidate function not viable: cannot convert argument of incomplete type 'void *' to 'char *' for 5th argument
+struct flb_event_chunk *flb_event_chunk_create(int type,
+                        ^
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:373:40: error: functions that differ only in their return type cannot be overloaded
+    extern struct flb_libco_in_params *pthread_getspecific(pthread_key_t key);
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+/usr/include/pthread.h:1131:14: note: previous declaration is here
+extern void *pthread_getspecific (pthread_key_t __key) __THROW;
+       ~~~~~~^
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:374:40: error: functions that differ only in their return type cannot be overloaded
+    extern struct flb_libco_in_params *flb_calloc(size_t nmemb, size_t size);
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+/src/fluent-bit/include/fluent-bit/flb_mem.h:84:7: note: previous definition is here
+void *flb_calloc(size_t n, const size_t size) {
+~~~~~~^
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:383:5: error: use of undeclared identifier 'flb_kv_init'; did you mean 'cfl_kv_init'?
+    flb_kv_init(&prop);
+    ^~~~~~~~~~~
+    cfl_kv_init
+/src/fluent-bit/lib/cfl/include/cfl/cfl_kv.h:33:6: note: 'cfl_kv_init' declared here
+void cfl_kv_init(struct cfl_list *list);
+     ^
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:383:17: error: cannot initialize a parameter of type 'struct cfl_list *' with an rvalue of type 'struct mk_list *'
+    flb_kv_init(&prop);
+                ^~~~~
+/src/fluent-bit/lib/cfl/include/cfl/cfl_kv.h:33:35: note: passing argument to parameter 'list' here
+void cfl_kv_init(struct cfl_list *list);
+                                  ^
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:384:5: error: use of undeclared identifier 'flb_kv_item_create'; did you mean 'cfl_kv_item_create'?
+    flb_kv_item_create(&prop, key_1, val_1);
+    ^~~~~~~~~~~~~~~~~~
+    cfl_kv_item_create
+/src/fluent-bit/lib/cfl/include/cfl/cfl_kv.h:37:16: note: 'cfl_kv_item_create' declared here
+struct cfl_kv *cfl_kv_item_create(struct cfl_list *list,
+               ^
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:384:24: error: cannot initialize a parameter of type 'struct cfl_list *' with an rvalue of type 'struct mk_list *'
+    flb_kv_item_create(&prop, key_1, val_1);
+                       ^~~~~
+/src/fluent-bit/lib/cfl/include/cfl/cfl_kv.h:37:52: note: passing argument to parameter 'list' here
+struct cfl_kv *cfl_kv_item_create(struct cfl_list *list,
+                                                   ^
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:411:5: error: use of undeclared identifier 'flb_kv_release'; did you mean 'cfl_kv_release'?
+    flb_kv_release(&prop);
+    ^~~~~~~~~~~~~~
+    cfl_kv_release
+/src/fluent-bit/lib/cfl/include/cfl/cfl_kv.h:40:6: note: 'cfl_kv_release' declared here
+void cfl_kv_release(struct cfl_list *list);
+     ^
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:411:20: error: cannot initialize a parameter of type 'struct cfl_list *' with an rvalue of type 'struct mk_list *'
+    flb_kv_release(&prop);
+                   ^~~~~
+/src/fluent-bit/lib/cfl/include/cfl/cfl_kv.h:40:38: note: passing argument to parameter 'list' here
+void cfl_kv_release(struct cfl_list *list);
+                                     ^
+19 errors generated.
+make[2]: *** [tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-msgpack_to_gelf_fuzzer.dir/build.make:76: tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-msgpack_to_gelf_fuzzer.dir/msgpack_to_gelf_fuzzer.c.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:7949: tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-msgpack_to_gelf_fuzzer.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
+[ 89%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-pack_json_state_fuzzer_OSSFUZZ.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 89%] Built target flb-it-fuzz-input_fuzzer
+[ 89%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-pack_json_state_fuzzer.dir/local_test.c.o
+[ 89%] Built target flb-it-fuzz-aws_util_fuzzer_OSSFUZZ
+[ 90%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-multiline_fuzzer_OSSFUZZ.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 90%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-multiline_fuzzer.dir/local_test.c.o
+In file included from /src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.c:3:
+In file included from /src/fluent-bit/include/fluent-bit/flb_parser.h:27:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time.h:24:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time_utils.h:24:
+In file included from /src/fluent-bit/include/fluent-bit/flb_coro.h:35:
+/src/fluent-bit/include/fluent-bit/flb_mem.h:67:7: error: static declaration of 'flb_malloc' follows non-static declaration
+void *flb_malloc(const size_t size) {
+      ^
+/src/fluent-bit/tests/internal/fuzzers/flb_fuzz_header.h:30:15: note: previous implicit declaration is here
+  char *tmp = flb_malloc(size+1);
+              ^
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.c:373:40: error: conflicting types for 'pthread_getspecific'
+    extern struct flb_libco_in_params *pthread_getspecific(pthread_key_t key);
+                                       ^
+/usr/include/pthread.h:1131:14: note: previous declaration is here
+extern void *pthread_getspecific (pthread_key_t __key) __THROW;
+             ^
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.c:374:40: error: conflicting types for 'flb_calloc'
+    extern struct flb_libco_in_params *flb_calloc(size_t nmemb, size_t size);
+                                       ^
+/src/fluent-bit/include/fluent-bit/flb_mem.h:84:7: note: previous definition is here
+void *flb_calloc(size_t n, const size_t size) {
+      ^
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.c:375:36: error: conflicting types for 'flb_event_chunk_create'
+    extern struct flb_event_chunk *flb_event_chunk_create(int type, void *records, char *tag, int tag_len, void *p_buf, size_t p_size);
+                                   ^
+/src/fluent-bit/include/fluent-bit/flb_event.h:50:25: note: previous declaration is here
+struct flb_event_chunk *flb_event_chunk_create(int type,
+                        ^
+4 errors generated.
+
+Fix failure
+In file included from /src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:1:
+/src/fluent-bit/tests/internal/fuzzers/flb_fuzz_header.h:30:15: error: use of undeclared identifier 'flb_malloc'
+  char *tmp = flb_malloc(size+1);
+              ^
+/src/fluent-bit/tests/internal/fuzzers/flb_fuzz_header.h:32:11: error: use of undeclared identifier 'malloc'
+    tmp = malloc(size+1);
+          ^
+In file included from /src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:3:
+In file included from /src/fluent-bit/include/fluent-bit/flb_parser.h:27:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time.h:24:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time_utils.h:25:
+In file included from /src/fluent-bit/include/fluent-bit/flb_scheduler.h:25:
+In file included from /src/fluent-bit/include/fluent-bit/flb_task.h:25:
+/src/fluent-bit/include/fluent-bit/flb_input.h:479:14: error: assigning to 'struct flb_libco_in_params *' from incompatible type 'void *'
+    params = pthread_getspecific(libco_in_param_key);
+             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fluent-bit/include/fluent-bit/flb_input.h:481:18: error: assigning to 'struct flb_libco_in_params *' from incompatible type 'void *'
+        params = flb_calloc(1, sizeof(struct flb_libco_in_params));
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fluent-bit/include/fluent-bit/flb_input.h:503:14: error: assigning to 'struct flb_libco_in_params *' from incompatible type 'void *'
+    params = pthread_getspecific(libco_in_param_key);
+             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fluent-bit/include/fluent-bit/flb_input.h:505:18: error: assigning to 'struct flb_libco_in_params *' from incompatible type 'void *'
+        params = flb_calloc(1, sizeof(struct flb_libco_in_params));
+                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:3:
+In file included from /src/fluent-bit/include/fluent-bit/flb_parser.h:27:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time.h:24:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time_utils.h:25:
+In file included from /src/fluent-bit/include/fluent-bit/flb_scheduler.h:26:
+/src/fluent-bit/include/fluent-bit/flb_output.h:682:19: error: no matching function for call to 'flb_event_chunk_create'
+            tmp = flb_event_chunk_create(evc->type, records, evc->tag, flb_sds_len(evc->tag), p_buf, p_size);
+                  ^~~~~~~~~~~~~~~~~~~~~~
+/src/fluent-bit/include/fluent-bit/flb_event.h:50:25: note: candidate function not viable: cannot convert argument of incomplete type 'void *' to 'char *' for 5th argument
+struct flb_event_chunk *flb_event_chunk_create(int type,
+                        ^
+In file included from /src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:3:
+In file included from /src/fluent-bit/include/fluent-bit/flb_parser.h:27:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time.h:24:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time_utils.h:25:
+In file included from /src/fluent-bit/include/fluent-bit/flb_scheduler.h:26:
+/src/fluent-bit/include/fluent-bit/flb_output.h:739:29: error: assigning to 'char *' from incompatible type 'void *'
+                            flb_realloc(p_buf, p_size + serialized_context_size);
+                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fluent-bit/include/fluent-bit/flb_output.h:772:48: error: no matching function for call to 'flb_event_chunk_create'
+            out_flush->processed_event_chunk = flb_event_chunk_create(
+                                               ^~~~~~~~~~~~~~~~~~~~~~
+/src/fluent-bit/include/fluent-bit/flb_event.h:50:25: note: candidate function not viable: cannot convert argument of incomplete type 'void *' to 'char *' for 5th argument
+struct flb_event_chunk *flb_event_chunk_create(int type,
+                        ^
+In file included from /src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:3:
+In file included from /src/fluent-bit/include/fluent-bit/flb_parser.h:27:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time.h:24:
+In file included from /src/fluent-bit/include/fluent-bit/flb_time_utils.h:25:
+In file included from /src/fluent-bit/include/fluent-bit/flb_scheduler.h:26:
+/src/fluent-bit/include/fluent-bit/flb_output.h:836:29: error: assigning to 'char *' from incompatible type 'void *'
+                            flb_realloc(p_buf, p_size + serialized_context_size);
+                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/fluent-bit/include/fluent-bit/flb_output.h:869:48: error: no matching function for call to 'flb_event_chunk_create'
+            out_flush->processed_event_chunk = flb_event_chunk_create(
+                                               ^~~~~~~~~~~~~~~~~~~~~~
+/src/fluent-bit/include/fluent-bit/flb_event.h:50:25: note: candidate function not viable: cannot convert argument of incomplete type 'void *' to 'char *' for 5th argument
+struct flb_event_chunk *flb_event_chunk_create(int type,
+                        ^
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:373:40: error: functions that differ only in their return type cannot be overloaded
+    extern struct flb_libco_in_params *pthread_getspecific(pthread_key_t key);
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+/usr/include/pthread.h:1131:14: note: previous declaration is here
+extern void *pthread_getspecific (pthread_key_t __key) __THROW;
+       ~~~~~~^
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:374:40: error: functions that differ only in their return type cannot be overloaded
+    extern struct flb_libco_in_params *flb_calloc(size_t nmemb, size_t size);
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+/src/fluent-bit/include/fluent-bit/flb_mem.h:84:7: note: previous definition is here
+void *flb_calloc(size_t n, const size_t size) {
+~~~~~~^
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:383:5: error: use of undeclared identifier 'flb_kv_init'; did you mean 'cfl_kv_init'?
+    flb_kv_init(&prop);
+    ^~~~~~~~~~~
+    cfl_kv_init
+/src/fluent-bit/lib/cfl/include/cfl/cfl_kv.h:33:6: note: 'cfl_kv_init' declared here
+void cfl_kv_init(struct cfl_list *list);
+     ^
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:383:17: error: cannot initialize a parameter of type 'struct cfl_list *' with an rvalue of type 'struct mk_list *'
+    flb_kv_init(&prop);
+                ^~~~~
+/src/fluent-bit/lib/cfl/include/cfl/cfl_kv.h:33:35: note: passing argument to parameter 'list' here
+void cfl_kv_init(struct cfl_list *list);
+                                  ^
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:384:5: error: use of undeclared identifier 'flb_kv_item_create'; did you mean 'cfl_kv_item_create'?
+    flb_kv_item_create(&prop, key_1, val_1);
+    ^~~~~~~~~~~~~~~~~~
+    cfl_kv_item_create
+/src/fluent-bit/lib/cfl/include/cfl/cfl_kv.h:37:16: note: 'cfl_kv_item_create' declared here
+struct cfl_kv *cfl_kv_item_create(struct cfl_list *list,
+               ^
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:384:24: error: cannot initialize a parameter of type 'struct cfl_list *' with an rvalue of type 'struct mk_list *'
+    flb_kv_item_create(&prop, key_1, val_1);
+                       ^~~~~
+/src/fluent-bit/lib/cfl/include/cfl/cfl_kv.h:37:52: note: passing argument to parameter 'list' here
+struct cfl_kv *cfl_kv_item_create(struct cfl_list *list,
+                                                   ^
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:411:5: error: use of undeclared identifier 'flb_kv_release'; did you mean 'cfl_kv_release'?
+    flb_kv_release(&prop);
+    ^~~~~~~~~~~~~~
+    cfl_kv_release
+/src/fluent-bit/lib/cfl/include/cfl/cfl_kv.h:40:6: note: 'cfl_kv_release' declared here
+void cfl_kv_release(struct cfl_list *list);
+     ^
+/src/fluent-bit/tests/internal/fuzzers/msgpack_to_gelf_fuzzer.cpp:411:20: error: cannot initialize a parameter of type 'struct cfl_list *' with an rvalue of type 'struct mk_list *'
+    flb_kv_release(&prop);
+                   ^~~~~
+/src/fluent-bit/lib/cfl/include/cfl/cfl_kv.h:40:38: note: passing argument to parameter 'list' here
+void cfl_kv_release(struct cfl_list *list);
+                                     ^
+19 errors generated.
+make[2]: *** [tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-msgpack_to_gelf_fuzzer_OSSFUZZ.dir/build.make:76: tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-msgpack_to_gelf_fuzzer_OSSFUZZ.dir/msgpack_to_gelf_fuzzer.c.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:8004: tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-msgpack_to_gelf_fuzzer_OSSFUZZ.dir/all] Error 2
+[ 90%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-multiline_fuzzer.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 90%] Built target flb-it-fuzz-config_random_fuzzer_OSSFUZZ
+[ 90%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_output_thread.c.o
+[ 90%] Built target flb-it-fuzz-aws_credentials_fuzzer_OSSFUZZ
+[ 90%] Building C object tests/internal/fuzzers/CMakeFiles/flb-it-fuzz-pack_json_state_fuzzer.dir/__/__/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 90%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_config.c.o
+[ 90%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_config_map.c.o
+[ 90%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_socket.c.o
+[ 91%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_network.c.o
+[ 91%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_utils.c.o
+[ 91%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_slist.c.o
+[ 91%] Built target flb-it-fuzz-msgpack_parse_fuzzer_OSSFUZZ
+[ 91%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_engine.c.o
+[ 91%] Built target flb-it-fuzz-signv4_fuzzer
+[ 91%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_engine_dispatch.c.o
+[ 91%] Built target flb-it-fuzz-config_random_fuzzer
+[ 91%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_task.c.o
+[ 91%] Built target flb-it-fuzz-engine_fuzzer
+[ 91%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_unescape.c.o
+[ 91%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_scheduler.c.o
+[ 91%] Linking C executable ../../../bin/flb-it-fuzz-pack_json_state_fuzzer_OSSFUZZ
+[ 91%] Built target flb-it-fuzz-engine_fuzzer_OSSFUZZ
+[ 91%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_io.c.o
+[ 91%] Linking C executable ../../../bin/flb-it-fuzz-multiline_fuzzer_OSSFUZZ
+[ 91%] Linking C executable ../../../bin/flb-it-fuzz-pack_json_state_fuzzer
+[ 91%] Built target flb-it-fuzz-config_fuzzer
+[ 91%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_storage.c.o
+[ 91%] Linking C executable ../../../bin/flb-it-fuzz-multiline_fuzzer
+[ 91%] Built target flb-it-fuzz-signv4_fuzzer_OSSFUZZ
+[ 91%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_connection.c.o
+[ 91%] Built target flb-it-fuzz-input_fuzzer_OSSFUZZ
+[ 91%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_downstream.c.o
+[ 91%] Built target flb-it-fuzz-config_fuzzer_OSSFUZZ
+[ 92%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_upstream.c.o
+[ 92%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_upstream_ha.c.o
+[ 92%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_upstream_node.c.o
+[ 92%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_router.c.o
+[ 92%] Built target flb-it-fuzz-filter_stdout_fuzzer
+[ 92%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_worker.c.o
+[ 92%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_coro.c.o
+[ 92%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_time.c.o
+[ 92%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_sosreport.c.o
+[ 92%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_hmac.c.o
+[ 92%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_hash.c.o
+[ 92%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_crypto.c.o
+[ 93%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_random.c.o
+[ 93%] Built target flb-it-fuzz-filter_stdout_fuzzer_OSSFUZZ
+[ 93%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_plugin.c.o
+[ 93%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_gzip.c.o
+[ 93%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_snappy.c.o
+[ 93%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_compression.c.o
+[ 93%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_http_client.c.o
+[ 93%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_callback.c.o
+[ 93%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_strptime.c.o
+[ 93%] Built target flb-it-fuzz-pack_json_state_fuzzer
+[ 93%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_fstore.c.o
+[ 93%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_thread_pool.c.o
+[ 93%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_routes_mask.c.o
+[ 93%] Built target flb-it-fuzz-pack_json_state_fuzzer_OSSFUZZ
+[ 93%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_typecast.c.o
+[ 94%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_event.c.o
+[ 94%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_base64.c.o
+[ 94%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_ring_buffer.c.o
+[ 94%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_log_event_decoder.c.o
+[ 94%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_log_event_encoder.c.o
+[ 94%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_log_event_encoder_primitives.c.o
+[ 94%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_log_event_encoder_dynamic_field.c.o
+[ 94%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_processor.c.o
+[ 94%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_reload.c.o
+[ 94%] Built target flb-it-fuzz-parse_json_fuzzer
+[ 94%] Building C object src/CMakeFiles/fluent-bit-shared.dir/config_format/flb_config_format.c.o
+[ 94%] Building C object src/CMakeFiles/fluent-bit-shared.dir/config_format/flb_cf_fluentbit.c.o
+[ 94%] Building C object src/CMakeFiles/fluent-bit-shared.dir/config_format/flb_cf_yaml.c.o
+[ 95%] Building C object src/CMakeFiles/fluent-bit-shared.dir/multiline/flb_ml_parser_cri.c.o
+[ 95%] Building C object src/CMakeFiles/fluent-bit-shared.dir/multiline/flb_ml_parser_docker.c.o
+[ 95%] Building C object src/CMakeFiles/fluent-bit-shared.dir/multiline/flb_ml_parser_python.c.o
+[ 95%] Building C object src/CMakeFiles/fluent-bit-shared.dir/multiline/flb_ml_parser_java.c.o
+[ 95%] Building C object src/CMakeFiles/fluent-bit-shared.dir/multiline/flb_ml_parser_go.c.o
+[ 95%] Built target flb-it-fuzz-parser_fuzzer_OSSFUZZ
+[ 95%] Building C object src/CMakeFiles/fluent-bit-shared.dir/multiline/flb_ml_parser_ruby.c.o
+[ 95%] Building C object src/CMakeFiles/fluent-bit-shared.dir/multiline/flb_ml_stream.c.o
+[ 95%] Building C object src/CMakeFiles/fluent-bit-shared.dir/multiline/flb_ml_parser.c.o
+[ 95%] Building C object src/CMakeFiles/fluent-bit-shared.dir/multiline/flb_ml_group.c.o
+[ 95%] Built target flb-it-fuzz-parse_json_fuzzer_OSSFUZZ
+[ 95%] Building C object src/CMakeFiles/fluent-bit-shared.dir/multiline/flb_ml_rule.c.o
+[ 95%] Built target flb-it-fuzz-parser_fuzzer
+[ 95%] Building C object src/CMakeFiles/fluent-bit-shared.dir/multiline/flb_ml.c.o
+[ 95%] Built target flb-it-fuzz-parse_logfmt_fuzzer
+[ 95%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_parser.c.o
+[ 96%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_parser_regex.c.o
+[ 96%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_parser_json.c.o
+[ 96%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_parser_decoder.c.o
+[ 96%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_parser_ltsv.c.o
+[ 96%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_parser_logfmt.c.o
+[ 96%] Building C object src/CMakeFiles/fluent-bit-shared.dir/tls/flb_tls.c.o
+[ 96%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_oauth2.c.o
+[ 96%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_plugin_proxy.c.o
+[ 96%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_metrics.c.o
+[ 96%] Built target flb-it-fuzz-parse_logfmt_fuzzer_OSSFUZZ
+[ 96%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_metrics_exporter.c.o
+[ 96%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_signv4.c.o
+[ 96%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_kafka.c.o
+[ 97%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_regex.c.o
+[ 97%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_sqldb.c.o
+[ 97%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_chunk_trace.c.o
+[ 97%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_record_accessor.c.o
+[ 97%] Building C object src/CMakeFiles/fluent-bit-shared.dir/flb_ra_key.c.o
+[ 97%] Built target flb-it-fuzz-parse_ltsv_fuzzer
+[ 97%] Building C object src/CMakeFiles/fluent-bit-shared.dir/__/lib/lwrb/lwrb/src/lwrb/lwrb.c.o
+[ 97%] Built target flb-it-fuzz-parse_ltsv_fuzzer_OSSFUZZ
+[ 97%] Built target flb-it-fuzz-multiline_fuzzer
+[ 97%] Built target flb-it-fuzz-multiline_fuzzer_OSSFUZZ
+[ 97%] Linking C shared library ../lib/libfluent-bit.so
+[ 97%] Built target fluent-bit-shared
+make: *** [Makefile:166: all] Error 2

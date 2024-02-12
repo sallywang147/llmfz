@@ -1,0 +1,83 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <stdio.h>
+#include <unistd.h>
+
+#include <gpac/constants.h>
+#include <gpac/dash.h>
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  char filename[256];
+  GF_Err e;
+  sprintf(filename, "/tmp/libfuzzer.%d", getpid());
+
+  FILE *fp = fopen(filename, "wb");
+  if (!fp)
+    return 0;
+  fwrite(data, size, 1, fp);
+  fclose(fp);
+
+  GF_DashClient *dash = gf_dash_new();
+  gf_dash_set_uri(dash, filename, NULL);
+  gf_dash_update_manifest(dash);
+  gf_dash_delete(dash);
+
+  unlink(filename);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/testsuite/oss-fuzzers/fuzz_parse.c:18:37: error: too few arguments to function call, expected 7, have 0
+  GF_DashClient *dash = gf_dash_new();
+                        ~~~~~~~~~~~ ^
+./include/gpac/dash.h:189:16: note: 'gf_dash_new' declared here
+GF_DashClient *gf_dash_new(GF_DASHFileIO *dash_io,
+               ^
+1 error generated.
+
+Fix failure
+/src/testsuite/oss-fuzzers/fuzz_parse.cpp:18:25: error: no matching function for call to 'gf_dash_new'
+  GF_DashClient *dash = gf_dash_new();
+                        ^~~~~~~~~~~
+./include/gpac/dash.h:189:16: note: candidate function not viable: requires 7 arguments, but 0 were provided
+GF_DashClient *gf_dash_new(GF_DASHFileIO *dash_io,
+               ^
+/src/testsuite/oss-fuzzers/fuzz_parse.cpp:19:3: error: use of undeclared identifier 'gf_dash_set_uri'; did you mean 'gf_dash_get_info'?
+  gf_dash_set_uri(dash, filename, NULL);
+  ^~~~~~~~~~~~~~~
+  gf_dash_get_info
+./include/gpac/dash.h:242:6: note: 'gf_dash_get_info' declared here
+void gf_dash_get_info(GF_DashClient *dash, const char **title, const char **source);
+     ^
+/src/testsuite/oss-fuzzers/fuzz_parse.cpp:19:25: error: cannot initialize a parameter of type 'const char **' with an lvalue of type 'char[256]'
+  gf_dash_set_uri(dash, filename, NULL);
+                        ^~~~~~~~
+./include/gpac/dash.h:242:57: note: passing argument to parameter 'title' here
+void gf_dash_get_info(GF_DashClient *dash, const char **title, const char **source);
+                                                        ^
+/src/testsuite/oss-fuzzers/fuzz_parse.cpp:20:3: error: use of undeclared identifier 'gf_dash_update_manifest'
+  gf_dash_update_manifest(dash);
+  ^
+/src/testsuite/oss-fuzzers/fuzz_parse.cpp:21:3: error: use of undeclared identifier 'gf_dash_delete'; did you mean 'gf_dash_del'?
+  gf_dash_delete(dash);
+  ^~~~~~~~~~~~~~
+  gf_dash_del
+./include/gpac/dash.h:200:6: note: 'gf_dash_del' declared here
+void gf_dash_del(GF_DashClient *dash);
+     ^
+5 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

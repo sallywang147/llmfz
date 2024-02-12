@@ -1,0 +1,1 @@
+error: undefined reference to 'Botan::EC_PrivateKey::EC_PrivateKey(Botan::EC_PrivateKey*, char**, Botan::AlgorithmIdentifier*, char*, size_t, bool)'

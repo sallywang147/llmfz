@@ -1,0 +1,236 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <err.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+#include "alembic/lib/Alembic/AbcCoreOgawa/All.h"
+
+#include "fuzzer_temp_file.h"
+
+using namespace Alembic::AbcGeom;
+using namespace Alembic::AbcMaterial;
+
+template <typename T>
+void dumpAttributes(T const &schema) {
+
+  const size_t meshPropertyCount = schema.getNumProperties();
+
+  for (size_t p = 0; p < meshPropertyCount; p++) {
+    const Alembic::AbcCoreAbstract::PropertyHeader &header = schema.getPropertyHeader(p);
+    const Alembic::AbcCoreAbstract::PropertyType pType = header.getPropertyType();
+    const std::string &name = header.getName();
+
+    if (name == "P") {
+      schema.getNumSamples();
+    } else if (name == "uv" || name == "st") {
+      schema.getUVsParam().getNumSamples();
+    } else if (name == ".arbGeomParams") {
+      // additional geometry elements (color sets, additional texture
+      // coordinates)
+      const ICompoundProperty geoParam = schema.getArbGeomParams();
+      const size_t geoPropCount = geoParam.getNumProperties();
+
+      for (size_t g = 0; g < geoPropCount; g++) {
+        const Alembic::AbcCoreAbstract::PropertyHeader &headerGeo = geoParam.getPropertyHeader(g);
+        const std::string &nameGeo = headerGeo.getName();
+      }
+    }
+  }
+}
+
+void dumpPolyMesh(const IObject &node) {
+  const Alembic::AbcCoreAbstract::ObjectHeader &header = node.getHeader();
+  const IPolyMesh mesh(node.getParent(), header.getName());
+  const IPolyMeshSchema &schema = mesh.getSchema();
+
+  // Mesh properties
+  dumpAttributes(schema);
+}
+
+void dumpSubD(const IObject &node) {
+  const Alembic::AbcCoreAbstract::ObjectHeader &header = node.getHeader();
+  const ISubD mesh(node.getParent(), header.getName());
+  const ISubDSchema &schema = mesh.getSchema();
+
+  dumpAttributes(schema);
+  schema.getSubdivisionSchemeProperty();
+  schema.getFaceVaryingInterpolateBoundaryProperty();
+  schema.getFaceVaryingPropagateCornersProperty();
+  schema.getInterpolateBoundaryProperty();
+}
+
+void dumpFaceSet(const IObject &node) {
+  const Alembic::AbcCoreAbstract::ObjectHeader &header = node.getHeader();
+  const IFaceSet faceSet(node.getParent(), header.getName());
+  const IFaceSetSchema &schema = faceSet.getSchema();
+  schema.getNumSamples();
+}
+
+void dumpCurves(const IObject &node) {
+  const Alembic::AbcCoreAbstract::ObjectHeader &header = node.getHeader();
+  const ICurves curves(node.getParent(), header.getName());
+  const ICurvesSchema &schema = curves.getSchema();
+
+  dumpAttributes(schema);
+}
+
+void dumpXform(const IObject &node) {
+  const Alembic::AbcCoreAbstract::ObjectHeader &header = node.getHeader();
+  const IXform xform(node.getParent(), header.getName());
+  const IXformSchema &schema = xform.getSchema();
+
+  schema.getNumSamples();
+  schema.getNumOps();
+}
+
+void dumpMaterial(const IObject &node) {
+  const Alembic::AbcCoreAbstract::ObjectHeader &header = node.getHeader();
+  IMaterial material(node.getParent(), header.getName());
+  IMaterialSchema &schema = material.getSchema();
+
+  std::vector<std::string> targetNames;
+  schema.getTargetNames(targetNames);
+
+  for (const std::string &target : targetNames) {
+    std::vector<std::string> shaderTypes;
+    schema.getShaderTypesForTarget(target, shaderTypes);
+    const size_t shaderTypeCount = shaderTypes.size();
+    for (size_t s = 0; s < shaderTypeCount; s++) {
+
+      ICompoundProperty parameters =
+          schema.getShaderParameters(target, shaderTypes[s]);
+      const size_t parameterCount = parameters.getNumProperties();
+    }
+  }
+}
+
+void dumpNodes(const IObject &node) {
+  const Alembic::AbcCoreAbstract::ObjectHeader &header = node.getHeader();
+  // Dump the general node information.
+  header.getName();
+  header.getFullName();
+  header.getMetaData().serialize();
+
+  // Dump the type specific information.
+  if (IPolyMesh::matches(header)) {
+    dumpPolyMesh(node);
+  } else if (ISubD::matches(header)) {
+    dumpSubD(node);
+  } else if (IFaceSet::matches(header)) {
+    dumpFaceSet(node);
+  } else if (ICurves::matches(header)) {
+    dumpCurves(node);
+  } else if (IXform::matches(header)) {
+    dumpXform(node);
+  } else if (IMaterial::matches(header)) {
+    dumpMaterial(node);
+  } else { // Miscellaneous nodes such as the root.
+    ;
+  }
+
+  // Dump the child headers.
+  const size_t childCount = node.getNumChildren();
+  for (size_t i = 0; i < childCount; i++) {
+    dumpNodes(node.getChild(i));
+  }
+}
+
+void dumpInfo(const char *file) {
+  // Load the Alembic archive and verify that it is valid.
+  IArchive archive(file);
+  IObject root = archive.getTop();
+  dumpNodes(root);
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzerTemporaryFile tempFile(data, size);
+  dumpInfo(tempFile.filename());
+
+  return 0;
+}
+
+extern "C" void getSample(Alembic::AbcCoreOgawa::v12::AprImpl *apr, size_t index, std::shared_ptr<Alembic::AbcCoreOgawa::v12::AprImpl::Sample> *sample) {
+  apr->getSample(index, sample);
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/alembic_dump_info_fuzzer.cc:14:26: error: expected namespace name
+using namespace Alembic::AbcGeom;
+                ~~~~~~~~~^
+/src/alembic_dump_info_fuzzer.cc:15:26: error: expected namespace name
+using namespace Alembic::AbcMaterial;
+                ~~~~~~~~~^
+/src/alembic_dump_info_fuzzer.cc:34:13: error: unknown type name 'ICompoundProperty'
+      const ICompoundProperty geoParam = schema.getArbGeomParams();
+            ^
+/src/alembic_dump_info_fuzzer.cc:45:25: error: unknown type name 'IObject'
+void dumpPolyMesh(const IObject &node) {
+                        ^
+/src/alembic_dump_info_fuzzer.cc:47:9: error: unknown type name 'IPolyMesh'
+  const IPolyMesh mesh(node.getParent(), header.getName());
+        ^
+/src/alembic_dump_info_fuzzer.cc:48:9: error: unknown type name 'IPolyMeshSchema'
+  const IPolyMeshSchema &schema = mesh.getSchema();
+        ^
+/src/alembic_dump_info_fuzzer.cc:54:21: error: unknown type name 'IObject'
+void dumpSubD(const IObject &node) {
+                    ^
+/src/alembic_dump_info_fuzzer.cc:56:9: error: unknown type name 'ISubD'
+  const ISubD mesh(node.getParent(), header.getName());
+        ^
+/src/alembic_dump_info_fuzzer.cc:57:9: error: unknown type name 'ISubDSchema'
+  const ISubDSchema &schema = mesh.getSchema();
+        ^
+/src/alembic_dump_info_fuzzer.cc:66:24: error: unknown type name 'IObject'
+void dumpFaceSet(const IObject &node) {
+                       ^
+/src/alembic_dump_info_fuzzer.cc:68:9: error: unknown type name 'IFaceSet'
+  const IFaceSet faceSet(node.getParent(), header.getName());
+        ^
+/src/alembic_dump_info_fuzzer.cc:69:9: error: unknown type name 'IFaceSetSchema'
+  const IFaceSetSchema &schema = faceSet.getSchema();
+        ^
+/src/alembic_dump_info_fuzzer.cc:73:23: error: unknown type name 'IObject'
+void dumpCurves(const IObject &node) {
+                      ^
+/src/alembic_dump_info_fuzzer.cc:75:9: error: unknown type name 'ICurves'
+  const ICurves curves(node.getParent(), header.getName());
+        ^
+/src/alembic_dump_info_fuzzer.cc:76:9: error: unknown type name 'ICurvesSchema'
+  const ICurvesSchema &schema = curves.getSchema();
+        ^
+/src/alembic_dump_info_fuzzer.cc:81:22: error: unknown type name 'IObject'
+void dumpXform(const IObject &node) {
+                     ^
+/src/alembic_dump_info_fuzzer.cc:83:9: error: unknown type name 'IXform'
+  const IXform xform(node.getParent(), header.getName());
+        ^
+/src/alembic_dump_info_fuzzer.cc:84:9: error: unknown type name 'IXformSchema'
+  const IXformSchema &schema = xform.getSchema();
+        ^
+/src/alembic_dump_info_fuzzer.cc:90:25: error: unknown type name 'IObject'
+void dumpMaterial(const IObject &node) {
+                        ^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,83 @@
+/workspace/out/libfuzzer-address-x86_64/alembic_dump_info_fuzzer -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/alembic_dump_info_fuzzer < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 1752911925
+INFO: Loaded 1 modules   (26975 inline 8-bit counters): 26975 [0x971210, 0x977b6f), 
+INFO: Loaded 1 PC tables (26975 PCs): 26975 [0x977b70,0x9e1160), 
+INFO:        0 files found in /workspace/corpus/alembic_dump_info_fuzzer
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: A corpus is not provided, starting from an empty corpus
+#2	INITED cov: 229 ft: 230 corp: 1/1b exec/s: 0 rss: 37Mb
+#3	NEW    cov: 229 ft: 233 corp: 2/10b lim: 4096 exec/s: 0 rss: 37Mb L: 9/9 MS: 1 CMP- DE: "\001\000\000\000\000\000\000\036"-
+#11	NEW    cov: 230 ft: 234 corp: 3/27b lim: 4096 exec/s: 0 rss: 38Mb L: 17/17 MS: 3 ChangeBinInt-ChangeBit-CMP- DE: "\001\000\000\000\000\000\000A"-
+#129	REDUCE cov: 230 ft: 234 corp: 3/26b lim: 4096 exec/s: 0 rss: 41Mb L: 8/17 MS: 3 CrossOver-ChangeBinInt-EraseBytes-
+#219	REDUCE cov: 230 ft: 234 corp: 3/25b lim: 4096 exec/s: 0 rss: 44Mb L: 16/16 MS: 5 InsertByte-InsertByte-InsertByte-EraseBytes-CMP- DE: "\001\000"-
+	NEW_FUNC[1/1]: 0x6f4890 in Alembic::Ogawa::v12::(anonymous namespace)::MemoryMappedIStreamReader::size() /src/alembic/lib/Alembic/Ogawa/IStreams.cpp:562
+#12177	REDUCE cov: 234 ft: 238 corp: 4/151b lim: 4096 exec/s: 6088 rss: 56Mb L: 126/126 MS: 3 CrossOver-CMP-InsertRepeatedBytes- DE: "Ogawa"-
+#12179	REDUCE cov: 234 ft: 238 corp: 4/118b lim: 4096 exec/s: 6089 rss: 56Mb L: 93/93 MS: 2 ShuffleBytes-EraseBytes-
+#12182	REDUCE cov: 234 ft: 238 corp: 4/75b lim: 4096 exec/s: 6091 rss: 56Mb L: 50/50 MS: 3 ShuffleBytes-ChangeByte-EraseBytes-
+#12189	REDUCE cov: 234 ft: 238 corp: 4/70b lim: 4096 exec/s: 6094 rss: 56Mb L: 45/45 MS: 2 CopyPart-EraseBytes-
+#12205	REDUCE cov: 234 ft: 238 corp: 4/50b lim: 4096 exec/s: 6102 rss: 56Mb L: 25/25 MS: 1 EraseBytes-
+#12281	REDUCE cov: 234 ft: 238 corp: 4/44b lim: 4096 exec/s: 6140 rss: 56Mb L: 19/19 MS: 1 EraseBytes-
+	NEW_FUNC[1/8]: 0x6ee200 in Alembic::Ogawa::v12::IArchive::isFrozen() const /src/alembic/lib/Alembic/Ogawa/IArchive.cpp:76
+	NEW_FUNC[2/8]: 0x6ee520 in std::__1::__shared_ptr_pointer<Alembic::Ogawa::v12::IGroup*, std::__1::shared_ptr<Alembic::Ogawa::v12::IGroup>::__shared_ptr_default_delete<Alembic::Ogawa::v12::IGroup, Alembic::Ogawa::v12::IGroup>, std::__1::allocator<Alembic::Ogawa::v12::IGroup> >::__on_zero_shared() /usr/local/bin/../include/c++/v1/__memory/shared_ptr.h:262
+#12841	REDUCE cov: 271 ft: 277 corp: 5/80b lim: 4096 exec/s: 6420 rss: 56Mb L: 36/36 MS: 5 ChangeBit-PersAutoDict-CopyPart-InsertByte-CMP- DE: "\001\000\000\000\000\000\000\036"-"\001\000\000\000\000\000\000\000"-
+#12847	REDUCE cov: 271 ft: 277 corp: 5/70b lim: 4096 exec/s: 6423 rss: 56Mb L: 26/26 MS: 1 EraseBytes-
+	NEW_FUNC[1/3]: 0x695e20 in std::__1::shared_ptr<Alembic::Ogawa::v12::IGroup>::~shared_ptr() /usr/local/bin/../include/c++/v1/__memory/shared_ptr.h:700
+	NEW_FUNC[2/3]: 0x6edb90 in std::__1::shared_ptr<Alembic::Ogawa::v12::IStreams>::~shared_ptr() /usr/local/bin/../include/c++/v1/__memory/shared_ptr.h:700
+#12878	REDUCE cov: 288 ft: 296 corp: 6/96b lim: 4096 exec/s: 6439 rss: 56Mb L: 26/26 MS: 1 ShuffleBytes-
+#12980	REDUCE cov: 288 ft: 296 corp: 6/90b lim: 4096 exec/s: 6490 rss: 56Mb L: 20/26 MS: 2 InsertByte-EraseBytes-
+#13086	REDUCE cov: 288 ft: 296 corp: 6/84b lim: 4096 exec/s: 6543 rss: 56Mb L: 20/20 MS: 1 EraseBytes-
+#13713	REDUCE cov: 288 ft: 296 corp: 6/82b lim: 4096 exec/s: 4571 rss: 57Mb L: 18/20 MS: 2 CrossOver-EraseBytes-
+	NEW_FUNC[1/1]: 0x6f4300 in Alembic::Ogawa::v12::IStreams::getSize() /src/alembic/lib/Alembic/Ogawa/IStreams.cpp:734
+#14746	REDUCE cov: 291 ft: 302 corp: 7/100b lim: 4096 exec/s: 4915 rss: 57Mb L: 18/20 MS: 3 ShuffleBytes-ShuffleBytes-ChangeBinInt-
+#14782	NEW    cov: 292 ft: 303 corp: 8/122b lim: 4096 exec/s: 4927 rss: 57Mb L: 22/22 MS: 1 CMP- DE: "\000\000\000\000"-
+#15073	REDUCE cov: 292 ft: 303 corp: 8/119b lim: 4096 exec/s: 5024 rss: 57Mb L: 17/22 MS: 1 EraseBytes-
+#15789	REDUCE cov: 292 ft: 303 corp: 8/118b lim: 4096 exec/s: 5263 rss: 57Mb L: 16/22 MS: 1 EraseBytes-
+#15876	REDUCE cov: 292 ft: 303 corp: 8/115b lim: 4096 exec/s: 5292 rss: 57Mb L: 16/22 MS: 2 ChangeBinInt-EraseBytes-
+#15992	NEW    cov: 293 ft: 304 corp: 9/133b lim: 4096 exec/s: 5330 rss: 57Mb L: 18/22 MS: 1 ChangeBinInt-
+#16384	pulse  cov: 293 ft: 304 corp: 9/133b lim: 4096 exec/s: 5461 rss: 57Mb
+#16548	REDUCE cov: 293 ft: 304 corp: 9/130b lim: 4096 exec/s: 5516 rss: 57Mb L: 19/19 MS: 1 EraseBytes-
+	NEW_FUNC[1/3]: 0x6925b0 in Alembic::AbcCoreOgawa::v12::ArImpl::init() /src/alembic/lib/Alembic/AbcCoreOgawa/ArImpl.cpp:81
+	NEW_FUNC[2/3]: 0x6ee280 in Alembic::Ogawa::v12::IArchive::getGroup() const /src/alembic/lib/Alembic/Ogawa/IArchive.cpp:86
+#18958	NEW    cov: 310 ft: 334 corp: 10/168b lim: 4096 exec/s: 6319 rss: 57Mb L: 38/38 MS: 5 EraseBytes-CrossOver-CopyPart-CopyPart-ChangeBit-
+#19050	REDUCE cov: 310 ft: 334 corp: 10/153b lim: 4096 exec/s: 6350 rss: 57Mb L: 23/23 MS: 2 PersAutoDict-EraseBytes- DE: "\001\000\000\000\000\000\000\000"-
+#20711	REDUCE cov: 310 ft: 334 corp: 10/151b lim: 4096 exec/s: 6903 rss: 57Mb L: 21/21 MS: 1 EraseBytes-
+#25952	REDUCE cov: 310 ft: 334 corp: 10/150b lim: 4096 exec/s: 6488 rss: 57Mb L: 20/20 MS: 1 EraseBytes-
+#26123	REDUCE cov: 310 ft: 334 corp: 10/149b lim: 4096 exec/s: 6530 rss: 57Mb L: 17/20 MS: 1 EraseBytes-
+#27624	REDUCE cov: 310 ft: 334 corp: 10/147b lim: 4096 exec/s: 6906 rss: 57Mb L: 17/20 MS: 1 EraseBytes-
+#30360	REDUCE cov: 310 ft: 334 corp: 10/146b lim: 4096 exec/s: 6072 rss: 57Mb L: 19/19 MS: 1 EraseBytes-
+#32768	pulse  cov: 310 ft: 334 corp: 10/146b lim: 4096 exec/s: 6553 rss: 57Mb
+#34678	REDUCE cov: 311 ft: 335 corp: 11/156b lim: 4096 exec/s: 6935 rss: 57Mb L: 10/19 MS: 3 ChangeBit-InsertByte-EraseBytes-
+#34682	REDUCE cov: 311 ft: 335 corp: 11/153b lim: 4096 exec/s: 6936 rss: 57Mb L: 7/19 MS: 4 ChangeBinInt-InsertByte-ChangeByte-EraseBytes-
+#34713	REDUCE cov: 311 ft: 335 corp: 11/151b lim: 4096 exec/s: 6942 rss: 57Mb L: 5/19 MS: 1 EraseBytes-
+#34731	REDUCE cov: 311 ft: 335 corp: 11/150b lim: 4096 exec/s: 6946 rss: 57Mb L: 4/19 MS: 3 CMP-EraseBytes-EraseBytes- DE: "\377\377"-
+#35167	REDUCE cov: 311 ft: 335 corp: 11/148b lim: 4096 exec/s: 7033 rss: 57Mb L: 2/19 MS: 1 EraseBytes-
+#36268	REDUCE cov: 311 ft: 335 corp: 11/147b lim: 4096 exec/s: 7253 rss: 57Mb L: 1/19 MS: 1 EraseBytes-
+#43370	REDUCE cov: 312 ft: 336 corp: 12/149b lim: 4096 exec/s: 7228 rss: 57Mb L: 2/19 MS: 2 CopyPart-InsertByte-
+#49897	REDUCE cov: 312 ft: 336 corp: 12/148b lim: 4096 exec/s: 7128 rss: 57Mb L: 18/18 MS: 2 CopyPart-EraseBytes-
+#53588	REDUCE cov: 312 ft: 336 corp: 12/147b lim: 4096 exec/s: 7655 rss: 57Mb L: 17/18 MS: 1 EraseBytes-
+#65536	pulse  cov: 312 ft: 336 corp: 12/147b lim: 4096 exec/s: 7281 rss: 57Mb
+#72300	REDUCE cov: 312 ft: 336 corp: 12/146b lim: 4096 exec/s: 7230 rss: 57Mb L: 17/18 MS: 2 PersAutoDict-EraseBytes- DE: "\001\000\000\000\000\000\000A"-
+	NEW_FUNC[1/2]: 0x6ba2f0 in std::__1::vector<unsigned long, std::__1::allocator<unsigned long> >::__swap_out_circular_buffer(std::__1::__split_buffer<unsigned long, std::__1::allocator<unsigned long>&>&) /usr/local/bin/../include/c++/v1/vector:889
+	NEW_FUNC[2/2]: 0x6d5970 in std::__1::vector<unsigned long, std::__1::allocator<unsigned long> >::__append(unsigned long) /usr/local/bin/../include/c++/v1/vector:1025
+#86648	NEW    cov: 327 ft: 356 corp: 13/209b lim: 4096 exec/s: 7877 rss: 57Mb L: 63/63 MS: 3 CopyPart-ChangeBit-InsertRepeatedBytes-
+#87174	REDUCE cov: 327 ft: 356 corp: 13/205b lim: 4096 exec/s: 7264 rss: 57Mb L: 59/59 MS: 1 EraseBytes-
+#87926	REDUCE cov: 327 ft: 356 corp: 13/180b lim: 4096 exec/s: 7327 rss: 57Mb L: 34/34 MS: 2 ChangeBit-EraseBytes-
+#131072	pulse  cov: 327 ft: 356 corp: 13/180b lim: 4096 exec/s: 7710 rss: 57Mb
+#137092	REDUCE cov: 327 ft: 356 corp: 13/179b lim: 4096 exec/s: 7616 rss: 57Mb L: 16/34 MS: 1 EraseBytes-
+#241557	DONE   cov: 327 ft: 356 corp: 13/179b lim: 4096 exec/s: 7792 rss: 57Mb
+###### Recommended dictionary. ######
+"\001\000\000\000\000\000\000\036" # Uses: 3343
+"\001\000\000\000\000\000\000A" # Uses: 3425
+"\001\000" # Uses: 3457
+"Ogawa" # Uses: 3219
+"\001\000\000\000\000\000\000\000" # Uses: 3079
+"\000\000\000\000" # Uses: 3056
+"\377\377" # Uses: 2827
+###### End of recommended dictionary. ######
+Done 241557 runs in 31 second(s)
+stat::number_of_executed_units: 241557
+stat::average_exec_per_sec:     7792
+stat::new_units_added:          44
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              57

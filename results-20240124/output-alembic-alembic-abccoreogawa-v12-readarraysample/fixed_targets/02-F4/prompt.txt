@@ -1,0 +1,121 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
+extern "C" {
+#include "alembic/lib/Alembic/AbcCoreOgawa/All.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  std::shared_ptr<int32_t> iDims;
+  std::shared_ptr<int32_t> iData;
+  std::shared_ptr<int32_t> iData2;
+  DataType dataType;
+  ReadArraySampleID(&iDims, &iData, size, &dataType, &iData2);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/usr/local/bin/../include/c++/v1/iosfwd:109:1: error: templates must have C++ linkage
+template<class _CharT>  struct _LIBCPP_TEMPLATE_VIS char_traits;
+^~~~~~~~~~~~~~~~~~~~~~
+/src/alembic_dump_info_fuzzer.cc:6:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/alembic_dump_info_fuzzer.cc:7:
+In file included from /src/alembic/lib/Alembic/AbcCoreOgawa/All.h:41:
+In file included from /src/alembic/lib/Alembic/AbcCoreOgawa/ReadWrite.h:40:
+In file included from /src/alembic/lib/Alembic/AbcCoreAbstract/All.h:40:
+In file included from /src/alembic/lib/Alembic/AbcCoreAbstract/ArchiveReader.h:41:
+In file included from /src/alembic/lib/Alembic/AbcCoreAbstract/Foundation.h:40:
+In file included from /src/alembic/lib/Alembic/Util/All.h:40:
+In file included from /src/alembic/lib/Alembic/Util/Foundation.h:41:
+In file included from /usr/local/bin/../include/c++/v1/unordered_map:518:
+In file included from /usr/local/bin/../include/c++/v1/__debug:14:
+/usr/local/bin/../include/c++/v1/iosfwd:110:19: error: explicit specialization of undeclared template struct 'char_traits'
+template<> struct char_traits<char>;
+                  ^          ~~~~~~
+/usr/local/bin/../include/c++/v1/iosfwd:114:19: error: explicit specialization of non-template struct 'char_traits'
+template<> struct char_traits<char16_t>;
+                  ^          ~~~~~~~~~~
+/usr/local/bin/../include/c++/v1/iosfwd:115:19: error: explicit specialization of non-template struct 'char_traits'
+template<> struct char_traits<char32_t>;
+                  ^          ~~~~~~~~~~
+/usr/local/bin/../include/c++/v1/iosfwd:117:19: error: explicit specialization of non-template struct 'char_traits'
+template<> struct char_traits<wchar_t>;
+                  ^          ~~~~~~~~~
+/usr/local/bin/../include/c++/v1/iosfwd:120:1: error: templates must have C++ linkage
+template<class _Tp>     class _LIBCPP_TEMPLATE_VIS allocator;
+^~~~~~~~~~~~~~~~~~~
+/src/alembic_dump_info_fuzzer.cc:6:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/alembic_dump_info_fuzzer.cc:7:
+In file included from /src/alembic/lib/Alembic/AbcCoreOgawa/All.h:41:
+In file included from /src/alembic/lib/Alembic/AbcCoreOgawa/ReadWrite.h:40:
+In file included from /src/alembic/lib/Alembic/AbcCoreAbstract/All.h:40:
+In file included from /src/alembic/lib/Alembic/AbcCoreAbstract/ArchiveReader.h:41:
+In file included from /src/alembic/lib/Alembic/AbcCoreAbstract/Foundation.h:40:
+In file included from /src/alembic/lib/Alembic/Util/All.h:40:
+In file included from /src/alembic/lib/Alembic/Util/Foundation.h:41:
+In file included from /usr/local/bin/../include/c++/v1/unordered_map:518:
+In file included from /usr/local/bin/../include/c++/v1/__debug:14:
+/usr/local/bin/../include/c++/v1/iosfwd:122:52: error: expected ',' or '>' in template-parameter-list
+template <class _CharT, class _Traits = char_traits<_CharT> >
+                                                   ^
+/usr/local/bin/../include/c++/v1/iosfwd:122:61: error: expected unqualified-id
+template <class _CharT, class _Traits = char_traits<_CharT> >
+                                                            ^
+/usr/local/bin/../include/c++/v1/iosfwd:125:52: error: expected ',' or '>' in template-parameter-list
+template <class _CharT, class _Traits = char_traits<_CharT> >
+                                                   ^
+/usr/local/bin/../include/c++/v1/iosfwd:125:61: error: expected unqualified-id
+template <class _CharT, class _Traits = char_traits<_CharT> >
+                                                            ^
+/usr/local/bin/../include/c++/v1/iosfwd:127:52: error: expected ',' or '>' in template-parameter-list
+template <class _CharT, class _Traits = char_traits<_CharT> >
+                                                   ^
+/usr/local/bin/../include/c++/v1/iosfwd:127:61: error: expected unqualified-id
+template <class _CharT, class _Traits = char_traits<_CharT> >
+                                                            ^
+/usr/local/bin/../include/c++/v1/iosfwd:129:52: error: expected ',' or '>' in template-parameter-list
+template <class _CharT, class _Traits = char_traits<_CharT> >
+                                                   ^
+/usr/local/bin/../include/c++/v1/iosfwd:129:61: error: expected unqualified-id
+template <class _CharT, class _Traits = char_traits<_CharT> >
+                                                            ^
+/usr/local/bin/../include/c++/v1/iosfwd:131:52: error: expected ',' or '>' in template-parameter-list
+template <class _CharT, class _Traits = char_traits<_CharT> >
+                                                   ^
+/usr/local/bin/../include/c++/v1/iosfwd:131:61: error: expected unqualified-id
+template <class _CharT, class _Traits = char_traits<_CharT> >
+                                                            ^
+/usr/local/bin/../include/c++/v1/iosfwd:134:52: error: expected ',' or '>' in template-parameter-list
+template <class _CharT, class _Traits = char_traits<_CharT>,
+                                                   ^
+/usr/local/bin/../include/c++/v1/iosfwd:134:60: error: expected unqualified-id
+template <class _CharT, class _Traits = char_traits<_CharT>,
+                                                           ^
+/usr/local/bin/../include/c++/v1/iosfwd:137:52: error: expected ',' or '>' in template-parameter-list
+template <class _CharT, class _Traits = char_traits<_CharT>,
+                                                   ^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

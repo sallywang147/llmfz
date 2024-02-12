@@ -1,0 +1,99 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <algorithm>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+
+#include "llvm/MC/MCInst.h"
+#include "llvm/MC/MCInstPrinter.h"
+#include "llvm/MC/MCStreamer.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  // Create a random MCInst.
+  llvm::MCInst inst;
+  inst.setOpcode(stream.ConsumeIntegral<uint16_t>());
+  inst.addOperand(llvm::MCOperand::createReg(stream.ConsumeIntegral<uint16_t>()));
+  inst.addOperand(llvm::MCOperand::createImm(stream.ConsumeIntegral<uint64_t>()));
+
+  // Create a random MCStreamer.
+  llvm::raw_string_ostream stream_buffer;
+  llvm::MCStreamer streamer(stream_buffer);
+
+  // Print the MCInst to the SStream.
+  llvm::MCInstPrinter printer(stream_buffer, nullptr);
+  printer.printInst(&inst, 0, nullptr, nullptr);
+
+  // Get the string from the SStream.
+  std::string str = stream_buffer.str();
+
+  // Print the string to stdout.
+  printf("%s\n", str.c_str());
+
+  // Call the missing function.
+  AArch64AppleInstPrinter_printInst(&inst, 0, nullptr, nullptr);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/capstonev5/suite/fuzz/fuzz_disasm.c:1:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:23:28: error: no matching constructor for initialization of 'llvm::raw_string_ostream'
+  llvm::raw_string_ostream stream_buffer;
+                           ^
+/usr/local/include/llvm/Support/raw_ostream.h:643:12: note: candidate constructor not viable: requires single argument 'O', but no arguments were provided
+  explicit raw_string_ostream(std::string &O) : OS(O) {
+           ^
+/usr/local/include/llvm/Support/raw_ostream.h:632:7: note: candidate constructor (the implicit copy constructor) not viable: requires 1 argument, but 0 were provided
+class raw_string_ostream : public raw_ostream {
+      ^
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:24:20: error: variable type 'llvm::MCStreamer' is an abstract class
+  llvm::MCStreamer streamer(stream_buffer);
+                   ^
+/usr/local/include/llvm/MC/MCStreamer.h:543:16: note: unimplemented pure virtual method 'emitSymbolAttribute' in 'MCStreamer'
+  virtual bool emitSymbolAttribute(MCSymbol *Symbol,
+               ^
+/usr/local/include/llvm/MC/MCStreamer.h:652:16: note: unimplemented pure virtual method 'emitCommonSymbol' in 'MCStreamer'
+  virtual void emitCommonSymbol(MCSymbol *Symbol, uint64_t Size,
+               ^
+/usr/local/include/llvm/MC/MCStreamer.h:670:16: note: unimplemented pure virtual method 'emitZerofill' in 'MCStreamer'
+  virtual void emitZerofill(MCSection *Section, MCSymbol *Symbol = nullptr,
+               ^
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:27:23: error: variable type 'llvm::MCInstPrinter' is an abstract class
+  llvm::MCInstPrinter printer(stream_buffer, nullptr);
+                      ^
+/usr/local/include/llvm/MC/MCInstPrinter.h:96:45: note: unimplemented pure virtual method 'getMnemonic' in 'MCInstPrinter'
+  virtual std::pair<const char *, uint64_t> getMnemonic(const MCInst *MI) = 0;
+                                            ^
+/usr/local/include/llvm/MC/MCInstPrinter.h:105:16: note: unimplemented pure virtual method 'printInst' in 'MCInstPrinter'
+  virtual void printInst(const MCInst *MI, uint64_t Address, StringRef Annot,
+               ^
+/src/capstonev5/suite/fuzz/fuzz_disasm.cpp:37:3: error: use of undeclared identifier 'AArch64AppleInstPrinter_printInst'
+  AArch64AppleInstPrinter_printInst(&inst, 0, nullptr, nullptr);
+  ^
+4 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

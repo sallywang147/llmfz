@@ -1,0 +1,94 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ cd /src/flatbuffers
++ mkdir build
++ cd build
++ cmake -DOSS_FUZZ:BOOL=ON -G 'Unix Makefiles' ../tests/fuzzer
+-- The C compiler identification is Clang 15.0.0
+-- The CXX compiler identification is Clang 15.0.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/local/bin/clang-jcc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/local/bin/clang++-jcc - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- FLATBUFFERS_MAX_PARSING_DEPTH: 24
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /src/flatbuffers/build
++ make
+[  4%] Building CXX object CMakeFiles/flatbuffers_fuzzed.dir/src/flatbuffers/src/idl_parser.cpp.o
+[  9%] Building CXX object CMakeFiles/flatbuffers_fuzzed.dir/src/flatbuffers/src/idl_gen_text.cpp.o
+[ 14%] Building CXX object CMakeFiles/flatbuffers_fuzzed.dir/src/flatbuffers/src/reflection.cpp.o
+[ 19%] Building CXX object CMakeFiles/flatbuffers_fuzzed.dir/src/flatbuffers/src/binary_annotator.cpp.o
+[ 23%] Building CXX object CMakeFiles/flatbuffers_fuzzed.dir/src/flatbuffers/src/util.cpp.o
+[ 28%] Building CXX object CMakeFiles/flatbuffers_fuzzed.dir/src/flatbuffers/tests/test_assert.cpp.o
+[ 33%] Linking CXX static library libflatbuffers_fuzzed.a
+[ 33%] Built target flatbuffers_fuzzed
+[ 38%] Building CXX object CMakeFiles/scalar_fuzzer.dir/flatbuffers_scalar_fuzzer.cc.o
+[ 42%] Linking CXX executable scalar_fuzzer
+[ 42%] Built target scalar_fuzzer
+[ 47%] Building CXX object CMakeFiles/parser_fuzzer.dir/flatbuffers_parser_fuzzer.cc.o
+[ 52%] Linking CXX executable parser_fuzzer
+[ 52%] Built target parser_fuzzer
+[ 57%] Building CXX object CMakeFiles/verifier_fuzzer.dir/flatbuffers_verifier_fuzzer.cc.o
+[ 61%] Linking CXX executable verifier_fuzzer
+[ 61%] Built target verifier_fuzzer
+[ 66%] Building CXX object CMakeFiles/flexverifier_fuzzer.dir/flexbuffers_verifier_fuzzer.cc.o
+[ 71%] Linking CXX executable flexverifier_fuzzer
+[ 71%] Built target flexverifier_fuzzer
+[ 76%] Building CXX object CMakeFiles/monster_fuzzer.dir/flatbuffers_monster_fuzzer.cc.o
+[ 80%] Linking CXX executable monster_fuzzer
+[ 80%] Built target monster_fuzzer
+[ 85%] Building CXX object CMakeFiles/annotator_fuzzer.dir/flatbuffers_annotator_fuzzer.cc.o
+[ 90%] Linking CXX executable annotator_fuzzer
+[ 90%] Built target annotator_fuzzer
+[ 95%] Building CXX object CMakeFiles/64bit_fuzzer.dir/flatbuffers_64bit_fuzzer.cc.o
+/src/flatbuffers/tests/fuzzer/flatbuffers_64bit_fuzzer.cc:29:3: error: use of undeclared identifier 'BreakSequence'
+  BreakSequence(input, "//", '@');  // "//" -> "@/"
+  ^
+/src/flatbuffers/tests/fuzzer/flatbuffers_64bit_fuzzer.cc:30:3: error: use of undeclared identifier 'BreakSequence'
+  BreakSequence(input, "/*", '@');  // "/*" -> "@*"
+  ^
+/src/flatbuffers/tests/fuzzer/flatbuffers_64bit_fuzzer.cc:33:3: error: use of undeclared identifier 'BreakSequence'
+  BreakSequence(input, "$schema", '@');  // "$schema" -> "@schema"
+  ^
+/src/flatbuffers/tests/fuzzer/flatbuffers_64bit_fuzzer.cc:36:5: error: use of undeclared identifier 'BreakSequence'
+    BreakSequence(input, f, '_');  // ident -> ident
+    ^
+/src/flatbuffers/tests/fuzzer/flatbuffers_64bit_fuzzer.cc:49:35: error: member reference base type 'const char *' is not a structure or union
+  TEST_EQ_FUNC(parser.Parse(schema.c_str()), true);
+                            ~~~~~~^~~~~~
+/src/flatbuffers/tests/fuzzer/../../tests/test_assert.h:31:41: note: expanded from macro 'TEST_EQ_FUNC'
+  #define TEST_EQ_FUNC(exp, val) TestEq(exp, val, "'" #exp "' != '" #val "'", __FILE__, __LINE__, __PRETTY_FUNCTION__)
+                                        ^~~
+/src/flatbuffers/tests/fuzzer/flatbuffers_64bit_fuzzer.cc:65:22: error: use of undeclared identifier 'Parse'
+    auto orig_done = Parse(parser, orig_scalar, &orig_back);
+                     ^
+/src/flatbuffers/tests/fuzzer/flatbuffers_64bit_fuzzer.cc:72:26: error: no matching function for call to 'GenTextFile'
+      FLATBUFFERS_ASSERT(GenTextFile(&parser, &orig_back, &ref_string));
+                         ^~~~~~~~~~~
+<command line>:1:28: note: expanded from here
+#define FLATBUFFERS_ASSERT fuzzer_assert_impl
+                           ^
+/src/flatbuffers/tests/fuzzer/fuzzer_assert.h:12:35: note: expanded from macro 'fuzzer_assert_impl'
+#define fuzzer_assert_impl(x) (!!(x) ? static_cast<void>(0) : __builtin_trap())
+                                  ^
+/src/flatbuffers/tests/fuzzer/../../include/flatbuffers/idl.h:1240:20: note: candidate function not viable: no known conversion from 'flatbuffers::Parser *' to 'const flatbuffers::Parser' for 1st argument; remove &
+extern const char *GenTextFile(const Parser &parser, const std::string &path,
+                   ^
+7 errors generated.
+make[2]: *** [CMakeFiles/64bit_fuzzer.dir/build.make:76: CMakeFiles/64bit_fuzzer.dir/flatbuffers_64bit_fuzzer.cc.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:279: CMakeFiles/64bit_fuzzer.dir/all] Error 2
+make: *** [Makefile:91: all] Error 2

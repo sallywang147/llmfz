@@ -1,0 +1,68 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+#include "cellBoundary.h"
+#include "geoPolygon.h"
+#include "geoPolygon_internal.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider provider(data, size);
+  const size_t num_bboxes = provider.ConsumeIntegralInRange<size_t>(0, 1000);
+  std::vector<BBox> bboxes;
+  for (size_t i = 0; i < num_bboxes; i++) {
+    bboxes.push_back(provider.ConsumeBytes<BBox>(sizeof(BBox)));
+  }
+  const size_t num_boundaries = provider.ConsumeIntegralInRange<size_t>(0, 1000);
+  std::vector<CellBoundary> boundaries;
+  for (size_t i = 0; i < num_boundaries; i++) {
+    boundaries.push_back(provider.ConsumeBytes<CellBoundary>(sizeof(CellBoundary)));
+  }
+  const size_t num_boundary_bboxes = provider.ConsumeIntegralInRange<size_t>(0, 1000);
+  std::vector<BBox> boundary_bboxes;
+  for (size_t i = 0; i < num_boundary_bboxes; i++) {
+    boundary_bboxes.push_back(provider.ConsumeBytes<BBox>(sizeof(BBox)));
+  }
+  GeoPolygon geoPolygon;
+  geoPolygon.num_vertices = provider.ConsumeIntegralInRange<size_t>(0, 1000);
+  geoPolygon.vertices = new GeoVertex[geoPolygon.num_vertices];
+  for (size_t i = 0; i < geoPolygon.num_vertices; i++) {
+    geoPolygon.vertices[i] = provider.ConsumeBytes<GeoVertex>(sizeof(GeoVertex));
+  }
+  cellBoundaryCrossesPolygon(&geoPolygon, bboxes.data(), boundaries.data(), boundary_bboxes.data());
+  delete[] geoPolygon.vertices;
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:16:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+/src/h3//src/apps/fuzzers/fuzzerResolutions.cpp:9:10: fatal error: 'cellBoundary.h' file not found
+#include "cellBoundary.h"
+         ^~~~~~~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,73 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "http-private.h"
+#include "ipp-private.h"
+#include <cups/cups.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size)
+{
+    if (Size < 10 || Size > 10240)
+        return 0;
+
+    char filename[256];
+    sprintf(filename, "/tmp/libfuzzer.%d", getpid());
+    FILE *fp = fopen(filename, "wb");
+    if (!fp)
+        return 0;
+
+    fwrite(Data, Size, 1, fp);
+    fclose(fp);
+
+    struct _ipp_s *request = ippNew();
+    ippReadIO(fp, (ipp_iocb_t)cupsFileRead, 1, NULL, request);
+    cupsFileClose(fp);
+    unlink(filename);
+
+    struct _http_s *http = httpConnectEncrypt(NULL, 631, NULL);
+    if (!http)
+        return 0;
+
+    struct _ipp_s *response = cupsDoRequest(http, request, "/printers/foobar");
+    ippDelete(response);
+    httpClose(http);
+
+    ippDelete(request);
+
+    return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+FuzzIPP.c:5:8: error: expected identifier or '('
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size)
+       ^
+1 error generated.
+
+Fix failure
+FuzzIPP.cpp:21:5: error: no matching function for call to 'cupsFileClose'
+    cupsFileClose(fp);
+    ^~~~~~~~~~~~~
+./../cups/file.h:51:13: note: candidate function not viable: no known conversion from 'FILE *' (aka '_IO_FILE *') to 'cups_file_t *' (aka '_cups_file_s *') for 1st argument
+extern int              cupsFileClose(cups_file_t *fp) _CUPS_PUBLIC;
+                        ^
+FuzzIPP.cpp:24:28: error: no matching function for call to 'httpConnectEncrypt'
+    struct _http_s *http = httpConnectEncrypt(NULL, 631, NULL);
+                           ^~~~~~~~~~~~~~~~~~
+./../cups/http.h:418:17: note: candidate function not viable: no known conversion from 'long' to 'http_encryption_t' (aka 'http_encryption_e') for 3rd argument
+extern http_t           *httpConnectEncrypt(const char *host, int port, http_encryption_t encryption) _CUPS_DEPRECATED_MSG("Use httpConnect2 instead.");
+                         ^
+2 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

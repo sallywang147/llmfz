@@ -1,0 +1,64 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+#include <vector>
+
+#include "zstd.h"
+
+extern "C" {
+#include "zstd.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  ZSTD_CCtx* cctx = ZSTD_createCCtx();
+  if (cctx == nullptr) {
+    return 0;
+  }
+  ZSTD_inBuffer input = {nullptr, 0, 0};
+  while (stream.remaining_bytes()) {
+    size_t input_size = stream.ConsumeIntegralInRange<size_t>(0, stream.remaining_bytes());
+    input.src = stream.ConsumeBytes<unsigned char>(input_size).data();
+    input.size = input_size;
+    input.pos = 0;
+    ZSTD_compressStream2(cctx, nullptr, 0, &input, nullptr, 0, ZSTD_e_end);
+  }
+  ZSTD_endStream(cctx, nullptr);
+  ZSTD_freeCCtx(cctx);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:16:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+/src/c-blosc/tests/fuzz/fuzz_compress.cpp:27:5: error: no matching function for call to 'ZSTD_compressStream2'
+    ZSTD_compressStream2(cctx, nullptr, 0, &input, nullptr, 0, ZSTD_e_end);
+    ^~~~~~~~~~~~~~~~~~~~
+/src/c-blosc/internal-complibs/zstd-1.5.5/zstd.h:780:20: note: candidate function not viable: requires 4 arguments, but 7 were provided
+ZSTDLIB_API size_t ZSTD_compressStream2( ZSTD_CCtx* cctx,
+                   ^
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,20 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ [[ -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link = *sanitize=memory* ]]
++ make
+/usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -std=c++17 -D_GLIBCXX_DEBUG -Wall -Wextra -I fuzzing-headers/include encoder.cpp -fsanitize=fuzzer -o fuzzer-encoder
+encoder.cpp:103:12: error: no matching member function for call to 'Get'
+        ds.Get(container); // fix: remove the second argument
+        ~~~^~~
+fuzzing-headers/include/fuzzing/datasource/datasource.hpp:41:27: note: candidate template ignored: couldn't infer template argument 'T'
+template<class T> T Base::Get(const uint64_t id)
+                          ^
+1 error generated.
+make: *** [Makefile:4: fuzzer-encoder] Error 1

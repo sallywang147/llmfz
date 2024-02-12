@@ -1,0 +1,94 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ mkdir -p /work/double-conversion
++ cd /work/double-conversion
++ cmake -GNinja /src/double-conversion/
+-- The C compiler identification is Clang 15.0.0
+-- The CXX compiler identification is Clang 15.0.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/local/bin/clang-jcc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/local/bin/clang++-jcc - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /work/double-conversion
++ ninja
+[1/9] Building CXX object CMakeFiles/double-conversion.dir/double-conversion/cached-powers.cc.o
+[2/9] Building CXX object CMakeFiles/double-conversion.dir/double-conversion/bignum-dtoa.cc.o
+[3/9] Building CXX object CMakeFiles/double-conversion.dir/double-conversion/fast-dtoa.cc.o
+[4/9] Building CXX object CMakeFiles/double-conversion.dir/double-conversion/fixed-dtoa.cc.o
+[5/9] Building CXX object CMakeFiles/double-conversion.dir/double-conversion/strtod.cc.o
+[6/9] Building CXX object CMakeFiles/double-conversion.dir/double-conversion/double-to-string.cc.o
+[7/9] Building CXX object CMakeFiles/double-conversion.dir/double-conversion/bignum.cc.o
+[8/9] Building CXX object CMakeFiles/double-conversion.dir/double-conversion/string-to-double.cc.o
+[9/9] Linking CXX static library libdouble-conversion.a
++ fuzzer=string_to_double_fuzzer
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -std=c++11 -I/src/double-conversion/double-conversion -c /src/string_to_double_fuzzer.cc -o string_to_double_fuzzer.o
+In file included from /src/string_to_double_fuzzer.cc:6:
+In file included from /src/double-conversion/double-conversion/double-conversion.h:31:
+In file included from /src/double-conversion/double-conversion/string-to-double.h:31:
+/src/double-conversion/double-conversion/utils.h:248:1: error: templates must have C++ linkage
+template <typename T>
+^~~~~~~~~~~~~~~~~~~~~
+/src/string_to_double_fuzzer.cc:5:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/string_to_double_fuzzer.cc:6:
+In file included from /src/double-conversion/double-conversion/double-conversion.h:31:
+In file included from /src/double-conversion/double-conversion/string-to-double.h:31:
+/src/double-conversion/double-conversion/utils.h:362:3: error: no template named 'Vector'
+  Vector<char> buffer_;
+  ^
+/src/double-conversion/double-conversion/utils.h:394:1: error: templates must have C++ linkage
+template <class Dest, class Source>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/string_to_double_fuzzer.cc:5:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/string_to_double_fuzzer.cc:6:
+In file included from /src/double-conversion/double-conversion/double-conversion.h:31:
+In file included from /src/double-conversion/double-conversion/string-to-double.h:31:
+/src/double-conversion/double-conversion/utils.h:411:1: error: templates must have C++ linkage
+template <class Dest, class Source>
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/string_to_double_fuzzer.cc:5:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/string_to_double_fuzzer.cc:6:
+In file included from /src/double-conversion/double-conversion/double-conversion.h:31:
+/src/double-conversion/double-conversion/string-to-double.h:208:3: error: templates must have C++ linkage
+  template <typename T>
+  ^~~~~~~~~~~~~~~~~~~~~
+/src/string_to_double_fuzzer.cc:5:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/string_to_double_fuzzer.cc:6:
+In file included from /src/double-conversion/double-conversion/double-conversion.h:31:
+/src/double-conversion/double-conversion/string-to-double.h:214:3: error: templates must have C++ linkage
+  template <typename T>
+  ^~~~~~~~~~~~~~~~~~~~~
+/src/string_to_double_fuzzer.cc:5:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+In file included from /src/string_to_double_fuzzer.cc:6:
+In file included from /src/double-conversion/double-conversion/double-conversion.h:31:
+/src/double-conversion/double-conversion/string-to-double.h:227:3: error: templates must have C++ linkage
+  template <class Iterator>
+  ^~~~~~~~~~~~~~~~~~~~~~~~~
+/src/string_to_double_fuzzer.cc:5:1: note: extern "C" language linkage specification begins here
+extern "C" {
+^
+7 errors generated.

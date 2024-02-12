@@ -1,0 +1,105 @@
+/workspace/out/libfuzzer-address-x86_64/format_command_fuzzer -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/format_command_fuzzer < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 335149417
+INFO: Loaded 1 modules   (2521 inline 8-bit counters): 2521 [0x627cb0, 0x628689), 
+INFO: Loaded 1 PC tables (2521 PCs): 2521 [0x628690,0x632420), 
+INFO:        0 files found in /workspace/corpus/format_command_fuzzer
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: A corpus is not provided, starting from an empty corpus
+#2	INITED cov: 2 ft: 2 corp: 1/1b exec/s: 0 rss: 33Mb
+	NEW_FUNC[1/25]: 0x56c950 in redisvFormatCommand /src/hiredis/hiredis.c:316
+	NEW_FUNC[2/25]: 0x56ffa0 in __redisSetError /src/hiredis/hiredis.c:684
+#6	NEW    cov: 106 ft: 107 corp: 2/4b lim: 4096 exec/s: 0 rss: 34Mb L: 3/3 MS: 4 ChangeBit-ShuffleBytes-CopyPart-InsertByte-
+#16	NEW    cov: 106 ft: 111 corp: 3/9b lim: 4096 exec/s: 0 rss: 34Mb L: 5/5 MS: 5 ChangeBit-EraseBytes-ChangeBit-ChangeBit-CrossOver-
+#22	NEW    cov: 108 ft: 116 corp: 4/15b lim: 4096 exec/s: 0 rss: 34Mb L: 6/6 MS: 1 CopyPart-
+#25	NEW    cov: 108 ft: 130 corp: 5/20b lim: 4096 exec/s: 0 rss: 34Mb L: 5/6 MS: 3 ShuffleBytes-ChangeByte-CMP- DE: "\000\000"-
+#29	NEW    cov: 109 ft: 150 corp: 6/54b lim: 4096 exec/s: 0 rss: 34Mb L: 34/34 MS: 4 EraseBytes-ChangeByte-CopyPart-InsertRepeatedBytes-
+#30	NEW    cov: 109 ft: 159 corp: 7/88b lim: 4096 exec/s: 0 rss: 34Mb L: 34/34 MS: 1 ChangeBinInt-
+#44	REDUCE cov: 109 ft: 159 corp: 7/68b lim: 4096 exec/s: 0 rss: 35Mb L: 14/34 MS: 4 EraseBytes-ChangeBit-InsertByte-EraseBytes-
+#45	REDUCE cov: 114 ft: 175 corp: 8/195b lim: 4096 exec/s: 0 rss: 35Mb L: 127/127 MS: 1 InsertRepeatedBytes-
+#47	NEW    cov: 117 ft: 191 corp: 9/200b lim: 4096 exec/s: 0 rss: 35Mb L: 5/127 MS: 2 CrossOver-ChangeBinInt-
+#53	REDUCE cov: 117 ft: 192 corp: 10/311b lim: 4096 exec/s: 0 rss: 35Mb L: 111/127 MS: 1 InsertRepeatedBytes-
+#64	NEW    cov: 117 ft: 199 corp: 11/316b lim: 4096 exec/s: 0 rss: 35Mb L: 5/127 MS: 1 ShuffleBytes-
+#65	NEW    cov: 117 ft: 203 corp: 12/448b lim: 4096 exec/s: 0 rss: 35Mb L: 132/132 MS: 1 CrossOver-
+#68	NEW    cov: 117 ft: 205 corp: 13/459b lim: 4096 exec/s: 0 rss: 35Mb L: 11/132 MS: 3 CopyPart-ChangeBinInt-PersAutoDict- DE: "\000\000"-
+#74	NEW    cov: 118 ft: 206 corp: 14/464b lim: 4096 exec/s: 0 rss: 35Mb L: 5/132 MS: 1 ChangeBit-
+#102	NEW    cov: 118 ft: 214 corp: 15/575b lim: 4096 exec/s: 0 rss: 35Mb L: 111/132 MS: 3 CrossOver-ChangeBit-ChangeBinInt-
+#105	NEW    cov: 118 ft: 215 corp: 16/789b lim: 4096 exec/s: 0 rss: 35Mb L: 214/214 MS: 3 PersAutoDict-ChangeBit-InsertRepeatedBytes- DE: "\000\000"-
+#167	REDUCE cov: 118 ft: 215 corp: 16/788b lim: 4096 exec/s: 0 rss: 35Mb L: 4/214 MS: 2 ChangeByte-EraseBytes-
+#178	REDUCE cov: 118 ft: 215 corp: 16/786b lim: 4096 exec/s: 0 rss: 35Mb L: 3/214 MS: 1 EraseBytes-
+#233	NEW    cov: 124 ft: 225 corp: 17/1134b lim: 4096 exec/s: 0 rss: 35Mb L: 348/348 MS: 5 CopyPart-InsertRepeatedBytes-ShuffleBytes-InsertByte-CopyPart-
+#262	NEW    cov: 135 ft: 236 corp: 18/1142b lim: 4096 exec/s: 0 rss: 35Mb L: 8/348 MS: 4 ChangeBit-InsertByte-InsertByte-InsertByte-
+#264	REDUCE cov: 135 ft: 236 corp: 18/1099b lim: 4096 exec/s: 0 rss: 35Mb L: 68/348 MS: 2 CrossOver-EraseBytes-
+#265	REDUCE cov: 135 ft: 236 corp: 18/1098b lim: 4096 exec/s: 0 rss: 35Mb L: 4/348 MS: 1 EraseBytes-
+#267	REDUCE cov: 136 ft: 237 corp: 19/1106b lim: 4096 exec/s: 0 rss: 35Mb L: 8/348 MS: 2 CMP-CMP- DE: "\001\000\0007"-" \000\000\000\000\000\000\000"-
+=================================================================
+==13==ERROR: AddressSanitizer: stack-use-after-return on address 0x7f968ea72e00 at pc 0x0000004c3d69 bp 0x7ffd4ae40db0 sp 0x7ffd4ae40578
+READ of size 5 at 0x7f968ea72e00 thread T0
+SCARINESS: 56 (5-byte-read-stack-use-after-return)
+    #0 0x4c3d68 in strlen /src/llvm-project/compiler-rt/lib/asan/../sanitizer_common/sanitizer_common_interceptors.inc:389:5
+    #1 0x56d1a6 in redisvFormatCommand /src/hiredis/hiredis.c:368:24
+    #2 0x57543f in redisvAppendCommand /src/hiredis/hiredis.c:1132:11
+    #3 0x57543f in redisvCommand /src/hiredis/hiredis.c:1202:9
+    #4 0x57598d in redisCommand /src/hiredis/hiredis.c:1210:19
+    #5 0x56c4c7 in LLVMFuzzerTestOneInput /src/hiredis/format_command_fuzzer.c:19:11
+    #6 0x43de53 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #7 0x43d63a in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #8 0x43ed09 in fuzzer::Fuzzer::MutateAndTestOne() /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:757:19
+    #9 0x43f9d5 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:895:5
+    #10 0x42ed3f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #11 0x458392 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #12 0x7f968f201082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #13 0x41f77d in _start (out/libfuzzer-address-x86_64/format_command_fuzzer+0x41f77d)
+
+DEDUP_TOKEN: strlen--redisvFormatCommand--redisvAppendCommand
+Address 0x7f968ea72e00 is located in stack of thread T0 at offset 0 in frame
+    #0 0x57164f in redisConnect /src/hiredis/hiredis.c:875
+
+DEDUP_TOKEN: redisConnect
+  This frame has 1 object(s):
+    [32, 112) 'options' (line 876)
+HINT: this may be a false positive if your program uses some custom stack unwind mechanism, swapcontext or vfork
+      (longjmp and C++ exceptions *are* supported)
+SUMMARY: AddressSanitizer: stack-use-after-return /src/llvm-project/compiler-rt/lib/asan/../sanitizer_common/sanitizer_common_interceptors.inc:389:5 in strlen
+Shadow bytes around the buggy address:
+  0x0ff351d46570: f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5
+  0x0ff351d46580: f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5
+  0x0ff351d46590: f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5
+  0x0ff351d465a0: f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5
+  0x0ff351d465b0: f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5
+=>0x0ff351d465c0:[f5]f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5
+  0x0ff351d465d0: f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5
+  0x0ff351d465e0: f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5
+  0x0ff351d465f0: f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5
+  0x0ff351d46600: f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5
+  0x0ff351d46610: f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07 
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+==13==ABORTING
+MS: 5 CopyPart-ChangeByte-CMP-InsertRepeatedBytes-ChangeByte- DE: "\000\000\000\000\000\000\000\000"-; base unit: 63fe7a67b8756d1069a3b7938d65f73c8fe9c060
+0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x25,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x73,0x2,0x2,0xe7,0x2,0x76,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x2,
+sssssssssssssssssssssssssssss%ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss\002\002\347\002v\000\000\000\000\000\000\000\000\002
+artifact_prefix='./'; Test unit written to ./crash-9683dcd8e5c955cbc06783108c96f9a7a0b87a15
+Base64: c3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Mlc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3MCAucCdgAAAAAAAAAAAg==
+stat::number_of_executed_units: 332
+stat::average_exec_per_sec:     0
+stat::new_units_added:          23
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              36

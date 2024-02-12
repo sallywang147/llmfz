@@ -1,0 +1,52 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include "test-util.h"
+#include <kj/main.h>
+#include "serialize.h"
+#include <capnp/test.capnp.h>
+#include <unistd.h>
+
+extern "C" {
+#include <capnp/dynamic.h>
+}
+
+/* This is the entry point of a fuzz target to be used with libFuzzer
+ * or another fuzz driver.
+ * Such a fuzz driver is used by the autotools target capnp-llvm-fuzzer-testcase
+ * when the environment variable LIB_FUZZING_ENGINE is defined
+ * for instance LIB_FUZZING_ENGINE=-fsanitize=fuzzer for libFuzzer
+ */
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* Data, size_t Size) {
+  kj::ArrayPtr<const uint8_t> array(Data, Size);
+  kj::ArrayInputStream ais(array);
+
+  KJ_IF_MAYBE(e, kj::runCatchingExceptions([&]() {
+    capnp::InputStreamMessageReader reader(ais);
+    capnp::_::checkTestMessage(reader.getRoot<capnp::_::TestAllTypes>());
+    capnp::_::checkDynamicTestMessage(reader.getRoot<capnp::DynamicStruct>(capnp::Schema::from<capnp::_::TestAllTypes>()));
+    kj::str(reader.getRoot<capnp::_::TestAllTypes>());
+    // The following line is added to fix the error.
+    capnp::DynamicStruct::Builder builder = reader.getRoot<capnp::DynamicStruct>(capnp::Schema::from<capnp::_::TestAllTypes>()).asBuilder();
+  })) {
+    KJ_LOG(ERROR, "threw");
+  }
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+The target function `void capnp::DynamicStruct::Builder::adopt(capnp::DynamicStruct::Builder * this, capnp::StructSchema::Field * field, capnp::Orphan * orphan)` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `void capnp::DynamicStruct::Builder::adopt(capnp::DynamicStruct::Builder * this, capnp::StructSchema::Field * field, capnp::Orphan * orphan)` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

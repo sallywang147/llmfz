@@ -1,0 +1,96 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <hunspell/hunspell.hxx>
+#include <fstream>
+#include <sstream>
+
+extern "C" int LLVMFuzzerTestOneInput(const char* data, size_t size)
+{
+    if (size < 1)
+        return 0;
+    // use first byte as len of following word to feed into the spell checking
+    int wordlen = data[0];
+    ++data;
+    --size;
+    if (wordlen > size)
+        return 0;
+
+    std::ofstream wrd("/tmp/test.word", std::ios_base::out | std::ios_base::trunc | std::ios_base::binary);
+    wrd.write(data, wordlen);
+    wrd.close();
+
+    std::string word(data, wordlen);
+    data+=wordlen;
+    size-=wordlen;
+
+    // take the rest and split into into two, to make aff and dic
+    size_t affsize = size / 2;
+    std::ofstream aff("/tmp/test.aff", std::ios_base::out | std::ios_base::trunc | std::ios_base::binary);
+    aff.write(data, affsize);
+    aff.close();
+
+    size_t dicsize = size  - affsize;
+    std::ofstream dic("/tmp/test.dic", std::ios_base::out | std::ios_base::trunc | std::ios_base::binary);
+    dic.write(data + affsize, dicsize);
+    dic.close();
+
+    Hunspell dict("/tmp/test.aff", "/tmp/test.dic");
+
+    char ** slst;
+    int ret = Hunspell_generate(dict.getHunhandle(), &slst, const_cast<char*>(word.c_str()), nullptr);
+
+    for (int i = 0; i < ret; i++)
+        free(slst[i]);
+    free(slst);
+
+    return 0;
+}
+
+#if 0
+int main(void)
+{
+    std::ostringstream os;
+
+    std::string word;
+    std::ifstream wrd("/tmp/test.word", std::ios_base::in | std::ios_base::binary);
+
+    os << wrd.rdbuf();
+    word=os.str();
+
+    wrd.close();
+
+    Hunspell dict("/tmp/test.aff", "/tmp/test.dic");
+
+    char ** slst;
+    int ret = Hunspell_generate(dict.getHunhandle(), &slst, const_cast<char*>(word.c_str()), nullptr);
+
+    for (int i = 0; i < ret; i++)
+        free(slst[i]);
+    free(slst);
+
+    return 0;
+}
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+</code>
+
+The code has the following build issues:
+<error>
+./src/tools/fuzzer.cxx:38:38: error: no member named 'getHunhandle' in 'Hunspell'
+    int ret = Hunspell_generate(dict.getHunhandle(), &slst, const_cast<char*>(word.c_str()), nullptr);
+                                ~~~~ ^
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

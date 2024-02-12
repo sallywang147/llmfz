@@ -1,0 +1,314 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <algorithm>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+#include <string>
+
+extern "C" {
+#include "mworker.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  // Initialize mworker.
+  mworker_init();
+
+  // Create a fuzzed mworker_data struct.
+  mworker_data data_struct;
+  data_struct.cmd = stream.ConsumeIntegral<uint8_t>();
+  data_struct.arg = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg2 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg3 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg4 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg5 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg6 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg7 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg8 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg9 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg10 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg11 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg12 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg13 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg14 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg15 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg16 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg17 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg18 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg19 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg20 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg21 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg22 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg23 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg24 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg25 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg26 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg27 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg28 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg29 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg30 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg31 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg32 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg33 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg34 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg35 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg36 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg37 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg38 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg39 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg40 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg41 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg42 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg43 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg44 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg45 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg46 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg47 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg48 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg49 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg50 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg51 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg52 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg53 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg54 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg55 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg56 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg57 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg58 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg59 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg60 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg61 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg62 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg63 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg64 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg65 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg66 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg67 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg68 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg69 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg70 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg71 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg72 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg73 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg74 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg75 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg76 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg77 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg78 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg79 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg80 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg81 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg82 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg83 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg84 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg85 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg86 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg87 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg88 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg89 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg90 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg91 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg92 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg93 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg94 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg95 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg96 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg97 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg98 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg99 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg100 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg101 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg102 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg103 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg104 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg105 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg106 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg107 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg108 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg109 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg110 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg111 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg112 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg113 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg114 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg115 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg116 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg117 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg118 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg119 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg120 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg121 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg122 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg123 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg124 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg125 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg126 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg127 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg128 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg129 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg130 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg131 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg132 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg133 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg134 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg135 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg136 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg137 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg138 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg139 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg140 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg141 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg142 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg143 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg144 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg145 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg146 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg147 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg148 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg149 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg150 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg151 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg152 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg153 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg154 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg155 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg156 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg157 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg158 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg159 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg160 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg161 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg162 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg163 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg164 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg165 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg166 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg167 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg168 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg169 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg170 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg171 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg172 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg173 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg174 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg175 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg176 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg177 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg178 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg179 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg180 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg181 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg182 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg183 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg184 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg185 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg186 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg187 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg188 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg189 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg190 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg191 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg192 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg193 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg194 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg195 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg196 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg197 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg198 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg199 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg200 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg201 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg202 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg203 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg204 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg205 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg206 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg207 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg208 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg209 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg210 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg211 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg212 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg213 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg214 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg215 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg216 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg217 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg218 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg219 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg220 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg221 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg222 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg223 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg224 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg225 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg226 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg227 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg228 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg229 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg230 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg231 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg232 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg233 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg234 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg235 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg236 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg237 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg238 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg239 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg240 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg241 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg242 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg243 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg244 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg245 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg246 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg247 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg248 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg249 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg250 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg251 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg252 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg253 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg254 = stream.ConsumeIntegral<uint64_t>();
+  data_struct.arg255 = stream.ConsumeIntegral<uint64_t>();
+
+  // Call the function with the fuzzed data.
+  mworker_loop(&data_struct);
+
+  // Clean up.
+  mworker_deinit();
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+fuzz_cfg_parser.c:1:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+fuzz_cfg_parser.cpp:11:10: fatal error: 'mworker.h' file not found
+#include "mworker.h"
+         ^~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

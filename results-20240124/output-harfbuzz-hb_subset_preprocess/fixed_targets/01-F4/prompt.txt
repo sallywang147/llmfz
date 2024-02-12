@@ -1,0 +1,51 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <assert.h>
+#include <stdlib.h>
+
+#include <hb-ot.h>
+
+#include "hb-fuzzer.hh"
+
+extern "C" {
+#include <hb.h>
+#include <hb-subset.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  alloc_state = _fuzzing_alloc_state(data, size);
+
+  hb_blob_t* blob = hb_blob_create((const char*)data, size,
+                                   HB_MEMORY_MODE_READONLY, nullptr, nullptr);
+  hb_face_t* face = hb_face_create(blob, 0);
+
+  hb_subset_input_t* input = hb_subset_input_create_or_fail();
+  hb_set_subset_input_glyphs(input, "abc", 3);
+
+  hb_subset_face_t* subset_face = hb_subset_or_fail(face, input);
+
+  hb_face_destroy(face);
+  hb_subset_face_destroy(subset_face);
+  hb_subset_input_destroy(input);
+  hb_blob_destroy(blob);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+The target function `struct hb_face_t * hb_subset_preprocess(struct hb_face_t * source)` was not called by the fuzz target `LLVMFuzzerTestOneInput`.YOU MUST CALL FUNCTION `struct hb_face_t * hb_subset_preprocess(struct hb_face_t * source)` INSIDE FUNCTION `LLVMFuzzerTestOneInput`.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

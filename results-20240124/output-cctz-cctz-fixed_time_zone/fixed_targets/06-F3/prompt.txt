@@ -1,0 +1,55 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <iostream>
+#include <string>
+
+#include "cctz/time_zone.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+    FuzzedDataProvider fuzzed_data(data, size);
+
+    std::chrono::seconds offset(fuzzed_data.ConsumeIntegral<long long>());
+    cctz::time_zone::Impl *tz = cctz::fixed_time_zone(offset);
+    cctz::time_zone lax(tz);
+
+    const auto t1 = cctz::convert(cctz::civil_second(
+            fuzzed_data.ConsumeIntegral<uint32_t>(),
+            fuzzed_data.ConsumeIntegral<uint32_t>(),
+            fuzzed_data.ConsumeIntegral<uint32_t>(),
+            fuzzed_data.ConsumeIntegral<uint32_t>(),
+            fuzzed_data.ConsumeIntegral<uint32_t>(),
+            fuzzed_data.ConsumeIntegral<uint32_t>()), lax);
+    std::string format = fuzzed_data.ConsumeRandomLengthString();
+    cctz::format(format, t1, lax);
+
+    return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+./fuzz_cctz.cc:12:28: error: no viable conversion from 'cctz::time_zone' to 'cctz::time_zone::Impl *'
+    cctz::time_zone::Impl *tz = cctz::fixed_time_zone(offset);
+                           ^    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./fuzz_cctz.cc:13:21: error: calling a private constructor of class 'cctz::time_zone'
+    cctz::time_zone lax(tz);
+                    ^
+../include/cctz/time_zone.h:219:12: note: declared private here
+  explicit time_zone(const Impl* impl) : impl_(impl) {}
+           ^
+2 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

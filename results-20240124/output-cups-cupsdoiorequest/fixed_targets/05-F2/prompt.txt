@@ -1,0 +1,143 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <cups/cups.h>
+#include <cups/http.h>
+#include <cups/ipp.h>
+#include <fuzzer/FuzzedDataProvider.h>
+
+extern "C" {
+#include <algorithm>
+
+cups_http_t *cupsHttpNew();
+const char *httpGetHostname(http_t *http, char *s, int slen);
+bool httpSetEncryption(http_t *http, http_encryption_t e);
+void cupsHttpSetHostname(http_t *http, const char *hostname, int port);
+void cupsHttpSetTimeout(http_t *http, int timeout);
+void cupsHttpConnect(http_t *http);
+void cupsHttpSetLogging(http_t *http, http_log_level_t level);
+ipp_attribute_t *ippAddString(ipp_t *ipp, ipp_tag_t group, ipp_tag_t value_tag, const char *name, const char *value);
+ipp_t *cupsDoIORequest(http_t *http, ipp_t *request, const char *resource, int infile, int outfile);
+void cupsHttpClose(http_t *http);
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  cups_http_t *http = cupsHttpNew();
+  cupsHttpSetHostname(http, "localhost", 631);
+  cupsHttpSetTimeout(http, 30);
+  cupsHttpSetEncryption(http, HTTP_ENCRYPTION_NEVER);
+  cupsHttpConnect(http);
+  cupsHttpSetLogging(http, HTTP_DEBUG_LOGGING);
+
+  ipp_t *request = ippNew();
+  ippSetVersion(request, 1, 1);
+  ippAddString(request, IPP_TAG_OPERATION, IPP_TAG_KEYWORD, "Get-Printer-Attributes",
+              nullptr);
+  ippAddString(request, IPP_TAG_PRINTER_URI, IPP_TAG_URI, "ipp://localhost:631/printers/MyPrinter",
+              nullptr);
+
+  cupsDoIORequest(http, request, "/printers/MyPrinter", 0, 0);
+  ippDelete(request);
+  cupsHttpClose(http);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:16:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+FuzzIPP.cpp:9:1: error: unknown type name 'cups_http_t'; did you mean 'cups_ptype_t'?
+cups_http_t *cupsHttpNew();
+^~~~~~~~~~~
+cups_ptype_t
+./../cups/cups.h:274:18: note: 'cups_ptype_t' declared here
+typedef unsigned cups_ptype_t;          // Combined printer type/capability flags
+                 ^
+FuzzIPP.cpp:15:39: error: unknown type name 'http_log_level_t'
+void cupsHttpSetLogging(http_t *http, http_log_level_t level);
+                                      ^
+FuzzIPP.cpp:16:18: error: conflicting types for 'ippAddString'
+ipp_attribute_t *ippAddString(ipp_t *ipp, ipp_tag_t group, ipp_tag_t value_tag, const char *name, const char *value);
+                 ^
+./../cups/ipp.h:543:25: note: previous declaration is here
+extern ipp_attribute_t  *ippAddString(ipp_t *ipp, ipp_tag_t group, ipp_tag_t value_tag, const char *name, const char *language, const char *value) _CUPS_PUBLIC;
+                         ^
+FuzzIPP.cpp:23:3: error: unknown type name 'cups_http_t'; did you mean 'cups_ptype_t'?
+  cups_http_t *http = cupsHttpNew();
+  ^~~~~~~~~~~
+  cups_ptype_t
+./../cups/cups.h:274:18: note: 'cups_ptype_t' declared here
+typedef unsigned cups_ptype_t;          // Combined printer type/capability flags
+                 ^
+FuzzIPP.cpp:24:3: error: no matching function for call to 'cupsHttpSetHostname'
+  cupsHttpSetHostname(http, "localhost", 631);
+  ^~~~~~~~~~~~~~~~~~~
+FuzzIPP.cpp:12:6: note: candidate function not viable: no known conversion from 'cups_ptype_t *' (aka 'unsigned int *') to 'http_t *' (aka '_http_s *') for 1st argument
+void cupsHttpSetHostname(http_t *http, const char *hostname, int port);
+     ^
+FuzzIPP.cpp:25:3: error: no matching function for call to 'cupsHttpSetTimeout'
+  cupsHttpSetTimeout(http, 30);
+  ^~~~~~~~~~~~~~~~~~
+FuzzIPP.cpp:13:6: note: candidate function not viable: no known conversion from 'cups_ptype_t *' (aka 'unsigned int *') to 'http_t *' (aka '_http_s *') for 1st argument
+void cupsHttpSetTimeout(http_t *http, int timeout);
+     ^
+FuzzIPP.cpp:26:3: error: use of undeclared identifier 'cupsHttpSetEncryption'; did you mean 'httpSetEncryption'?
+  cupsHttpSetEncryption(http, HTTP_ENCRYPTION_NEVER);
+  ^~~~~~~~~~~~~~~~~~~~~
+  httpSetEncryption
+FuzzIPP.cpp:11:6: note: 'httpSetEncryption' declared here
+bool httpSetEncryption(http_t *http, http_encryption_t e);
+     ^
+FuzzIPP.cpp:26:25: error: cannot initialize a parameter of type 'http_t *' (aka '_http_s *') with an lvalue of type 'cups_ptype_t *' (aka 'unsigned int *')
+  cupsHttpSetEncryption(http, HTTP_ENCRYPTION_NEVER);
+                        ^~~~
+FuzzIPP.cpp:11:32: note: passing argument to parameter 'http' here
+bool httpSetEncryption(http_t *http, http_encryption_t e);
+                               ^
+FuzzIPP.cpp:27:3: error: no matching function for call to 'cupsHttpConnect'
+  cupsHttpConnect(http);
+  ^~~~~~~~~~~~~~~
+FuzzIPP.cpp:14:6: note: candidate function not viable: no known conversion from 'cups_ptype_t *' (aka 'unsigned int *') to 'http_t *' (aka '_http_s *') for 1st argument
+void cupsHttpConnect(http_t *http);
+     ^
+FuzzIPP.cpp:28:28: error: use of undeclared identifier 'HTTP_DEBUG_LOGGING'
+  cupsHttpSetLogging(http, HTTP_DEBUG_LOGGING);
+                           ^
+FuzzIPP.cpp:34:25: error: use of undeclared identifier 'IPP_TAG_PRINTER_URI'; did you mean 'IPP_TAG_PRINTER'?
+  ippAddString(request, IPP_TAG_PRINTER_URI, IPP_TAG_URI, "ipp://localhost:631/printers/MyPrinter",
+                        ^~~~~~~~~~~~~~~~~~~
+                        IPP_TAG_PRINTER
+./../cups/ipp.h:461:3: note: 'IPP_TAG_PRINTER' declared here
+  IPP_TAG_PRINTER,                      // Printer group
+  ^
+FuzzIPP.cpp:37:3: error: no matching function for call to 'cupsDoIORequest'
+  cupsDoIORequest(http, request, "/printers/MyPrinter", 0, 0);
+  ^~~~~~~~~~~~~~~
+FuzzIPP.cpp:17:8: note: candidate function not viable: no known conversion from 'cups_ptype_t *' (aka 'unsigned int *') to 'http_t *' (aka '_http_s *') for 1st argument
+ipp_t *cupsDoIORequest(http_t *http, ipp_t *request, const char *resource, int infile, int outfile);
+       ^
+FuzzIPP.cpp:39:3: error: no matching function for call to 'cupsHttpClose'
+  cupsHttpClose(http);
+  ^~~~~~~~~~~~~
+FuzzIPP.cpp:18:6: note: candidate function not viable: no known conversion from 'cups_ptype_t *' (aka 'unsigned int *') to 'http_t *' (aka '_http_s *') for 1st argument
+void cupsHttpClose(http_t *http);
+     ^
+13 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

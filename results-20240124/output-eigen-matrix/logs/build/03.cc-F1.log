@@ -1,0 +1,872 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ mkdir build_dir
++ cd build_dir
++ cmake ..
+-- The C compiler identification is Clang 15.0.0
+-- The CXX compiler identification is Clang 15.0.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/local/bin/clang-jcc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/local/bin/clang++-jcc - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Performing Test standard_math_library_linked_to_automatically
+-- Performing Test standard_math_library_linked_to_automatically - Success
+-- Standard libraries to link to explicitly: none
+-- Performing Test COMPILER_SUPPORT_WERROR
+-- Performing Test COMPILER_SUPPORT_WERROR - Success
+-- Performing Test COMPILER_SUPPORT_pedantic
+-- Performing Test COMPILER_SUPPORT_pedantic - Success
+-- Performing Test COMPILER_SUPPORT_Wall
+-- Performing Test COMPILER_SUPPORT_Wall - Success
+-- Performing Test COMPILER_SUPPORT_Wextra
+-- Performing Test COMPILER_SUPPORT_Wextra - Success
+-- Performing Test COMPILER_SUPPORT_Wundef
+-- Performing Test COMPILER_SUPPORT_Wundef - Success
+-- Performing Test COMPILER_SUPPORT_Wcastalign
+-- Performing Test COMPILER_SUPPORT_Wcastalign - Success
+-- Performing Test COMPILER_SUPPORT_Wcharsubscripts
+-- Performing Test COMPILER_SUPPORT_Wcharsubscripts - Success
+-- Performing Test COMPILER_SUPPORT_Wnonvirtualdtor
+-- Performing Test COMPILER_SUPPORT_Wnonvirtualdtor - Success
+-- Performing Test COMPILER_SUPPORT_Wunusedlocaltypedefs
+-- Performing Test COMPILER_SUPPORT_Wunusedlocaltypedefs - Success
+-- Performing Test COMPILER_SUPPORT_Wpointerarith
+-- Performing Test COMPILER_SUPPORT_Wpointerarith - Success
+-- Performing Test COMPILER_SUPPORT_Wwritestrings
+-- Performing Test COMPILER_SUPPORT_Wwritestrings - Success
+-- Performing Test COMPILER_SUPPORT_Wformatsecurity
+-- Performing Test COMPILER_SUPPORT_Wformatsecurity - Success
+-- Performing Test COMPILER_SUPPORT_Wshorten64to32
+-- Performing Test COMPILER_SUPPORT_Wshorten64to32 - Success
+-- Performing Test COMPILER_SUPPORT_Wlogicalop
+-- Performing Test COMPILER_SUPPORT_Wlogicalop - Success
+-- Performing Test COMPILER_SUPPORT_Wenumconversion
+-- Performing Test COMPILER_SUPPORT_Wenumconversion - Success
+-- Performing Test COMPILER_SUPPORT_Wcpp11extensions
+-- Performing Test COMPILER_SUPPORT_Wcpp11extensions - Success
+-- Performing Test COMPILER_SUPPORT_Wdoublepromotion
+-- Performing Test COMPILER_SUPPORT_Wdoublepromotion - Success
+-- Performing Test COMPILER_SUPPORT_Wshadow
+-- Performing Test COMPILER_SUPPORT_Wshadow - Success
+-- Performing Test COMPILER_SUPPORT_Wnopsabi
+-- Performing Test COMPILER_SUPPORT_Wnopsabi - Success
+-- Performing Test COMPILER_SUPPORT_Wnovariadicmacros
+-- Performing Test COMPILER_SUPPORT_Wnovariadicmacros - Success
+-- Performing Test COMPILER_SUPPORT_Wnolonglong
+-- Performing Test COMPILER_SUPPORT_Wnolonglong - Success
+-- Performing Test COMPILER_SUPPORT_fnochecknew
+-- Performing Test COMPILER_SUPPORT_fnochecknew - Success
+-- Performing Test COMPILER_SUPPORT_fnocommon
+-- Performing Test COMPILER_SUPPORT_fnocommon - Success
+-- Performing Test COMPILER_SUPPORT_fstrictaliasing
+-- Performing Test COMPILER_SUPPORT_fstrictaliasing - Success
+-- Performing Test COMPILER_SUPPORT_wd981
+-- Performing Test COMPILER_SUPPORT_wd981 - Failed
+-- Performing Test COMPILER_SUPPORT_wd2304
+-- Performing Test COMPILER_SUPPORT_wd2304 - Failed
+-- Performing Test COMPILER_SUPPORT_OPENMP
+-- Performing Test COMPILER_SUPPORT_OPENMP - Success
+-- Found unsuitable Qt version "" from NOTFOUND
+-- Looking for a Fortran compiler
+-- Looking for a Fortran compiler - NOTFOUND
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE  
+-- Could NOT find CHOLMOD (missing: CHOLMOD_INCLUDES CHOLMOD_LIBRARIES) 
+-- Could NOT find UMFPACK (missing: UMFPACK_INCLUDES UMFPACK_LIBRARIES) 
+-- Could NOT find KLU (missing: KLU_INCLUDES KLU_LIBRARIES) 
+-- Could NOT find SuperLU (missing: SUPERLU_INCLUDES SUPERLU_LIBRARIES SUPERLU_VERSION_OK) (Required is at least version "4.0")
+-- A version of Pastix has been found but pastix_nompi.h does not exist in the include directory. Because Eigen tests require a version without MPI, we disable the Pastix backend.
+-- Could NOT find SPQR (missing: SPQR_INCLUDES SPQR_LIBRARIES) 
+-- Could NOT find Accelerate (missing: Accelerate_INCLUDES Accelerate_LIBRARIES) 
+-- Found unsuitable Qt version "" from NOTFOUND
+-- Performing Test COMPILER_SUPPORT_FASTMATH
+-- Performing Test COMPILER_SUPPORT_FASTMATH - Success
+-- Could NOT find Boost (missing: Boost_INCLUDE_DIR) (Required is at least version "1.53.0")
+CUDA_TOOLKIT_ROOT_DIR not found or specified
+-- Could NOT find CUDA (missing: CUDA_TOOLKIT_ROOT_DIR CUDA_NVCC_EXECUTABLE CUDA_INCLUDE_DIRS CUDA_CUDART_LIBRARY) (Required is at least version "9.0")
+-- The Fortran compiler identification is unknown
+-- Could NOT find GoogleHash (missing: GOOGLEHASH_INCLUDES GOOGLEHASH_COMPILE) 
+-- Could NOT find Adolc (missing: ADOLC_INCLUDES ADOLC_LIBRARIES) 
+-- Could NOT find MPFR (missing: MPFR_INCLUDES MPFR_LIBRARIES MPFR_VERSION_OK) (Required is at least version "1.0.0")
+-- Could NOT find PkgConfig (missing: PKG_CONFIG_EXECUTABLE) 
+CUDA_TOOLKIT_ROOT_DIR not found or specified
+-- Could NOT find CUDA (missing: CUDA_TOOLKIT_ROOT_DIR CUDA_NVCC_EXECUTABLE CUDA_INCLUDE_DIRS CUDA_CUDART_LIBRARY) (Required is at least version "9.0")
+-- Found unsuitable Qt version "" from NOTFOUND
+-- Qt4 not found, so disabling the mandelbrot and opengl demos
+-- Could NOT find CLANG_FORMAT: Found unsuitable version "0.0", but required is exact version "9" (found CLANG_FORMAT_EXECUTABLE-NOTFOUND)
+-- ************************************************************
+-- ***    Eigen's unit tests configuration summary          ***
+-- ************************************************************
+-- 
+-- Build type:        Release
+-- Build site:        0c5ca9c5c03b
+-- Build string:      linux-5.10.0-27-cloud-amd64-llvm-clang++-15.0.0-sse2-64bit
+-- Enabled backends:  
+-- Disabled backends: CHOLMOD,  UMFPACK,  KLU,  SuperLU,  PaStiX,  METIS,  SPQR,  Accelerate,  Qt4 support,  Boost.Multiprecision,  GoogleHash,  Adolc,  MPFR C++,  fftw,  pocketfft,  OpenGL, 
+-- Default order:     Column-major
+-- Maximal matrix/vector size: 320
+-- SSE2:              Using architecture defaults
+-- SSE3:              Using architecture defaults
+-- SSSE3:             Using architecture defaults
+-- SSE4.1:            Using architecture defaults
+-- SSE4.2:            Using architecture defaults
+-- AVX:               Using architecture defaults
+-- AVX2:              Using architecture defaults
+-- FMA:               Using architecture defaults
+-- AVX512:            Using architecture defaults
+-- AVX512DQ:          Using architecture defaults
+-- Altivec:           Using architecture defaults
+-- VSX:               Using architecture defaults
+-- MIPS MSA:          Using architecture defaults
+-- ARM NEON:          Using architecture defaults
+-- ARMv8 NEON:        Using architecture defaults
+-- S390X ZVECTOR:     Using architecture defaults
+-- SYCL:              OFF
+-- CUDA:              OFF
+-- HIP:               OFF
+-- 
+CXX:               /usr/local/bin/clang++-jcc
+ CXX_FLAGS:         -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -pedantic -Wall -Wextra -Wundef -Wcast-align -Wchar-subscripts -Wnon-virtual-dtor -Wunused-local-typedefs -Wpointer-arith -Wwrite-strings -Wformat-security -Wshorten-64-to-32 -Wlogical-op -Wenum-conversion -Wc++11-extensions -Wdouble-promotion -Wshadow -Wno-psabi -Wno-variadic-macros -Wno-long-long -fno-check-new -fno-common -fstrict-aliasing
+ Sparse lib flags:   
+
+-- ************************************************************
+-- 
+-- Configured Eigen 3.4.90
+-- 
+-- Available targets (use: make TARGET):
+-- ---------+--------------------------------------------------------------
+-- Target   |   Description
+-- ---------+--------------------------------------------------------------
+-- install  | Install Eigen. Headers will be installed to:
+--          |     <CMAKE_INSTALL_PREFIX>/<INCLUDE_INSTALL_DIR>
+--          |   Using the following values:
+--          |     CMAKE_INSTALL_PREFIX: /usr/local
+--          |     INCLUDE_INSTALL_DIR:  include/eigen3
+--          |   Change the install location of Eigen headers using:
+--          |     cmake . -DCMAKE_INSTALL_PREFIX=yourprefix
+--          |   Or:
+--          |     cmake . -DINCLUDE_INSTALL_DIR=yourdir
+-- doc      | Generate the API documentation, requires Doxygen & LaTeX
+-- check    | Build and run the unit-tests. Read this page:
+--          |   http://eigen.tuxfamily.org/index.php?title=Tests
+-- blas     | Build BLAS library (not the same thing as Eigen)
+-- uninstall| Remove files installed by the install target
+-- ---------+--------------------------------------------------------------
+-- 
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /src/eigen/build_dir
++ make install
+Install the project...
+-- Install configuration: "Release"
+-- Installing: /usr/local/include/eigen3/signature_of_eigen3_matrix_library
+-- Installing: /usr/local/share/pkgconfig/eigen3.pc
+-- Installing: /usr/local/include/eigen3/Eigen
+-- Installing: /usr/local/include/eigen3/Eigen/PaStiXSupport
+-- Installing: /usr/local/include/eigen3/Eigen/SparseCholesky
+-- Installing: /usr/local/include/eigen3/Eigen/SVD
+-- Installing: /usr/local/include/eigen3/Eigen/LU
+-- Installing: /usr/local/include/eigen3/Eigen/OrderingMethods
+-- Installing: /usr/local/include/eigen3/Eigen/SparseCore
+-- Installing: /usr/local/include/eigen3/Eigen/Core
+-- Installing: /usr/local/include/eigen3/Eigen/UmfPackSupport
+-- Installing: /usr/local/include/eigen3/Eigen/AccelerateSupport
+-- Installing: /usr/local/include/eigen3/Eigen/Geometry
+-- Installing: /usr/local/include/eigen3/Eigen/QtAlignedMalloc
+-- Installing: /usr/local/include/eigen3/Eigen/MetisSupport
+-- Installing: /usr/local/include/eigen3/Eigen/PardisoSupport
+-- Installing: /usr/local/include/eigen3/Eigen/SuperLUSupport
+-- Installing: /usr/local/include/eigen3/Eigen/KLUSupport
+-- Installing: /usr/local/include/eigen3/Eigen/StdVector
+-- Installing: /usr/local/include/eigen3/Eigen/Eigen
+-- Installing: /usr/local/include/eigen3/Eigen/SparseLU
+-- Installing: /usr/local/include/eigen3/Eigen/CholmodSupport
+-- Installing: /usr/local/include/eigen3/Eigen/IterativeLinearSolvers
+-- Installing: /usr/local/include/eigen3/Eigen/Dense
+-- Installing: /usr/local/include/eigen3/Eigen/Jacobi
+-- Installing: /usr/local/include/eigen3/Eigen/StdDeque
+-- Installing: /usr/local/include/eigen3/Eigen/SPQRSupport
+-- Installing: /usr/local/include/eigen3/Eigen/QR
+-- Installing: /usr/local/include/eigen3/Eigen/SparseQR
+-- Installing: /usr/local/include/eigen3/Eigen/Cholesky
+-- Installing: /usr/local/include/eigen3/Eigen/ThreadPool
+-- Installing: /usr/local/include/eigen3/Eigen/src
+-- Installing: /usr/local/include/eigen3/Eigen/src/PaStiXSupport
+-- Installing: /usr/local/include/eigen3/Eigen/src/PaStiXSupport/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/PaStiXSupport/PaStiXSupport.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/StlSupport
+-- Installing: /usr/local/include/eigen3/Eigen/src/StlSupport/details.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/StlSupport/StdVector.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/StlSupport/StdList.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/StlSupport/StdDeque.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseCholesky
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseCholesky/SimplicialCholesky_impl.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseCholesky/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseCholesky/SimplicialCholesky.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SVD
+-- Installing: /usr/local/include/eigen3/Eigen/src/SVD/BDCSVD_LAPACKE.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SVD/JacobiSVD.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SVD/BDCSVD.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SVD/SVDBase.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SVD/JacobiSVD_LAPACKE.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SVD/UpperBidiagonalization.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SVD/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/LU
+-- Installing: /usr/local/include/eigen3/Eigen/src/LU/PartialPivLU_LAPACKE.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/LU/arch
+-- Installing: /usr/local/include/eigen3/Eigen/src/LU/arch/InverseSize4.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/LU/FullPivLU.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/LU/InverseImpl.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/LU/PartialPivLU.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/LU/Determinant.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/LU/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/OrderingMethods
+-- Installing: /usr/local/include/eigen3/Eigen/src/OrderingMethods/Amd.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/OrderingMethods/Ordering.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/OrderingMethods/Eigen_Colamd.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/OrderingMethods/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseCore
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseCore/SparseTriangularView.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseCore/ConservativeSparseSparseProduct.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseCore/SparseCwiseBinaryOp.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseCore/SparseUtil.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseCore/SparseRedux.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseCore/SparseFuzzy.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseCore/SparseVector.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseCore/SparseMatrixBase.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseCore/SparseBlock.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseCore/AmbiVector.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseCore/SparseAssign.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseCore/SparseSelfAdjointView.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseCore/SparsePermutation.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseCore/CompressedStorage.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseCore/SparseProduct.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseCore/SparseSolverBase.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseCore/SparseRef.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseCore/SparseDenseProduct.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseCore/TriangularSolver.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseCore/SparseDiagonalProduct.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseCore/SparseDot.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseCore/SparseMatrix.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseCore/SparseMap.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseCore/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseCore/SparseTranspose.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseCore/SparseSparseProductWithPruning.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseCore/SparseColEtree.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseCore/SparseCwiseUnaryOp.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseCore/SparseCompressedBase.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseCore/SparseView.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/Ref.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/StableNorm.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/SolveTriangular.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/Reverse.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/Assign.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/SolverBase.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/ConditionEstimator.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/DenseBase.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/ArrayBase.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/util
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/util/MKL_support.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/util/Constants.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/util/Meta.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/util/ConfigureVectorization.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/util/ReshapedHelper.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/util/Serializer.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/util/DisableStupidWarnings.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/util/XprHelper.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/util/Assert.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/util/IndexedViewHelper.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/util/MaxSizeVector.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/util/ReenableStupidWarnings.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/util/EmulateArray.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/util/SymbolicIndex.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/util/BlasUtil.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/util/Macros.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/util/IntegralConstant.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/util/StaticAssert.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/util/MoreMeta.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/util/ForwardDeclarations.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/util/Memory.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/CommaInitializer.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/StlIterators.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/TriangularMatrix.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/NumTraits.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/AVX
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/AVX/PacketMath.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/AVX/MathFunctions.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/AVX/Complex.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/AVX/TypeCasting.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/MSA
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/MSA/PacketMath.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/MSA/MathFunctions.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/MSA/Complex.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/SYCL
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/SYCL/InteropHeaders.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/SYCL/PacketMath.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/SYCL/MathFunctions.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/SYCL/TypeCasting.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/Default
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/Default/BFloat16.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/Default/ConjHelper.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/Default/GenericPacketMathFunctions.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/Default/GenericPacketMathFunctionsFwd.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/Default/Settings.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/Default/Half.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/SVE
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/SVE/PacketMath.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/SVE/MathFunctions.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/SVE/TypeCasting.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/NEON
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/NEON/PacketMath.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/NEON/MathFunctions.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/NEON/UnaryFunctors.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/NEON/GeneralBlockPanelKernel.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/NEON/Complex.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/NEON/TypeCasting.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/ZVector
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/ZVector/PacketMath.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/ZVector/MathFunctions.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/ZVector/Complex.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/AltiVec
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/AltiVec/MatrixProductMMAbfloat16.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/AltiVec/MatrixProductCommon.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/AltiVec/PacketMath.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/AltiVec/MathFunctions.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/AltiVec/MatrixProduct.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/AltiVec/MatrixProductMMA.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/AltiVec/MatrixVectorProduct.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/AltiVec/Complex.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/AltiVec/TypeCasting.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/SSE
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/SSE/PacketMath.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/SSE/MathFunctions.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/SSE/Complex.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/SSE/TypeCasting.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/AVX512
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/AVX512/PacketMath.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/AVX512/GemmKernel.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/AVX512/MathFunctions.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/AVX512/TrsmUnrolls.inc
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/AVX512/TrsmKernel.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/AVX512/Complex.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/AVX512/TypeCasting.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/AVX512/PacketMathFP16.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/GPU
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/GPU/Tuple.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/GPU/PacketMath.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/GPU/MathFunctions.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/GPU/Complex.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/GPU/TypeCasting.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/HIP
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/HIP/hcc
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/HIP/hcc/math_constants.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/HVX
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/arch/HVX/PacketMath.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/EigenBase.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/VectorBlock.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/MathFunctionsImpl.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/Reshaped.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/IndexedView.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/Redux.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/ProductEvaluators.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/MatrixBase.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/MathFunctions.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/Block.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/ReturnByValue.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/CoreEvaluators.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/CwiseUnaryView.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/ForceAlignedAccess.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/Diagonal.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/Random.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/Select.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/functors
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/functors/AssignmentFunctors.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/functors/StlFunctors.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/functors/UnaryFunctors.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/functors/BinaryFunctors.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/functors/TernaryFunctors.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/functors/NullaryFunctors.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/GeneralProduct.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/Dot.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/MapBase.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/PermutationMatrix.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/DenseStorage.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/Transpose.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/CwiseBinaryOp.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/CwiseTernaryOp.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/Matrix.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/CwiseNullaryOp.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/DiagonalProduct.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/Transpositions.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/Inverse.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/DiagonalMatrix.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/DenseCoeffsBase.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/Assign_MKL.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/Map.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/SelfAdjointView.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/GenericPacketMath.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/Product.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/Solve.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/PartialReduxEvaluator.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/products
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/products/TriangularMatrixVector_BLAS.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/products/SelfadjointProduct.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/products/GeneralMatrixVector.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/products/SelfadjointMatrixVector_BLAS.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/products/SelfadjointRank2Update.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/products/SelfadjointMatrixVector.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/products/TriangularMatrixMatrix_BLAS.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/products/GeneralMatrixVector_BLAS.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/products/Parallelizer.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/products/TriangularMatrixVector.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/products/SelfadjointMatrixMatrix.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/products/TriangularSolverVector.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/products/GeneralBlockPanelKernel.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/products/TriangularMatrixMatrix.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/products/GeneralMatrixMatrixTriangular.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/products/GeneralMatrixMatrix.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/products/SelfadjointMatrixMatrix_BLAS.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/products/GeneralMatrixMatrixTriangular_BLAS.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/products/TriangularSolverMatrix.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/products/GeneralMatrixMatrix_BLAS.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/products/TriangularSolverMatrix_BLAS.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/Fuzzy.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/Visitor.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/BandMatrix.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/Swap.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/Array.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/ArithmeticSequence.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/NoAlias.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/CwiseUnaryOp.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/ArrayWrapper.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/IO.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/PlainObjectBase.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/CoreIterators.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/NestByValue.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/Replicate.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/SkewSymmetricMatrix3.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/AssignEvaluator.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/VectorwiseOp.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/Stride.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/GlobalFunctions.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Core/SelfCwiseBinaryOp.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/UmfPackSupport
+-- Installing: /usr/local/include/eigen3/Eigen/src/UmfPackSupport/UmfPackSupport.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/UmfPackSupport/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/AccelerateSupport
+-- Installing: /usr/local/include/eigen3/Eigen/src/AccelerateSupport/AccelerateSupport.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/AccelerateSupport/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Geometry
+-- Installing: /usr/local/include/eigen3/Eigen/src/Geometry/AlignedBox.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Geometry/Hyperplane.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Geometry/Umeyama.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Geometry/arch
+-- Installing: /usr/local/include/eigen3/Eigen/src/Geometry/arch/Geometry_SIMD.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Geometry/OrthoMethods.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Geometry/Quaternion.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Geometry/Rotation2D.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Geometry/Homogeneous.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Geometry/EulerAngles.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Geometry/RotationBase.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Geometry/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Geometry/ParametrizedLine.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Geometry/Scaling.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Geometry/AngleAxis.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Geometry/Transform.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Geometry/Translation.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/misc
+-- Installing: /usr/local/include/eigen3/Eigen/src/misc/blas.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/misc/lapacke.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/misc/RealSvd2x2.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/misc/lapacke_mangling.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/misc/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/misc/Image.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/misc/Kernel.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/misc/lapacke_helpers.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/MetisSupport
+-- Installing: /usr/local/include/eigen3/Eigen/src/MetisSupport/MetisSupport.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/MetisSupport/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/PardisoSupport
+-- Installing: /usr/local/include/eigen3/Eigen/src/PardisoSupport/PardisoSupport.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/PardisoSupport/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SuperLUSupport
+-- Installing: /usr/local/include/eigen3/Eigen/src/SuperLUSupport/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SuperLUSupport/SuperLUSupport.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/KLUSupport
+-- Installing: /usr/local/include/eigen3/Eigen/src/KLUSupport/KLUSupport.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/KLUSupport/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseLU
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseLU/SparseLU_kernel_bmod.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseLU/SparseLU_SupernodalMatrix.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseLU/SparseLU_pivotL.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseLU/SparseLU_relax_snode.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseLU/SparseLU_column_bmod.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseLU/SparseLU_copy_to_ucol.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseLU/SparseLUImpl.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseLU/SparseLU_heap_relax_snode.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseLU/SparseLU.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseLU/SparseLU_Utils.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseLU/SparseLU_pruneL.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseLU/SparseLU_Structs.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseLU/SparseLU_panel_bmod.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseLU/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseLU/SparseLU_Memory.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseLU/SparseLU_column_dfs.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseLU/SparseLU_panel_dfs.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/CholmodSupport
+-- Installing: /usr/local/include/eigen3/Eigen/src/CholmodSupport/CholmodSupport.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/CholmodSupport/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/IterativeLinearSolvers
+-- Installing: /usr/local/include/eigen3/Eigen/src/IterativeLinearSolvers/BiCGSTAB.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/IterativeLinearSolvers/BasicPreconditioners.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/IterativeLinearSolvers/ConjugateGradient.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/IterativeLinearSolvers/LeastSquareConjugateGradient.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/IterativeLinearSolvers/IncompleteLUT.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/IterativeLinearSolvers/IterativeSolverBase.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/IterativeLinearSolvers/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/IterativeLinearSolvers/SolveWithGuess.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/IterativeLinearSolvers/IncompleteCholesky.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Jacobi
+-- Installing: /usr/local/include/eigen3/Eigen/src/Jacobi/Jacobi.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Jacobi/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SPQRSupport
+-- Installing: /usr/local/include/eigen3/Eigen/src/SPQRSupport/SuiteSparseQRSupport.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SPQRSupport/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/QR
+-- Installing: /usr/local/include/eigen3/Eigen/src/QR/ColPivHouseholderQR_LAPACKE.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/QR/CompleteOrthogonalDecomposition.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/QR/ColPivHouseholderQR.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/QR/FullPivHouseholderQR.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/QR/HouseholderQR_LAPACKE.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/QR/HouseholderQR.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/QR/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseQR
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseQR/SparseQR.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/SparseQR/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Cholesky
+-- Installing: /usr/local/include/eigen3/Eigen/src/Cholesky/LLT_LAPACKE.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Cholesky/LDLT.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Cholesky/LLT.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Cholesky/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/ThreadPool
+-- Installing: /usr/local/include/eigen3/Eigen/src/ThreadPool/NonBlockingThreadPool.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/ThreadPool/ThreadCancel.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/ThreadPool/EventCount.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/ThreadPool/ThreadPoolInterface.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/ThreadPool/ThreadYield.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/ThreadPool/Barrier.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/ThreadPool/ThreadEnvironment.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/ThreadPool/ThreadLocal.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/ThreadPool/RunQueue.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/ThreadPool/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Eigenvalues
+-- Installing: /usr/local/include/eigen3/Eigen/src/Eigenvalues/RealSchur.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Eigenvalues/RealQZ.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Eigenvalues/ComplexEigenSolver.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Eigenvalues/SelfAdjointEigenSolver.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Eigenvalues/HessenbergDecomposition.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Eigenvalues/ComplexSchur_LAPACKE.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Eigenvalues/RealSchur_LAPACKE.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Eigenvalues/EigenSolver.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Eigenvalues/GeneralizedSelfAdjointEigenSolver.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Eigenvalues/GeneralizedEigenSolver.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Eigenvalues/ComplexSchur.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Eigenvalues/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Eigenvalues/Tridiagonalization.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Eigenvalues/SelfAdjointEigenSolver_LAPACKE.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Eigenvalues/MatrixBaseEigenvalues.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Householder
+-- Installing: /usr/local/include/eigen3/Eigen/src/Householder/BlockHouseholder.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Householder/HouseholderSequence.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Householder/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/Householder/Householder.h
+-- Installing: /usr/local/include/eigen3/Eigen/src/plugins
+-- Installing: /usr/local/include/eigen3/Eigen/src/plugins/IndexedViewMethods.inc
+-- Installing: /usr/local/include/eigen3/Eigen/src/plugins/CommonCwiseBinaryOps.inc
+-- Installing: /usr/local/include/eigen3/Eigen/src/plugins/ReshapedMethods.inc
+-- Installing: /usr/local/include/eigen3/Eigen/src/plugins/BlockMethods.inc
+-- Installing: /usr/local/include/eigen3/Eigen/src/plugins/MatrixCwiseBinaryOps.inc
+-- Installing: /usr/local/include/eigen3/Eigen/src/plugins/ArrayCwiseUnaryOps.inc
+-- Installing: /usr/local/include/eigen3/Eigen/src/plugins/CommonCwiseUnaryOps.inc
+-- Installing: /usr/local/include/eigen3/Eigen/src/plugins/ArrayCwiseBinaryOps.inc
+-- Installing: /usr/local/include/eigen3/Eigen/src/plugins/InternalHeaderCheck.inc
+-- Installing: /usr/local/include/eigen3/Eigen/src/plugins/MatrixCwiseUnaryOps.inc
+-- Installing: /usr/local/include/eigen3/Eigen/Eigenvalues
+-- Installing: /usr/local/include/eigen3/Eigen/StdList
+-- Installing: /usr/local/include/eigen3/Eigen/Sparse
+-- Installing: /usr/local/include/eigen3/Eigen/Householder
+-- Installing: /usr/local/share/eigen3/cmake/Eigen3Targets.cmake
+-- Installing: /usr/local/share/eigen3/cmake/Eigen3Config.cmake
+-- Installing: /usr/local/share/eigen3/cmake/Eigen3ConfigVersion.cmake
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/AdolcForward
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/AlignedVector3
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/ArpackSupport
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/AutoDiff
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/BVH
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/EulerAngles
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/FFT
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/IterativeSolvers
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/KroneckerProduct
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/LevenbergMarquardt
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/MatrixFunctions
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/MoreVectorization
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/MPRealSupport
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/NNLS
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/NonLinearOptimization
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/NumericalDiff
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/OpenGLSupport
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/Polynomials
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/Skyline
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/SparseExtra
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/SpecialFunctions
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/Splines
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/SparseExtra
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/SparseExtra/MarketIO.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/SparseExtra/RandomSetter.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/SparseExtra/MatrixMarketIterator.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/SparseExtra/SparseInverse.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/SparseExtra/BlockSparseMatrix.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/SparseExtra/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/SpecialFunctions
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/SpecialFunctions/HipVectorCompatibility.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/SpecialFunctions/BesselFunctionsHalf.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/SpecialFunctions/arch
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/SpecialFunctions/arch/AVX
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/SpecialFunctions/arch/AVX/SpecialFunctions.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/SpecialFunctions/arch/AVX/BesselFunctions.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/SpecialFunctions/arch/NEON
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/SpecialFunctions/arch/NEON/SpecialFunctions.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/SpecialFunctions/arch/NEON/BesselFunctions.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/SpecialFunctions/arch/AVX512
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/SpecialFunctions/arch/AVX512/SpecialFunctions.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/SpecialFunctions/arch/AVX512/BesselFunctions.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/SpecialFunctions/arch/GPU
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/SpecialFunctions/arch/GPU/SpecialFunctions.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/SpecialFunctions/SpecialFunctionsFunctors.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/SpecialFunctions/SpecialFunctionsImpl.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/SpecialFunctions/SpecialFunctionsHalf.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/SpecialFunctions/BesselFunctionsFunctors.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/SpecialFunctions/SpecialFunctionsPacketMath.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/SpecialFunctions/BesselFunctionsArrayAPI.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/SpecialFunctions/SpecialFunctionsBFloat16.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/SpecialFunctions/BesselFunctionsPacketMath.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/SpecialFunctions/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/SpecialFunctions/BesselFunctionsBFloat16.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/SpecialFunctions/BesselFunctionsImpl.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/SpecialFunctions/SpecialFunctionsArrayAPI.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/MatrixFunctions
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/MatrixFunctions/StemFunction.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixSquareRoot.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixFunction.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/MatrixFunctions/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixLogarithm.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixPower.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/Skyline
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/Skyline/SkylineProduct.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/Skyline/SkylineMatrix.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/Skyline/SkylineStorage.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/Skyline/SkylineUtil.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/Skyline/SkylineInplaceLU.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/Skyline/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/Skyline/SkylineMatrixBase.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/LevenbergMarquardt
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/LevenbergMarquardt/LMcovar.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/LevenbergMarquardt/LMqrsolv.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/LevenbergMarquardt/LevenbergMarquardt.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/LevenbergMarquardt/LMonestep.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/LevenbergMarquardt/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/LevenbergMarquardt/LMpar.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/AutoDiff
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/AutoDiff/AutoDiffVector.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/AutoDiff/AutoDiffJacobian.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/AutoDiff/AutoDiffScalar.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/AutoDiff/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/NonLinearOptimization
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/NonLinearOptimization/r1mpyq.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/NonLinearOptimization/r1updt.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/NonLinearOptimization/LevenbergMarquardt.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/NonLinearOptimization/qrsolv.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/NonLinearOptimization/rwupdt.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/NonLinearOptimization/fdjac1.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/NonLinearOptimization/lmpar.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/NonLinearOptimization/covar.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/NonLinearOptimization/HybridNonLinearSolver.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/NonLinearOptimization/chkder.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/NonLinearOptimization/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/NonLinearOptimization/dogleg.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/NumericalDiff
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/NumericalDiff/NumericalDiff.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/NumericalDiff/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/Splines
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/Splines/SplineFitting.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/Splines/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/Splines/SplineFwd.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/Splines/Spline.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/FFT
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/FFT/ei_fftw_impl.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/FFT/ei_pocketfft_impl.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/FFT/ei_imklfft_impl.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/FFT/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/FFT/ei_kissfft_impl.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/IterativeSolvers
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/IterativeSolvers/GMRES.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/IterativeSolvers/MINRES.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/IterativeSolvers/IDRS.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/IterativeSolvers/IDRSTABL.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/IterativeSolvers/IncompleteLU.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/IterativeSolvers/BiCGSTABL.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/IterativeSolvers/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/IterativeSolvers/DGMRES.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/IterativeSolvers/Scaling.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/KroneckerProduct
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/KroneckerProduct/KroneckerTensorProduct.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/KroneckerProduct/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/EulerAngles
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/EulerAngles/EulerSystem.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/EulerAngles/EulerAngles.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/EulerAngles/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/Polynomials
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/Polynomials/Companion.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/Polynomials/PolynomialSolver.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/Polynomials/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/Polynomials/PolynomialUtils.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/Eigenvalues
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/Eigenvalues/ArpackSelfAdjointEigenSolver.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/Eigenvalues/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/MoreVectorization
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/MoreVectorization/MathFunctions.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/MoreVectorization/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/BVH
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/BVH/KdBVH.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/BVH/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/src/BVH/BVAlgorithms.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/Tensor
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/TensorSymmetry
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/ThreadPool
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorDeviceDefault.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorIndexList.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorArgMax.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorGenerator.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorUInt128.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorContractionGpu.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorDevice.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorTrace.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorDeviceGpu.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorExpr.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorMorphing.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/Tensor.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorReverse.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorCostModel.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorFunctors.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorScan.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorDeviceThreadPool.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorContractionMapper.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorReduction.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorForwardDeclarations.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorGpuHipCudaUndefines.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorTraits.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorFFT.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorShuffling.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorCustomOp.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorMeta.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorIO.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorMap.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorInflation.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorExecutor.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorFixedSize.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorReductionSycl.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorRef.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorContractionSycl.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorForcedEval.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorChipping.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorVolumePatch.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorScanSycl.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorBroadcasting.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorContraction.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorImagePatch.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorPadding.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorContractionThreadPool.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorConvolutionSycl.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorGpuHipCudaDefines.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorInitializer.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorBase.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorDeviceSycl.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorPatch.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorEvaluator.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorMacros.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorConvolution.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorDimensions.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorStorage.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorLayoutSwap.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorEvalTo.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorGlobalFunctions.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorConversion.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorIntDiv.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorDimensionList.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/InternalHeaderCheck.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorBlock.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorContractionBlocking.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorRandom.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorContractionCuda.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorStriding.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorDeviceCuda.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorConcatenation.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorAssign.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/Tensor/TensorReductionGpu.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/util
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/util/CXX11Meta.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/util/CXX11Workarounds.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/TensorSymmetry
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/TensorSymmetry/util
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/TensorSymmetry/util/TemplateGroupTheory.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/TensorSymmetry/Symmetry.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/TensorSymmetry/DynamicSymmetry.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/TensorSymmetry/StaticSymmetry.h
+-- Installing: /usr/local/include/eigen3/unsupported/Eigen/CXX11/src/TensorSymmetry/InternalHeaderCheck.h
++ cd ..
+++ find /src -name '*_fuzzer.cc'
++ for fuzzers in $(find $SRC -name '*_fuzzer.cc')
+++ basename -s .cc /src/solver_fuzzer.cc
++ fuzz_basename=solver_fuzzer
++ /usr/local/bin/clang++-jcc -O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++ -I. -Isrc/Eigen/Core /src/solver_fuzzer.cc -o /workspace/out/libfuzzer-address-x86_64/solver_fuzzer -fsanitize=fuzzer
+/src/solver_fuzzer.cc:581:69: error: expected ';' after expression
+  for (Eigen::Index i = 0; i < rows; ++i) sm2.col(i).noalias() -= sm
+                                                                    ^
+                                                                    ;
+/src/solver_fuzzer.cc:581:67: error: use of undeclared identifier 'sm'
+  for (Eigen::Index i = 0; i < rows; ++i) sm2.col(i).noalias() -= sm
+                                                                  ^
+/src/solver_fuzzer.cc:581:69: error: expected '}'
+  for (Eigen::Index i = 0; i < rows; ++i) sm2.col(i).noalias() -= sm
+                                                                    ^
+/src/solver_fuzzer.cc:54:66: note: to match this '{'
+void basicStuff(const MatrixType& m, FuzzedDataProvider* stream) {
+                                                                 ^
+/src/solver_fuzzer.cc:581:69: error: expected '}'
+  for (Eigen::Index i = 0; i < rows; ++i) sm2.col(i).noalias() -= sm
+                                                                    ^
+/src/solver_fuzzer.cc:5:11: note: to match this '{'
+namespace {
+          ^
+4 errors generated.

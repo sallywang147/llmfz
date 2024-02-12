@@ -1,0 +1,53 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include <expat.h>
+
+extern "C" {
+#include "libfuzzer/libfuzzer_macro.h"
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
+{
+  char test_file[] = "libfuzzer.xml";
+  FILE* fp = fopen(test_file, "wb");
+  if (!fp)
+    return 0;
+  fwrite(data, size, 1, fp);
+  fclose(fp);
+
+  XML_Parser parser = XML_ParserCreate(nullptr);
+  XML_SetExternalEntityRefHandler(parser, externalEntityInitProcessor);
+  if (XML_ParseFile(parser, test_file) == XML_STATUS_ERROR) {
+    return 1;
+  }
+
+  XML_ParserFree(parser);
+  remove(test_file);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+xml_parser_fuzzer.cc:6:10: fatal error: 'expat.h' file not found
+#include <expat.h>
+         ^~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

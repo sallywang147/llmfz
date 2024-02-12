@@ -1,0 +1,46 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+#include <xml.h>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
+{
+  XML_Parser parser = XML_ParserCreate(NULL);
+  if (!parser)
+    return 0;
+
+  char* context = (char*)malloc(size);
+  if (!context) {
+    XML_ParserFree(parser);
+    return 0;
+  }
+  memcpy(context, data, size);
+
+  externalEntityInitProcessor(parser, context, context, NULL);
+  free(context);
+  XML_ParserFree(parser);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+xml_parser_fuzzer.cc:4:10: fatal error: 'xml.h' file not found
+#include <xml.h>
+         ^~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

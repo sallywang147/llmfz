@@ -1,0 +1,121 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdlib.h>
+
+extern "C" {
+#include <brotli/decode.h>
+}
+
+// Entry point for LibFuzzer.
+int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  if (size < 1)
+    return 0;
+  const uint8_t* next_in = data;
+  size_t avail_in = size;
+
+  const int kBufferSize = 1024;
+  uint8_t* buffer = (uint8_t*) malloc(kBufferSize);
+  if (!buffer) {
+    // OOM is out-of-scope here.
+    return 0;
+  }
+  size_t total_out = 0;
+
+  BrotliDecoderState* state = BrotliDecoderCreateInstance(0, 0, 0);
+  if (!state) {
+    // OOM is out-of-scope here.
+    free(buffer);
+    return 0;
+  }
+
+  BrotliDecoderResult result = BROTLI_DECODER_RESULT_NEEDS_MORE_INPUT;
+  while (result == BROTLI_DECODER_RESULT_NEEDS_MORE_INPUT) {
+    size_t avail_out = kBufferSize;
+    uint8_t* next_out = buffer;
+    result = BrotliDecoderDecompressStream(
+        state, &avail_in, &next_in, &avail_out, &next_out, &total_out);
+    if (total_out > 1 << 26)
+      break;
+  }
+
+  if (result == BROTLI_DECODER_RESULT_NEEDS_MORE_INPUT) {
+    BrotliDecoderAttachDictionary(state, 0, size, (char*)data);
+    result = BrotliDecoderDecompressStream(
+        state, &avail_in, &next_in, &avail_out, &next_out, &total_out);
+  }
+
+  BrotliDecoderDestroyInstance(state);
+  free(buffer);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+c/fuzz/decode_fuzzer.c:5:8: error: expected identifier or '('
+extern "C" {
+       ^
+c/fuzz/decode_fuzzer.c:24:3: error: use of undeclared identifier 'BrotliDecoderState'
+  BrotliDecoderState* state = BrotliDecoderCreateInstance(0, 0, 0);
+  ^
+c/fuzz/decode_fuzzer.c:24:23: error: use of undeclared identifier 'state'
+  BrotliDecoderState* state = BrotliDecoderCreateInstance(0, 0, 0);
+                      ^
+c/fuzz/decode_fuzzer.c:25:8: error: use of undeclared identifier 'state'
+  if (!state) {
+       ^
+c/fuzz/decode_fuzzer.c:31:3: error: use of undeclared identifier 'BrotliDecoderResult'
+  BrotliDecoderResult result = BROTLI_DECODER_RESULT_NEEDS_MORE_INPUT;
+  ^
+c/fuzz/decode_fuzzer.c:32:10: error: use of undeclared identifier 'result'
+  while (result == BROTLI_DECODER_RESULT_NEEDS_MORE_INPUT) {
+         ^
+c/fuzz/decode_fuzzer.c:32:20: error: use of undeclared identifier 'BROTLI_DECODER_RESULT_NEEDS_MORE_INPUT'
+  while (result == BROTLI_DECODER_RESULT_NEEDS_MORE_INPUT) {
+                   ^
+c/fuzz/decode_fuzzer.c:35:5: error: use of undeclared identifier 'result'
+    result = BrotliDecoderDecompressStream(
+    ^
+c/fuzz/decode_fuzzer.c:36:9: error: use of undeclared identifier 'state'
+        state, &avail_in, &next_in, &avail_out, &next_out, &total_out);
+        ^
+c/fuzz/decode_fuzzer.c:41:7: error: use of undeclared identifier 'result'
+  if (result == BROTLI_DECODER_RESULT_NEEDS_MORE_INPUT) {
+      ^
+c/fuzz/decode_fuzzer.c:41:17: error: use of undeclared identifier 'BROTLI_DECODER_RESULT_NEEDS_MORE_INPUT'
+  if (result == BROTLI_DECODER_RESULT_NEEDS_MORE_INPUT) {
+                ^
+c/fuzz/decode_fuzzer.c:42:35: error: use of undeclared identifier 'state'
+    BrotliDecoderAttachDictionary(state, 0, size, (char*)data);
+                                  ^
+c/fuzz/decode_fuzzer.c:43:5: error: use of undeclared identifier 'result'
+    result = BrotliDecoderDecompressStream(
+    ^
+c/fuzz/decode_fuzzer.c:44:9: error: use of undeclared identifier 'state'
+        state, &avail_in, &next_in, &avail_out, &next_out, &total_out);
+        ^
+c/fuzz/decode_fuzzer.c:44:38: error: use of undeclared identifier 'avail_out'
+        state, &avail_in, &next_in, &avail_out, &next_out, &total_out);
+                                     ^
+c/fuzz/decode_fuzzer.c:44:50: error: use of undeclared identifier 'next_out'
+        state, &avail_in, &next_in, &avail_out, &next_out, &total_out);
+                                                 ^
+c/fuzz/decode_fuzzer.c:47:32: error: use of undeclared identifier 'state'
+  BrotliDecoderDestroyInstance(state);
+                               ^
+17 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

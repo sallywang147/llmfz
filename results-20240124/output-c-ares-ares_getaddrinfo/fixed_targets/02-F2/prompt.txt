@@ -1,0 +1,57 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <stddef.h>
+#include <ares.h>
+
+extern "C" {
+#include "ares_version.h"
+}
+
+// Entrypoint for Clang's libfuzzer
+int LLVMFuzzerTestOneInput(const unsigned char *data,
+                           unsigned long size) {
+  // Feed the data into ares_getaddrinfo.
+  struct ares_channeldata channel;
+  ares_channel_init(&channel, ARES_OPT_FLAGS, ARES_FLAG_NOCHECKRESP, NULL);
+
+  ares_getaddrinfo(&channel, (char *)data, (char *)data, NULL, NULL, NULL);
+
+  ares_channel_destroy(&channel);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/c-ares/test/ares-test-fuzz-name.c:4:8: error: expected identifier or '('
+extern "C" {
+       ^
+/src/c-ares/test/ares-test-fuzz-name.c:12:27: error: variable has incomplete type 'struct ares_channeldata'
+  struct ares_channeldata channel;
+                          ^
+include/ares.h:342:8: note: forward declaration of 'struct ares_channeldata'
+struct ares_channeldata;
+       ^
+2 errors generated.
+
+Fix failure
+/src/c-ares/test/ares-test-fuzz-name.cpp:12:27: error: variable has incomplete type 'struct ares_channeldata'
+  struct ares_channeldata channel;
+                          ^
+include/ares.h:342:8: note: forward declaration of 'ares_channeldata'
+struct ares_channeldata;
+       ^
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

@@ -1,0 +1,20 @@
+Using seed corpus: msgpack_fuzzer_seed_corpus.zip
+/workspace/out/libfuzzer-address-x86_64/msgpack_fuzzer -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/msgpack_fuzzer -max_len=256 -timeout=10 < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 1048736791
+INFO: Loaded 1 modules   (1 inline 8-bit counters): 1 [0x5e9f00, 0x5e9f01), 
+INFO: Loaded 1 PC tables (1 PCs): 1 [0x5a6ad8,0x5a6ae8), 
+INFO:       25 files found in /workspace/corpus/msgpack_fuzzer
+INFO: seed corpus: files: 25 min: 1b max: 23b total: 190b rss: 33Mb
+#26	INITED cov: 1 ft: 1 corp: 1/1b exec/s: 0 rss: 34Mb
+#4194304	pulse  cov: 1 ft: 1 corp: 1/1b lim: 256 exec/s: 2097152 rss: 60Mb
+#8388608	pulse  cov: 1 ft: 1 corp: 1/1b lim: 256 exec/s: 1677721 rss: 60Mb
+#16777216	pulse  cov: 1 ft: 1 corp: 1/1b lim: 256 exec/s: 1525201 rss: 60Mb
+#33554432	pulse  cov: 1 ft: 1 corp: 1/1b lim: 256 exec/s: 1458888 rss: 60Mb
+#44320591	DONE   cov: 1 ft: 1 corp: 1/1b lim: 256 exec/s: 1429696 rss: 60Mb
+Done 44320591 runs in 31 second(s)
+stat::number_of_executed_units: 44320591
+stat::average_exec_per_sec:     1429696
+stat::new_units_added:          0
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              60

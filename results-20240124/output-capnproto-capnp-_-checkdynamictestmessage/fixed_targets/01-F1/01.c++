@@ -1,0 +1,1 @@
+undefined reference to `capnp::_::checkDynamicTestMessage(capnp::DynamicStruct)'

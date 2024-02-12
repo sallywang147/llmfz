@@ -1,0 +1,1 @@
+undefined reference to `Botan::PKCS8::PEM_Encoder::PEM_Encoder(Botan::RandomNumberGenerator&, std::string const&)'

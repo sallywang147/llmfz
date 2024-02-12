@@ -1,0 +1,45 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <algorithm>
+#include <fuzzer/FuzzedDataProvider.h>
+
+extern "C" {
+#include <gpac/constants.h>
+#include <gpac/dashdmx.h>
+}
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  struct GF_DASHDmxCtx *ctx = gf_dashdmx_new();
+  struct GF_DASHGroup *group = gf_dashdmx_new_group(ctx);
+  dashdmx_switch_segment(ctx, group);
+  gf_dashdmx_delete(ctx);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/testsuite/oss-fuzzers/fuzz_parse.c:1:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+/src/testsuite/oss-fuzzers/fuzz_parse.cpp:6:10: fatal error: 'gpac/dashdmx.h' file not found
+#include <gpac/dashdmx.h>
+         ^~~~~~~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

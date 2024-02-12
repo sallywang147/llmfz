@@ -1,0 +1,69 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <fuzzer/FuzzedDataProvider.h>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+#include "gpsd.h"
+
+#define kMinInputLength 10
+#define kMaxInputLength 9216
+
+extern int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) 
+{//gpsd/tests//test_packet.c
+
+    if (Size < kMinInputLength || Size > kMaxInputLength){
+        return 0;
+    }
+
+    {
+        struct gps_device_t dev;
+
+        gpsd_init(&dev, NULL);
+        gpsd_poll(&dev);
+        gpsd_close(&dev);
+    }
+    {
+        struct gps_device_t dev;
+        int nullfd = open("/dev/null", O_RDONLY);
+        ssize_t st;
+
+        gpsd_init(&dev, NULL);
+        gpsd_set_raw(&dev, nullfd);
+
+        memcpy(dev.inbuffer, Data, Size);
+        dev.inbuflen = Size;
+
+        do {
+            st = gpsd_poll(&dev);
+        } while (st > 0);
+
+        close(nullfd);
+    }
+
+    return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:16:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

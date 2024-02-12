@@ -1,0 +1,86 @@
+Using seed corpus: cjson_read_fuzzer_seed_corpus.zip
+/workspace/out/libfuzzer-address-x86_64/cjson_read_fuzzer -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/cjson_read_fuzzer -dict=cjson_read_fuzzer.dict < /dev/null
+Dictionary: 37 entries
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 1636068686
+INFO: Loaded 1 modules   (1253 inline 8-bit counters): 1253 [0x601620, 0x601b05), 
+INFO: Loaded 1 PC tables (1253 PCs): 1253 [0x5b7c80,0x5bcad0), 
+INFO:       14 files found in /workspace/corpus/cjson_read_fuzzer
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: seed corpus: files: 14 min: 52b max: 3465b total: 9002b rss: 33Mb
+#15	INITED cov: 2 ft: 2 corp: 1/52b exec/s: 0 rss: 34Mb
+#31	REDUCE cov: 2 ft: 2 corp: 1/50b lim: 4096 exec/s: 0 rss: 34Mb L: 50/50 MS: 1 EraseBytes-
+#55	REDUCE cov: 2 ft: 2 corp: 1/45b lim: 4096 exec/s: 0 rss: 34Mb L: 45/45 MS: 4 CrossOver-EraseBytes-CrossOver-EraseBytes-
+#56	REDUCE cov: 2 ft: 2 corp: 1/25b lim: 4096 exec/s: 0 rss: 34Mb L: 25/25 MS: 1 EraseBytes-
+#60	REDUCE cov: 2 ft: 2 corp: 1/20b lim: 4096 exec/s: 0 rss: 34Mb L: 20/20 MS: 4 ChangeBit-ChangeASCIIInt-ManualDict-EraseBytes- DE: "-"-
+#61	REDUCE cov: 2 ft: 2 corp: 1/15b lim: 4096 exec/s: 0 rss: 34Mb L: 15/15 MS: 1 EraseBytes-
+#73	REDUCE cov: 2 ft: 2 corp: 1/10b lim: 4096 exec/s: 0 rss: 34Mb L: 10/10 MS: 2 ChangeBinInt-EraseBytes-
+#140	REDUCE cov: 2 ft: 2 corp: 1/9b lim: 4096 exec/s: 0 rss: 34Mb L: 9/9 MS: 2 CopyPart-EraseBytes-
+#204	REDUCE cov: 2 ft: 2 corp: 1/8b lim: 4096 exec/s: 0 rss: 34Mb L: 8/8 MS: 4 ChangeByte-ChangeByte-PersAutoDict-EraseBytes- DE: "-"-
+#221	REDUCE cov: 2 ft: 2 corp: 1/7b lim: 4096 exec/s: 0 rss: 34Mb L: 7/7 MS: 2 ShuffleBytes-EraseBytes-
+#251	REDUCE cov: 3 ft: 3 corp: 2/16b lim: 4096 exec/s: 0 rss: 34Mb L: 9/9 MS: 5 InsertByte-ChangeByte-CrossOver-InsertByte-ChangeBinInt-
+#289	REDUCE cov: 3 ft: 3 corp: 2/15b lim: 4096 exec/s: 0 rss: 34Mb L: 6/9 MS: 3 InsertByte-InsertByte-EraseBytes-
+#294	REDUCE cov: 4 ft: 4 corp: 3/19b lim: 4096 exec/s: 0 rss: 34Mb L: 4/9 MS: 5 ChangeBit-InsertByte-ChangeBit-PersAutoDict-EraseBytes- DE: "-"-
+#401	REDUCE cov: 4 ft: 4 corp: 3/15b lim: 4096 exec/s: 0 rss: 34Mb L: 5/6 MS: 2 ChangeBit-EraseBytes-
+#459	REDUCE cov: 4 ft: 4 corp: 3/14b lim: 4096 exec/s: 0 rss: 34Mb L: 5/5 MS: 3 ChangeBit-ChangeBit-EraseBytes-
+#590	REDUCE cov: 6 ft: 6 corp: 4/19b lim: 4096 exec/s: 0 rss: 34Mb L: 5/5 MS: 1 ChangeByte-
+#761	REDUCE cov: 6 ft: 6 corp: 4/18b lim: 4096 exec/s: 0 rss: 34Mb L: 3/5 MS: 1 EraseBytes-
+#1137	REDUCE cov: 6 ft: 6 corp: 4/17b lim: 4096 exec/s: 0 rss: 34Mb L: 2/5 MS: 1 EraseBytes-
+#1184	REDUCE cov: 6 ft: 6 corp: 4/16b lim: 4096 exec/s: 0 rss: 35Mb L: 1/5 MS: 2 PersAutoDict-EraseBytes- DE: "-"-
+#1320	NEW    cov: 7 ft: 7 corp: 5/21b lim: 4096 exec/s: 0 rss: 35Mb L: 5/5 MS: 1 ChangeASCIIInt-
+#1347	NEW    cov: 9 ft: 9 corp: 6/29b lim: 4096 exec/s: 0 rss: 35Mb L: 8/8 MS: 2 CopyPart-InsertByte-
+#1403	REDUCE cov: 9 ft: 9 corp: 6/27b lim: 4096 exec/s: 0 rss: 35Mb L: 6/6 MS: 1 EraseBytes-
+	NEW_FUNC[1/4]: 0x56cb30 in cJSON_Delete /src/cjson/cJSON.c:254
+	NEW_FUNC[2/4]: 0x56d0b0 in cJSON_ParseWithOpts /src/cjson/cJSON.c:1085
+#1634	REDUCE cov: 38 ft: 39 corp: 7/33b lim: 4096 exec/s: 1634 rss: 35Mb L: 6/6 MS: 1 CopyPart-
+#1670	NEW    cov: 39 ft: 40 corp: 8/39b lim: 4096 exec/s: 1670 rss: 35Mb L: 6/6 MS: 1 ChangeByte-
+#1673	NEW    cov: 40 ft: 41 corp: 9/49b lim: 4096 exec/s: 1673 rss: 35Mb L: 10/10 MS: 3 ShuffleBytes-PersAutoDict-CopyPart- DE: "-"-
+#1710	NEW    cov: 41 ft: 42 corp: 10/56b lim: 4096 exec/s: 1710 rss: 35Mb L: 7/10 MS: 2 PersAutoDict-ChangeASCIIInt- DE: "-"-
+	NEW_FUNC[1/7]: 0x56fd40 in cJSON_PrintBuffered /src/cjson/cJSON.c:1268
+	NEW_FUNC[2/7]: 0x570070 in print_value /src/cjson/cJSON.c:1373
+
+=================================================================
+==14==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 64 byte(s) in 1 object(s) allocated from:
+    #0 0x52ef66 in __interceptor_malloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:69:3
+    #1 0x574cac in cJSON_New_Item /src/cjson/cJSON.c:243:27
+    #2 0x574cac in cJSON_CreateNumber /src/cjson/cJSON.c:2441:19
+    #3 0x56c697 in LLVMFuzzerTestOneInput /src/cjson/fuzzing/cjson_read_fuzzer.c:69:57
+    #4 0x43ddd3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #5 0x43d5ba in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #6 0x43ec89 in fuzzer::Fuzzer::MutateAndTestOne() /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:757:19
+    #7 0x43f955 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:895:5
+    #8 0x42ecbf in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #9 0x458312 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #10 0x7ff4c6dfe082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_malloc--cJSON_New_Item--cJSON_CreateNumber
+Indirect leak of 4 byte(s) in 1 object(s) allocated from:
+    #0 0x52ef66 in __interceptor_malloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:69:3
+    #1 0x577fb1 in cJSON_strdup /src/cjson/cJSON.c:199:28
+    #2 0x577fb1 in replace_item_in_object /src/cjson/cJSON.c:2373:34
+    #3 0x5782e4 in cJSON_ReplaceItemInObjectCaseSensitive /src/cjson/cJSON.c:2391:12
+    #4 0x56c6a7 in LLVMFuzzerTestOneInput /src/cjson/fuzzing/cjson_read_fuzzer.c:69:5
+    #5 0x43ddd3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #6 0x43d5ba in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #7 0x43ec89 in fuzzer::Fuzzer::MutateAndTestOne() /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:757:19
+    #8 0x43f955 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:895:5
+    #9 0x42ecbf in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #10 0x458312 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #11 0x7ff4c6dfe082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_malloc--cJSON_strdup--replace_item_in_object
+SUMMARY: AddressSanitizer: 68 byte(s) leaked in 2 allocation(s).
+INFO: to ignore leaks on libFuzzer side use -detect_leaks=0.
+
+MS: 1 CopyPart-; base unit: c3fe05c120c9702c51eff7383aa8ff4e38c91367
+0x30,0x31,0x30,0x31,0x30,0x31,0x9,0x0,
+010101\011\000
+artifact_prefix='./'; Test unit written to ./leak-9b82767edb9969b1a964ddb3ed26804f0cb10678
+Base64: MDEwMTAxCQA=
+stat::number_of_executed_units: 1772
+stat::average_exec_per_sec:     1772
+stat::new_units_added:          25
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              35

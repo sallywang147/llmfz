@@ -1,0 +1,73 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <stddef.h>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <sstream>
+#include <string>
+#include <vector>
+
+#include "ares.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  // Create a channel
+  ares_channel channel;
+  int status = ares_init(&channel);
+  if (status != ARES_SUCCESS) {
+    fprintf(stderr, "Failed to initialize c-ares channel: %s\n",
+            ares_strerror(status));
+    return 0;
+  }
+
+  // Create a socket address
+  struct sockaddr_in addr;
+  memset(&addr, 0, sizeof(addr));
+  addr.sin_family = AF_INET;
+  addr.sin_port = htons(80);
+  addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+
+  // Create a buffer to store the name information
+  char name[NI_MAXHOST];
+  memset(name, 0, sizeof(name));
+
+  // Call the function to be fuzzed
+  ares_getnameinfo(channel, reinterpret_cast<struct sockaddr *>(&addr),
+                   sizeof(addr), NI_NUMERICHOST, nullptr, name);
+
+  // Destroy the channel
+  ares_destroy(channel);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/c-ares/test/ares-test-fuzz-name.c:2:10: fatal error: 'cstdint' file not found
+#include <cstdint>
+         ^~~~~~~~~
+1 error generated.
+
+Fix failure
+/src/c-ares/test/ares-test-fuzz-name.cpp:30:13: error: use of undeclared identifier 'NI_MAXHOST'
+  char name[NI_MAXHOST];
+            ^
+/src/c-ares/test/ares-test-fuzz-name.cpp:35:34: error: use of undeclared identifier 'NI_NUMERICHOST'
+                   sizeof(addr), NI_NUMERICHOST, nullptr, name);
+                                 ^
+2 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

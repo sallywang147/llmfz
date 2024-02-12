@@ -1,0 +1,170 @@
+---------------------------------------------------------------
+Compiling libFuzzer to /usr/lib/libFuzzingEngine.a...  done.
+---------------------------------------------------------------
+CC=/usr/local/bin/clang-jcc
+CXX=/usr/local/bin/clang++-jcc
+CFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link
+CXXFLAGS=-O1 -fno-omit-frame-pointer -gline-tables-only -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -fsanitize=address -fsanitize-address-use-after-scope -fsanitize=fuzzer-no-link -stdlib=libc++
+RUSTFLAGS=--cfg fuzzing -Zsanitizer=address -Cdebuginfo=1 -Cforce-frame-pointers
+---------------------------------------------------------------
++ mkdir my_build
++ pushd my_build/
+/src/coturn/my_build /src/coturn
++ cmake -DFUZZER=ON -DLIB_FUZZING_ENGINE=-fsanitize=fuzzer '-DCMAKE_EXE_LINKER_FLAGS=-Wl,-rpath,'\''$ORIGIN/lib'\''' -DWITH_MYSQL=OFF -Wno-dev ../.
+-- The C compiler identification is Clang 15.0.0
+-- The CXX compiler identification is Clang 15.0.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/local/bin/clang-jcc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/local/bin/clang++-jcc - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+BUILD_VERSION:4.6.2-r7-22-g87602ea;
+-- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "1.1.1f") found components: Crypto SSL 
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE  
+-- Could NOT find Libevent (missing: Libevent_DIR)
+-- Could NOT find PkgConfig (missing: PKG_CONFIG_EXECUTABLE) 
+-- Found Libevent: /usr/lib/x86_64-linux-gnu/libevent_core.so;/usr/lib/x86_64-linux-gnu/libevent_extra.so;/usr/lib/x86_64-linux-gnu/libevent_openssl.so;/usr/lib/x86_64-linux-gnu/libevent_pthreads.so  
+CMake Warning at src/apps/common/CMakeLists.txt:53 (find_package):
+  By not providing "Findhiredis.cmake" in CMAKE_MODULE_PATH this project has
+  asked CMake to find a package configuration file provided by "hiredis", but
+  CMake did not find one.
+
+  Could not find a package configuration file provided by "hiredis" with any
+  of the following names:
+
+    hiredisConfig.cmake
+    hiredis-config.cmake
+
+  Add the installation prefix of "hiredis" to CMAKE_PREFIX_PATH or set
+  "hiredis_DIR" to a directory containing one of the above files.  If
+  "hiredis" provides a separate development package or SDK, be sure it has
+  been installed.
+
+
+COMMON_LIBS:OpenSSL::SSL;OpenSSL::Crypto;Threads::Threads;/usr/lib/x86_64-linux-gnu/libevent_core.so;/usr/lib/x86_64-linux-gnu/libevent_extra.so;/usr/lib/x86_64-linux-gnu/libevent_openssl.so;/usr/lib/x86_64-linux-gnu/libevent_pthreads.so
+-- Looking for pthread_barrier_init
+-- Looking for pthread_barrier_init - found
+-- SQLite not found, try -DSQLite_DIR=<path> (missing: SQLite_INCLUDE_DIR SQLite_LIBRARY) 
+-- PostgreSQL not found, try -DPostgreSQL_DIR=<path> (missing: PostgreSQL_INCLUDE_DIR PostgreSQL_LIBRARY) 
+CMake Warning at src/apps/relay/CMakeLists.txt:88 (find_package):
+  By not providing "Findmongo.cmake" in CMAKE_MODULE_PATH this project has
+  asked CMake to find a package configuration file provided by "mongo", but
+  CMake did not find one.
+
+  Could not find a package configuration file provided by "mongo" with any of
+  the following names:
+
+    mongoConfig.cmake
+    mongo-config.cmake
+
+  Add the installation prefix of "mongo" to CMAKE_PREFIX_PATH or set
+  "mongo_DIR" to a directory containing one of the above files.  If "mongo"
+  provides a separate development package or SDK, be sure it has been
+  installed.
+
+
+CMake Warning at src/apps/relay/CMakeLists.txt:98 (find_package):
+  By not providing "Findhiredis.cmake" in CMAKE_MODULE_PATH this project has
+  asked CMake to find a package configuration file provided by "hiredis", but
+  CMake did not find one.
+
+  Could not find a package configuration file provided by "hiredis" with any
+  of the following names:
+
+    hiredisConfig.cmake
+    hiredis-config.cmake
+
+  Add the installation prefix of "hiredis" to CMAKE_PREFIX_PATH or set
+  "hiredis_DIR" to a directory containing one of the above files.  If
+  "hiredis" provides a separate development package or SDK, be sure it has
+  been installed.
+
+
+CMake Warning at src/apps/relay/CMakeLists.txt:108 (find_package):
+  By not providing "Findlibsystemd.cmake" in CMAKE_MODULE_PATH this project
+  has asked CMake to find a package configuration file provided by
+  "libsystemd", but CMake did not find one.
+
+  Could not find a package configuration file provided by "libsystemd" with
+  any of the following names:
+
+    libsystemdConfig.cmake
+    libsystemd-config.cmake
+
+  Add the installation prefix of "libsystemd" to CMAKE_PREFIX_PATH or set
+  "libsystemd_DIR" to a directory containing one of the above files.  If
+  "libsystemd" provides a separate development package or SDK, be sure it has
+  been installed.
+
+
+-- Could NOT find PkgConfig (missing: PKG_CONFIG_EXECUTABLE) 
+-- Could NOT find Prometheus (missing: prom_libs prom_INCLUDE_DIR promhttp_libs promhttp_INCLUDE_DIR microhttpd_include_dir microhttpd_libs) 
+turnserver_LIBS:
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /src/coturn/my_build
+++ nproc
++ make -j32
+[  2%] Building C object src/apps/common/CMakeFiles/turncommon.dir/apputils.c.o
+[  4%] Building C object src/apps/common/CMakeFiles/turncommon.dir/ns_turn_utils.c.o
+[  6%] Building C object src/apps/common/CMakeFiles/turncommon.dir/stun_buffer.c.o
+[  8%] Linking C static library ../../../lib/libturncommon.a
+[  8%] Built target turncommon
+[ 10%] Building C object src/client/CMakeFiles/turnclient.dir/ns_turn_ioaddr.c.o
+[ 12%] Building C object src/client/CMakeFiles/turnclient.dir/ns_turn_msg_addr.c.o
+[ 14%] Building C object src/client/CMakeFiles/turnclient.dir/ns_turn_msg.c.o
+[ 16%] Linking C static library ../../lib/libturnclient.a
+[ 16%] Built target turnclient
+[ 18%] Building C object src/server/CMakeFiles/turn_server.dir/ns_turn_allocation.c.o
+[ 22%] Building C object src/apps/natdiscovery/CMakeFiles/turnutils_natdiscovery.dir/natdiscovery.c.o
+[ 22%] Building C object src/apps/oauth/CMakeFiles/turnutils_oauth.dir/oauth.c.o
+[ 25%] Building C object src/server/CMakeFiles/turn_server.dir/ns_turn_maps_rtcp.c.o
+[ 27%] Building C object src/server/CMakeFiles/turn_server.dir/ns_turn_maps.c.o
+[ 29%] Building C object src/apps/peer/CMakeFiles/turnutils_peer.dir/mainudpserver.c.o
+[ 31%] Building C object src/server/CMakeFiles/turn_server.dir/ns_turn_server.c.o
+[ 35%] Building C object src/apps/peer/CMakeFiles/turnutils_peer.dir/udpserver.c.o
+[ 35%] Building C object src/apps/stunclient/CMakeFiles/turnutils_stunclient.dir/stunclient.c.o
+[ 37%] Building C object src/apps/uclient/CMakeFiles/turnutils_uclient.dir/uclient.c.o
+[ 39%] Building C object src/apps/rfc5769/CMakeFiles/turnutils_rfc5769check.dir/rfc5769check.c.o
+[ 41%] Building C object fuzzing/CMakeFiles/FuzzStun.dir/FuzzStun.c.o
+[ 45%] Building C object src/apps/uclient/CMakeFiles/turnutils_uclient.dir/startuclient.c.o
+[ 45%] Building C object fuzzing/CMakeFiles/FuzzStunClient.dir/FuzzStunClient.c.o
+[ 47%] Building C object src/apps/uclient/CMakeFiles/turnutils_uclient.dir/mainuclient.c.o
+[ 50%] Building C object fuzzing/CMakeFiles/FuzzStunClient.dir/__/src/apps/common/stun_buffer.c.o
+[ 52%] Linking C executable FuzzStunClient
+[ 54%] Linking C executable ../../../bin/turnutils_peer
+[ 56%] Linking C executable ../../../bin/turnutils_stunclient
+[ 58%] Linking C executable ../../../bin/turnutils_rfc5769check
+[ 60%] Linking C executable ../../../bin/turnutils_oauth
+[ 62%] Linking C executable ../../../bin/turnutils_natdiscovery
+[ 62%] Built target turnutils_peer
+[ 62%] Built target turnutils_stunclient
+[ 62%] Built target FuzzStunClient
+[ 62%] Built target turnutils_rfc5769check
+[ 62%] Built target turnutils_oauth
+[ 62%] Built target turnutils_natdiscovery
+[ 64%] Linking C executable ../../../bin/turnutils_uclient
+[ 64%] Built target turnutils_uclient
+/src/coturn/fuzzing/FuzzStun.c:12:8: error: expected identifier or '('
+extern "C" {
+       ^
+/src/coturn/fuzzing/FuzzStun.c:13:10: fatal error: 'ioa_addr.h' file not found
+#include "ioa_addr.h"
+         ^~~~~~~~~~~~
+2 errors generated.
+
+Fix failure
+error: invalid argument '-std=gnu11' not allowed with 'C++'
+make[2]: *** [fuzzing/CMakeFiles/FuzzStun.dir/build.make:76: fuzzing/CMakeFiles/FuzzStun.dir/FuzzStun.c.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:635: fuzzing/CMakeFiles/FuzzStun.dir/all] Error 2
+make[1]: *** Waiting for unfinished jobs....
+[ 66%] Linking C static library ../../lib/libturn_server.a
+[ 66%] Built target turn_server
+make: *** [Makefile:156: all] Error 2

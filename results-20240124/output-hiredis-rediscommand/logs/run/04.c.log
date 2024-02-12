@@ -1,0 +1,170 @@
+/workspace/out/libfuzzer-address-x86_64/format_command_fuzzer -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/format_command_fuzzer < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 356087463
+INFO: Loaded 1 modules   (2523 inline 8-bit counters): 2523 [0x627cb0, 0x62868b), 
+INFO: Loaded 1 PC tables (2523 PCs): 2523 [0x628690,0x632440), 
+INFO:        0 files found in /workspace/corpus/format_command_fuzzer
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: A corpus is not provided, starting from an empty corpus
+#2	INITED cov: 2 ft: 2 corp: 1/1b exec/s: 0 rss: 33Mb
+	NEW_FUNC[1/13]: 0x56ffe0 in __redisSetError /src/hiredis/hiredis.c:684
+	NEW_FUNC[2/13]: 0x570ca0 in redisConnectWithOptions /src/hiredis/hiredis.c:808
+
+=================================================================
+==13==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 272 byte(s) in 1 object(s) allocated from:
+    #0 0x52f1be in __interceptor_calloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:77:3
+    #1 0x570d01 in hi_calloc /src/hiredis/./alloc.h:67:12
+    #2 0x570d01 in redisContextInit /src/hiredis/hiredis.c:712:9
+    #3 0x570d01 in redisConnectWithOptions /src/hiredis/hiredis.c:809:23
+    #4 0x5717b6 in redisConnect /src/hiredis/hiredis.c:878:12
+    #5 0x56c4b2 in LLVMFuzzerTestOneInput /src/hiredis/format_command_fuzzer.c:19:9
+    #6 0x43de53 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #7 0x43d63a in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #8 0x43ed09 in fuzzer::Fuzzer::MutateAndTestOne() /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:757:19
+    #9 0x43f9d5 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:895:5
+    #10 0x42ed3f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #11 0x458392 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #12 0x7f385be77082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_calloc--hi_calloc--redisContextInit
+Indirect leak of 432 byte(s) in 9 object(s) allocated from:
+    #0 0x52f1be in __interceptor_calloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:77:3
+    #1 0x59424c in hi_calloc /src/hiredis/./alloc.h:67:12
+    #2 0x59424c in redisReaderCreateWithFunctions /src/hiredis/read.c:670:29
+    #3 0x570d5c in redisReaderCreate /src/hiredis/hiredis.c:701:12
+    #4 0x570d5c in redisContextInit /src/hiredis/hiredis.c:719:17
+    #5 0x570d5c in redisConnectWithOptions /src/hiredis/hiredis.c:809:23
+    #6 0x5717b6 in redisConnect /src/hiredis/hiredis.c:878:12
+    #7 0x56c4b2 in LLVMFuzzerTestOneInput /src/hiredis/format_command_fuzzer.c:19:9
+    #8 0x43de53 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #9 0x43d63a in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #10 0x43ed09 in fuzzer::Fuzzer::MutateAndTestOne() /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:757:19
+    #11 0x43f9d5 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:895:5
+    #12 0x42ed3f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #13 0x458392 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #14 0x7f385be77082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_calloc--hi_calloc--redisReaderCreateWithFunctions
+Indirect leak of 216 byte(s) in 1 object(s) allocated from:
+    #0 0x52f1be in __interceptor_calloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:77:3
+    #1 0x594145 in hi_calloc /src/hiredis/./alloc.h:67:12
+    #2 0x594145 in redisReaderCreateWithFunctions /src/hiredis/read.c:657:9
+    #3 0x570d5c in redisReaderCreate /src/hiredis/hiredis.c:701:12
+    #4 0x570d5c in redisContextInit /src/hiredis/hiredis.c:719:17
+    #5 0x570d5c in redisConnectWithOptions /src/hiredis/hiredis.c:809:23
+    #6 0x5717b6 in redisConnect /src/hiredis/hiredis.c:878:12
+    #7 0x56c4b2 in LLVMFuzzerTestOneInput /src/hiredis/format_command_fuzzer.c:19:9
+    #8 0x43de53 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #9 0x43d63a in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #10 0x43ed09 in fuzzer::Fuzzer::MutateAndTestOne() /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:757:19
+    #11 0x43f9d5 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:895:5
+    #12 0x42ed3f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #13 0x458392 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #14 0x7f385be77082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_calloc--hi_calloc--redisReaderCreateWithFunctions
+Indirect leak of 72 byte(s) in 1 object(s) allocated from:
+    #0 0x52f1be in __interceptor_calloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:77:3
+    #1 0x5941ac in hi_calloc /src/hiredis/./alloc.h:67:12
+    #2 0x5941ac in redisReaderCreateWithFunctions /src/hiredis/read.c:665:15
+    #3 0x570d5c in redisReaderCreate /src/hiredis/hiredis.c:701:12
+    #4 0x570d5c in redisContextInit /src/hiredis/hiredis.c:719:17
+    #5 0x570d5c in redisConnectWithOptions /src/hiredis/hiredis.c:809:23
+    #6 0x5717b6 in redisConnect /src/hiredis/hiredis.c:878:12
+    #7 0x56c4b2 in LLVMFuzzerTestOneInput /src/hiredis/format_command_fuzzer.c:19:9
+    #8 0x43de53 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #9 0x43d63a in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #10 0x43ed09 in fuzzer::Fuzzer::MutateAndTestOne() /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:757:19
+    #11 0x43f9d5 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:895:5
+    #12 0x42ed3f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #13 0x458392 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #14 0x7f385be77082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_calloc--hi_calloc--redisReaderCreateWithFunctions
+Indirect leak of 16 byte(s) in 1 object(s) allocated from:
+    #0 0x52efe6 in __interceptor_malloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:69:3
+    #1 0x59dec8 in hi_malloc /src/hiredis/./alloc.h:59:12
+    #2 0x59dec8 in _redisContextConnectTcp /src/hiredis/net.c:558:20
+    #3 0x59eb2f in redisContextConnectBindTcp /src/hiredis/net.c:626:12
+    #4 0x571253 in redisConnectWithOptions /src/hiredis/hiredis.c:849:9
+    #5 0x5717b6 in redisConnect /src/hiredis/hiredis.c:878:12
+    #6 0x56c4b2 in LLVMFuzzerTestOneInput /src/hiredis/format_command_fuzzer.c:19:9
+    #7 0x43de53 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #8 0x43d63a in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #9 0x43ed09 in fuzzer::Fuzzer::MutateAndTestOne() /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:757:19
+    #10 0x43f9d5 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:895:5
+    #11 0x42ed3f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #12 0x458392 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #13 0x7f385be77082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_malloc--hi_malloc--_redisContextConnectTcp
+Indirect leak of 10 byte(s) in 1 object(s) allocated from:
+    #0 0x519c43 in strdup /src/llvm-project/compiler-rt/lib/asan/asan_interceptors.cpp:440:3
+    #1 0x59d4d0 in hi_strdup /src/hiredis/./alloc.h:75:12
+    #2 0x59d4d0 in _redisContextConnectTcp /src/hiredis/net.c:464:23
+    #3 0x59eb2f in redisContextConnectBindTcp /src/hiredis/net.c:626:12
+    #4 0x571253 in redisConnectWithOptions /src/hiredis/hiredis.c:849:9
+    #5 0x5717b6 in redisConnect /src/hiredis/hiredis.c:878:12
+    #6 0x56c4b2 in LLVMFuzzerTestOneInput /src/hiredis/format_command_fuzzer.c:19:9
+    #7 0x43de53 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #8 0x43d63a in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #9 0x43ed09 in fuzzer::Fuzzer::MutateAndTestOne() /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:757:19
+    #10 0x43f9d5 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:895:5
+    #11 0x42ed3f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #12 0x458392 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #13 0x7f385be77082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: strdup--hi_strdup--_redisContextConnectTcp
+Indirect leak of 4 byte(s) in 1 object(s) allocated from:
+    #0 0x52efe6 in __interceptor_malloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:69:3
+    #1 0x577879 in hi_malloc /src/hiredis/./alloc.h:59:12
+    #2 0x577879 in sdsnewlen /src/hiredis/sds.c:94:10
+    #3 0x577879 in sdsempty /src/hiredis/sds.c:143:12
+    #4 0x59415a in redisReaderCreateWithFunctions /src/hiredis/read.c:661:14
+    #5 0x570d5c in redisReaderCreate /src/hiredis/hiredis.c:701:12
+    #6 0x570d5c in redisContextInit /src/hiredis/hiredis.c:719:17
+    #7 0x570d5c in redisConnectWithOptions /src/hiredis/hiredis.c:809:23
+    #8 0x5717b6 in redisConnect /src/hiredis/hiredis.c:878:12
+    #9 0x56c4b2 in LLVMFuzzerTestOneInput /src/hiredis/format_command_fuzzer.c:19:9
+    #10 0x43de53 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #11 0x43d63a in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #12 0x43ed09 in fuzzer::Fuzzer::MutateAndTestOne() /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:757:19
+    #13 0x43f9d5 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:895:5
+    #14 0x42ed3f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #15 0x458392 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #16 0x7f385be77082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_malloc--hi_malloc--sdsnewlen
+Indirect leak of 4 byte(s) in 1 object(s) allocated from:
+    #0 0x52efe6 in __interceptor_malloc /src/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:69:3
+    #1 0x577879 in hi_malloc /src/hiredis/./alloc.h:59:12
+    #2 0x577879 in sdsnewlen /src/hiredis/sds.c:94:10
+    #3 0x577879 in sdsempty /src/hiredis/sds.c:143:12
+    #4 0x570d2e in redisContextInit /src/hiredis/hiredis.c:718:15
+    #5 0x570d2e in redisConnectWithOptions /src/hiredis/hiredis.c:809:23
+    #6 0x5717b6 in redisConnect /src/hiredis/hiredis.c:878:12
+    #7 0x56c4b2 in LLVMFuzzerTestOneInput /src/hiredis/format_command_fuzzer.c:19:9
+    #8 0x43de53 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #9 0x43d63a in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #10 0x43ed09 in fuzzer::Fuzzer::MutateAndTestOne() /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:757:19
+    #11 0x43f9d5 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:895:5
+    #12 0x42ed3f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #13 0x458392 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #14 0x7f385be77082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+
+DEDUP_TOKEN: __interceptor_malloc--hi_malloc--sdsnewlen
+SUMMARY: AddressSanitizer: 1026 byte(s) leaked in 16 allocation(s).
+INFO: to ignore leaks on libFuzzer side use -detect_leaks=0.
+
+MS: 3 CopyPart-CrossOver-CopyPart-; base unit: adc83b19e793491b1c6ea0fd8b46cd9f32e592fc
+0xa,0xa,0xa,
+\012\012\012
+artifact_prefix='./'; Test unit written to ./leak-7c338ed2840d2bf55f9f5e4eed04f66c80840eb3
+Base64: CgoK
+stat::number_of_executed_units: 6
+stat::average_exec_per_sec:     0
+stat::new_units_added:          0
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              34

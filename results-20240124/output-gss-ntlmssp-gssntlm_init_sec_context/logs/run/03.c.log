@@ -1,0 +1,52 @@
+/workspace/out/libfuzzer-address-x86_64/fuzz-accept-sec-context -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/fuzz-accept-sec-context -dict=fuzz-accept-sec-context.dict < /dev/null
+Dictionary: 7 entries
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 1549951183
+INFO: Loaded 1 modules   (3108 inline 8-bit counters): 3108 [0x646fc0, 0x647be4), 
+INFO: Loaded 1 PC tables (3108 PCs): 3108 [0x5f1778,0x5fd9b8), 
+INFO:        0 files found in /workspace/corpus/fuzz-accept-sec-context
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: A corpus is not provided, starting from an empty corpus
+#2	INITED cov: 20 ft: 21 corp: 1/1b exec/s: 0 rss: 37Mb
+#3	NEW    cov: 21 ft: 22 corp: 2/26b lim: 4096 exec/s: 0 rss: 38Mb L: 25/25 MS: 1 ManualDict- DE: "foo\\@bar.example.com@BAR"-
+#31	NEW    cov: 22 ft: 23 corp: 3/52b lim: 4096 exec/s: 0 rss: 38Mb L: 26/26 MS: 3 ChangeBinInt-CrossOver-ChangeBinInt-
+	NEW_FUNC[1/2]: 0x57d440 in gssntlm_init_sec_context /src/gss-ntlmssp/src/gss_sec_ctx.c:25
+	NEW_FUNC[2/2]: 0x5a75e0 in ntlm_free_buffer_data /src/gss-ntlmssp/src/ntlm.c:122
+#37	NEW    cov: 35 ft: 47 corp: 4/78b lim: 4096 exec/s: 0 rss: 38Mb L: 26/26 MS: 1 ChangeBinInt-
+#98	REDUCE cov: 35 ft: 47 corp: 4/76b lim: 4096 exec/s: 0 rss: 38Mb L: 23/26 MS: 1 EraseBytes-
+#105	REDUCE cov: 35 ft: 47 corp: 4/67b lim: 4096 exec/s: 0 rss: 38Mb L: 17/26 MS: 2 PersAutoDict-EraseBytes- DE: "foo\\@bar.example.com@BAR"-
+#161	REDUCE cov: 35 ft: 47 corp: 4/61b lim: 4096 exec/s: 0 rss: 38Mb L: 20/23 MS: 1 EraseBytes-
+#162	REDUCE cov: 35 ft: 47 corp: 4/58b lim: 4096 exec/s: 0 rss: 38Mb L: 20/20 MS: 1 EraseBytes-
+#233	REDUCE cov: 35 ft: 47 corp: 4/57b lim: 4096 exec/s: 0 rss: 38Mb L: 16/20 MS: 1 EraseBytes-
+#284	REDUCE cov: 35 ft: 47 corp: 4/55b lim: 4096 exec/s: 0 rss: 38Mb L: 14/20 MS: 1 EraseBytes-
+#306	REDUCE cov: 35 ft: 47 corp: 4/47b lim: 4096 exec/s: 0 rss: 39Mb L: 12/20 MS: 2 CopyPart-EraseBytes-
+#317	REDUCE cov: 35 ft: 47 corp: 4/41b lim: 4096 exec/s: 0 rss: 39Mb L: 14/14 MS: 1 EraseBytes-
+#320	REDUCE cov: 35 ft: 47 corp: 4/35b lim: 4096 exec/s: 0 rss: 39Mb L: 6/14 MS: 3 CMP-CopyPart-EraseBytes- DE: "\377\377\377\377"-
+#441	REDUCE cov: 35 ft: 47 corp: 4/30b lim: 4096 exec/s: 0 rss: 39Mb L: 9/14 MS: 1 EraseBytes-
+#463	REDUCE cov: 35 ft: 47 corp: 4/29b lim: 4096 exec/s: 0 rss: 39Mb L: 8/14 MS: 2 ChangeByte-EraseBytes-
+#509	REDUCE cov: 35 ft: 47 corp: 4/26b lim: 4096 exec/s: 0 rss: 39Mb L: 3/14 MS: 1 EraseBytes-
+#560	REDUCE cov: 35 ft: 47 corp: 4/25b lim: 4096 exec/s: 0 rss: 39Mb L: 13/13 MS: 1 EraseBytes-
+#566	REDUCE cov: 35 ft: 47 corp: 4/24b lim: 4096 exec/s: 0 rss: 39Mb L: 2/13 MS: 1 EraseBytes-
+#593	REDUCE cov: 35 ft: 47 corp: 4/21b lim: 4096 exec/s: 0 rss: 39Mb L: 5/13 MS: 2 CrossOver-EraseBytes-
+#635	REDUCE cov: 35 ft: 47 corp: 4/19b lim: 4096 exec/s: 0 rss: 39Mb L: 3/13 MS: 2 ChangeBit-EraseBytes-
+#686	REDUCE cov: 35 ft: 47 corp: 4/18b lim: 4096 exec/s: 0 rss: 39Mb L: 12/12 MS: 1 EraseBytes-
+#848	REDUCE cov: 35 ft: 47 corp: 4/17b lim: 4096 exec/s: 0 rss: 39Mb L: 2/12 MS: 2 CopyPart-EraseBytes-
+#8386	REDUCE cov: 35 ft: 47 corp: 4/15b lim: 4096 exec/s: 0 rss: 39Mb L: 10/10 MS: 3 InsertByte-EraseBytes-ChangeByte-
+#8659	REDUCE cov: 35 ft: 47 corp: 4/13b lim: 4096 exec/s: 0 rss: 39Mb L: 8/8 MS: 3 ChangeByte-ShuffleBytes-EraseBytes-
+#8836	REDUCE cov: 35 ft: 47 corp: 4/9b lim: 4096 exec/s: 0 rss: 39Mb L: 4/4 MS: 2 ChangeBit-EraseBytes-
+#9182	REDUCE cov: 35 ft: 47 corp: 4/8b lim: 4096 exec/s: 0 rss: 39Mb L: 3/3 MS: 1 EraseBytes-
+#524288	pulse  cov: 35 ft: 47 corp: 4/8b lim: 4096 exec/s: 262144 rss: 63Mb
+#1048576	pulse  cov: 35 ft: 47 corp: 4/8b lim: 4096 exec/s: 349525 rss: 63Mb
+#2097152	pulse  cov: 35 ft: 47 corp: 4/8b lim: 4096 exec/s: 349525 rss: 64Mb
+#4194304	pulse  cov: 35 ft: 47 corp: 4/8b lim: 4096 exec/s: 381300 rss: 64Mb
+#8388608	pulse  cov: 35 ft: 47 corp: 4/8b lim: 4096 exec/s: 381300 rss: 64Mb
+#11930722	DONE   cov: 35 ft: 47 corp: 4/8b lim: 4096 exec/s: 384862 rss: 64Mb
+###### Recommended dictionary. ######
+"\377\377\377\377" # Uses: 421881
+###### End of recommended dictionary. ######
+Done 11930722 runs in 31 second(s)
+stat::number_of_executed_units: 11930722
+stat::average_exec_per_sec:     384862
+stat::new_units_added:          25
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              64

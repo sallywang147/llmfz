@@ -1,0 +1,656 @@
+<system>
+You are a security testing engineer who wants to write a C++ program to execute all lines in a given function by defining and initializing its parameters in a suitable way before fuzzing the function through <code>LLVMFuzzerTestOneInput</code>.
+
+Carefully study the function signature and its parameters, then follow the example problems and solutions to answer the final problem. YOU MUST call the function to fuzz in the solution.
+
+Try as many variations of these inputs as possible. Do not use a random number generator such as <code>rand()</code>.
+
+Use <code>FuzzedDataProvider</code> to generate these inputs. You MUST declare it in <code>LLVMFuzzerTestOneInput</code>, like this:
+<code>
+FuzzedDataProvider stream(data, size);
+</code>
+
+Include <code>#include <fuzzer/FuzzedDataProvider.h></code> in the solution.
+
+This code shows example of using it:
+<code>
+// Extract integral values
+int int_arg = stream.ConsumeIntegral<int>();
+int int_arg_in_range = stream.ConsumeIntegralInRange(-100, 100);
+bool bool_arg = stream.ConsumeBool();
+
+// Extract floating point values
+float probability = stream.ConsumeProbability();
+double double_arg = stream.ConsumeFloatingPoint<double>();
+double double_arg_in_range = stream.ConsumeFloatingPointInRange(-1.0, 1.0);
+
+// Extract value from predefined set, such as enum or array
+EnumType enum = stream.ConsumeEnum<EnumType>();
+int valid_values = stream.PickValueInArray({FLAG_1, FLAG_2, FLAG_3});
+
+// Extract an array of bytes as a vector. You MUST call <code>.data()</code> to use result as pointer.
+std::vector<uint8_t> bytes = stream.ConsumeBytes<uint8_t>(stream.ConsumeIntegralInRange(0, max_size));
+void *data_ptr = bytes.data();
+std::vector<uint8_t> bytes2 = stream.ConsumeBytes<uint8_t>(requested_size);
+void *data2_ptr = bytes2.data();
+
+// Extract a string. You MUST use <code>.c_str()</code> to use result as pointer
+std::string str = stream.ConsumeBytesAsString(stream.ConsumeIntegralInRange(0, max_size));
+char *ptr = str.c_str();
+std::string str2 = stream.ConsumeBytesAsString(requested_size);
+char *ptr2 = str2.c_str();
+std::string str3 = stream.ConsumeRandomLengthString();
+char *ptr3 = str3.c_str();
+
+// Extract to user defined object
+struct_type_t obj;
+size_t consumed = stream.ConsumeData(&obj, sizeof(obj));
+</code>
+
+There MUST be AT MOST ONE call to <code>ConsumeRemainingBytes</code> to consume remaining input!
+<code>
+FuzzedDataProvider stream(data, size);
+
+std::vector<uint8_t> bytes3 = stream.ConsumeRemainingBytes();
+void *data3_ptr = bytes3.data();
+</code>
+
+All variables used MUST be declared and initialized. Carefully make sure that the variable and argument types in your code match and compiles successfully. Add type casts to make types match.
+
+Do not create new variables with the same names as existing variables.
+WRONG:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  void* data = Foo();
+}
+</code>
+
+EXTREMELY IMPORTANT: If you write code using <code>goto</code>, you MUST MUST also declare all variables BEFORE the <code>goto</code>. Never introduce new variables after the <code>goto</code>.
+WRONG:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int a = bar();
+  if (!some_function()) goto EXIT;
+  Foo b = target_function(data, size);
+  int c = another_func();
+EXIT:
+  return 0;
+}
+</code>
+
+CORRECT:
+<code>
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  int a = bar();
+  Foo b;
+  int c;
+
+  if (!some_function()) goto EXIT;
+  b = target_function(data, size);
+  c = another_func()
+EXIT:
+  return 0;
+}
+</code>
+
+If an example provided for the same library includes a unique header file, then it must be included in the solution as well.
+</system>
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+BGD_DECLARE(void) gdImageString (gdImagePtr im, gdFontPtr f, int x, int y, unsigned char *s, int color)
+</function header>
+</task>
+
+<solution>
+
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+#include "gd.h"
+#include "gdfontg.h"
+#include "gdfontl.h"
+#include "gdfontmb.h"
+#include "gdfonts.h"
+#include "gdfontt.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const uint8_t slate_width = stream.ConsumeIntegral<uint8_t>();
+  const uint8_t slate_height = stream.ConsumeIntegral<uint8_t>();
+  gdImagePtr slate_image = gdImageCreateTrueColor(slate_width, slate_height);
+  if (slate_image == nullptr) {
+    return 0;
+  }
+
+  const int x_position = stream.ConsumeIntegral<int>();
+  const int y_position = stream.ConsumeIntegral<int>();
+  const int text_color = stream.ConsumeIntegral<int>();
+  const gdFontPtr font_ptr = stream.PickValueInArray(
+      {gdFontGetGiant(), gdFontGetLarge(), gdFontGetMediumBold(),
+       gdFontGetSmall(), gdFontGetTiny()});
+  const std::string text = stream.ConsumeRemainingBytesAsString();
+
+  gdImageString(slate_image, font_ptr, x_position, y_position,
+                reinterpret_cast<uint8_t*>(const_cast<char*>(text.c_str())),
+                text_color);
+  gdImageDestroy(slate_image);
+  return 0;
+}
+</solution>
+
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+MPG123_EXPORT int mpg123_decode(mpg123_handle *mh, const unsigned char *inmemory, size_t inmemsize, unsigned char *outmemory, size_t outmemsize, size_t *done )
+</function header>
+</task>
+
+<solution>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+#include "mpg123.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  static bool initialized = false;
+  if (!initialized) {
+    mpg123_init();
+    initialized = true;
+  }
+  int ret;
+  mpg123_handle* handle = mpg123_new(nullptr, &ret);
+  if (handle == nullptr) {
+    return 0;
+  }
+
+  ret = mpg123_param(handle, MPG123_ADD_FLAGS, MPG123_QUIET, 0.);
+  if(ret == MPG123_OK)
+    ret = mpg123_open_feed(handle);
+  if (ret != MPG123_OK) {
+    mpg123_delete(handle);
+    return 0;
+  }
+
+  std::vector<uint8_t> output_buffer(mpg123_outblock(handle));
+
+  size_t output_written = 0;
+  // Initially, start by feeding the decoder more data.
+  int decode_ret = MPG123_NEED_MORE;
+  FuzzedDataProvider provider(data, size);
+  while ((decode_ret != MPG123_ERR)) {
+    if (decode_ret == MPG123_NEED_MORE) {
+      if (provider.remaining_bytes() == 0
+          || mpg123_tellframe(handle) > 10000
+          || mpg123_tell_stream(handle) > 1<<20) {
+        break;
+      }
+      const size_t next_size = provider.ConsumeIntegralInRange<size_t>(
+          0,
+          provider.remaining_bytes());
+      auto next_input = provider.ConsumeBytes<unsigned char>(next_size);
+      decode_ret = mpg123_decode(handle, next_input.data(), next_input.size(),
+                                 output_buffer.data(), output_buffer.size(),
+                                 &output_written);
+    } else if (decode_ret != MPG123_ERR && decode_ret != MPG123_NEED_MORE) {
+      decode_ret = mpg123_decode(handle, nullptr, 0, output_buffer.data(),
+                                 output_buffer.size(), &output_written);
+    } else {
+      // Unhandled mpg123_decode return value.
+      abort();
+    }
+  }
+
+  mpg123_delete(handle);
+
+  return 0;
+}
+</solution>
+
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+void flb_config_exit(struct flb_config * config)
+</function header>
+</task>
+
+<solution>
+#include "flb_fuzz_header.h"
+#include <fluent-bit/flb_kv.h>
+#include <fluent-bit/flb_parser.h>
+#include <fluent-bit/flb_slist.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
+/* A sample of configurations */
+char conf_file[] = "# Parser: no_year\n"
+                   "# ===============\n"
+                   "# the given format don't contain the Year, this is a common\n"
+                   "# case on old Syslog implementations.\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        no_year\n"
+                   "    Format      json\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %b %d %H:%M:%S\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "# Parser: no_year_N\n"
+                   "# =================\n"
+                   "# Just for compatibility, check a string with no year but including Nanoseconds.\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        no_year_N\n"
+                   "    Format      json\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %b %d %H:%M:%S.%L\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "# Parser: no_year_NC\n"
+                   "# =================\n"
+                   "# Just for compatibility, check a string with no year but including Nanoseconds with comma as fractional separator.\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        no_year_NC\n"
+                   "    Format      json\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %b %d %H:%M:%S,%L\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "# Parser: no_year_TZ\n"
+                   "# =================\n"
+                   "# Time string with no year and including timezone\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        no_year_TZ\n"
+                   "    Format      json\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %b %d %H:%M:%S %z\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "# Parser: no_year_N_TZ\n"
+                   "# ====================\n"
+                   "# Time string with no year, nanoseconds and timezone\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        no_year_N_TZ\n"
+                   "    Format      json\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %b %d %H:%M:%S.%L %z\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "\n"
+                   "# Parser: no_year_NC_TZ\n"
+                   "# ====================\n"
+                   "# Time string with no year, nanoseconds and timezone with comma as fractional separator.\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        no_year_NC_TZ\n"
+                   "    Format      json\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %b %d %H:%M:%S,%L %z\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "\n"
+                   "# Parser: default_UTC\n"
+                   "# ===================\n"
+                   "# Time string with timezone in UTC\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        default_UTC\n"
+                   "    Format      json\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %m/%d/%Y %H:%M:%S\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "# Parser: default_UTC_Z\n"
+                   "# =====================\n"
+                   "# Time string with timezone in UTC and ending Z\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        default_UTC_Z\n"
+                   "    Format      json\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %m/%d/%Y %H:%M:%SZ\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "# Parser: default_UTC_N_Z\n"
+                   "# =======================\n"
+                   "# Time string with timezone in UTC, nanoseconds and ending Z\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        default_UTC_N_Z\n"
+                   "    Format      json\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %m/%d/%Y %H:%M:%S.%LZ\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "# Parser: default_UTC_NC_Z\n"
+                   "# =======================\n"
+                   "# Time string with timezone in UTC, nanoseconds with comma as fractional separator and ending Z\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        default_UTC_NC_Z\n"
+                   "    Format      json\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %m/%d/%Y %H:%M:%S,%LZ\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "# Parser: generic_TZ\n"
+                   "# ==================\n"
+                   "# Generic date with timezone\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        generic_TZ\n"
+                   "    Format      json\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %m/%d/%Y %H:%M:%S %z\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "# Parser: generic\n"
+                   "# ===============\n"
+                   "# Generic date\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        generic\n"
+                   "    Format      json\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %m/%d/%Y %H:%M:%S\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "# Parser: generic_N\n"
+                   "# ===============\n"
+                   "# Generic date with nanoseconds\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        generic_N\n"
+                   "    Format      json\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %m/%d/%Y %H:%M:%S.%L\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "# Parser: generic_NC\n"
+                   "# ===============\n"
+                   "# Generic date with nanoseconds with comma as fractional separator\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        generic_NC\n"
+                   "    Format      json\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %m/%d/%Y %H:%M:%S,%L\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "# Parser: generic_N_TZ\n"
+                   "# ====================\n"
+                   "# Generic date with nanoseconds and timezone\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        generic_N_TZ\n"
+                   "    Format      json\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %m/%d/%Y %H:%M:%S.%L %z\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "# Parser: generic_NC_TZ\n"
+                   "# ====================\n"
+                   "# Generic date with nanoseconds with comma as fractional separator and timezone\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        generic_NC_TZ\n"
+                   "    Format      json\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %m/%d/%Y %H:%M:%S,%L %z\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "# Parser: apache_error\n"
+                   "# ====================\n"
+                   "# Apache error log time format\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        apache_error\n"
+                   "    Format      json\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %a %b %d %H:%M:%S.%L %Y\n"
+                   "    Time_Keep   On\n"
+                   "# Parser: mysql_quoted_stuff\n"
+                   "# ====================\n"
+                   "# Apache error log time format\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        mysql_quoted_stuff\n"
+                   "    Format      regex\n"
+                   "    Regex       ^(?<time>.*?),(?<key001>.*)$\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %Y-%M-%S %H:%M:%S\n"
+                   "    Time_Keep   On\n"
+                   "    Decode_Field_As   mysql_quoted key001\n"
+                   "# Parser: REGEX_generic_NC_TZ\n"
+                   "# ====================\n"
+                   "# Generic date with nanoseconds with comma as fractional separator and timezone\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        REGEX_generic_NC_TZ\n"
+                   "    Format      regex\n"
+                   "    Regex       ^(?<key001>[^ ]*) (?<key002>[^ ]*) (?<time>.+)$\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %m/%d/%Y %H:%M:%S,%L %z\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "# Parser: REGEX_apache_error\n"
+                   "# ====================\n"
+                   "# Apache error log time format\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        REGEX_apache_error\n"
+                   "    Format      regex\n"
+                   "    Regex       ^(?<key001>[^ ]*) (?<key002>[^ ]*) (?<time>.+)$\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %a %b %d %H:%M:%S.%L %Y\n"
+                   "    Time_Keep   On\n"
+                   "\n"
+                   "\n"
+                   "\n"
+                   "# Parser: REGEX_mysql_quoted_stuff\n"
+                   "# ====================\n"
+                   "# Apache error log time format\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        REGEX_mysql_quoted_stuff\n"
+                   "    Format      regex\n"
+                   "    Regex       ^(?<time>.*?),(?<key001>.*)$\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %Y-%M-%S %H:%M:%S\n"
+                   "    Time_Keep   On\n"
+                   "    Decode_Field_As   mysql_quoted key001\n"
+                   "\n"
+                   "\n"
+                   "\n"
+                   "# Parser: REGEX2_mysql_quoted_stuff\n"
+                   "# ====================\n"
+                   "# Apache error log time format\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        REGEX2_mysql_quoted_stuff\n"
+                   "    Format      logfmt\n"
+                   "    Regex       ^(?<time>.*?),(?<key001>.*)$\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %Y-%M-%S %H:%M:%S\n"
+                   "    Time_Keep   On\n"
+                   "    Decode_Field_As   mysql_quoted key001\n"
+                   "    Types A1:integer A2:string A3:bool A4:float A5:hex\n"
+                   "\n"
+                   "\n"
+                   "\n"
+                   "# Parser: REGEX3_mysql_quoted_stuff\n"
+                   "# ====================\n"
+                   "# Apache error log time format\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        REGEX3_mysql_quoted_stuff\n"
+                   "    Format      json\n"
+                   "    Regex       ^(?<time>.*?),(?<key001>.*)$\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %Y-%M-%S %H:%M:%S\n"
+                   "    Time_Keep   On\n"
+                   "    Decode_Field_As   escaped_utf8 key001\n"
+                   "    Types A1:integer A2:string A3:bool A4:float A5:hex\n"
+                   "\n"
+                   "\n"
+                   "\n"
+                   "# Parser: REGEX33_mysql_quoted_stuff\n"
+                   "# ====================\n"
+                   "# Apache error log time format\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        REGEX33_mysql_quoted_stuff\n"
+                   "    Format      json\n"
+                   "    Regex       ^(?<time>.*?),(?<key001>.*)$\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %Y-%M-%S %H:%M:%S\n"
+                   "    Time_Keep   On\n"
+                   "    Decode_Field_As   escaped key001\n"
+                   "    Types A1:integer A2:string A3:bool A4:float A5:hex\n"
+                   "\n"
+                   "\n"
+                   "\n"
+                   "# Parser: REGEX4_mysql_quoted_stuff\n"
+                   "# ====================\n"
+                   "# Apache error log time format\n"
+                   "#\n"
+                   "[PARSER]\n"
+                   "    Name        REGEX4_mysql_quoted_stuff\n"
+                   "    Format      json\n"
+                   "    Regex       ^(?<time>.*?),(?<key001>.*)$\n"
+                   "    Time_Key    time\n"
+                   "    Time_Format %Y-%M-%S %H:%M:%S\n"
+                   "    Time_Keep   On\n"
+                   "    Decode_Field_As   json key001\n"
+                   "    Types A1:integer A2:string A3:bool A4:float A5:hex\n"
+                   "[MULTILINE_PARSER]\n"
+                   "    name          exception_test\n"
+                   "    type          regex\n"
+                   "    flush_timeout 1000\n"
+                   "    rule          \"start_state\"  \"/(Dec \\d+ \\d+\\:\\d+\\:\\d+)(.*)/\" \"cont\"\n"
+                   "    rule          \"cont\" \"/^\\s+at.*/\" \"cont\"\n";
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  /* Set fuzzer-malloc chance of failure */
+  flb_malloc_p = 0;
+  flb_malloc_mod = 25000;
+
+  /* Limit the size of the config files to 32KB. */
+  if (size > 32768) {
+    return 0;
+  }
+
+  /* Write the config file to a location we know OSS-Fuzz has */
+  char filename[256];
+  sprintf(filename, "/tmp/libfuzzer.%d", getpid());
+  FILE *fp = fopen(filename, "wb");
+  if (!fp) {
+    return 0;
+  }
+  fwrite(conf_file, strlen(conf_file), 1, fp);
+  fclose(fp);
+
+  /* Now parse random data based on the config files */
+  struct flb_config *config = NULL;
+  config = flb_config_init();
+  int ret = flb_parser_conf_file(filename, config);
+  if (ret == 0) {
+    struct mk_list *head = NULL;
+    mk_list_foreach(head, &config->parsers) {
+      size_t out_size;
+      char *out_buf = NULL;
+      struct flb_parser *parser = NULL;
+      struct flb_time out_time;
+      parser = mk_list_entry(head, struct flb_parser, _head);
+      flb_parser_do(parser, (const char *)data, size, (void **)&out_buf, &out_size, &out_time);
+      if (out_buf != NULL) {
+        free(out_buf);
+      }
+    }
+  }
+  flb_parser_exit(config);
+  flb_config_exit(config);
+
+  if (size > 100) {
+    /* Now let's do a second run where we also call flb_config_set_property */
+    config = flb_config_init();
+    ret = flb_parser_conf_file(filename, config);
+    char *key_1 = get_null_terminated(15, &data, &size);
+    char *val_1 = get_null_terminated(15, &data, &size);
+    char *key_2 = get_null_terminated(15, &data, &size);
+    char *val_2 = get_null_terminated(15, &data, &size);
+    char *progname = get_null_terminated(15, &data, &size);
+
+    flb_config_set_property(config, key_1, val_1);
+    flb_config_set_property(config, key_2, val_2);
+    flb_config_set_program_name(config, progname);
+    set_log_level_from_env(config);
+
+    struct mk_list prop;
+    flb_kv_init(&prop);
+    flb_kv_item_create(&prop, key_1, val_1);
+    flb_config_prop_get(progname, &prop);
+    flb_slist_entry_get(&prop, (int)data[0]);
+    flb_slist_dump(&prop);
+
+    if (ret == 0) {
+      struct mk_list *head = NULL;
+      mk_list_foreach(head, &config->parsers) {
+        size_t out_size;
+        char *out_buf = NULL;
+        struct flb_parser *parser = NULL;
+        struct flb_time out_time;
+
+        parser = mk_list_entry(head, struct flb_parser, _head);
+        flb_parser_do(parser, (const char *)data, size, (void **)&out_buf, &out_size, &out_time);
+        if (out_buf != NULL) {
+          free(out_buf);
+        }
+      }
+    }
+    flb_parser_exit(config);
+    flb_config_exit(config);
+    flb_free(key_1);
+    flb_free(val_1);
+    flb_free(key_2);
+    flb_free(val_2);
+    flb_free(progname);
+    flb_kv_release(&prop);
+  }
+
+  /* clean up the file */
+  unlink(filename);
+
+  return 0;
+}
+
+</solution>
+
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+int flb_start_trace(struct flb_lib_ctx * ctx)
+</function header>
+</task>
+You MUST call <code>
+int flb_start_trace(struct flb_lib_ctx * ctx)
+</code> in your solution!
+
+<solution>

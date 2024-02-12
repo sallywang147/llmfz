@@ -1,0 +1,65 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+#include <algorithm>  // For std::min
+
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "hostapd.h"
+#include "hostapd_cfg.h"
+#include "hostapd_log.h"
+#include "hostapd_main.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  struct hostapd_iface *iface =
+      (struct hostapd_iface *)malloc(sizeof(struct hostapd_iface));
+  if (iface == NULL) {
+    return 0;
+  }
+
+  iface->config_fname = (char *)malloc(std::min(size, (size_t)255));  // Limit the size of the config file name to prevent excessive memory allocation
+  if (iface->config_fname == NULL) {
+    free(iface);
+    return 0;
+  }
+  stream.ConsumeBytes<char>(iface->config_fname, std::min(size, (size_t)255));
+
+  hostapd_reload_config(iface);
+
+  free(iface->config_fname);
+  free(iface);
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+../fuzzer-common.c:1:10: fatal error: 'algorithm' file not found
+#include <algorithm>  // For std::min
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+../fuzzer-common.cpp:10:10: fatal error: 'hostapd.h' file not found
+#include "hostapd.h"
+         ^~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

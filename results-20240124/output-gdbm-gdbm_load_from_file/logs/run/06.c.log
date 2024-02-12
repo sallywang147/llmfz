@@ -1,0 +1,76 @@
+Using seed corpus: gdbm_fuzzer_seed_corpus.zip
+/workspace/out/libfuzzer-address-x86_64/gdbm_fuzzer -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /workspace/corpus/gdbm_fuzzer < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 3658810418
+INFO: Loaded 1 modules   (1901 inline 8-bit counters): 1901 [0x654ee0, 0x65564d), 
+INFO: Loaded 1 PC tables (1901 PCs): 1901 [0x5fa348,0x601a18), 
+INFO:       20 files found in /workspace/corpus/gdbm_fuzzer
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 16384 bytes
+INFO: seed corpus: files: 20 min: 2048b max: 16384b total: 98304b rss: 34Mb
+=================================================================
+==14==ERROR: AddressSanitizer: stack-buffer-underflow on address 0x7f6f5646fa1f at pc 0x00000057281c bp 0x7ffecbb37590 sp 0x7ffecbb37588
+READ of size 1 at 0x7f6f5646fa1f thread T0
+SCARINESS: 27 (1-byte-read-stack-buffer-underflow)
+    #0 0x57281b in get_dump_line /src/gdbm/src/gdbmload.c:87:8
+    #1 0x570e3a in get_parms /src/gdbm/src/gdbmload.c:154:15
+    #2 0x56dd6e in _gdbm_load_file /src/gdbm/src/gdbmload.c:413:8
+    #3 0x56dd6e in gdbm_load_from_file /src/gdbm/src/gdbmload.c:647:10
+    #4 0x56c7e5 in LLVMFuzzerTestOneInput /src/gdbm/fuzz/gdbm_fuzzer.cpp:21:13
+    #5 0x43df23 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #6 0x43d70a in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #7 0x43f574 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:826:7
+    #8 0x43f7a9 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #9 0x42ee0f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #10 0x458462 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #11 0x7f6f56bd8082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #12 0x41f84d in _start (out/libfuzzer-address-x86_64/gdbm_fuzzer+0x41f84d)
+
+DEDUP_TOKEN: get_dump_line--get_parms--_gdbm_load_file
+Address 0x7f6f5646fa1f is located in stack of thread T0 at offset 31 in frame
+    #0 0x5722bf in get_dump_line /src/gdbm/src/gdbmload.c:78
+
+DEDUP_TOKEN: get_dump_line
+  This frame has 1 object(s):
+    [32, 112) 'buf' (line 79) <== Memory access at offset 31 underflows this variable
+HINT: this may be a false positive if your program uses some custom stack unwind mechanism, swapcontext or vfork
+      (longjmp and C++ exceptions *are* supported)
+SUMMARY: AddressSanitizer: stack-buffer-underflow /src/gdbm/src/gdbmload.c:87:8 in get_dump_line
+Shadow bytes around the buggy address:
+  0x0fee6ac85ef0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fee6ac85f00: f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5
+  0x0fee6ac85f10: f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5 f5
+  0x0fee6ac85f20: f1 f1 f1 f1 00 00 00 f2 f2 f2 f2 f2 00 f2 f2 f2
+  0x0fee6ac85f30: 00 f3 f3 f3 00 00 00 00 00 00 00 00 00 00 00 00
+=>0x0fee6ac85f40: f1 f1 f1[f1]00 00 00 00 00 00 00 00 00 00 f3 f3
+  0x0fee6ac85f50: f3 f3 f3 f3 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fee6ac85f60: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fee6ac85f70: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fee6ac85f80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0fee6ac85f90: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07 
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+==14==ABORTING
+MS: 0 ; base unit: 0000000000000000000000000000000000000000
+artifact_prefix='./'; Test unit written to ./crash-4a5d92b164bcb3b1afcf5bda12c17f4bf3544b3b
+stat::number_of_executed_units: 2
+stat::average_exec_per_sec:     0
+stat::new_units_added:          0
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              34

@@ -1,0 +1,82 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+#include <string>
+#include <vector>
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider provider(data, size);
+  const size_t num_args = provider.ConsumeIntegralInRange<size_t>(1, 10);
+  std::vector<char*> args(num_args + 1);
+  for (size_t i = 0; i < num_args; i++) {
+    const size_t arg_len = provider.ConsumeIntegralInRange<size_t>(0, 100);
+    args[i] = new char[arg_len + 1];
+    provider.ConsumeBytes(args[i], arg_len);
+    args[i][arg_len] = '\0';
+  }
+  args[num_args] = nullptr;
+
+  const size_t cmd_len = provider.ConsumeIntegralInRange<size_t>(0, 100);
+  char* cmd = new char[cmd_len + 1];
+  provider.ConsumeBytes(cmd, cmd_len);
+  cmd[cmd_len] = '\0';
+
+  cmd_rebase(num_args, args.data(), cmd);
+
+  for (size_t i = 0; i < num_args; i++) {
+    delete[] args[i];
+  }
+  delete[] cmd;
+
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:16:10: fatal error: 'algorithm' file not found
+#include <algorithm>
+         ^~~~~~~~~~~
+1 error generated.
+
+Fix failure
+oss-fuzz/fuzz-date.cpp:17:14: error: no matching member function for call to 'ConsumeBytes'
+    provider.ConsumeBytes(args[i], arg_len);
+    ~~~~~~~~~^~~~~~~~~~~~
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:352:36: note: candidate template ignored: couldn't infer template argument 'T'
+std::vector<T> FuzzedDataProvider::ConsumeBytes(size_t size, size_t num_bytes) {
+                                   ^
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:108:36: note: candidate function template not viable: requires single argument 'num_bytes', but 2 arguments were provided
+std::vector<T> FuzzedDataProvider::ConsumeBytes(size_t num_bytes) {
+                                   ^
+oss-fuzz/fuzz-date.cpp:24:12: error: no matching member function for call to 'ConsumeBytes'
+  provider.ConsumeBytes(cmd, cmd_len);
+  ~~~~~~~~~^~~~~~~~~~~~
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:352:36: note: candidate template ignored: couldn't infer template argument 'T'
+std::vector<T> FuzzedDataProvider::ConsumeBytes(size_t size, size_t num_bytes) {
+                                   ^
+/usr/local/lib/clang/15.0.0/include/fuzzer/FuzzedDataProvider.h:108:36: note: candidate function template not viable: requires single argument 'num_bytes', but 2 arguments were provided
+std::vector<T> FuzzedDataProvider::ConsumeBytes(size_t num_bytes) {
+                                   ^
+oss-fuzz/fuzz-date.cpp:27:3: error: use of undeclared identifier 'cmd_rebase'
+  cmd_rebase(num_args, args.data(), cmd);
+  ^
+3 errors generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

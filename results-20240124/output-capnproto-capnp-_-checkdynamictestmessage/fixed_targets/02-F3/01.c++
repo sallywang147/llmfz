@@ -1,0 +1,1 @@
+error: undefined reference to `capnp::_::checkDynamicTestMessage(capnp::DynamicStructReader const&)'
