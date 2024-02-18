@@ -11,8 +11,8 @@ from peft import prepare_model_for_int8_training, LoraConfig, get_peft_model, Pe
 model = None
 tokenizer = None
 peft_model = None
-os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"]="0"
+#os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
+#os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 def maybe_load_models():
     global model
