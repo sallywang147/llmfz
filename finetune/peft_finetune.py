@@ -25,6 +25,7 @@ def maybe_load_models():
             torch_dtype=torch.float16,
             device_map= "auto",
         )
+        model.to(device)
 
     if tokenizer is None:
         tokenizer = LlamaTokenizer.from_pretrained(
@@ -241,7 +242,6 @@ def tokenize_and_train(
             # original tokens. In this case, MLM is set to False, indicating that it will not be used.
             mlm=False, 
         ),
-        device=0,
     )
     result = trainer.train(resume_from_checkpoint=False)
 
