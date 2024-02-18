@@ -25,7 +25,6 @@ def maybe_load_models():
             torch_dtype=torch.float16,
             device_map= "auto",
         )
-        model.to("cuda")
 
     if tokenizer is None:
         tokenizer = LlamaTokenizer.from_pretrained(
