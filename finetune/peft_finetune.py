@@ -242,7 +242,7 @@ def tokenize_and_train(
             mlm=False, 
         ),
     )
-
+    model.to('cuda')
     result = trainer.train(resume_from_checkpoint=False)
 
     model.save_pretrained(output_dir)
