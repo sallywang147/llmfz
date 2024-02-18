@@ -148,8 +148,8 @@ def tokenize_and_train(
             padding="max_length",
         )
         return {
-            "input_ids": result["input_ids"][:-1],
-            "attention_mask": result["attention_mask"][:-1],
+            "input_ids": result["input_ids"][:-1].to("cuda"),
+            "attention_mask": result["attention_mask"][:-1].to("cuda"),
         }
 
     def to_dict(text):
@@ -167,6 +167,7 @@ def tokenize_and_train(
         bias="none",
         task_type="CAUSAL_LM",
     ))
+    model = model.to("cuda")
     output_dir = f"lora-{model_name}"
     #we may or may not need the line below, depending on the device
     #model = model.to(torch.device('cuda'))
