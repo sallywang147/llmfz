@@ -59,7 +59,7 @@ def generate_text(
             model, model_name,
             torch_dtype=torch.float16
         )
-
+        model.to('cuda')
     inputs = tokenizer(text, return_tensors="pt")
     input_ids = inputs["input_ids"].to(model.device)
 
@@ -156,9 +156,8 @@ def tokenize_and_train(
     paragraphs = [to_dict(x) for x in paragraphs]
     data = Dataset.from_list(paragraphs)            
     data = data.shuffle().map(lambda x: tokenize(x))
-
     model = prepare_model_for_int8_training(model)
-
+    model.to('cuda')
     model = get_peft_model(model, LoraConfig(
         r=lora_r,
         lora_alpha=lora_alpha,
