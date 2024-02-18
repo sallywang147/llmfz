@@ -243,7 +243,7 @@ def tokenize_and_train(
         ),
     )
 
-    result = trainer.train(resume_from_checkpoint=True)
+    result = trainer.train(resume_from_checkpoint=False)
 
     model.save_pretrained(output_dir)
     
