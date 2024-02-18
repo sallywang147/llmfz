@@ -7,9 +7,12 @@ from datasets import Dataset
 from transformers import LlamaForCausalLM, LlamaTokenizer, GenerationConfig
 from peft import prepare_model_for_int8_training, LoraConfig, get_peft_model, PeftModel
 
+
 model = None
 tokenizer = None
 peft_model = None
+os.environ[“CUDA_DEVICE_ORDER”]=“PCI_BUS_ID”
+os.environ[“CUDA_VISIBLE_DEVICES”]=“0”
 
 def maybe_load_models():
     global model
@@ -157,7 +160,6 @@ def tokenize_and_train(
     data = Dataset.from_list(paragraphs)            
     data = data.shuffle().map(lambda x: tokenize(x))
     model = prepare_model_for_int8_training(model)
-    model.to('cuda')
     model = get_peft_model(model, LoraConfig(
         r=lora_r,
         lora_alpha=lora_alpha,
@@ -240,8 +242,8 @@ def tokenize_and_train(
             # original tokens. In this case, MLM is set to False, indicating that it will not be used.
             mlm=False, 
         ),
+        device=0,
     )
-    model.to('cuda')
     result = trainer.train(resume_from_checkpoint=False)
 
     model.save_pretrained(output_dir)
