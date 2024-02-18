@@ -4,6 +4,9 @@ import random
 import torch
 import transformers
 from datasets import Dataset
+from accelerate import dispatch_model, infer_auto_device_map
+from accelerate.utils import get_balanced_memory
+from torch.cuda.amp import autocast
 from transformers import LlamaForCausalLM, LlamaTokenizer, GenerationConfig
 from peft import prepare_model_for_int8_training, LoraConfig, get_peft_model, PeftModel
 
@@ -24,6 +27,20 @@ def maybe_load_models():
             load_in_8bit=True,
             torch_dtype=torch.float16,
             device_map= "auto",
+        )
+        max_memory = get_balanced_memory(
+        model,
+        max_memory=None,
+        no_split_module_classes=["DecoderLayer", "Attention", "MLP", "LayerNorm", "Linear"],
+        dtype='float16',
+        low_zero=False,
+        )
+
+        device_map = infer_auto_device_map(
+        model,
+        max_memory=max_memory,
+        no_split_module_classes=["DecoderLayer", "Attention", "MLP", "LayerNorm", "Linear"],
+        dtype='float16'
         )
 
     if tokenizer is None:
