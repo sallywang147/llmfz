@@ -62,7 +62,6 @@ def generate_text(
             model, model_name,
             torch_dtype=torch.float16
         )
-        model.to('cuda')
     inputs = tokenizer(text, return_tensors="pt")
     input_ids = inputs["input_ids"].to(model.device)
 
