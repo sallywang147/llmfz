@@ -148,8 +148,8 @@ def tokenize_and_train(
             padding="max_length",
         )
         return {
-            "input_ids": result["input_ids"][:-1].to("cuda"),
-            "attention_mask": result["attention_mask"][:-1].to("cuda"),
+            "input_ids": result["input_ids"][:-1],
+            "attention_mask": result["attention_mask"][:-1],
         }
 
     def to_dict(text):
