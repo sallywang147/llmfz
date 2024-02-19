@@ -17,6 +17,20 @@ peft_model = None
 #os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
 #os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
+
+def parse_args():
+  """Parses command line arguments."""
+  parser = argparse.ArgumentParser()
+  parser.add_argument('-s',
+                      #'--train_data_size',
+                      type=int,
+                      required=False,
+                      help='Specify desired training dataset size.')
+
+  args = parser.parse_args()
+
+  return args
+
 def maybe_load_models():
     global model
     global tokenizer
@@ -148,13 +162,18 @@ def tokenize_and_train(
     lora_r,
     lora_alpha,
     lora_dropout,
-    model_name):
+    model_name,
+    size=None):
     global model
     global tokenizer
     reset_models()
     maybe_load_models()
     tokenizer.pad_token_id = 0
-    paragraphs = training_data.split("<end of text>")
+    if size is None: 
+        paragraphs = training_data.split("<end of text>")
+    else: 
+        assert(len(paragraphs)>=size)
+        paragraphs = paragraphs[:size]
     print("Number of samples: " + str(len(paragraphs)))
         
     def tokenize(item):
@@ -260,7 +279,7 @@ def tokenize_and_train(
             mlm=False, 
         ),
     )
-    result = trainer.train(resume_from_checkpoint=False)
+    result = trainer.train(resume_from_checkpoint=False, device="cuda")
 
     model.save_pretrained(output_dir)
     
@@ -268,11 +287,12 @@ def tokenize_and_train(
 
     return result
 
- #lora hyperparameters from this paper: https://github.com/microsoft/LoRA/tree/main/examples/NLG      
-if __name__ == "__main__":  
-        train_file = open('../train_data/context.txt', "r")
-        train_data = train_file.read()   
-        tokenize_and_train(train_data,
+def main():
+    args = parse_args()
+    train_file = open('../train_data/context.txt', "r")
+    train_data = train_file.read()
+    tokenize_and_train(
+        train_data,
         max_seq_length=4096,
         micro_batch_size=1,
         gradient_accumulation_steps=16,
@@ -281,4 +301,9 @@ if __name__ == "__main__":
         lora_r=8,
         lora_alpha=32,
         lora_dropout=0.1,
-        model_name='llama_7B') #pass on lora model name 
+        model_name='llama_7B',
+        size= args.s) #pass on lora model name 
+
+ #lora hyperparameters from this paper: https://github.com/microsoft/LoRA/tree/main/examples/NLG      
+if __name__ == "__main__":  
+    main()
