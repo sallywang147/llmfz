@@ -1112,7 +1112,7 @@ def choose_model(context_train_data, model=None, method=None, size=None):
                 lora_r=8,
                 lora_alpha=32,
                 lora_dropout=0.1,
-                model_name='llama_7B',
+                model_name='context_llama_7B',
                 size= args.s) #pass on lora model name 
         if method=="onestep" or method is None:    
             onestep_tokenize_and_train_llama(
@@ -1124,7 +1124,7 @@ def choose_model(context_train_data, model=None, method=None, size=None):
                 lora_r=8,
                 lora_alpha=32,
                 lora_dropout=0.1,
-                model_name='llama_7B',
+                model_name='onestep_llama_7B',
                 size=size) #pass on lora model name 
     elif model=="codellama":
         if method=="context": 
