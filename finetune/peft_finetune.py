@@ -1,4 +1,5 @@
 import os
+import sys
 import argparse
 import json
 import random
@@ -162,9 +163,9 @@ def tokenize_dataset():
 def onestep_tokenize_and_train_codellama():
     model, tokenizer = load_codellama()
     tokenized_train_dataset, tokenized_val_dataset = tokenize_dataset()
-    model = model.to("cuda")
     model.train() # put model back into training mode
     model = prepare_model_for_int8_training(model)
+    output_dir = f"onestep-codellama"
 
     config = LoraConfig(
         r=16,
@@ -187,7 +188,7 @@ def onestep_tokenize_and_train_codellama():
     batch_size = 128
     per_device_train_batch_size = 32
     gradient_accumulation_steps = batch_size // per_device_train_batch_size
-
+   
     training_args = TrainingArguments(
             per_device_train_batch_size=per_device_train_batch_size,
             gradient_accumulation_steps=gradient_accumulation_steps,
@@ -228,7 +229,6 @@ def onestep_tokenize_and_train_codellama():
         print("compiling the model")
         model = torch.compile(model)
 
-    output_dir = f"onestep-codellama"
     print("Training...")
 
     result = trainer.train(resume_from_checkpoint=False, device="cuda")
