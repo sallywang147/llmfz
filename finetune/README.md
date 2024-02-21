@@ -4,16 +4,17 @@
 
 | Ssupported Models  | Fine-tuning Methods |Train Time by Methods (hours)|Total Train Time (days)|Quantization|LoRA|
 | ------------- | ------------- | ------------- | ------------- |------------- |------------- |
-| LLaMA  | contextualized; one-step  |contextualized: 212; one-step: 4.3 | 9 |8 bits|yes|
+| LLaMA  | contextualized; one-step  |contextualized: 212; one-step: 12 | 10 |8 bits|yes|
 | CodeLLaMA  | contextualized; one-step| contextualized: 96.71; one-step:6.57| 4.3|8 bits|yes|
 | Falcon  | contextualized; one-step  |contextualized: 89;  one-step: 4.56|4|4bits|yes|
-| StarCoder  | contextualized; one-step|contextualized:131; one-step: 5.61|5.6 |N/A|yes|
+| StarCoder  | contextualized; one-step|contextualized:131; one-step: 5.61|5.6 |8 bits|yes|
 | GPT4  |  one-step |contextualized:N/A; one-step: 0.05|negligible|N/A|N/A|
 
-Train Time and Total Time: we provide the expected train time based on the following hyperparameters of PEFT models and on the parallel usage of at least two A100 GPUs.
+Train Time and Total Time: we provide the expected train time based on the following hyperparameters of PEFT models and on the parallel usage of at least two A100 GPUs. In our case, we use the 2xA100 commercial GPUs from [Paperspace](https://www.paperspace.com/) for all fine-tuning and evaluation. 
 
-GPT4: due to the limitation of [tiered users](https://platform.openai.com/docs/guides/rate-limits/usage-tiers?context=tier-four), we were only able to fine-tune GPT4
-davinci-002 with 5 epochs and 40 traininng samples. 
+GPT4: due to the limitation of [tiered users](https://platform.openai.com/docs/guides/rate-limits/usage-tiers?context=tier-four), we were only able to fine-tune GPT4 davinci-002 with 5 epochs and 40 traininng samples. 
+
+Falcon 4-bit quanntizaion: we did not use 8 bits like the other models, because 4bits is [recommended practice](https://www.labellerr.com/blog/hands-on-with-fine-tuning-llm/) by ML researchers for Falcon in this case. 
 
 | Hyperparameters  | Values|
 | ------------- | ------------- |
@@ -45,7 +46,7 @@ Assuming you have all relevant datasets in ``../train_data`` directory (if not, 
 you can use the following script:
  ```
    cd finetune
-  `pip install -r requirements.txt -U` 
+   pip install -r requirements.txt -U
    python peft_finetune.py -model [model_name] -method context -s [optional: dataset size]
   ```
 All parameters should be lower case. For example, ``python peft_finetune.py -model codellama -method context -s 50`` or simply ``python peft_finetune.py -model codellama -method context``
@@ -54,7 +55,7 @@ All parameters should be lower case. For example, ``python peft_finetune.py -mod
 
  ```
    cd finetune
-  `pip install -r requirements.txt -U` 
+   pip install -r requirements.txt -U
    python peft_finetune.py -model [model_name] -method onestep -s [optional: dataset size]
   ```
 The default setting would split the dataset into 80:20 for training and evaluation.
@@ -115,11 +116,44 @@ Note: I actually don't recommend fine-tuning GPT4. It requires a very rigid data
 
  ## Fine-tuned Models Ready for Use 
 
- ### Contextualized Fine-tuning 
+ ### One-step Fine-tuning
  
- [deployed peft llama](https://huggingface.co/sallywww/llama_fuzz_targets)
+ [deployed codeLLaMA](https://huggingface.co/sallywww/codeLLaMA_oneStep_fuzzTargets/tree/main)
+ [deployed Falcon](https://huggingface.co/sallywww/Falcon_oneStep_fuzzTargets/tree/main)
+ 
+
+  ### Contextualized Fine-tuning
 
  ## Results
 We evaluate the fine-tuned models on two questions: 
 1. Using human-writen fuzz targets as ground truths, how do fine-tuned models compare to pre-trained models? (a.k.a. How much does fine-tuning help, if at all?)
-2. On previously unseen under-covered function signatures, can fine-tuned models generate fuzz targets compile successful and improve coverage? (a.k.a. Is the effect of fine-tuning generalizable?)
+2. On previously unseen under-covered function signatures, can fine-tuned models generate fuzz targets compile successful and improve coverage? (a.k.a. the good, old coverage question)
+
+### Q1. How do fine-tuned models compare to pre-trained models?
+
+ #### One-step Fine-tuning 
+
+ | Models  | Training Loss|Eval Loss|
+| ------------- | ------------- |------------- |
+| CodeLLaMa  | 0.22 | 0.34 | 
+| LLaMA  | | |
+|  Falcon |7.175 |NaN |
+| StarCoder |  | |
+| GPT4(Note) | | |
+
+Note: GPT4 fine-tuning was completed on limited data and 5 epochs only. 
+
+ **CodeLLama**
+ 
+<img width="566" alt="Screen Shot 2024-02-21 at 6 40 01 AM" src="https://github.com/sallywang147/llmfz/assets/60257613/c5688662-2236-44de-9774-1c33219f48bd">
+
+
+ **Falcon**
+ 
+<img width="483" alt="Screen Shot 2024-02-21 at 7 36 00 AM" src="https://github.com/sallywang147/llmfz/assets/60257613/ad97346c-7d26-4b26-ad49-4a2875167fb7">
+
+
+ ####  Contextualized Fine-tuning 
+
+ ### Q2. The good, old coverage question (on previously unseen programs)
+ 
