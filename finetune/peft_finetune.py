@@ -55,6 +55,49 @@ def parse_args():
 
     return args
 
+
+def load_llama():
+    global model
+    global tokenizer
+    model = LlamaForCausalLM.from_pretrained(
+            "baffo32/decapoda-research-llama-7B-hf",
+            load_in_8bit=True,
+            torch_dtype=torch.float16,
+            device_map= "auto", #comment this line out if encountering cuda OOM or wrong distribution
+                                #across GPU and CPU. 
+        )
+    max_memory = get_balanced_memory(
+        model,
+        max_memory=None,
+        no_split_module_classes=["DecoderLayer", "Attention", "MLP", "LayerNorm", "Linear"],
+        dtype='float16',
+        low_zero=False,
+        )
+
+    device_map = infer_auto_device_map(
+        model,
+        max_memory=max_memory,
+        no_split_module_classes=["DecoderLayer", "Attention", "MLP", "LayerNorm", "Linear"],
+        dtype='float16'
+        )
+
+    if tokenizer is None:
+        tokenizer = LlamaTokenizer.from_pretrained(
+            "baffo32/decapoda-research-llama-7B-hf",
+        )
+
+
+def reset_models():
+    global model
+    global tokenizer
+
+    del model
+    del tokenizer
+
+    model = None
+    tokenizer = None
+
+
 def load_codellama():
     global model
     global tokenizer
@@ -81,6 +124,75 @@ def load_codellama():
         dtype='float16'
         )
     tokenizer = AutoTokenizer.from_pretrained("codellama/CodeLlama-7b-hf")
+    return model, tokenizer
+
+def load_falcon():
+    global model
+    global tokenizer
+
+    base_model = "tiiuae/falcon-7b"
+
+    bnb_config = BitsAndBytesConfig(
+        load_in_4bit=True,
+        load_4bit_use_double_quant=True,
+        bnb_4bit_quant_type="nf4",
+        bnb_4bit_compute_dtype=torch.bfloat16,
+    )
+
+    model =AutoModelForCausalLM.from_pretrained(
+        base_model,
+        device_map="auto",
+        trust_remote_code=True,
+        quantization_config=bnb_config,
+    )
+    model.config.use_cache = False
+
+    tokenizer = AutoTokenizer.from_pretrained(base_model)
+    tokenizer.pad_token = tokenizer.eos_token
+    max_memory = get_balanced_memory(
+        model,
+        max_memory=None,
+        no_split_module_classes=["DecoderLayer", "Attention", "MLP", "LayerNorm", "Linear"],
+        dtype='float16',
+        low_zero=False,
+        )
+
+    device_map = infer_auto_device_map(
+        model,
+        max_memory=max_memory,
+        no_split_module_classes=["DecoderLayer", "Attention", "MLP", "LayerNorm", "Linear"],
+        dtype='float16'
+        )
+    return model, tokenizer
+
+def load_starcoder():
+    global model
+    global tokenizer
+
+    base_model = "bigcode/starcoder"
+    model =AutoModelForCausalLM.from_pretrained(
+        base_model,
+        device_map="auto",
+        trust_remote_code=True,
+        torch_dtype=torch.float16,
+    )
+
+    tokenizer = AutoTokenizer.from_pretrained(base_model)
+    tokenizer.pad_token = tokenizer.eos_token
+    max_memory = get_balanced_memory(
+        model,
+        max_memory=None,
+        no_split_module_classes=["DecoderLayer", "Attention", "MLP", "LayerNorm", "Linear"],
+        dtype='float16',
+        low_zero=False,
+        )
+
+    device_map = infer_auto_device_map(
+        model,
+        max_memory=max_memory,
+        no_split_module_classes=["DecoderLayer", "Attention", "MLP", "LayerNorm", "Linear"],
+        dtype='float16'
+        )
     return model, tokenizer
 
 
@@ -346,46 +458,6 @@ def contextual_tokenize_and_train_codellama(training_data):
     reset_models()
     return result
     
-
-def load_llama():
-    global model
-    global tokenizer
-    model = LlamaForCausalLM.from_pretrained(
-            "baffo32/decapoda-research-llama-7B-hf",
-            load_in_8bit=True,
-            torch_dtype=torch.float16,
-            device_map= "auto", #comment this line out if encountering cuda OOM or wrong distribution
-                                #across GPU and CPU. 
-        )
-    max_memory = get_balanced_memory(
-        model,
-        max_memory=None,
-        no_split_module_classes=["DecoderLayer", "Attention", "MLP", "LayerNorm", "Linear"],
-        dtype='float16',
-        low_zero=False,
-        )
-
-    device_map = infer_auto_device_map(
-        model,
-        max_memory=max_memory,
-        no_split_module_classes=["DecoderLayer", "Attention", "MLP", "LayerNorm", "Linear"],
-        dtype='float16'
-        )
-
-    if tokenizer is None:
-        tokenizer = LlamaTokenizer.from_pretrained(
-            "baffo32/decapoda-research-llama-7B-hf",
-        )
-
-def reset_models():
-    global model
-    global tokenizer
-
-    del model
-    del tokenizer
-
-    model = None
-    tokenizer = None
 
 def generate_text(
     model_name, 
@@ -666,16 +738,365 @@ def onestep_tokenize_and_train_llama(
     reset_models()
     return result
 
+def onestep_tokenize_and_train_falcon():
+    model, tokenizer = load_falcon()
+    tokenized_train_dataset, tokenized_val_dataset = tokenize_dataset()
+    model.train() # put model back into training mode
+    model = prepare_model_for_int8_training(model)
+    output_dir = f"onestep-falcon"
 
-def main():
-    args = parse_args()
-    onestep_train_file = open('../train_data/onestep.json', "r")
-    onestep_train_data = onestep_train_file.read()
-    context_train_file = open('../train_data/context.txt', "r")
-    context_train_data = context_train_file.read()
+    config = LoraConfig(
+        r=16,
+        lora_alpha=32,
+        target_modules=["query_key_value"],
+        lora_dropout=0.05,
+        bias="none",
+        task_type="CAUSAL_LM"
+    )
+    model = get_peft_model(model, config)
+    if torch.cuda.device_count() > 1:
+        # keeps Trainer from trying its own DataParallelism when more than 1 gpu is available
+        model.is_parallelizable = True
+        model.model_parallel = True
+    batch_size = 128
+    per_device_train_batch_size = 32
+    gradient_accumulation_steps = batch_size // per_device_train_batch_size
+   
+    training_args = TrainingArguments(
+            per_device_train_batch_size=per_device_train_batch_size,
+            gradient_accumulation_steps=gradient_accumulation_steps,
+            warmup_steps=100,
+            max_steps=400,
+            num_train_epochs=30,  
+            learning_rate=3e-4,
+            fp16=True,
+            logging_steps=10,
+            optim="adamw_torch",
+            evaluation_strategy="steps", # if val_set_size > 0 else "no",
+            save_strategy="steps",
+            eval_steps=20,
+            save_steps=20,
+            output_dir=output_dir,
+            load_best_model_at_end=False,
+            group_by_length=True, # group sequences of roughly the same length together to speed up training
+            #report_to="wandb", # if use_wandb else "none",
+            #run_name=f"codellama-{datetime.now().strftime('%Y-%m-%d-%H-%M')}", # if use_wandb else None,
+        )
 
-    if args.model=="llama":
-        if args.method=="context":    
+    trainer = Trainer(
+        model=model,
+        train_dataset=tokenized_train_dataset,
+        eval_dataset=tokenized_val_dataset,
+        args=training_args,
+        data_collator=DataCollatorForSeq2Seq(
+            tokenizer, pad_to_multiple_of=8, return_tensors="pt", padding=True
+            ),
+        )
+
+    model.config.use_cache = False
+    old_state_dict = model.state_dict
+    model.state_dict = (lambda self, *_, **__: get_peft_model_state_dict(self, old_state_dict())).__get__(
+        model, type(model)
+    )
+    if torch.__version__ >= "2" and sys.platform != "win32":
+        print("compiling the model")
+        model = torch.compile(model)
+
+    print("Training...")
+
+    result = trainer.train(resume_from_checkpoint=False)
+
+    model.save_pretrained(output_dir) 
+    reset_models()
+    return result
+
+
+def contextual_tokenize_and_train_falcon(training_data):
+    global model
+    global tokenizer
+    reset_models()
+    model, tokenizer = load_falcon()
+    tokenizer.pad_token_id = 0
+    if size is None: 
+        paragraphs = training_data.split("<end of text>")
+    else: 
+        assert(len(paragraphs)>=size)
+        paragraphs = paragraphs[:size]
+        test_paragraphs = paragraphs[size+1:int(size+size*0.2)]
+    print("Number of train samples: " + str(len(paragraphs)))
+        
+    def tokenize(item):
+        result = tokenizer(
+            item["text"],
+            truncation=True,
+            max_length=max_seq_length,
+            padding="max_length",
+        )
+        return {
+            "input_ids": result["input_ids"][:-1],
+            "attention_mask": result["attention_mask"][:-1],
+        }
+
+    def to_dict(text):
+        return {"text": text}
+
+    paragraphs = [to_dict(x) for x in paragraphs]
+    test_paragraphs = [to_dict(y) for y in test_paragraphs]
+    data = Dataset.from_list(paragraphs) 
+    test_data = Dataset.from_list(test_paragraphs)              
+    tokenized_train_dataset = data.shuffle().map(lambda x: tokenize(x))
+    tokenized_val_dataset = test_data.shuffle().map(lambda y: tokenize(y))
+    model.train() # put model back into training mode
+    model = prepare_model_for_int8_training(model)
+
+    config = LoraConfig(
+        r=16,
+        lora_alpha=32,
+        target_modules=["query_key_value"],
+        lora_dropout=0.05,
+        bias="none",
+        task_type="CAUSAL_LM"
+    )
+    model = get_peft_model(model, config)
+    if torch.cuda.device_count() > 1:
+        # keeps Trainer from trying its own DataParallelism when more than 1 gpu is available
+        model.is_parallelizable = True
+        model.model_parallel = True
+    batch_size = 128
+    per_device_train_batch_size = 32
+    gradient_accumulation_steps = batch_size // per_device_train_batch_size
+    output_dir = "context-code-llama"
+    training_args = TrainingArguments(
+            per_device_train_batch_size=per_device_train_batch_size,
+            gradient_accumulation_steps=gradient_accumulation_steps,
+            warmup_steps=100,
+            max_steps=400,
+            num_train_epochs=30,  
+            learning_rate=3e-4,
+            fp16=True,
+            logging_steps=10,
+            optim="adamw_torch",
+            evaluation_strategy="steps", # if val_set_size > 0 else "no",
+            save_strategy="steps",
+            eval_steps=20,
+            save_steps=20,
+            output_dir=output_dir,
+            load_best_model_at_end=False,
+            group_by_length=True, # group sequences of roughly the same length together to speed up training
+            #report_to="wandb", # if use_wandb else "none",
+            #run_name=f"codellama-{datetime.now().strftime('%Y-%m-%d-%H-%M')}", # if use_wandb else None,
+        )
+
+    trainer = Trainer(
+        model=model,
+        train_dataset=tokenized_train_dataset,
+        eval_dataset=tokenized_val_dataset,
+        args=training_args,
+        data_collator=DataCollatorForSeq2Seq(
+            tokenizer, pad_to_multiple_of=8, return_tensors="pt", padding=True
+            ),
+        )
+
+    model.config.use_cache = False
+    old_state_dict = model.state_dict
+    model.state_dict = (lambda self, *_, **__: get_peft_model_state_dict(self, old_state_dict())).__get__(
+        model, type(model)
+    )
+    if torch.__version__ >= "2" and sys.platform != "win32":
+        print("compiling the model")
+        model = torch.compile(model)
+
+    output_dir = f"lora-{model_name}"
+    print("Training...")
+
+    result = trainer.train(resume_from_checkpoint=False)
+
+    model.save_pretrained(output_dir) 
+    reset_models()
+    return result
+
+
+def onestep_tokenize_and_train_starcoder():
+    model, tokenizer = load_starcoder()
+    tokenized_train_dataset, tokenized_val_dataset = tokenize_dataset()
+    model.train() # put model back into training mode
+    model = prepare_model_for_int8_training(model)
+    output_dir = f"onestep-starcoder"
+
+    config = LoraConfig(
+        r=16,
+        lora_alpha=32,
+        target_modules = ["c_proj", "c_attn", "q_attn"],
+        lora_dropout=0.05,
+        bias="none",
+        task_type="CAUSAL_LM"
+    )
+    model = get_peft_model(model, config)
+    if torch.cuda.device_count() > 1:
+        # keeps Trainer from trying its own DataParallelism when more than 1 gpu is available
+        model.is_parallelizable = True
+        model.model_parallel = True
+    batch_size = 128
+    per_device_train_batch_size = 32
+    gradient_accumulation_steps = batch_size // per_device_train_batch_size
+   
+    training_args = TrainingArguments(
+            per_device_train_batch_size=per_device_train_batch_size,
+            gradient_accumulation_steps=gradient_accumulation_steps,
+            warmup_steps=100,
+            max_steps=400,
+            num_train_epochs=30,  
+            learning_rate=3e-4,
+            fp16=True,
+            logging_steps=10,
+            optim="adamw_torch",
+            evaluation_strategy="steps", # if val_set_size > 0 else "no",
+            save_strategy="steps",
+            eval_steps=20,
+            save_steps=20,
+            output_dir=output_dir,
+            load_best_model_at_end=False,
+            group_by_length=True, # group sequences of roughly the same length together to speed up training
+            #report_to="wandb", # if use_wandb else "none",
+            #run_name=f"codellama-{datetime.now().strftime('%Y-%m-%d-%H-%M')}", # if use_wandb else None,
+        )
+
+    trainer = Trainer(
+        model=model,
+        train_dataset=tokenized_train_dataset,
+        eval_dataset=tokenized_val_dataset,
+        args=training_args,
+        data_collator=DataCollatorForSeq2Seq(
+            tokenizer, pad_to_multiple_of=8, return_tensors="pt", padding=True
+            ),
+        )
+
+    model.config.use_cache = False
+    old_state_dict = model.state_dict
+    model.state_dict = (lambda self, *_, **__: get_peft_model_state_dict(self, old_state_dict())).__get__(
+        model, type(model)
+    )
+    if torch.__version__ >= "2" and sys.platform != "win32":
+        print("compiling the model")
+        model = torch.compile(model)
+
+    print("Training...")
+
+    result = trainer.train(resume_from_checkpoint=False)
+
+    model.save_pretrained(output_dir) 
+    reset_models()
+    return result
+
+
+def contextual_tokenize_and_train_starcoder(training_data):
+    global model
+    global tokenizer
+    reset_models()
+    model, tokenizer = load_starcoder()
+    tokenizer.pad_token_id = 0
+    if size is None: 
+        paragraphs = training_data.split("<end of text>")
+    else: 
+        assert(len(paragraphs)>=size)
+        paragraphs = paragraphs[:size]
+        test_paragraphs = paragraphs[size+1:int(size+size*0.2)]
+    print("Number of train samples: " + str(len(paragraphs)))
+        
+    def tokenize(item):
+        result = tokenizer(
+            item["text"],
+            truncation=True,
+            max_length=max_seq_length,
+            padding="max_length",
+        )
+        return {
+            "input_ids": result["input_ids"][:-1],
+            "attention_mask": result["attention_mask"][:-1],
+        }
+
+    def to_dict(text):
+        return {"text": text}
+
+    paragraphs = [to_dict(x) for x in paragraphs]
+    test_paragraphs = [to_dict(y) for y in test_paragraphs]
+    data = Dataset.from_list(paragraphs) 
+    test_data = Dataset.from_list(test_paragraphs)              
+    tokenized_train_dataset = data.shuffle().map(lambda x: tokenize(x))
+    tokenized_val_dataset = test_data.shuffle().map(lambda y: tokenize(y))
+    model.train() # put model back into training mode
+    model = prepare_model_for_int8_training(model)
+
+    config = LoraConfig(
+        r=16,
+        lora_alpha=32,
+        target_modules = ["c_proj", "c_attn", "q_attn"],
+        lora_dropout=0.05,
+        bias="none",
+        task_type="CAUSAL_LM"
+    )
+    model = get_peft_model(model, config)
+    if torch.cuda.device_count() > 1:
+        # keeps Trainer from trying its own DataParallelism when more than 1 gpu is available
+        model.is_parallelizable = True
+        model.model_parallel = True
+    batch_size = 128
+    per_device_train_batch_size = 32
+    gradient_accumulation_steps = batch_size // per_device_train_batch_size
+    output_dir = "context-starcoder"
+
+    training_args = TrainingArguments(
+            per_device_train_batch_size=per_device_train_batch_size,
+            gradient_accumulation_steps=gradient_accumulation_steps,
+            warmup_steps=100,
+            max_steps=400,
+            num_train_epochs=30,  
+            learning_rate=3e-4,
+            fp16=True,
+            logging_steps=10,
+            optim="adamw_torch",
+            evaluation_strategy="steps", # if val_set_size > 0 else "no",
+            save_strategy="steps",
+            eval_steps=20,
+            save_steps=20,
+            output_dir=output_dir,
+            load_best_model_at_end=False,
+            group_by_length=True, # group sequences of roughly the same length together to speed up training
+            #report_to="wandb", # if use_wandb else "none",
+            #run_name=f"codellama-{datetime.now().strftime('%Y-%m-%d-%H-%M')}", # if use_wandb else None,
+        )
+
+    trainer = Trainer(
+        model=model,
+        train_dataset=tokenized_train_dataset,
+        eval_dataset=tokenized_val_dataset,
+        args=training_args,
+        data_collator=DataCollatorForSeq2Seq(
+            tokenizer, pad_to_multiple_of=8, return_tensors="pt", padding=True
+            ),
+        )
+
+    model.config.use_cache = False
+    old_state_dict = model.state_dict
+    model.state_dict = (lambda self, *_, **__: get_peft_model_state_dict(self, old_state_dict())).__get__(
+        model, type(model)
+    )
+    if torch.__version__ >= "2" and sys.platform != "win32":
+        print("compiling the model")
+        model = torch.compile(model)
+
+    output_dir = f"lora-{model_name}"
+    print("Training...")
+
+    result = trainer.train(resume_from_checkpoint=False)
+
+    model.save_pretrained(output_dir) 
+    reset_models()
+    return result
+
+def choose_model(context_train_data, model=None, method=None):
+    if model=="llama":
+        if method=="context":    
             context_tokenize_and_train_llama(
                 context_train_data,
                 max_seq_length=4096,
@@ -688,7 +1109,7 @@ def main():
                 lora_dropout=0.1,
                 model_name='llama_7B',
                 size= args.s) #pass on lora model name 
-        if args.method=="onestep" or args.method is None:    
+        if method=="onestep" or method is None:    
             onestep_tokenize_and_train_llama(
                 max_seq_length=4096,
                 micro_batch_size=1,
@@ -700,15 +1121,31 @@ def main():
                 lora_dropout=0.1,
                 model_name='llama_7B',
                 size= args.s) #pass on lora model name 
-    elif args.model=="codellama":
-        if args.method=="context": 
+    elif model=="codellama":
+        if method=="context": 
             contextual_tokenize_and_train_codellama(context_train_data) 
-        if args.method=="context" or args.method is None: 
+        if method=="onestep" or method is None: 
             onestep_tokenize_and_train_codellama()
-    elif args.model is None: 
+    elif model=="falcon":
+        if method=="context": 
+            contextual_tokenize_and_train_falcon(context_train_data) 
+        if method=="onestep" or method is None: 
+            onestep_tokenize_and_train_falcon()
+    elif model=="starcoder":
+        if method=="context": 
+            contextual_tokenize_and_train_starcoder(context_train_data) 
+        if method=="onestep" or method is None: 
+            onestep_tokenize_and_train_falcon() 
+    elif model is None: 
             onestep_tokenize_and_train_codellama()
 
+def main():
+    args = parse_args()
+    context_train_file = open('../train_data/context.txt', "r")
+    context_train_data = context_train_file.read()
+    choose_model(context_train_data, args.model, args.method)
 
+   
  #lora hyperparameters from this paper: https://github.com/microsoft/LoRA/tree/main/examples/NLG      
 if __name__ == "__main__":  
     main()
