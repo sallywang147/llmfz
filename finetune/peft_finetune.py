@@ -368,7 +368,7 @@ def contextual_tokenize_and_train_codellama(training_data, size=None):
         result = tokenizer(
             item["text"],
             truncation=True,
-            max_length=max_seq_length,
+            max_length=4096,
             padding="max_length",
         )
         return {
@@ -832,7 +832,7 @@ def contextual_tokenize_and_train_falcon(training_data, size=None):
         result = tokenizer(
             item["text"],
             truncation=True,
-            max_length=max_seq_length,
+            max_length=4096,
             padding="max_length",
         )
         return {
@@ -1011,7 +1011,7 @@ def contextual_tokenize_and_train_starcoder(training_data, size=None):
         result = tokenizer(
             item["text"],
             truncation=True,
-            max_length=max_seq_length,
+            max_length=4096,
             padding="max_length",
         )
         return {
