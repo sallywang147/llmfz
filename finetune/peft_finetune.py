@@ -410,6 +410,7 @@ def contextual_tokenize_and_train_codellama(training_data, size=None):
     per_device_train_batch_size = 32
     gradient_accumulation_steps = batch_size // per_device_train_batch_size
     output_dir = "context-code-llama"
+
     training_args = TrainingArguments(
             per_device_train_batch_size=per_device_train_batch_size,
             gradient_accumulation_steps=gradient_accumulation_steps,
@@ -673,7 +674,7 @@ def context_tokenize_and_train_llama(
             mlm=False, 
         ),
     )
-    result = trainer.train(resume_from_checkpoint=False, device="cuda")
+    result = trainer.train(resume_from_checkpoint=False)
 
     model.save_pretrained(output_dir)
     
