@@ -160,5 +160,19 @@ Note: GPT4 fine-tuning was completed on super limited data and 5 epochs only.
 
  ####  Contextualized Fine-tuning 
 
+ 
+ | Models  | Training Loss|Eval Loss|
+| ------------- | ------------- |------------- |
+| CodeLLaMa  |  |  | 
+| LLaMA  | | |
+|  Falcon | | |
+| StarCoder |  | |
+| GPT4(Note) | | |
+
+
  ### Q2. The good, old coverage question (on previously unseen programs)
+
+  | Benchmarks  | Fuzz Targets |Cov. Improvement|Model |Prompt history|
+| ------------- | ------------- |------------- |------------- |------------- |
+|   |  |  | | |
  
