@@ -46,7 +46,7 @@ def parse_args():
                       type=str,
                       required=False,
                       help='Specify a model that you want to finetune: llama or codellama.')
-        parser.add_argument('-method',
+    parser.add_argument('-method',
                       type=str,
                       required=False,
                       help='Specify a fine-tuning method: context or onestep.')
@@ -674,7 +674,7 @@ def main():
     onestep_train_file = open('../train_data/onestep.json', "r")
     onestep_train_data = onestep_train_file.read()
     context_train_file = open('../train_data/context.txt', "r")
-    context_train_data = train_file.read()
+    context_train_data = context_train_file.read()
 
     if args.model=="llama":
         if args.method=="context":    
@@ -704,7 +704,7 @@ def main():
                 size= args.s) #pass on lora model name 
     elif args.model=="codellama":
         if args.method=="context": 
-            contextual_tokenize_and_train_codellama(training_data) 
+            contextual_tokenize_and_train_codellama(context_train_data) 
         if args.method=="context" or args.method is None: 
             onestep_tokenize_and_train_codellama()
     elif args.model is None: 
