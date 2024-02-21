@@ -349,7 +349,7 @@ def onestep_tokenize_and_train_codellama():
     reset_models()
     return result
 
-def contextual_tokenize_and_train_codellama(training_data):
+def contextual_tokenize_and_train_codellama(training_data, size=None):
     global model
     global tokenizer
     reset_models()
@@ -811,7 +811,7 @@ def onestep_tokenize_and_train_falcon():
     return result
 
 
-def contextual_tokenize_and_train_falcon(training_data):
+def contextual_tokenize_and_train_falcon(training_data, size=None):
     global model
     global tokenizer
     reset_models()
@@ -989,7 +989,7 @@ def onestep_tokenize_and_train_starcoder():
     return result
 
 
-def contextual_tokenize_and_train_starcoder(training_data):
+def contextual_tokenize_and_train_starcoder(training_data, size=None):
     global model
     global tokenizer
     reset_models()
@@ -1094,7 +1094,7 @@ def contextual_tokenize_and_train_starcoder(training_data):
     reset_models()
     return result
 
-def choose_model(context_train_data, model=None, method=None):
+def choose_model(context_train_data, model=None, method=None, size=None):
     if model=="llama":
         if method=="context":    
             context_tokenize_and_train_llama(
@@ -1120,20 +1120,20 @@ def choose_model(context_train_data, model=None, method=None):
                 lora_alpha=32,
                 lora_dropout=0.1,
                 model_name='llama_7B',
-                size= args.s) #pass on lora model name 
+                size=size) #pass on lora model name 
     elif model=="codellama":
         if method=="context": 
-            contextual_tokenize_and_train_codellama(context_train_data) 
+            contextual_tokenize_and_train_codellama(context_train_data, size) 
         if method=="onestep" or method is None: 
             onestep_tokenize_and_train_codellama()
     elif model=="falcon":
         if method=="context": 
-            contextual_tokenize_and_train_falcon(context_train_data) 
+            contextual_tokenize_and_train_falcon(context_train_data, size) 
         if method=="onestep" or method is None: 
             onestep_tokenize_and_train_falcon()
     elif model=="starcoder":
         if method=="context": 
-            contextual_tokenize_and_train_starcoder(context_train_data) 
+            contextual_tokenize_and_train_starcoder(context_train_data, size) 
         if method=="onestep" or method is None: 
             onestep_tokenize_and_train_falcon() 
     elif model is None: 
@@ -1143,7 +1143,7 @@ def main():
     args = parse_args()
     context_train_file = open('../train_data/context.txt', "r")
     context_train_data = context_train_file.read()
-    choose_model(context_train_data, args.model, args.method)
+    choose_model(context_train_data, args.model, args.method, args.s)
 
    
  #lora hyperparameters from this paper: https://github.com/microsoft/LoRA/tree/main/examples/NLG      
