@@ -173,6 +173,7 @@ def load_starcoder():
     model =AutoModelForCausalLM.from_pretrained(
         base_model,
         device_map="auto",
+        load_in_8bit=True,
         trust_remote_code=True,
         torch_dtype=torch.float16,
     )
