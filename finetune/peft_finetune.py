@@ -1139,7 +1139,7 @@ def choose_model(context_train_data, model=None, method=None, size=None):
         if method=="context": 
             contextual_tokenize_and_train_starcoder(context_train_data, size) 
         if method=="onestep" or method is None: 
-            onestep_tokenize_and_train_falcon() 
+            onestep_tokenize_and_train_starcoder() 
     elif model is None: 
             onestep_tokenize_and_train_codellama()
 
