@@ -358,6 +358,7 @@ def contextual_tokenize_and_train_codellama(training_data, size=None):
     if size is None: 
         paragraphs = training_data.split("<end of text>")
     else: 
+        paragraphs = training_data.split("<end of text>")
         assert(len(paragraphs)>=size)
         paragraphs = paragraphs[:size]
         test_paragraphs = paragraphs[size+1:int(size+size*0.2)]
@@ -559,6 +560,7 @@ def context_tokenize_and_train_llama(
     if size is None: 
         paragraphs = training_data.split("<end of text>")
     else: 
+        paragraphs = training_data.split("<end of text>")
         assert(len(paragraphs)>=size)
         paragraphs = paragraphs[:size]
         test_paragraphs = paragraphs[size+1:int(size+size*0.2)]
@@ -820,6 +822,7 @@ def contextual_tokenize_and_train_falcon(training_data, size=None):
     if size is None: 
         paragraphs = training_data.split("<end of text>")
     else: 
+        paragraphs = training_data.split("<end of text>")
         assert(len(paragraphs)>=size)
         paragraphs = paragraphs[:size]
         test_paragraphs = paragraphs[size+1:int(size+size*0.2)]
@@ -998,6 +1001,7 @@ def contextual_tokenize_and_train_starcoder(training_data, size=None):
     if size is None: 
         paragraphs = training_data.split("<end of text>")
     else: 
+        paragraphs = training_data.split("<end of text>")
         assert(len(paragraphs)>=size)
         paragraphs = paragraphs[:size]
         test_paragraphs = paragraphs[size+1:int(size+size*0.2)]
