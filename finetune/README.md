@@ -79,17 +79,22 @@ function fuzz target(s) are: <target_1> <target_2>...
 ```
 The comparison benchmark generates 203 training samples for contextualized finetuning.
 
- 2.[lightly contextualized datatset](https://github.com/sallywang147/llmfz/blob/main/train_data/gpt4.json)  (a .json file without contextual information, particularly suited for GPT-3.5 and T5 models):
- 
+ 2. [one-step dataset w/out contexts](https://github.com/sallywang147/llmfz/blob/main/train_data/onestep.json) (a .json file without contextual information, particularly suited for GPT-3.5 and T5 models):
+
  ```
-{"prompt": "prompt.txt in <results_dir>",
-"completion":  "<target_1> <target_2>..."
+{"prompt": "You are a security engineer <some background info> function signature_1",
+"completion":  "<target_1> "
+}
+{"prompt": "function signature_2",
+"completion":  "<target_2> "
+}
+{"prompt": "function signature_3",
+"completion":  "<target_3> "
 }
 ```
 
- 3. [one-step dataset w/out contexts](https://github.com/sallywang147/llmfz/blob/main/train_data/onestep.json) (a .json file without contextual information, particularly suited for GPT-3.5 and T5 models):
-
- ```
+3. GPT fine-tuning dataset: we minimized background info in prompts, due to highly limited token lengths. 
+```
 {"prompt": "function signature_1",
 "completion":  "<target_1> "
 }
@@ -100,9 +105,6 @@ The comparison benchmark generates 203 training samples for contextualized finet
 "completion":  "<target_3> "
 }
 ```
-  
-We develop 2 and 3 datasets to compare the effectiveness of different fine-tuning.
-
 
 ### GPT4 Fine-tuning 
 
