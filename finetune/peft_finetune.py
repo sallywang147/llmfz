@@ -46,7 +46,7 @@ def parse_args():
     parser.add_argument('-model',
                       type=str,
                       required=False,
-                      help='Specify a model that you want to finetune: llama or codellama.')
+                      help='Specify a model that you want to finetune: llama, codellama,falcon, or starCoder.')
     parser.add_argument('-method',
                       type=str,
                       required=False,
@@ -633,7 +633,6 @@ def onestep_tokenize_and_train_llama(
         bias="none",
         task_type="CAUSAL_LM",
     ))
-    model = model.to("cuda")
     output_dir = f"onestep-lora-{model_name}"
     #we may or may not need the line below, depending on the device
     #model = model.to(torch.device('cuda'))
@@ -662,7 +661,7 @@ def onestep_tokenize_and_train_llama(
             mlm=False, 
         ),
     )
-    result = trainer.train(resume_from_checkpoint=False, device="cuda")
+    result = trainer.train(resume_from_checkpoint=False)
     model.save_pretrained(output_dir)  
     reset_models()
     return result
