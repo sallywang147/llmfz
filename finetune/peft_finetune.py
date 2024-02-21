@@ -450,7 +450,7 @@ def contextual_tokenize_and_train_codellama(training_data, size=None):
         print("compiling the model")
         model = torch.compile(model)
 
-    output_dir = f"lora-{model_name}"
+    output_dir = f"context-codellama"
     print("Training...")
 
     result = trainer.train(resume_from_checkpoint=False)
@@ -868,7 +868,8 @@ def contextual_tokenize_and_train_falcon(training_data, size=None):
     batch_size = 128
     per_device_train_batch_size = 32
     gradient_accumulation_steps = batch_size // per_device_train_batch_size
-    output_dir = "context-code-llama"
+    output_dir = "context-code-falcon"
+
     training_args = TrainingArguments(
             per_device_train_batch_size=per_device_train_batch_size,
             gradient_accumulation_steps=gradient_accumulation_steps,
@@ -909,7 +910,6 @@ def contextual_tokenize_and_train_falcon(training_data, size=None):
         print("compiling the model")
         model = torch.compile(model)
 
-    output_dir = f"lora-{model_name}"
     print("Training...")
 
     result = trainer.train(resume_from_checkpoint=False)
@@ -1089,7 +1089,6 @@ def contextual_tokenize_and_train_starcoder(training_data, size=None):
         print("compiling the model")
         model = torch.compile(model)
 
-    output_dir = f"lora-{model_name}"
     print("Training...")
 
     result = trainer.train(resume_from_checkpoint=False)
