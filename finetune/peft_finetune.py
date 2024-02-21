@@ -1,48 +1,71 @@
 import os
 import argparse
+import json
 import random
 import torch
 import transformers
-from datasets import Dataset
+from datasets import Dataset, load_dataset
 from accelerate import dispatch_model, infer_auto_device_map
 from accelerate.utils import get_balanced_memory
+from finetune_data import jdump
+from itertools import islice
 from torch.cuda.amp import autocast
-from transformers import LlamaForCausalLM, LlamaTokenizer, GenerationConfig
-from peft import prepare_model_for_int8_training, LoraConfig, get_peft_model, PeftModel
+from transformers import (
+    LlamaForCausalLM, 
+    LlamaTokenizer, 
+    GenerationConfig, 
+    BitsAndBytesConfig,
+    AutoTokenizer, 
+    AutoModelForCausalLM, 
+    TrainingArguments, 
+    Trainer, 
+    DataCollatorForSeq2Seq,
+) 
+from peft import (
+    prepare_model_for_int8_training, 
+    LoraConfig, 
+    get_peft_model, 
+    PeftModel,
+    get_peft_model_state_dict,
+    set_peft_model_state_dict,
+)
 
 
 model = None
 tokenizer = None
 peft_model = None
-#os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-#os.environ["CUDA_VISIBLE_DEVICES"]="0"
-
 
 def parse_args():
-  """Parses command line arguments."""
-  parser = argparse.ArgumentParser()
-  parser.add_argument('-s',
-                      #'--train_data_size',
+    """Parses command line arguments."""
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-s',
                       type=int,
                       required=False,
-                      help='Specify desired training dataset size.')
+                      help='Specify desired training dataset size.')    
+    parser.add_argument('-model',
+                      type=str,
+                      required=False,
+                      help='Specify a model that you want to finetune: llama or codellama.')
+        parser.add_argument('-method',
+                      type=str,
+                      required=False,
+                      help='Specify a fine-tuning method: context or onestep.')
+    args = parser.parse_args()
 
-  args = parser.parse_args()
+    return args
 
-  return args
-
-def maybe_load_models():
+def load_codellama():
     global model
     global tokenizer
 
-    if model is None:
-        model = LlamaForCausalLM.from_pretrained(
-            "baffo32/decapoda-research-llama-7B-hf",
-            load_in_8bit=True,
-            torch_dtype=torch.float16,
-            device_map= "auto",
-        )
-        max_memory = get_balanced_memory(
+    base_model = "codellama/CodeLlama-7b-hf"
+    model = AutoModelForCausalLM.from_pretrained(
+    base_model,
+    load_in_8bit=True,
+    torch_dtype=torch.float16,
+    device_map="auto", #might require commenting out 
+    )   
+    max_memory = get_balanced_memory(
         model,
         max_memory=None,
         no_split_module_classes=["DecoderLayer", "Attention", "MLP", "LayerNorm", "Linear"],
@@ -50,7 +73,300 @@ def maybe_load_models():
         low_zero=False,
         )
 
-        device_map = infer_auto_device_map(
+    device_map = infer_auto_device_map(
+        model,
+        max_memory=max_memory,
+        no_split_module_classes=["DecoderLayer", "Attention", "MLP", "LayerNorm", "Linear"],
+        dtype='float16'
+        )
+    tokenizer = AutoTokenizer.from_pretrained("codellama/CodeLlama-7b-hf")
+    return model, tokenizer
+
+
+def load_datasets(data_path, file_name, size=None):
+
+    train_data = []  
+    eval_data = []
+    original_path = os.path.join(data_path, file_name + ".json")
+    train_path = os.path.join(data_path, file_name + "_"+ "train" + ".json")
+    eval_path = os.path.join(data_path, file_name + "_"+ "eval" + ".json")
+    dataset = load_dataset('json', data_files=original_path, split='train')
+    full_size = len(dataset)
+    print(f"the size of dataset you use for fine-tuning is {full_size}\n")
+
+    if size is None: 
+        default_size = int(full_size*0.8)
+        eval_size = int(full_size - full_size *0.8)
+        for i in range(default_size):
+            train_data.append(dataset[i])
+        jdump(train_data, train_path)
+        for i in range(eval_size):
+            eval_data.append(dataset[default_size+i])
+        jdump(eval_data, eval_path) 
+    else:    
+        remain = full_size - size
+        for i in range(size):
+            train_data.append(dataset[i])
+        jdump(train_data, train_path)  
+        for i in range(remain):
+            eval_data.append(dataset[size+i])
+        jdump(eval_data, eval_path)          
+    train_set = load_dataset('json', data_files=train_path, split='train')
+    eval_set = load_dataset('json', data_files=eval_path, split='train')
+    print(f"this is an example of {len(train_set)} training samples: \n")
+    print(train_set[0])
+    if len(eval_set) >= 1: 
+        print(f"this is an example of  {len(eval_set)} evaluation samples: \n")
+        print(eval_set[0])    
+    return train_set, eval_set 
+
+
+def tokenize(prompt):
+    tokenizer.add_eos_token = True
+    tokenizer.pad_token_id = 0
+    tokenizer.padding_side = "left"
+    result = tokenizer(
+        prompt,
+        truncation=True,
+        max_length=512,
+        padding=False,
+        return_tensors=None,
+    )
+    # "self-supervised learning" means the labels are also the inputs:
+    result["labels"] = result["input_ids"].copy()
+    return result
+
+def generate_and_tokenize_prompt(data_point):
+    full_prompt =f"""You are a security testing engineer who wants to write a C++ program to execute all lines in a given function by defining and initializing its parameters in a suitable way before fuzzing the function through <code>LLVMFuzzerTestOneInput</code>.
+    Carefully study the function signature and its parameters, then generate a fuzz targets by the following instructions. YOU MUST call the function to fuzz in the solution.
+    Try as many variations of possible inputs as possible. Do not use a random number generator such as <code>rand()</code>.
+    Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>.
+    All variables used MUST be declared and initialized. Carefully make sure that the variable and argument types in your code match and compiles successfully. Add type casts to make types match.
+    Do not create new variables with the same names as existing variables. If you write code using <code>goto</code>, you MUST MUST also declare all variables BEFORE the <code>goto</code>. Never introduce new variables after the <code>goto</code>.
+    It is important that the provided solution compiles and actually calls the function specified by the function signature:
+
+    ### Input:
+    {data_point["prompt"]}
+
+    ### Response:
+    {data_point["completion"]}
+    """
+    return tokenize(full_prompt)
+
+def tokenize_dataset():
+    train_dataset, eval_dataset = load_datasets("../train_data", "onestep")
+    tokenized_train_dataset = train_dataset.map(generate_and_tokenize_prompt)
+    tokenized_val_dataset = eval_dataset.map(generate_and_tokenize_prompt)
+    return tokenized_train_dataset, tokenized_val_dataset
+
+def onestep_tokenize_and_train_codellama():
+    model, tokenizer = load_codellama()
+    tokenized_train_dataset, tokenized_val_dataset = tokenize_dataset()
+    model = model.to("cuda")
+    model.train() # put model back into training mode
+    model = prepare_model_for_int8_training(model)
+
+    config = LoraConfig(
+        r=16,
+        lora_alpha=16,
+        target_modules=[
+        "q_proj",
+        "k_proj",
+        "v_proj",
+        "o_proj",
+    ],
+        lora_dropout=0.05,
+        bias="none",
+        task_type="CAUSAL_LM",
+    )
+    model = get_peft_model(model, config)
+    if torch.cuda.device_count() > 1:
+        # keeps Trainer from trying its own DataParallelism when more than 1 gpu is available
+        model.is_parallelizable = True
+        model.model_parallel = True
+    batch_size = 128
+    per_device_train_batch_size = 32
+    gradient_accumulation_steps = batch_size // per_device_train_batch_size
+
+    training_args = TrainingArguments(
+            per_device_train_batch_size=per_device_train_batch_size,
+            gradient_accumulation_steps=gradient_accumulation_steps,
+            warmup_steps=100,
+            max_steps=400,
+            num_train_epochs=30,  
+            learning_rate=3e-4,
+            fp16=True,
+            logging_steps=10,
+            optim="adamw_torch",
+            evaluation_strategy="steps", # if val_set_size > 0 else "no",
+            save_strategy="steps",
+            eval_steps=20,
+            save_steps=20,
+            output_dir=output_dir,
+            load_best_model_at_end=False,
+            group_by_length=True, # group sequences of roughly the same length together to speed up training
+            #report_to="wandb", # if use_wandb else "none",
+            #run_name=f"codellama-{datetime.now().strftime('%Y-%m-%d-%H-%M')}", # if use_wandb else None,
+        )
+
+    trainer = Trainer(
+        model=model,
+        train_dataset=tokenized_train_dataset,
+        eval_dataset=tokenized_val_dataset,
+        args=training_args,
+        data_collator=DataCollatorForSeq2Seq(
+            tokenizer, pad_to_multiple_of=8, return_tensors="pt", padding=True
+            ),
+        )
+
+    model.config.use_cache = False
+    old_state_dict = model.state_dict
+    model.state_dict = (lambda self, *_, **__: get_peft_model_state_dict(self, old_state_dict())).__get__(
+        model, type(model)
+    )
+    if torch.__version__ >= "2" and sys.platform != "win32":
+        print("compiling the model")
+        model = torch.compile(model)
+
+    output_dir = f"onestep-codellama"
+    print("Training...")
+
+    result = trainer.train(resume_from_checkpoint=False, device="cuda")
+
+    model.save_pretrained(output_dir) 
+    reset_models()
+    return result
+
+def contextual_tokenize_and_train_codellama(training_data):
+    global model
+    global tokenizer
+    reset_models()
+    model, tokenizer = load_codellama()
+    tokenizer.pad_token_id = 0
+    if size is None: 
+        paragraphs = training_data.split("<end of text>")
+    else: 
+        assert(len(paragraphs)>=size)
+        paragraphs = paragraphs[:size]
+        test_paragraphs = paragraphs[size+1:int(size+size*0.2)]
+    print("Number of train samples: " + str(len(paragraphs)))
+        
+    def tokenize(item):
+        result = tokenizer(
+            item["text"],
+            truncation=True,
+            max_length=max_seq_length,
+            padding="max_length",
+        )
+        return {
+            "input_ids": result["input_ids"][:-1],
+            "attention_mask": result["attention_mask"][:-1],
+        }
+
+    def to_dict(text):
+        return {"text": text}
+
+    paragraphs = [to_dict(x) for x in paragraphs]
+    test_paragraphs = [to_dict(y) for y in test_paragraphs]
+    data = Dataset.from_list(paragraphs) 
+    test_data = Dataset.from_list(test_paragraphs)              
+    tokenized_train_dataset = data.shuffle().map(lambda x: tokenize(x))
+    tokenized_val_dataset = test_data.shuffle().map(lambda y: tokenize(y))
+    model = model.to("cuda")
+    model.train() # put model back into training mode
+    model = prepare_model_for_int8_training(model)
+
+    config = LoraConfig(
+        r=16,
+        lora_alpha=16,
+        target_modules=[
+        "q_proj",
+        "k_proj",
+        "v_proj",
+        "o_proj",
+    ],
+        lora_dropout=0.05,
+        bias="none",
+        task_type="CAUSAL_LM",
+    )
+    model = get_peft_model(model, config)
+    if torch.cuda.device_count() > 1:
+        # keeps Trainer from trying its own DataParallelism when more than 1 gpu is available
+        model.is_parallelizable = True
+        model.model_parallel = True
+    batch_size = 128
+    per_device_train_batch_size = 32
+    gradient_accumulation_steps = batch_size // per_device_train_batch_size
+    output_dir = "context-code-llama"
+    training_args = TrainingArguments(
+            per_device_train_batch_size=per_device_train_batch_size,
+            gradient_accumulation_steps=gradient_accumulation_steps,
+            warmup_steps=100,
+            max_steps=400,
+            num_train_epochs=30,  
+            learning_rate=3e-4,
+            fp16=True,
+            logging_steps=10,
+            optim="adamw_torch",
+            evaluation_strategy="steps", # if val_set_size > 0 else "no",
+            save_strategy="steps",
+            eval_steps=20,
+            save_steps=20,
+            output_dir=output_dir,
+            load_best_model_at_end=False,
+            group_by_length=True, # group sequences of roughly the same length together to speed up training
+            #report_to="wandb", # if use_wandb else "none",
+            #run_name=f"codellama-{datetime.now().strftime('%Y-%m-%d-%H-%M')}", # if use_wandb else None,
+        )
+
+    trainer = Trainer(
+        model=model,
+        train_dataset=tokenized_train_dataset,
+        eval_dataset=tokenized_val_dataset,
+        args=training_args,
+        data_collator=DataCollatorForSeq2Seq(
+            tokenizer, pad_to_multiple_of=8, return_tensors="pt", padding=True
+            ),
+        )
+
+    model.config.use_cache = False
+    old_state_dict = model.state_dict
+    model.state_dict = (lambda self, *_, **__: get_peft_model_state_dict(self, old_state_dict())).__get__(
+        model, type(model)
+    )
+    if torch.__version__ >= "2" and sys.platform != "win32":
+        print("compiling the model")
+        model = torch.compile(model)
+
+    output_dir = f"lora-{model_name}"
+    print("Training...")
+
+    result = trainer.train(resume_from_checkpoint=False, device="cuda")
+
+    model.save_pretrained(output_dir) 
+    reset_models()
+    return result
+    
+
+def load_llama():
+    global model
+    global tokenizer
+    model = LlamaForCausalLM.from_pretrained(
+            "baffo32/decapoda-research-llama-7B-hf",
+            load_in_8bit=True,
+            torch_dtype=torch.float16,
+            device_map= "auto", #comment this line out if encountering cuda OOM or wrong distribution
+                                #across GPU and CPU. 
+        )
+    max_memory = get_balanced_memory(
+        model,
+        max_memory=None,
+        no_split_module_classes=["DecoderLayer", "Attention", "MLP", "LayerNorm", "Linear"],
+        dtype='float16',
+        low_zero=False,
+        )
+
+    device_map = infer_auto_device_map(
         model,
         max_memory=max_memory,
         no_split_module_classes=["DecoderLayer", "Attention", "MLP", "LayerNorm", "Linear"],
@@ -84,7 +400,7 @@ def generate_text(
     global model
     global tokenizer
 
-    maybe_load_models()
+    load_llama()
 
     tokenizer.pad_token_id = 0
 
@@ -152,7 +468,7 @@ def generate_text(
     output_text = tokenizer.decode(generation_output)
     return output_text.strip()
 
-def tokenize_and_train(
+def context_tokenize_and_train_llama(
     training_data,
     max_seq_length,
     micro_batch_size,
@@ -167,13 +483,14 @@ def tokenize_and_train(
     global model
     global tokenizer
     reset_models()
-    maybe_load_models()
+    load_llama()
     tokenizer.pad_token_id = 0
     if size is None: 
         paragraphs = training_data.split("<end of text>")
     else: 
         assert(len(paragraphs)>=size)
         paragraphs = paragraphs[:size]
+        test_paragraphs = paragraphs[size+1:int(size+size*0.2)]
     print("Number of samples: " + str(len(paragraphs)))
         
     def tokenize(item):
@@ -192,6 +509,9 @@ def tokenize_and_train(
         return {"text": text}
 
     paragraphs = [to_dict(x) for x in paragraphs]
+    test_paragraphs = [to_dict(y) for y in test_paragraphs]         
+    tokenized_train_dataset = data.shuffle().map(lambda x: tokenize(x))
+    tokenized_val_dataset = test_data.shuffle().map(lambda y: tokenize(y))
     data = Dataset.from_list(paragraphs)            
     data = data.shuffle().map(lambda x: tokenize(x))
     model = prepare_model_for_int8_training(model)
@@ -204,7 +524,7 @@ def tokenize_and_train(
         task_type="CAUSAL_LM",
     ))
     model = model.to("cuda")
-    output_dir = f"lora-{model_name}"
+    output_dir = f"context-lora-{model_name}"
     #we may or may not need the line below, depending on the device
     #model = model.to(torch.device('cuda'))
     print("Training...")
@@ -262,8 +582,9 @@ def tokenize_and_train(
 
         # The dataset to be used for training. 'data' should be a PyTorch Dataset or 
         # a compatible format, containing the input samples and labels or masks (if required).
-        train_dataset=data, 
-
+        train_dataset=tokenized_train_dataset,
+        eval_dataset=tokenized_val_dataset,
+  
         # The TrainingArguments instance created earlier, which contains various 
         # hyperparameters and configurations for the training process.
         args=training_args, 
@@ -287,22 +608,108 @@ def tokenize_and_train(
 
     return result
 
+def onestep_tokenize_and_train_llama(
+    max_seq_length,
+    micro_batch_size,
+    gradient_accumulation_steps,
+    epochs,
+    learning_rate,
+    lora_r,
+    lora_alpha,
+    lora_dropout,
+    model_name,
+    size=None):
+    global model
+    global tokenizer
+    reset_models()
+    load_llama()
+    tokenized_train_dataset, tokenized_val_dataset = tokenize_dataset()
+    tokenizer.pad_token_id = 0
+    model = prepare_model_for_int8_training(model)
+    model = get_peft_model(model, LoraConfig(
+        r=lora_r,
+        lora_alpha=lora_alpha,
+        target_modules=["q_proj", "v_proj"],
+        lora_dropout=lora_dropout,
+        bias="none",
+        task_type="CAUSAL_LM",
+    ))
+    model = model.to("cuda")
+    output_dir = f"onestep-lora-{model_name}"
+    #we may or may not need the line below, depending on the device
+    #model = model.to(torch.device('cuda'))
+    print("Training...")
+
+    training_args = transformers.TrainingArguments(
+        # Set the batch size for training on each device (GPU, CPU, or TPU).
+        per_device_train_batch_size=micro_batch_size, 
+        gradient_accumulation_steps=gradient_accumulation_steps,  
+        num_train_epochs=epochs,  
+        learning_rate=learning_rate, 
+        fp16=True,  
+        logging_steps=20, 
+        output_dir=output_dir, 
+        save_total_limit=100,  
+    )
+
+
+    trainer = transformers.Trainer(
+        model=model, 
+        train_dataset=tokenized_train_dataset,
+        eval_dataset=tokenized_val_dataset,
+        args=training_args, 
+        data_collator=transformers.DataCollatorForLanguageModeling( 
+            tokenizer,  
+            mlm=False, 
+        ),
+    )
+    result = trainer.train(resume_from_checkpoint=False, device="cuda")
+    model.save_pretrained(output_dir)  
+    reset_models()
+    return result
+
+
 def main():
     args = parse_args()
-    train_file = open('../train_data/context.txt', "r")
-    train_data = train_file.read()
-    tokenize_and_train(
-        train_data,
-        max_seq_length=4096,
-        micro_batch_size=1,
-        gradient_accumulation_steps=16,
-        epochs=30,
-        learning_rate=2e-5,
-        lora_r=8,
-        lora_alpha=32,
-        lora_dropout=0.1,
-        model_name='llama_7B',
-        size= args.s) #pass on lora model name 
+    onestep_train_file = open('../train_data/onestep.json', "r")
+    onestep_train_data = onestep_train_file.read()
+    context_train_file = open('../train_data/context.txt', "r")
+    context_train_data = train_file.read()
+
+    if args.model=="llama":
+        if args.method=="context":    
+            context_tokenize_and_train_llama(
+                context_train_data,
+                max_seq_length=4096,
+                micro_batch_size=1,
+                gradient_accumulation_steps=16,
+                epochs=30,
+                learning_rate=2e-5,
+                lora_r=8,
+                lora_alpha=32,
+                lora_dropout=0.1,
+                model_name='llama_7B',
+                size= args.s) #pass on lora model name 
+        if args.method=="onestep" or args.method is None:    
+            onestep_tokenize_and_train_llama(
+                max_seq_length=4096,
+                micro_batch_size=1,
+                gradient_accumulation_steps=16,
+                epochs=30,
+                learning_rate=2e-5,
+                lora_r=8,
+                lora_alpha=32,
+                lora_dropout=0.1,
+                model_name='llama_7B',
+                size= args.s) #pass on lora model name 
+    elif args.model=="codellama":
+        if args.method=="context": 
+            contextual_tokenize_and_train_codellama(training_data) 
+        if args.method=="context" or args.method is None: 
+            onestep_tokenize_and_train_codellama()
+    elif args.model is None: 
+            onestep_tokenize_and_train_codellama()
+
 
  #lora hyperparameters from this paper: https://github.com/microsoft/LoRA/tree/main/examples/NLG      
 if __name__ == "__main__":  
