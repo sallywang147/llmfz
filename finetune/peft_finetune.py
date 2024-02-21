@@ -231,7 +231,7 @@ def onestep_tokenize_and_train_codellama():
 
     print("Training...")
 
-    result = trainer.train(resume_from_checkpoint=False, device="cuda")
+    result = trainer.train(resume_from_checkpoint=False)
 
     model.save_pretrained(output_dir) 
     reset_models()
@@ -272,7 +272,6 @@ def contextual_tokenize_and_train_codellama(training_data):
     test_data = Dataset.from_list(test_paragraphs)              
     tokenized_train_dataset = data.shuffle().map(lambda x: tokenize(x))
     tokenized_val_dataset = test_data.shuffle().map(lambda y: tokenize(y))
-    model = model.to("cuda")
     model.train() # put model back into training mode
     model = prepare_model_for_int8_training(model)
 
@@ -341,7 +340,7 @@ def contextual_tokenize_and_train_codellama(training_data):
     output_dir = f"lora-{model_name}"
     print("Training...")
 
-    result = trainer.train(resume_from_checkpoint=False, device="cuda")
+    result = trainer.train(resume_from_checkpoint=False)
 
     model.save_pretrained(output_dir) 
     reset_models()
