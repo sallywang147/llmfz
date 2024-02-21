@@ -120,8 +120,9 @@ Note: I actually don't recommend fine-tuning GPT4. It requires a very rigid data
 
  ### One-step Fine-tuning
  
- [deployed codeLLaMA](https://huggingface.co/sallywww/codeLLaMA_oneStep_fuzzTargets/tree/main)
- [deployed Falcon](https://huggingface.co/sallywww/Falcon_oneStep_fuzzTargets/tree/main)
+ [deployed codeLLaMA](https://huggingface.co/sallywww/codeLLaMA_oneStep_fuzzTargets/tree/main); 
+ [deployed Falcon](https://huggingface.co/sallywww/Falcon_oneStep_fuzzTargets/tree/main); 
+ [deployed GPT4](https://platform.openai.com/finetune/ftjob-F9QcCnzaLzvbhYxtGaM2gSzs?filter=successful)
  
 
   ### Contextualized Fine-tuning
@@ -141,9 +142,9 @@ We evaluate the fine-tuned models on two questions:
 | LLaMA  | | |
 |  Falcon |7.175 |NaN |
 | StarCoder |  | |
-| GPT4(Note) | | |
+| GPT4(Note) |0.07 |N/A |
 
-Note: GPT4 fine-tuning was completed on limited data and 5 epochs only. 
+Note: GPT4 fine-tuning was completed on super limited data and 5 epochs only. 
 
  **CodeLLama**
  
@@ -154,6 +155,8 @@ Note: GPT4 fine-tuning was completed on limited data and 5 epochs only.
  
 <img width="483" alt="Screen Shot 2024-02-21 at 7 36 00 AM" src="https://github.com/sallywang147/llmfz/assets/60257613/ad97346c-7d26-4b26-ad49-4a2875167fb7">
 
+ **GPT4**
+<img width="1037" alt="Screen Shot 2024-02-21 at 9 35 47 AM" src="https://github.com/sallywang147/llmfz/assets/60257613/be3d89a6-583a-4a3e-aeec-96e2ce486d79">
 
  ####  Contextualized Fine-tuning 
 
