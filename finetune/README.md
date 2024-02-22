@@ -122,7 +122,7 @@ Note: I actually don't recommend fine-tuning GPT4. It requires a very rigid data
  [deployed LLaMA](https://huggingface.co/sallywww/LLaMA_oneStep_fuzzTragets/tree/main); 
  [deployed codeLLaMA](https://huggingface.co/sallywww/codeLLaMA_oneStep_fuzzTargets/tree/main); 
  [deployed Falcon](https://huggingface.co/sallywww/Falcon_oneStep_fuzzTargets/tree/main); 
- [deployed StarCoder]()
+ [deployed StarCoder](https://huggingface.co/sallywww/StarCoder_oneStep_FuzzTargets/tree/main);
  [deployed GPT4](https://platform.openai.com/finetune/ftjob-F9QcCnzaLzvbhYxtGaM2gSzs?filter=successful)
  
 
