@@ -584,7 +584,9 @@ def context_tokenize_and_train_llama(
         return {"text": text}
 
     paragraphs = [to_dict(x) for x in paragraphs]
-    test_paragraphs = [to_dict(y) for y in test_paragraphs]         
+    test_paragraphs = [to_dict(y) for y in test_paragraphs]   
+    data = Dataset.from_list(paragraphs) 
+    test_data = Dataset.from_list(test_paragraphs)          
     tokenized_train_dataset = data.shuffle().map(lambda x: tokenize(x))
     tokenized_val_dataset = test_data.shuffle().map(lambda y: tokenize(y))
     data = Dataset.from_list(paragraphs)            
