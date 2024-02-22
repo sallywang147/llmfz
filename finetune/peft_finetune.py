@@ -1113,7 +1113,7 @@ def choose_model(context_train_data, model=None, method=None, size=None):
                 lora_alpha=32,
                 lora_dropout=0.1,
                 model_name='context_llama_7B',
-                size= args.s) #pass on lora model name 
+                size=size) #pass on lora model name 
         if method=="onestep" or method is None:    
             onestep_tokenize_and_train_llama(
                 max_seq_length=4096,
