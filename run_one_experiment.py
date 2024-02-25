@@ -80,22 +80,30 @@ def generate_targets(benchmark: Benchmark,
   """Generates fuzz target with LLM."""
   print(f'Generating targets for {benchmark.project} '
         f'{benchmark.function_signature} using {model.name}..')
+  print("getting stuck here? #1")
   model.generate_code(response_dir=work_dirs.raw_targets, log_output=debug)
-
+  print("getting stuck here? #2")
   _, target_ext = os.path.splitext(benchmark.target_path)
+  print("getting stuck here? #3")
   generated_targets = []
   for file in os.listdir(work_dirs.raw_targets):
+    print("getting stuck here? #4")
     if not output_parser.is_raw_output(file):
+      print("getting stuck here? #5")
       continue
     raw_output = os.path.join(work_dirs.raw_targets, file)
+    print("getting stuck here? #6")
     target_code = output_parser.parse_code(raw_output)
     target_id, _ = os.path.splitext(raw_output)
     target_file = f'{target_id}{target_ext}'
     target_path = os.path.join(work_dirs.raw_targets, target_file)
     output_parser.save_output(target_code, target_path)
+    print("getting stuck here? #7")
     generated_targets.append(target_path)
+    print("getting stuck here? #8")
 
   if generated_targets:
+    print("getting stuck here? #9")
     targets_relpath = map(os.path.relpath, generated_targets)
     print('Generated:\n', '\n '.join(targets_relpath))
   else:
