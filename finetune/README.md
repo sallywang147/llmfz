@@ -173,12 +173,19 @@ Note: GPT4 fine-tuning was completed on super limited data and 5 epochs only.
  | Models  | Training Loss|Eval Loss|
 | ------------- | ------------- |------------- |
 | CodeLLaMa  |  |  | 
-| LLaMA  | | |
+| LLaMA  | 0.42| |
 |  Falcon | | |
 | StarCoder |  | |
 
+LLaMA
+
+<img width="459" alt="Screen Shot 2024-02-23 at 5 10 02 PM" src="https://github.com/sallywang147/llmfz/assets/60257613/572430d1-a08b-41ae-b9ee-b0500cdc7f8a">
 
  ### Q2. The good, old coverage question (on previously unseen programs)
+
+remember to run ``sudo apt install clang-format`` before starting. 
+
+Sample script used to reproduce a single benchmark results: ``python3.11 ./run_all_experiments.py --model ftpeft_llama -y './benchmark-sets/all/harfbuzz.yaml' --work-dir=harfbuzz_finetune_results -to 180``
 
   | Benchmarks  | Fuzz Targets |Cov. Improvement|Model |Prompt history|
 | ------------- | ------------- |------------- |------------- |------------- |
