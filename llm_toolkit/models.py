@@ -28,7 +28,9 @@ from typing import Any, Callable, Optional, Tuple, Type
 
 import openai
 import tiktoken
+import torch
 import vertexai
+import transformers
 from google.api_core.exceptions import GoogleAPICallError
 from vertexai.preview.generative_models import GenerativeModel
 from vertexai.preview.language_models import CodeGenerationModel
@@ -533,6 +535,7 @@ class PEFTModel(LLM):
   """finetuned peft llama model."""
 
   name = 'peft_llama'
+  _max_output_tokens = 2048
 
   # ================================ Prompt ================================ #
   def _estimate_token_num(self, text) -> int:
@@ -570,13 +573,12 @@ class PEFTModel(LLM):
     model = LlamaForCausalLM.from_pretrained(config.base_model_name_or_path)
     model = PeftModel.from_pretrained(model, peft_model_id)
     tokenizer = LlamaTokenizer.from_pretrained(config.base_model_name_or_path)
-    model.cuda()
+    #model.cuda()
     return model, tokenizer
 
-  def do_generate(self, raw_model: Any, tokenizer: Any, prompt: str, config: dict[str, Any]) -> Any:
+  def do_generate(self, model: Any, tokenizer: Any, prompt: str, config: dict[str, Any]) -> Any:
     inputs = tokenizer(prompt, return_tensors="pt")
-    input_ids = inputs["input_ids"].to(model.device)
-    stopping_criteria_list = transformers.StoppingCriteriaList()
+    #input_ids = inputs["input_ids"].to(model.device)
     with torch.no_grad():
         outputs = model.generate(input_ids=inputs["input_ids"].cuda(), \
                 generation_config=config)
