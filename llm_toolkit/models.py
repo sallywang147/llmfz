@@ -32,7 +32,8 @@ import vertexai
 from google.api_core.exceptions import GoogleAPICallError
 from vertexai.preview.generative_models import GenerativeModel
 from vertexai.preview.language_models import CodeGenerationModel
-
+from transformers import LlamaForCausalLM, LlamaTokenizer, GenerationConfig
+from peft import prepare_model_for_int8_training, PeftConfig, LoraConfig, get_peft_model, PeftModel
 from data_prep import project_targets
 from experiment.benchmark import FileType
 
@@ -41,7 +42,7 @@ MAX_TOKENS: int = 2000
 NUM_SAMPLES: int = 1
 TEMPERATURE: float = 0.4
 
-DEFAULT_TEMPLATE_DIR: str = 'prompts/template_xml/'
+DEFAULT_TEMPLATE_DIR: str = 'prompts/template_peft/'
 
 # TODO(Dongge): Refactor this tot avoid hard-coding.
 # Example files.
@@ -528,8 +529,89 @@ class GPT4(GPT):
   name = 'gpt-4'
 
 
+class PEFTModel(LLM):
+  """finetuned peft llama model."""
+
+  name = 'peft_llama'
+
+  # ================================ Prompt ================================ #
+  def _estimate_token_num(self, text) -> int:
+    """Estimates the number of tokens in |text|."""
+    # https://cookbook.openai.com/examples/how_to_count_tokens_with_tiktoken
+    return int(len(re.split('[^a-zA-Z0-9]+', text)) * 1.5 + 0.5)
+
+  def _reset_prompt(self) -> None:
+    """Prepares the prompt for GPT based models."""
+    self._prompt = ""
+
+  def _create_prompt_piece(self, content: str, role: str):
+    """Returns a prompt piece in the format wanted by Google."""
+    # Ignore role, just return content
+    del role
+    # TODO(Dongge): Use role as XML tags.
+    return content
+
+  def _add_priming(self, priming_content: str) -> None:
+    """Constructs the prompt priming in the required format."""
+    self._prompt += f'{priming_content}\n'
+
+  def _add_problem(self, problem_content: str) -> None:
+    """Constructs the prompt problem in the required format."""
+    self._prompt += f'{problem_content}\n'
+
+  def _add_solution(self, solution_content: str) -> None:
+    """Constructs the prompt problem in the required format."""
+    self._prompt += f'{solution_content}\n'
+
+  def get_model(self) -> Any:
+
+    peft_model_id = "sallywww/LLaMA_oneStep_fuzzTragets"
+    config = PeftConfig.from_pretrained(peft_model_id)
+    model = LlamaForCausalLM.from_pretrained(config.base_model_name_or_path)
+    model = PeftModel.from_pretrained(model, peft_model_id)
+    tokenizer = LlamaTokenizer.from_pretrained(config.base_model_name_or_path)
+    model.cuda()
+    return model, tokenizer
+
+  def do_generate(self, raw_model: Any, tokenizer: Any, prompt: str, config: dict[str, Any]) -> Any:
+    inputs = tokenizer(prompt, return_tensors="pt")
+    input_ids = inputs["input_ids"].to(model.device)
+    stopping_criteria_list = transformers.StoppingCriteriaList()
+    with torch.no_grad():
+        outputs = model.generate(input_ids=inputs["input_ids"].cuda(), \
+                generation_config=config)
+    output_text = okenizer.batch_decode(outputs.detach().cpu().numpy(), skip_special_tokens=True)[0]
+    return output_text.strip()
+
+  def generate_code(self, response_dir: str, log_output: bool = False) -> None:
+    del log_output
+    model, tokenizer = self.get_model()
+    parameters = {
+        'temperature': self.temperature,
+        'max_output_tokens': self._max_output_tokens,
+    }
+
+    with open(self.prompt_path) as f:
+      prompt = f.read()
+
+    for index in range(self.num_samples):
+      response = self.with_retry_on_error(
+          lambda: self.do_generate(model, tokenizer, prompt, parameters),
+          GoogleAPICallError)
+      self._save_output(index, response, response_dir)
+
+
+class PeftLLaMA(PEFTModel):
+  """PEFTMODEL."""
+
+  name = 'peft_llama'
+
+
 class GoogleModel(LLM):
   """Generic Google model."""
+
+  def get_model(self) -> Any:
+    return CodeGenerationModel.from_pretrained(self._vertex_ai_model)
 
   def _estimate_token_num(self, text) -> int:
     """Estimates the number of tokens in |text|."""
@@ -666,3 +748,4 @@ class AIBinaryModel(GoogleModel):
 
 
 DefaultModel = VertexAICodeBison32KModel
+DefaultPeftModel = PeftLLaMA
