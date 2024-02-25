@@ -119,9 +119,10 @@ Note: I actually don't recommend fine-tuning GPT4. It requires a very rigid data
  ## Fine-tuned Models Ready for Use 
 
  ### One-step Fine-tuning
- 
+ [deployed LLaMA](https://huggingface.co/sallywww/LLaMA_oneStep_fuzzTragets/tree/main); 
  [deployed codeLLaMA](https://huggingface.co/sallywww/codeLLaMA_oneStep_fuzzTargets/tree/main); 
  [deployed Falcon](https://huggingface.co/sallywww/Falcon_oneStep_fuzzTargets/tree/main); 
+ [deployed StarCoder](https://huggingface.co/sallywww/StarCoder_oneStep_FuzzTargets/tree/main);
  [deployed GPT4](https://platform.openai.com/finetune/ftjob-F9QcCnzaLzvbhYxtGaM2gSzs?filter=successful)
  
 
@@ -139,9 +140,9 @@ We evaluate the fine-tuned models on two questions:
  | Models  | Training Loss|Eval Loss|
 | ------------- | ------------- |------------- |
 | CodeLLaMa  | 0.22 | 0.34 | 
-| LLaMA  | | |
+| LLaMA  | 0.167 | 0.312|
 |  Falcon |7.175 |NaN |
-| StarCoder |  | |
+| StarCoder |0.1998  |0.338 |
 | GPT4(Note) |0.07 |N/A |
 
 Note: GPT4 fine-tuning was completed on super limited data and 5 epochs only. 
@@ -150,10 +151,18 @@ Note: GPT4 fine-tuning was completed on super limited data and 5 epochs only.
  
 <img width="566" alt="Screen Shot 2024-02-21 at 6 40 01 AM" src="https://github.com/sallywang147/llmfz/assets/60257613/c5688662-2236-44de-9774-1c33219f48bd">
 
+ **LLama**
+
+<img width="482" alt="Screen Shot 2024-02-21 at 9 49 24 PM" src="https://github.com/sallywang147/llmfz/assets/60257613/8ecf94b0-6ced-4528-8ca9-9fa317ab356f">
+
 
  **Falcon**
  
 <img width="483" alt="Screen Shot 2024-02-21 at 7 36 00 AM" src="https://github.com/sallywang147/llmfz/assets/60257613/ad97346c-7d26-4b26-ad49-4a2875167fb7">
+
+ **StarCoder**
+
+ <img width="492" alt="Screen Shot 2024-02-22 at 2 17 58 AM" src="https://github.com/sallywang147/llmfz/assets/60257613/8c82f5cc-3cb0-40fd-843c-f10c8148ab1b">
 
  **GPT4**
 <img width="1037" alt="Screen Shot 2024-02-21 at 9 35 47 AM" src="https://github.com/sallywang147/llmfz/assets/60257613/be3d89a6-583a-4a3e-aeec-96e2ce486d79">
@@ -167,7 +176,6 @@ Note: GPT4 fine-tuning was completed on super limited data and 5 epochs only.
 | LLaMA  | | |
 |  Falcon | | |
 | StarCoder |  | |
-| GPT4(Note) | | |
 
 
  ### Q2. The good, old coverage question (on previously unseen programs)
