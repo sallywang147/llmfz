@@ -530,11 +530,84 @@ class GPT4(GPT):
 
   name = 'gpt-4'
 
-
-class PEFTModel(LLM):
+class PeftLLaMAModel(LLM):
   """finetuned peft llama model."""
 
   name = 'peft_llama'
+  _max_output_tokens = 2048
+
+  # ================================ Prompt ================================ #
+  def _estimate_token_num(self, text) -> int:
+    """Estimates the number of tokens in |text|."""
+    # https://cookbook.openai.com/examples/how_to_count_tokens_with_tiktoken
+    return int(len(re.split('[^a-zA-Z0-9]+', text)) * 1.5 + 0.5)
+
+  def _reset_prompt(self) -> None:
+    """Prepares the prompt for GPT based models."""
+    self._prompt = ""
+
+  def _create_prompt_piece(self, content: str, role: str):
+    """Returns a prompt piece in the format wanted by Google."""
+    # Ignore role, just return content
+    del role
+    # TODO(Dongge): Use role as XML tags.
+    return content
+
+  def _add_priming(self, priming_content: str) -> None:
+    """Constructs the prompt priming in the required format."""
+    self._prompt += f'{priming_content}\n'
+
+  def _add_problem(self, problem_content: str) -> None:
+    """Constructs the prompt problem in the required format."""
+    self._prompt += f'{problem_content}\n'
+
+  def _add_solution(self, solution_content: str) -> None:
+    """Constructs the prompt problem in the required format."""
+    self._prompt += f'{solution_content}\n'
+
+  def get_model(self) -> Any:
+    model = LlamaForCausalLM.from_pretrained(
+            "baffo32/decapoda-research-llama-7B-hf",
+            load_in_8bit=True,
+            torch_dtype=torch.float16,
+            device_map= "auto", #comment this line out if encountering cuda OOM or wrong distribution
+                                #across GPU and CPU. 
+        )
+    tokenizer = LlamaTokenizer.from_pretrained(
+            "baffo32/decapoda-research-llama-7B-hf",
+        )
+    return model, tokenizer
+
+  def do_generate(self, model: Any, tokenizer: Any, prompt: str, config: dict[str, Any]) -> Any:
+    inputs = tokenizer(prompt, return_tensors="pt")
+    #input_ids = inputs["input_ids"].to(model.device)
+    with torch.no_grad():
+        outputs = model.generate(input_ids=inputs["input_ids"].cuda(), \
+                generation_config=config)
+    output_text = okenizer.batch_decode(outputs.detach().cpu().numpy(), skip_special_tokens=True)[0]
+    return output_text.strip()
+
+  def generate_code(self, response_dir: str, log_output: bool = False) -> None:
+    del log_output
+    model, tokenizer = self.get_model()
+    parameters = {
+        'temperature': self.temperature,
+        'max_output_tokens': self._max_output_tokens,
+    }
+
+    with open(self.prompt_path) as f:
+      prompt = f.read()
+
+    for index in range(self.num_samples):
+      response = self.with_retry_on_error(
+          lambda: self.do_generate(model, tokenizer, prompt, parameters),
+          GoogleAPICallError)
+      self._save_output(index, response, response_dir)
+
+class FintunedPEFTModel(LLM):
+  """finetuned peft llama model."""
+
+  name = 'ftpeft_llama'
   _max_output_tokens = 2048
 
   # ================================ Prompt ================================ #
@@ -603,8 +676,13 @@ class PEFTModel(LLM):
       self._save_output(index, response, response_dir)
 
 
-class PeftLLaMA(PEFTModel):
+class FinetunedPeftLLaMA(FintunedPEFTModel):
   """PEFTMODEL."""
+
+  name = 'ftpeft_llama'
+
+class PeftLLaMA(PeftLLaMAModel):
+  """LLaMA MODEL."""
 
   name = 'peft_llama'
 
@@ -750,4 +828,4 @@ class AIBinaryModel(GoogleModel):
 
 
 DefaultModel = VertexAICodeBison32KModel
-DefaultPeftModel = PeftLLaMA
+DefaultPeftModel = FinetunedPeftLLaMA
