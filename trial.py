@@ -22,7 +22,6 @@ from transformers import (
 )
 from peft import (
     prepare_model_for_int8_training,
-    LoraConfig,
     PeftConfig,
     get_peft_model,
     PeftModel,
