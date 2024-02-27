@@ -22,6 +22,7 @@ from transformers import (
 )
 from peft import (
     prepare_model_for_int8_training,
+    LoraConfig,
     PeftConfig,
     get_peft_model,
     PeftModel,
@@ -38,7 +39,7 @@ harfbuzz_sigs = ["struct hb_face_t * hb_subset_preprocess(struct hb_face_t * sou
 
 def generate_text(prompt):
   peft_model_id = "sallywww/LLaMA_oneStep_fuzzTragets"
-  config = PeftConfig.from_pretrained(peft_model_id)
+  config = LoraConfig.from_pretrained(peft_model_id)
   raw_model = LlamaForCausalLM.from_pretrained(config.base_model_name_or_path)
   model = PeftModel.from_pretrained(raw_model, peft_model_id)
   tokenizer = LlamaTokenizer.from_pretrained(config.base_model_name_or_path)
