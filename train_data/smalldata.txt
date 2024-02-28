@@ -1,0 +1,1147 @@
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+BGD_DECLARE(void) gdImageString (gdImagePtr im, gdFontPtr f, int x, int y, unsigned char *s, int color)
+</function header>
+</task>
+
+<solution>
+
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+#include "gd.h"
+#include "gdfontg.h"
+#include "gdfontl.h"
+#include "gdfontmb.h"
+#include "gdfonts.h"
+#include "gdfontt.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const uint8_t slate_width = stream.ConsumeIntegral<uint8_t>();
+  const uint8_t slate_height = stream.ConsumeIntegral<uint8_t>();
+  gdImagePtr slate_image = gdImageCreateTrueColor(slate_width, slate_height);
+  if (slate_image == nullptr) {
+    return 0;
+  }
+
+  const int x_position = stream.ConsumeIntegral<int>();
+  const int y_position = stream.ConsumeIntegral<int>();
+  const int text_color = stream.ConsumeIntegral<int>();
+  const gdFontPtr font_ptr = stream.PickValueInArray(
+      {gdFontGetGiant(), gdFontGetLarge(), gdFontGetMediumBold(),
+       gdFontGetSmall(), gdFontGetTiny()});
+  const std::string text = stream.ConsumeRemainingBytesAsString();
+
+  gdImageString(slate_image, font_ptr, x_position, y_position,
+                reinterpret_cast<uint8_t*>(const_cast<char*>(text.c_str())),
+                text_color);
+  gdImageDestroy(slate_image);
+  return 0;
+}
+</solution>
+<end of text>
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+MPG123_EXPORT int mpg123_decode(mpg123_handle *mh, const unsigned char *inmemory, size_t inmemsize, unsigned char *outmemory, size_t outmemsize, size_t *done )
+</function header>
+</task>
+
+<solution>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+#include "mpg123.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  static bool initialized = false;
+  if (!initialized) {
+    mpg123_init();
+    initialized = true;
+  }
+  int ret;
+  mpg123_handle* handle = mpg123_new(nullptr, &ret);
+  if (handle == nullptr) {
+    return 0;
+  }
+
+  ret = mpg123_param(handle, MPG123_ADD_FLAGS, MPG123_QUIET, 0.);
+  if(ret == MPG123_OK)
+    ret = mpg123_open_feed(handle);
+  if (ret != MPG123_OK) {
+    mpg123_delete(handle);
+    return 0;
+  }
+
+  std::vector<uint8_t> output_buffer(mpg123_outblock(handle));
+
+  size_t output_written = 0;
+  // Initially, start by feeding the decoder more data.
+  int decode_ret = MPG123_NEED_MORE;
+  FuzzedDataProvider provider(data, size);
+  while ((decode_ret != MPG123_ERR)) {
+    if (decode_ret == MPG123_NEED_MORE) {
+      if (provider.remaining_bytes() == 0
+          || mpg123_tellframe(handle) > 10000
+          || mpg123_tell_stream(handle) > 1<<20) {
+        break;
+      }
+      const size_t next_size = provider.ConsumeIntegralInRange<size_t>(
+          0,
+          provider.remaining_bytes());
+      auto next_input = provider.ConsumeBytes<unsigned char>(next_size);
+      decode_ret = mpg123_decode(handle, next_input.data(), next_input.size(),
+                                 output_buffer.data(), output_buffer.size(),
+                                 &output_written);
+    } else if (decode_ret != MPG123_ERR && decode_ret != MPG123_NEED_MORE) {
+      decode_ret = mpg123_decode(handle, nullptr, 0, output_buffer.data(),
+                                 output_buffer.size(), &output_written);
+    } else {
+      // Unhandled mpg123_decode return value.
+      abort();
+    }
+  }
+
+  mpg123_delete(handle);
+
+  return 0;
+}
+</solution>
+<end of text>
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+int blosc2_schunk_free(struct blosc2_schunk * )
+</function header>
+</task>
+
+<solution>
+#include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <inttypes.h>
+
+#include <blosc2.h>
+
+#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  const char *const compressors[] = { "blosclz", "lz4", "lz4hc", "zlib", "zstd" };
+  int32_t i = 0, dsize = 0, filter = BLOSC_BITSHUFFLE;
+  int32_t nchunk = 0, max_chunksize = 512;
+  int64_t nchunks = 0;
+
+  blosc2_init();
+
+  blosc2_cparams cparams = BLOSC2_CPARAMS_DEFAULTS;
+  cparams.typesize = 1;
+  /* Find next available compressor */
+  cparams.compcode = 0;
+  while (blosc1_set_compressor(compressors[cparams.compcode % 6]) == -1 && i < 6) {
+    cparams.compcode++, i++;
+  }
+  if (i == 6) {
+    /* No compressors available */
+    blosc2_destroy();
+    return 0;
+  }
+  if (size > INT32_MAX) {
+      printf("Conversion error: size_t does not fit in int32_t\n");
+      return 0;
+  }
+  if (size > 0) {
+    /* Variable size compression level and max chunksize */
+    cparams.clevel = data[0] % (9 + 1);
+    max_chunksize *= data[0];
+  }
+  if (size > 1) {
+    filter = data[1];
+  }
+  cparams.filters[BLOSC2_MAX_FILTERS - 1] = filter % (BLOSC_BITSHUFFLE + 1);
+  cparams.filters_meta[BLOSC2_MAX_FILTERS - 1] = filter;
+  cparams.nthreads = 1;
+
+  blosc2_dparams dparams = BLOSC2_DPARAMS_DEFAULTS;
+  dparams.nthreads = 1;
+
+  /* Create a super-chunk backed by an in-memory frame */
+  blosc2_storage storage = {.cparams=&cparams, .dparams=&dparams};
+  blosc2_schunk* schunk = blosc2_schunk_new(&storage);
+  if (schunk == NULL) {
+    blosc2_destroy();
+    return 0;
+  }
+
+  /* Compress data */
+  int32_t chunksize = max_chunksize;
+  for (i = 0; chunksize > 0 && i < (int32_t)size; i += chunksize, nchunks++) {
+    if (i + chunksize > (int32_t)size)
+      chunksize = (int32_t)size - i;
+    nchunks = blosc2_schunk_append_buffer(schunk, (uint8_t *)data + i, chunksize);
+    if (nchunks < 0) {
+      printf("Compression error.  Error code: %" PRId64 "\n", nchunks);
+      break;
+    }
+  }
+
+  /* Decompress data */
+  uint8_t *uncompressed_data = (uint8_t *)malloc(size+1);
+  if (uncompressed_data != NULL) {
+    for (i = 0, nchunk = 0; nchunk < nchunks-1; nchunk++) {
+      dsize = blosc2_schunk_decompress_chunk(schunk, nchunk, uncompressed_data + i, chunksize);
+      if (dsize < 0) {
+        printf("Decompression error.  Error code: %d\n", dsize);
+        break;
+      }
+      i += dsize;
+    }
+
+    /* Compare decompressed data with original */
+    if (size > 0 && nchunks > 0) {
+      if (dsize < 0 || memcmp(data, uncompressed_data, size) != 0) {
+        printf("Decompression data does not match original %d\n", dsize);
+      }
+    }
+
+    free(uncompressed_data);
+  }
+
+  /* Free resources */
+  blosc2_schunk_free(schunk);
+
+  blosc2_destroy();
+  return 0;
+}
+
+#ifdef __cplusplus
+}
+#endif
+
+</solution>
+<end of text>
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+int b2nd_insert(struct b2nd_array_t * , char * , size_t , char , size_t )
+</function header>
+</task>
+You MUST call <code>
+int b2nd_insert(struct b2nd_array_t * , char * , size_t , char , size_t )
+</code> in your solution!
+
+<solution>
+
+function fuzz target(s) are: #include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <inttypes.h>
+
+#include <b2nd.h>
+
+#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  struct b2nd_array_t *array = NULL;
+  char *key = NULL;
+  char value = 0;
+  size_t key_len = 0;
+
+  if (size < 1) {
+    return 0;
+  }
+
+  b2nd_init();
+
+  array = b2nd_new();
+  if (array == NULL) {
+    b2nd_destroy();
+    return 0;
+  }
+
+  key_len = data[0] % 1024;
+  if (key_len > 0) {
+    key = (char *)malloc(key_len + 1);
+    if (key == NULL) {
+      b2nd_destroy();
+      return 0;
+    }
+    memcpy(key, data + 1, key_len);
+    key[key_len] = '\0';
+  }
+
+  value = data[key_len + 1];
+
+  b2nd_insert(array, key, key_len, value, size - key_len - 2);
+
+  b2nd_free(array);
+  free(key);
+
+  b2nd_destroy();
+  return 0;
+}
+
+#ifdef __cplusplus
+}
+#endif
+
+// Add the following code to the end of the file:
+extern "C" {
+void b2nd_init(void) {}
+struct b2nd_array_t *b2nd_new(void) { return NULL; }
+void b2nd_destroy(void) {}
+void b2nd_insert(struct b2nd_array_t *array, const char *key, size_t key_len, char value, size_t value_len) {}
+void b2nd_free(struct b2nd_array_t *array) {}
+}
+<end of text>
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+BGD_DECLARE(void) gdImageString (gdImagePtr im, gdFontPtr f, int x, int y, unsigned char *s, int color)
+</function header>
+</task>
+
+<solution>
+
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+#include "gd.h"
+#include "gdfontg.h"
+#include "gdfontl.h"
+#include "gdfontmb.h"
+#include "gdfonts.h"
+#include "gdfontt.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const uint8_t slate_width = stream.ConsumeIntegral<uint8_t>();
+  const uint8_t slate_height = stream.ConsumeIntegral<uint8_t>();
+  gdImagePtr slate_image = gdImageCreateTrueColor(slate_width, slate_height);
+  if (slate_image == nullptr) {
+    return 0;
+  }
+
+  const int x_position = stream.ConsumeIntegral<int>();
+  const int y_position = stream.ConsumeIntegral<int>();
+  const int text_color = stream.ConsumeIntegral<int>();
+  const gdFontPtr font_ptr = stream.PickValueInArray(
+      {gdFontGetGiant(), gdFontGetLarge(), gdFontGetMediumBold(),
+       gdFontGetSmall(), gdFontGetTiny()});
+  const std::string text = stream.ConsumeRemainingBytesAsString();
+
+  gdImageString(slate_image, font_ptr, x_position, y_position,
+                reinterpret_cast<uint8_t*>(const_cast<char*>(text.c_str())),
+                text_color);
+  gdImageDestroy(slate_image);
+  return 0;
+}
+</solution>
+<end of text>
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+MPG123_EXPORT int mpg123_decode(mpg123_handle *mh, const unsigned char *inmemory, size_t inmemsize, unsigned char *outmemory, size_t outmemsize, size_t *done )
+</function header>
+</task>
+
+<solution>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+#include "mpg123.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  static bool initialized = false;
+  if (!initialized) {
+    mpg123_init();
+    initialized = true;
+  }
+  int ret;
+  mpg123_handle* handle = mpg123_new(nullptr, &ret);
+  if (handle == nullptr) {
+    return 0;
+  }
+
+  ret = mpg123_param(handle, MPG123_ADD_FLAGS, MPG123_QUIET, 0.);
+  if(ret == MPG123_OK)
+    ret = mpg123_open_feed(handle);
+  if (ret != MPG123_OK) {
+    mpg123_delete(handle);
+    return 0;
+  }
+
+  std::vector<uint8_t> output_buffer(mpg123_outblock(handle));
+
+  size_t output_written = 0;
+  // Initially, start by feeding the decoder more data.
+  int decode_ret = MPG123_NEED_MORE;
+  FuzzedDataProvider provider(data, size);
+  while ((decode_ret != MPG123_ERR)) {
+    if (decode_ret == MPG123_NEED_MORE) {
+      if (provider.remaining_bytes() == 0
+          || mpg123_tellframe(handle) > 10000
+          || mpg123_tell_stream(handle) > 1<<20) {
+        break;
+      }
+      const size_t next_size = provider.ConsumeIntegralInRange<size_t>(
+          0,
+          provider.remaining_bytes());
+      auto next_input = provider.ConsumeBytes<unsigned char>(next_size);
+      decode_ret = mpg123_decode(handle, next_input.data(), next_input.size(),
+                                 output_buffer.data(), output_buffer.size(),
+                                 &output_written);
+    } else if (decode_ret != MPG123_ERR && decode_ret != MPG123_NEED_MORE) {
+      decode_ret = mpg123_decode(handle, nullptr, 0, output_buffer.data(),
+                                 output_buffer.size(), &output_written);
+    } else {
+      // Unhandled mpg123_decode return value.
+      abort();
+    }
+  }
+
+  mpg123_delete(handle);
+
+  return 0;
+}
+</solution>
+<end of text>
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+int blosc2_schunk_free(struct blosc2_schunk * )
+</function header>
+</task>
+
+<solution>
+#include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <inttypes.h>
+
+#include <blosc2.h>
+
+#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  const char *const compressors[] = { "blosclz", "lz4", "lz4hc", "zlib", "zstd" };
+  int32_t i = 0, dsize = 0, filter = BLOSC_BITSHUFFLE;
+  int32_t nchunk = 0, max_chunksize = 512;
+  int64_t nchunks = 0;
+
+  blosc2_init();
+
+  blosc2_cparams cparams = BLOSC2_CPARAMS_DEFAULTS;
+  cparams.typesize = 1;
+  /* Find next available compressor */
+  cparams.compcode = 0;
+  while (blosc1_set_compressor(compressors[cparams.compcode % 6]) == -1 && i < 6) {
+    cparams.compcode++, i++;
+  }
+  if (i == 6) {
+    /* No compressors available */
+    blosc2_destroy();
+    return 0;
+  }
+  if (size > INT32_MAX) {
+      printf("Conversion error: size_t does not fit in int32_t\n");
+      return 0;
+  }
+  if (size > 0) {
+    /* Variable size compression level and max chunksize */
+    cparams.clevel = data[0] % (9 + 1);
+    max_chunksize *= data[0];
+  }
+  if (size > 1) {
+    filter = data[1];
+  }
+  cparams.filters[BLOSC2_MAX_FILTERS - 1] = filter % (BLOSC_BITSHUFFLE + 1);
+  cparams.filters_meta[BLOSC2_MAX_FILTERS - 1] = filter;
+  cparams.nthreads = 1;
+
+  blosc2_dparams dparams = BLOSC2_DPARAMS_DEFAULTS;
+  dparams.nthreads = 1;
+
+  /* Create a super-chunk backed by an in-memory frame */
+  blosc2_storage storage = {.cparams=&cparams, .dparams=&dparams};
+  blosc2_schunk* schunk = blosc2_schunk_new(&storage);
+  if (schunk == NULL) {
+    blosc2_destroy();
+    return 0;
+  }
+
+  /* Compress data */
+  int32_t chunksize = max_chunksize;
+  for (i = 0; chunksize > 0 && i < (int32_t)size; i += chunksize, nchunks++) {
+    if (i + chunksize > (int32_t)size)
+      chunksize = (int32_t)size - i;
+    nchunks = blosc2_schunk_append_buffer(schunk, (uint8_t *)data + i, chunksize);
+    if (nchunks < 0) {
+      printf("Compression error.  Error code: %" PRId64 "\n", nchunks);
+      break;
+    }
+  }
+
+  /* Decompress data */
+  uint8_t *uncompressed_data = (uint8_t *)malloc(size+1);
+  if (uncompressed_data != NULL) {
+    for (i = 0, nchunk = 0; nchunk < nchunks-1; nchunk++) {
+      dsize = blosc2_schunk_decompress_chunk(schunk, nchunk, uncompressed_data + i, chunksize);
+      if (dsize < 0) {
+        printf("Decompression error.  Error code: %d\n", dsize);
+        break;
+      }
+      i += dsize;
+    }
+
+    /* Compare decompressed data with original */
+    if (size > 0 && nchunks > 0) {
+      if (dsize < 0 || memcmp(data, uncompressed_data, size) != 0) {
+        printf("Decompression data does not match original %d\n", dsize);
+      }
+    }
+
+    free(uncompressed_data);
+  }
+
+  /* Free resources */
+  blosc2_schunk_free(schunk);
+
+  blosc2_destroy();
+  return 0;
+}
+
+#ifdef __cplusplus
+}
+#endif
+
+</solution>
+<end of text>
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+int b2nd_insert(struct b2nd_array_t * , char * , size_t , char , size_t )
+</function header>
+</task>
+You MUST call <code>
+int b2nd_insert(struct b2nd_array_t * , char * , size_t , char , size_t )
+</code> in your solution!
+
+<solution>
+
+function fuzz target(s) are: #include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <inttypes.h>
+
+#include <b2nd.h>
+
+#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  struct b2nd_array_t *array = NULL;
+  char *key = NULL;
+  char value = 0;
+  size_t key_len = 0;
+
+  if (size < 1) {
+    return 0;
+  }
+
+  b2nd_init();
+
+  array = b2nd_new();
+  if (array == NULL) {
+    b2nd_destroy();
+    return 0;
+  }
+
+  key_len = data[0] % 1024;
+  if (key_len > 0) {
+    key = (char *)malloc(key_len + 1);
+    if (key == NULL) {
+      b2nd_destroy();
+      return 0;
+    }
+    memcpy(key, data + 1, key_len);
+    key[key_len] = '\0';
+  }
+
+  value = data[key_len + 1];
+
+  b2nd_insert(array, key, key_len, value, size - key_len - 2);
+
+  b2nd_free(array);
+  free(key);
+
+  b2nd_destroy();
+  return 0;
+}
+
+#ifdef __cplusplus
+}
+#endif
+
+// Add the following code to the end of the file:
+extern "C" {
+void b2nd_init(void) {}
+struct b2nd_array_t *b2nd_new(void) { return NULL; }
+void b2nd_destroy(void) {}
+void b2nd_insert(struct b2nd_array_t *array, const char *key, size_t key_len, char value, size_t value_len) {}
+void b2nd_free(struct b2nd_array_t *array) {}
+}
+<end of text>
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+int blosc2_schunk_free(struct blosc2_schunk * )
+</function header>
+</task>
+
+<solution>
+#include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <inttypes.h>
+
+#include <blosc2.h>
+
+#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  const char *const compressors[] = { "blosclz", "lz4", "lz4hc", "zlib", "zstd" };
+  int32_t i = 0, dsize = 0, filter = BLOSC_BITSHUFFLE;
+  int32_t nchunk = 0, max_chunksize = 512;
+  int64_t nchunks = 0;
+
+  blosc2_init();
+
+  blosc2_cparams cparams = BLOSC2_CPARAMS_DEFAULTS;
+  cparams.typesize = 1;
+  /* Find next available compressor */
+  cparams.compcode = 0;
+  while (blosc1_set_compressor(compressors[cparams.compcode % 6]) == -1 && i < 6) {
+    cparams.compcode++, i++;
+  }
+  if (i == 6) {
+    /* No compressors available */
+    blosc2_destroy();
+    return 0;
+  }
+  if (size > INT32_MAX) {
+      printf("Conversion error: size_t does not fit in int32_t\n");
+      return 0;
+  }
+  if (size > 0) {
+    /* Variable size compression level and max chunksize */
+    cparams.clevel = data[0] % (9 + 1);
+    max_chunksize *= data[0];
+  }
+  if (size > 1) {
+    filter = data[1];
+  }
+  cparams.filters[BLOSC2_MAX_FILTERS - 1] = filter % (BLOSC_BITSHUFFLE + 1);
+  cparams.filters_meta[BLOSC2_MAX_FILTERS - 1] = filter;
+  cparams.nthreads = 1;
+
+  blosc2_dparams dparams = BLOSC2_DPARAMS_DEFAULTS;
+  dparams.nthreads = 1;
+
+  /* Create a super-chunk backed by an in-memory frame */
+  blosc2_storage storage = {.cparams=&cparams, .dparams=&dparams};
+  blosc2_schunk* schunk = blosc2_schunk_new(&storage);
+  if (schunk == NULL) {
+    blosc2_destroy();
+    return 0;
+  }
+
+  /* Compress data */
+  int32_t chunksize = max_chunksize;
+  for (i = 0; chunksize > 0 && i < (int32_t)size; i += chunksize, nchunks++) {
+    if (i + chunksize > (int32_t)size)
+      chunksize = (int32_t)size - i;
+    nchunks = blosc2_schunk_append_buffer(schunk, (uint8_t *)data + i, chunksize);
+    if (nchunks < 0) {
+      printf("Compression error.  Error code: %" PRId64 "\n", nchunks);
+      break;
+    }
+  }
+
+  /* Decompress data */
+  uint8_t *uncompressed_data = (uint8_t *)malloc(size+1);
+  if (uncompressed_data != NULL) {
+    for (i = 0, nchunk = 0; nchunk < nchunks-1; nchunk++) {
+      dsize = blosc2_schunk_decompress_chunk(schunk, nchunk, uncompressed_data + i, chunksize);
+      if (dsize < 0) {
+        printf("Decompression error.  Error code: %d\n", dsize);
+        break;
+      }
+      i += dsize;
+    }
+
+    /* Compare decompressed data with original */
+    if (size > 0 && nchunks > 0) {
+      if (dsize < 0 || memcmp(data, uncompressed_data, size) != 0) {
+        printf("Decompression data does not match original %d\n", dsize);
+      }
+    }
+
+    free(uncompressed_data);
+  }
+
+  /* Free resources */
+  blosc2_schunk_free(schunk);
+
+  blosc2_destroy();
+  return 0;
+}
+
+#ifdef __cplusplus
+}
+#endif
+
+</solution>
+<end of text>
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+int b2nd_insert(struct b2nd_array_t * , char * , size_t , char , size_t )
+</function header>
+</task>
+You MUST call <code>
+int b2nd_insert(struct b2nd_array_t * , char * , size_t , char , size_t )
+</code> in your solution!
+
+<solution>
+
+function fuzz target(s) are: #include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <inttypes.h>
+
+#include <b2nd.h>
+
+#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  struct b2nd_array_t *array = NULL;
+  char *key = NULL;
+  char value = 0;
+  size_t key_len = 0;
+
+  if (size < 1) {
+    return 0;
+  }
+
+  b2nd_init();
+
+  array = b2nd_new();
+  if (array == NULL) {
+    b2nd_destroy();
+    return 0;
+  }
+
+  key_len = data[0] % 1024;
+  if (key_len > 0) {
+    key = (char *)malloc(key_len + 1);
+    if (key == NULL) {
+      b2nd_destroy();
+      return 0;
+    }
+    memcpy(key, data + 1, key_len);
+    key[key_len] = '\0';
+  }
+
+  value = data[key_len + 1];
+
+  b2nd_insert(array, key, key_len, value, size - key_len - 2);
+
+  b2nd_free(array);
+  free(key);
+
+  b2nd_destroy();
+  return 0;
+}
+
+#ifdef __cplusplus
+}
+#endif
+
+// Add the following code to the end of the file:
+extern "C" {
+void b2nd_init(void) {}
+struct b2nd_array_t *b2nd_new(void) { return NULL; }
+void b2nd_destroy(void) {}
+void b2nd_insert(struct b2nd_array_t *array, const char *key, size_t key_len, char value, size_t value_len) {}
+void b2nd_free(struct b2nd_array_t *array) {}
+}
+<end of text>
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+BGD_DECLARE(void) gdImageString (gdImagePtr im, gdFontPtr f, int x, int y, unsigned char *s, int color)
+</function header>
+</task>
+
+<solution>
+
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <string>
+
+#include "gd.h"
+#include "gdfontg.h"
+#include "gdfontl.h"
+#include "gdfontmb.h"
+#include "gdfonts.h"
+#include "gdfontt.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  const uint8_t slate_width = stream.ConsumeIntegral<uint8_t>();
+  const uint8_t slate_height = stream.ConsumeIntegral<uint8_t>();
+  gdImagePtr slate_image = gdImageCreateTrueColor(slate_width, slate_height);
+  if (slate_image == nullptr) {
+    return 0;
+  }
+
+  const int x_position = stream.ConsumeIntegral<int>();
+  const int y_position = stream.ConsumeIntegral<int>();
+  const int text_color = stream.ConsumeIntegral<int>();
+  const gdFontPtr font_ptr = stream.PickValueInArray(
+      {gdFontGetGiant(), gdFontGetLarge(), gdFontGetMediumBold(),
+       gdFontGetSmall(), gdFontGetTiny()});
+  const std::string text = stream.ConsumeRemainingBytesAsString();
+
+  gdImageString(slate_image, font_ptr, x_position, y_position,
+                reinterpret_cast<uint8_t*>(const_cast<char*>(text.c_str())),
+                text_color);
+  gdImageDestroy(slate_image);
+  return 0;
+}
+</solution>
+<end of text>
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+MPG123_EXPORT int mpg123_decode(mpg123_handle *mh, const unsigned char *inmemory, size_t inmemsize, unsigned char *outmemory, size_t outmemsize, size_t *done )
+</function header>
+</task>
+
+<solution>
+#include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+#include "mpg123.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  static bool initialized = false;
+  if (!initialized) {
+    mpg123_init();
+    initialized = true;
+  }
+  int ret;
+  mpg123_handle* handle = mpg123_new(nullptr, &ret);
+  if (handle == nullptr) {
+    return 0;
+  }
+
+  ret = mpg123_param(handle, MPG123_ADD_FLAGS, MPG123_QUIET, 0.);
+  if(ret == MPG123_OK)
+    ret = mpg123_open_feed(handle);
+  if (ret != MPG123_OK) {
+    mpg123_delete(handle);
+    return 0;
+  }
+
+  std::vector<uint8_t> output_buffer(mpg123_outblock(handle));
+
+  size_t output_written = 0;
+  // Initially, start by feeding the decoder more data.
+  int decode_ret = MPG123_NEED_MORE;
+  FuzzedDataProvider provider(data, size);
+  while ((decode_ret != MPG123_ERR)) {
+    if (decode_ret == MPG123_NEED_MORE) {
+      if (provider.remaining_bytes() == 0
+          || mpg123_tellframe(handle) > 10000
+          || mpg123_tell_stream(handle) > 1<<20) {
+        break;
+      }
+      const size_t next_size = provider.ConsumeIntegralInRange<size_t>(
+          0,
+          provider.remaining_bytes());
+      auto next_input = provider.ConsumeBytes<unsigned char>(next_size);
+      decode_ret = mpg123_decode(handle, next_input.data(), next_input.size(),
+                                 output_buffer.data(), output_buffer.size(),
+                                 &output_written);
+    } else if (decode_ret != MPG123_ERR && decode_ret != MPG123_NEED_MORE) {
+      decode_ret = mpg123_decode(handle, nullptr, 0, output_buffer.data(),
+                                 output_buffer.size(), &output_written);
+    } else {
+      // Unhandled mpg123_decode return value.
+      abort();
+    }
+  }
+
+  mpg123_delete(handle);
+
+  return 0;
+}
+</solution>
+<end of text>
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+int blosc2_schunk_free(struct blosc2_schunk * )
+</function header>
+</task>
+
+<solution>
+#include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <inttypes.h>
+
+#include <blosc2.h>
+
+#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  const char *const compressors[] = { "blosclz", "lz4", "lz4hc", "zlib", "zstd" };
+  int32_t i = 0, dsize = 0, filter = BLOSC_BITSHUFFLE;
+  int32_t nchunk = 0, max_chunksize = 512;
+  int64_t nchunks = 0;
+
+  blosc2_init();
+
+  blosc2_cparams cparams = BLOSC2_CPARAMS_DEFAULTS;
+  cparams.typesize = 1;
+  /* Find next available compressor */
+  cparams.compcode = 0;
+  while (blosc1_set_compressor(compressors[cparams.compcode % 6]) == -1 && i < 6) {
+    cparams.compcode++, i++;
+  }
+  if (i == 6) {
+    /* No compressors available */
+    blosc2_destroy();
+    return 0;
+  }
+  if (size > INT32_MAX) {
+      printf("Conversion error: size_t does not fit in int32_t\n");
+      return 0;
+  }
+  if (size > 0) {
+    /* Variable size compression level and max chunksize */
+    cparams.clevel = data[0] % (9 + 1);
+    max_chunksize *= data[0];
+  }
+  if (size > 1) {
+    filter = data[1];
+  }
+  cparams.filters[BLOSC2_MAX_FILTERS - 1] = filter % (BLOSC_BITSHUFFLE + 1);
+  cparams.filters_meta[BLOSC2_MAX_FILTERS - 1] = filter;
+  cparams.nthreads = 1;
+
+  blosc2_dparams dparams = BLOSC2_DPARAMS_DEFAULTS;
+  dparams.nthreads = 1;
+
+  /* Create a super-chunk backed by an in-memory frame */
+  blosc2_storage storage = {.cparams=&cparams, .dparams=&dparams};
+  blosc2_schunk* schunk = blosc2_schunk_new(&storage);
+  if (schunk == NULL) {
+    blosc2_destroy();
+    return 0;
+  }
+
+  /* Compress data */
+  int32_t chunksize = max_chunksize;
+  for (i = 0; chunksize > 0 && i < (int32_t)size; i += chunksize, nchunks++) {
+    if (i + chunksize > (int32_t)size)
+      chunksize = (int32_t)size - i;
+    nchunks = blosc2_schunk_append_buffer(schunk, (uint8_t *)data + i, chunksize);
+    if (nchunks < 0) {
+      printf("Compression error.  Error code: %" PRId64 "\n", nchunks);
+      break;
+    }
+  }
+
+  /* Decompress data */
+  uint8_t *uncompressed_data = (uint8_t *)malloc(size+1);
+  if (uncompressed_data != NULL) {
+    for (i = 0, nchunk = 0; nchunk < nchunks-1; nchunk++) {
+      dsize = blosc2_schunk_decompress_chunk(schunk, nchunk, uncompressed_data + i, chunksize);
+      if (dsize < 0) {
+        printf("Decompression error.  Error code: %d\n", dsize);
+        break;
+      }
+      i += dsize;
+    }
+
+    /* Compare decompressed data with original */
+    if (size > 0 && nchunks > 0) {
+      if (dsize < 0 || memcmp(data, uncompressed_data, size) != 0) {
+        printf("Decompression data does not match original %d\n", dsize);
+      }
+    }
+
+    free(uncompressed_data);
+  }
+
+  /* Free resources */
+  blosc2_schunk_free(schunk);
+
+  blosc2_destroy();
+  return 0;
+}
+
+#ifdef __cplusplus
+}
+#endif
+
+</solution>
+<end of text>
+
+<task>
+Your goal is to write a fuzzing harness for the provided function header using <code>LLVMFuzzerTestOneInput</code>. It is important that the provided solution compiles and actually calls the function specified by the function header:
+<function header>
+int b2nd_insert(struct b2nd_array_t * , char * , size_t , char , size_t )
+</function header>
+</task>
+You MUST call <code>
+int b2nd_insert(struct b2nd_array_t * , char * , size_t , char , size_t )
+</code> in your solution!
+
+<solution>
+
+function fuzz target(s) are: #include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <inttypes.h>
+
+#include <b2nd.h>
+
+#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+  struct b2nd_array_t *array = NULL;
+  char *key = NULL;
+  char value = 0;
+  size_t key_len = 0;
+
+  if (size < 1) {
+    return 0;
+  }
+
+  b2nd_init();
+
+  array = b2nd_new();
+  if (array == NULL) {
+    b2nd_destroy();
+    return 0;
+  }
+
+  key_len = data[0] % 1024;
+  if (key_len > 0) {
+    key = (char *)malloc(key_len + 1);
+    if (key == NULL) {
+      b2nd_destroy();
+      return 0;
+    }
+    memcpy(key, data + 1, key_len);
+    key[key_len] = '\0';
+  }
+
+  value = data[key_len + 1];
+
+  b2nd_insert(array, key, key_len, value, size - key_len - 2);
+
+  b2nd_free(array);
+  free(key);
+
+  b2nd_destroy();
+  return 0;
+}
+
+#ifdef __cplusplus
+}
+#endif
+
+// Add the following code to the end of the file:
+extern "C" {
+void b2nd_init(void) {}
+struct b2nd_array_t *b2nd_new(void) { return NULL; }
+void b2nd_destroy(void) {}
+void b2nd_insert(struct b2nd_array_t *array, const char *key, size_t key_len, char value, size_t value_len) {}
+void b2nd_free(struct b2nd_array_t *array) {}
+}
+<end of text>
