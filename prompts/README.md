@@ -1,7 +1,7 @@
 
 # Prompting Comparison Guide 
 
-This page documents the results and improvements of a different prompting stragy: explicit reasoning based prompting (See [cool_temp]()). We compare the results with the baseline prompts in 
+This page documents the results and improvements of a different prompting stragy: explicit reasoning based prompting (See [cool_temp](https://github.com/sallywang147/llmfz/tree/main/prompts/cool_temp)). We compare the results with the baseline prompts in 
 [temp_xml](). Below are the fuzzbench benchmarks that explicit reasoning based prompting further improves upon. 
 
 All results are documented in [prompts_results](). 
@@ -11,9 +11,9 @@ max cov. Diff = max cov. by temp_xml - max cov. by xplicit reasoning based promp
 
   | Benchmarks  | Fuzz Targets |Max Cov. Improvement |Max Cov. Diff|Model |Prompt history|
 | ------------- | ------------- |------------- |------------- |------------- |------------- |
-|  harfbuzz | ``hb_face_t * hb_subset_preprocess(hb_face_t *)`` |1.5% |1.6%  | Vertex AI codeBison | |
-|  harfbuzz | ``void hb_ot_shape_glyphs_closure(hb_font_t *, hb_buffer_t *, const hb_feature_t *, unsigned int, hb_set_t *)``|4.9% |0.5%  | Vertex AI codeBison | |
-|  zlib | ``hb_face_t * hb_subset_preprocess(hb_face_t *)``|15.33%  |15.3%  | Vertex AI codeBison | |
+|  harfbuzz | ``hb_face_t * hb_subset_preprocess(hb_face_t *)`` |1.5% |1.6%  | Vertex AI codeBison | [prompt](https://github.com/sallywang147/llmfz/tree/main/cooltemp_results/output-harfbuzz-hb_subset_preprocess)|
+|  harfbuzz | ``void hb_ot_shape_glyphs_closure(hb_font_t *, hb_buffer_t *, const hb_feature_t *, unsigned int, hb_set_t *)``|4.9% |0.5%  | Vertex AI codeBison | [prompt](https://github.com/sallywang147/llmfz/tree/main/cooltemp_results/output-harfbuzz-hb_ot_shape_glyphs_closure)|
+|  zlib | ``gzprintf(...)``|15.33%  |15.3%  | Vertex AI codeBison |[prompt](https://github.com/sallywang147/llmfz/tree/main/cooltemp_results/new_prompt_zlib/output-zlib-gzprintf) |
 
 
 
