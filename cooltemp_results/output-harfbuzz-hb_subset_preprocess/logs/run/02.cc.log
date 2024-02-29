@@ -1,0 +1,54 @@
+INFO:__main__:Running: docker run --rm --privileged --shm-size=2g --platform linux/amd64 -e FUZZING_ENGINE=libfuzzer -e SANITIZER=address -e RUN_FUZZER_MODE=interactive -e HELPER=True -v /home/sallyjunsongwang/oss-fuzz-gen/results/output-harfbuzz-hb_subset_preprocess/corpora/02.cc:/tmp/hb-repacker-fuzzer_corpus -v /tmp/tmpy2eupuwg/build/out/harfbuzz-hb_subset_preprocess-02:/out -t gcr.io/oss-fuzz-base/base-runner run_fuzzer hb-repacker-fuzzer -print_final_stats=1 -max_total_time=30 -len_control=0.
+rm: cannot remove '/tmp/hb-repacker-fuzzer_corpus': Device or resource busy
+Using seed corpus: hb-repacker-fuzzer_seed_corpus.zip
+/out/hb-repacker-fuzzer -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /tmp/hb-repacker-fuzzer_corpus < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 1373236062
+INFO: Loaded 1 modules   (96402 inline 8-bit counters): 96402 [0xf47480, 0xf5ed12), 
+INFO: Loaded 1 PC tables (96402 PCs): 96402 [0xf5ed18,0x10d7638), 
+INFO:       10 files found in /tmp/hb-repacker-fuzzer_corpus
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 358596 bytes
+INFO: seed corpus: files: 10 min: 423b max: 358596b total: 2345624b rss: 36Mb
+#11	INITED cov: 1363 ft: 1482 corp: 5/539Kb exec/s: 0 rss: 45Mb
+#14	NEW    cov: 1368 ft: 1492 corp: 6/576Kb lim: 358596 exec/s: 0 rss: 46Mb L: 37528/358356 MS: 3 CrossOver-ChangeBit-EraseBytes-
+#23	NEW    cov: 1374 ft: 1503 corp: 7/731Kb lim: 358596 exec/s: 0 rss: 48Mb L: 158745/358356 MS: 4 ChangeBit-ShuffleBytes-ChangeBit-CopyPart-
+#24	NEW    cov: 1375 ft: 1505 corp: 8/856Kb lim: 358596 exec/s: 0 rss: 48Mb L: 128114/358356 MS: 1 CrossOver-
+#28	NEW    cov: 1375 ft: 1511 corp: 9/1011Kb lim: 358596 exec/s: 0 rss: 49Mb L: 159168/358356 MS: 4 ChangeASCIIInt-ChangeBinInt-ChangeBit-CrossOver-
+#30	NEW    cov: 1377 ft: 1514 corp: 10/1137Kb lim: 358596 exec/s: 0 rss: 50Mb L: 128187/358356 MS: 2 ChangeBinInt-InsertRepeatedBytes-
+#31	NEW    cov: 1377 ft: 1515 corp: 11/1187Kb lim: 358596 exec/s: 0 rss: 50Mb L: 52028/358356 MS: 1 EraseBytes-
+#34	NEW    cov: 1382 ft: 1522 corp: 12/1238Kb lim: 358596 exec/s: 0 rss: 51Mb L: 52029/358356 MS: 3 ShuffleBytes-ShuffleBytes-InsertByte-
+#39	NEW    cov: 1384 ft: 1524 corp: 13/1363Kb lim: 358596 exec/s: 0 rss: 52Mb L: 128115/358356 MS: 5 ChangeBit-ChangeByte-ChangeBit-ChangeBit-InsertByte-
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+[1m[31m==12==ERROR: AddressSanitizer: SEGV on unknown address 0x000000000000 (pc 0x000000cc2e0a bp 0x7ffd69cc2c30 sp 0x7ffd69cc2bf0 T0)
+[1m[0m==12==The signal is caused by a WRITE memory access.
+==12==Hint: address points to the zero page.
+SCARINESS: 10 (null-deref)
+    #0 0xcc2e0a in SubtableUnicodesCache /work/build/../../src/harfbuzz/src/hb-ot-cmap-table.hh:1583:9
+    #1 0xcc2e0a in create /work/build/../../src/harfbuzz/src/hb-ot-cmap-table.hh:1564:17
+    #2 0xcc2e0a in OT::cmap::create_filled_cache(hb_blob_ptr_t<OT::cmap>) /work/build/../../src/harfbuzz/src/hb-ot-cmap-table.hh:1656:36
+    #3 0x94abb6 in _attach_accelerator_data /work/build/../../src/harfbuzz/src/hb-subset.cc:577:23
+    #4 0x94abb6 in hb_subset_plan_execute_or_fail /work/build/../../src/harfbuzz/src/hb-subset.cc:696:5
+    #5 0x92e13d in hb_subset_or_fail /work/build/../../src/harfbuzz/src/hb-subset.cc:608:24
+    #6 0x92605f in hb_subset_preprocess /work/build/../../src/harfbuzz/src/hb-subset-input.cc:601:27
+    #7 0x56c515 in LLVMFuzzerTestOneInput /work/build/../../src/harfbuzz/test/fuzzing/hb-repacker-fuzzer.cc:18:25
+    #8 0x43de83 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #9 0x43d66a in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #10 0x43ed39 in fuzzer::Fuzzer::MutateAndTestOne() /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:757:19
+    #11 0x43fa05 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:895:5
+    #12 0x42ed6f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #13 0x4583c2 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #14 0x7f2e5658d082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #15 0x41f7ad in _start (/out/hb-repacker-fuzzer+0x41f7ad)
+
+DEDUP_TOKEN: SubtableUnicodesCache--create--OT::cmap::create_filled_cache(hb_blob_ptr_t<OT::cmap>)
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: SEGV /work/build/../../src/harfbuzz/src/hb-ot-cmap-table.hh:1583:9 in SubtableUnicodesCache
+==12==ABORTING
+MS: 2 ShuffleBytes-InsertByte-; base unit: bb0953447bc1c945f5c23176629335697ac7a816
+artifact_prefix='./'; Test unit written to ./crash-f2ebeb353b85118b9a38457bf6dd51e548bc52e7
+stat::number_of_executed_units: 51
+stat::average_exec_per_sec:     0
+stat::new_units_added:          8
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              54

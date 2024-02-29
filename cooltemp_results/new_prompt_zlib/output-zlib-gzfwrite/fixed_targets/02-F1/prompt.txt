@@ -1,0 +1,50 @@
+Given the following C++ program and its build error message, fix the code to achieve the original functionality.
+
+If a function is missing, fix it by including the related libraries.
+
+If the error contains "undefined reference to", this means one or more of the header <code>#include</code> directives need to be wrapped with <code>extern "C" {}</code> for the object linking to succeed. You must fix this by rewriting the relevant <code>#include</code> and wrapping it with <code>extern "C" {}</code>.
+
+Below is the code needs to be built:
+<code>
+ #include <fuzzer/FuzzedDataProvider.h>
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+#include "zlib.h"
+
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
+  FuzzedDataProvider stream(data, size);
+  gzFile file = gzdopen(0, "wb");
+  if (file == nullptr) {
+    return 0;
+  }
+
+  for (size_t i = 0; i < size; i++) {
+    int ret = gzfwrite(file, &stream.ConsumeIntegral<int>(), 1, file);
+    if (ret == EOF) {
+      break;
+    }
+  }
+
+  gzclose(file);
+  return 0;
+}
+</code>
+
+The code has the following build issues:
+<error>
+/src/zlib_uncompress_fuzzer.cc:19:30: error: cannot take the address of an rvalue of type 'int'
+    int ret = gzfwrite(file, &stream.ConsumeIntegral<int>(), 1, file);
+                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.
+</error>
+
+Fix code:
+1. Consider the possible solution for the issues listed above.
+2. Apply the solutions to the original code.
+It's important to show the complete code, not only the fixed line.
+<solution>

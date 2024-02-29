@@ -1,0 +1,42 @@
+INFO:__main__:Running: docker run --rm --privileged --shm-size=2g --platform linux/amd64 -e FUZZING_ENGINE=libfuzzer -e SANITIZER=address -e RUN_FUZZER_MODE=interactive -e HELPER=True -v /home/sallyjunsongwang/oss-fuzz-gen/results/output-harfbuzz-hb_shape_justify/corpora/01.cc:/tmp/hb-repacker-fuzzer_corpus -v /tmp/tmpy2eupuwg/build/out/harfbuzz-hb_shape_justify-01:/out -t gcr.io/oss-fuzz-base/base-runner run_fuzzer hb-repacker-fuzzer -print_final_stats=1 -max_total_time=30 -len_control=0.
+rm: cannot remove '/tmp/hb-repacker-fuzzer_corpus': Device or resource busy
+Using seed corpus: hb-repacker-fuzzer_seed_corpus.zip
+/out/hb-repacker-fuzzer -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /tmp/hb-repacker-fuzzer_corpus < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 1638993814
+INFO: Loaded 1 modules   (45690 inline 8-bit counters): 45690 [0xa26300, 0xa3157a), 
+INFO: Loaded 1 PC tables (45690 PCs): 45690 [0xa31580,0xae3d20), 
+INFO:       10 files found in /tmp/hb-repacker-fuzzer_corpus
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 358596 bytes
+hb-repacker-fuzzer: ../../src/harfbuzz/test/fuzzing/hb-repacker-fuzzer.cc:39: int LLVMFuzzerTestOneInput(const uint8_t *, size_t): Assertion `ret' failed.
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+[1m[31m==12==ERROR: AddressSanitizer: ABRT on unknown address 0x00000000000c (pc 0x7f6fba34700b bp 0x7f6fba4bc588 sp 0x7ffd188935b0 T0)
+[1m[0mSCARINESS: 10 (signal)
+    #0 0x7f6fba34700b in raise (/lib/x86_64-linux-gnu/libc.so.6+0x4300b) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #1 0x7f6fba326858 in abort (/lib/x86_64-linux-gnu/libc.so.6+0x22858) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #2 0x7f6fba326728  (/lib/x86_64-linux-gnu/libc.so.6+0x22728) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #3 0x7f6fba337fd5 in __assert_fail (/lib/x86_64-linux-gnu/libc.so.6+0x33fd5) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #4 0x56ca5d in LLVMFuzzerTestOneInput /work/build/../../src/harfbuzz/test/fuzzing/hb-repacker-fuzzer.cc:39:3
+    #5 0x43de83 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #6 0x43f234 in fuzzer::Fuzzer::ReadAndExecuteSeedCorpora(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:804:3
+    #7 0x43f709 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:857:3
+    #8 0x42ed6f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #9 0x4583c2 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #10 0x7f6fba328082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #11 0x41f7ad in _start (/out/hb-repacker-fuzzer+0x41f7ad)
+
+DEDUP_TOKEN: raise--abort--
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: ABRT (/lib/x86_64-linux-gnu/libc.so.6+0x4300b) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca) in raise
+==12==ABORTING
+MS: 0 ; base unit: 0000000000000000000000000000000000000000
+
+
+artifact_prefix='./'; Test unit written to ./crash-da39a3ee5e6b4b0d3255bfef95601890afd80709
+Base64: 
+stat::number_of_executed_units: 1
+stat::average_exec_per_sec:     0
+stat::new_units_added:          0
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              34
