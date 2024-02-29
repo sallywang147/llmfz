@@ -1,0 +1,45 @@
+INFO:__main__:Running: docker run --rm --privileged --shm-size=2g --platform linux/amd64 -e FUZZING_ENGINE=libfuzzer -e SANITIZER=address -e RUN_FUZZER_MODE=interactive -e HELPER=True -v '/home/sallyjunsongwang/oss-fuzz-gen/results/output-harfbuzz-_zz16hb_shape_justifyenk3$_3cled/corpora/01.cc:/tmp/hb-repacker-fuzzer_corpus' -v /tmp/tmpy2eupuwg/build/out/harfbuzz-zz16hb_shape_justifyenk3-3cled-01:/out -t gcr.io/oss-fuzz-base/base-runner run_fuzzer hb-repacker-fuzzer -print_final_stats=1 -max_total_time=30 -len_control=0.
+rm: cannot remove '/tmp/hb-repacker-fuzzer_corpus': Device or resource busy
+Using seed corpus: hb-repacker-fuzzer_seed_corpus.zip
+/out/hb-repacker-fuzzer -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /tmp/hb-repacker-fuzzer_corpus < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 2186202758
+INFO: Loaded 1 modules   (1 inline 8-bit counters): 1 [0x5e9f00, 0x5e9f01), 
+INFO: Loaded 1 PC tables (1 PCs): 1 [0x5a6ad8,0x5a6ae8), 
+INFO:       10 files found in /tmp/hb-repacker-fuzzer_corpus
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 358596 bytes
+INFO: seed corpus: files: 10 min: 423b max: 358596b total: 2345624b rss: 31Mb
+#11	INITED cov: 1 ft: 1 corp: 1/423b exec/s: 0 rss: 37Mb
+#27	REDUCE cov: 1 ft: 1 corp: 1/373b lim: 358596 exec/s: 0 rss: 38Mb L: 373/373 MS: 1 EraseBytes-
+#64	REDUCE cov: 1 ft: 1 corp: 1/226b lim: 358596 exec/s: 0 rss: 38Mb L: 226/226 MS: 2 ChangeBit-EraseBytes-
+#75	REDUCE cov: 1 ft: 1 corp: 1/205b lim: 358596 exec/s: 0 rss: 38Mb L: 205/205 MS: 1 EraseBytes-
+#76	REDUCE cov: 1 ft: 1 corp: 1/131b lim: 358596 exec/s: 0 rss: 38Mb L: 131/131 MS: 1 EraseBytes-
+#81	REDUCE cov: 1 ft: 1 corp: 1/120b lim: 358596 exec/s: 0 rss: 38Mb L: 120/120 MS: 5 ShuffleBytes-CMP-CrossOver-CopyPart-EraseBytes- DE: "\377\377\377\377\377\377\377\377"-
+#86	REDUCE cov: 1 ft: 1 corp: 1/98b lim: 358596 exec/s: 0 rss: 38Mb L: 98/98 MS: 5 CopyPart-ChangeByte-ShuffleBytes-PersAutoDict-EraseBytes- DE: "\377\377\377\377\377\377\377\377"-
+#100	REDUCE cov: 1 ft: 1 corp: 1/93b lim: 358596 exec/s: 0 rss: 38Mb L: 93/93 MS: 4 CrossOver-InsertByte-ChangeBit-EraseBytes-
+#106	REDUCE cov: 1 ft: 1 corp: 1/72b lim: 358596 exec/s: 0 rss: 38Mb L: 72/72 MS: 1 EraseBytes-
+#107	REDUCE cov: 1 ft: 1 corp: 1/68b lim: 358596 exec/s: 0 rss: 38Mb L: 68/68 MS: 1 EraseBytes-
+#108	REDUCE cov: 1 ft: 1 corp: 1/55b lim: 358596 exec/s: 0 rss: 38Mb L: 55/55 MS: 1 EraseBytes-
+#174	REDUCE cov: 1 ft: 1 corp: 1/37b lim: 358596 exec/s: 0 rss: 38Mb L: 37/37 MS: 1 EraseBytes-
+#216	REDUCE cov: 1 ft: 1 corp: 1/21b lim: 358596 exec/s: 0 rss: 38Mb L: 21/21 MS: 2 ChangeBinInt-EraseBytes-
+#238	REDUCE cov: 1 ft: 1 corp: 1/17b lim: 358596 exec/s: 0 rss: 38Mb L: 17/17 MS: 2 CopyPart-EraseBytes-
+#239	REDUCE cov: 1 ft: 1 corp: 1/11b lim: 358596 exec/s: 0 rss: 38Mb L: 11/11 MS: 1 EraseBytes-
+#278	REDUCE cov: 1 ft: 1 corp: 1/7b lim: 358596 exec/s: 0 rss: 38Mb L: 7/7 MS: 4 ChangeByte-ChangeBinInt-ChangeByte-EraseBytes-
+#282	REDUCE cov: 1 ft: 1 corp: 1/5b lim: 358596 exec/s: 0 rss: 38Mb L: 5/5 MS: 4 CopyPart-ChangeBit-CopyPart-EraseBytes-
+#299	REDUCE cov: 1 ft: 1 corp: 1/4b lim: 358596 exec/s: 0 rss: 38Mb L: 4/4 MS: 2 ChangeBit-EraseBytes-
+#300	REDUCE cov: 1 ft: 1 corp: 1/2b lim: 358596 exec/s: 0 rss: 38Mb L: 2/2 MS: 1 EraseBytes-
+#310	REDUCE cov: 1 ft: 1 corp: 1/1b lim: 358596 exec/s: 0 rss: 38Mb L: 1/1 MS: 5 ChangeByte-ChangeBit-ChangeBit-CopyPart-EraseBytes-
+#2097152	pulse  cov: 1 ft: 1 corp: 1/1b lim: 358596 exec/s: 1048576 rss: 59Mb
+#4194304	pulse  cov: 1 ft: 1 corp: 1/1b lim: 358596 exec/s: 1048576 rss: 59Mb
+#8388608	pulse  cov: 1 ft: 1 corp: 1/1b lim: 358596 exec/s: 932067 rss: 59Mb
+#16777216	pulse  cov: 1 ft: 1 corp: 1/1b lim: 358596 exec/s: 883011 rss: 59Mb
+#26164760	DONE   cov: 1 ft: 1 corp: 1/1b lim: 358596 exec/s: 844024 rss: 59Mb
+###### Recommended dictionary. ######
+"\377\377\377\377\377\377\377\377" # Uses: 1832298
+###### End of recommended dictionary. ######
+Done 26164760 runs in 31 second(s)
+stat::number_of_executed_units: 26164760
+stat::average_exec_per_sec:     844024
+stat::new_units_added:          19
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              59

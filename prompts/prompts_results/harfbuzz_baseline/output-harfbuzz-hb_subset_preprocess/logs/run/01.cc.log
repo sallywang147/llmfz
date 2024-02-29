@@ -1,0 +1,88 @@
+INFO:__main__:Running: docker run --rm --privileged --shm-size=2g --platform linux/amd64 -e FUZZING_ENGINE=libfuzzer -e SANITIZER=address -e RUN_FUZZER_MODE=interactive -e HELPER=True -v /home/sallyjunsongwang/oss-fuzz-gen/results/output-harfbuzz-hb_subset_preprocess/corpora/01.cc:/tmp/hb-repacker-fuzzer_corpus -v /tmp/tmpy2eupuwg/build/out/harfbuzz-hb_subset_preprocess-01:/out -t gcr.io/oss-fuzz-base/base-runner run_fuzzer hb-repacker-fuzzer -print_final_stats=1 -max_total_time=30 -len_control=0.
+rm: cannot remove '/tmp/hb-repacker-fuzzer_corpus': Device or resource busy
+Using seed corpus: hb-repacker-fuzzer_seed_corpus.zip
+/out/hb-repacker-fuzzer -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /tmp/hb-repacker-fuzzer_corpus < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 1678172486
+INFO: Loaded 1 modules   (96402 inline 8-bit counters): 96402 [0xf47480, 0xf5ed12), 
+INFO: Loaded 1 PC tables (96402 PCs): 96402 [0xf5ed18,0x10d7638), 
+INFO:       10 files found in /tmp/hb-repacker-fuzzer_corpus
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 358596 bytes
+INFO: seed corpus: files: 10 min: 423b max: 358596b total: 2345624b rss: 36Mb
+#11	INITED cov: 1363 ft: 1482 corp: 5/539Kb exec/s: 0 rss: 45Mb
+#15	NEW    cov: 1372 ft: 1499 corp: 6/540Kb lim: 358596 exec/s: 0 rss: 46Mb L: 409/358356 MS: 4 EraseBytes-CrossOver-CopyPart-EraseBytes-
+#21	NEW    cov: 1373 ft: 1500 corp: 7/541Kb lim: 358596 exec/s: 0 rss: 49Mb L: 1799/358356 MS: 1 CopyPart-
+#23	NEW    cov: 1375 ft: 1506 corp: 8/542Kb lim: 358596 exec/s: 0 rss: 49Mb L: 922/358356 MS: 2 CMP-InsertByte- DE: "\377\377\377\377\377\377\377\004"-
+#25	NEW    cov: 1381 ft: 1515 corp: 9/601Kb lim: 358596 exec/s: 0 rss: 49Mb L: 60273/358356 MS: 2 ChangeBinInt-EraseBytes-
+#27	NEW    cov: 1385 ft: 1522 corp: 10/601Kb lim: 358596 exec/s: 0 rss: 49Mb L: 269/358356 MS: 2 ShuffleBytes-EraseBytes-
+#30	NEW    cov: 1385 ft: 1523 corp: 11/666Kb lim: 358596 exec/s: 0 rss: 49Mb L: 65759/358356 MS: 3 ChangeASCIIInt-ChangeBinInt-CMP- DE: "\001\000\000\000\000\000\000\010"-
+#32	NEW    cov: 1385 ft: 1538 corp: 12/795Kb lim: 358596 exec/s: 0 rss: 50Mb L: 132244/358356 MS: 2 CrossOver-CopyPart-
+#33	NEW    cov: 1387 ft: 1541 corp: 13/859Kb lim: 358596 exec/s: 0 rss: 51Mb L: 65752/358356 MS: 1 InsertByte-
+#38	NEW    cov: 1389 ft: 1548 corp: 14/923Kb lim: 358596 exec/s: 0 rss: 51Mb L: 66011/358356 MS: 5 ChangeBit-ChangeBinInt-ChangeASCIIInt-PersAutoDict-CrossOver- DE: "\377\377\377\377\377\377\377\004"-
+#53	NEW    cov: 1398 ft: 1596 corp: 15/1051Kb lim: 358596 exec/s: 0 rss: 54Mb L: 130619/358356 MS: 5 InsertRepeatedBytes-PersAutoDict-ChangeASCIIInt-ChangeByte-EraseBytes- DE: "\377\377\377\377\377\377\377\004"-
+#54	NEW    cov: 1398 ft: 1597 corp: 16/1180Kb lim: 358596 exec/s: 0 rss: 54Mb L: 132245/358356 MS: 1 InsertByte-
+#59	NEW    cov: 1398 ft: 1612 corp: 17/1181Kb lim: 358596 exec/s: 0 rss: 54Mb L: 560/358356 MS: 5 ChangeBit-PersAutoDict-ChangeBit-ChangeBinInt-CopyPart- DE: "\377\377\377\377\377\377\377\004"-
+#60	NEW    cov: 1398 ft: 1635 corp: 18/1308Kb lim: 358596 exec/s: 0 rss: 55Mb L: 130627/358356 MS: 1 PersAutoDict- DE: "\377\377\377\377\377\377\377\004"-
+#61	NEW    cov: 1398 ft: 1644 corp: 19/1373Kb lim: 358596 exec/s: 0 rss: 55Mb L: 66013/358356 MS: 1 CMP- DE: "\377\002"-
+#65	NEW    cov: 1398 ft: 1648 corp: 20/1437Kb lim: 358596 exec/s: 0 rss: 55Mb L: 66103/358356 MS: 4 ChangeBinInt-ChangeASCIIInt-ChangeByte-InsertRepeatedBytes-
+#70	NEW    cov: 1398 ft: 1649 corp: 21/1478Kb lim: 358596 exec/s: 0 rss: 55Mb L: 41286/358356 MS: 5 CMP-InsertByte-CopyPart-ChangeASCIIInt-EraseBytes- DE: "\377\377\377\377"-
+#82	NEW    cov: 1398 ft: 1653 corp: 22/1479Kb lim: 358596 exec/s: 0 rss: 55Mb L: 1121/358356 MS: 2 CrossOver-InsertByte-
+#86	NEW    cov: 1398 ft: 1668 corp: 23/1607Kb lim: 358596 exec/s: 0 rss: 55Mb L: 131741/358356 MS: 4 ChangeBinInt-InsertByte-ChangeBit-CrossOver-
+#89	NEW    cov: 1398 ft: 1670 corp: 24/1672Kb lim: 358596 exec/s: 0 rss: 55Mb L: 66037/358356 MS: 3 InsertByte-ChangeBit-InsertRepeatedBytes-
+#96	NEW    cov: 1402 ft: 1677 corp: 25/1736Kb lim: 358596 exec/s: 0 rss: 55Mb L: 66142/358356 MS: 2 InsertRepeatedBytes-PersAutoDict- DE: "\001\000\000\000\000\000\000\010"-
+#102	NEW    cov: 1456 ft: 1755 corp: 26/1864Kb lim: 358596 exec/s: 0 rss: 55Mb L: 130626/358356 MS: 1 InsertRepeatedBytes-
+#183	NEW    cov: 1486 ft: 1856 corp: 27/1865Kb lim: 358596 exec/s: 0 rss: 56Mb L: 804/358356 MS: 1 EraseBytes-
+#206	NEW    cov: 1493 ft: 1864 corp: 28/1929Kb lim: 358596 exec/s: 0 rss: 57Mb L: 66143/358356 MS: 3 ChangeBinInt-ChangeASCIIInt-InsertByte-
+#207	NEW    cov: 1496 ft: 1877 corp: 29/1994Kb lim: 358596 exec/s: 0 rss: 57Mb L: 65765/358356 MS: 1 InsertRepeatedBytes-
+#218	NEW    cov: 1497 ft: 1890 corp: 30/2074Kb lim: 358596 exec/s: 0 rss: 57Mb L: 82574/358356 MS: 1 EraseBytes-
+#251	NEW    cov: 1497 ft: 1895 corp: 31/2202Kb lim: 358596 exec/s: 0 rss: 59Mb L: 130670/358356 MS: 3 ChangeBinInt-ShuffleBytes-InsertRepeatedBytes-
+#279	NEW    cov: 1497 ft: 1897 corp: 32/2202Kb lim: 358596 exec/s: 0 rss: 59Mb L: 237/358356 MS: 3 InsertByte-EraseBytes-InsertByte-
+#290	NEW    cov: 1499 ft: 1902 corp: 33/2309Kb lim: 358596 exec/s: 0 rss: 59Mb L: 109414/358356 MS: 1 EraseBytes-
+	NEW_FUNC[1/1]: 0x59df60 in hb_face_get_empty /work/build/../../src/harfbuzz/src/hb-face.cc:260
+#292	NEW    cov: 1502 ft: 1906 corp: 34/2310Kb lim: 358596 exec/s: 0 rss: 59Mb L: 1044/358356 MS: 2 InsertRepeatedBytes-PersAutoDict- DE: "\001\000\000\000\000\000\000\010"-
+#317	NEW    cov: 1507 ft: 1912 corp: 35/2438Kb lim: 358596 exec/s: 0 rss: 59Mb L: 130706/358356 MS: 5 ShuffleBytes-ChangeBit-ChangeBit-InsertRepeatedBytes-PersAutoDict- DE: "\377\002"-
+#325	REDUCE cov: 1507 ft: 1912 corp: 35/2438Kb lim: 358596 exec/s: 0 rss: 59Mb L: 905/358356 MS: 3 EraseBytes-ChangeByte-InsertRepeatedBytes-
+#366	NEW    cov: 1507 ft: 1913 corp: 36/2518Kb lim: 358596 exec/s: 0 rss: 60Mb L: 82582/358356 MS: 1 CMP- DE: "\377\377\377\377\377\377\377\006"-
+#413	NEW    cov: 1510 ft: 1918 corp: 37/2583Kb lim: 358596 exec/s: 0 rss: 60Mb L: 66186/358356 MS: 2 ShuffleBytes-InsertRepeatedBytes-
+#432	NEW    cov: 1510 ft: 1920 corp: 38/2647Kb lim: 358596 exec/s: 0 rss: 60Mb L: 65989/358356 MS: 4 CrossOver-ChangeBit-ChangeASCIIInt-InsertByte-
+	NEW_FUNC[1/1]: 0x58f430 in bool hb_hashmap_t<unsigned int, unsigned int, true>::set_with_hash<unsigned int const&, unsigned int const&>(unsigned int const&, unsigned int, unsigned int const&, bool) /work/build/../../src/harfbuzz/src/hb-map.hh:245
+#454	NEW    cov: 1526 ft: 1958 corp: 39/2728Kb lim: 358596 exec/s: 0 rss: 60Mb L: 82700/358356 MS: 2 InsertByte-InsertRepeatedBytes-
+#460	NEW    cov: 1526 ft: 1960 corp: 40/2857Kb lim: 358596 exec/s: 0 rss: 60Mb L: 131758/358356 MS: 1 InsertRepeatedBytes-
+#484	NEW    cov: 1528 ft: 1980 corp: 41/3168Kb lim: 358596 exec/s: 0 rss: 61Mb L: 319211/358356 MS: 4 PersAutoDict-ShuffleBytes-CrossOver-CopyPart- DE: "\377\377\377\377\377\377\377\004"-
+#495	NEW    cov: 1529 ft: 1984 corp: 42/3170Kb lim: 358596 exec/s: 0 rss: 61Mb L: 1800/358356 MS: 1 InsertByte-
+#505	NEW    cov: 1529 ft: 1989 corp: 43/3264Kb lim: 358596 exec/s: 0 rss: 61Mb L: 96420/358356 MS: 5 CopyPart-ChangeBinInt-CMP-ChangeBit-CMP- DE: "Eeb\000"-"\377\377"-
+#535	REDUCE cov: 1529 ft: 1989 corp: 43/3243Kb lim: 358596 exec/s: 0 rss: 61Mb L: 336486/336486 MS: 5 ChangeByte-InsertByte-ChangeBit-ChangeBinInt-EraseBytes-
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+[1m[31m==11==ERROR: AddressSanitizer: SEGV on unknown address 0x000000000000 (pc 0x000000cc2e0a bp 0x7ffecc549f30 sp 0x7ffecc549ef0 T0)
+[1m[0m==11==The signal is caused by a WRITE memory access.
+==11==Hint: address points to the zero page.
+SCARINESS: 10 (null-deref)
+    #0 0xcc2e0a in SubtableUnicodesCache /work/build/../../src/harfbuzz/src/hb-ot-cmap-table.hh:1583:9
+    #1 0xcc2e0a in create /work/build/../../src/harfbuzz/src/hb-ot-cmap-table.hh:1564:17
+    #2 0xcc2e0a in OT::cmap::create_filled_cache(hb_blob_ptr_t<OT::cmap>) /work/build/../../src/harfbuzz/src/hb-ot-cmap-table.hh:1656:36
+    #3 0x94abb6 in _attach_accelerator_data /work/build/../../src/harfbuzz/src/hb-subset.cc:577:23
+    #4 0x94abb6 in hb_subset_plan_execute_or_fail /work/build/../../src/harfbuzz/src/hb-subset.cc:696:5
+    #5 0x92e13d in hb_subset_or_fail /work/build/../../src/harfbuzz/src/hb-subset.cc:608:24
+    #6 0x92605f in hb_subset_preprocess /work/build/../../src/harfbuzz/src/hb-subset-input.cc:601:27
+    #7 0x56c515 in LLVMFuzzerTestOneInput /work/build/../../src/harfbuzz/test/fuzzing/hb-repacker-fuzzer.cc:19:28
+    #8 0x43de83 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #9 0x43d66a in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #10 0x43ed39 in fuzzer::Fuzzer::MutateAndTestOne() /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:757:19
+    #11 0x43fa05 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:895:5
+    #12 0x42ed6f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #13 0x4583c2 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #14 0x7f97e8112082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #15 0x41f7ad in _start (/out/hb-repacker-fuzzer+0x41f7ad)
+
+DEDUP_TOKEN: SubtableUnicodesCache--create--OT::cmap::create_filled_cache(hb_blob_ptr_t<OT::cmap>)
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: SEGV /work/build/../../src/harfbuzz/src/hb-ot-cmap-table.hh:1583:9 in SubtableUnicodesCache
+==11==ABORTING
+MS: 1 InsertByte-; base unit: bb0953447bc1c945f5c23176629335697ac7a816
+artifact_prefix='./'; Test unit written to ./crash-19f7d400ed5a5ae12b447b19209633653180d53c
+stat::number_of_executed_units: 536
+stat::average_exec_per_sec:     0
+stat::new_units_added:          40
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              62

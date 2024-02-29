@@ -1,0 +1,28 @@
+INFO:__main__:Running: docker run --rm --privileged --shm-size=2g --platform linux/amd64 -e FUZZING_ENGINE=libfuzzer -e SANITIZER=address -e RUN_FUZZER_MODE=interactive -e HELPER=True -v /home/sallyjunsongwang/oss-fuzz-gen/results/output-zlib-gzprintf/corpora/02.cc:/tmp/zlib_uncompress_fuzzer_corpus -v /tmp/tmpub2463d2/build/out/zlib-gzprintf-02:/out -t gcr.io/oss-fuzz-base/base-runner run_fuzzer zlib_uncompress_fuzzer -print_final_stats=1 -max_total_time=30 -len_control=0.
+rm: cannot remove '/tmp/zlib_uncompress_fuzzer_corpus': Device or resource busy
+/out/zlib_uncompress_fuzzer -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /tmp/zlib_uncompress_fuzzer_corpus < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 3958627034
+INFO: Loaded 1 modules   (1620 inline 8-bit counters): 1620 [0x647a90, 0x6480e4), 
+INFO: Loaded 1 PC tables (1620 PCs): 1620 [0x5f3210,0x5f9750), 
+INFO:        0 files found in /tmp/zlib_uncompress_fuzzer_corpus
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: A corpus is not provided, starting from an empty corpus
+#2	INITED cov: 8 ft: 9 corp: 1/1b exec/s: 0 rss: 33Mb
+#3	NEW    cov: 11 ft: 12 corp: 2/74b lim: 4096 exec/s: 0 rss: 34Mb L: 73/73 MS: 1 InsertRepeatedBytes-
+#129	REDUCE cov: 11 ft: 12 corp: 2/58b lim: 4096 exec/s: 0 rss: 34Mb L: 57/57 MS: 1 EraseBytes-
+#228	REDUCE cov: 11 ft: 12 corp: 2/44b lim: 4096 exec/s: 0 rss: 34Mb L: 43/43 MS: 4 ChangeBinInt-ChangeBit-InsertByte-EraseBytes-
+#250	REDUCE cov: 11 ft: 12 corp: 2/30b lim: 4096 exec/s: 0 rss: 34Mb L: 29/29 MS: 2 ChangeByte-EraseBytes-
+#252	REDUCE cov: 11 ft: 12 corp: 2/25b lim: 4096 exec/s: 0 rss: 34Mb L: 24/24 MS: 2 CopyPart-EraseBytes-
+#372	REDUCE cov: 11 ft: 12 corp: 2/24b lim: 4096 exec/s: 0 rss: 34Mb L: 23/23 MS: 5 ChangeBit-CrossOver-ChangeBinInt-InsertByte-EraseBytes-
+#2097152	pulse  cov: 11 ft: 12 corp: 2/24b lim: 4096 exec/s: 1048576 rss: 55Mb
+#4194304	pulse  cov: 11 ft: 12 corp: 2/24b lim: 4096 exec/s: 838860 rss: 55Mb
+#8388608	pulse  cov: 11 ft: 12 corp: 2/24b lim: 4096 exec/s: 762600 rss: 55Mb
+#16777216	pulse  cov: 11 ft: 12 corp: 2/24b lim: 4096 exec/s: 729444 rss: 55Mb
+#22894707	DONE   cov: 11 ft: 12 corp: 2/24b lim: 4096 exec/s: 738538 rss: 55Mb
+Done 22894707 runs in 31 second(s)
+stat::number_of_executed_units: 22894707
+stat::average_exec_per_sec:     738538
+stat::new_units_added:          6
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              55

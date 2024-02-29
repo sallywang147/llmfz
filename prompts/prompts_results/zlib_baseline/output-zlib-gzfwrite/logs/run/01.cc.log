@@ -1,0 +1,48 @@
+INFO:__main__:Running: docker run --rm --privileged --shm-size=2g --platform linux/amd64 -e FUZZING_ENGINE=libfuzzer -e SANITIZER=address -e RUN_FUZZER_MODE=interactive -e HELPER=True -v /home/sallyjunsongwang/oss-fuzz-gen/results/output-zlib-gzfwrite/corpora/01.cc:/tmp/zlib_uncompress_fuzzer_corpus -v /tmp/tmpub2463d2/build/out/zlib-gzfwrite-01:/out -t gcr.io/oss-fuzz-base/base-runner run_fuzzer zlib_uncompress_fuzzer -print_final_stats=1 -max_total_time=30 -len_control=0.
+rm: cannot remove '/tmp/zlib_uncompress_fuzzer_corpus': Device or resource busy
+/out/zlib_uncompress_fuzzer -rss_limit_mb=2560 -timeout=25 -print_final_stats=1 -max_total_time=30 -len_control=0 /tmp/zlib_uncompress_fuzzer_corpus < /dev/null
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 3898655165
+INFO: Loaded 1 modules   (2646 inline 8-bit counters): 2646 [0x6625a0, 0x662ff6), 
+INFO: Loaded 1 PC tables (2646 PCs): 2646 [0x608b90,0x6130f0), 
+INFO:        0 files found in /tmp/zlib_uncompress_fuzzer_corpus
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 4096 bytes
+INFO: A corpus is not provided, starting from an empty corpus
+#2	INITED cov: 190 ft: 191 corp: 1/1b exec/s: 0 rss: 36Mb
+#5	NEW    cov: 190 ft: 192 corp: 2/2b lim: 4096 exec/s: 0 rss: 37Mb L: 1/1 MS: 3 CopyPart-ShuffleBytes-ChangeBit-
+#6	NEW    cov: 190 ft: 203 corp: 3/3b lim: 4096 exec/s: 0 rss: 37Mb L: 1/1 MS: 1 ChangeByte-
+#7	NEW    cov: 191 ft: 204 corp: 4/12b lim: 4096 exec/s: 0 rss: 37Mb L: 9/9 MS: 1 CMP- DE: "\001\000\000\000\000\000\000\000"-
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+[1m[31m==11==ERROR: AddressSanitizer: SEGV on unknown address 0x000000000002 (pc 0x7f20ddf5bc12 bp 0x7ffdd4de80b0 sp 0x7ffdd4de7878 T0)
+[1m[0m==11==The signal is caused by a READ memory access.
+==11==Hint: address points to the zero page.
+SCARINESS: 10 (null-deref)
+    #0 0x7f20ddf5bc12  (/lib/x86_64-linux-gnu/libc.so.6+0xbbc12) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #1 0x52e1f8 in __asan_memcpy /src/llvm-project/compiler-rt/lib/asan/asan_interceptors_memintrinsics.cpp:22:3
+    #2 0x574c7f in gz_write /src/zlib/gzwrite.c:204:13
+    #3 0x57515d in gzfwrite /src/zlib/gzwrite.c:283:18
+    #4 0x56c848 in LLVMFuzzerTestOneInput /src/zlib_uncompress_fuzzer.cc:22:5
+    #5 0x43de43 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #6 0x43d62a in fuzzer::Fuzzer::RunOne(unsigned char const*, unsigned long, bool, fuzzer::InputInfo*, bool, bool*) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:514:3
+    #7 0x43ecf9 in fuzzer::Fuzzer::MutateAndTestOne() /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:757:19
+    #8 0x43f9c5 in fuzzer::Fuzzer::Loop(std::__Fuzzer::vector<fuzzer::SizedFile, std::__Fuzzer::allocator<fuzzer::SizedFile> >&) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:895:5
+    #9 0x42ed2f in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:912:6
+    #10 0x458382 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #11 0x7f20ddec4082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca)
+    #12 0x41f76d in _start (/out/zlib_uncompress_fuzzer+0x41f76d)
+
+DEDUP_TOKEN: __asan_memcpy--gz_write
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: SEGV (/lib/x86_64-linux-gnu/libc.so.6+0xbbc12) (BuildId: eebe5d5f4b608b8a53ec446b63981bba373ca0ca) 
+==11==ABORTING
+MS: 1 CopyPart-; base unit: adc83b19e793491b1c6ea0fd8b46cd9f32e592fc
+0xa,0xa,
+\012\012
+artifact_prefix='./'; Test unit written to ./crash-71853c6197a6a7f222db0f1978c7cb232b87c5ee
+Base64: Cgo=
+stat::number_of_executed_units: 8
+stat::average_exec_per_sec:     0
+stat::new_units_added:          3
+stat::slowest_unit_time_sec:    0
+stat::peak_rss_mb:              38
