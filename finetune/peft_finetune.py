@@ -1,5 +1,6 @@
 import os
 import sys
+import accelerate
 import argparse
 import json
 import random
@@ -265,6 +266,7 @@ def generate_and_tokenize_prompt(data_point):
     ### Response:
     {data_point["completion"]}
     """
+    print(f"to be tokeninzed full data point for training:{full_prompt}\n")
     return tokenize(full_prompt)
 
 def tokenize_dataset():
