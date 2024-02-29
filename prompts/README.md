@@ -10,9 +10,9 @@ Note: when we say "max cov. diff", we compare the results by explicit reasoning 
 max cov. Diff = max cov. by temp_xml - max cov. by xplicit reasoning based prompting 
 
   | Benchmarks  | Fuzz Targets |Max Cov. Improvement |Max Cov. Diff|Model |Prompt history|
-| ------------- | ------------- |------------- |------------- |------------- |
-|  harfbuzz | ``hb_face_t * hb_subset_preprocess(hb_face_t *)`` | |1.6%  | Vertex AI codeBison | |
-|  harfbuzz | ``void hb_ot_shape_glyphs_closure(hb_font_t *, hb_buffer_t *, const hb_feature_t *, unsigned int, hb_set_t *)``| |0.5%  | Vertex AI codeBison | |
+| ------------- | ------------- |------------- |------------- |------------- |------------- |
+|  harfbuzz | ``hb_face_t * hb_subset_preprocess(hb_face_t *)`` |1.5% |1.6%  | Vertex AI codeBison | |
+|  harfbuzz | ``void hb_ot_shape_glyphs_closure(hb_font_t *, hb_buffer_t *, const hb_feature_t *, unsigned int, hb_set_t *)``|4.9% |0.5%  | Vertex AI codeBison | |
 |  zlib | ``hb_face_t * hb_subset_preprocess(hb_face_t *)``|15.33%  |15.3%  | Vertex AI codeBison | |
 
 
