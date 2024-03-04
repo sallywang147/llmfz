@@ -289,6 +289,7 @@ def tokenize_dataset():
         train_dataset, eval_dataset = load_datasets("../train_data", "onestep")
         tokenized_train_dataset = train_dataset.map(tokenize_json_prompt)
         tokenized_val_dataset = eval_dataset.map(tokenize_json_prompt)
+        print("we are using json data for finetuning!")
     else: 
         train_dataset, eval_dataset = load_datasets("../train_data", "onestep")
         tokenized_train_dataset = train_dataset.map(generate_and_tokenize_prompt)
