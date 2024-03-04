@@ -52,6 +52,10 @@ def parse_args():
                       type=str,
                       required=False,
                       help='Specify a fine-tuning method: context or onestep.')
+    parser.add_argument('-json',
+                      type=bool,
+                      required=False,
+                      help='Specify if the model is to be fine-tuned only on json data.')
     args = parser.parse_args()
 
     return args
@@ -251,6 +255,16 @@ def tokenize(prompt):
     result["labels"] = result["input_ids"].copy()
     return result
 
+
+def tokenize_json_prompt(data_point):
+    full_prompt =f"""
+    {data_point["prompt"]}
+
+    {data_point["completion"]}
+    """
+    return tokenize(full_prompt)
+
+
 def generate_and_tokenize_prompt(data_point):
     full_prompt =f"""You are a security testing engineer who wants to write a C++ program to execute all lines in a given function by defining and initializing its parameters in a suitable way before fuzzing the function through <code>LLVMFuzzerTestOneInput</code>.
     Carefully study the function signature and its parameters, then generate a fuzz targets by the following instructions. YOU MUST call the function to fuzz in the solution.
@@ -266,13 +280,19 @@ def generate_and_tokenize_prompt(data_point):
     ### Response:
     {data_point["completion"]}
     """
-    print(f"to be tokeninzed full data point for training:{full_prompt}\n")
+    #print(f"to be tokeninzed full data point for training:{full_prompt}\n")
     return tokenize(full_prompt)
 
 def tokenize_dataset():
-    train_dataset, eval_dataset = load_datasets("../train_data", "onestep")
-    tokenized_train_dataset = train_dataset.map(generate_and_tokenize_prompt)
-    tokenized_val_dataset = eval_dataset.map(generate_and_tokenize_prompt)
+    args = parse_args()
+    if args.json is True:
+        train_dataset, eval_dataset = load_datasets("../train_data", "onestep")
+        tokenized_train_dataset = train_dataset.map(tokenize_json_prompt)
+        tokenized_val_dataset = eval_dataset.map(tokenize_json_prompt)
+    else: 
+        train_dataset, eval_dataset = load_datasets("../train_data", "onestep")
+        tokenized_train_dataset = train_dataset.map(generate_and_tokenize_prompt)
+        tokenized_val_dataset = eval_dataset.map(generate_and_tokenize_prompt)
     return tokenized_train_dataset, tokenized_val_dataset
 
 def onestep_tokenize_and_train_codellama():
