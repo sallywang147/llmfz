@@ -201,6 +201,10 @@ def load_starcoder():
         )
     return model, tokenizer
 
+def load_Phind():
+    global model
+    global tokenizer
+
 
 def load_datasets(data_path, file_name, size=None):
 
@@ -355,7 +359,7 @@ def onestep_tokenize_and_train_codellama():
             tokenizer, pad_to_multiple_of=8, return_tensors="pt", padding=True
             ),
         )
-
+    '''
     model.config.use_cache = False
     old_state_dict = model.state_dict
     model.state_dict = (lambda self, *_, **__: get_peft_model_state_dict(self, old_state_dict())).__get__(
@@ -364,7 +368,7 @@ def onestep_tokenize_and_train_codellama():
     if torch.__version__ >= "2" and sys.platform != "win32":
         print("compiling the model")
         model = torch.compile(model)
-
+    '''
     print("Training...")
 
     result = trainer.train(resume_from_checkpoint=False)
